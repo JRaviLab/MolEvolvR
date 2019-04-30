@@ -1,2 +1,3 @@
-# psp-shiny
-Shiny app for the Psp evolution paper
+# Shiny app for the Psp evolution paper
+
+by @SamuelZornChen & @JananiRavi
