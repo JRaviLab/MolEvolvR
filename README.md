@@ -2,4 +2,4 @@
 
 by @SamuelZornChen & @JananiRavi
 
-Scripts | Data | Shiny App
+[Scripts](https://github.com/cpathogeno/psp-shiny/tree/master/scripts) | [Shiny App](https://github.com/cpathogeno/psp-shiny/tree/master/shiny) | [Test data](https://github.com/cpathogeno/psp-shiny/tree/master/data)
