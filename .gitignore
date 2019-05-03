@@ -4,6 +4,10 @@
 
 # Session Data files
 .RData
+Icon
+Icon?
+.DS_Store
+.DS_Store?
 
 # Example code in package build process
 *-Ex.R
@@ -34,3 +38,5 @@ vignettes/*.pdf
 
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
 rsconnect/
+packrat/lib*/
+packrat/src/
