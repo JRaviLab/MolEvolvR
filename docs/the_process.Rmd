@@ -1,0 +1,114 @@
+---
+title: "The process"
+author: "Janani Ravi"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+    depth: 4
+    number_sections: false
+    theme: united
+---
+## Environment & Setup
+```{r setup, eval=T, results='hide', message=FALSE}
+library(tidyverse)
+library(here)
+library(rmarkdown); library(knitr)
+source("R/cleanup.R")
+source("R/plotting.R")
+conflicted::conflict_prefer("filter", "dplyr")
+conflicted::conflict_prefer("as_data_frame", "tibble")
+```
+
+
+## Data import
+```{r import, eval=T, results='hide', message=F}
+prot <- read_delim("data/pspa_snf7.txt", # data/protein_name.txt
+                   delim="\t", col_names=T, comment="#", trim_ws=T,
+                   escape_double = FALSE, na = "NA")
+
+lineages_map <- read_delim("data/organisms2lineages_map_bae_20170828.txt",
+                           delim="\t", col_names=T, comment="#", trim_ws=T)
+```
+
+## Data analysis
+### Select columns for data export
+```{r select-cols, eval=T}
+prot_data <- prot %>%
+  select(AccNum, Species, Lineage=Lineage.final,
+         DomArch=DomArch.norep, GenContext=GenContext.norep,
+         Length, GI, GenName, Annotation)
+```
+
+### Viewing your data
+```{r view-data, eval=T}
+paged_table(prot_data)
+```
+
+### Wordcounts
+```{r wordcounts, eval=T}
+## Counts of domains in XXX domain architectures
+DA.doms.wc <- prot$DA.doms %>%
+  words2wc()
+DA.doms.wc %>%
+  head() %>%
+  kable()
+# DA.doms.wc.ge5 <- filter.freq(DA.doms.wc, 5)
+## Counts of domain architectures in the GenContext of XXX homologs
+GC.DA.wc <- prot$GC.DA %>%
+  words2wc()
+GC.DA.wc %>%
+  head() %>%
+  kable()
+```
+
+### UpSet plots
+```{r upset-plot-da, eval=T, out.height="300px"}
+upset.plot(prot, 10, "da2doms")
+```
+
+```{r upset-plot-gc, eval=T, out.height="600px"}
+upset.plot(prot, 75, "gc2da")
+```
+
+### Worclouds
+```{r}
+
+```
+
+### Lineage summaries
+```{r lin-summary, eval=T}
+## Main Domain Architectures -- Counts by DA and Lineage
+prot.DA.summ.byLin <- summ.DA.byLin(prot)
+prot.DA.summ <- summ.DA(prot.DA.summ.byLin)
+
+prot.DA.summ.byLin %>% head() %>% kable()
+prot.DA.summ %>% head() %>% kable()
+
+## Main Genomic Contexts -- Summarized by DA & Lineage
+prot.GC.summ.byDALin <- summ.GC.byDALin(prot)
+prot.GC.summ.byLin <- summ.GC.byLin(prot)
+prot.GC.summ <- summ.GC(prot.GC.summ.byDALin)
+
+prot.GC.summ.byDALin %>% head() %>% kable()
+prot.GC.summ.byLin %>% head() %>% kable()
+prot.GC.summ %>% head() %>% kable()
+```
+
+### Lineage summary plots
+```{r lin-summ-plot, eval=T, out.width='70%'}
+
+```
+
+### Add Leaves
+```{r add-leaves, eval=T}
+
+```
+
+### Generate MSA + Phylogenetic tree
+```{r msa-tree, eval=T}
+
+```
