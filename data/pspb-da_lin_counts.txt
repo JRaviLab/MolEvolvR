@@ -1,0 +1,29 @@
+DomArch.norep	Lineage.final	count
+PspB	bacteria>proteobacteria>gammaproteobacteria	400
+SIG	bacteria>proteobacteria>gammaproteobacteria	88
+PspB	bacteria>proteobacteria>alphaproteobacteria	43
+SIG	bacteria>proteobacteria>alphaproteobacteria	28
+SIG+PspB	bacteria>proteobacteria>gammaproteobacteria	23
+PspB	NA	18
+PspC	bacteria>proteobacteria>gammaproteobacteria	10
+PspB	bacteria>proteobacteria>deltaproteobacteria	6
+TM(s)	bacteria>firmicutes	5
+PspB	bacteria>fcb group	4
+SIG+PspB	bacteria>proteobacteria>deltaproteobacteria	3
+BZIP	bacteria>other unclassified bacteria	1
+ClpABN-AAA+EP1+ClpABC-AAA	bacteria>actinobacteria	1
+DHH	bacteria>firmicutes	1
+PspB	bacteria>firmicutes	1
+PspB	bacteria>nitrospirae	1
+PspB	bacteria>other unclassified bacteria	1
+PspB	bacteria>proteobacteria>epsilonproteobacteria	1
+PspB	bacteria>pvc group	1
+PspB+PspC	bacteria>proteobacteria>gammaproteobacteria	1
+PspB+STYKIN	bacteria>proteobacteria>deltaproteobacteria	1
+SIG	NA	1
+SIG+COOHNH2ligase	bacteria>proteobacteria>alphaproteobacteria	1
+SIG+PspB	NA	1
+SIG+TM	bacteria>proteobacteria>gammaproteobacteria	1
+SIG+TM(s)+PBPB+PspB	eukaryota>metazoa	1
+TM	eukaryota>others	1
+TM(s)+PspB+TM	bacteria>cyanobacteria	1
