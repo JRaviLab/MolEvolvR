@@ -1,0 +1,28 @@
+Package: psp
+Title: Psp Evolution
+Version: 0.0.0.9000
+Authors@R: person("Janani", "Ravi", email = "janani@msu.edu", role = c("aut", "cre"))
+Description: What the package does (one paragraph).
+Depends: R (>= 3.5.1)
+License: MIT License
+Encoding: UTF-8
+LazyData: true
+URL: https://github.com/jananiravi/psp-evolution
+BugReports: https://github.com/jananiravi/psp-evolution/issues
+Imports:
+  tidyverse,
+  here,
+  UpSetR,
+  gridExtra,
+  roxygen2,
+  docstring,
+  igraph,
+  rgl,
+  ape,
+  phylogram,
+  phytools,
+  msa,
+  seqinr,
+  ggtree,
+  tidytree
+RoxygenNote: 6.1.1
