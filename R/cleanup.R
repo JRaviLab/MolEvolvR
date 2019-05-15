@@ -89,7 +89,7 @@ remove.empty.rows <- function(x){	x %>%
 ## Before/after break up ##
 ###########################
 ## Function to obtain element counts (DA, GC)
-counts <- function(x, min.freq) {	x %>%
+counts_elements <- function(x, min.freq) {	x %>%
 		table() %>%
 		as_tibble() %>%
 		`colnames<-`(c("elements", "freq")) %>%
