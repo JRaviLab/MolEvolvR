@@ -10,19 +10,22 @@ LazyData: true
 URL: https://github.com/jananiravi/psp-evolution
 BugReports: https://github.com/jananiravi/psp-evolution/issues
 Imports:
-  tidyverse,
-  here,
-  UpSetR,
-  gridExtra,
-  roxygen2,
-  docstring,
-  igraph,
-  rgl,
-  ape,
-  phylogram,
-  phytools,
-  msa,
-  seqinr,
-  ggtree,
-  tidytree
+    tidyverse,
+    here,
+    UpSetR,
+    gridExtra,
+    roxygen2,
+    docstring,
+    igraph,
+    rgl,
+    ape,
+    phylogram,
+    phytools,
+    msa,
+    seqinr,
+    ggtree,
+    tidytree,
+    Rcpp
 RoxygenNote: 6.1.1
+LinkingTo: 
+    Rcpp
