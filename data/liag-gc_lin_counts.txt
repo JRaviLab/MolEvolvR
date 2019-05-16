@@ -1,0 +1,686 @@
+GenContext.norep	Lineage.final	count
+<-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)<-SIG+PADR-HTH	bacteria>firmicutes	40
+SIG+PADR-HTH->DUF1700-alpha-helical+TM(s)->SIG+Toast-rack*->	bacteria>firmicutes	33
+<-SIG+Toast-rack*<-?<-SIGMA-HTH	bacteria>proteobacteria>gammaproteobacteria	30
+SIG+Toast-rack*->	bacteria>actinobacteria	27
+<-SIG+Toast-rack*	bacteria>actinobacteria	26
+DUF1700-alpha-helical+TM(s)->SIG+Toast-rack*->	bacteria>firmicutes	24
+SIG+Toast-rack*->	bacteria>firmicutes	24
+<-SIG+Toast-rack*	bacteria>firmicutes	21
+<-SIG+PADR-HTH<-Toast-rack*	bacteria>actinobacteria	20
+SIGMA-HTH->?->SIG+Toast-rack*->	bacteria>proteobacteria>gammaproteobacteria	20
+<-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)	bacteria>firmicutes	19
+Toast-rack*->SIG+PADR-HTH->	bacteria>actinobacteria	19
+<-Toast-rack*	bacteria>actinobacteria	18
+SIG+Toast-rack*->	bacteria>fcb group	18
+<-SIG+Toast-rack*	bacteria>proteobacteria>gammaproteobacteria	17
+Toast-rack*->	bacteria>firmicutes	16
+LexA-HTH+Peptidase_S24-><-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)<-SIG+PADR-HTH	bacteria>firmicutes	14
+SIG+Toast-rack*->	bacteria>other unclassified bacteria	14
+GNTR-HTH->ABC-ATPase->SIG+TM(s)->SIG+Toast-rack*->	bacteria>proteobacteria>gammaproteobacteria	13
+<-Phage_holin_4_2<-PspC+TM(s)<-Toast-rack*	bacteria>firmicutes	12
+<-SIG+Toast-rack*	bacteria>fcb group	12
+<-Toast-rack*	bacteria>firmicutes	12
+SIG+PADR-HTH->DUF1700-alpha-helical+Toast-rack*->	bacteria>firmicutes	12
+SIG+Toast-rack*->	eukaryota>metazoa	12
+TraJ-RHH->Toast-rack*->ABC-ATPase->SIG+TM(s)->	bacteria>actinobacteria	12
+RNA-Helicase+A18->ABC-ATPase(s)->Toast-rack*->	bacteria>firmicutes	11
+Toast-rack*->	bacteria>actinobacteria	11
+Toast-rack*->ABC-ATPase->SIG+TM(s)->	bacteria>actinobacteria	11
+<-SIG+LTD+IG+Calcineurin<-Phage_holin_4_2<-PspC+TM(s)<-Toast-rack*	bacteria>firmicutes	10
+<-SIG+Toast-rack*	bacteria>other unclassified bacteria	10
+<-SIG+Toast-rack*<-SIG+TM(s)<-ABC-ATPase<-GNTR-HTH	bacteria>proteobacteria>gammaproteobacteria	10
+<-Toast-rack*<-TraJ-RHH	bacteria>actinobacteria	10
+Toast-rack*->PspC+TM(s)->Phage_holin_4_2->	bacteria>firmicutes	9
+<-Phage_holin_4_2<-PspC+TM(s)<-PspC+Toast-rack*<-Toast-rack*	bacteria>firmicutes	8
+<-SIG+Toast-rack*<-?<-ABC-ATPase	bacteria>firmicutes	8
+Toast-rack*->SIG+PADR-HTH-><-?<-?<-ADH_N+ADH_zinc_N	bacteria>actinobacteria	8
+<-SIG+TM(s)<-ABC-ATPase<-Toast-rack*	bacteria>actinobacteria	7
+SIG+PADR-HTH->DUF1700-alpha-helical+TM(s)->SIG+Toast-rack*->adh_short->	bacteria>firmicutes	7
+<-Phage_holin_4_2<-PspC+TM(s)<-Toast-rack*<-?<-ABC-ATPase(s)<-RNA-Helicase+A18	bacteria>firmicutes	6
+<-SIG+TM(s)<-ABC-ATPase<-Toast-rack*<-TraJ-RHH	bacteria>actinobacteria	6
+ADH_N+ADH_zinc_N->?->?-><-SIG+PADR-HTH<-Toast-rack*	bacteria>actinobacteria	6
+Amidohydro_1->G->?-><-SIG+LTD+IG+Calcineurin<-Phage_holin_4_2<-PspC+TM(s)<-Toast-rack*	bacteria>firmicutes	6
+LiaI-LiaF-TM+Toast-rack*->	bacteria>firmicutes	6
+SIG+PADR-HTH->DUF1700-alpha-helical+TM(s)->SIG+Toast-rack*->Acetyltransf_7->	bacteria>firmicutes	6
+SIG+TM+HISKIN-LiaS-like->REC+LYTTR->SIG+Toast-rack*->	bacteria>actinobacteria	6
+SIG+Toast-rack*->	archaea>euryarchaeota	6
+SIG+Toast-rack*->	bacteria>proteobacteria>gammaproteobacteria	6
+Toast-rack*->?->Phage_holin_4_2->	bacteria>firmicutes	6
+TraJ-RHH->Toast-rack*->	bacteria>actinobacteria	6
+<-LiaI-LiaF-TM(s)+Toast-rack*<-?<-?<-?<-?<-Amidase<-Glu-tRNAGln	bacteria>firmicutes	5
+<-SIG+Toast-rack*	archaea>euryarchaeota	5
+<-SIG+Toast-rack*	bacteria>proteobacteria>deltaproteobacteria	5
+<-SIG+Toast-rack*<-?<-?<-ABC-ATPase<-SIG+TM+HAMP+HISKIN<-REC+LYTTR	bacteria>firmicutes	5
+<-SIG+Toast-rack*<-ABC-ATPase(s)<-RNA-Helicase+A18	bacteria>firmicutes	5
+LiaI-LiaF-TM->PspA->SIG+Toast-rack*->LiaI-LiaF-TM+Toast-rack*->SIG+TM+HAMP+HISKIN-LiaS-like->REC+LYTTR->	bacteria>firmicutes	5
+LiaI-LiaF-TM+Toast-rack*-><-Aldo_ket_red	bacteria>firmicutes	5
+<-BPL_LplA_LipB+Lip_prot_lig_C<-DUF1700-alpha-helical+Toast-rack*<-SIG+PADR-HTH	bacteria>firmicutes	4
+<-DUF1700-alpha-helical+Toast-rack*<-SIG+PADR-HTH	bacteria>firmicutes	4
+<-SIG+Toast-rack*	eukaryota>metazoa	4
+<-Thy1||TraJ-RHH->Toast-rack*->	bacteria>actinobacteria	4
+<-Toast-rack*	eukaryota>metazoa	4
+<-Toast-rack*<-SIG+PADR-HTH	bacteria>firmicutes	4
+<-Toast-rack*<-TraJ-RHH||Thy1->	bacteria>actinobacteria	4
+ABC-ATPase->?->SIG+Toast-rack*->	bacteria>firmicutes	4
+REC+LYTTR->SIG+TM+HAMP+HISKIN->ABC-ATPase->?->?->SIG+Toast-rack*->	bacteria>firmicutes	4
+SIG+PADR-HTH->DUF1700-alpha-helical+TM(s)->SIG+Toast-rack*-><-LexA-HTH+Peptidase_S24	bacteria>firmicutes	4
+SIG+PADR-HTH->Toast-rack*->PspC+TM(s)-><-?||?-><-MacB_PCD+FtsX<-ABC-ATPase	bacteria>firmicutes	4
+SIGMA-HTH->?->SIG+Toast-rack*->DnaB+DnaB_C->	bacteria>proteobacteria>gammaproteobacteria	4
+TM+Toast-rack*->	eukaryota>fungi	4
+Toast-rack*->?-><-PRK	bacteria>firmicutes	4
+<-DUF362<-SIG+Toast-rack*<-SIG+TM(s)<-ABC-ATPase	archaea>euryarchaeota	3
+<-Phage_holin_4_2<-PspC+TM(s)<-Toast-rack*<-ABC-ATPase(s)<-RNA-Helicase+A18	bacteria>firmicutes	3
+<-Phage_holin_4_2<-Toast-rack*	bacteria>firmicutes	3
+<-PspC+TM(s)<-?<-Toast-rack*<-SIG+PADR-HTH	bacteria>firmicutes	3
+<-REC+LYTTR<-SIG+Toast-rack*	bacteria>firmicutes	3
+<-SIG+Toast-rack*	eukaryota>fungi	3
+<-SIG+Toast-rack*<-SIG+TM(s)<-SIG+TM(s)	bacteria>proteobacteria>alphaproteobacteria	3
+<-SIG+Toast-rack*<-SIG+Toast-rack*	bacteria>fcb group	3
+<-TM(s)+LiaI-LiaF-TM(s)+Toast-rack*	bacteria>firmicutes	3
+<-Toast-rack*	bacteria>other unclassified bacteria	3
+<-Toast-rack*<-ABC-ATPase(s)<-RNA-Helicase+A18	bacteria>firmicutes	3
+Abhydrolase_1-><-SIG+Toast-rack*	bacteria>firmicutes	3
+ADH_N+ADH_zinc_N-><-SIG+PADR-HTH<-Toast-rack*	bacteria>actinobacteria	3
+Aldo_ket_red->SIG+Toast-rack*->	archaea>others	3
+BirA-HTH-><-PspC+TM(s)<-PspC+TM(s)<-SIG+Toast-rack*	bacteria>firmicutes	3
+SIG+Beta-lactamase->Toast-rack*->SIG+PADR-HTH->	bacteria>actinobacteria	3
+SIG+TM+HISKIN-LiaS-like->REC+LYTTR->TM+Toast-rack*->	bacteria>actinobacteria	3
+SIG+Toast-rack*->	bacteria>pvc group	3
+SIGMA-HTH->?->?->LiaI-LiaF-TM+Toast-rack*->	bacteria>firmicutes	3
+SIGMA-HTH->?->SIG+Toast-rack*-><-MODE-HTH+PBPII	bacteria>proteobacteria>gammaproteobacteria	3
+SIGMA-HTH->SIG+Toast-rack*->SIG+Bactofilin+TM(s)->	bacteria>fcb group	3
+SIGMA-HTH->ZnF+TM+HEAT_2->SIG+Toast-rack*->SIG+Toast-rack*->	bacteria>fcb group	3
+Toast-rack*->	archaea>euryarchaeota	3
+Toast-rack*->	eukaryota>metazoa	3
+ZNR+DUF2089-HTH->Toast-rack*->	bacteria>firmicutes	3
+<-Adenine_glyco<-SIG+TM(s)<-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)<-SIG+PADR-HTH||PspC+TM(s)->	bacteria>firmicutes	2
+<-DnaB+DnaB_C<-SIG+Toast-rack*<-?<-SIGMA-HTH	bacteria>proteobacteria>gammaproteobacteria	2
+<-DUF1700-alpha-helical+Toast-rack*	bacteria>firmicutes	2
+<-LiaI-LiaF-TM(s)+Toast-rack*	bacteria>firmicutes	2
+<-LiaI-LiaF-TM+Toast-rack*<-?<-?<-SIGMA-HTH	bacteria>firmicutes	2
+<-MFS_1+TM(s)<-SIG+Toast-rack*	bacteria>actinobacteria	2
+<-Phage_holin_4_2<-?<-PspC+TM(s)<-Toast-rack*	bacteria>firmicutes	2
+<-Phage_holin_4_2<-PspC+TM(s)<-Toast-rack*<-?<-ABC-ATPase<-ABC-ATPase<-?<-?<-SIG+PBP_like_2	bacteria>firmicutes	2
+<-REC+LYTTR<-SIG+TM+HISKIN-LiaS-like||ABC-ATPase->?-><-SIG+TM(s)<-ABC-ATPase<-Toast-rack*<-TraJ-RHH	bacteria>actinobacteria	2
+<-SIG+TM(s)+Toast-rack*	eukaryota>sar>stramenopiles	2
+<-SIG+Toast-rack*	bacteria>acidobacteria	2
+<-SIG+Toast-rack*	bacteria>chloroflexi	2
+<-SIG+Toast-rack*	eukaryota>sar>stramenopiles	2
+<-SIG+Toast-rack*||Cluster539_2clades->	bacteria>firmicutes	2
+<-SIG+Toast-rack*<-?<-?<-PspA	bacteria>spirochaetes	2
+<-SIG+Toast-rack*<-?<-SIGMA-HTH||?->?-><-?<-?||DUF45->	bacteria>proteobacteria>gammaproteobacteria	2
+<-SIG+Toast-rack*<-REC+LYTTR<-SIG+TM+HISKIN-LiaS-like	bacteria>actinobacteria	2
+<-SIG+Toast-rack*<-SIG+Toast-rack*<-ZnF+TM+HEAT_2<-SIGMA-HTH	bacteria>fcb group	2
+<-SNO<-SOR_SNZ+ThiG||SIG+Aminotran_1_2->?->SIG+PADR-HTH->Toast-rack*->PspC+TM(s)-><-DNA_topoisoIV+DNA_gyraseA_C(s)<-HATPase_c+DNA_gyraseB+Toprim+DNA_gyraseB_C<-?<-?<-DNA_pol3_beta+DNA_pol3_beta_2+DNA_pol3_beta_3	bacteria>firmicutes	2
+<-TM(s)+LiaI-LiaF-TM(s)+Toast-rack*<-?<-?<-Amidase<-Glu-tRNAGln	bacteria>firmicutes	2
+<-TM+Toast-rack*<-REC+LYTTR<-SIG+TM+HISKIN-LiaS-like	bacteria>actinobacteria	2
+<-Toast-rack*	archaea>tack group	2
+<-Toast-rack*	bacteria>deinococcus-thermus	2
+<-Toast-rack*	eukaryota>fungi	2
+<-Toast-rack*<-?<-?<-?<-?<-?<-HTH_3	bacteria>firmicutes	2
+<-Toast-rack*<-DUF2089-HTH<-ZNR+DUF2089-HTH	bacteria>chloroflexi	2
+<-Toast-rack*<-SIG+Toast-rack*<-ZnF+TM+HEAT_2<-SIGMA-HTH	bacteria>fcb group	2
+<-Toast-rack*<-SIG+YibE_F<-SIG+YibE_F	bacteria>firmicutes	2
+ABC-ATPase->?->SIG+Toast-rack*->	bacteria>actinobacteria	2
+ABC-ATPase->SIG+TM(s)->SIG+Toast-rack*->	bacteria>firmicutes	2
+Aldedh->Acetate_kinase->SIG+PADR-HTH->DUF1700-alpha-helical+TM(s)->SIG+Toast-rack*->	bacteria>firmicutes	2
+Aldose_epim-><-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)<-SIG+PADR-HTH	bacteria>firmicutes	2
+CN_hydrolase+NAD_synthase-><-SIG+Toast-rack*	bacteria>firmicutes	2
+Cob_adeno_trans-><-SIG+TM(s)<-Toast-rack*<-SIG+TM(s)<-HTH	archaea>euryarchaeota	2
+GreA_GreB_N+GreA_GreB-><-?<-?<-Smr<-?||?-><-SIG+Toast-rack*	bacteria>proteobacteria>gammaproteobacteria	2
+HTH->SIG+TM(s)->Toast-rack*->SIG+TM(s)->	archaea>euryarchaeota	2
+MFS_1+TM-><-Phage_holin_4_2<-PspC+TM(s)<-Toast-rack*	bacteria>firmicutes	2
+REC+LYTTR->SIG+TM+HAMP+HISKIN-><-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)<-SIG+PADR-HTH	bacteria>firmicutes	2
+RNA-Helicase+A18->ABC-ATPase(s)->?->PIG-L->Toast-rack*->Phage_holin_4_2->	bacteria>firmicutes	2
+RNA-Helicase+A18->ABC-ATPase(s)->?->Toast-rack*->Phage_holin_4_2->	bacteria>firmicutes	2
+RNA-Helicase+A18->ABC-ATPase(s)->Toast-rack*->PspC+TM(s)->Phage_holin_4_2->	bacteria>firmicutes	2
+SIG+PADR-HTH->DUF1700-alpha-helical+TM(s)->SIG+Toast-rack*->ABC-ATPase->	bacteria>firmicutes	2
+SIG+PADR-HTH->DUF1700-alpha-helical+TM(s)->SIG+Toast-rack*->Acetyltransf_7-><-?<-?<-?||?->SIG+TM(s)+ABC-ATPase->SIG+TM(s)+ABC-ATPase->	bacteria>firmicutes	2
+SIG+PADR-HTH->DUF1700-alpha-helical+TM(s)->SIG+Toast-rack*->PspC+TM(s)->	bacteria>firmicutes	2
+SIG+TM(s)+Toast-rack*->	eukaryota>sar>stramenopiles	2
+SIG+Toast-rack*->	eukaryota>fungi	2
+SIG+Toast-rack*->	eukaryota>sar>stramenopiles	2
+SIG+Toast-rack*-><-CN_hydrolase+NAD_synthase	bacteria>firmicutes	2
+SIG+Toast-rack*-><-Dus	bacteria>fcb group	2
+SIG+Toast-rack*->SIG+Toast-rack*->	bacteria>actinobacteria	2
+SIG+Toast-rack*->SIG+Toast-rack*->	bacteria>fcb group	2
+SIGMA-HTH->?->SIG+Toast-rack*->	bacteria>fcb group	2
+SIGMA-HTH->?->SIG+Toast-rack*->DnaB+DnaB_C->?-><-?||?->NMN_transporter->	bacteria>proteobacteria>gammaproteobacteria	2
+SIGMA-HTH->zf-HC2+TM->SIG+Toast-rack*->	bacteria>fcb group	2
+Toast-rack*->	bacteria>deinococcus-thermus	2
+Toast-rack*->	bacteria>other unclassified bacteria	2
+Toast-rack*-><-SIG+DHO_dh<-?<-Smr<-?||THF_DHG_CYH+THF_DHG_CYH_C->	bacteria>proteobacteria>deltaproteobacteria	2
+Toast-rack*->Phage_holin_4_2->	bacteria>firmicutes	2
+Toast-rack*->PspC+TM(s)->?->Phage_holin_4_2->	bacteria>firmicutes	2
+Toast-rack*->PspC+TM(s)->Phage_holin_4_2->SIG+LTD+IG+Calcineurin-><-?<-G<-Amidohydro_1	bacteria>firmicutes	2
+Toast-rack*->SIG+PADR-HTH-><-?<-?<-?||?-><-?<-ADH_N+ADH_zinc_N	bacteria>actinobacteria	2
+TraJ-RHH->Toast-rack*-><-?<-ABC-ATPase<-?||?->?->ENOYCOADEHYD->	bacteria>actinobacteria	2
+TraJ-RHH->Toast-rack*->ABC-ATPase->SIG+TM(s)->p450->	bacteria>actinobacteria	2
+TraJ-RHH->Toast-rack*->p450->	bacteria>actinobacteria	2
+<-AAA+AAA_assoc_2+MgsA_C||?->tRNA->?->SurE-><-?||?-><-?<-SIG+Toast-rack*	bacteria>other unclassified bacteria	1
+<-ABC-ATPase<-?<-SIG+Toast-rack*<-?<-ABC-ATPase<-GNTR-HTH	bacteria>firmicutes	1
+<-ABC-ATPase<-?<-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)<-SIG+PADR-HTH	bacteria>firmicutes	1
+<-ABC-ATPase<-MacB_PCD+FtsX+TM+MacB_PCD+FtsX<-SIG+Toast-rack*<-ABC-ATPase	bacteria>acidobacteria	1
+<-ABC-ATPase<-SIG+PADR-HTH||?-><-Toast-rack*	archaea>tack group	1
+<-Acyl-CoA_dh_N+Acyl-CoA_dh_M+Acyl-CoA_dh_1||SIG+Toast-rack*->	eukaryota>archaeplastida>viridiplantae>chlorophyta	1
+<-ADH_N+ADH_zinc_N<-?<-HI0933_like<-?<-GreA_GreB_N+GreA_GreB||SIG+Toast-rack*->SIG+Toast-rack*-><-?||?->?->?->?-><-SIG+Acetyltransf_1	bacteria>proteobacteria>alphaproteobacteria	1
+<-adh_short||TraJ-RHH->Toast-rack*->	bacteria>actinobacteria	1
+<-adh_short<-SIG+Toast-rack*	bacteria>proteobacteria>gammaproteobacteria	1
+<-AIRS+AIRS_C+AIRS+AIRS_C||?->?->SIG+Toast-rack*->	bacteria>other unclassified bacteria	1
+<-AlaDh_PNT_N+AlaDh_PNT_C<-?<-Cluster1104_2clades<-HTH_24+ROK<-SIG+GFO_IDH_MocA<-?<-SIG+Toast-rack*<-PNTB<-PNTB_4TM<-AlaDh_PNT_N+AlaDh_PNT_C	bacteria>other unclassified bacteria	1
+<-AraC-HTH(s)||?->?-><-SIG+PADR-HTH<-Toast-rack*<-?||?-><-T2SSE	bacteria>actinobacteria	1
+<-Asp_Glu_race||Cob_adeno_trans-><-?<-?<-SIG+TM(s)<-Toast-rack*	archaea>euryarchaeota	1
+<-Asp_Glu_race||Cob_adeno_trans-><-SIG+TM(s)<-SIG+TM(s)<-Toast-rack*<-?<-SIG+TM(s)<-HTH	archaea>euryarchaeota	1
+<-CN_hydrolase+NAD_synthase<-SIG+Toast-rack*	bacteria>other unclassified bacteria	1
+<-COesterase<-?<-SIG+Toast-rack*<-?||HTH_24+ROK->?->Lyase_1+ASL_C2->	bacteria>acidobacteria	1
+<-Cys_Met_Meta_PP||?->REC+LYTTR->SIG+TM+HAMP+HISKIN-><-ZNR+DUF2089-HTH<-?<-DUF2089-HTH<-Toast-rack*<-?<-?<-?<-?||Arginase->?-><-ATP-grasp	bacteria>deinococcus-thermus	1
+<-DAGK_cat<-?<-PTPS<-?<-SIGMA-HTH<-SIG+Toast-rack*<-PspC+TM(s)<-PspC+TM(s)	bacteria>firmicutes	1
+<-DNA_ligase_A_N+DNA_ligase_A_M+DNA_ligase_A_C||?->SIG+TM+HISKIN-LiaS-like->REC+LYTTR->TM+Toast-rack*->CstA+CstA_5TM+TM->	bacteria>actinobacteria	1
+<-DNA_photolyase+FAD_binding_7||?->TraJ-RHH->Toast-rack*-><-?<-?||SIGMA-HTH->?->?->?->?->?->DUF1707-SHOCT-bihelical+Toast-rack*-><-?||Peptidase_M24->	bacteria>actinobacteria	1
+<-DUF1700-alpha-helical+TM(s)<-SIG+PADR-HTH<-SIG+Toast-rack*	bacteria>thermotogae	1
+<-DUF2089-HTH+Toast-rack*<-?<-DUF2089-HTH<-Toast-rack*	bacteria>other unclassified bacteria	1
+<-DUF2089-HTH<-Toast-rack*<-ZNR+DUF2089-HTH	bacteria>fcb group	1
+<-DUF2252<-RNA-Helicase+A18||His_Phos_1->?-><-?<-SIG+Toast-rack*<-SIG+BLBD<-?<-LexA-HTH+Peptidase_S24	bacteria>acidobacteria	1
+<-DUF520<-Toast-rack*	bacteria>pvc group	1
+<-Dus||HSP33-><-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)<-SIG+PADR-HTH<-Maf||?->Pribosyltran->SIG+TM+AAA+Peptidase_M41->	bacteria>tenericutes	1
+<-Dus<-?||?-><-TM+Toast-rack*	bacteria>chloroflexi	1
+<-Dus<-SIG+Toast-rack(s)*<-DUF1700-alpha-helical+TM(s)<-SIG+PADR-HTH	bacteria>firmicutes	1
+<-EPSP_synthase<-PDH||?->SIG+PADR-HTH->DUF1700-alpha-helical+Toast-rack*->Peptidase_M32->?->THF_DHG_CYH+THF_DHG_CYH_C->Lyase_1+ADSL_C->	bacteria>tenericutes	1
+<-FAA_hydrolase||?-><-?<-adh_short||TetR_N-><-?<-Toast-rack*<-TraJ-RHH<-?<-SIGMA-HTH	bacteria>actinobacteria	1
+<-Fer2_3+Fer2_2<-?<-?<-?<-?||?->?-><-SIG+Toast-rack*	bacteria>firmicutes	1
+<-Fer2_3+Fer4_8||Glyco_tran_WecB->Cob_adeno_trans->?->PGK->?-><-EVE<-Toast-rack*<-ZNR+DUF2089-HTH	bacteria>armatimonadetes	1
+<-Flavoprotein+DFP||?-><-?<-?||Toast-rack*-><-?<-?<-?<-?<-?<-?<-SIG+SBP_bac_8	bacteria>firmicutes	1
+<-GATase_5<-PurS||?->TraJ-RHH->Toast-rack*->ABC-ATPase->SIG+TM(s)-><-?<-?<-SIG+HTH_11+WYL||ABC-ATPase->SIG+TM(s)->	bacteria>actinobacteria	1
+<-GFA<-?||SIG+tRNA_U5-meth_tr->?-><-?||ADH_N+ADH_zinc_N->SIG+Toast-rack*-><-?<-UDG<-?<-?<-SIG+CDP-OH_P_transf+TM(s)	bacteria>actinobacteria	1
+<-Glyco_hydro_1<-MarR||?-><-SIG+PADR-HTH<-Toast-rack*||?->SIG+Toast-rack*->	bacteria>actinobacteria	1
+<-Glyoxalase||?->TraJ-RHH->Toast-rack*->	bacteria>actinobacteria	1
+<-Glyoxalase<-YbjQ_1<-?||?->?->NDK-><-LiaI-LiaF-TM(s)+Toast-rack*<-TM+LiaI-LiaF-TM<-?<-SIGMA-HTH	bacteria>acidobacteria	1
+<-GTP-bdg_N+GTP-bdg_M+MMR_HSR1||?->SIG+Toast-rack*-><-?<-SIG+PPK2	archaea>others	1
+<-HAD_2||?-><-?<-Toast-rack*	bacteria>firmicutes	1
+<-Isochorismatase||SIG+PADR-HTH->DUF1700-alpha-helical+TM(s)->SIG+Toast-rack(s)*->	bacteria>firmicutes	1
+<-LACI-HTH+PBPI<-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)<-SIG+PADR-HTH	bacteria>firmicutes	1
+<-LiaI-LiaF-TM(s)+Toast-rack*<-TM+LiaI-LiaF-TM<-?<-SIGMA-HTH	bacteria>acidobacteria	1
+<-LiaI-LiaF-TM+Toast-rack*	bacteria>firmicutes	1
+<-LiaI-LiaF-TM+Toast-rack*<-?<-?<-Amidase<-Glu-tRNAGln	bacteria>firmicutes	1
+<-LiaI-LiaF-TM+Toast-rack*<-LiaI-LiaF-TM<-BBOX+TM(s)+LiaI-LiaF-TM<-?<-SIGMA-HTH||?->ATP-cone->	bacteria>acidobacteria	1
+<-MacB_PCD+FtsX+TM+MacB_PCD+FtsX<-?<-SIG+Toast-rack*	bacteria>fcb group	1
+<-MacB_PCD+FtsX+TM+MacB_PCD+FtsX<-MacB_PCD+FtsX+TM+MacB_PCD+FtsX<-MacB_PCD+FtsX+TM+MacB_PCD+FtsX<-?<-?<-SIG+Toast-rack*	bacteria>pvc group	1
+<-MacB_PCD+FtsX+TM+MacB_PCD+FtsX<-SIG+Toast-rack*||?-><-?<-FAD_binding_4+FAD-oxidase_C	bacteria>fcb group	1
+<-MacB_PCD+FtsX<-ABC-ATPase<-?<-?<-?<-?<-Toast-rack*<-?<-ZNR+DUF2089-HTH	bacteria>thermotogae	1
+<-MacB_PCD+FtsX<-ABC-ATPase<-?<-?<-?<-?<-Toast-rack*<-?<-ZNR+DUF2089-HTH||?->?->Cation_efflux+ZT_dimer->Acetyltransf_3->	bacteria>thermotogae	1
+<-MerR-HTH||Toast-rack*->SIG+PADR-HTH->	bacteria>actinobacteria	1
+<-MerR-HTH<-?||SIG+Toast-rack*-><-?<-Ldh_1_N+Ldh_1_C	bacteria>firmicutes	1
+<-MODE-HTH+PBPII||?->AP_endonuc_2->SIG+Toast-rack*->	bacteria>firmicutes	1
+<-MODE-HTH+PBPII||?->SIG+Toast-rack(s)*->	bacteria>proteobacteria>betaproteobacteria	1
+<-NAD_binding_10<-?||SIG+PADR-HTH->DUF1700-alpha-helical+ZetaToxin+Toast-rack*->YbjQ_1->	bacteria>firmicutes	1
+<-NifU_N<-Aldedh<-Endonuclease_5||?->ZNR+DUF2089-HTH->?->Toast-rack+DUF2089-HTH*->?-><-PDT	bacteria>thermobaculum	1
+<-NTP_transferase<-NAD_Gly3P_dh_N+NAD_Gly3P_dh_C<-?<-?<-Phage_holin_4_2<-PspC+TM(s)<-Toast-rack*	bacteria>firmicutes	1
+<-ParBc<-AAA_31<-GidB<-?<-?<-ZNR+DUF2089-HTH<-?<-Toast-rack*	bacteria>deinococcus-thermus	1
+<-Phage_holin_4_2<-DUF2089-HTH<-Toast-rack*<-ZNR+DUF2089-HTH	bacteria>firmicutes	1
+<-Phage_holin_4_2<-PSE<-Toast-rack*	bacteria>firmicutes	1
+<-Phage_holin_4_2<-PspC+TM(s)<-PspC+TM(s)<-Toast-rack*<-?<-?<-ABC-ATPase(s)	bacteria>firmicutes	1
+<-Phage_holin_4_2<-Toast-rack*<-?<-ABC-ATPase(s)<-RNA-Helicase+A18	bacteria>firmicutes	1
+<-Phage_holin_4_2<-Toast-rack*<-PIG-L	bacteria>firmicutes	1
+<-PhyH<-SIG+Toast-rack*	bacteria>other unclassified bacteria	1
+<-PIG-L<-?||TraJ-RHH->Toast-rack*->ABC-ATPase->SIG+TM(s)->	bacteria>actinobacteria	1
+<-PspC+TM(s)<-PspC+TM(s)<-?<-SIG+Toast-rack*<-?<-SIGMA-HTH	bacteria>caldiserica	1
+<-PspC+TM(s)<-SIG+Toast-rack*	bacteria>firmicutes	1
+<-PspC+TM(s)<-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)<-SIG+PADR-HTH	bacteria>firmicutes	1
+<-PspC+TM(s)<-Toast-rack*<-SIG+PADR-HTH	bacteria>firmicutes	1
+<-PTA_PTB<-?<-?||?-><-PspC+TM(s)<-Toast-rack*<-SIG+PADR-HTH	bacteria>firmicutes	1
+<-Radical_SAM||OsmC->?-><-?<-SIG+TM+Toast-rack*<-PspC+TM(s)<-PspC+TM(s)	archaea>euryarchaeota	1
+<-REC+LYTTR||TraJ-RHH->?->?->Toast-rack*->ABC-ATPase->SIG+TM(s)->	bacteria>actinobacteria	1
+<-REC+LYTTR<-?<-?<-Toast-rack*	bacteria>actinobacteria	1
+<-REC+LYTTR<-SIG+TM+HAMP+HISKIN-LiaS-like<-LiaI-LiaF-TM+Toast-rack*<-SIG+Toast-rack*<-PspA<-LiaI-LiaF-TM	bacteria>firmicutes	1
+<-REC+LYTTR<-SIG+Toast-rack*<-SIG+TM+HISKIN-LiaS-like<-?<-?<-?<-SIG+PADR-HTH	bacteria>deinococcus-thermus	1
+<-REC+NtrC-AAA+FIS-HTH||PspA->?->?->SIG+Toast-rack*->SIG+TM(s)->ABC-ATPase->	bacteria>proteobacteria>alphaproteobacteria	1
+<-RecG_wedge+DEAD+Helicase_C<-SIG+Toast-rack*	bacteria>actinobacteria	1
+<-Response_reg+PAS_9+HisKA+HATPase_c<-?<-Toast-rack*	bacteria>actinobacteria	1
+<-Rhodanese(s)||SufE-><-ZNR+DUF2089-HTH<-?<-Toast-rack*	bacteria>deinococcus-thermus	1
+<-RNA-Helicase+A18||?->?-><-?<-SIG+Toast-rack*<-SIG+BLBD<-LexA-HTH+Peptidase_S24	bacteria>acidobacteria	1
+<-RuvX||SIG+YceG->?->?->SIG+Toast-rack*->	bacteria>acidobacteria	1
+<-SIG+Aminotran_1_2||?->Toast-rack*->SIG+PADR-HTH-><-MerR-HTH||?->?->?->SIG+DoxX+TM->	bacteria>actinobacteria	1
+<-SIG+Aminotran_1_2<-?<-SIG+Toast-rack*	archaea>euryarchaeota	1
+<-SIG+Bactofilin+TM(s)<-SIG+Toast-rack*	bacteria>fcb group	1
+<-SIG+Bactofilin+TM(s)<-SIG+Toast-rack*	bacteria>other unclassified bacteria	1
+<-SIG+Bactofilin+TM(s)<-SIG+Toast-rack*<-SIGMA-HTH	bacteria>fcb group	1
+<-SIG+Beta-lactamase<-Toast-rack*||?->?-><-?<-?||?->?->?->?->DUF1707-SHOCT-bihelical+Toast-rack*-><-?<-SIGMA-HTH	bacteria>actinobacteria	1
+<-SIG+DsbD+TM(s)+Thioredoxin_7<-?<-SIG+Toast-rack*||?->PolyA_pol+PolyA_pol_RNAbd+HD+tRNA_NucTran2_2->	bacteria>other unclassified bacteria	1
+<-SIG+DUF1576+TM+DUF1576<-?<-?||?->?-><-Toast-rack*<-?||?->?-><-?<-?<-?<-DEAD+Helicase_C+DEAD_assoc	archaea>euryarchaeota	1
+<-SIG+GDSL||SIGMA-HTH->?->TM+LiaI-LiaF-TM->LiaI-LiaF-TM+Toast-rack+PspA*-><-NDK	bacteria>acidobacteria	1
+<-SIG+Glyco_hydro_2_N+Glyco_hydro_2+Glyco_hydro_2_C<-Toast-rack*	bacteria>dictyoglomi	1
+<-SIG+HTH_11+WYL||?->?->SIG+Toast-rack*->	bacteria>firmicutes	1
+<-SIG+Nramp+TM<-?||?->SIG+Toast-rack*->	bacteria>proteobacteria>gammaproteobacteria	1
+<-SIG+Nramp+TM<-?<-Thy1||TraJ-RHH->Toast-rack*->	bacteria>actinobacteria	1
+<-SIG+PADR-HTH<-Toast-rack*<-?<-SIG+TM+BPD_transp_1<-SIG+TM(s)+BPD_transp_1+TM	bacteria>actinobacteria	1
+<-SIG+PADR-HTH<-Toast-rack*<-?<-Toast-rack*	bacteria>actinobacteria	1
+<-SIG+PADR-HTH<-Toast-rack*<-T2SSE	bacteria>actinobacteria	1
+<-SIG+PDZ_2(s)<-SIG+Toast-rack*<-zf-HC2+TM<-SIGMA-HTH<-SIG+Bactofilin+TM(s)<-SIG+Toast-rack*<-SIGMA-HTH	bacteria>fcb group	1
+<-SIG+PDZ_2(s)<-SIG+Toast-rack*<-ZnF+TM+HEAT_2<-SIGMA-HTH	bacteria>acidobacteria	1
+<-SIG+Peptidase_M1||?->SIG+Toast-rack*->	bacteria>fcb group	1
+<-SIG+Sortilin-Vps10(s)+FlgD_ig<-?<-?<-adh_short||?->?->?-><-Toast-rack*<-SIG+Toast-rack*<-ZnF+TM+HEAT_2<-SIGMA-HTH	bacteria>fcb group	1
+<-SIG+Sortilin-Vps10(s)+FlgD_ig<-PSE<-PSE<-?<-?<-SIG+Toast-rack*	bacteria>other unclassified bacteria	1
+<-SIG+TM(s)+BPD_transp_1+TM<-?<-?||Glyco_hydro_36N+Melibiase+Glyco_hydro_36C->ADH_N+ADH_zinc_N->?-><-?<-Toast-rack*	bacteria>actinobacteria	1
+<-SIG+TM(s)<-ABC-ATPase<-Toast-rack*<-TraJ-RHH<-?||?->?->?-><-?<-Toast-rack*	bacteria>actinobacteria	1
+<-SIG+TM(s)<-ABC-ATPase<-Toast-rack*<-TraJ-RHH<-?<-?||?->?->ENOYCOADEHYD->	bacteria>actinobacteria	1
+<-SIG+TM(s)<-ABC-ATPase<-Toast-rack*<-TraJ-RHH<-SIGMA-HTH<-SIG+Beta-lactamase	bacteria>actinobacteria	1
+<-SIG+TM(s)<-Toast-rack*<-SIG+TM(s)<-HTH	archaea>euryarchaeota	1
+<-SIG+TM+AAA+Peptidase_M41<-?<-?<-?<-?<-PolyA_pol+PolyA_pol_RNAbd+HD+tRNA_NucTran2_2||SIG+Toast-rack*->	bacteria>other unclassified bacteria	1
+<-SIG+TM+HAMP+HISKIN<-REC+LYTTR<-SIG+PADR-HTH<-Toast-rack*<-SIG+Acyltransferase	bacteria>actinobacteria	1
+<-SIG+Toast-rack*	archaea>asgard group	1
+<-SIG+Toast-rack*	archaea>others	1
+<-SIG+Toast-rack*	archaea>tack group	1
+<-SIG+Toast-rack*	bacteria>cyanobacteria	1
+<-SIG+Toast-rack*	bacteria>pvc group	1
+<-SIG+Toast-rack*	bacteria>thermotogae	1
+<-SIG+Toast-rack*	eukaryota>archaeplastida>viridiplantae>chlorophyta	1
+<-SIG+Toast-rack*	eukaryota>holozoa	1
+<-SIG+Toast-rack*	eukaryota>sar>alveolata	1
+<-SIG+Toast-rack*||?->?->?->?->REC+LYTTR-><-?<-SIGMA-HTH	bacteria>fcb group	1
+<-SIG+Toast-rack*||?->?->?->REC+NtrC-AAA+FIS-HTH->	bacteria>other unclassified bacteria	1
+<-SIG+Toast-rack*||?-><-SIG+Toast-rack*<-REC+LYTTR<-SIG+TM+HISKIN-LiaS-like	bacteria>actinobacteria	1
+<-SIG+Toast-rack*||Cluster539_2clades-><-?<-?||?->Glyco_hydro_36N+Melibiase+Glyco_hydro_36C->	bacteria>firmicutes	1
+<-SIG+Toast-rack*<-?||?->?->?->?->ADH_N+ADH_zinc_N->	bacteria>chloroflexi	1
+<-SIG+Toast-rack*<-?<-?<-?||ABC-ATPase->?->SIG+Toast-rack*-><-?<-REC+LYTTR	bacteria>firmicutes	1
+<-SIG+Toast-rack*<-?<-?<-?<-?<-TM+SSF+TM(s)<-LACI-HTH+PBPI	bacteria>acidobacteria	1
+<-SIG+Toast-rack*<-?<-?<-?<-MacB_PCD+FtsX+TM+MacB_PCD+FtsX	bacteria>fcb group	1
+<-SIG+Toast-rack*<-?<-?<-SIG+TM(s)||?-><-Phage_holin_4_2	bacteria>actinobacteria	1
+<-SIG+Toast-rack*<-?<-?<-SIGMA-HTH	bacteria>proteobacteria>gammaproteobacteria	1
+<-SIG+Toast-rack*<-?<-ABC-ATPase	bacteria>actinobacteria	1
+<-SIG+Toast-rack*<-?<-ENOYCOADEHYD	bacteria>other unclassified bacteria	1
+<-SIG+Toast-rack*<-?<-NUDIX<-AMP_N+Peptidase_M24	bacteria>other unclassified bacteria	1
+<-SIG+Toast-rack*<-?<-PseudoU_synth_1(s)<-CbiQ<-ABC-ATPase<-ABC-ATPase	bacteria>firmicutes	1
+<-SIG+Toast-rack*<-?<-PspC+TM(s)<-DUF1700-alpha-helical+TM(s)<-SIG+PADR-HTH	bacteria>spirochaetes	1
+<-SIG+Toast-rack*<-?<-SIGMA-HTH	bacteria>proteobacteria>deltaproteobacteria	1
+<-SIG+Toast-rack*<-?<-SIGMA-HTH||?-><-Ribosomal_L9_N+Ribosomal_L9_C<-SIG+Ribosomal_S18<-?<-SIG+TM+HAMP+HISKIN	bacteria>proteobacteria>gammaproteobacteria	1
+<-SIG+Toast-rack*<-ABC-ATPase<-MacB_PCD+FtsX<-MacB_PCD+FtsX	bacteria>other unclassified bacteria	1
+<-SIG+Toast-rack*<-Abhydrolase_2<-?||YTCD-HTH->	archaea>euryarchaeota	1
+<-SIG+Toast-rack*<-Aldose_epim	bacteria>actinobacteria	1
+<-SIG+Toast-rack*<-Cluster1581_2clades	bacteria>fcb group	1
+<-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)<-?||?-><-?<-ABC-ATPase<-?<-ABC-ATPase	bacteria>firmicutes	1
+<-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)<-REC+LYTTR<-SIG+TM+HISKIN-LiaS-like<-SIG+TM(s)+Toast-rack*	bacteria>firmicutes	1
+<-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)<-SIG+PADR-HTH	bacteria>proteobacteria>deltaproteobacteria	1
+<-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)<-SIG+PADR-HTH	bacteria>spirochaetes	1
+<-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)<-SIG+PADR-HTH<-?<-ETF+ETF_alpha<-ETF<-?<-ETF+ETF_alpha	bacteria>firmicutes	1
+<-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)<-SIG+PADR-HTH<-Acetate_kinase<-Aldedh	bacteria>firmicutes	1
+<-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)<-SIG+PADR-HTH<-tRNA<-?<-?<-?<-WhiA_N+LAGLIDADG_WhiA+HTH_WhiA	bacteria>tenericutes	1
+<-SIG+Toast-rack*<-ENOYCOADEHYD	bacteria>other unclassified bacteria	1
+<-SIG+Toast-rack*<-His_biosynth||DUF488->	archaea>euryarchaeota	1
+<-SIG+Toast-rack*<-LiaI-LiaF-TM+Toast-rack*	bacteria>firmicutes	1
+<-SIG+Toast-rack*<-LiaI-LiaF-TM<-BBOX+TM(s)+LiaI-LiaF-TM<-zf-HC2+TM<-SIGMA-HTH	bacteria>other unclassified bacteria	1
+<-SIG+Toast-rack*<-MacB_PCD+FtsX+TM+MacB_PCD+FtsX	bacteria>fcb group	1
+<-SIG+Toast-rack*<-Penicillinase_R	bacteria>pvc group	1
+<-SIG+Toast-rack*<-PSE<-PSE<-SIGMA-HTH<-DcuC	bacteria>other unclassified bacteria	1
+<-SIG+Toast-rack*<-PspA<-LiaI-LiaF-TM	bacteria>firmicutes	1
+<-SIG+Toast-rack*<-REC+LYTTR<-SIG+TM+HISKIN-LiaS-like||?->Aldo_ket_red->	bacteria>actinobacteria	1
+<-SIG+Toast-rack*<-SIG+BLBD	bacteria>acidobacteria	1
+<-SIG+Toast-rack*<-SIG+Peptidase_S9_N+Peptidase_S9	bacteria>firmicutes	1
+<-SIG+Toast-rack*<-SIG+TM+HAMP+HISKIN	bacteria>fcb group	1
+<-SIG+Toast-rack*<-SIG+Toast-rack*	eukaryota>metazoa	1
+<-SIG+Toast-rack*<-SIG+Toast-rack*<-?<-?<-PspA||REC+NtrC-AAA+FIS-HTH->	bacteria>proteobacteria>alphaproteobacteria	1
+<-SIG+Toast-rack*<-SIG+Toast-rack*<-?<-?<-SIGMA-HTH	bacteria>proteobacteria>gammaproteobacteria	1
+<-SIG+Toast-rack*<-SIG+Toast-rack*<-SIG+Toast-rack*<-?<-SIGMA-HTH	bacteria>fcb group	1
+<-SIG+Toast-rack*<-SIG+Toast-rack*<-ZnF+TM+HEAT_2<-SIGMA-HTH<-SIG+Toast-rack*<-SIG+Toast-rack*<-PSE<-SIGMA-HTH	bacteria>fcb group	1
+<-SIG+Toast-rack*<-SIG+Toast-rack*<-ZnF+TM+HEAT_2<-SIGMA-HTH<-SIG+Toast-rack*<-SIG+Toast-rack*<-ZnF+TM+HEAT_2<-SIGMA-HTH	bacteria>fcb group	1
+<-SIG+Toast-rack*<-Toast-rack*	bacteria>fcb group	1
+<-SIG+Toast-rack*<-zf-HC2+TM<-SIGMA-HTH	bacteria>fcb group	1
+<-SIG+Toast-rack*<-zf-HC2+TM<-SIGMA-HTH	bacteria>other unclassified bacteria	1
+<-SIG+Toast-rack*<-zf-HC2+TM<-SIGMA-HTH	bacteria>proteobacteria>gammaproteobacteria	1
+<-SIG+Toast-rack*<-ZnF+TM+HEAT_2<-SIGMA-HTH	bacteria>other unclassified bacteria	1
+<-SIGMA-HTH<-LiaI-LiaF-TM+Toast-rack*	bacteria>firmicutes	1
+<-SNO<-SOR_SNZ+ThiG<-?<-Isochorismatase<-SIG+LiaI-LiaF-TM<-Toast-rack*<-DUF2089-HTH<-ZNR+DUF2089-HTH	bacteria>thermotogae	1
+<-THF_DHG_CYH+THF_DHG_CYH_C||?->Smr->?->SIG+DHO_dh-><-Toast-rack*	bacteria>proteobacteria>deltaproteobacteria	1
+<-Thy1||?->TraJ-RHH->Toast-rack*-><-?<-SIG+HTH_42<-EamA(s)	bacteria>actinobacteria	1
+<-Thy1||TraJ-RHH->Toast-rack*-><-SIG+HTH_42	bacteria>actinobacteria	1
+<-Thy1||TraJ-RHH->Toast-rack*-><-SIG+HTH_42||?->?-><-SIG+Aminotran_1_2||EamA(s)->	bacteria>actinobacteria	1
+<-TM(s)+PEMT<-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)<-SIG+PADR-HTH	bacteria>firmicutes	1
+<-TM+SSF+TM(s)||TraJ-RHH->Toast-rack*->	bacteria>actinobacteria	1
+<-TM+Toast-rack*	bacteria>actinobacteria	1
+<-TM+Toast-rack*	bacteria>chloroflexi	1
+<-TM+Toast-rack*	eukaryota>fungi	1
+<-TM+Toast-rack*<-REC+LYTTR<-SIG+TM+HISKIN-LiaS-like||LACI-HTH+PBPI->	bacteria>actinobacteria	1
+<-Toast-rack(s)*<-DUF2089-HTH<-ZNR+DUF2089-HTH	bacteria>chloroflexi	1
+<-Toast-rack*	bacteria>dictyoglomi	1
+<-Toast-rack*||?-><-?||SIG+DUF4015->	bacteria>actinobacteria	1
+<-Toast-rack*||?-><-?<-?<-?<-?<-?||?-><-?<-?||?->?-><-?||DUF1707-SHOCT-bihelical+Toast-rack*->	bacteria>actinobacteria	1
+<-Toast-rack*||?-><-SIG+TM(s)<-ABC-ATPase	bacteria>actinobacteria	1
+<-Toast-rack*<-?||?-><-?<-DEAD+Helicase_C+DEAD_assoc	archaea>euryarchaeota	1
+<-Toast-rack*<-?||SIG+FecCD->ABC-ATPase->	archaea>euryarchaeota	1
+<-Toast-rack*<-?<-?<-ABC-ATPase(s)	bacteria>firmicutes	1
+<-Toast-rack*<-?<-Cyclase	bacteria>actinobacteria	1
+<-Toast-rack*<-?<-ZNR+DUF2089-HTH||?->?->Cation_efflux+ZT_dimer->	bacteria>thermotogae	1
+<-Toast-rack*<-SIG+TM(s)	bacteria>actinobacteria	1
+<-Toast-rack*<-SIG+TM(s)+ABC-ATPase	bacteria>firmicutes	1
+<-Toast-rack*<-SIG+YibE_F<-SIG+YibE_F<-PSE<-?<-ABC-ATPase<-ABC-ATPase	bacteria>firmicutes	1
+<-Toast-rack*<-TraJ-RHH||?-><-Radical_SAM<-?||?->Methyltransf_25->	bacteria>actinobacteria	1
+<-Toast-rack*<-TraJ-RHH||?->Thy1->	bacteria>actinobacteria	1
+<-Toast-rack*<-TraJ-RHH<-?||?->?-><-?<-tRNA||DUF520->	bacteria>actinobacteria	1
+<-Toast-rack*<-ZNR+DUF2089-HTH	bacteria>fcb group	1
+<-Toast-rack*<-ZNR+DUF2089-HTH	bacteria>firmicutes	1
+<-Toast-rack*<-ZNR+DUF2089-HTH	bacteria>other unclassified bacteria	1
+<-Toast-rack*<-ZNR+DUF2089-HTH||Peptidase_M32->	bacteria>armatimonadetes	1
+<-Toast-rack*<-ZNR+DUF2089-HTH<-Isochorismatase	bacteria>thermotogae	1
+<-Urocanase<-?||?-><-SIG+Toast-rack*	bacteria>fcb group	1
+<-WhiA_N+LAGLIDADG_WhiA+HTH_WhiA<-?<-?<-?<-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)<-SIG+PADR-HTH	bacteria>firmicutes	1
+<-ZNR+DUF2089-HTH<-?<-Toast-rack*	bacteria>deinococcus-thermus	1
+<-ZNR+DUF2089-HTH<-SIG+TM(s)<-?<-DUF2089-HTH<-Toast-rack*	bacteria>deinococcus-thermus	1
+<-ZNR+DUF2089-HTH<-Toast-rack*	bacteria>other unclassified bacteria	1
+AA_permease_2-><-SIG+Toast-rack*<-ZnF+TM+HEAT_2	bacteria>other unclassified bacteria	1
+AA_permease_2-><-SIG+Toast-rack*<-ZnF+TM+HEAT_2<-SIGMA-HTH	bacteria>other unclassified bacteria	1
+AAA_3->?->?->?-><-Toast-rack*<-ZNR+DUF2089-HTH	bacteria>firmicutes	1
+ABC-ATPase->?->?-><-?<-?<-SIG+TM(s)<-ABC-ATPase<-Toast-rack*<-?||?-><-Bac_GDH	bacteria>actinobacteria	1
+ABC-ATPase->?->?->SIG+CitMHS+TM(s)-><-SIG+Toast-rack*||?-><-?<-?<-?<-?<-?||Aminotran_3->	bacteria>proteobacteria>gammaproteobacteria	1
+ABC-ATPase->?-><-SIG+TM(s)<-ABC-ATPase<-Toast-rack*<-TraJ-RHH	bacteria>actinobacteria	1
+ABC-ATPase->?-><-SIG+Toast-rack*<-Toast-rack*	bacteria>fcb group	1
+ABC-ATPase->?-><-SIG+Toast-rack*<-Toast-rack*<-?<-Acetyltransf_3	bacteria>fcb group	1
+ABC-ATPase->?-><-Toast-rack*<-TraJ-RHH	bacteria>actinobacteria	1
+ABC-ATPase->?->GNTR-HTH->ABC-ATPase->?->SIG+Toast-rack*->ABC-ATPase->?->?->REC+LYTTR->SIG+TM+HAMP+HISKIN->	bacteria>firmicutes	1
+ABC-ATPase->ABC-ATPase->SIG+Toast-rack*->	bacteria>other unclassified bacteria	1
+ABC-ATPase->SIG+TM(s)-><-?||Toast-rack*->	bacteria>actinobacteria	1
+ABC-ATPase->SIG+TM(s)-><-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)<-SIG+PADR-HTH	bacteria>firmicutes	1
+ABC-ATPase->SIG+TM(s)->Toast-rack*->	bacteria>firmicutes	1
+ABC-ATPase->SIG+TM+BPD_transp_1->SIG+TM+BPD_transp_1->SIG+SBP_bac_8->?->Toast-rack*->	bacteria>firmicutes	1
+ABC-ATPase->SIG+TM+BPD_transp_1->TM(s)+BPD_transp_1->?->?->?->SIG+PADR-HTH->DUF1700-alpha-helical+Toast-rack*->	bacteria>firmicutes	1
+ABC-ATPase(s)->?->?->Toast-rack*->	bacteria>firmicutes	1
+ABC-ATPase(s)->?->?->Toast-rack*->PSE->Phage_holin_4_2->	bacteria>firmicutes	1
+ABC-ATPase(s)->?->?->Toast-rack*->PspC+TM(s)->PspC+TM(s)->Phage_holin_4_2->	bacteria>firmicutes	1
+Acetyltransf_3-><-?<-?<-?<-?||?-><-?<-SIG+Toast-rack*<-SIG+Toast-rack*<-ZnF+TM+HEAT_2<-SIGMA-HTH<-?<-?||ABC-ATPase->?-><-tRNA-synt_1b+S4	bacteria>fcb group	1
+Aconitase+HC2->?-><-SIG+Toast-rack*	bacteria>fcb group	1
+Acyl-CoA_dh_N+Acyl-CoA_dh_M+Acyl-CoA_dh_1->?->?->?->?-><-SIG+Toast-rack*<-SIG+Toast-rack*	bacteria>fcb group	1
+ADH_N+ADH_zinc_N->?->?->?->?-><-SIG+PADR-HTH<-Toast-rack*	bacteria>actinobacteria	1
+ADH_N+ADH_zinc_N->?-><-SIG+PADR-HTH<-Toast-rack*	bacteria>actinobacteria	1
+ADH_N+ADH_zinc_N->Toast-rack*-><-?<-?||AraC-HTH(s)->	bacteria>actinobacteria	1
+adh_short->?->?->?->?->?->?-><-SIG+Toast-rack*	bacteria>proteobacteria>gammaproteobacteria	1
+adh_short-><-p450<-SIG+TM(s)<-PSE<-Toast-rack*<-TraJ-RHH	bacteria>actinobacteria	1
+Aldedh->adh_short->GNTR-HTH->?->?->TraJ-RHH->Toast-rack*->ABC-ATPase->SIG+TM(s)->	bacteria>actinobacteria	1
+Aldo_ket_red->?->?-><-Toast-rack*<-TraJ-RHH||Thy1->	bacteria>actinobacteria	1
+Aldo_ket_red-><-SIG+Toast-rack*	bacteria>firmicutes	1
+Aldo_ket_red->SIG+Toast-rack*->	bacteria>fcb group	1
+Aminotran_3->?-><-?||?->?->SIG+PADR-HTH->DUF1700-alpha-helical+TM(s)->SIG+Toast-rack*->URO-D->	bacteria>firmicutes	1
+Aminotran_4->SIG+Toast-rack*->	bacteria>proteobacteria>deltaproteobacteria	1
+Aminotran_5->?->SIGMA-HTH->ZnF+TM+HEAT_2->?->SIG+Toast-rack*->	bacteria>other unclassified bacteria	1
+AP_endonuc_2-><-EamA(s)||MODE-HTH+PBPII-><-Toast-rack*<-TraJ-RHH	bacteria>actinobacteria	1
+Arg_tRNA_synt_N+tRNA-synt_1d+DALR_1->LiaI-LiaF-TM+Toast-rack*->SIGMA-HTH->	bacteria>firmicutes	1
+B3_4->?->?->Toast-rack*->SIG+PADR-HTH-><-?<-ADH_N+ADH_zinc_N	bacteria>actinobacteria	1
+Band_7_1+DUF4339-><-?<-?<-?||HTH->SIG+TM(s)->Toast-rack*->Toast-rack*->Toast-rack*->SIG+TM(s)-><-Cob_adeno_trans	archaea>euryarchaeota	1
+BCCT-><-p450<-DUF1700-alpha-helical+Toast-rack*	bacteria>firmicutes	1
+BirA-HTH-><-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)<-SIG+PADR-HTH	bacteria>firmicutes	1
+BirA-HTH-><-Toast-rack*	bacteria>firmicutes	1
+BPL_LplA_LipB+Lip_prot_lig_C-><-Toast-rack*<-ZNR+DUF2089-HTH	bacteria>firmicutes	1
+CarD_CdnL_TRCF->SIG+Toast-rack*->SIG+Toast-rack*->	bacteria>proteobacteria>alphaproteobacteria	1
+Cob_adeno_trans-><-SIG+TM(s)<-SIG+TM(s)<-Toast-rack*<-?<-SIG+TM(s)<-HTH	archaea>euryarchaeota	1
+Cob_adeno_trans->SIG+Toast-rack*->	bacteria>actinobacteria	1
+Cons_hypoth698+TM->?->?-><-?||?->SIG+Toast-rack*->?-><-?||?-><-?<-Pro_CA||Thr_synth_N+PALP->	bacteria>proteobacteria>gammaproteobacteria	1
+CTP_synth_N+GATase->?->Ribosomal_L31-><-Toast-rack*	bacteria>firmicutes	1
+CTP_transf_like->?->?->?-><-?||?-><-?||Toast-rack*->Phage_holin_4_2->	bacteria>firmicutes	1
+DcuC->SIGMA-HTH->zf-HC2+TM->SIG+Toast-rack*->	bacteria>other unclassified bacteria	1
+DUF1700-alpha-helical+TM(s)->SIG+Toast-rack*-><-ABC-ATPase	bacteria>firmicutes	1
+DUF1700-alpha-helical+TM(s)->SIG+Toast-rack*->SIG+TM(s)->	bacteria>firmicutes	1
+DUF2089-HTH->Toast-rack*->	bacteria>other unclassified bacteria	1
+DUF4870->?->?->Toast-rack*->	bacteria>firmicutes	1
+DUF4870->?->?->Toast-rack*-><-?<-?||BCCT-><-?<-?<-AIM24	bacteria>firmicutes	1
+Dus-><-SIG+Toast-rack*	bacteria>fcb group	1
+ENOYCOADEHYD->?-><-?||?-><-SIG+Toast-rack*<-SIG+Toast-rack*<-ZnF+TM+HEAT_2<-SIGMA-HTH	bacteria>fcb group	1
+ETF+ETF_alpha->?->ETF->ETF+ETF_alpha->?->SIG+PADR-HTH->DUF1700-alpha-helical+TM(s)->SIG+Toast-rack*->	bacteria>firmicutes	1
+FAD_binding_4+FAD-oxidase_C->?-><-?<-CstA+CstA_5TM+TM<-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)<-SIG+PADR-HTH<-?<-SIG+TM+BPD_transp_1<-SIG+TM(s)+BPD_transp_1+TM	bacteria>firmicutes	1
+Fe-ADH-><-?||DEAD+Helicase_C+DEAD_assoc->?-><-?<-?||?->Toast-rack*->	archaea>euryarchaeota	1
+Flavodoxin_2->Cation_efflux+ZT_dimer->Fe_dep_repress+Fe_dep_repr_C+FeoA->?->?->SIG+PADR-HTH->DUF1700-alpha-helical+TM(s)->SIG+Toast-rack*-><-?<-TauE	bacteria>firmicutes	1
+G->?-><-SIG+LTD+IG+Calcineurin<-?<-?<-Phage_holin_4_2<-PspC+TM(s)<-Toast-rack*	bacteria>firmicutes	1
+Glyco_hydro_1->?-><-?||SIG+Toast-rack*->	bacteria>fcb group	1
+Glyco_hydro_3+Glyco_hydro_3_C+Fn3-like-><-?<-?<-SIG+Toast-rack*<-zf-HC2+TM<-SIGMA-HTH	bacteria>other unclassified bacteria	1
+Glyco_tran_WecB-><-SIG+LiaI-LiaF-TM<-Toast-rack*<-ZNR+DUF2089-HTH	bacteria>thermotogae	1
+GNTR-HTH-><-SIG+Beta-lactamase||adh_short->TraJ-RHH->Toast-rack*->ABC-ATPase->SIG+TM(s)->p450->	bacteria>actinobacteria	1
+GNTR-HTH->ABC-ATPase->?->SIG+Toast-rack*->	bacteria>firmicutes	1
+GNTR-HTH->ABC-ATPase->SIG+TM(s)->SIG+Toast-rack*->?-><-EamA(s)	bacteria>proteobacteria>gammaproteobacteria	1
+GTP_EFTU+GTP_EFTU_D2+EFG_C-><-?<-Toast-rack*<-?||TP_methylase->?->?->?-><-OsmC	bacteria>spirochaetes	1
+H-><-?<-SIG+Toast-rack*	bacteria>proteobacteria>betaproteobacteria	1
+HATPase_c_3+DNA_mis_repair+MutL_C->?-><-?||?->Cytidylate_kin-><-LiaI-LiaF-TM+Toast-rack*<-LiaI-LiaF-TM<-TM+LiaI-LiaF-TM<-?<-SIGMA-HTH	bacteria>acidobacteria	1
+HD_4+RelA_SpoT+TGS+ACT_4->?->?->SIG+TM+HISKIN-LiaS-like->SIG+Toast-rack*->REC+LYTTR-><-?<-Aldo_ket_red	bacteria>deinococcus-thermus	1
+HHH_8+HHH_5(s)+DNA_pol_B_palm+DNA_pol_B_thumb+PHP->?->SIGMA-HTH->?->?->?->SIG+Toast-rack*-><-?<-FAD_binding_6+NAD_binding_1+Fer2	bacteria>fcb group	1
+His_Phos_1->Toast-rack*->	bacteria>fcb group	1
+Hist_deacetyl->?->SIG+TM+HISKIN-LiaS-like->SIG+Toast-rack*->REC+LYTTR->SIG+Acetyltransf_1->	bacteria>deinococcus-thermus	1
+HIT->SIG+Toast-rack*->DUF463->	bacteria>proteobacteria>gammaproteobacteria	1
+HTH->SIG+TM(s)->Toast-rack*->SIG+TM(s)->?->?-><-Cob_adeno_trans	archaea>euryarchaeota	1
+HTH->SIG+TM(s)->Toast-rack*->SIG+TM(s)-><-?||?->?-><-PTPS	archaea>euryarchaeota	1
+HTH->SIG+TM(s)->Toast-rack*->SIG+TM(s)->SIG+TM(s)->	archaea>euryarchaeota	1
+HTH->SIG+TM(s)->Toast-rack*->Toast-rack*->SIG+TM(s)-><-Cob_adeno_trans	archaea>euryarchaeota	1
+HTH_3->?->?->?->?->?->Toast-rack*->	bacteria>firmicutes	1
+LACI-HTH+PBPI->?->?->SIG+Toast-rack*-><-?<-?<-?<-SIG+TM+BPD_transp_1<-SIG+TM(s)+BPD_transp_1+TM<-?<-LACI-HTH+PBPI	bacteria>spirochaetes	1
+LACI-HTH+PBPI->Toast-rack*->SIG+PADR-HTH->	bacteria>actinobacteria	1
+Lactamase_B_3->SIG+Toast-rack*-><-Sacchrp_dh_NADP	archaea>euryarchaeota	1
+LiaI-LiaF-TM->?->?->TraJ-RHH->Toast-rack*->	bacteria>actinobacteria	1
+LiaI-LiaF-TM->PspA->SIG+Toast-rack*->LiaI-LiaF-TM+Toast-rack*->PSE->REC+LYTTR->	bacteria>firmicutes	1
+LiaI-LiaF-TM(s)+Toast-rack*->	bacteria>firmicutes	1
+LiaI-LiaF-TM+Toast-rack*->?->HhH-GPD+EndIII_4Fe-2S->	bacteria>firmicutes	1
+MacB_PCD+FtsX+TM+MacB_PCD+FtsX->?->?-><-?<-?||SIGMA-HTH->ZnF+TM+HEAT_2->SIG+Toast-rack*->SIG+Toast-rack*->	bacteria>fcb group	1
+MacB_PCD+FtsX+TM+MacB_PCD+FtsX->MacB_PCD+FtsX+TM+MacB_PCD+FtsX->MacB_PCD+FtsX+TM+MacB_PCD+FtsX->SIG+Toast-rack*->	bacteria>fcb group	1
+MerR-HTH->SIG+TM(s)+ABC-ATPase-><-?<-DUF1700-alpha-helical+Toast-rack*<-SIG+PADR-HTH	bacteria>firmicutes	1
+MerR+MerR_1-><-SIG+Toast-rack*	bacteria>firmicutes	1
+Meth_synt_1+Meth_synt_2->4HBT-><-?<-?||?->?->?->SIG+Toast-rack*->	bacteria>fcb group	1
+MMR_HSR1+YchF-GTPase_C-><-DUF2089-HTH<-Toast-rack*<-ZNR+DUF2089-HTH<-?<-Aminotran_5	bacteria>firmicutes	1
+Molybdop_Fe4S4+Molybdopterin+Molydop_binding->?->?->?->?->?->Toast-rack*->	bacteria>actinobacteria	1
+MTHFR->?->?-><-DUF1700-alpha-helical+Toast-rack*<-SIG+PADR-HTH	bacteria>firmicutes	1
+NAD_Gly3P_dh_N+NAD_Gly3P_dh_C-><-TerD+vWA-TerF-like<-?||Toast-rack*->?->ZNR+DUF2089-HTH->	bacteria>deinococcus-thermus	1
+NMO-><-SIG+Toast-rack*<-?<-adh_short	bacteria>firmicutes	1
+NMO->4HBT->?->SIG+PADR-HTH->Toast-rack*->DcuC->DcuC->?->FGGY_N+FGGY_C->	bacteria>firmicutes	1
+NTP_transferase+Fucokinase->?->?->PSE-><-Glyco_transf_5+Glycos_transf_1||?->Methyltrans_SAM->?->SIG+Toast-rack*->	bacteria>other unclassified bacteria	1
+NTP_transferase+MannoseP_isomer->PGM_PMM_I+PGM_PMM_II+PGM_PMM_III+PGM_PMM_IV-><-?<-SIG+Toast-rack*	bacteria>proteobacteria>gammaproteobacteria	1
+PadR->?-><-SIG+TM(s)<-ABC-ATPase<-Toast-rack*<-TraJ-RHH<-?<-Fer2_3+Fer4_8	bacteria>actinobacteria	1
+Penicillinase_R->SIG+Toast-rack*->	bacteria>fcb group	1
+Peptidase_M24-><-SIG+TM(s)<-ABC-ATPase<-Toast-rack*<-TraJ-RHH<-GNTR-HTH	bacteria>actinobacteria	1
+Peptidase_M3_N+Peptidase_M3->?->Toast-rack*->DUF2089-HTH->?->ZNR+DUF2089-HTH-><-ENOYCOADEHYD	bacteria>deinococcus-thermus	1
+Peptidase_M3_N+Peptidase_M3-><-?||YTCD-HTH->adh_short-><-?<-?<-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)<-SIG+PADR-HTH	bacteria>firmicutes	1
+Peptidase_M3_N+Peptidase_M3-><-?<-?<-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)<-SIG+PADR-HTH	bacteria>firmicutes	1
+Pirin+Pirin_C-><-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)<-SIG+PADR-HTH	bacteria>actinobacteria	1
+PolyA_pol+PolyA_pol_RNAbd+HD+tRNA_NucTran2_2->?->SIG+PADR-HTH->DUF1700-alpha-helical+TM(s)->SIG+Toast-rack*-><-?||?->Ribosomal_S15->	bacteria>spirochaetes	1
+polyprenyl_synt-><-SIG+Toast-rack*<-?<-SIGMA-HTH||?-><-Ribosomal_L9_N+Ribosomal_L9_C<-SIG+Ribosomal_S18	bacteria>proteobacteria>gammaproteobacteria	1
+PRK->?->DIOX_N+2OG-FeII_Oxy->Peptidase_M17_N+Peptidase_M17->?->SIGMA-HTH->?->SIG+Toast-rack*->?-><-?<-?<-ABC-ATPase<-ABC-ATPase	bacteria>proteobacteria>gammaproteobacteria	1
+PspA->?->?->SIG+Toast-rack*->SIG+DUF1576+TM+DUF1576->	bacteria>spirochaetes	1
+Put_DNA-bind_N+CoA_binding->?->?->?->?->?->SIG+TM+HAMP+HISKIN->Toast-rack*->	bacteria>other unclassified bacteria	1
+REC+LYTTR->?->?-><-?<-?<-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)<-SIG+PADR-HTH	bacteria>firmicutes	1
+REC+LYTTR-><-?<-Radical_SAM+Radical_SAM_C<-?<-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)	bacteria>firmicutes	1
+REC+LYTTR-><-Toast-rack*<-TraJ-RHH	bacteria>actinobacteria	1
+REC+LYTTR->SIG+TM+HAMP+HISKIN-><-?||?->?-><-?||Toast-rack*->SIG+PADR-HTH-><-?<-ADH_N+ADH_zinc_N	bacteria>actinobacteria	1
+REC+LYTTR->SIG+TM+HAMP+HISKIN-><-?||ABC-ATPase->?->?->SIG+Toast-rack*->	bacteria>firmicutes	1
+REC+LYTTR->SIG+TM+HAMP+HISKIN-><-ZNR+DUF2089-HTH<-?<-Toast-rack*	bacteria>deinococcus-thermus	1
+Rhodanese(s)->SIG+Toast-rack*->	bacteria>actinobacteria	1
+RibD_C->?->SIG+Toast-rack*->	bacteria>firmicutes	1
+Ribosomal_L31-><-SIG+Toast-rack*||Aminotran_1_2->Aminotran_3->AAA_26->	bacteria>fcb group	1
+Ribosomal_S4+S4->?->?->PseudoU_synth_1(s)-><-Toast-rack*<-TraJ-RHH	bacteria>actinobacteria	1
+Ribosomal_S4+S4->GTP_EFTU+GTP_EFTU_D2+RF3_C->DAGK_cat-><-TM+Toast-rack*<-?<-DUF463||PGM_PMM_I+PGM_PMM_II+PGM_PMM_III+PGM_PMM_IV->?-><-SIG+DUF885	bacteria>proteobacteria>alphaproteobacteria	1
+RNA-Helicase+A18->ABC-ATPase(s)->?->Toast-rack*->PspC+TM(s)->Phage_holin_4_2->	bacteria>firmicutes	1
+RNA-Helicase+A18->ABC-ATPase(s)->SIG+Toast-rack*->	bacteria>firmicutes	1
+Rubrerythrin->MMR_HSR1+YchF-GTPase_C->?-><-Cyclase<-PfkB<-HhH-GPD||?->SIG+Toast-rack*->	archaea>euryarchaeota	1
+S-AdoMet_synt_N+S-AdoMet_synt_M+S-AdoMet_synt_C->?-><-?<-?<-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)	bacteria>firmicutes	1
+S-AdoMet_synt_N+S-AdoMet_synt_M+S-AdoMet_synt_C->?-><-?<-Radical_SAM+Radical_SAM_C<-?<-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)	bacteria>firmicutes	1
+S-AdoMet_synt_N+S-AdoMet_synt_M+S-AdoMet_synt_C->?->SIG+Acyltransferase->?->SIG+Toast-rack*-><-?<-?<-SIG+Peptidase_S15+PepX_C	bacteria>fcb group	1
+Semialdhyde_dh+Semialdhyde_dhC->?-><-SIG+Toast-rack*<-DUF1700-alpha-helical+TM(s)<-SIG+PADR-HTH	bacteria>firmicutes	1
+SIG+Abhydrolase_3-><-?<-?<-SIG+Toast-rack*<-AHSA1<-HTH_20	bacteria>acidobacteria	1
+SIG+Acyltransferase->Toast-rack*->SIG+PADR-HTH->REC+LYTTR->SIG+TM+HAMP+HISKIN->	bacteria>actinobacteria	1
+SIG+Amino_oxidase-><-p450<-?<-?<-DUF1700-alpha-helical+Toast-rack*	bacteria>firmicutes	1
+SIG+ASH-IG+Toast-rack+TPR(s)+CASPASE*->	bacteria>cyanobacteria	1
+SIG+Beta-Helix+Toast-rack+CASPASE*->	bacteria>cyanobacteria	1
+SIG+BLBD->SIG+Toast-rack*->	bacteria>acidobacteria	1
+SIG+cNMP_binding+HTH_Crp_2-><-?<-?<-?<-Penicillinase_R<-?<-SIG+Toast-rack*	bacteria>firmicutes	1
+SIG+cNMP_binding+HTH_Crp_2->Acetyltransf_1-><-ZNR+DUF2089-HTH<-?<-Toast-rack*	bacteria>deinococcus-thermus	1
+SIG+EAL->?->?->GNTR-HTH->ABC-ATPase->?->SIG+Toast-rack*->ABC-ATPase->	bacteria>firmicutes	1
+SIG+HSP20->?-><-?||?->?-><-?<-SIG+Toast-rack*	bacteria>proteobacteria>deltaproteobacteria	1
+SIG+HTH_42-><-Toast-rack*<-TraJ-RHH	bacteria>actinobacteria	1
+SIG+PADR-HTH->?->?->SIG+TM+HISKIN-LiaS-like->SIG+Toast-rack*->REC+LYTTR->SIG+DUF2268->	bacteria>deinococcus-thermus	1
+SIG+PADR-HTH->?->DUF1700-alpha-helical+Toast-rack*->	bacteria>firmicutes	1
+SIG+PADR-HTH->?->SIG+Toast-rack*-><-?||?-><-SIG+SelR	bacteria>firmicutes	1
+SIG+PADR-HTH->?->Toast-rack*->	bacteria>firmicutes	1
+SIG+PADR-HTH->DUF1700-alpha-helical+TM(s)->?->Toast-rack*->	bacteria>firmicutes	1
+SIG+PADR-HTH->DUF1700-alpha-helical+TM(s)->SIG+Toast-rack(s)*->	bacteria>firmicutes	1
+SIG+PADR-HTH->DUF1700-alpha-helical+TM(s)->SIG+Toast-rack*->	bacteria>actinobacteria	1
+SIG+PADR-HTH->DUF1700-alpha-helical+TM(s)->SIG+Toast-rack*->?->?-><-?<-?<-REC+LYTTR	bacteria>firmicutes	1
+SIG+PADR-HTH->DUF1700-alpha-helical+TM(s)->SIG+Toast-rack*->?->?-><-Peptidase_M3_N+Peptidase_M3	bacteria>firmicutes	1
+SIG+PADR-HTH->DUF1700-alpha-helical+TM(s)->SIG+Toast-rack*->?-><-OTCace_N+OTCace<-Aminotran_3	bacteria>firmicutes	1
+SIG+PADR-HTH->DUF1700-alpha-helical+TM(s)->SIG+Toast-rack*-><-?||?->?->SIG+TM(s)+Toast-rack*->SIG+TM+HISKIN-LiaS-like->REC+LYTTR->	bacteria>firmicutes	1
+SIG+PADR-HTH->DUF1700-alpha-helical+TM(s)->SIG+Toast-rack*-><-BirA-HTH	bacteria>firmicutes	1
+SIG+PADR-HTH->DUF1700-alpha-helical+TM(s)->SIG+Toast-rack*-><-Radical_SAM+BATS	bacteria>firmicutes	1
+SIG+PADR-HTH->DUF1700-alpha-helical+TM(s)->SIG+Toast-rack*-><-SIG+TM+HAMP+HISKIN<-REC+LYTTR	bacteria>firmicutes	1
+SIG+PADR-HTH->DUF1700-alpha-helical+TM(s)->SIG+Toast-rack*->ABC-ATPase->SIG+TM(s)->	bacteria>firmicutes	1
+SIG+PADR-HTH->DUF1700-alpha-helical+TM(s)->SIG+Toast-rack*->Lactamase_B+Flavodoxin_1+Flavin_Reduct+Rubredoxin->	bacteria>firmicutes	1
+SIG+PADR-HTH->DUF1700-alpha-helical+TM(s)->Toast-rack*->Flavodoxin_2->	bacteria>firmicutes	1
+SIG+PADR-HTH->DUF1700-alpha-helical+Toast-rack*->?->?-><-?||RNA-Helicase+A18->	bacteria>tenericutes	1
+SIG+PADR-HTH->DUF1700-alpha-helical+Toast-rack*->?-><-SIG+TM(s)+ABC-ATPase<-MerR-HTH	bacteria>firmicutes	1
+SIG+PADR-HTH->DUF1700-alpha-helical+Toast-rack*-><-?<-LUD_dom+Fer4_8+DUF3390<-CCG(s)	bacteria>firmicutes	1
+SIG+PADR-HTH->DUF1700-alpha-helical+Toast-rack*->DUF1700-alpha-helical+TM(s)->?->SIG+Toast-rack*->	bacteria>spirochaetes	1
+SIG+PADR-HTH->DUF1700-alpha-helical+Toast-rack*->SIG+Toast-rack*->	archaea>euryarchaeota	1
+SIG+PADR-HTH->Toast-rack*->	bacteria>firmicutes	1
+SIG+PADR-HTH->Toast-rack*->PspC+TM(s)->	bacteria>firmicutes	1
+SIG+PBP_like_2->?->?->PSE->ABC-ATPase->SIG+Toast-rack*->	bacteria>other unclassified bacteria	1
+SIG+Peptidase_M1->?->?-><-DnaB+DnaB_C<-SIG+Toast-rack*<-?<-SIGMA-HTH<-Ribosomal_L9_N+Ribosomal_L9_C<-SIG+Ribosomal_S18	bacteria>proteobacteria>gammaproteobacteria	1
+SIG+TM(s)->?-><-?<-?||SIG+Toast-rack*->	bacteria>actinobacteria	1
+SIG+TM(s)->?->SIG+TM+HISKIN-LiaS-like->REC+LYTTR->TM+Toast-rack*->	bacteria>actinobacteria	1
+SIG+TM(s)->REC+LYTTR->SIG+TM+HAMP+HISKIN-><-SIG+Toast-rack*<-SIG+TM(s)<-ABC-ATPase	bacteria>firmicutes	1
+SIG+TM(s)->SIG+TM(s)->SIG+Toast-rack*->	bacteria>proteobacteria>alphaproteobacteria	1
+SIG+TM(s)+ABC-ATPase->SIG+TM(s)+ABC-ATPase-><-SIG+Toast-rack*<-?<-ABC-ATPase	bacteria>firmicutes	1
+SIG+TM+bPH_2->?->?->Glu-tRNAGln->Amidase->?->?->LiaI-LiaF-TM+Toast-rack*->	bacteria>firmicutes	1
+SIG+TM+HISKIN-LiaS-like->REC+LYTTR-><-REC+LYTTR<-?<-SIG+TM+HISKIN-LiaS-like<-SIG+Toast-rack*<-SIG+Toast-rack*	bacteria>actinobacteria	1
+SIG+TM+HISKIN-LiaS-like->REC+LYTTR->SIG+Toast-rack*-><-?<-NMO||?-><-?<-?<-FAA_hydrolase	bacteria>actinobacteria	1
+SIG+TM+HISKIN-LiaS-like->REC+LYTTR->SIG+Toast-rack*->tRNA->tRNA-><-AMP_N+Peptidase_M24<-?||NUDIX-><-tRNA_edit<-?||Pro_isomerase->TM+Rhomboid->	bacteria>actinobacteria	1
+SIG+TM+HISKIN-LiaS-like->SIG+Toast-rack*->REC+LYTTR->	bacteria>deinococcus-thermus	1
+SIG+TM+HISKIN-LiaS-like->SIG+Toast-rack*->REC+LYTTR->?->?-><-?<-?<-?<-MscL	bacteria>deinococcus-thermus	1
+SIG+TM+HISKIN-LiaS-like->SIG+Toast-rack*->REC+LYTTR->Cupin_2-><-?<-Aldo_ket_red||?-><-SIG+TM(s)	bacteria>deinococcus-thermus	1
+SIG+TM+HISKIN-LiaS-like->TM+Toast-rack*->	bacteria>actinobacteria	1
+SIG+Toast-rack->SIG+Toast-rack*->SIG+Toast-rack*->SIG+Toast-rack*->SIG+Toast-rack*->SIG+Toast-rack*->SIG+Toast-rack*->	eukaryota>metazoa	1
+SIG+Toast-rack(s)+CASPASE*->	bacteria>cyanobacteria	1
+SIG+Toast-rack*->	archaea>others	1
+SIG+Toast-rack*->	bacteria>proteobacteria>deltaproteobacteria	1
+SIG+Toast-rack*->	eukaryota>holozoa	1
+SIG+Toast-rack*->?->?-><-REC+LYTTR<-SIG+TM+HISKIN-LiaS-like	bacteria>actinobacteria	1
+SIG+Toast-rack*->?-><-?||?-><-SurE<-?<-tRNA<-?||AAA+AAA_assoc_2+MgsA_C->	bacteria>other unclassified bacteria	1
+SIG+Toast-rack*->?-><-?<-?<-?<-SIG+Serpin<-?<-DUF362	bacteria>fcb group	1
+SIG+Toast-rack*->?->SIG+Toast-rack->SIG+Toast-rack*->	eukaryota>metazoa	1
+SIG+Toast-rack*-><-?||?-><-?||SIG+TM+HAMP+HISKIN->	bacteria>actinobacteria	1
+SIG+Toast-rack*-><-?||?-><-?<-?<-?||?->AIRC->	bacteria>spirochaetes	1
+SIG+Toast-rack*-><-?||?->Smr->?->?-><-GreA_GreB_N+GreA_GreB	bacteria>proteobacteria>gammaproteobacteria	1
+SIG+Toast-rack*-><-?||SIG+Toast-rack*->	eukaryota>metazoa	1
+SIG+Toast-rack*-><-?<-?||?-><-?||SIG+Toast-rack*-><-?<-?<-?<-?||?-><-?<-Glu-tRNAGln	archaea>others	1
+SIG+Toast-rack*-><-?<-?<-?||?->?->Cupin_2->	archaea>euryarchaeota	1
+SIG+Toast-rack*-><-?<-SIG+tRNA-synt_His+HGTP_anticodon	bacteria>other unclassified bacteria	1
+SIG+Toast-rack*-><-?<-tRNA<-Lactamase_B_3	bacteria>other unclassified bacteria	1
+SIG+Toast-rack*-><-GATase_5<-PurS	archaea>euryarchaeota	1
+SIG+Toast-rack*-><-H	bacteria>fcb group	1
+SIG+Toast-rack*-><-REC+LYTTR<-SIG+TM+HAMP+HISKIN	bacteria>fcb group	1
+SIG+Toast-rack*-><-Ribosomal_L31<-?<-CTP_synth_N+GATase	bacteria>firmicutes	1
+SIG+Toast-rack*-><-SIG+CitMHS+TM(s)	bacteria>proteobacteria>gammaproteobacteria	1
+SIG+Toast-rack*-><-SIG+CitMHS+TM(s)<-?<-ABC-ATPase||?->REC+LYTTR->	bacteria>proteobacteria>gammaproteobacteria	1
+SIG+Toast-rack*-><-SIG+PPK2<-?<-ABC-ATPase<-SIG+FecCD<-SIG+FecCD	bacteria>actinobacteria	1
+SIG+Toast-rack*-><-SIG+TM(s)	bacteria>actinobacteria	1
+SIG+Toast-rack*-><-SIG+TM(s)+ABC-ATPase	bacteria>proteobacteria>gammaproteobacteria	1
+SIG+Toast-rack*->ADH_N+ADH_zinc_N-><-?<-?<-?<-?<-SIG+TM(s)<-ABC-ATPase	archaea>euryarchaeota	1
+SIG+Toast-rack*->GTP-bdg_N+GTP-bdg_M+MMR_HSR1->	bacteria>actinobacteria	1
+SIG+Toast-rack*->HAD_2->Fe-ADH->?-><-DUF5131<-Fer4_9	bacteria>elusimicrobia	1
+SIG+Toast-rack*->LiaI-LiaF-TM+Toast-rack*->SIG+TM+HAMP+HISKIN-LiaS-like->REC+LYTTR->	bacteria>firmicutes	1
+SIG+Toast-rack*->MFS_1+TM(s)->	bacteria>actinobacteria	1
+SIG+Toast-rack*->Na_H_Exchanger+TrkA_N->	bacteria>proteobacteria>gammaproteobacteria	1
+SIG+Toast-rack*->REC+LYTTR->SIG+TM+HAMP+HISKIN->	bacteria>firmicutes	1
+SIG+Toast-rack*->RibD_C->	bacteria>actinobacteria	1
+SIG+Toast-rack*->SIG+PDZ_2(s)->	bacteria>cyanobacteria	1
+SIG+Toast-rack*->SIG+Toast-rack*->	bacteria>other unclassified bacteria	1
+SIG+Toast-rack*->SIG+Toast-rack*->	eukaryota>metazoa	1
+SIG+Toast-rack*->SIG+Toast-rack*->SIG+Toast-rack*->SIG+Toast-rack*->	eukaryota>metazoa	1
+SIG+Toast-rack*->SIGMA-HTH->	bacteria>proteobacteria>deltaproteobacteria	1
+SIG+Toast-rack*->TM+Toast-rack*->	eukaryota>fungi	1
+SIG+Toast-rack*->Toast-rack*->	bacteria>firmicutes	1
+SIG+Toast-rack*->Toast-rack*->SIG+Toast-rack*->	bacteria>other unclassified bacteria	1
+SIGMA-HTH->?->?->LiaI-LiaF-TM+Toast-rack*-><-Aldo_ket_red	bacteria>firmicutes	1
+SIGMA-HTH->?->?->SIG+Toast-rack*->	bacteria>fcb group	1
+SIGMA-HTH->?->?->SIG+Toast-rack*->	bacteria>firmicutes	1
+SIGMA-HTH->?->?->SIG+Toast-rack*-><-?<-FAD_binding_6+NAD_binding_1+Fer2	bacteria>fcb group	1
+SIGMA-HTH->?-><-?<-Toast-rack*	bacteria>actinobacteria	1
+SIGMA-HTH->?->BBOX+TM(s)+LiaI-LiaF-TM->LiaI-LiaF-TM->LiaI-LiaF-TM+Toast-rack*-><-?||?-><-?<-?||?-><-SIG+Toast-rack*	bacteria>acidobacteria	1
+SIGMA-HTH->?->SIG+Toast-rack*->	bacteria>acidobacteria	1
+SIGMA-HTH->?->SIG+Toast-rack*-><-?||GTP_EFTU+GTP_EFTU_D2+RF3_C->	bacteria>proteobacteria>gammaproteobacteria	1
+SIGMA-HTH->?->SIG+Toast-rack*->PhnA_Zn_Ribbon+PhnA->	bacteria>proteobacteria>gammaproteobacteria	1
+SIGMA-HTH->?->TM+LiaI-LiaF-TM->LiaI-LiaF-TM(s)+Toast-rack*->	bacteria>acidobacteria	1
+SIGMA-HTH->SIG+Toast-rack*->SIG+Bactofilin+TM(s)->SIG+Toast-rack*->	bacteria>fcb group	1
+SIGMA-HTH->Toast-rack*->	bacteria>actinobacteria	1
+SIGMA-HTH->zf-HC2+TM->BBOX+TM(s)+LiaI-LiaF-TM->LiaI-LiaF-TM->SIG+Toast-rack*->	bacteria>other unclassified bacteria	1
+SIGMA-HTH->zf-HC2+TM->SIG+Toast-rack*->	bacteria>other unclassified bacteria	1
+SIGMA-HTH->zf-HC2+TM->SIG+Toast-rack*->SIG+Toast-rack*->	bacteria>fcb group	1
+SIGMA-HTH->zf-HC2+TM->SIG+Toast-rack*->SIG+Toast-rack*->SIG+Toast-rack*->Bax1-I-><-Pterin_4a	bacteria>fcb group	1
+SIGMA-HTH->ZnF+TM+HEAT_2->PSE->SIG+Toast-rack*->	bacteria>other unclassified bacteria	1
+SIGMA-HTH->ZnF+TM+HEAT_2->SIG+Toast-rack*->	bacteria>fcb group	1
+SIGMA-HTH->ZnF+TM+HEAT_2->SIG+Toast-rack*->SIG+PDZ_2(s)->	bacteria>acidobacteria	1
+SIGMA-HTH->ZnF+TM+HEAT_2->SIG+Toast-rack*->SIG+Peptidase_S9_N+Peptidase_S9-><-HIT<-GreA_GreB_N+GreA_GreB||?-><-SIG+TM(s)+ABC-ATPase	bacteria>fcb group	1
+SIGMA-HTH->ZnF+TM+HEAT_2->SIG+Toast-rack*->SIG+Toast-rack*->SIG+Beta-lactamase->SIG+Beta-lactamase->?->?->?->?->MacB_PCD+FtsX+TM+MacB_PCD+FtsX->?->SIG+Toast-rack*->?->?->YoeB_toxin->	bacteria>fcb group	1
+SIGMA-HTH->ZnF+TM+HEAT_2->SIG+Toast-rack*->SIG+Toast-rack*->SIG+Beta-lactamase->SIG+Beta-lactamase->?->?->?->?->SIG+Toast-rack*->	bacteria>fcb group	1
+SIGMA-HTH->ZnF+TM+HEAT_2->SIG+Toast-rack*->SIG+Toast-rack*->SIGMA-HTH->	bacteria>acidobacteria	1
+SIGMA-HTH->ZnF+TM+HEAT_2->SIG+Toast-rack*->Toast-rack*->	bacteria>fcb group	1
+Sigma70_r1_2+Sigma70_r2+Sigma70_r3+Sigma70_r4->DUF2071->?->?-><-SIG+Toast-rack*	bacteria>fcb group	1
+SufE->?-><-?||Cation_efflux+ZT_dimer->SIGMA-HTH->ZnF+TM+HEAT_2->SIG+Toast-rack*->SIG+Toast-rack*-><-PadR<-?<-GidB<-GIDA+GIDA_assoc	bacteria>other unclassified bacteria	1
+SufE->?-><-?<-?<-?<-?||SIG+Toast-rack*->	bacteria>proteobacteria>deltaproteobacteria	1
+T2SSE->Toast-rack*->SIG+PADR-HTH-><-?<-?<-?<-?||AraC-HTH(s)->	bacteria>actinobacteria	1
+Thy1-><-?<-?<-?<-SIG+TM(s)<-Toast-rack*<-Toast-rack*<-SIG+TM(s)<-HTH	archaea>euryarchaeota	1
+TM(s)+PEMT->?-><-?<-?<-SIG+Toast-rack*<-Na_H_Exchanger+TrkA_N<-?<-?<-?<-?<-?<-REC+LYTTR	bacteria>fcb group	1
+TM+Toast-rack*->	bacteria>actinobacteria	1
+TM+Toast-rack*->	eukaryota>others	1
+Toast-rack*->	bacteria>cyanobacteria	1
+Toast-rack*->	bacteria>proteobacteria>gammaproteobacteria	1
+Toast-rack*->	eukaryota>archaeplastida>viridiplantae	1
+Toast-rack*->	eukaryota>fungi	1
+Toast-rack*->	eukaryota>sar>stramenopiles	1
+Toast-rack*->?->?->?->?->?->SIG+TM+Proton_antipo_N+Proton_antipo_M+TM(s)->SIG+TM(s)+Proton_antipo_M+TM(s)->	bacteria>chloroflexi	1
+Toast-rack*->?->?->?->EamA+TM+EamA->	bacteria>actinobacteria	1
+Toast-rack*->?->?-><-SIG+HTH_42	bacteria>actinobacteria	1
+Toast-rack*->?-><-SIG+HTH_42	bacteria>actinobacteria	1
+Toast-rack*-><-?<-?<-?||?->?->SIG+DUF1576+TM+DUF1576->	archaea>euryarchaeota	1
+Toast-rack*-><-?<-COX1+TM	archaea>euryarchaeota	1
+Toast-rack*-><-PRK	bacteria>firmicutes	1
+Toast-rack*->ABC-ATPase->SIG+TM(s)->?-><-REC+LYTTR<-SIG+TM+HISKIN-LiaS-like	bacteria>actinobacteria	1
+Toast-rack*->ABC-ATPase->SIG+TM(s)->?->MFS_1+TM(s)->	bacteria>actinobacteria	1
+Toast-rack*->ABC-ATPase->SIG+TM(s)->?->PurS->GATase_5->AIRS+AIRS_C+AIRS+AIRS_C->	bacteria>actinobacteria	1
+Toast-rack*->DPPIV_N+Peptidase_S9->SIG+Aminotran_1_2-><-Cupin_2	bacteria>actinobacteria	1
+Toast-rack*->DUF2089-HTH->	bacteria>caldiserica	1
+Toast-rack*->p450-><-?<-SIG+Sigma70_r2+Sigma70_r4_2+TPR_2<-YCII||SIG+Beta-lactamase->	bacteria>actinobacteria	1
+Toast-rack*->PSE->?->?-><-Iso_dh	bacteria>armatimonadetes	1
+Toast-rack*->PspC+TM(s)->?->Phage_holin_4_2->?->?->NAD_Gly3P_dh_N+NAD_Gly3P_dh_C->	bacteria>firmicutes	1
+Toast-rack*->SIG+PADR-HTH->?->?-><-ADH_N+ADH_zinc_N	bacteria>actinobacteria	1
+Toast-rack*->SIG+PADR-HTH-><-?<-?<-?<-?<-ADH_N+ADH_zinc_N	bacteria>actinobacteria	1
+Toast-rack*->SIG+PADR-HTH-><-?<-ADH_N+ADH_zinc_N<-ABC-ATPase	bacteria>actinobacteria	1
+Toast-rack*->SIG+PADR-HTH-><-Na_H_Exchanger<-ADH_N+ADH_zinc_N<-?||MarR->	bacteria>actinobacteria	1
+Toast-rack*->SIG+TM(s)->	archaea>euryarchaeota	1
+Toast-rack*->SIG+TM(s)-><-Cob_adeno_trans	archaea>euryarchaeota	1
+Toast-rack*->SIG+Toast-rack*->	bacteria>other unclassified bacteria	1
+Toast-rack*->Toast-rack*->	bacteria>other unclassified bacteria	1
+Toast-rack*->ZNR+DUF2089-HTH->	bacteria>deinococcus-thermus	1
+TraJ-RHH->?->Toast-rack*->ABC-ATPase->SIG+TM(s)->?-><-AhpC-TSA+1-cysPrx_C	bacteria>actinobacteria	1
+TraJ-RHH->Toast-rack*->?->?-><-Acetyltransf_3||?-><-?<-SIG+TM(s)<-UPF0060	bacteria>actinobacteria	1
+TraJ-RHH->Toast-rack*-><-?<-?||?-><-?||?-><-?<-?||?->?->?->?->?->?->DUF1707-SHOCT-bihelical+Toast-rack*->Peptidase_M24->?-><-LACI-HTH+PBPI	bacteria>actinobacteria	1
+TraJ-RHH->Toast-rack*-><-?<-?||SIGMA-HTH->?->?->?->?->?->DUF1707-SHOCT-bihelical+Toast-rack*-><-?||Peptidase_M24->	bacteria>actinobacteria	1
+TraJ-RHH->Toast-rack*-><-SIG+HTH_42	bacteria>actinobacteria	1
+TraJ-RHH->Toast-rack*-><-SIG+HTH_42||?->DUF2461->	bacteria>actinobacteria	1
+TraJ-RHH->Toast-rack*->ABC-ATPase->	bacteria>actinobacteria	1
+TraJ-RHH->Toast-rack*->ABC-ATPase->SIG+TM(s)->?-><-?<-?<-?<-Methyltransf_25	bacteria>actinobacteria	1
+TraJ-RHH->Toast-rack*->ABC-ATPase->SIG+TM(s)-><-?<-?||?-><-?<-Abhydrolase_1	bacteria>actinobacteria	1
+TraJ-RHH->Toast-rack*->ABC-ATPase->SIG+TM(s)-><-?<-?||?-><-ABC-ATPase<-HTH_24+ROK	bacteria>actinobacteria	1
+TraJ-RHH->Toast-rack*->ABC-ATPase->SIG+TM(s)-><-?<-Band_7_1+DUF4339	bacteria>actinobacteria	1
+TraJ-RHH->Toast-rack*->ABC-ATPase->SIG+TM(s)-><-?<-Band_7_1+DUF4339||?->adh_short->	bacteria>actinobacteria	1
+TraJ-RHH->Toast-rack*->ABC-ATPase->SIG+TM(s)-><-ABC-ATPase<-SIG+TM+BPD_transp_1<-SIG+SBP_bac_11	bacteria>actinobacteria	1
+TraJ-RHH->Toast-rack*->ABC-ATPase->SIG+TM(s)-><-YbjQ_1<-?<-?<-?<-ABC-ATPase	bacteria>actinobacteria	1
+TraJ-RHH->Toast-rack*->ABC-ATPase->SIG+TM(s)->DUF1707-SHOCT-bihelical+Toast-rack*->?->SIG+Methyltransf_11->	bacteria>actinobacteria	1
+TraJ-RHH->Toast-rack*->ABC-ATPase->SIG+TM(s)->Response_reg+Pyr_redox_2->?-><-?<-MODE-HTH+PBPII	bacteria>actinobacteria	1
+TraJ-RHH->Toast-rack*->p450->ABC-ATPase->	bacteria>actinobacteria	1
+Transposase_mut-><-SIG+Toast-rack*	bacteria>firmicutes	1
+tRNA-synt_1b+S4->?-><-?<-DUF2089-HTH<-?<-Toast-rack*<-ZNR+DUF2089-HTH	bacteria>other unclassified bacteria	1
+UPF0014->?-><-SIG+Toast-rack*<-REC+LYTTR<-SIG+TM+HISKIN-LiaS-like	bacteria>actinobacteria	1
+UPF0060-><-Toast-rack*	bacteria>firmicutes	1
+URO-D-><-TM+Rhomboid||?-><-SIG+TM(s)<-ABC-ATPase<-Toast-rack*	bacteria>actinobacteria	1
+UvrD-helicase+UvrD_C-><-DUF1700-alpha-helical+Toast-rack*<-SIG+PADR-HTH<-?||?->?->DNA_ligase_aden+DNA_ligase_OB+DNA_ligase_ZBD+HHH_2+BRCT->ABC-ATPase(s)->	bacteria>tenericutes	1
+WhiA_N+LAGLIDADG_WhiA+HTH_WhiA->?->?->?->SIG+PADR-HTH->DUF1700-alpha-helical+TM(s)->SIG+Toast-rack*->tRNA->tRNA->?->?->Cyclase->?->Arginase->	bacteria>tenericutes	1
+YceI->Pirin+Pirin_C-><-SIG+Toast-rack*	bacteria>acidobacteria	1
+ZnF+TM+HEAT_2->SIG+Toast-rack*->	bacteria>pvc group	1
+ZNR+DUF2089-HTH->?->Toast-rack*->Phage_holin_4_2-><-?||NUDIX-><-?||SIGMA-HTH->	bacteria>firmicutes	1
+ZNR+DUF2089-HTH->DUF2089-HTH->Toast-rack(s)*->	bacteria>chloroflexi	1
+ZNR+DUF2089-HTH->DUF2089-HTH->Toast-rack*->SIG+LiaI-LiaF-TM->	bacteria>thermotogae	1
+ZNR+DUF2089-HTH->DUF2089-HTH->Toast-rack*->SIG+LiaI-LiaF-TM->Isochorismatase->?->SOR_SNZ+ThiG->SNO->	bacteria>thermotogae	1
+ZNR+DUF2089-HTH->SIG+TM(s)->Toast-rack*->	bacteria>chloroflexi	1
+ZNR+DUF2089-HTH->Toast-rack*->EVE->	bacteria>armatimonadetes	1
+ZNR+DUF2089-HTH->Toast-rack*->Peptidase_M20-><-AAA+AAA_assoc_2+MgsA_C	bacteria>firmicutes	1
+ZNR+DUF2089-HTH->Toast-rack*->SIG+Toast-rack*->	bacteria>thermotogae	1
+ZNR+DUF2089-HTH->Toast-rack+TM*->	bacteria>chloroflexi	1

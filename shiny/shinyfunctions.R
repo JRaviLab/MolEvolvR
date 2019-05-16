@@ -168,7 +168,7 @@ phylo.plots <- function(filepath, plot_type){
   my_seqs_msa_aln <- msaConvert(my_seqs_msa, type="seqinr::alignment")
 
   d <- dist.alignment(my_seqs_msa_aln, "identity")
-#  as.matrix(d)[2:5, "HBA1_Homo_sapiens", drop=FALSE]
+  #  as.matrix(d)[2:5, "HBA1_Homo_sapiens", drop=FALSE]
 
   ## Phylogenetic tree
   ## using package ape
@@ -178,15 +178,15 @@ phylo.plots <- function(filepath, plot_type){
     plot(seqTree, main="Phylogenetic Tree of MSA")
   }
   else{
-## drawing trees using ggtree
-#ggtree(seqTree)
+    ## drawing trees using ggtree
+    #ggtree(seqTree)
     groupInfo <- split(seqTree$tip.label,
-                     gsub("_\\w+", "", seqTree$tip.label))
+                       gsub("_\\w+", "", seqTree$tip.label))
     seqTree <- groupOTU(seqTree, groupInfo)
     if(plot_type == "ggTree"){
-    ggtree(seqTree, aes(color=group),
-           layout='circular') +
-      geom_tiplab(size=1, aes(angle=angle))
+      ggtree(seqTree, aes(color=group),
+             layout='circular') +
+        geom_tiplab(size=1, aes(angle=angle))
     }
     else if(plot_type == "msaTree"){
       ## Tree + MSA
