@@ -12,20 +12,52 @@ colnames(DUF1707_table) <- colNam
 
 #pspa_snf7.txt
 pspa_table <- read_tsv("data/pspa_snf7.txt")
+pspa_data <- pspa_table %>%
+  select(AccNum, Species, Lineage=Lineage.final,
+         DomArch=DomArch.norep, GenContext=GenContext.norep,
+         Length, GI, GenName, Annotation)
 #pspm.renamed.arch.cls.20170619.txt
 pspm_table <- read_tsv("data/pspm.renamed.arch.cls.20170619.txt") %>% filter(!grepl(pattern =  "#", AccNum))
+pspm_data <- pspm_table%>%
+  select(AccNum, Species, Lineage,
+         SIG.TM.LADB,# GenContext=GenContext.norep,
+         Length, GI, GenName, Annotation)
 #pspb.txt
 pspb_table <- read_tsv("data/pspb.txt")
+pspb_data <- pspb_table %>%
+  select(AccNum, Species, Lineage=Lineage.final,
+         DomArch=DomArch.norep, GenContext=GenContext.norep,
+         Length, GI, GenName, Annotation)
 #pspc.txt
 pspc_table <- read_tsv("data/pspc.txt")
+pspc_data <- pspc_table %>%
+  select(AccNum, Species, Lineage=Lineage.final,
+         DomArch=DomArch.norep, GenContext=GenContext.norep,
+         Length, GI, GenName, Annotation)
 #pspn.renamed.arch.cls.20170619.txt
 pspn_table <- read_tsv("data/pspn.renamed.arch.cls.20170619.txt") %>% filter(!grepl(pattern =  "#", AccNum))
+pspn_data <- pspn_table%>%
+  select(AccNum, Species, Lineage,
+         SIG.TM.LADB,# GenContext=GenContext.norep,
+         Length, GI, GenName, Annotation)
 #liai.txt
 liai_table <- read_tsv("data/liai.txt")
+liai_data <- liai_table %>%
+  select(AccNum, Species, Lineage=Lineage.final,
+         DomArch=DomArch.norep, GenContext=GenContext.norep,
+         Length, GI, GenName, Annotation)
 #liaf.txt
 liaf_table <- read_tsv("data/liaf.txt")
+liaf_data <- liaf_table %>%
+  select(AccNum, Species, Lineage=Lineage.final,
+         DomArch=DomArch.norep, GenContext=GenContext.norep,
+         Length, GI, GenName, Annotation)
 #liag.txt
 liag_table <- read_tsv("data/liag.txt")
+liag_data <- liag_table %>%
+  select(AccNum, Species, Lineage=Lineage.final,
+         DomArch=DomArch.norep, GenContext=GenContext.norep,
+         Length, GI, GenName, Annotation)
 
 #pspa-da_lin_counts.txt
 pspa_DA_Lin <- read_tsv("data/pspa-da_lin_counts.txt")
