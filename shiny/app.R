@@ -32,7 +32,7 @@ body <- dashboardBody(
                      #Dropdown to select protein for viewing
                      selectInput(inputId =  "proSelec", label = "Protein",
                                  choices = c( #"DUF1700", "DUF1707",
-                                   "PspA", "PspB", "PspC", "PspM", "PspN","Liai","Liaf", "Liag")
+                                   "PspA", "PspB", "PspC", "PspM", "PspN","LiaI","LiaF", "LiaG")
                                  , selected = "PspA")
               ),
               #Buttons to select which file type to download
@@ -53,7 +53,7 @@ body <- dashboardBody(
                 sidebarPanel(
                   #dropdown to select protein
                   selectInput(inputId =  "linSelec", label = "Protein",
-                              choices = c( "PspA", "PspB", "PspC","Liaf","Liag","Liai")
+                              choices = c( "PspA", "PspB", "PspC","LiaF","LiaG","LiaI")
                               , selected = "PspA"),
                   #Radiobuttons to selext domain architecture and genomic context
                   radioButtons(inputId = "DA_GC", label = "Lineage by:"
@@ -120,14 +120,14 @@ server <- function(input, output){
     switch(input$proSelec,
            "DUF1700" = DUF1700_table,
            "DUF1707" = DUF1707_table,
-           "PspA" = pspa_table,
-           "PspB" = pspb_table,
-           "PspC" = pspc_table,
-           "PspM" = pspm_table,
-           "PspN" = pspn_table,
-           "Liai" = liai_table,
-           "Liaf"= liaf_table,
-           "Liag" = liag_table)
+           "PspA" = pspa_data,
+           "PspB" = pspb_data,
+           "PspC" = pspc_data,
+           "PspM" = pspm_data,
+           "PspN" = pspn_data,
+           "LiaI" = liai_data,
+           "LiaF"= liaf_data,
+           "LiaG" = liag_data)
   })
   #Render the Data table for selected protein
   output$proTable <- DT::renderDT({paged_table(pspTable())}, extensions = c('FixedColumns',"FixedHeader"),
@@ -146,18 +146,18 @@ server <- function(input, output){
              "PspA" = lineage.DA.plot(pspa_DA_Lin, pspa_totalC,type = "da2doms",cutoff = input$cutoff),
              "PspB" = lineage.DA.plot(pspb_DA_Lin, pspb_totalC,type ="da2doms", cutoff = input$cutoff),
              "PspC" = lineage.DA.plot(pspc_DA_Lin, pspc_totalC,type = "da2doms",cutoff = input$cutoff),
-             "Liaf" = lineage.DA.plot(liaf_DA_lin, liaf_totalC, type = "da2doms", cutoff = input$cutoff),
-             "Liag" = lineage.DA.plot(liag_DA_lin, liag_totalC, type = "da2doms", cutoff = input$cutoff),
-             "Liai" = lineage.DA.plot(liai_DA_lin, liai_totalC, type = "da2doms", cutoff = input$cutoff))
+             "LiaF" = lineage.DA.plot(liaf_DA_lin, liaf_totalC, type = "da2doms", cutoff = input$cutoff),
+             "LiaG" = lineage.DA.plot(liag_DA_lin, liag_totalC, type = "da2doms", cutoff = input$cutoff),
+             "LiaI" = lineage.DA.plot(liai_DA_lin, liai_totalC, type = "da2doms", cutoff = input$cutoff))
     }
     else{
       switch(input$linSelec,
              "PspA" = lineage.DA.plot(pspa_cum, pspa_cum,type = "gc2da", cutoff =input$cutoff),
              "PspB" = lineage.DA.plot(pspb_cum, pspb_cum,type = "gc2da",cutoff =input$cutoff),
              "PspC" = lineage.DA.plot(pspc_cum, pspc_cum,type = "gc2da",cutoff = input$cutoff),
-             "Liaf" = lineage.DA.plot(liaf_cum, liaf_cum, type = "gc2da", cutoff = input$cutoff),
-             "Liag" = lineage.DA.plot(liag_cum, liag_cum, type = "gc2da", cutoff = input$cutoff),
-             "Liai" = lineage.DA.plot(liai_cum, liai_cum, type = "gc2da", cutoff = input$cutoff))
+             "LiaF" = lineage.DA.plot(liaf_cum, liaf_cum, type = "gc2da", cutoff = input$cutoff),
+             "LiaG" = lineage.DA.plot(liag_cum, liag_cum, type = "gc2da", cutoff = input$cutoff),
+             "LiaI" = lineage.DA.plot(liai_cum, liai_cum, type = "gc2da", cutoff = input$cutoff))
     }
   }, height = 500)
 
@@ -168,18 +168,18 @@ server <- function(input, output){
              "PspA" = filter(pspa_totalC,totalcount >= input$cutoff),
              "PspB" = filter(pspb_totalC,totalcount >= input$cutoff),
              "PspC" = filter(pspc_totalC,totalcount >= input$cutoff),
-             "Liaf" = filter(liaf_totalC, totalcount >= input$cutoff),
-             "Liai" = filter(liai_totalC, totalcount >= input$cutoff),
-             "Liag" = filter(liag_totalC, totalcount >= input$cutoff)
+             "LiaF" = filter(liaf_totalC, totalcount >= input$cutoff),
+             "LiaI" = filter(liai_totalC, totalcount >= input$cutoff),
+             "LiaG" = filter(liag_totalC, totalcount >= input$cutoff)
       )}
     else{
       switch(input$linSelec,
              "PspA" = filter(pspa_cum,totalcount >= input$cutoff),
              "PspB" = filter(pspb_cum,totalcount >= input$cutoff),
              "PspC" = filter(pspc_cum,totalcount >= input$cutoff),
-             "Liaf" = filter(liaf_cum,totalcount >= input$cutoff),
-             "Liag" = filter(liag_cum,totalcount >= input$cutoff),
-             "Liai" = filter(liai_cum,totalcount >= input$cutoff)
+             "LiaF" = filter(liaf_cum,totalcount >= input$cutoff),
+             "LiaG" = filter(liag_cum,totalcount >= input$cutoff),
+             "LiaI" = filter(liai_cum,totalcount >= input$cutoff)
       )
     }
   )
@@ -200,9 +200,9 @@ server <- function(input, output){
              "PspA"= upset.plot(pspa_table,pspa.DA.doms.wc,input$cutoff, "da2doms"),
              "PspB"= upset.plot(pspb_table,pspb.DA.doms.wc,input$cutoff, "da2doms"),
              "PspC"= upset.plot(pspc_table,pspc.DA.doms.wc, input$cutoff, "da2doms"),
-             "Liaf"= upset.plot(liaf_table,liaf.DA.doms.wc,input$cutoff, "da2doms"),
-             "Liag"= upset.plot(liag_table,liag.DA.doms.wc,input$cutoff, "da2doms"),
-             "Liai"= upset.plot(liai_table,liai.DA.doms.wc,input$cutoff, "da2doms")
+             "LiaF"= upset.plot(liaf_table,liaf.DA.doms.wc,input$cutoff, "da2doms"),
+             "LiaG"= upset.plot(liag_table,liag.DA.doms.wc,input$cutoff, "da2doms"),
+             "LiaI"= upset.plot(liai_table,liai.DA.doms.wc,input$cutoff, "da2doms")
       )
     }
     else{
@@ -210,9 +210,9 @@ server <- function(input, output){
              "PspA"= upset.plot(pspa_table, pspa.GC.doms.wc, input$cutoff, "gc2da"),
              "PspB"= upset.plot(pspb_table, pspb.GC.doms.wc, input$cutoff, "gc2da"),
              "PspC"= upset.plot(pspc_table, pspc.GC.doms.wc, input$cutoff, "gc2da"),
-             "Liaf"=upset.plot(liaf_table, liaf.GC.doms.wc, input$cutoff, "gc2da"),
-             "Liag"=upset.plot(liag_table, liag.GC.doms.wc, input$cutoff, "gc2da"),
-             "Liai"=upset.plot(liai_table, liai.GC.doms.wc, input$cutoff, "gc2da")
+             "LiaF"=upset.plot(liaf_table, liaf.GC.doms.wc, input$cutoff, "gc2da"),
+             "LiaG"=upset.plot(liag_table, liag.GC.doms.wc, input$cutoff, "gc2da"),
+             "LiaI"=upset.plot(liai_table, liai.GC.doms.wc, input$cutoff, "gc2da")
       )
     }
   }, height = 550)
