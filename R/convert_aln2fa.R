@@ -24,4 +24,7 @@ convert_aln2fa <- function(input_file, lin_file) {
     #' @note Please refer to the source code if you have alternate +
     #' file formats and/or column names.
 
+    lin <- lin_file %>% 
+    select(lineage) %>%
+    strsplit()
 }

@@ -1,6 +1,6 @@
 library(tidyverse)
 
-prot <- read_tsv("cpathogeno/the-approach/data/pspa_snf7.txt")
+prot <- read_tsv("data/pspa_snf7.txt")
 #operon straightner
 opvec=prot$GenContext   #operon column from a df containing cleanblastclust columns
 opvec=gsub(pattern = ">",replacement = ">|",x = opvec)
