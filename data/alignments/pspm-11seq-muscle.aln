@@ -1,0 +1,118 @@
+CLUSTAL multiple sequence alignment by MUSCLE (3.8)
+
+
+Amis431-S....      ------------------------------------------------------------
+AmedU32-STT..      MAQQGRRRDFSELSAKLEKHIEKLPDYA-----------------VRAQEQLQKVQKYFP
+MabUC22-TT...      MLTPGGFVSSEFGLGGCWIFGHNVNMTP-----------------Q--------------
+MsmeMC2155-ST      ------------------------------------------------------------
+Mav104-STT...      ------------------------------------------------------------
+MtbH37Rv-TT..      ------------------------------------------------------------
+MbovBCG-TT...      ------------------------------------------------------------
+Mafr-TT......      ------------------------------------------------------------
+NnovSH22a-STT      MGRTRARTEPAKTRVRPWSRSARTGVSAPPIDAMRVVPASNEPGADPTRTSSAEPLSTES
+RspB7740-TT..      ----MGRRDHESGRSRKR------------------------------------------
+Raet-ST......      ------------------------------------------------------------
+
+
+Amis431-S....      ------------------------------------------------------------
+AmedU32-STT..      PAEQAGGKPAPRRPNPL-------------------------------------------
+MabUC22-TT...      PPRRAA------VHGGW-------------------------------------------
+MsmeMC2155-ST      MTTKTG------RPEAW-------------------------------------------
+Mav104-STT...      MAVNAT------QPGPW-------------------------------------------
+MtbH37Rv-TT..      MAVKAG------QRRPW-------------------------------------------
+MbovBCG-TT...      MAVKAG------QRRPW-------------------------------------------
+Mafr-TT......      MAVKAG------QRRPW-------------------------------------------
+NnovSH22a-STT      PARHRNSGHGVRESGPAHSTPGQDRVPAPSVNLFSGYGDRVPARVAGSDSGSETGSAAGR
+RspB7740-TT..      PAVSLDRESVTTAVSES-------------------------------------------
+Raet-ST......      --MNTP------ARGRT-------------------------------------------
+
+
+Amis431-S....      ------------------------------------------------------------
+AmedU32-STT..      -----------------------------------QRPPVRRPDMTASLSSMASQVPAFA
+MabUC22-TT...      -----------------------------------EQLLRRLATNVNDLGEELAA-----
+MsmeMC2155-ST      -----------------------------------RSLLQRGIDTAAEVSGAVAE-----
+Mav104-STT...      -----------------------------------RALLQRGVAAAADLSDLVAR-----
+MtbH37Rv-TT..      -----------------------------------RSLLQRGVDTAGDLADLVAQ-----
+MbovBCG-TT...      -----------------------------------RSLLQRGVDTAGDLADLVAQ-----
+Mafr-TT......      -----------------------------------RSLLQRGVDTAGDLADLVAQ-----
+NnovSH22a-STT      HDRTRSGAAAGASARGSRTGSSPRNTAAERGIGDDRDRLARMPDALREAGEFALH-----
+RspB7740-TT..      -----------------------------------GAVVRSLAESARSVGTSILD-----
+Raet-ST......      -----------------------------------GQFPGPAAAALRDMTGSVVE-----
+
+
+Amis431-S....      ---------MDERTRYFRRLKRLRGAARRWSVLGAGFTGAAVVLTPYAGIGIADAAWAAA
+AmedU32-STT..      EARAKWDRWNHPAAKLERRKRR----TSKALTLWIILTILCAVVTVAAAVGWLSPTSAAM
+MabUC22-TT...      ----RMRAMSDKREKLLRKRLR----AKRWSIRWALACVAGLLVTTVLAT-TGAPPWLLI
+MsmeMC2155-ST      ----KLNAAADPRAKLLRKRRW----ALRFAVFFTFATGFWVFVTAVLAA-WTTPVWVLI
+Mav104-STT...      ----KISAATDPRARLLRRRRR----ALRWGLIFTAGCAFWAVLTIVLAA-WGWFALLLE
+MtbH37Rv-TT..      ----KISVAIDPRARLLRRRRR----ALRWGLVFTAGCLLWGLVTALLAA-WGWFTSLLV
+MbovBCG-TT...      ----KISVAIDPRARLLRRRRR----ALRWGLVFTAGCLLWGLVTALLAA-WGWFTSLLV
+Mafr-TT......      ----KISVAIDPRARLLRRRRR----ALRWGLVFTAGCLLWGLVTALLAA-WGWFTSLLV
+NnovSH22a-STT      ----TVRKWADPRERELRKRRR----VRRRSLRWSAASGMTVLGTAGLVA-ISAPVWAVV
+RspB7740-TT..      ----AAGRRKDPRVKHLKKIRR----ARRRGIRFGAASTTTAVGTAGMAV-LSAPEWTLF
+Raet-ST......      ----AARRWNDPAARVRRKKRR----ARRRARLFGAASGMSGVGTATLVA-ASAPDWTIV
+.  .  .    . .             . *
+
+Amis431-S....      AGGS-------AVLAWFRW---SDHRELAATPAPPPPPPAIGSPKLTAALERIPAGRTVL
+AmedU32-STT..      MPQAITAFAGAVIFGTFSVRSGLKLRELKRIPIPA-AP---------AGPPPLPP-----
+MabUC22-TT...      IPALLT--AGCAIPATYLL---VRYRYLKAEPLPPPRP---------GVERRLPP-----
+MsmeMC2155-ST      ITGAIA--AGAAFPATLAW---LRYRWLRRTPLPVQRP---------TVGRRLPP-----
+Mav104-STT...      ITGAVA--VVMAIPATLLL---LRYRWLRAEPLPAPRP---------ATVRRLPP-----
+MtbH37Rv-TT..      ITGTIA--VTQAIPATLLL---LRYRWLRSEPLPVRRP---------ASVRRLPP-----
+MbovBCG-TT...      ITGTIA--VTQAIPATLLL---LRYRWLRSEPLPVRRP---------ASVRRLPP-----
+Mafr-TT......      ITGTIA--VTQAIPATLLL---LRYRWLRSEPLPVRRP---------ASVRRLPP-----
+NnovSH22a-STT      VVGGGT--VALVTGAAVST---RRYLELRRNPLPPAAF----------VPRRLPA-----
+RspB7740-TT..      VGGGSA--ALMAVPAAFAV---TRLRRLRAQPVPVGLP----------TKRVSPQ-----
+Raet-ST......      ATGGTT--AALVVPAVLAV---RTFRRLDAVPLPPPAP----------ARRALPP-----
+.  .            *   * *                   *
+
+Amis431-S....      QEVRRQKNRYALRGSAIADSWDRLDRASQTMAGLSGLLTG---LGEPAAIEAAGA-----
+AmedU32-STT..      ------------ARSAAREPMERLAECEASLTELLRQLSVPSSLGMPPVSEVSVADARQT
+MabUC22-TT...      ------------YGSSARPPMAALDAAERSLFSLLGVVERGSMIPESEGRQVLSA-----
+MsmeMC2155-ST      ------------WGSAARQPMSALLASERGMFSLLGVMERGRMLPPEELHELTTV-----
+Mav104-STT...      ------------PGSAARPAMYALGASERGFASLLAVLERGAMLPAAEIRDLTAA-----
+MtbH37Rv-TT..      ------------PGSAARPAMSALGASERGFFSLLGVMERGAMLPADEIRDLTAA-----
+MbovBCG-TT...      ------------PGSAARPAMSALGASERGFFSLLGVMERGAMLPADEIRDLTAA-----
+Mafr-TT......      ------------PGSAARPAMSALGASERGFFSLLGVMERGAMLPADEIRDLTAA-----
+NnovSH22a-STT      ------------VRSAARAPVARLVRAERAMYALGRHIADGGRLPADDLTDTLAT-----
+RspB7740-TT..      ------------RGSAAYESMARLAGAEQSLFELLGILARSETIGTDDVEEMIGV-----
+Raet-ST......      ------------SGSVARAPMARLASDEQSLAQLLSVLARSRTVAADDLEEIAAA-----
+*    .   *   .  :  *   :     :      :   .
+
+Amis431-S....      ----EQWLRELGQRVASVERAIPLSHPDR-REVLERSHAGLAEQFTEGVLEYENLVAAAA
+AmedU32-STT..      ATEAAAALRGLAARIQAIER-GRDSAPAREKAALDAAVAKLREQLDDGLEGYRGLVAAAG
+MabUC22-TT...      ANRAAYVMAATAKEVVSMERAAAETPHTR--EYLQPTIKAFTAQLDTGVRQYNELVTAAA
+MsmeMC2155-ST      ANQAARTMMATAAEVVSMERAAGNAPQSR--PHLVPTINAFAAQLNQGVRQYNEMVTAAA
+Mav104-STT...      AGRTSAAMASTAAQVVSMERAAQAGEESR--SYLAPTINAFTAQLSAGVRQYNEMVTAAA
+MtbH37Rv-TT..      ANQTSAAMVATAAEVVSMERAVQCSAASR--SYLVPTINAFTAQLSTGVRQYNEMVTAAA
+MbovBCG-TT...      ANQTSAAMVATAAEVVSMERAVQCSAASR--SYLVPTINAFTAQLSTGVRQYNEMVTAAA
+Mafr-TT......      ANQTSAAMVATAAEVVSMERAVQCSAASR--SYLVPTINAFTAQLSTGVRQYNEMVTAAA
+NnovSH22a-STT      ADSGAAALHALAGDIAAMEQAVGVVADSRCAPQLSRQLDAMVERLESGVGEYEQLVSAAG
+RspB7740-TT..      TSDAARGLEGVAVDIAALERAGAASAVTR--EHLRGAIASAANELATGVDQYEQLVAAAA
+Raet-ST......      AREASDALEAVAVDVVALESAARDSAAAG--AHLGAAVAAAGQRLDTGVDQFEELVAAAA
+:   .  : ::*              *          :  *:  :  :*:**.
+
+Amis431-S....      SYVAE----------DGHPVADSRHPAYFGLIEAADRLRGFAEGLAELRTNEIKIPSERA
+AmedU32-STT..      HSVAAAG--------DGLVTS------KQALTDATDRLAGLAMALRELS-----------
+MabUC22-TT...      QLVSAGNGG------AVVASPMSRGALFDDLVSATDRLTGWAGALDELG----QLSG---
+MsmeMC2155-ST      QLVSSVNGGANGQMPGGPAAPLSQQRYRSELTGATDRLTGWAQAFDELG----GLRRA--
+Mav104-STT...      RLVSAANG-------DGSTAS---QHYRAELVGATDRLNGWAQAFDELG----GLRGAG-
+MtbH37Rv-TT..      QLVSSANG-------AGGAGP-GQQRYREELAGATDRLVAWAQAFDELG----GLPRR--
+MbovBCG-TT...      QLVSSANG-------AGGAGP-GQQRYREELAGATDRLVAWAQAFDELG----GLPRR--
+Mafr-TT......      QLVSSANG-------AGGAGP-GQQRYREELAGATDRLVAWAQAFDELG----GLPGVSR
+NnovSH22a-STT      RILAAPP--------ATGAPADEFGWAMLTLREAADRLDGWAQALTDLA-------DRH-
+RspB7740-TT..      RMTGP----------AGPASTTVVESHRRELLSATDRLQGWAEALTEID----QIRSRHR
+Raet-ST......      RLAAAP---------DGTRSMALLDRQRAELISASDRLESWAQSWREIR----QIEGRYR
+.                          *  *:*** . * .  ::
+
+Amis431-S....      GSADTSK-----------------------------------------------
+AmedU32-STT..      ------------------------------------------------------
+MabUC22-TT...      ------------------------------------------------------
+MsmeMC2155-ST      ------------------------------------------------------
+Mav104-STT...      ------------------------------------------------------
+MtbH37Rv-TT...     ------------------------------------------------------
+MbovBCG-TT...      ------------------------------------------------------
+Mafr-TT......      SGPAVARSVRYTPGECGRRVGGRARRRARGQDCARAACAGAIPCSAHARNTRTG
+NnovSH22a-STT      ------------------------------------------------------
+RspB7740-TT..      ------------------------------------------------------
+Raet-ST......      Y-----------------------------------------------------
