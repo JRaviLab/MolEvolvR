@@ -1,10 +1,10 @@
 # Created: April 19, 2019
 
-# library(tidyverse) library(here) library(roxygen2); library(docstring)
+library(tidyverse); library(here); library(roxygen2); library(docstring)
 
 ## Function to add leaves to an alignment file
-add_leaves <- function(input_file = "data/alignments/final_alns/pspa_snf7.aln", 
-    lin_file = "data/shiny/pspa.txt") {
+add_leaves <- function(input_file = "data/alignments/pspa_snf7.aln",
+    lin_file = "data/pspa_snf7.txt") {
     #' Adding Leaves to an alignment file w/ accessions
     #' @author Janani Ravi
     #' @keywords alignment, accnum, leaves, lineage, species
@@ -23,11 +23,22 @@ add_leaves <- function(input_file = "data/alignments/final_alns/pspa_snf7.aln",
     #'
     #' @note Please refer to the source code if you have alternate +
     #' file formats and/or column names.
-    
+
     aln <- read_tsv(input_file)
     lin <- read_tsv(lin_file)
     colnames(aln) <- c("AccNum", "Alignment")
-    aln_lin <- left_join(aln, lin, by = "AccNum") %>% select(AccNum, Alignment, 
-        Species, Lineage.final)
+
+    aln_lin <- left_join(aln, lin, by = "AccNum") %>%
+        select(AccNum, Alignment,
+               Species, Lineage.final)
+
+    temp <- aln_lin %>%
+        separate(Lineage.final,
+                 into=c("kingdom", "phylum"), sep=">", remove=F) %>%
+        separate(Species, into=c("genus", "spp"),
+                 sep=" ", remove=F) %>%
+        unite
+
+
     return(aln_lin)
 }
