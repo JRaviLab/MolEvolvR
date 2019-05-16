@@ -3,7 +3,7 @@ library(tidyverse)
 library(DT)
 library(rmarkdown)
 library(shinydashboard)
-# library(here)
+library(shinyjqui)
 
 source("PSP_Web_Data.R")
 
@@ -15,8 +15,9 @@ source("shinyfunctions.R")
 sidebar<- dashboardSidebar(
   sidebarMenu(id = "tabs",
               menuItem("Data Table", tabName = "datatable"),
-              menuItem("Lineage Plots", tabName = "lineagePlots"),
-              menuItem("Phylogeny", tabName = "phylogeny")
+              menuItem("Lineage Plots", tabName = "lineagePlots")
+              #              ,
+              #              menuItem("Phylogeny", tabName = "phylogeny")
   )
 )
 ######
@@ -30,7 +31,8 @@ body <- dashboardBody(
               column(width = 2,
                      #Dropdown to select protein for viewing
                      selectInput(inputId =  "proSelec", label = "Protein",
-                                 choices = c( "DUF1700", "DUF1707","PspA", "PspB", "PspC", "PspM", "PspN","Liai","Liaf", "Liag")
+                                 choices = c( #"DUF1700", "DUF1707",
+                                   "PspA", "PspB", "PspC", "PspM", "PspN","Liai","Liaf", "Liag")
                                  , selected = "PspA")
               ),
               #Buttons to select which file type to download
@@ -51,7 +53,7 @@ body <- dashboardBody(
                 sidebarPanel(
                   #dropdown to select protein
                   selectInput(inputId =  "linSelec", label = "Protein",
-                              choices = c( "PspA", "PspB", "PspC")
+                              choices = c( "PspA", "PspB", "PspC","Liaf","Liag","Liai")
                               , selected = "PspA"),
                   #Radiobuttons to selext domain architecture and genomic context
                   radioButtons(inputId = "DA_GC", label = "Lineage by:"
@@ -64,38 +66,35 @@ body <- dashboardBody(
                 mainPanel(
                   tabsetPanel(
                     id= 'lin_data',
-                    tabPanel("Heatmap",plotOutput(outputId = "LinPlot" )),
+                    tabPanel("Heatmap",jqui_resizable(plotOutput(outputId = "LinPlot", height = '500px' ))),
                     tabPanel("Table", DT::dataTableOutput(outputId = "LinTable")),
-                    tabPanel("Upset Plot", plotOutput(outputId = "upsetP"))
+                    tabPanel("Upset Plot", jqui_resizable(plotOutput(outputId = "upsetP")))
                   )
                 )
 
 
               )
             )
-    ),
-    tabItem("phylogeny",
-            fluidPage(sidebarLayout(
-              sidebarPanel(
-                selectInput(inputId =  "alignSelec", label = "Protein",
-                            choices = c( "PspA", "PspB", "PspC","PspM","PspN")
-                            , selected = "PspN"),
-                radioButtons(inputId = "plottype", label = "Plot Type",
-                             choices = c("Tree1", "Tree2", "Tree3"),selected = "Tree1")),
-              mainPanel(
-                tabsetPanel(
-                  id= 'lin_data',
-                  tabPanel("Align1",plotOutput(outputId = "msaPlot" ))
-              #    tabPanel("Table", DT::dataTableOutput(outputId = "LinTable")),
-               #   tabPanel("Upset Plot", plotOutput(outputId = "upsetP"))
-                )
-              )
-
-
-            )
-
-            )
-    )
+    )#,
+    #    tabItem("phylogeny",
+    #            fluidPage(sidebarLayout(
+    #              sidebarPanel(
+    #                selectInput(inputId =  "alignSelec", label = "Protein",
+    #                            choices = c( "PspA", "PspB", "PspC","PspM","PspN")
+    #                            , selected = "PspN"),
+    #                radioButtons(inputId = "plottype", label = "Plot Type",
+    #                            choices = c("Tree1", "Tree2", "Tree3"),selected = "Tree1")),
+    #              mainPanel(
+    #                tabsetPanel(
+    #                  id= 'lin_data',
+    #                  tabPanel("Align1",plotOutput(outputId = "msaPlot" ))
+    #    tabPanel("Table", DT::dataTableOutput(outputId = "LinTable")),
+    #   tabPanel("Upset Plot", plotOutput(outputId = "upsetP"))
+    #                )
+    #              )
+    #            )
+    #           )
+    #    )
   )
 )
 ####
@@ -146,13 +145,19 @@ server <- function(input, output){
       switch(input$linSelec,
              "PspA" = lineage.DA.plot(pspa_DA_Lin, pspa_totalC,type = "da2doms",cutoff = input$cutoff),
              "PspB" = lineage.DA.plot(pspb_DA_Lin, pspb_totalC,type ="da2doms", cutoff = input$cutoff),
-             "PspC" = lineage.DA.plot(pspc_DA_Lin, pspc_totalC,type = "da2doms",cutoff = input$cutoff))
+             "PspC" = lineage.DA.plot(pspc_DA_Lin, pspc_totalC,type = "da2doms",cutoff = input$cutoff),
+             "Liaf" = lineage.DA.plot(liaf_DA_lin, liaf_totalC, type = "da2doms", cutoff = input$cutoff),
+             "Liag" = lineage.DA.plot(liag_DA_lin, liag_totalC, type = "da2doms", cutoff = input$cutoff),
+             "Liai" = lineage.DA.plot(liai_DA_lin, liai_totalC, type = "da2doms", cutoff = input$cutoff))
     }
     else{
       switch(input$linSelec,
              "PspA" = lineage.DA.plot(pspa_cum, pspa_cum,type = "gc2da", cutoff =input$cutoff),
              "PspB" = lineage.DA.plot(pspb_cum, pspb_cum,type = "gc2da",cutoff =input$cutoff),
-             "PspC" = lineage.DA.plot(pspc_cum, pspc_cum,type = "gc2da",cutoff = input$cutoff))
+             "PspC" = lineage.DA.plot(pspc_cum, pspc_cum,type = "gc2da",cutoff = input$cutoff),
+             "Liaf" = lineage.DA.plot(liaf_cum, liaf_cum, type = "gc2da", cutoff = input$cutoff),
+             "Liag" = lineage.DA.plot(liag_cum, liag_cum, type = "gc2da", cutoff = input$cutoff),
+             "Liai" = lineage.DA.plot(liai_cum, liai_cum, type = "gc2da", cutoff = input$cutoff))
     }
   }, height = 500)
 
@@ -162,13 +167,19 @@ server <- function(input, output){
       switch(input$linSelec,
              "PspA" = filter(pspa_totalC,totalcount >= input$cutoff),
              "PspB" = filter(pspb_totalC,totalcount >= input$cutoff),
-             "PspC" = filter(pspc_totalC,totalcount >= input$cutoff)
+             "PspC" = filter(pspc_totalC,totalcount >= input$cutoff),
+             "Liaf" = filter(liaf_totalC, totalcount >= input$cutoff),
+             "Liai" = filter(liai_totalC, totalcount >= input$cutoff),
+             "Liag" = filter(liag_totalC, totalcount >= input$cutoff)
       )}
     else{
       switch(input$linSelec,
              "PspA" = filter(pspa_cum,totalcount >= input$cutoff),
              "PspB" = filter(pspb_cum,totalcount >= input$cutoff),
-             "PspC" = filter(pspc_cum,totalcount >= input$cutoff)
+             "PspC" = filter(pspc_cum,totalcount >= input$cutoff),
+             "Liaf" = filter(liaf_cum,totalcount >= input$cutoff),
+             "Liag" = filter(liag_cum,totalcount >= input$cutoff),
+             "Liai" = filter(liai_cum,totalcount >= input$cutoff)
       )
     }
   )
@@ -186,17 +197,25 @@ server <- function(input, output){
     DA_or_GC <- input$DA_GC
     if(DA_or_GC == "Domain Architecture"){
       switch(selected,
-             "PspA"= upset.plot(pspa_table, pspa.DA.doms.wc, input$cutoff, "da2doms"),
-             "PspC"= upset.plot(pspc_table, pspc.DA.doms.wc, input$cutoff, "da2doms")
-             )
+             "PspA"= upset.plot(pspa_table,pspa.DA.doms.wc,input$cutoff, "da2doms"),
+             "PspB"= upset.plot(pspb_table,pspb.DA.doms.wc,input$cutoff, "da2doms"),
+             "PspC"= upset.plot(pspc_table,pspc.DA.doms.wc, input$cutoff, "da2doms"),
+             "Liaf"= upset.plot(liaf_table,liaf.DA.doms.wc,input$cutoff, "da2doms"),
+             "Liag"= upset.plot(liag_table,liag.DA.doms.wc,input$cutoff, "da2doms"),
+             "Liai"= upset.plot(liai_table,liai.DA.doms.wc,input$cutoff, "da2doms")
+      )
     }
     else{
       switch(selected,
              "PspA"= upset.plot(pspa_table, pspa.GC.doms.wc, input$cutoff, "gc2da"),
-             "PspC"= upset.plot(pspc_table, pspc.GC.doms.wc, input$cutoff, "gc2da")
-             )
+             "PspB"= upset.plot(pspb_table, pspb.GC.doms.wc, input$cutoff, "gc2da"),
+             "PspC"= upset.plot(pspc_table, pspc.GC.doms.wc, input$cutoff, "gc2da"),
+             "Liaf"=upset.plot(liaf_table, liaf.GC.doms.wc, input$cutoff, "gc2da"),
+             "Liag"=upset.plot(liag_table, liag.GC.doms.wc, input$cutoff, "gc2da"),
+             "Liai"=upset.plot(liai_table, liai.GC.doms.wc, input$cutoff, "gc2da")
+      )
     }
-  }, height = 600)
+  }, height = 550)
 
   msaPlotType <-reactive({
     switch(input$plottype,
@@ -205,11 +224,11 @@ server <- function(input, output){
            "Tree3"= "msaTree")
   })
 
-  output$msaPlot <- renderPlot({
-    switch(input$alignSelec,
-           "PspN"= phylo.plots("data/alignments/pspn-duf3046-aln/pspn.31seq.aln.txt",msaPlotType()))
-  }, height = 600
-  )
+  #  output$msaPlot <- renderPlot({
+  #    switch(input$alignSelec,
+  #           "PspN"= phylo.plots("data/alignments/pspn-duf3046-aln/pspn.31seq.aln.txt",msaPlotType()))
+  #  }, height = 600
+  #  )
 
   #Reactive expresion to change file name depending on which protein is selected
   fileNam <- reactive({

@@ -1,0 +1,715 @@
+AccNum	SIG.TM.PFAM	SIG.TM.LADB	PFAM	Length	GenName	Species	Lineage	Annotation	GI
+# 641;	Rv2738c-like-DUF3046
+ADC86130.1	SIG+DUF3046	SIG	DUF3046	114	BIF_02265	Bifidobacterium animalis subsp. lactis BB-12	bacteria>actinobacteria	Hypothetical cytosolic protein [Bifidobacterium animalis subsp. lactis BB-12]	289178884
+AEK30566.1	SIG+DUF3046	SIG	DUF3046	114	BALAC2494_00132	Bifidobacterium animalis subsp. lactis CNCM I-2494	bacteria>actinobacteria	Hypothetical cytosolic protein [Bifidobacterium animalis subsp. lactis CNCM I-2494]	340365275
+ADD43834.1	DUF3046	-	DUF3046	102	Snas_4184	Stackebrandtia nassauensis DSM 44728	bacteria>actinobacteria	hypothetical protein Snas_4184 [Stackebrandtia nassauensis DSM 44728]	290570869
+ABE95860.1	SIG+DUF3046	SIG	DUF3046	100	Bbr_1182	Bifidobacterium breve UCC2003	bacteria>actinobacteria	Conserved hypothetical protein [Bifidobacterium breve UCC2003]	339479392
+AHJ25001.1	SIG+DUF3046	SIG	DUF3046	100	BS27_1204	Bifidobacterium breve S27	bacteria>actinobacteria	Hypothetical protein BS27_1204 [Bifidobacterium breve S27]	585136533
+ACJ52047.1	SIG+DUF3046	SIG	DUF3046	99	Blon_0948	Bifidobacterium longum subsp. infantis ATCC 15697 = JCM 1222 = DSM 20088	bacteria>actinobacteria	hypothetical protein Blon_0948 [Bifidobacterium longum subsp. infantis ATCC 15697 = JCM 1222 = DSM 20088]	213523300
+AHJ17645.1	SIG+DUF3046	SIG	DUF3046	99	B7017_1153	Bifidobacterium breve JCM 7017	bacteria>actinobacteria	Hypothetical protein B7017_1153 [Bifidobacterium breve JCM 7017]	585128855
+ACZ30272.1	SIG+DUF3046	SIG	DUF3046	93	Xcel_1241	Xylanimonas cellulosilytica DSM 15894	bacteria>actinobacteria	hypothetical protein Xcel_1241 [Xylanimonas cellulosilytica DSM 15894]	269304722
+ABY22468.1	DUF3046	-	DUF3046	92	RSal33209_0721	Renibacterium salmoninarum ATCC 33209	bacteria>actinobacteria	hypothetical cytosolic protein [Renibacterium salmoninarum ATCC 33209]	162952953
+ACV08696.1	DUF3046	SIG	DUF3046	88	Jden_1040	Jonesia denitrificans DSM 20603	bacteria>actinobacteria	hypothetical protein Jden_1040 [Jonesia denitrificans DSM 20603]	256685803
+ADI67740.1	DUF3046	-	DUF3046	88	HMPREF0573_11421	Mobiluncus curtisii ATCC 43063	bacteria>actinobacteria	hypothetical protein HMPREF0573_11421 [Mobiluncus curtisii ATCC 43063]	298236608
+AIG78287.1	DUF3046	-	DUF3046	87	AJAP_27205	Amycolatopsis japonica	bacteria>actinobacteria	Hypothetical protein AJAP_27205 [Amycolatopsis japonica]	667683671
+BAI65286.1	DUF3046	-	DUF3046	85	RMDY18_14540	Rothia mucilaginosa DY-18	bacteria>actinobacteria	signal transduction histidine kinase [Rothia mucilaginosa DY-18]	283134521
+APH01819.1	DUF3046	-	DUF3046	84	ASJ30_10025	Janibacter terrae	bacteria>actinobacteria	histidine kinase [Janibacter terrae]	1110983356 
+ACS46471.1	DUF3046	-	DUF3046	83	Balac_1115	Bifidobacterium animalis subsp. lactis Bl-04	bacteria>actinobacteria	hypothetical protein Balac_1115 [Bifidobacterium animalis subsp. lactis Bl-04]	240249531
+ACS48038.1	DUF3046	-	DUF3046	83	Balat_1115	Bifidobacterium animalis subsp. lactis DSM 10140	bacteria>actinobacteria	hypothetical protein Balat_1115 [Bifidobacterium animalis subsp. lactis DSM 10140]	240251099
+ADG33663.1	DUF3046	-	DUF3046	83	BalV_1075	Bifidobacterium animalis subsp. lactis V9	bacteria>actinobacteria	hypothetical protein BalV_1075 [Bifidobacterium animalis subsp. lactis V9]	295794128
+AEN76845.1	DUF3046	-	DUF3046	83	BLC1_1071	Bifidobacterium animalis subsp. lactis BLC1	bacteria>actinobacteria	hypothetical protein BLC1_1071 [Bifidobacterium animalis subsp. lactis BLC1]	345282991
+AFI63306.1	DUF3046	-	DUF3046	83	BANAN_05490	Bifidobacterium animalis subsp. animalis ATCC 25527	bacteria>actinobacteria	hypothetical protein BANAN_05490 [Bifidobacterium animalis subsp. animalis ATCC 25527]	385701358
+AGO52555.1	DUF3046	-	DUF3046	83	Bl12_1037	Bifidobacterium animalis subsp. lactis Bl12	bacteria>actinobacteria	hypothetical protein Bl12_1037 [Bifidobacterium animalis subsp. lactis Bl12]	514423327
+AJD88834.1	DUF3046	-	DUF3046	83	GU89_05655	Bifidobacterium animalis subsp. lactis	bacteria>actinobacteria	hypothetical protein GU89_05655 [Bifidobacterium animalis subsp. lactis]	747146555
+ANU44269.1	DUF3046	-	DUF3046	83	A4U98_07265	Bifidobacterium animalis subsp. animalis	bacteria>actinobacteria	hypothetical protein A4U98_07265 [Bifidobacterium animalis subsp. animalis]	1045259404 
+APT92364.1	DUF3046	-	DUF3046	83	CPHO_05040	Corynebacterium phocae	bacteria>actinobacteria	hypothetical protein CPHO_05040 [Corynebacterium phocae]	1129931776 
+AAZ54840.1	DUF3046	Imm-Cloacin	DUF3046	82	Tfu_0802	Thermobifida fusca YX	bacteria>actinobacteria	hypothetical protein Tfu_0802 [Thermobifida fusca YX]	71914938
+ADU48681.1	DUF3046	-	DUF3046	82	Intca_2172	Intrasporangium calvum DSM 43043	bacteria>actinobacteria	hypothetical protein Intca_2172 [Intrasporangium calvum DSM 43043]	315589384
+AKK11301.1	DUF3046	-	DUF3046	82	CUTER_06560	Corynebacterium uterequi	bacteria>actinobacteria	putative DUF3046 family protein [Corynebacterium uterequi]	827636567
+AAT89397.1	DUF3046	-	DUF3046	81	Lxx16040	Leifsonia xyli subsp. xyli str. CTCB07	bacteria>actinobacteria	conserved hypothetical protein [Leifsonia xyli subsp. xyli str. CTCB07]	50951696
+APF41705.1	DUF3046	-	DUF3046	81	BHE16_03980	Neomicrococcus aestuarii	bacteria>actinobacteria	histidine kinase [Neomicrococcus aestuarii]	1109135093 
+ACV06782.1	DUF3046	-	DUF3046	80	Ksed_17700	Kytococcus sedentarius DSM 20547	bacteria>actinobacteria	hypothetical protein Ksed_17700 [Kytococcus sedentarius DSM 20547]	256688980
+ADG74440.1	DUF3046	-	DUF3046	80	Cfla_1542	Cellulomonas flavigena DSM 20109	bacteria>actinobacteria	conserved hypothetical protein [Cellulomonas flavigena DSM 20109]	296021204
+AGF72698.1	DUF3046	-	DUF3046	80	A605_08480	Corynebacterium halotolerans YIM 70093 = DSM 44683	bacteria>actinobacteria	hypothetical protein A605_08480 [Corynebacterium halotolerans YIM 70093 = DSM 44683]	451903811
+AIZ16524.1	DUF3046	-	DUF3046	80	AH67_06070	Bifidobacterium pseudolongum PV8-2	bacteria>actinobacteria	hypothetical protein AH67_06070 [Bifidobacterium pseudolongum PV8-2]	730568096
+ACL29225.1	DUF3046	-	DUF3046	79	BLA_0933	Bifidobacterium animalis subsp. lactis AD011	bacteria>actinobacteria	conserved hypothetical protein [Bifidobacterium animalis subsp. lactis AD011]	219621068
+ACZ22236.1	DUF3046	-	DUF3046	79	Sked_23210	Sanguibacter keddieii DSM 10542	bacteria>actinobacteria	hypothetical protein Sked_23210 [Sanguibacter keddieii DSM 10542]	269097800
+AFJ16835.1	DUF3046	-	DUF3046	79	W7Y_1115	Bifidobacterium animalis subsp. lactis B420	bacteria>actinobacteria	hypothetical protein W7Y_1115 [Bifidobacterium animalis subsp. lactis B420]	386653705
+AFJ18419.1	DUF3046	-	DUF3046	79	W91_1140	Bifidobacterium animalis subsp. lactis Bi-07	bacteria>actinobacteria	hypothetical protein W91_1140 [Bifidobacterium animalis subsp. lactis Bi-07]	386655290
+AGW85308.1	DUF3046	-	DUF3046	79	BLAC_05615	Bifidobacterium animalis subsp. lactis ATCC 27673	bacteria>actinobacteria	hypothetical protein BLAC_05615 [Bifidobacterium animalis subsp. lactis ATCC 27673]	546347833
+AIA33110.1	DUF3046	-	DUF3046	79	EN10_05650	Bifidobacterium animalis	bacteria>actinobacteria	hypothetical protein EN10_05650 [Bifidobacterium animalis]	640844000
+AJC76792.1	DUF3046	-	DUF3046	79	U723_05655	Bifidobacterium animalis subsp. lactis KLDS2.0603	bacteria>actinobacteria	hypothetical protein U723_05655 [Bifidobacterium animalis subsp. lactis KLDS2.0603]	744824115
+AJD34223.1	DUF3046	-	DUF3046	79	BAA6_1110	Bifidobacterium animalis	bacteria>actinobacteria	hypothetical protein BAA6_1110 [Bifidobacterium animalis]	745800561
+AKK03350.1	DUF3046	-	DUF3046	79	CEPID_07495	Corynebacterium epidermidicanis	bacteria>actinobacteria	putative DUF3046 family protein [Corynebacterium epidermidicanis]	827628057
+APX00781.1	DUF3046	-	DUF3046	79	BWQ92_02720	Arthrobacter sp. QXT-31	bacteria>actinobacteria	histidine kinase [Arthrobacter sp. QXT-31]	1134500769 
+BAR05243.1	DUF3046	-	DUF3046	79	PSDT_0724	Parascardovia denticolens DSM 10105 = JCM 12538	bacteria>actinobacteria	conserved hypothetical protein [Parascardovia denticolens DSM 10105 = JCM 12538]	781881090
+BAS13054.1	DUF3046	-	DUF3046	79	AHiyo8_13570	Arthrobacter sp. Hiyo8	bacteria>actinobacteria	conserved hypothetical protein [Arthrobacter sp. Hiyo8]	910743655
+AEK36972.1	DUF3046	-	DUF3046	78	CVAR_1618	Corynebacterium variabile DSM 44702	bacteria>actinobacteria	hypothetical protein CVAR_1618 [Corynebacterium variabile DSM 44702]	340534492
+AGH40991.1	DUF3046	-	DUF3046	78	D805_0724	Bifidobacterium thermophilum RBL67	bacteria>actinobacteria	hypothetical protein D805_0724 [Bifidobacterium thermophilum RBL67]	469498465
+AGN22492.1	DUF3046	-	DUF3046	78	C629_09470	Corynebacterium glutamicum SCgG2	bacteria>actinobacteria	hypothetical protein C629_09470 [Corynebacterium glutamicum SCgG2]	509090248
+AIE82051.1	DUF3046	-	DUF3046	78	FB03_00795	Actinotignum schaalii	bacteria>actinobacteria	hypothetical protein FB03_00795 [Actinotignum schaalii]	663076161
+AKT52198.1	DUF3046	-	DUF3046	78	ADJ73_14620	Arsenicicoccus sp. oral taxon 190	bacteria>actinobacteria	histidine kinase [Arsenicicoccus sp. oral taxon 190]	908726409
+AKU17300.1	DUF3046	-	DUF3046	78	VV02_17995	Luteipulveratus mongoliensis	bacteria>actinobacteria	histidine kinase [Luteipulveratus mongoliensis]	909834509
+BAB99349.1	DUF3046	-	DUF3046	78	Cgl1956	Corynebacterium glutamicum ATCC 13032	bacteria>actinobacteria	Hypothetical protein [Corynebacterium glutamicum ATCC 13032]	21324726
+BAF54780.1	DUF3046	-	DUF3046	78	cgR_1786	Corynebacterium glutamicum R	bacteria>actinobacteria	hypothetical protein cgR_1786 [Corynebacterium glutamicum R]	140845781
+BAR06841.1	DUF3046	-	DUF3046	78	SCIP_0774	Scardovia inopinata JCM 12537	bacteria>actinobacteria	conserved hypothetical protein [Scardovia inopinata JCM 12537]	781882867
+CAF20297.1	DUF3046	-	DUF3046	78	cg2145	Corynebacterium glutamicum ATCC 13032	bacteria>actinobacteria	conserved hypothetical protein [Corynebacterium glutamicum ATCC 13032]	41326134
+ACQ80702.1	DUF3046	-	DUF3046	77	Bcav_2452	Beutenbergia cavernae DSM 12333	bacteria>actinobacteria	conserved hypothetical protein [Beutenbergia cavernae DSM 12333]	229566851
+ADB10030.1	DUF3046	-	DUF3046	77	BDP_1422	Bifidobacterium dentium Bd1	bacteria>actinobacteria	Conserved hypothetical protein [Bifidobacterium dentium Bd1]	283102924
+ADO53433.1	DUF3046	-	DUF3046	77	BBIF_1228	Bifidobacterium bifidum S17	bacteria>actinobacteria	Conserved hypothetical protein [Bifidobacterium bifidum S17]	309251685
+ADP36323.1	DUF3046	-	DUF3046	77	BBPR_1271	Bifidobacterium bifidum PRL2010	bacteria>actinobacteria	Conserved hypothetical protein [Bifidobacterium bifidum PRL2010]	310866954
+ADP38950.1	DUF3046	-	DUF3046	77	HMPREF0421_20868	Gardnerella vaginalis ATCC 14019	bacteria>actinobacteria	hypothetical protein HMPREF0421_20868 [Gardnerella vaginalis ATCC 14019]	310946246
+AEE45699.1	DUF3046	-	DUF3046	77	Celf_1565	Cellulomonas fimi ATCC 484	bacteria>actinobacteria	hypothetical protein Celf_1565 [Cellulomonas fimi ATCC 484]	332339116
+AEF31430.1	DUF3046	-	DUF3046	77	HMPREF9231_0701	Gardnerella vaginalis HMP9231	bacteria>actinobacteria	hypothetical protein HMPREF9231_0701 [Gardnerella vaginalis HMP9231]	333393512
+AEG44013.1	DUF3046	-	DUF3046	77	Isova_1244	Isoptericola variabilis 225	bacteria>actinobacteria	hypothetical protein Isova_1244 [Isoptericola variabilis 225]	334107123
+AEI12550.1	DUF3046	-	DUF3046	77	Celgi_2049	Cellulomonas gilvus ATCC 13127	bacteria>actinobacteria	hypothetical protein Celgi_2049 [Cellulomonas gilvus ATCC 13127]	336104731
+AFL04843.1	DUF3046	-	DUF3046	77	BBB_1251	Bifidobacterium bifidum BGN4	bacteria>actinobacteria	hypothetical protein BBB_1251 [Bifidobacterium bifidum BGN4]	389890776
+AFU71216.1	DUF3046	-	DUF3046	77	BAST_0628	Bifidobacterium asteroides PRL2011	bacteria>actinobacteria	hypothetical protein BAST_0628 [Bifidobacterium asteroides PRL2011]	408465687
+AGC62029.1	SIG+DUF3046	SIG	DUF3046	77	MULP_02141	Mycobacterium liflandii 128FXT	bacteria>actinobacteria	hypothetical protein MULP_02141 [Mycobacterium liflandii 128FXT]	442582886
+AHJ15868.1	DUF3046	-	DUF3046	77	B12L_1124	Bifidobacterium breve 12L	bacteria>actinobacteria	Hypothetical protein B12L_1124 [Bifidobacterium breve 12L]	585126494
+AHJ21350.1	DUF3046	-	DUF3046	77	B2258_1155	Bifidobacterium breve NCFB 2258	bacteria>actinobacteria	Hypothetical protein B2258_1155 [Bifidobacterium breve NCFB 2258]	585132880
+AIF40516.1	DUF3046	-	DUF3046	77	HX89_05690	Dermacoccus nishinomiyaensis	bacteria>actinobacteria	histidine kinase [Dermacoccus nishinomiyaensis]	664687926
+AIF90705.1	DUF3046	-	DUF3046	77	GS08_06175	Bifidobacterium longum	bacteria>actinobacteria	hypothetical protein GS08_06175 [Bifidobacterium longum]	666000948
+AII74552.1	DUF3046	-	DUF3046	77	BCOR_0535	Bifidobacterium coryneforme	bacteria>actinobacteria	hypothetical protein BCOR_0535 [Bifidobacterium coryneforme]	671340792
+AII76492.1	DUF3046	-	DUF3046	77	BADO_1077	Bifidobacterium adolescentis	bacteria>actinobacteria	hypothetical protein BADO_1077 [Bifidobacterium adolescentis]	671342976
+AIZ14839.1	DUF3046	-	DUF3046	77	AH68_07075	Bifidobacterium kashiwanohense PV20-2	bacteria>actinobacteria	hypothetical protein AH68_07075 [Bifidobacterium kashiwanohense PV20-2]	730565971
+AJE06139.1	DUF3046	-	DUF3046	77	BBMN23_1167	Bifidobacterium adolescentis	bacteria>actinobacteria	hypothetical protein BBMN23_1167 [Bifidobacterium adolescentis]	747124717
+AKV55337.1	DUF3046	-	DUF3046	77	AB656_02820	Bifidobacterium actinocoloniiforme DSM 22766	bacteria>actinobacteria	hypothetical protein AB656_02820 [Bifidobacterium actinocoloniiforme DSM 22766]	914248428
+ALC98911.1	DUF3046	-	DUF3046	77	AM609_04350	Actinomyces sp. oral taxon 414	bacteria>actinobacteria	hypothetical protein AM609_04350 [Actinomyces sp. oral taxon 414]	925195628
+ALE09751.1	DUF3046	-	DUF3046	77	RY67_1739	Bifidobacterium longum subsp. infantis	bacteria>actinobacteria	Hypothetical protein RY67_1739 [Bifidobacterium longum subsp. infantis]	927298552
+ALE11744.1	DUF3046	-	DUF3046	77	RY70_1402	Bifidobacterium bifidum	bacteria>actinobacteria	Hypothetical protein RY70_1402 [Bifidobacterium bifidum]	927300639
+ALE36433.1	DUF3046	-	DUF3046	77	BBG7_1245	Bifidobacterium longum	bacteria>actinobacteria	hypothetical protein BBG7_1245 [Bifidobacterium longum]	927983841
+ALO72722.1	DUF3046	-	DUF3046	77	B8809_1051	Bifidobacterium longum subsp. longum	bacteria>actinobacteria	hypothetical protein B8809_1051 [Bifidobacterium longum subsp. longum]	953517168
+ALO74796.1	DUF3046	-	DUF3046	77	BBL306_1267	Bifidobacterium longum subsp. longum	bacteria>actinobacteria	hypothetical protein BBL306_1267 [Bifidobacterium longum subsp. longum]	953519243
+AMK57939.1	DUF3046	-	DUF3046	77	Bang102_005335	Bifidobacterium angulatum	bacteria>actinobacteria	hypothetical protein Bang102_005335 [Bifidobacterium angulatum]	998638892
+ANC30584.1	DUF3046	-	DUF3046	77	I598_1015	Isoptericola dokdonensis DS-3	bacteria>actinobacteria	hypothetical protein I598_1015 [Isoptericola dokdonensis DS-3]	1024987372 
+AOL10231.1	DUF3046	-	DUF3046	77	B624_0750	Bifidobacterium longum	bacteria>actinobacteria	hypothetical protein B624_0750 [Bifidobacterium longum]	1062060419 
+AOP01347.1	DUF3046	-	DUF3046	77	BL1206_1309	Bifidobacterium longum subsp. longum	bacteria>actinobacteria	hypothetical protein BL1206_1309 [Bifidobacterium longum subsp. longum]	1064283092 
+AQM43268.1	DUF3046	-	DUF3046	77	BBL520_06740	Bifidobacterium breve	bacteria>actinobacteria	hypothetical protein BBL520_06740 [Bifidobacterium breve]	1143276931 
+BAJ68555.1	DUF3046	-	DUF3046	77	BLIJ_0965	Bifidobacterium longum subsp. infantis ATCC 15697 = JCM 1222 = DSM 20088	bacteria>actinobacteria	conserved hypothetical protein [Bifidobacterium longum subsp. infantis ATCC 15697 = JCM 1222 = DSM 20088]	320457934
+BAJ71367.1	DUF3046	-	DUF3046	77	BLIF_1227	Bifidobacterium longum subsp. infantis 157F	bacteria>actinobacteria	conserved hypothetical protein [Bifidobacterium longum subsp. infantis 157F]	320460747
+BAP83754.1	DUF3046	-	DUF3046	77	BL105A_1125	Bifidobacterium longum	bacteria>actinobacteria	hypothetical protein BL105A_1125 [Bifidobacterium longum]	716055360
+BAQ27349.1	DUF3046	-	DUF3046	77	BBDE_1355	Bifidobacterium dentium JCM 1195 = DSM 20436	bacteria>actinobacteria	conserved hypothetical protein [Bifidobacterium dentium JCM 1195 = DSM 20436]	757806562
+BAQ29470.1	DUF3046	-	DUF3046	77	BBKW_1335	Bifidobacterium kashiwanohense JCM 15439 = DSM 21854	bacteria>actinobacteria	conserved hypothetical protein [Bifidobacterium kashiwanohense JCM 15439 = DSM 21854]	757808684
+BAQ33349.1	DUF3046	-	DUF3046	77	GAVG_0697	Gardnerella vaginalis ATCC 14018 = JCM 11026	bacteria>actinobacteria	conserved hypothetical protein [Gardnerella vaginalis ATCC 14018 = JCM 11026]	757812565
+BAQ96239.1	DUF3046	-	DUF3046	77	BBAG_0617	Bifidobacterium angulatum DSM 20098 = JCM 7096	bacteria>actinobacteria	conserved hypothetical protein [Bifidobacterium angulatum DSM 20098 = JCM 7096]	781871248
+BAQ98466.1	DUF3046	-	DUF3046	77	BBBF_1259	Bifidobacterium bifidum ATCC 29521 = JCM 1255 = DSM 20456	bacteria>actinobacteria	conserved hypothetical protein [Bifidobacterium bifidum ATCC 29521 = JCM 1255 = DSM 20456]	781873718
+BAR00220.1	DUF3046	-	DUF3046	77	BBBR_1181	Bifidobacterium breve DSM 20213 = JCM 1192	bacteria>actinobacteria	conserved hypothetical protein [Bifidobacterium breve DSM 20213 = JCM 1192]	781875628
+BAR02111.1	DUF3046	-	DUF3046	77	BBCT_1143	Bifidobacterium catenulatum DSM 16992 = JCM 1194 = LMG 11043	bacteria>actinobacteria	conserved hypothetical protein [Bifidobacterium catenulatum DSM 16992 = JCM 1194 = LMG 11043]	781877747
+BAR03877.1	DUF3046	-	DUF3046	77	BBPC_1199	Bifidobacterium pseudocatenulatum DSM 20438 = JCM 1200 = LMG 10505	bacteria>actinobacteria	conserved hypothetical protein [Bifidobacterium pseudocatenulatum DSM 20438 = JCM 1200 = LMG 10505]	781879635
+CAN02089.1	DUF3046	-	DUF3046	77	CMM_2026	Clavibacter michiganensis subsp. michiganensis NCPPB 382	bacteria>actinobacteria	conserved hypothetical protein [Clavibacter michiganensis subsp. michiganensis NCPPB 382]	147831137
+CAQ01322.1	DUF3046	-	DUF3046	77	CMS1207	Clavibacter michiganensis subsp. sepedonicus	bacteria>actinobacteria	conserved hypothetical protein [Clavibacter michiganensis subsp. sepedonicus]	169156180
+CCE75930.1	DUF3046	-	DUF3046	77	CMN_01988	Clavibacter michiganensis subsp. nebraskensis NCPPB 2581	bacteria>actinobacteria	conserved hypothetical protein [Clavibacter michiganensis subsp. nebraskensis NCPPB 2581]	472822385
+AIC47295.1	DUF3046	-	DUF3046	76	Rhola_00004760	Rhodoluna lacicola	bacteria>actinobacteria	Protein of unknown function (DUF3046) [Rhodoluna lacicola]	649018545
+ALE18512.1	DUF3046	-	DUF3046	76	AL705_00880	Lawsonella clevelandensis	bacteria>actinobacteria	hypothetical protein AL705_00880 [Lawsonella clevelandensis]	927370098
+AMB58952.1	DUF3046	-	DUF3046	76	AWU67_08840	Microterricola viridarii	bacteria>actinobacteria	signal transduction histidine kinase [Microterricola viridarii]	984368351
+ANJ27434.1	DUF3046	-	DUF3046	76	ATC03_12665	Agromyces aureus	bacteria>actinobacteria	signal transduction histidine kinase [Agromyces aureus]	1035532615 
+ADH92382.1	DUF3046	-	DUF3046	75	Arch_0648	Arcanobacterium haemolyticum DSM 20595	bacteria>actinobacteria	hypothetical protein Arch_0648 [Arcanobacterium haemolyticum DSM 20595]	296931574
+AGG67084.1	DUF3046	-	DUF3046	75	H924_08210	Corynebacterium callunae DSM 20147	bacteria>actinobacteria	hypothetical protein H924_08210 [Corynebacterium callunae DSM 20147]	459384793
+AMT94326.1	DUF3046	-	DUF3046	75	A2T55_11500	Brevibacterium linens	bacteria>actinobacteria	histidine kinase [Brevibacterium linens]	1013857488 
+ANP28187.1	DUF3046	TraK-HTH	DUF3046	75	DAD186_16370	Dermabacter vaginalis	bacteria>actinobacteria	hypothetical protein DAD186_16370 [Dermabacter vaginalis]	1041929821 
+AOP54205.1	DUF3046	-	DUF3046	75	BLSMQ_2499	Brevibacterium linens	bacteria>actinobacteria	hypothetical protein BLSMQ_2499 [Brevibacterium linens]	1066957691 
+AOY56230.1	DUF3046	-	DUF3046	75	A4Z71_04510	Candidatus Rhodoluna planktonica	bacteria>actinobacteria	hypothetical protein A4Z71_04510 [Candidatus Rhodoluna planktonica]	1092202166 
+AOZ72869.1	DUF3046	-	DUF3046	75	BK816_05810	Actinomyces sp. VUL4_3	bacteria>actinobacteria	hypothetical protein BK816_05810 [Actinomyces sp. VUL4_3]	1095164819 
+APB00150.1	DUF3046	-	DUF3046	75	NS506_06113	Nocardia seriolae	bacteria>actinobacteria	hypothetical protein NS506_06113 [Nocardia seriolae]	1098541364 
+ABK02853.1	DUF3046	-	DUF3046	74	Arth_1459	Arthrobacter sp. FB24	bacteria>actinobacteria	conserved hypothetical protein [Arthrobacter sp. FB24]	116610129
+ABM07901.1	DUF3046	-	DUF3046	74	AAur_1593	Paenarthrobacter aurescens TC1	bacteria>actinobacteria	conserved hypothetical protein [Paenarthrobacter aurescens TC1]	119948990
+ACL39450.1	DUF3046	-	DUF3046	74	Achl_1461	Pseudarthrobacter chlorophenolicus A6	bacteria>actinobacteria	conserved hypothetical protein [Pseudarthrobacter chlorophenolicus A6]	219859108
+ACU84900.1	DUF3046	-	DUF3046	74	Bfae_10520	Brachybacterium faecium DSM 4810	bacteria>actinobacteria	hypothetical protein Bfae_10520 [Brachybacterium faecium DSM 4810]	256559053
+ADP41035.1	DUF3046	-	DUF3046	74	HMPREF0733_11578	Rothia dentocariosa ATCC 17931	bacteria>actinobacteria	hypothetical protein HMPREF0733_11578 [Rothia dentocariosa ATCC 17931]	310944741
+AGW41876.1	DUF3046	-	DUF3046	74	O159_18530	Leifsonia xyli subsp. cynodontis DSM 46306	bacteria>actinobacteria	hypothetical protein O159_18530 [Leifsonia xyli subsp. cynodontis DSM 46306]	545576764
+AIV39789.1	DUF3046	-	DUF3046	74	NI26_05375	Curtobacterium sp. MR_MD2014	bacteria>actinobacteria	signal transduction histidine kinase [Curtobacterium sp. MR_MD2014]	703597829
+AJM77404.1	DUF3046	-	DUF3046	74	TI83_04480	Rathayibacter toxicus	bacteria>actinobacteria	hypothetical protein TI83_04480 [Rathayibacter toxicus]	756778937
+AJW80505.1	DUF3046	-	DUF3046	74	VO01_09370	Clavibacter michiganensis subsp. insidiosus	bacteria>actinobacteria	signal transduction histidine kinase [Clavibacter michiganensis subsp. insidiosus]	772245232
+AKU64692.1	DUF3046	-	DUF3046	74	ADJ76_01945	Actinomyces meyeri	bacteria>actinobacteria	hypothetical protein ADJ76_01945 [Actinomyces meyeri]	913013736
+AKV85368.1	DUF3046	-	DUF3046	74	AKG07_02625	Microbacterium sp. CGR1	bacteria>actinobacteria	signal transduction histidine kinase [Microbacterium sp. CGR1]	914697926
+ALD13179.1	DUF3046	-	DUF3046	74	AES38_09865	Clavibacter michiganensis subsp. capsici	bacteria>actinobacteria	signal transduction histidine kinase [Clavibacter michiganensis subsp. capsici]	926442211
+ALD63430.1	DUF3046	-	DUF3046	74	AFL94_05215	Arthrobacter sp. LS16	bacteria>actinobacteria	histidine kinase [Arthrobacter sp. LS16]	927031814
+ALG30772.1	DUF3046	-	DUF3046	74	AOZ07_05825	Arthrobacter halophytocola	bacteria>actinobacteria	histidine kinase [Arthrobacter halophytocola]	930828071
+ALQ31324.1	DUF3046	-	DUF3046	74	ATC04_12665	Arthrobacter sp. YC-RL1	bacteria>actinobacteria	histidine kinase [Arthrobacter sp. YC-RL1]	957777562
+ALS56700.1	DUF3046	-	DUF3046	74	APU90_01995	Rathayibacter toxicus	bacteria>actinobacteria	hypothetical protein APU90_01995 [Rathayibacter toxicus]	961558512
+ALV40280.1	DUF3046	-	DUF3046	74	AU252_03100	Pseudarthrobacter sulfonivorans	bacteria>actinobacteria	histidine kinase [Pseudarthrobacter sulfonivorans]	971340096
+AMD88283.1	DUF3046	-	DUF3046	74	AXF14_12750	Actinomyces radicidentis	bacteria>actinobacteria	hypothetical protein AXF14_12750 [Actinomyces radicidentis]	987452844
+AMG84315.1	DUF3046	-	DUF3046	74	AXH82_13590	Microbacterium sp. PAMC 28756	bacteria>actinobacteria	signal transduction histidine kinase [Microbacterium sp. PAMC 28756]	991921107
+AMM20556.1	DUF3046	-	DUF3046	74	AX769_10865	Frondihabitans sp. PAMC 28766	bacteria>actinobacteria	signal transduction histidine kinase [Frondihabitans sp. PAMC 28766]	1001853323 
+AND16148.1	DUF3046	-	DUF3046	74	A6122_0998	Rathayibacter tritici	bacteria>actinobacteria	hypothetical protein A6122_0998 [Rathayibacter tritici]	1026622747 
+ANF31093.1	DUF3046	-	DUF3046	74	A0130_04830	Leifsonia xyli	bacteria>actinobacteria	signal transduction histidine kinase [Leifsonia xyli]	1029984836 
+AOX44970.1	DUF3046	-	DUF3046	74	BJP65_03485	Microbacterium sp. BH3-3-3	bacteria>actinobacteria	signal transduction histidine kinase [Microbacterium sp. BH3-3-3]	1084380285 
+AOX67444.1	DUF3046	-	DUF3046	74	BJK06_02085	Curtobacterium sp. BH-2-1-1	bacteria>actinobacteria	signal transduction histidine kinase [Curtobacterium sp. BH-2-1-1]	1087726369 
+APF33787.1	DUF3046	-	DUF3046	74	BO218_05920	Microbacterium paludicola	bacteria>actinobacteria	signal transduction histidine kinase [Microbacterium paludicola]	1109118684 
+APH44768.1	DUF3046	-	DUF3046	74	BMW26_07195	Microbacterium sp. 1.5R	bacteria>actinobacteria	signal transduction histidine kinase [Microbacterium sp. 1.5R]	1111284625 
+APX34451.1	DUF3046	-	DUF3046	74	BH708_19015	Brachybacterium sp. P6-10-X1	bacteria>actinobacteria	hypothetical protein BH708_19015 [Brachybacterium sp. P6-10-X1]	1134534653 
+APZ34848.1	DUF3046	-	DUF3046	74	BOH66_11775	Microbacterium aurum	bacteria>actinobacteria	signal transduction histidine kinase [Microbacterium aurum]	1137414320 
+BAJ73270.1	DUF3046	-	DUF3046	74	MTES_0306	Microbacterium testaceum StLB037	bacteria>actinobacteria	hypothetical protein MTES_0306 [Microbacterium testaceum StLB037]	323273125
+CBT75310.1	DUF3046	SIG	DUF3046	74	AARI_11000	Glutamicibacter arilaitensis Re117	bacteria>actinobacteria	conserved hypothetical protein [Glutamicibacter arilaitensis Re117]	307744338
+AEG81880.1	DUF3046	-	DUF3046	73	CULC809_01348	Corynebacterium ulcerans 809	bacteria>actinobacteria	hypothetical protein CULC809_01348 [Corynebacterium ulcerans 809]	334697083
+AEG84071.1	DUF3046	-	DUF3046	73	CULC22_01361	Corynebacterium ulcerans BR-AD22	bacteria>actinobacteria	hypothetical protein CULC22_01361 [Corynebacterium ulcerans BR-AD22]	334699275
+AIT89368.1	DUF3046	-	DUF3046	73	Cul210932_1430	Corynebacterium ulcerans	bacteria>actinobacteria	Hypothetical protein Cul210932_1430 [Corynebacterium ulcerans]	698189493
+AIU30655.1	DUF3046	-	DUF3046	73	Cul210931_1319	Corynebacterium ulcerans	bacteria>actinobacteria	Hypothetical protein Cul210931_1319 [Corynebacterium ulcerans]	698969793
+AIU32904.1	DUF3046	-	DUF3046	73	CulFRC11_1335	Corynebacterium ulcerans FRC11	bacteria>actinobacteria	Hypothetical protein CulFRC11_1335 [Corynebacterium ulcerans FRC11]	698973094
+AIU91957.1	DUF3046	-	DUF3046	73	Cul05146_1395	Corynebacterium ulcerans	bacteria>actinobacteria	Hypothetical protein Cul05146_1395 [Corynebacterium ulcerans]	700340451
+AJT40587.1	DUF3046	-	DUF3046	73	UM93_01820	Arthrobacter sp. IHBB 11108	bacteria>actinobacteria	histidine kinase [Arthrobacter sp. IHBB 11108]	767256704
+AKA96874.1	DUF3046	-	DUF3046	73	CUL131002_1349c	Corynebacterium ulcerans	bacteria>actinobacteria	Hypothetical protein CUL131002_1349c [Corynebacterium ulcerans]	803356559
+AKN77249.1	DUF3046	-	DUF3046	73	CulFRC58_1395	Corynebacterium ulcerans FRC58	bacteria>actinobacteria	Hypothetical protein CulFRC58_1395 [Corynebacterium ulcerans FRC58]	852474238
+ALB03444.1	DUF3046	-	DUF3046	73	KPaMU14_08025	Kocuria palustris	bacteria>actinobacteria	histidine kinase [Kocuria palustris]	923034704
+ALD95146.1	DUF3046	-	DUF3046	73	Cul131001_1449	Corynebacterium ulcerans	bacteria>actinobacteria	Hypothetical protein Cul131001_1449 [Corynebacterium ulcerans]	927310817
+ALE05340.1	DUF3046	-	DUF3046	73	AL755_07425	Arthrobacter sp. ERGS1:01	bacteria>actinobacteria	histidine kinase [Arthrobacter sp. ERGS1:01]	927293889
+ALE91688.1	DUF3046	-	DUF3046	73	AOC05_03965	Arthrobacter alpinus	bacteria>actinobacteria	histidine kinase [Arthrobacter alpinus]	928486349
+ALJ21042.1	DUF3046	-	DUF3046	73	AOA12_14495	Microbacterium sp. No. 7	bacteria>actinobacteria	signal transduction histidine kinase [Microbacterium sp. No. 7]	938164402
+ALO67563.1	DUF3046	-	DUF3046	73	AS189_15040	Arthrobacter alpinus	bacteria>actinobacteria	histidine kinase [Arthrobacter alpinus]	953322280
+ALU39775.1	DUF3046	-	DUF3046	73	AS188_08460	Kocuria flava	bacteria>actinobacteria	histidine kinase [Kocuria flava]	970325398
+ALV44784.1	DUF3046	-	DUF3046	73	MB46_03905	Arthrobacter sp. A3	bacteria>actinobacteria	histidine kinase [Arthrobacter sp. A3]	971344603
+ALX66813.1	DUF3046	-	DUF3046	73	AB663_002215	Microbacterium sp. XT11	bacteria>actinobacteria	hypothetical protein AB663_002215 [Microbacterium sp. XT11]	973721435
+AMM32362.1	DUF3046	-	DUF3046	73	SA2016_1686	Sinomonas atrocyanea	bacteria>actinobacteria	histidine kinase [Sinomonas atrocyanea]	1001865876 
+ANP72114.1	DUF3046	-	DUF3046	73	PA27867_1148	Cryobacterium arcticum	bacteria>actinobacteria	hypothetical protein PA27867_1148 [Cryobacterium arcticum]	1042050226 
+ANS80547.1	DUF3046	-	DUF3046	73	SGUI_3151	Serinicoccus sp. JLT9	bacteria>actinobacteria	hypothetical protein SGUI_3151 [Serinicoccus sp. JLT9]	1043661428 
+BAG29932.1	DUF3046	-	DUF3046	73	KRH_15850	Kocuria rhizophila DC2201	bacteria>actinobacteria	hypothetical protein KRH_15850 [Kocuria rhizophila DC2201]	183581461
+BAS19517.1	DUF3046	-	DUF3046	73	RM6536_0270	Rothia mucilaginosa	bacteria>actinobacteria	hypothetical protein RM6536_0270 [Rothia mucilaginosa]	915387034
+ACS30254.1	DUF3046	-	DUF3046	72	Mlut_07220	Micrococcus luteus NCTC 2665	bacteria>actinobacteria	hypothetical protein Mlut_07220 [Micrococcus luteus NCTC 2665]	239838457
+AHH20188.1	DUF3046	-	DUF3046	72	NONO_c54080	Nocardia nova SH22a	bacteria>actinobacteria	hypothetical protein NONO_c54080 [Nocardia nova SH22a]	576087798
+AMD98075.1	DUF3046	-	DUF3046	72	AXE84_00375	Actinomyces oris	bacteria>actinobacteria	hypothetical protein AXE84_00375 [Actinomyces oris]	987462641
+ANG85425.1	DUF3046	-	DUF3046	72	A8L33_08520	Microbacterium chocolatum	bacteria>actinobacteria	signal transduction histidine kinase [Microbacterium chocolatum]	1032533841 
+AOT04024.1	DUF3046	-	DUF3046	72	ASPU41_12530	Arthrobacter sp. U41	bacteria>actinobacteria	histidine kinase [Arthrobacter sp. U41]	1071994326 
+ADB76489.1	DUF3046	-	DUF3046	71	Gobs_3920	Geodermatophilus obscurus DSM 43160	bacteria>actinobacteria	conserved hypothetical protein [Geodermatophilus obscurus DSM 43160]	284065551
+AGN19467.1	DUF3046	-	DUF3046	71	C624_09460	Corynebacterium glutamicum SCgG1	bacteria>actinobacteria	hypothetical protein C624_09460 [Corynebacterium glutamicum SCgG1]	509087222
+AGP30942.1	DUF3046	-	DUF3046	71	A606_06475	Corynebacterium terpenotabidum Y-11	bacteria>actinobacteria	hypothetical protein A606_06475 [Corynebacterium terpenotabidum Y-11]	521018390
+AGS35043.1	DUF3046	-	DUF3046	71	B841_07850	Corynebacterium maris DSM 45190	bacteria>actinobacteria	hypothetical protein B841_07850 [Corynebacterium maris DSM 45190]	528325728
+AGT05696.1	DUF3046	-	DUF3046	71	cgp_2145	Corynebacterium glutamicum MB001	bacteria>actinobacteria	hypothetical protein cgp_2145 [Corynebacterium glutamicum MB001]	529578243
+AHI19841.1	DUF3046	-	DUF3046	71	CCASEI_06325	Corynebacterium casei LMG S-19264	bacteria>actinobacteria	hypothetical protein CCASEI_06325 [Corynebacterium casei LMG S-19264]	582016495
+AIJ33750.1	DUF3046	-	DUF3046	71	CIMIT_07400	Corynebacterium imitans	bacteria>actinobacteria	hypothetical protein CIMIT_07400 [Corynebacterium imitans]	672594773
+AIK85393.1	DUF3046	-	DUF3046	71	CGLAR1_09075	Corynebacterium glutamicum	bacteria>actinobacteria	hypothetical protein CGLAR1_09075 [Corynebacterium glutamicum]	674168194
+AIK88178.1	DUF3046	-	DUF3046	71	AR0_09225	Corynebacterium glutamicum	bacteria>actinobacteria	hypothetical protein AR0_09225 [Corynebacterium glutamicum]	674156924
+AIL97100.1	DUF3046	-	DUF3046	71	CUREI_07170	Corynebacterium ureicelerivorans	bacteria>actinobacteria	hypothetical protein CUREI_07170 [Corynebacterium ureicelerivorans]	675825410
+AIT61305.1	DUF3046	-	DUF3046	71	CDOO_08570	Corynebacterium doosanense CAU 212 = DSM 45436	bacteria>actinobacteria	hypothetical protein CDOO_08570 [Corynebacterium doosanense CAU 212 = DSM 45436]	697778569
+AJE33416.1	DUF3046	-	DUF3046	71	B842_07835	Corynebacterium humireducens NBRC 106098 = DSM 45392	bacteria>actinobacteria	hypothetical protein B842_07835 [Corynebacterium humireducens NBRC 106098 = DSM 45392]	748229962
+AJE67653.1	DUF3046	-	DUF3046	71	SB89_08910	Corynebacterium glutamicum	bacteria>actinobacteria	hypothetical protein SB89_08910 [Corynebacterium glutamicum]	748811342
+AKE39365.1	DUF3046	-	DUF3046	71	UL81_07045	Corynebacterium camporealensis	bacteria>actinobacteria	Protein of unknown function (DUF3046) [Corynebacterium camporealensis]	814960998
+AKF27700.1	DUF3046	-	DUF3046	71	YH66_09145	[Brevibacterium] flavum	bacteria>actinobacteria	hypothetical protein YH66_09145 [[Brevibacterium] flavum]	817155165
+ALP51576.1	DUF3046	-	DUF3046	71	AC079_09495	Corynebacterium glutamicum	bacteria>actinobacteria	hypothetical protein AC079_09495 [Corynebacterium glutamicum]	954626400
+AMA01570.1	DUF3046	-	DUF3046	71	APT58_09440	Corynebacterium glutamicum	bacteria>actinobacteria	hypothetical protein APT58_09440 [Corynebacterium glutamicum]	975043072
+AMJ44468.1	DUF3046	-	DUF3046	71	AW169_05770	Corynebacterium stationis	bacteria>actinobacteria	hypothetical protein AW169_05770 [Corynebacterium stationis]	995959459
+AMO90147.1	DUF3046	-	DUF3046	71	WM42_2450	Corynebacterium simulans	bacteria>actinobacteria	hypothetical protein WM42_2450 [Corynebacterium simulans]	1004391115 
+AMO92701.1	DUF3046	-	DUF3046	71	AWU68_2457	Corynebacterium simulans	bacteria>actinobacteria	hypothetical protein AWU68_2457 [Corynebacterium simulans]	1004393670 
+ANE05348.1	DUF3046	-	DUF3046	71	ccrud_08455	Corynebacterium crudilactis	bacteria>actinobacteria	hypothetical protein ccrud_08455 [Corynebacterium crudilactis]	1027917863 
+ANE09822.1	DUF3046	-	DUF3046	71	A3654_09205	Corynebacterium glutamicum	bacteria>actinobacteria	hypothetical protein A3654_09205 [Corynebacterium glutamicum]	1027953089 
+ANR62820.1	DUF3046	-	DUF3046	71	C628_09420	[Brevibacterium] flavum ZL-1	bacteria>actinobacteria	hypothetical protein C628_09420 [[Brevibacterium] flavum ZL-1]	1043175617 
+ANR65824.1	DUF3046	-	DUF3046	71	C627_09325	Corynebacterium glutamicum ZL-6	bacteria>actinobacteria	hypothetical protein C627_09325 [Corynebacterium glutamicum ZL-6]	1043178622 
+ANU35098.1	DUF3046	-	DUF3046	71	BBD29_09285	Corynebacterium glutamicum	bacteria>actinobacteria	hypothetical protein BBD29_09285 [Corynebacterium glutamicum]	1045038591 
+APT08851.1	DUF3046	-	DUF3046	71	BSP99_09550	Corynebacterium glutamicum	bacteria>actinobacteria	hypothetical protein BSP99_09550 [Corynebacterium glutamicum]	1127832964 
+APT87033.1	DUF3046	-	DUF3046	71	CFLV_07425	Corynebacterium flavescens	bacteria>actinobacteria	hypothetical protein CFLV_07425 [Corynebacterium flavescens]	1129922827 
+APT94843.1	DUF3046	-	DUF3046	71	CSTAT_05660	Corynebacterium stationis	bacteria>actinobacteria	hypothetical protein CSTAT_05660 [Corynebacterium stationis]	1129935551 
+BAC18660.1	DUF3046	-	DUF3046	71	-	Corynebacterium efficiens YS-314	bacteria>actinobacteria	conserved hypothetical protein [Corynebacterium efficiens YS-314]	23493691
+CCH25101.1	DUF3046	-	DUF3046	71	WA5_1881	Corynebacterium glutamicum K051	bacteria>actinobacteria	hypothetical protein WA5_1881 [Corynebacterium glutamicum K051]	385144062
+ADK29048.1	DUF3046	-	DUF3046	70	cpfrc_01255	Corynebacterium pseudotuberculosis FRC41	bacteria>actinobacteria	hypothetical protein cpfrc_01255 [Corynebacterium pseudotuberculosis FRC41]	300686126
+ADL10721.1	DUF3046	-	DUF3046	70	CpC231_1247	Corynebacterium pseudotuberculosis C231	bacteria>actinobacteria	Hypothetical protein CpC231_1247 [Corynebacterium pseudotuberculosis C231]	302206379
+ADL21129.1	DUF3046	-	DUF3046	70	Cp1002_1248	Corynebacterium pseudotuberculosis 1002	bacteria>actinobacteria	Hypothetical protein Cp1002_1248 [Corynebacterium pseudotuberculosis 1002]	302330935
+ADO26521.1	DUF3046	-	DUF3046	70	CpI19_1254	Corynebacterium pseudotuberculosis I19	bacteria>actinobacteria	Hypothetical protein CpI19_1254 [Corynebacterium pseudotuberculosis I19]	308276622
+AEK92586.1	DUF3046	-	DUF3046	70	CpPAT10_1247	Corynebacterium pseudotuberculosis PAT10	bacteria>actinobacteria	Hypothetical protein CpPAT10_1247 [Corynebacterium pseudotuberculosis PAT10]	341825065
+AEP70493.1	DUF3046	-	DUF3046	70	Cp4202_1240	Corynebacterium pseudotuberculosis 42/02-A	bacteria>actinobacteria	Hypothetical protein Cp4202_1240 [Corynebacterium pseudotuberculosis 42/02-A]	348607220
+AEQ06803.1	DUF3046	-	DUF3046	70	CpCIP5297_1271	Corynebacterium pseudotuberculosis CIP 52.97	bacteria>actinobacteria	Hypothetical protein CpCIP5297_1271 [Corynebacterium pseudotuberculosis CIP 52.97]	349735325
+AER69295.1	DUF3046	-	DUF3046	70	Cp106_1230	Corynebacterium pseudotuberculosis 1/06-A	bacteria>actinobacteria	Hypothetical protein Cp106_1230 [Corynebacterium pseudotuberculosis 1/06-A]	355392630
+AEX39743.1	DUF3046	-	DUF3046	70	Cp3995_1282	Corynebacterium pseudotuberculosis 3/99-5	bacteria>actinobacteria	Hypothetical protein Cp3995_1282 [Corynebacterium pseudotuberculosis 3/99-5]	371576140
+AFB72607.1	DUF3046	-	DUF3046	70	Cp316_1303	Corynebacterium pseudotuberculosis 316	bacteria>actinobacteria	Hypothetical protein Cp316_1303 [Corynebacterium pseudotuberculosis 316]	377654258
+AFF22408.1	DUF3046	-	DUF3046	70	CpP54B96_1273	Corynebacterium pseudotuberculosis P54B96	bacteria>actinobacteria	Hypothetical protein CpP54B96_1273 [Corynebacterium pseudotuberculosis P54B96]	380869934
+AFH52207.1	DUF3046	-	DUF3046	70	Cp267_1308	Corynebacterium pseudotuberculosis 267	bacteria>actinobacteria	Hypothetical protein Cp267_1308 [Corynebacterium pseudotuberculosis 267]	383805128
+AFH91074.1	DUF3046	-	DUF3046	70	Cp31_1266	Corynebacterium pseudotuberculosis 31	bacteria>actinobacteria	Hypothetical protein Cp31_1266 [Corynebacterium pseudotuberculosis 31]	384477278
+AFK16898.1	DUF3046	-	DUF3046	70	Cp258_1270	Corynebacterium pseudotuberculosis 258	bacteria>actinobacteria	Hypothetical protein Cp258_1270 [Corynebacterium pseudotuberculosis 258]	388247907
+AFM07592.1	DUF3046	-	DUF3046	70	Cp162_1249	Corynebacterium pseudotuberculosis Cp162	bacteria>actinobacteria	Hypothetical protein Cp162_1249 [Corynebacterium pseudotuberculosis Cp162]	390531863
+AHU88932.1	DUF3046	-	DUF3046	70	CQ11_01755	Trueperella pyogenes	bacteria>actinobacteria	hypothetical protein CQ11_01755 [Trueperella pyogenes]	604188586
+AIG07659.1	DUF3046	-	DUF3046	70	CPTA_01830	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	hypothetical protein CPTA_01830 [Corynebacterium pseudotuberculosis]	666103782
+AIG09988.1	DUF3046	-	DUF3046	70	CPTB_01932	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	hypothetical protein CPTB_01932 [Corynebacterium pseudotuberculosis]	666108220
+AIG12112.1	DUF3046	-	DUF3046	70	CPTC_01824	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	hypothetical protein CPTC_01824 [Corynebacterium pseudotuberculosis]	666112053
+AJC13993.1	DUF3046	-	DUF3046	70	CpVD57_1280	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	Hypothetical protein CpVD57_1280 [Corynebacterium pseudotuberculosis]	743593838
+AJC69776.1	DUF3046	-	DUF3046	70	X956_06795	Trueperella pyogenes TP8	bacteria>actinobacteria	histidine kinase [Trueperella pyogenes TP8]	744783343
+AKC74017.1	DUF3046	-	DUF3046	70	Cp226_1299	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	Hypothetical protein Cp226_1299 [Corynebacterium pseudotuberculosis]	807231314
+AKI59613.1	DUF3046	-	DUF3046	70	Cp29156_1223	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	Hypothetical protein Cp29156_1223 [Corynebacterium pseudotuberculosis]	827408971
+AKJ55932.1	DUF3046	-	DUF3046	70	Cp12C_1325	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	Hypothetical protein Cp12C_1325 [Corynebacterium pseudotuberculosis]	827031018
+AKK06146.1	DUF3046	-	DUF3046	70	CMUST_09145	Corynebacterium mustelae	bacteria>actinobacteria	putative DUF3046 family protein [Corynebacterium mustelae]	827631027
+AKP08913.1	DUF3046	-	DUF3046	70	Cp262_1250	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	Hypothetical protein Cp262_1250 [Corynebacterium pseudotuberculosis]	870600870
+AKS13591.1	DUF3046	-	DUF3046	70	CpE19_1253	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	Hypothetical protein CpE19_1253 [Corynebacterium pseudotuberculosis]	902820280
+ALD74425.1	DUF3046	-	DUF3046	70	AN946_09110	Trueperella pyogenes	bacteria>actinobacteria	hypothetical protein AN946_09110 [Trueperella pyogenes]	927043217
+ALF57674.1	DUF3046	-	DUF3046	70	AN902_05990	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	hypothetical protein AN902_05990 [Corynebacterium pseudotuberculosis]	930355230
+ALM77945.1	DUF3046	-	DUF3046	70	Cp1002B_1403	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	Hypothetical protein Cp1002B_1403 [Corynebacterium pseudotuberculosis]	948530402
+ALP33923.1	DUF3046	-	DUF3046	70	CpN1_1247	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	Hypothetical protein CpN1_1247 [Corynebacterium pseudotuberculosis]	954040157
+ALR33863.1	DUF3046	-	DUF3046	70	CpPA01_1202	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	Hypothetical protein CpPA01_1202 [Corynebacterium pseudotuberculosis]	959200687
+ALU17705.1	DUF3046	-	DUF3046	70	AN397_06000	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	hypothetical protein AN397_06000 [Corynebacterium pseudotuberculosis]	969861841
+ALU19695.1	DUF3046	-	DUF3046	70	AK970_06000	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	hypothetical protein AK970_06000 [Corynebacterium pseudotuberculosis]	969863832
+ALU21675.1	DUF3046	-	DUF3046	70	AN398_05990	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	hypothetical protein AN398_05990 [Corynebacterium pseudotuberculosis]	969865813
+AMN70189.1	DUF3046	-	DUF3046	70	ATN02_06825	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	hypothetical protein ATN02_06825 [Corynebacterium pseudotuberculosis]	1002760907 
+AMN72039.1	DUF3046	-	DUF3046	70	ATN03_06375	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	hypothetical protein ATN03_06375 [Corynebacterium pseudotuberculosis]	1002762758 
+AMN73476.1	DUF3046	-	DUF3046	70	ATN04_03340	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	hypothetical protein ATN04_03340 [Corynebacterium pseudotuberculosis]	1002764196 
+AMN76360.1	DUF3046	-	DUF3046	70	ATN05_08790	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	hypothetical protein ATN05_08790 [Corynebacterium pseudotuberculosis]	1002767081 
+ANH23961.1	DUF3046	-	DUF3046	70	CpE55_1256	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	Hypothetical protein CpE55_1256 [Corynebacterium pseudotuberculosis]	1032991247 
+ANH26016.1	DUF3046	-	DUF3046	70	CpMEX9_1245	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	Hypothetical protein CpMEX9_1245 [Corynebacterium pseudotuberculosis]	1032993542 
+ANK56622.1	DUF3046	-	DUF3046	70	CpPA02_1212	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	Hypothetical protein CpPA02_1212 [Corynebacterium pseudotuberculosis]	1036578356 
+ANQ77448.1	DUF3046	-	DUF3046	70	CpCP13_1286	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	Hypothetical protein CpCP13_1286 [Corynebacterium pseudotuberculosis]	1042814319 
+ANQ79572.1	DUF3046	-	DUF3046	70	CpT1_1279	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	Hypothetical protein CpT1_1279 [Corynebacterium pseudotuberculosis]	1042816444 
+ANZ92471.1	DUF3046	-	DUF3046	70	CPMB20_08800	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	hypothetical protein CPMB20_08800 [Corynebacterium pseudotuberculosis]	1051002222 
+APA72947.1	DUF3046	-	DUF3046	70	CpMEX29_1246	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	Hypothetical protein CpMEX29_1246 [Corynebacterium pseudotuberculosis]	1098509767 
+APB11127.1	DUF3046	-	DUF3046	70	A4R72_06580	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	hypothetical protein A4R72_06580 [Corynebacterium pseudotuberculosis]	1100272282 
+APB13171.1	DUF3046	-	DUF3046	70	A4R71_06595	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	hypothetical protein A4R71_06595 [Corynebacterium pseudotuberculosis]	1100275099 
+APB15216.1	DUF3046	-	DUF3046	70	A4R68_06590	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	hypothetical protein A4R68_06590 [Corynebacterium pseudotuberculosis]	1100278085 
+APB17261.1	DUF3046	-	DUF3046	70	A4R67_06570	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	hypothetical protein A4R67_06570 [Corynebacterium pseudotuberculosis]	1100281018 
+APB19311.1	DUF3046	-	DUF3046	70	A4R66_06575	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	hypothetical protein A4R66_06575 [Corynebacterium pseudotuberculosis]	1100284105 
+APB21351.1	DUF3046	-	DUF3046	70	A4R65_06570	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	hypothetical protein A4R65_06570 [Corynebacterium pseudotuberculosis]	1100287102 
+APB23359.1	DUF3046	-	DUF3046	70	A4R64_06365	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	hypothetical protein A4R64_06365 [Corynebacterium pseudotuberculosis]	1100289555 
+APB25367.1	DUF3046	-	DUF3046	70	A4R63_06350	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	hypothetical protein A4R63_06350 [Corynebacterium pseudotuberculosis]	1100292046 
+APB27417.1	DUF3046	-	DUF3046	70	A4R62_06575	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	hypothetical protein A4R62_06575 [Corynebacterium pseudotuberculosis]	1100294925 
+APB29466.1	DUF3046	-	DUF3046	70	A4R69_06575	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	hypothetical protein A4R69_06575 [Corynebacterium pseudotuberculosis]	1100297746 
+APG81817.1	DUF3046	-	DUF3046	70	CPI37_1164	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	Hypothetical protein CPI37_1164 [Corynebacterium pseudotuberculosis]	1110963343 
+APQ54345.1	DUF3046	-	DUF3046	70	CpMEX30_1315	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	Hypothetical protein CpMEX30_1315 [Corynebacterium pseudotuberculosis]	1125825475 
+APQ56432.1	DUF3046	-	DUF3046	70	CpMEX31_1310	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	Hypothetical protein CpMEX31_1310 [Corynebacterium pseudotuberculosis]	1125830171 
+APT90602.1	DUF3046	-	DUF3046	70	CSPHI_05615	Corynebacterium sphenisci DSM 44792	bacteria>actinobacteria	hypothetical protein CSPHI_05615 [Corynebacterium sphenisci DSM 44792]	1129928614 
+APZ31975.1	DUF3046	-	DUF3046	70	CpMEX1_1241	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	Hypothetical protein CpMEX1_1241 [Corynebacterium pseudotuberculosis]	1137411131 
+AQL51371.1	DUF3046	-	DUF3046	70	CpPA04_1272	Corynebacterium pseudotuberculosis	bacteria>actinobacteria	hypothetical protein CpPA04_1272 [Corynebacterium pseudotuberculosis]	1142905362 
+BAM27677.1	DUF3046	-	DUF3046	70	CULC0102_1478	Corynebacterium ulcerans 0102	bacteria>actinobacteria	hypothetical protein CULC0102_1478 [Corynebacterium ulcerans 0102]	393403185
+ABW10672.1	DUF3046	-	DUF3046	69	Franean1_1218	Frankia sp. EAN1pec	bacteria>actinobacteria	conserved hypothetical protein [Frankia sp. EAN1pec]	158108475
+ACV80287.1	DUF3046	-	DUF3046	69	Namu_3995	Nakamurella multipartita DSM 44233	bacteria>actinobacteria	hypothetical protein Namu_3995 [Nakamurella multipartita DSM 44233]	258557345
+AIG64002.1	DUF3046	-	DUF3046	69	CATYP_04305	Corynebacterium atypicum	bacteria>actinobacteria	hypothetical protein CATYP_04305 [Corynebacterium atypicum]	667687390
+AAK47129.1	DUF3046	-	DUF3046	68	MT2808	Mycobacterium tuberculosis CDC1551	bacteria>actinobacteria	conserved hypothetical protein [Mycobacterium tuberculosis CDC1551]	13882571
+AAS05167.1	DUF3046	-	DUF3046	68	MAP_2850c	Mycobacterium avium subsp. paratuberculosis K-10	bacteria>actinobacteria	hypothetical protein MAP_2850c [Mycobacterium avium subsp. paratuberculosis K-10]	41397307
+ABL05560.1	DUF3046	-	DUF3046	68	MUL_3382	Mycobacterium ulcerans Agy99	bacteria>actinobacteria	conserved hypothetical protein [Mycobacterium ulcerans Agy99]	118570809
+ABQ74541.1	DUF3046	-	DUF3046	68	MRA_2765	Mycobacterium tuberculosis H37Ra	bacteria>actinobacteria	hypothetical protein MRA_2765 [Mycobacterium tuberculosis H37Ra]	148506732
+ACC40425.1	DUF3046	-	DUF3046	68	MMAR_1975	Mycobacterium marinum M	bacteria>actinobacteria	conserved hypothetical protein [Mycobacterium marinum M]	183175315
+AEI09566.1	DUF3046	-	DUF3046	68	CRES_1211	Corynebacterium resistens DSM 45100	bacteria>actinobacteria	hypothetical protein CRES_1211 [Corynebacterium resistens DSM 45100]	336101746
+AEN01197.1	DUF3046	-	DUF3046	68	MTCTRI2_2791	Mycobacterium tuberculosis CTRI-2	bacteria>actinobacteria	hypothetical protein MTCTRI2_2791 [Mycobacterium tuberculosis CTRI-2]	344220566
+AET20019.1	DUF3046	-	DUF3046	68	BCGMEX_2745c	Mycobacterium bovis BCG str. Mexico	bacteria>actinobacteria	Hypothetical protein BCGMEX_2745c [Mycobacterium bovis BCG str. Mexico]	356594790
+AFC44681.1	DUF3046	-	DUF3046	68	OCU_34620	Mycobacterium intracellulare ATCC 13950	bacteria>actinobacteria	hypothetical protein OCU_34620 [Mycobacterium intracellulare ATCC 13950]	378800545
+AFC49820.1	DUF3046	-	DUF3046	68	OCO_34570	Mycobacterium intracellulare MOTT-02	bacteria>actinobacteria	hypothetical protein OCO_34570 [Mycobacterium intracellulare MOTT-02]	378805685
+AFC55091.1	DUF3046	-	DUF3046	68	OCQ_35790	Mycobacterium intracellulare MOTT-64	bacteria>actinobacteria	hypothetical protein OCQ_35790 [Mycobacterium intracellulare MOTT-64]	378810957
+AFE13892.1	DUF3046	-	DUF3046	68	MRGA423_17005	Mycobacterium tuberculosis RGTB423	bacteria>actinobacteria	hypothetical protein MRGA423_17005 [Mycobacterium tuberculosis RGTB423]	380726097
+AFE17560.1	DUF3046	-	DUF3046	68	MRGA327_16785	Mycobacterium tuberculosis RGTB327	bacteria>actinobacteria	hypothetical protein MRGA327_16785 [Mycobacterium tuberculosis RGTB327]	380722451
+AFJ36420.1	DUF3046	-	DUF3046	68	W7S_17295	Mycobacterium sp. MOTT36Y	bacteria>actinobacteria	hypothetical protein W7S_17295 [Mycobacterium sp. MOTT36Y]	386790301
+AFN50712.1	DUF3046	-	DUF3046	68	RVBD_2738c	Mycobacterium tuberculosis H37Rv	bacteria>actinobacteria	hypothetical protein RVBD_2738c [Mycobacterium tuberculosis H37Rv]	395139553
+AFS15509.1	DUF3046	-	DUF3046	68	MIP_05203	Mycobacterium indicus pranii MTCC 9506	bacteria>actinobacteria	Hypothetical protein MIP_05203 [Mycobacterium indicus pranii MTCC 9506]	405130254
+AGE36452.1	DUF3046	-	DUF3046	68	CU7111_0859	Corynebacterium urealyticum DSM 7111	bacteria>actinobacteria	hypothetical protein CU7111_0859 [Corynebacterium urealyticum DSM 7111]	448277028
+AGE68741.1	DUF3046	-	DUF3046	68	K60_028310	Mycobacterium bovis BCG str. Korea 1168P	bacteria>actinobacteria	hypothetical protein K60_028310 [Mycobacterium bovis BCG str. Korea 1168P]	449033314
+AGJ68839.1	DUF3046	-	DUF3046	68	J112_14665	Mycobacterium tuberculosis str. Beijing/NITR203	bacteria>actinobacteria	hypothetical protein J112_14665 [Mycobacterium tuberculosis str. Beijing/NITR203]	478742679
+AGJ77808.1	DUF3046	-	DUF3046	68	PALO_06000	Cutibacterium avidum 44067	bacteria>actinobacteria	hypothetical protein PALO_06000 [Cutibacterium avidum 44067]	480315104
+AGL24317.1	DUF3046	-	DUF3046	68	I917_19205	Mycobacterium tuberculosis str. Haarlem/NITR202	bacteria>actinobacteria	hypothetical protein I917_19205 [Mycobacterium tuberculosis str. Haarlem/NITR202]	492062310
+AGL32226.1	DUF3046	-	DUF3046	68	J114_14605	Mycobacterium tuberculosis EAI5/NITR206	bacteria>actinobacteria	hypothetical protein J114_14605 [Mycobacterium tuberculosis EAI5/NITR206]	492076154
+AGL35905.1	DUF3046	-	DUF3046	68	MAP4_0959	Mycobacterium avium subsp. paratuberculosis MAP4	bacteria>actinobacteria	hypothetical protein MAP4_0959 [Mycobacterium avium subsp. paratuberculosis MAP4]	494537016
+AGM01324.1	DUF3046	-	DUF3046	68	CFBS_2891	Mycobacterium tuberculosis CCDC5079	bacteria>actinobacteria	hypothetical protein CFBS_2891 [Mycobacterium tuberculosis CCDC5079]	505811377
+AGP65037.1	DUF3046	-	DUF3046	68	OEM_35020	Mycobacterium yongonense 05-1390	bacteria>actinobacteria	hypothetical protein OEM_35020 [Mycobacterium yongonense 05-1390]	521367202
+AGQ37357.1	DUF3046	-	DUF3046	68	M943_14140	Mycobacterium tuberculosis EAI5	bacteria>actinobacteria	hypothetical protein M943_14140 [Mycobacterium tuberculosis EAI5]	523439649
+AGU15278.1	DUF3046	-	DUF3046	68	CARG_05755	Corynebacterium argentoratense DSM 44202	bacteria>actinobacteria	hypothetical protein CARG_05755 [Corynebacterium argentoratense DSM 44202]	533215950
+AHI03265.1	DUF3046	-	DUF3046	68	CFAL_06250	Corynebacterium falsenii DSM 44353	bacteria>actinobacteria	hypothetical protein CFAL_06250 [Corynebacterium falsenii DSM 44353]	578015007
+AHI23005.1	DUF3046	-	DUF3046	68	B843_08100	Corynebacterium vitaeruminis DSM 20294	bacteria>actinobacteria	hypothetical protein B843_08100 [Corynebacterium vitaeruminis DSM 20294]	582019662
+AHJ43535.1	DUF3046	-	DUF3046	68	HKBS1_2889	Mycobacterium tuberculosis HKBS1	bacteria>actinobacteria	hypothetical protein HKBS1_2889 [Mycobacterium tuberculosis HKBS1]	585502524
+AHJ47682.1	DUF3046	-	DUF3046	68	HKBT2_2885	Mycobacterium tuberculosis BT2	bacteria>actinobacteria	hypothetical protein HKBT2_2885 [Mycobacterium tuberculosis BT2]	585516942
+AHJ51828.1	DUF3046	-	DUF3046	68	HKBT1_2882	Mycobacterium tuberculosis BT1	bacteria>actinobacteria	hypothetical protein HKBT1_2882 [Mycobacterium tuberculosis BT1]	585531613
+AHJ55977.1	DUF3046	-	DUF3046	68	CFBR_2892	Mycobacterium tuberculosis CCDC5180	bacteria>actinobacteria	hypothetical protein CFBR_2892 [Mycobacterium tuberculosis CCDC5180]	585542438
+AHM08486.1	DUF3046	-	DUF3046	68	BCGT_2567	Mycobacterium bovis BCG str. ATCC 35743	bacteria>actinobacteria	hypothetical protein BCGT_2567 [Mycobacterium bovis BCG str. ATCC 35743]	594545983
+AHW64008.1	DUF3046	-	DUF3046	68	CGLY_07815	Corynebacterium glyciniphilum AJ 3170	bacteria>actinobacteria	Hypothetical protein CGLY_07815 [Corynebacterium glyciniphilum AJ 3170]	610393045
+AIB49434.1	DUF3046	-	DUF3046	68	MTBK_28900	Mycobacterium tuberculosis K	bacteria>actinobacteria	glycosyl transferase [Mycobacterium tuberculosis K]	646276754
+AID05796.1	DUF3046	-	DUF3046	68	ER17_14500	Mycobacterium tuberculosis	bacteria>actinobacteria	hypothetical protein ER17_14500 [Mycobacterium tuberculosis]	655546445
+AII91329.1	DUF3046	-	DUF3046	68	IZ84_14620	Mycobacterium tuberculosis	bacteria>actinobacteria	hypothetical protein IZ84_14620 [Mycobacterium tuberculosis]	671747588
+AII95245.1	DUF3046	-	DUF3046	68	JE53_14605	Mycobacterium tuberculosis	bacteria>actinobacteria	hypothetical protein JE53_14605 [Mycobacterium tuberculosis]	671751505
+AIQ05385.1	DUF3046	-	DUF3046	68	LJ70_14810	Mycobacterium tuberculosis	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium tuberculosis]	686573989
+AIQ09403.1	DUF3046	-	DUF3046	68	LJ80_14975	Mycobacterium tuberculosis	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium tuberculosis]	686578009
+AIR15511.1	DUF3046	-	DUF3046	68	LH57_14980	Mycobacterium tuberculosis H37Rv	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium tuberculosis H37Rv]	690313480
+AIR47954.1	DUF3046	-	DUF3046	68	LH58_14535	Mycobacterium bovis	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium bovis]	690297384
+AIT86421.1	DUF3046	-	DUF3046	68	LG41_16355	Mycobacterium intracellulare 1956	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium intracellulare 1956]	698186545
+AJF04101.1	DUF3046	-	DUF3046	68	Y980_2738c	Mycobacterium tuberculosis H37RvSiena	bacteria>actinobacteria	hypothetical protein Y980_2738c [Mycobacterium tuberculosis H37RvSiena]	749195822
+AJW50042.1	DUF3046	-	DUF3046	68	UB21_14525	Mycobacterium tuberculosis	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium tuberculosis]	769539944
+AKE41414.1	DUF3046	-	DUF3046	68	UL82_06240	Corynebacterium kutscheri	bacteria>actinobacteria	Protein of unknown function (DUF3046) [Corynebacterium kutscheri]	814963048
+AKO25784.1	DUF3046	-	DUF3046	68	GS11_2858	Mycobacterium bovis BCG	bacteria>actinobacteria	hypothetical protein GS11_2858 [Mycobacterium bovis BCG]	857100124
+AKR02568.1	DUF3046	-	DUF3046	68	Mb1595_p3045	Mycobacterium bovis	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium bovis]	893681672
+ALA67259.1	DUF3046	-	DUF3046	68	CLAC_05475	Corynebacterium lactis RW2-5	bacteria>actinobacteria	hypothetical protein CLAC_05475 [Corynebacterium lactis RW2-5]	922844939
+ALA79284.1	DUF3046	-	DUF3046	68	BCGR_2967	Mycobacterium bovis BCG	bacteria>actinobacteria	DUF3046 domain-containing protein [Mycobacterium bovis BCG]	922678487
+ALB19939.1	DUF3046	-	DUF3046	68	AFL40_2839	Mycobacterium tuberculosis	bacteria>actinobacteria	Hypothetical protein AFL40_2839 [Mycobacterium tuberculosis]	923108656
+ALV11716.1	DUF3046	-	DUF3046	68	BOVR_14150	Mycobacterium bovis	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium bovis]	971173974
+AMC42961.1	DUF3046	-	DUF3046	68	RN03_3003	Mycobacterium tuberculosis	bacteria>actinobacteria	hypothetical protein RN03_3003 [Mycobacterium tuberculosis]	984948861
+AMC47190.1	DUF3046	-	DUF3046	68	RN05_2914	Mycobacterium tuberculosis	bacteria>actinobacteria	hypothetical protein RN05_2914 [Mycobacterium tuberculosis]	984953091
+AMC56158.1	DUF3046	-	DUF3046	68	RN07_2927	Mycobacterium bovis	bacteria>actinobacteria	hypothetical protein RN07_2927 [Mycobacterium bovis]	984962061
+AMC60450.1	DUF3046	-	DUF3046	68	RN08_3023	Mycobacterium microti	bacteria>actinobacteria	hypothetical protein RN08_3023 [Mycobacterium microti]	984966354
+AMC65078.1	DUF3046	-	DUF3046	68	RN09_3330	Mycobacterium africanum	bacteria>actinobacteria	hypothetical protein RN09_3330 [Mycobacterium africanum]	984970983
+AMC68411.1	DUF3046	-	DUF3046	68	RN10_1865	Mycobacterium tuberculosis	bacteria>actinobacteria	hypothetical protein RN10_1865 [Mycobacterium tuberculosis]	984974317
+AMC74204.1	DUF3046	-	DUF3046	68	RN11_3194	Mycobacterium tuberculosis	bacteria>actinobacteria	hypothetical protein RN11_3194 [Mycobacterium tuberculosis]	984980111
+AMC82760.1	DUF3046	-	DUF3046	68	RN13_2941	Mycobacterium tuberculosis	bacteria>actinobacteria	hypothetical protein RN13_2941 [Mycobacterium tuberculosis]	984988669
+AMC86953.1	DUF3046	-	DUF3046	68	RN14_2905	Mycobacterium tuberculosis	bacteria>actinobacteria	hypothetical protein RN14_2905 [Mycobacterium tuberculosis]	984992863
+AMC91160.1	DUF3046	-	DUF3046	68	RN15_2928	Mycobacterium tuberculosis	bacteria>actinobacteria	hypothetical protein RN15_2928 [Mycobacterium tuberculosis]	984997071
+AMO11118.1	DUF3046	-	DUF3046	68	AZH48_14120	Mycobacterium bovis BCG str. Tokyo 172	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium bovis BCG str. Tokyo 172]	1003105806 
+ANG88451.1	DUF3046	-	DUF3046	68	SZ58_009050	Mycobacterium bovis	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium bovis]	1032536871 
+ANZ83460.1	DUF3046	-	DUF3046	68	BEE65_2857	Mycobacterium tuberculosis	bacteria>actinobacteria	Hypothetical protein BEE65_2857 [Mycobacterium tuberculosis]	1050847619 
+AOE37149.1	DUF3046	-	DUF3046	68	BEE64_2842	Mycobacterium tuberculosis	bacteria>actinobacteria	Hypothetical protein BEE64_2842 [Mycobacterium tuberculosis]	1057480254 
+AOS92968.1	DUF3046	-	DUF3046	68	AN480_18325	Mycobacterium chimaera	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium chimaera]	1071933265 
+AOT73614.1	DUF3046	-	DUF3046	68	TM57_01440	Mycobacterium tuberculosis	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium tuberculosis]	1072830226 
+AOZ44023.1	DUF3046	-	DUF3046	68	BTB1458_3026	Mycobacterium tuberculosis	bacteria>actinobacteria	hypothetical protein BTB1458_3026 [Mycobacterium tuberculosis]	1092948391 
+APR58066.1	DUF3046	-	DUF3046	68	BTU11_15035	Mycobacterium tuberculosis	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium tuberculosis]	1125939810 
+APT84932.1	DUF3046	-	DUF3046	68	CAQU_07480	Corynebacterium aquilae DSM 44791	bacteria>actinobacteria	hypothetical protein CAQU_07480 [Corynebacterium aquilae DSM 44791]	1129919032 
+APT89066.1	DUF3046	-	DUF3046	68	CFRA_07150	Corynebacterium frankenforstense DSM 45800	bacteria>actinobacteria	hypothetical protein CFRA_07150 [Corynebacterium frankenforstense DSM 45800]	1129926115 
+BAH27027.1	DUF3046	-	DUF3046	68	JTY_2746	Mycobacterium bovis BCG str. Tokyo 172	bacteria>actinobacteria	hypothetical protein JTY_2746 [Mycobacterium bovis BCG str. Tokyo 172]	224774221
+BAL66780.1	DUF3046	-	DUF3046	68	ERDMAN_3000	Mycobacterium tuberculosis str. Erdman = ATCC 35801	bacteria>actinobacteria	hypothetical protein ERDMAN_3000 [Mycobacterium tuberculosis str. Erdman = ATCC 35801]	379029047
+CAI37281.1	DUF3046	SIG	DUF3046	68	jk1117	Corynebacterium jeikeium K411	bacteria>actinobacteria	hypothetical protein jk1117 [Corynebacterium jeikeium K411]	68263793
+CAL72740.1	DUF3046	-	DUF3046	68	BCG_2752c	Mycobacterium bovis BCG str. Pasteur 1173P2	bacteria>actinobacteria	Conserved hypothetical protein [Mycobacterium bovis BCG str. Pasteur 1173P2]	121494262
+CAQ04833.1	DUF3046	-	DUF3046	68	cu0873	Corynebacterium urealyticum DSM 7109	bacteria>actinobacteria	hypothetical protein cu0873 [Corynebacterium urealyticum DSM 7109]	171851857
+CCC27813.1	DUF3046	-	DUF3046	68	MAF_27430	Mycobacterium africanum GM041182	bacteria>actinobacteria	conserved hypothetical protein [Mycobacterium africanum GM041182]	339332107
+CCC45096.1	DUF3046	-	DUF3046	68	MCAN_27651	Mycobacterium canettii CIPT 140010059	bacteria>actinobacteria	conserved hypothetical protein [Mycobacterium canettii CIPT 140010059]	340005929
+CCC65328.1	DUF3046	-	DUF3046	68	BCGM2735c	Mycobacterium bovis BCG str. Moreau RDJ	bacteria>actinobacteria	conserved hypothetical protein [Mycobacterium bovis BCG str. Moreau RDJ]	341602652
+CCG12619.1	DUF3046	-	DUF3046	68	MT7199_2771	Mycobacterium tuberculosis 7199-99	bacteria>actinobacteria	hypothetical protein MT7199_2771 [Mycobacterium tuberculosis 7199-99]	440582216
+CCP45537.1	DUF3046	-	DUF3046	68	Rv2738c	Mycobacterium tuberculosis H37Rv	bacteria>actinobacteria	Conserved hypothetical protein [Mycobacterium tuberculosis H37Rv]	444896276
+CDM11128.1	DUF3046	-	DUF3046	68	MT49_2991	Mycobacterium tuberculosis 49-02	bacteria>actinobacteria	hypothetical PROTEIN MT49_2991 [Mycobacterium tuberculosis 49-02]	702071619
+CDM76046.1	DUF3046	-	DUF3046	68	MMARE11_18990	Mycobacterium marinum E11	bacteria>actinobacteria	conserved hypothetical protein [Mycobacterium marinum E11]	641305048
+CDO44022.1	DUF3046	-	DUF3046	68	Mb2758c	Mycobacterium bovis AF2122/97	bacteria>actinobacteria	CONSERVED HYPOTHETICAL PROTEIN [Mycobacterium bovis AF2122/97]	768985187
+EGE51287.1	DUF3046	-	DUF3046	68	TBPG_002623	Mycobacterium tuberculosis W-148	bacteria>actinobacteria	hypothetical protein TBPG_002623 [Mycobacterium tuberculosis W-148]	326904354
+ANH39328.1	DUF3046	-	DUF3046	67	I601_2912	Nocardioides dokdonensis FR1436	bacteria>actinobacteria	hypothetical protein I601_2912 [Nocardioides dokdonensis FR1436]	1033004000 
+BAH33460.1	DUF3046	-	DUF3046	67	RER_27520	Rhodococcus erythropolis PR4	bacteria>actinobacteria	conserved hypothetical protein [Rhodococcus erythropolis PR4]	226185356
+CAC31367.1	DUF3046	-	DUF3046	67	ML0986	Mycobacterium leprae	bacteria>actinobacteria	conserved hypothetical protein [Mycobacterium leprae]	13093018
+CAR71081.1	DUF3046	-	DUF3046	67	MLBr00986	Mycobacterium leprae Br4923	bacteria>actinobacteria	conserved hypothetical protein [Mycobacterium leprae Br4923]	219933052
+ABP53890.1	DUF3046	-	DUF3046	66	Strop_1424	Salinispora tropica CNB-440	bacteria>actinobacteria	hypothetical protein Strop_1424 [Salinispora tropica CNB-440]	145303308
+ABV97288.1	DUF3046	-	DUF3046	66	Sare_1388	Salinispora arenicola CNS-205	bacteria>actinobacteria	conserved hypothetical protein [Salinispora arenicola CNS-205]	157915861
+ADL45090.1	DUF3046	-	DUF3046	66	Micau_1532	Micromonospora aurantiaca ATCC 27029	bacteria>actinobacteria	hypothetical protein Micau_1532 [Micromonospora aurantiaca ATCC 27029]	302568888
+ADU07325.1	DUF3046	-	DUF3046	66	ML5_1794	Micromonospora sp. L5	bacteria>actinobacteria	hypothetical protein ML5_1794 [Micromonospora sp. L5]	315409208
+AEB43562.1	DUF3046	-	DUF3046	66	VAB18032_12240	Verrucosispora maris AB-18-032	bacteria>actinobacteria	hypothetical protein VAB18032_12240 [Verrucosispora maris AB-18-032]	328809390
+AEV88053.1	DUF3046	-	DUF3046	66	ACPL_7173	Actinoplanes sp. SE50/110	bacteria>actinobacteria	hypothetical protein ACPL_7173 [Actinoplanes sp. SE50/110]	359839612
+AGZ45388.1	DUF3046	-	DUF3046	66	AFR_35660	Actinoplanes friuliensis DSM 7358	bacteria>actinobacteria	hypothetical protein AFR_35660 [Actinoplanes friuliensis DSM 7358]	556038141
+ANI92572.1	DUF3046	-	DUF3046	66	BJL86_1801	Dietzia timorensis	bacteria>actinobacteria	Hypothetical protein BJL86_1801 [Dietzia timorensis]	1035339515 
+ADX72616.1	DUF3046	-	DUF3046	65	Asphe3_14420	Pseudarthrobacter phenanthrenivorans Sphe3	bacteria>actinobacteria	hypothetical protein Asphe3_14420 [Pseudarthrobacter phenanthrenivorans Sphe3]	323468931
+AFR28421.1	DUF3046	-	DUF3046	65	ARUE_c15050	Arthrobacter sp. Rue61a	bacteria>actinobacteria	hypothetical protein ARUE_c15050 [Arthrobacter sp. Rue61a]	403228999
+AHJ19549.1	DUF3046	SIG	DUF3046	65	B7019_1279	Bifidobacterium breve JCM 7019	bacteria>actinobacteria	Hypothetical protein B7019_1279 [Bifidobacterium breve JCM 7019]	585131078
+ABD12879.1	DUF3046	-	DUF3046	64	Francci3_3526	Frankia casuarinae	bacteria>actinobacteria	hypothetical protein Francci3_3526 [Frankia casuarinae]	86569070
+ABG08238.1	DUF3046	-	DUF3046	64	Mmcs_2130	Mycobacterium sp. MCS	bacteria>actinobacteria	conserved hypothetical protein [Mycobacterium sp. MCS]	108769516
+ABG98536.1	DUF3046	-	DUF3046	64	RHA1_ro06764	Rhodococcus jostii RHA1	bacteria>actinobacteria	conserved hypothetical protein [Rhodococcus jostii RHA1]	110823252
+ABK53265.1	DUF3046	-	DUF3046	64	Acel_1493	Acidothermus cellulolyticus 11B	bacteria>actinobacteria	hypothetical protein Acel_1493 [Acidothermus cellulolyticus 11B]	117649163
+ABK65264.1	DUF3046	-	DUF3046	64	MAV_3629	Mycobacterium avium 104	bacteria>actinobacteria	conserved hypothetical protein [Mycobacterium avium 104]	118164367
+ABK71520.1	DUF3046	-	DUF3046	64	MSMEG_2700	Mycobacterium smegmatis str. MC2 155	bacteria>actinobacteria	conserved hypothetical protein [Mycobacterium smegmatis str. MC2 155]	118170624
+ABL81843.1	DUF3046	-	DUF3046	64	Noca_2338	Nocardioides sp. JS614	bacteria>actinobacteria	conserved hypothetical protein [Nocardioides sp. JS614]	119537226
+ABL91374.1	DUF3046	-	DUF3046	64	Mkms_2176	Mycobacterium sp. KMS	bacteria>actinobacteria	conserved hypothetical protein [Mycobacterium sp. KMS]	119694301
+ABM13216.1	DUF3046	-	DUF3046	64	Mvan_2402	Mycobacterium vanbaalenii PYR-1	bacteria>actinobacteria	conserved hypothetical protein [Mycobacterium vanbaalenii PYR-1]	119956211
+ABN97903.1	DUF3046	-	DUF3046	64	Mjls_2117	Mycobacterium sp. JLS	bacteria>actinobacteria	conserved hypothetical protein [Mycobacterium sp. JLS]	126234503
+ABP46454.1	DUF3046	-	DUF3046	64	Mflv_3983	Mycobacterium gilvum PYR-GCK	bacteria>actinobacteria	conserved hypothetical protein [Mycobacterium gilvum PYR-GCK]	145217050
+ACU35370.1	DUF3046	-	DUF3046	64	Amir_1418	Actinosynnema mirum DSM 43827	bacteria>actinobacteria	hypothetical protein Amir_1418 [Actinosynnema mirum DSM 43827]	255919859
+ACU97764.1	DUF3046	-	DUF3046	64	Svir_27830	Saccharomonospora viridis DSM 43017	bacteria>actinobacteria	hypothetical protein Svir_27830 [Saccharomonospora viridis DSM 43017]	256586631
+ACY21449.1	DUF3046	-	DUF3046	64	Gbro_2201	Gordonia bronchialis DSM 43247	bacteria>actinobacteria	hypothetical protein Gbro_2201 [Gordonia bronchialis DSM 43247]	262085481
+ACY98836.1	DUF3046	-	DUF3046	64	Tcur_3297	Thermomonospora curvata DSM 43183	bacteria>actinobacteria	hypothetical protein Tcur_3297 [Thermomonospora curvata DSM 43183]	268312462
+ACZ85196.1	DUF3046	-	DUF3046	64	Sros_2214	Streptosporangium roseum DSM 43021	bacteria>actinobacteria	hypothetical protein Sros_2214 [Streptosporangium roseum DSM 43021]	270506918
+ADB32065.1	DUF3046	-	DUF3046	64	Kfla_3000	Kribbella flavida DSM 17836	bacteria>actinobacteria	hypothetical protein Kfla_3000 [Kribbella flavida DSM 17836]	283810226
+ADE01186.1	DUF3046	-	DUF3046	64	HMPREF0675_4070	Propionibacterium acnes SK137	bacteria>actinobacteria	hypothetical protein HMPREF0675_4070 [Propionibacterium acnes SK137]	291377331
+ADG87836.1	DUF3046	-	DUF3046	64	Tbis_1114	Thermobispora bispora DSM 43833	bacteria>actinobacteria	hypothetical protein Tbis_1114 [Thermobispora bispora DSM 43833]	296091884
+ADH66110.1	DUF3046	-	DUF3046	64	Ndas_0665	Nocardiopsis dassonvillei subsp. dassonvillei DSM 43111	bacteria>actinobacteria	conserved hypothetical protein [Nocardiopsis dassonvillei subsp. dassonvillei DSM 43111]	296844090
+ADI06462.1	DUF3046	-	DUF3046	64	SBI_03341	Streptomyces bingchenggensis BCW-1	bacteria>actinobacteria	hypothetical protein SBI_03341 [Streptomyces bingchenggensis BCW-1]	297156750
+ADJ44139.1	DUF3046	-	DUF3046	64	AMED_2342	Amycolatopsis mediterranei U32	bacteria>actinobacteria	conserved hypothetical protein [Amycolatopsis mediterranei U32]	299793764
+ADP79210.1	DUF3046	-	DUF3046	64	FraEuI1c_1137	Frankia inefficax	bacteria>actinobacteria	hypothetical protein FraEuI1c_1137 [Frankia inefficax]	311226355
+ADT99939.1	DUF3046	-	DUF3046	64	Mspyr1_33280	Mycobacterium gilvum Spyr1	bacteria>actinobacteria	hypothetical protein Mspyr1_33280 [Mycobacterium gilvum Spyr1]	315263198
+ADW03023.1	DUF3046	-	DUF3046	64	Sfla_1585	Streptomyces pratensis ATCC 33331	bacteria>actinobacteria	Protein of unknown function DUF3046 [Streptomyces pratensis ATCC 33331]	320008173
+AEA26750.1	DUF3046	-	DUF3046	64	Psed_4598	Pseudonocardia dioxanivorans CB1190	bacteria>actinobacteria	hypothetical protein Psed_4598 [Pseudonocardia dioxanivorans CB1190]	326953053
+AEE72227.1	DUF3046	-	DUF3046	64	PAZ_c10530	Propionibacterium acnes 266	bacteria>actinobacteria	hypothetical protein PAZ_c10530 [Propionibacterium acnes 266]	332675411
+AEF36485.1	DUF3046	-	DUF3046	64	JDM601_2485	Mycobacterium sinense	bacteria>actinobacteria	conserved hypothetical protein [Mycobacterium sinense]	333487093
+AEF40150.1	DUF3046	-	DUF3046	64	AS9A_1701	Hoyosella subflava DQS3-9A1	bacteria>actinobacteria	hypothetical protein AS9A_1701 [Hoyosella subflava DQS3-9A1]	333481590
+AEH29333.1	DUF3046	-	DUF3046	64	TIB1ST10_05190	Propionibacterium acnes 6609	bacteria>actinobacteria	hypothetical protein TIB1ST10_05190 [Propionibacterium acnes 6609]	335277428
+AEK40873.1	DUF3046	-	DUF3046	64	RAM_11915	Amycolatopsis mediterranei S699	bacteria>actinobacteria	hypothetical protein RAM_11915 [Amycolatopsis mediterranei S699]	340525668
+AEM81830.1	DUF3046	-	DUF3046	64	Strvi_2098	Streptomyces violaceusniger Tu 4113	bacteria>actinobacteria	hypothetical protein Strvi_2098 [Streptomyces violaceusniger Tu 4113]	344036105
+AEN12761.1	DUF3046	-	DUF3046	64	SACTE_4935	Streptomyces sp. SirexAA-E	bacteria>actinobacteria	conserved hypothetical protein [Streptomyces sp. SirexAA-E]	344318073
+AER06375.1	DUF3046	-	DUF3046	64	TIIST44_09575	Propionibacterium acnes subsp. defendens ATCC 11828	bacteria>actinobacteria	hypothetical protein TIIST44_09575 [Propionibacterium acnes subsp. defendens ATCC 11828]	353455856
+AEV76087.1	DUF3046	-	DUF3046	64	MycrhN_5619	Mycobacterium rhodesiae NBB3	bacteria>actinobacteria	Protein of unknown function (DUF3046) [Mycobacterium rhodesiae NBB3]	359823274
+AEW79076.1	DUF3046	-	DUF3046	64	TIA2EST2_04935	Propionibacterium acnes TypeIA2 P.acn33	bacteria>actinobacteria	hypothetical protein TIA2EST2_04935 [Propionibacterium acnes TypeIA2 P.acn33]	365743879
+AEW81321.1	DUF3046	-	DUF3046	64	TIA2EST22_05025	Propionibacterium acnes TypeIA2 P.acn17	bacteria>actinobacteria	hypothetical protein TIA2EST22_05025 [Propionibacterium acnes TypeIA2 P.acn17]	365741627
+AEW83587.1	DUF3046	-	DUF3046	64	TIA2EST36_04995	Propionibacterium acnes TypeIA2 P.acn31	bacteria>actinobacteria	hypothetical protein TIA2EST36_04995 [Propionibacterium acnes TypeIA2 P.acn31]	365739385
+AEW96903.1	DUF3046	-	DUF3046	64	SCATT_45320	Streptomyces cattleya NRRL 8057 = DSM 46488	bacteria>actinobacteria	hypothetical protein SCATT_45320 [Streptomyces cattleya NRRL 8057 = DSM 46488]	365808687
+AEY92120.1	DUF3046	-	DUF3046	64	SHJG_6853	Streptomyces hygroscopicus subsp. jinggangensis 5008	bacteria>actinobacteria	hypothetical protein SHJG_6853 [Streptomyces hygroscopicus subsp. jinggangensis 5008]	374103236
+AFA73137.1	DUF3046	-	DUF3046	64	GPOL_c20980	Gordonia polyisoprenivorans VH2	bacteria>actinobacteria	protein of unknown function DUF3046 [Gordonia polyisoprenivorans VH2]	375752317
+AFM16884.1	DUF3046	-	DUF3046	64	Mycch_2101	Mycobacterium chubuense NBB4	bacteria>actinobacteria	Protein of unknown function (DUF3046) [Mycobacterium chubuense NBB4]	390615734
+AFN45154.1	DUF3046	-	DUF3046	64	HMPREF9154_1370	Pseudopropionibacterium propionicum F0230a	bacteria>actinobacteria	hypothetical protein HMPREF9154_1370 [Pseudopropionibacterium propionicum F0230a]	395141047
+AFO75852.1	DUF3046	-	DUF3046	64	AMES_2316	Amycolatopsis mediterranei S699	bacteria>actinobacteria	hypothetical protein AMES_2316 [Amycolatopsis mediterranei S699]	398316905
+AFP39102.1	DUF3046	-	DUF3046	64	MSMEI_2634	Mycobacterium smegmatis str. MC2 155	bacteria>actinobacteria	hypothetical protein MSMEI_2634 [Mycobacterium smegmatis str. MC2 155]	399231609
+AFR06313.1	DUF3046	-	DUF3046	64	B005_3561	Nocardiopsis alba ATCC BAA-2165	bacteria>actinobacteria	hypothetical protein B005_3561 [Nocardiopsis alba ATCC BAA-2165]	402798903
+AFR48755.1	DUF3046	-	DUF3046	64	KTR9_2118	Gordonia sp. KTR9	bacteria>actinobacteria	hypothetical protein KTR9_2118 [Gordonia sp. KTR9]	403645515
+AFU40817.1	DUF3046	-	DUF3046	64	PAC1_05310	Propionibacterium acnes C1	bacteria>actinobacteria	hypothetical protein PAC1_05310 [Propionibacterium acnes C1]	407903987
+AFV89337.1	DUF3046	-	DUF3046	64	PACID_15240	Acidipropionibacterium acidipropionici ATCC 4875	bacteria>actinobacteria	hypothetical protein PACID_15240 [Acidipropionibacterium acidipropionici ATCC 4875]	410822722
+AGB22869.1	DUF3046	-	DUF3046	64	Mycsm_02534	Mycobacterium sp. JS623	bacteria>actinobacteria	Protein of unknown function (DUF3046) [Mycobacterium sp. JS623]	433297049
+AGI87495.1	DUF3046	-	DUF3046	64	XNR_1096	Streptomyces albus J1074	bacteria>actinobacteria	DUF3046 domain containing protein [Streptomyces albus J1074]	477543542
+AGJ57708.1	DUF3046	-	DUF3046	64	F750_5279	Streptomyces sp. PAMC 26508	bacteria>actinobacteria	hypothetical protein F750_5279 [Streptomyces sp. PAMC 26508]	478749128
+AGJ79983.1	DUF3046	-	DUF3046	64	PAGK_1142	Propionibacterium acnes HL096PA1	bacteria>actinobacteria	hypothetical protein PAGK_1142 [Propionibacterium acnes HL096PA1]	481320672
+AGK80568.1	DUF3046	-	DUF3046	64	SFUL_5685	Streptomyces fulvissimus DSM 40593	bacteria>actinobacteria	DUF3046 domain containing protein [Streptomyces fulvissimus DSM 40593]	485097385
+AGL20270.1	DUF3046	-	DUF3046	64	L083_6760	Actinoplanes sp. N902-109	bacteria>actinobacteria	hypothetical protein L083_6760 [Actinoplanes sp. N902-109]	492008950
+AGM04916.1	DUF3046	SIG	DUF3046	64	AORI_2328	Amycolatopsis orientalis HCCB10007	bacteria>actinobacteria	hypothetical protein AORI_2328 [Amycolatopsis orientalis HCCB10007]	505814993
+AGM29602.1	DUF3046	-	DUF3046	64	MASS_3000	Mycobacterium abscessus subsp. bolletii 50594	bacteria>actinobacteria	hypothetical protein MASS_3000 [Mycobacterium abscessus subsp. bolletii 50594]	506963221
+AGS72202.1	DUF3046	-	DUF3046	64	B446_26970	Streptomyces collinus Tu 365	bacteria>actinobacteria	hypothetical protein B446_26970 [Streptomyces collinus Tu 365]	529200456
+AGT82981.1	DUF3046	-	DUF3046	64	B737_2317	Amycolatopsis mediterranei RB	bacteria>actinobacteria	hypothetical protein B737_2317 [Amycolatopsis mediterranei RB]	532228002
+AGT92390.1	DUF3046	-	DUF3046	64	O5Y_12645	Rhodococcus erythropolis CCM2595	bacteria>actinobacteria	hypothetical protein O5Y_12645 [Rhodococcus erythropolis CCM2595]	532222357
+AGZ53233.1	DUF3046	-	DUF3046	64	MKAN_25185	Mycobacterium kansasii ATCC 12478	bacteria>actinobacteria	hypothetical protein MKAN_25185 [Mycobacterium kansasii ATCC 12478]	556026022
+AHC25234.1	DUF3046	-	DUF3046	64	D174_11815	Mycobacterium neoaurum VKM Ac-1815D	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium neoaurum VKM Ac-1815D]	565685374
+AHD19471.1	DUF3046	-	DUF3046	64	Y013_01510	Rhodococcus pyridinivorans SB3094	bacteria>actinobacteria	hypothetical protein Y013_01510 [Rhodococcus pyridinivorans SB3094]	568232566
+AHI00064.1	DUF3046	SIG	DUF3046	64	KALB_6705	Kutzneria albida DSM 43870	bacteria>actinobacteria	hypothetical protein KALB_6705 [Kutzneria albida DSM 43870]	578011805
+AHK30603.1	DUF3046	-	DUF3046	64	Pd630_LPD03384	Rhodococcus opacus PD630	bacteria>actinobacteria	hypothetical protein Pd630_LPD03384 [Rhodococcus opacus PD630]	589065744
+AIA06306.1	DUF3046	-	DUF3046	64	DC74_5857	Streptomyces albulus	bacteria>actinobacteria	hypothetical protein DC74_5857 [Streptomyces albulus]	636569621
+AIC71850.1	DUF3046	-	DUF3046	64	MYCMA_07285	Mycobacterium abscessus subsp. bolletii str. GO 06	bacteria>actinobacteria	hypothetical protein MYCMA_07285 [Mycobacterium abscessus subsp. bolletii str. GO 06]	649944957
+AID35787.1	DUF3046	-	DUF3046	64	TIA1EST1_04965	Propionibacterium acnes hdn-1	bacteria>actinobacteria	hypothetical protein TIA1EST1_04965 [Propionibacterium acnes hdn-1]	657119038
+AIJ12961.1	DUF3046	-	DUF3046	64	SLIV_09785	Streptomyces lividans TK24	bacteria>actinobacteria	hypothetical protein SLIV_09785 [Streptomyces lividans TK24]	672369079
+AIJ25115.1	DUF3046	-	DUF3046	64	AMETH_5023	Amycolatopsis methanolica 239	bacteria>actinobacteria	hypothetical protein AMETH_5023 [Amycolatopsis methanolica 239]	672359237
+AIR21002.1	DUF3046	-	DUF3046	64	LG40_24940	Mycobacterium kansasii 662	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium kansasii 662]	690323375
+AIR24770.1	DUF3046	-	DUF3046	64	LA64_16645	Mycobacterium avium subsp. avium 2285 (S)	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium avium subsp. avium 2285 (S)]	690328025
+AIR30577.1	DUF3046	-	DUF3046	64	LH54_25070	Mycobacterium kansasii 824	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium kansasii 824]	690334909
+AIR34218.1	DUF3046	-	DUF3046	64	LA61_15445	Mycobacterium abscessus subsp. bolletii 103	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium abscessus subsp. bolletii 103]	690338929
+AIR39098.1	DUF3046	-	DUF3046	64	LA62_15545	Mycobacterium abscessus subsp. bolletii	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium abscessus subsp. bolletii]	690345027
+AIR42699.1	DUF3046	-	DUF3046	64	LH56_08810	Mycobacterium abscessus subsp. bolletii	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium abscessus subsp. bolletii]	690291193
+AIR57578.1	DUF3046	-	DUF3046	64	LA63_16650	Mycobacterium avium subsp. avium 2285 (R)	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium avium subsp. avium 2285 (R)]	690308269
+AIS00907.1	DUF3046	-	DUF3046	64	SGLAU_24845	Streptomyces glaucescens	bacteria>actinobacteria	hypothetical protein SGLAU_24845 [Streptomyces glaucescens]	692324703
+AIU07870.1	DUF3046	-	DUF3046	64	LJ00_13430	Mycobacterium smegmatis str. MC2 155	bacteria>actinobacteria	hypothetical protein LJ00_13430 [Mycobacterium smegmatis str. MC2 155]	698941108
+AIU14495.1	DUF3046	-	DUF3046	64	LI99_13435	Mycobacterium smegmatis	bacteria>actinobacteria	hypothetical protein LI99_13435 [Mycobacterium smegmatis]	698950301
+AIU21118.1	DUF3046	-	DUF3046	64	LI98_13440	Mycobacterium smegmatis	bacteria>actinobacteria	hypothetical protein LI98_13440 [Mycobacterium smegmatis]	698958583
+AIV11866.1	DUF3046	-	DUF3046	64	NF82_15310	Mycobacterium abscessus subsp. bolletii	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium abscessus subsp. bolletii]	701177227
+AIV15712.1	DUF3046	-	DUF3046	64	NF92_08955	Mycobacterium abscessus subsp. abscessus	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium abscessus subsp. abscessus]	701181074
+AIV20239.1	DUF3046	-	DUF3046	64	NF90_08955	Mycobacterium abscessus subsp. abscessus	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium abscessus subsp. abscessus]	701185602
+AIV26017.1	DUF3046	-	DUF3046	64	NF84_16500	Mycobacterium avium subsp. avium	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium avium subsp. avium]	701191381
+AIV33856.1	DUF3046	-	DUF3046	64	NI25_10390	Streptomyces sp. CCM_MD2014	bacteria>actinobacteria	hypothetical protein NI25_10390 [Streptomyces sp. CCM_MD2014]	703589031
+AIY03892.1	DUF3046	-	DUF3046	64	ART_4293	Arthrobacter sp. PAMC 25486	bacteria>actinobacteria	hypothetical protein ART_4293 [Arthrobacter sp. PAMC 25486]	723610516
+AIY17809.1	DUF3046	-	DUF3046	64	KR76_15435	Pimelobacter simplex	bacteria>actinobacteria	hypothetical protein KR76_15435 [Pimelobacter simplex]	723624333
+AIY46306.1	DUF3046	-	DUF3046	64	G155_12735	Mycobacterium sp. VKM Ac-1817D	bacteria>actinobacteria	hypothetical protein G155_12735 [Mycobacterium sp. VKM Ac-1817D]	725871073
+AJC55573.1	DUF3046	-	DUF3046	64	GZL_02986	Streptomyces sp. 769	bacteria>actinobacteria	hypothetical protein GZL_02986 [Streptomyces sp. 769]	744773432
+AJE81895.1	DUF3046	-	DUF3046	64	SLNWT_1519	Streptomyces albus	bacteria>actinobacteria	hypothetical protein SLNWT_1519 [Streptomyces albus]	749176149
+AJF67624.1	DUF3046	-	DUF3046	64	SVTN_27800	Streptomyces vietnamensis	bacteria>actinobacteria	hypothetical protein SVTN_27800 [Streptomyces vietnamensis]	751391536
+AJK55029.1	DUF3046	SIG	DUF3046	64	BB31_17350	Amycolatopsis lurida NRRL 2430	bacteria>actinobacteria	hypothetical protein BB31_17350 [Amycolatopsis lurida NRRL 2430]	755911451
+AJK74411.1	DUF3046	-	DUF3046	64	RC58_04720	Mycobacterium avium subsp. paratuberculosis	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium avium subsp. paratuberculosis]	756073814
+AJK78565.1	DUF3046	-	DUF3046	64	RE97_04715	Mycobacterium avium subsp. paratuberculosis	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium avium subsp. paratuberculosis]	756082770
+AJP04145.1	DUF3046	-	DUF3046	64	TU94_24415	Streptomyces cyaneogriseus subsp. noncyanogenus	bacteria>actinobacteria	hypothetical protein TU94_24415 [Streptomyces cyaneogriseus subsp. noncyanogenus]	758858989
+AJT64002.1	DUF3046	-	DUF3046	64	T261_2319	Streptomyces lydicus A02	bacteria>actinobacteria	hypothetical protein T261_2319 [Streptomyces lydicus A02]	768314221
+AKA03180.1	DUF3046	-	DUF3046	64	SAZ_12640	Streptomyces albulus ZPM	bacteria>actinobacteria	hypothetical protein SAZ_12640 [Streptomyces albulus ZPM]	785757392
+AKE00652.1	DUF3046	-	DUF3046	64	XU06_12865	Rhodococcus erythropolis	bacteria>actinobacteria	hypothetical protein XU06_12865 [Rhodococcus erythropolis]	808772587
+AKE92525.1	DUF3046	-	DUF3046	64	AAT18_11925	Rhodococcus aetherivorans	bacteria>actinobacteria	hypothetical protein AAT18_11925 [Rhodococcus aetherivorans]	816218729
+AKG45899.1	DUF3046	-	DUF3046	64	SXIM_45150	Streptomyces xiamenensis	bacteria>actinobacteria	hypothetical protein SXIM_45150 [Streptomyces xiamenensis]	818447755
+AKH85196.1	DUF3046	-	DUF3046	64	AA958_26535	Streptomyces sp. CNQ-509	bacteria>actinobacteria	hypothetical protein AA958_26535 [Streptomyces sp. CNQ-509]	822596301
+AKK27236.1	DUF3046	-	DUF3046	64	AB431_11700	Mycobacterium sp. EPa45	bacteria>actinobacteria	hypothetical protein AB431_11700 [Mycobacterium sp. EPa45]	828182001
+AKL68214.1	DUF3046	-	DUF3046	64	M444_25440	Streptomyces sp. Mg1	bacteria>actinobacteria	hypothetical protein M444_25440 [Streptomyces sp. Mg1]	829482071
+AKN17542.1	DUF3046	-	DUF3046	64	B586_14725	Mycobacterium haemophilum DSM 44634	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium haemophilum DSM 44634]	846149097
+AKP59046.1	DUF3046	-	DUF3046	64	MAUC22_16860	Mycobacterium abscessus UC22	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium abscessus UC22]	873879409
+AKS34770.1	DUF3046	-	DUF3046	64	AFA91_25980	Mycobacterium goodii	bacteria>actinobacteria	hypothetical protein AFA91_25980 [Mycobacterium goodii]	906355135
+AKZ58515.1	DUF3046	-	DUF3046	64	SAM23877_5470	Streptomyces ambofaciens ATCC 23877	bacteria>actinobacteria	hypothetical protein SAM23877_5470 [Streptomyces ambofaciens ATCC 23877]	917651846
+ALC20444.1	DUF3046	-	DUF3046	64	SPRI_2138	Streptomyces pristinaespiralis	bacteria>actinobacteria	DUF3046 domain-containing protein [Streptomyces pristinaespiralis]	924534262
+ALC27147.1	DUF3046	-	DUF3046	64	ABE83_08650	Streptomyces sp. CFMR 7	bacteria>actinobacteria	hypothetical protein ABE83_08650 [Streptomyces sp. CFMR 7]	924541145
+ALD69590.1	DUF3046	-	DUF3046	64	RN83_05415	Cutibacterium acnes	bacteria>actinobacteria	hypothetical protein RN83_05415 [Cutibacterium acnes]	927038018
+ALE76451.1	DUF3046	-	DUF3046	64	FRP1_18170	Pseudonocardia sp. EC080625-04	bacteria>actinobacteria	hypothetical protein FRP1_18170 [Pseudonocardia sp. EC080625-04]	928465723
+ALE81061.1	DUF3046	-	DUF3046	64	WY02_24740	Pseudonocardia sp. AL041005-10	bacteria>actinobacteria	hypothetical protein WY02_24740 [Pseudonocardia sp. AL041005-10]	928480730
+ALE84687.1	DUF3046	-	DUF3046	64	XF36_17370	Pseudonocardia sp. HH130629-09	bacteria>actinobacteria	hypothetical protein XF36_17370 [Pseudonocardia sp. HH130629-09]	928474959
+ALG07875.1	DUF3046	-	DUF3046	64	AOZ06_13975	Kibdelosporangium phytohabitans	bacteria>actinobacteria	hypothetical protein AOZ06_13975 [Kibdelosporangium phytohabitans]	930830672
+ALG84611.1	DUF3046	-	DUF3046	64	ACH46_09035	Gordonia sp. QH-11	bacteria>actinobacteria	hypothetical protein ACH46_09035 [Gordonia sp. QH-11]	933681907
+ALI26459.1	DUF3046	-	DUF3046	64	XA26_26160	Mycobacterium fortuitum	bacteria>actinobacteria	hypothetical protein XA26_26160 [Mycobacterium fortuitum]	937420460
+ALL79128.1	DUF3046	-	DUF3046	64	AD006_25625	Pseudonocardia sp. EC080610-09	bacteria>actinobacteria	hypothetical protein AD006_25625 [Pseudonocardia sp. EC080610-09]	944388299
+ALL84304.1	DUF3046	-	DUF3046	64	AD017_05215	Pseudonocardia sp. EC080619-01	bacteria>actinobacteria	hypothetical protein AD017_05215 [Pseudonocardia sp. EC080619-01]	944393478
+ALM17238.1	DUF3046	-	DUF3046	64	AOY11_14230	Mycobacterium abscessus	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium abscessus]	946537309
+ALN16120.1	DUF3046	-	DUF3046	64	ASQ49_13580	Acidipropionibacterium acidipropionici	bacteria>actinobacteria	hypothetical protein ASQ49_13580 [Acidipropionibacterium acidipropionici]	949807725
+ALO11421.1	DUF3046	-	DUF3046	64	AQF52_5828	Streptomyces venezuelae	bacteria>actinobacteria	hypothetical protein AQF52_5828 [Streptomyces venezuelae]	952473083
+ALO96551.1	DUF3046	-	DUF3046	64	SHL15_5485	Streptomyces hygroscopicus subsp. limoneus	bacteria>actinobacteria	hypothetical protein SHL15_5485 [Streptomyces hygroscopicus subsp. limoneus]	953785031
+ALT35210.1	DUF3046	-	DUF3046	64	ALW21_05090	Cutibacterium acnes	bacteria>actinobacteria	hypothetical protein ALW21_05090 [Cutibacterium acnes]	966536511
+ALT37526.1	DUF3046	-	DUF3046	64	ALW23_05170	Cutibacterium acnes	bacteria>actinobacteria	hypothetical protein ALW23_05170 [Cutibacterium acnes]	966538828
+ALT42038.1	DUF3046	-	DUF3046	64	ALW29_05015	Cutibacterium acnes	bacteria>actinobacteria	hypothetical protein ALW29_05015 [Cutibacterium acnes]	966543342
+ALT44328.1	DUF3046	-	DUF3046	64	ALW33_05180	Cutibacterium acnes	bacteria>actinobacteria	hypothetical protein ALW33_05180 [Cutibacterium acnes]	966545633
+ALU71294.1	DUF3046	-	DUF3046	64	H351_19675	Rhodococcus erythropolis R138	bacteria>actinobacteria	hypothetical protein H351_19675 [Rhodococcus erythropolis R138]	970865885
+ALU96613.1	DUF3046	-	DUF3046	64	WQO_26755	Streptomyces globisporus C-1027	bacteria>actinobacteria	hypothetical protein WQO_26755 [Streptomyces globisporus C-1027]	971159009
+ALV32901.1	DUF3046	-	DUF3046	64	AS200_13200	Streptomyces sp. CdTB01	bacteria>actinobacteria	hypothetical protein AS200_13200 [Streptomyces sp. CdTB01]	971332279
+ALV52540.1	DUF3046	-	DUF3046	64	ASR50_26090	Streptomyces sp. 4F	bacteria>actinobacteria	hypothetical protein ASR50_26090 [Streptomyces sp. 4F]	971352363
+ALX04600.1	DUF3046	-	DUF3046	64	AERYTH_07780	Aeromicrobium erythreum	bacteria>actinobacteria	hypothetical protein AERYTH_07780 [Aeromicrobium erythreum]	973194682
+AMB42447.1	DUF3046	-	DUF3046	64	AUT26_06990	Arthrobacter sp. ATCC 21022	bacteria>actinobacteria	histidine kinase [Arthrobacter sp. ATCC 21022]	983719552
+AMM07887.1	DUF3046	-	DUF3046	64	Salbus254_1344	Streptomyces albus	bacteria>actinobacteria	hypothetical protein Salbus254_1344 [Streptomyces albus]	1001840645 
+AMO05725.1	DUF3046	-	DUF3046	64	MyAD_11595	Mycobacterium sp. NRRL B-3805	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium sp. NRRL B-3805]	1003100412 
+AMO61953.1	DUF3046	-	DUF3046	64	MPHLCCUG_03148	Mycobacterium phlei	bacteria>actinobacteria	hypothetical protein MPHLCCUG_03148 [Mycobacterium phlei]	1003469991 
+AMS04683.1	DUF3046	-	DUF3046	64	AXH35_03460	Acidipropionibacterium acidipropionici	bacteria>actinobacteria	hypothetical protein AXH35_03460 [Acidipropionibacterium acidipropionici]	1012283486 
+AMT71616.1	DUF3046	-	DUF3046	64	ABG82_16215	Mycobacterium immunogenum	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium immunogenum]	1013058503 
+AMU21856.1	DUF3046	-	DUF3046	64	A3N95_14355	Mycobacterium abscessus	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium abscessus]	1014138167 
+AMU26871.1	DUF3046	-	DUF3046	64	A3N96_16995	Mycobacterium abscessus	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium abscessus]	1014147133 
+AMU31692.1	DUF3046	-	DUF3046	64	A3N97_14715	Mycobacterium abscessus	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium abscessus]	1014156278 
+AMU36556.1	DUF3046	-	DUF3046	64	A3N98_16190	Mycobacterium abscessus	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium abscessus]	1014165894 
+AMU41601.1	DUF3046	-	DUF3046	64	A3N99_16780	Mycobacterium abscessus	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium abscessus]	1014177358 
+AMU46456.1	DUF3046	-	DUF3046	64	A3O00_15355	Mycobacterium abscessus	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium abscessus]	1014187949 
+AMU51349.1	DUF3046	-	DUF3046	64	A3O01_15285	Mycobacterium abscessus	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium abscessus]	1014198770 
+AMU56378.1	DUF3046	-	DUF3046	64	A3O02_15305	Mycobacterium abscessus	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium abscessus]	1014208650 
+AMU61575.1	DUF3046	-	DUF3046	64	A3O03_16900	Mycobacterium abscessus	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium abscessus]	1014220901 
+AMU66474.1	DUF3046	-	DUF3046	64	A3O04_15210	Mycobacterium abscessus	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium abscessus]	1014890313 
+AMU71059.1	DUF3046	-	DUF3046	64	A3O05_14165	Mycobacterium abscessus	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium abscessus]	1014894899 
+AMU76146.1	DUF3046	-	DUF3046	64	A3O06_17455	Mycobacterium abscessus	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium abscessus]	1014899987 
+AMW13257.1	DUF3046	-	DUF3046	64	A4E84_29450	Streptomyces sp. S10(2016)	bacteria>actinobacteria	hypothetical protein A4E84_29450 [Streptomyces sp. S10(2016)]	1015642399 
+AMW20572.1	DUF3046	-	DUF3046	64	Chelonae_p2821	Mycobacterium sp. QIA-37	bacteria>actinobacteria	hypothetical protein Chelonae_p2821 [Mycobacterium sp. QIA-37]	1015672840 
+AMY18848.1	DUF3046	-	DUF3046	64	A3Q40_01458	Rhodococcus sp. PBTS 1	bacteria>actinobacteria	hypothetical protein A3Q40_01458 [Rhodococcus sp. PBTS 1]	1017208652 
+ANA99022.1	DUF3046	-	DUF3046	64	BB28_15430	Mycobacterium chelonae CCUG 47445	bacteria>actinobacteria	hypothetical protein BB28_15430 [Mycobacterium chelonae CCUG 47445]	1023046880 
+ANB08918.1	DUF3046	-	DUF3046	64	SAM40697_4961	Streptomyces ambofaciens	bacteria>actinobacteria	hypothetical protein SAM40697_4961 [Streptomyces ambofaciens]	1023057066 
+ANE81073.1	DUF3046	-	DUF3046	64	A7U43_18875	Mycobacterium sp. YC-RL4	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium sp. YC-RL4]	1028500563 
+ANH29482.1	DUF3046	-	DUF3046	64	A0V42_14585	Mycobacterium avium subsp. paratuberculosis	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium avium subsp. paratuberculosis]	1032998033 
+ANH93791.1	DUF3046	-	DUF3046	64	A8713_23615	Streptomyces sp. SAT1	bacteria>actinobacteria	hypothetical protein A8713_23615 [Streptomyces sp. SAT1]	1033852942 
+ANJ09832.1	DUF3046	-	DUF3046	64	Spa2297_24385	Streptomyces parvulus	bacteria>actinobacteria	hypothetical protein Spa2297_24385 [Streptomyces parvulus]	1035486662 
+ANN16420.1	DUF3046	SIG	DUF3046	64	SD37_12665	Amycolatopsis orientalis	bacteria>actinobacteria	hypothetical protein SD37_12665 [Amycolatopsis orientalis]	1039682320 
+ANN99866.1	DUF3046	-	DUF3046	64	BAB74_14955	Mycobacterium abscessus	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium abscessus]	1041022823 
+ANO04738.1	DUF3046	-	DUF3046	64	BAB75_16460	Mycobacterium immunogenum	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium immunogenum]	1041027695 
+ANO10031.1	DUF3046	-	DUF3046	64	BAB76_15295	Mycobacterium abscessus	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium abscessus]	1041032989 
+ANO15012.1	DUF3046	-	DUF3046	64	BAB77_15030	Mycobacterium abscessus	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium abscessus]	1041037971 
+ANO19806.1	DUF3046	-	DUF3046	64	BAB78_15585	Mycobacterium abscessus	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium abscessus]	1041042767 
+ANO25089.1	DUF3046	-	DUF3046	64	BAB79_17450	Mycobacterium abscessus	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium abscessus]	1041048051 
+ANP49877.1	DUF3046	-	DUF3046	64	AVL59_09865	Streptomyces griseochromogenes	bacteria>actinobacteria	hypothetical protein AVL59_09865 [Streptomyces griseochromogenes]	1042027982 
+ANQ75219.1	DUF3046	-	DUF3046	64	AOT96_24095	Rhodococcus sp. 008	bacteria>actinobacteria	hypothetical protein AOT96_24095 [Rhodococcus sp. 008]	1042835355 
+ANR92622.1	DUF3046	-	DUF3046	64	BBJ32_15875	Mycobacterium avium	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium avium]	1043214922 
+ANW17745.1	DUF3046	-	DUF3046	64	BB341_05635	Streptomyces clavuligerus	bacteria>actinobacteria	hypothetical protein BB341_05635 [Streptomyces clavuligerus]	1046922011 
+ANW64391.1	DUF3046	-	DUF3046	64	BCA37_12995	Mycobacterium sp. djl-10	bacteria>actinobacteria	hypothetical protein BCA37_12995 [Mycobacterium sp. djl-10]	1047840630 
+ANY08407.1	DUF3046	-	DUF3046	64	AFB00_21400	Pseudonocardia sp. HH130630-07	bacteria>actinobacteria	hypothetical protein AFB00_21400 [Pseudonocardia sp. HH130630-07]	1049188568 
+ANY23314.1	DUF3046	-	DUF3046	64	BCM27_11360	Gordonia terrae	bacteria>actinobacteria	hypothetical protein BCM27_11360 [Gordonia terrae]	1049203117 
+ANZ15896.1	DUF3046	-	DUF3046	64	SNOUR_12925	Streptomyces noursei ATCC 11455	bacteria>actinobacteria	Protein of unknown function (DUF3046) [Streptomyces noursei ATCC 11455]	1051497191 
+ANZ28171.1	DUF3046	-	DUF3046	64	A4U64_12795	Rhodococcus sp. WB1	bacteria>actinobacteria	hypothetical protein A4U64_12795 [Rhodococcus sp. WB1]	1050289833 
+ANZ42433.1	DUF3046	-	DUF3046	64	BBK82_02020	Lentzea guizhouensis	bacteria>actinobacteria	hypothetical protein BBK82_02020 [Lentzea guizhouensis]	1050306074 
+AOD22844.1	DUF3046	-	DUF3046	64	IM25_15565	Rhodococcus sp. p52	bacteria>actinobacteria	hypothetical protein IM25_15565 [Rhodococcus sp. p52]	1052536299 
+AOG27512.1	DUF3046	-	DUF3046	64	BFS79_01995	Cutibacterium avidum	bacteria>actinobacteria	hypothetical protein BFS79_01995 [Cutibacterium avidum]	1059945375 
+AOH44814.1	DUF3046	-	DUF3046	64	BCB70_01625	Propionibacterium sp. oral taxon 193	bacteria>actinobacteria	hypothetical protein BCB70_01625 [Propionibacterium sp. oral taxon 193]	1061027634 
+AOP49453.1	DUF3046	-	DUF3046	64	SL103_27275	Streptomyces lydicus	bacteria>actinobacteria	hypothetical protein SL103_27275 [Streptomyces lydicus]	1066952498 
+AOR31747.1	DUF3046	-	DUF3046	64	BFF78_12400	Streptomyces puniciscabiei	bacteria>actinobacteria	hypothetical protein BFF78_12400 [Streptomyces puniciscabiei]	1069154836 
+AOS65088.1	DUF3046	-	DUF3046	64	TL08_21505	Actinoalloteichus hymeniacidonis	bacteria>actinobacteria	putative DUF3046 family protein [Actinoalloteichus hymeniacidonis]	1070872297 
+AOT61395.1	DUF3046	-	DUF3046	64	A4G23_04282	Streptomyces rubrolavendulae	bacteria>actinobacteria	hypothetical protein A4G23_04282 [Streptomyces rubrolavendulae]	1072813976 
+AOU76211.1	DUF3046	-	DUF3046	64	SLNHY_1520	Streptomyces albus	bacteria>actinobacteria	hypothetical protein SLNHY_1520 [Streptomyces albus]	1073939454 
+AOW89408.1	DUF3046	-	DUF3046	64	BC342_26045	Streptomyces pactum	bacteria>actinobacteria	hypothetical protein BC342_26045 [Streptomyces pactum]	1082324682 
+AOY71919.1	DUF3046	-	DUF3046	64	ARZXY2_2388	Arthrobacter sp. ZXY-2	bacteria>actinobacteria	histidine kinase [Arthrobacter sp. ZXY-2]	1092262835 
+AOZ46173.1	DUF3046	-	DUF3046	64	A8L58_04925	Acidipropionibacterium acidipropionici	bacteria>actinobacteria	hypothetical protein A8L58_04925 [Acidipropionibacterium acidipropionici]	1092999245 
+APE12087.1	DUF3046	-	DUF3046	64	BO226_06100	Rhodococcus sp. 2G	bacteria>actinobacteria	hypothetical protein BO226_06100 [Rhodococcus sp. 2G]	1108520429 
+APE15532.1	DUF3046	-	DUF3046	64	BOH72_10245	Mycobacterium sp. WY10	bacteria>actinobacteria	hypothetical protein BOH72_10245 [Mycobacterium sp. WY10]	1108523877 
+APE24282.1	DUF3046	-	DUF3046	64	vnz_26785	Streptomyces venezuelae	bacteria>actinobacteria	hypothetical protein vnz_26785 [Streptomyces venezuelae]	1108532628 
+APS18791.1	DUF3046	-	DUF3046	64	TK78_07370	Streptomyces sp. Tue 6075	bacteria>actinobacteria	hypothetical protein TK78_07370 [Streptomyces sp. Tue 6075]	1127397401 
+APT12005.1	DUF3046	-	DUF3046	64	BS641_18580	Mycobacterium avium subsp. hominissuis	bacteria>actinobacteria	signal transduction histidine kinase [Mycobacterium avium subsp. hominissuis]	1127838627 
+APU16938.1	DUF3046	-	DUF3046	64	UA74_24620	Actinoalloteichus sp. ADI127-7	bacteria>actinobacteria	putative DUF3046 family protein [Actinoalloteichus sp. ADI127-7]	1130032617 
+APU23018.1	DUF3046	-	DUF3046	64	UA75_25200	Actinoalloteichus sp. GBA129-24	bacteria>actinobacteria	putative DUF3046 family protein [Actinoalloteichus sp. GBA129-24]	1130038698 
+APU42501.1	DUF3046	-	DUF3046	64	BSL84_24670	Streptomyces sp. TN58	bacteria>actinobacteria	hypothetical protein BSL84_24670 [Streptomyces sp. TN58]	1130053298 
+APY86037.1	DUF3046	-	DUF3046	64	A7J05_10220	Streptomyces silaceus	bacteria>actinobacteria	hypothetical protein A7J05_10220 [Streptomyces silaceus]	1137365122 
+APZ08131.1	DUF3046	-	DUF3046	64	BWX38_01300	Acidipropionibacterium acidipropionici	bacteria>actinobacteria	hypothetical protein BWX38_01300 [Acidipropionibacterium acidipropionici]	1137387223 
+AQA14403.1	DUF3046	-	DUF3046	64	BV401_32325	Streptomyces autolyticus	bacteria>actinobacteria	hypothetical protein BV401_32325 [Streptomyces autolyticus]	1140129858 
+AQA24454.1	DUF3046	-	DUF3046	64	BTZ20_2455	Rhodococcus sp. MTM3W5.2	bacteria>actinobacteria	hypothetical protein BTZ20_2455 [Rhodococcus sp. MTM3W5.2]	1140139921 
+BAC70206.1	DUF3046	-	DUF3046	64	SAVERM_2495	Streptomyces avermitilis MA-4680 = NBRC 14893	bacteria>actinobacteria	hypothetical protein SAVERM_2495 [Streptomyces avermitilis MA-4680 = NBRC 14893]	29606143
+BAD58697.1	DUF3046	-	DUF3046	64	NFA_38490	Nocardia farcinica IFM 10152	bacteria>actinobacteria	hypothetical protein NFA_38490 [Nocardia farcinica IFM 10152]	54017327
+BAG18584.1	DUF3046	-	DUF3046	64	SGR_1755	Streptomyces griseus subsp. griseus NBRC 13350	bacteria>actinobacteria	conserved hypothetical protein [Streptomyces griseus subsp. griseus NBRC 13350]	178464064
+BAH54997.1	DUF3046	-	DUF3046	64	ROP_67500	Rhodococcus opacus B4	bacteria>actinobacteria	hypothetical protein ROP_67500 [Rhodococcus opacus B4]	226244649
+BAJ29283.1	DUF3046	SIG	DUF3046	64	KSE_34760	Kitasatospora setae KM-6054	bacteria>actinobacteria	hypothetical protein KSE_34760 [Kitasatospora setae KM-6054]	311896875
+BAJ31129.1	DUF3046	-	DUF3046	64	KSE_53540	Kitasatospora setae KM-6054	bacteria>actinobacteria	hypothetical protein KSE_53540 [Kitasatospora setae KM-6054]	311898721
+BAK35128.1	DUF3046	-	DUF3046	64	MLP_21140	Microlunatus phosphovorus NM-1	bacteria>actinobacteria	hypothetical protein MLP_21140 [Microlunatus phosphovorus NM-1]	334685543
+BAP97842.1	DUF3046	-	DUF3046	64	MMASJCM_3066	Mycobacterium abscessus subsp. bolletii CCUG 48898 = JCM 15300	bacteria>actinobacteria	hypothetical protein MMASJCM_3066 [Mycobacterium abscessus subsp. bolletii CCUG 48898 = JCM 15300]	731178205
+BAQ06860.1	DUF3046	-	DUF3046	64	KURONO_3077	Mycobacterium tuberculosis str. Kurono	bacteria>actinobacteria	hypothetical protein KURONO_3077 [Mycobacterium tuberculosis str. Kurono]	737519186
+CAA15872.1	DUF3046	-	DUF3046	64	SC4H8.05	Streptomyces coelicolor A3(2)	bacteria>actinobacteria	hypothetical protein SC4H8.05 [Streptomyces coelicolor A3(2)]	2687331
+CAJ64352.1	DUF3046	-	DUF3046	64	FRAAL5720	Frankia alni ACN14a	bacteria>actinobacteria	conserved hypothetical protein [Frankia alni ACN14a]	111152611
+CAM63139.1	DUF3046	-	DUF3046	64	MAB_3061c	Mycobacterium abscessus ATCC 19977	bacteria>actinobacteria	Conserved hypothetical protein [Mycobacterium abscessus ATCC 19977]	169242111
+CBG69604.1	DUF3046	-	DUF3046	64	SCAB_24971	Streptomyces scabiei 87.22	bacteria>actinobacteria	conserved hypothetical protein [Streptomyces scabiei 87.22]	260646507
+CBH48031.1	DUF3046	-	DUF3046	64	REQ_19690	Rhodococcus equi 103S	bacteria>actinobacteria	conserved hypothetical protein [Rhodococcus equi 103S]	311888719
+CBL56832.1	DUF3046	-	DUF3046	64	PFREUD_13140	Propionibacterium freudenreichii subsp. shermanii CIRM-BIA1	bacteria>actinobacteria	Hypothetical protein PFREUD_13140 [Propionibacterium freudenreichii subsp. shermanii CIRM-BIA1]	296922260
+CCB77231.1	DUF3046	-	DUF3046	64	SCAT_4543	Streptomyces cattleya NRRL 8057 = DSM 46488	bacteria>actinobacteria	conserved protein of unknown function [Streptomyces cattleya NRRL 8057 = DSM 46488]	337768518
+CCG04543.1	DUF3046	-	DUF3046	64	BLASA_3686	Blastococcus saxobsidens DD2	bacteria>actinobacteria	conserved protein of unknown function [Blastococcus saxobsidens DD2]	378784872
+CCH28999.1	DUF3046	-	DUF3046	64	BN6_16770	Saccharothrix espanaensis DSM 44229	bacteria>actinobacteria	hypothetical protein BN6_16770 [Saccharothrix espanaensis DSM 44229]	407881356
+CCH89703.1	DUF3046	-	DUF3046	64	MODMU_4308	Modestobacter marinus	bacteria>actinobacteria	conserved protein of unknown function [Modestobacter marinus]	388488132
+CKH69345.1	DUF3046	-	DUF3046	64	ERS451418_02706	Mycobacterium smegmatis	bacteria>actinobacteria	Protein of uncharacterised function (DUF3046) [Mycobacterium smegmatis]	777216780
+CQR61368.1	DUF3046	-	DUF3046	64	sle_19060	Streptomyces leeuwenhoekii	bacteria>actinobacteria	Conserved Hypothetical Protein [Streptomyces leeuwenhoekii]	822877578
+CRK55743.1	DUF3046	SIG	DUF3046	64	-	Alloactinosynnema sp. L-07	bacteria>actinobacteria	hypothetical protein [Alloactinosynnema sp. L-07]	886828071
+CRY73271.1	DUF3046	-	DUF3046	64	ERS450000_00050	Nocardia farcinica	bacteria>actinobacteria	Protein of uncharacterised function (DUF3046) [Nocardia farcinica]	873548216
+CUM38048.1	DUF3046	-	DUF3046	64	BN2537_5061	Streptomyces venezuelae	bacteria>actinobacteria	FIG01124460: hypothetical protein [Streptomyces venezuelae]	932867037
+CUW31511.1	DUF3046	-	DUF3046	64	TUE45_06259	Streptomyces reticuli	bacteria>actinobacteria	hypothetical protein TUE45_06259 [Streptomyces reticuli]	972711583
+ADG78400.1	DUF3046	-	DUF3046	63	Tpau_1782	Tsukamurella paurometabola DSM 20162	bacteria>actinobacteria	conserved hypothetical protein [Tsukamurella paurometabola DSM 20162]	296027630
+ADG97409.1	DUF3046	-	DUF3046	63	Srot_0935	Segniliparus rotundus DSM 44985	bacteria>actinobacteria	conserved hypothetical protein [Segniliparus rotundus DSM 44985]	296180503
+AEX42140.1	DUF3046	-	DUF3046	63	CD31A_1469	Corynebacterium diphtheriae 31A	bacteria>actinobacteria	hypothetical protein CD31A_1469 [Corynebacterium diphtheriae 31A]	371578472
+AEX44457.1	DUF3046	-	DUF3046	63	CD241_1397	Corynebacterium diphtheriae 241	bacteria>actinobacteria	hypothetical protein CD241_1397 [Corynebacterium diphtheriae 241]	371580790
+AEX46660.1	DUF3046	-	DUF3046	63	CDB402_1361	Corynebacterium diphtheriae INCA 402	bacteria>actinobacteria	hypothetical protein CDB402_1361 [Corynebacterium diphtheriae INCA 402]	371582994
+AEX48965.1	DUF3046	-	DUF3046	63	CDBH8_1445	Corynebacterium diphtheriae BH8	bacteria>actinobacteria	hypothetical protein CDBH8_1445 [Corynebacterium diphtheriae BH8]	371585300
+AEX67647.1	DUF3046	-	DUF3046	63	CDC7B_1454	Corynebacterium diphtheriae C7 (beta)	bacteria>actinobacteria	hypothetical protein CDC7B_1454 [Corynebacterium diphtheriae C7 (beta)]	372104050
+AEX70094.1	DUF3046	-	DUF3046	63	CDPW8_1442	Corynebacterium diphtheriae PW8	bacteria>actinobacteria	hypothetical protein CDPW8_1442 [Corynebacterium diphtheriae PW8]	372117624
+AEX72358.1	DUF3046	-	DUF3046	63	CDCE8392_1370	Corynebacterium diphtheriae CDCE 8392	bacteria>actinobacteria	hypothetical protein CDCE8392_1370 [Corynebacterium diphtheriae CDCE 8392]	372106296
+AEX74642.1	DUF3046	-	DUF3046	63	CDHC01_1396	Corynebacterium diphtheriae HC01	bacteria>actinobacteria	hypothetical protein CDHC01_1396 [Corynebacterium diphtheriae HC01]	372108581
+AEX76838.1	DUF3046	-	DUF3046	63	CDHC02_1349	Corynebacterium diphtheriae HC02	bacteria>actinobacteria	hypothetical protein CDHC02_1349 [Corynebacterium diphtheriae HC02]	372110778
+AEX79099.1	DUF3046	-	DUF3046	63	CDHC03_1372	Corynebacterium diphtheriae HC03	bacteria>actinobacteria	hypothetical protein CDHC03_1372 [Corynebacterium diphtheriae HC03]	372113040
+AEX81363.1	DUF3046	-	DUF3046	63	CDHC04_1372	Corynebacterium diphtheriae HC04	bacteria>actinobacteria	hypothetical protein CDHC04_1372 [Corynebacterium diphtheriae HC04]	372115305
+AEX83601.1	DUF3046	-	DUF3046	63	CDVA01_1334	Corynebacterium diphtheriae VA01	bacteria>actinobacteria	hypothetical protein CDVA01_1334 [Corynebacterium diphtheriae VA01]	372119867
+AFU03962.1	DUF3046	-	DUF3046	63	O3I_030065	Nocardia brasiliensis ATCC 700358	bacteria>actinobacteria	hypothetical protein O3I_030065 [Nocardia brasiliensis ATCC 700358]	407310061
+AJW39329.1	DUF3046	-	DUF3046	63	NY08_1299	Rhodococcus sp. B7740	bacteria>actinobacteria	hypothetical protein NY08_1299 [Rhodococcus sp. B7740]	769528227
+AMY25022.1	DUF3046	-	DUF3046	63	A3Q41_03736	Rhodococcus sp. PBTS 2	bacteria>actinobacteria	hypothetical protein A3Q41_03736 [Rhodococcus sp. PBTS 2]	1017214976 
+AMY55836.1	DUF3046	-	DUF3046	63	A3L23_04533	Rhodococcus fascians D188	bacteria>actinobacteria	hypothetical protein A3L23_04533 [Rhodococcus fascians D188]	1018280007 
+APE38573.1	DUF3046	-	DUF3046	63	BOX37_20870	Nocardia soli	bacteria>actinobacteria	hypothetical protein BOX37_20870 [Nocardia soli]	1108546924 
+APM35628.1	DUF3046	-	DUF3046	63	BS112_03210	Corynebacterium diphtheriae	bacteria>actinobacteria	hypothetical protein BS112_03210 [Corynebacterium diphtheriae]	1114581070 
+CAE49979.1	DUF3046	-	DUF3046	63	DIP1451	Corynebacterium diphtheriae	bacteria>actinobacteria	Conserved hypothetical protein [Corynebacterium diphtheriae]	38200294
+CKH00437.1	DUF3046	-	DUF3046	63	ERS451417_01474	Corynebacterium diphtheriae	bacteria>actinobacteria	Protein of uncharacterised function (DUF3046) [Corynebacterium diphtheriae]	777192446
+AGF66276.1	DUF3046	-	DUF3046	62	SHJGH_6613	Streptomyces hygroscopicus subsp. jinggangensis TL01	bacteria>actinobacteria	hypothetical protein SHJGH_6613 [Streptomyces hygroscopicus subsp. jinggangensis TL01]	451796227
+ALM38069.1	DUF3046	-	DUF3046	62	SFR_1454	Streptomyces sp. FR-008	bacteria>actinobacteria	DUF3046 domain containing protein [Streptomyces sp. FR-008]	947253087
+ANS68398.1	DUF3046	-	DUF3046	62	SLINC_6174	Streptomyces lincolnensis	bacteria>actinobacteria	hypothetical protein SLINC_6174 [Streptomyces lincolnensis]	1043639451 
+CCF64489.1	DUF3046	-	DUF3046	62	NOCYR_3726	Nocardia cyriacigeorgica GUH-2	bacteria>actinobacteria	conserved protein of unknown function [Nocardia cyriacigeorgica GUH-2]	374847419
+AAT82763.1	DUF3046	-	DUF3046	59	PPA1011	Propionibacterium acnes KPA171202	bacteria>actinobacteria	hypothetical protein PPA1011 [Propionibacterium acnes KPA171202]	50840096
+AEH10890.1	DUF3046	-	DUF3046	55	FsymDg_3611	Frankia symbiont of Datisca glomerata	bacteria>actinobacteria	hypothetical protein FsymDg_3611 [Frankia symbiont of Datisca glomerata]	334860416
+AJQ90603.1	DUF3046	-	DUF3046	55	RM25_0881	Propionibacterium freudenreichii subsp. freudenreichii	bacteria>actinobacteria	Hypothetical protein RM25_0881 [Propionibacterium freudenreichii subsp. freudenreichii]	764032368
+BAN32107.1	DUF3046	-	DUF3046	55	MAH_3033	Mycobacterium avium subsp. hominissuis TH135	bacteria>actinobacteria	hypothetical protein MAH_3033 [Mycobacterium avium subsp. hominissuis TH135]	508735672
+CAM01052.1	DUF3046	-	DUF3046	55	SACE_1734	Saccharopolyspora erythraea NRRL 2338	bacteria>actinobacteria	hypothetical protein SACE_1734 [Saccharopolyspora erythraea NRRL 2338]	133910939
+CUW15279.1	DUF3046	-	DUF3046	55	PFREUDJS001_001260	Propionibacterium freudenreichii subsp. shermanii	bacteria>actinobacteria	PF11248 family protein [Propionibacterium freudenreichii subsp. shermanii]	1020737036 
+ACU70500.1	DUF3046	-	DUF3046	52	Caci_1579	Catenulispora acidiphila DSM 44928	bacteria>actinobacteria	conserved hypothetical protein [Catenulispora acidiphila DSM 44928]	256357003
+ADH00637.1	DUF3046	-	DUF3046	50	BLJ_1186	Bifidobacterium longum subsp. longum JDM301	bacteria>actinobacteria	conserved hypothetical protein [Bifidobacterium longum subsp. longum JDM301]	296183755
+AEF26539.1	DUF3046	-	DUF3046	50	HMPREF9228_0692	Bifidobacterium breve ACS-071-V-Sch8b	bacteria>actinobacteria	hypothetical protein HMPREF9228_0692 [Bifidobacterium breve ACS-071-V-Sch8b]	333109523
+AEI97323.1	DUF3046	-	DUF3046	50	BLNIAS_01131	Bifidobacterium longum subsp. longum KACC 91563	bacteria>actinobacteria	hypothetical protein BLNIAS_01131 [Bifidobacterium longum subsp. longum KACC 91563]	338754334
+ALE12881.1	DUF3046	-	DUF3046	50	RY69_622	Bifidobacterium breve	bacteria>actinobacteria	Hypothetical protein RY69_622 [Bifidobacterium breve]	927302112
+BAJ66856.1	DUF3046	-	DUF3046	50	BLLJ_1189	Bifidobacterium longum subsp. longum JCM 1217	bacteria>actinobacteria	conserved hypothetical protein [Bifidobacterium longum subsp. longum JCM 1217]	320456234
+ANS27685.1	DUF3046	-	DUF3046	48	R1CP_14905	Rhodococcus opacus	bacteria>actinobacteria	hypothetical protein R1CP_14905 [Rhodococcus opacus]	1043689167 
+AFE13896.1	DUF3046	-	DUF3046	47	MRGA423_17025	Mycobacterium tuberculosis RGTB423	bacteria>actinobacteria	hypothetical protein MRGA423_17025 [Mycobacterium tuberculosis RGTB423]	380726101
+AFE17564.1	DUF3046	-	DUF3046	47	MRGA327_16815	Mycobacterium tuberculosis RGTB327	bacteria>actinobacteria	hypothetical protein MRGA327_16815 [Mycobacterium tuberculosis RGTB327]	380722455
+AGQ37358.1	DUF3046	-	DUF3046	47	M943_14160	Mycobacterium tuberculosis EAI5	bacteria>actinobacteria	hypothetical protein M943_14160 [Mycobacterium tuberculosis EAI5]	523439650
+BAL66784.1	DUF3046	-	DUF3046	47	ERDMAN_3004	Mycobacterium tuberculosis str. Erdman = ATCC 35801	bacteria>actinobacteria	hypothetical protein ERDMAN_3004 [Mycobacterium tuberculosis str. Erdman = ATCC 35801]	379029051
+AGL32230.1	DUF3046	-	DUF3046	44	J114_14625	Mycobacterium tuberculosis EAI5/NITR206	bacteria>actinobacteria	hypothetical protein J114_14625 [Mycobacterium tuberculosis EAI5/NITR206]	492076158
+AHM08490.1	DUF3046	-	DUF3046	44	BCGT_2571	Mycobacterium bovis BCG str. ATCC 35743	bacteria>actinobacteria	hypothetical protein BCGT_2571 [Mycobacterium bovis BCG str. ATCC 35743]	594545987
+AKO25789.1	DUF3046	-	DUF3046	44	GS11_2863	Mycobacterium bovis BCG	bacteria>actinobacteria	hypothetical protein GS11_2863 [Mycobacterium bovis BCG]	857100129
+ALA79289.1	DUF3046	-	DUF3046	44	BCGR_2972	Mycobacterium bovis BCG	bacteria>actinobacteria	DUF3046 domain-containing protein [Mycobacterium bovis BCG]	922678492
+AOZ44031.1	DUF3046	-	DUF3046	44	BTB1458_3034	Mycobacterium tuberculosis	bacteria>actinobacteria	hypothetical protein BTB1458_3034 [Mycobacterium tuberculosis]	1092948399 
+BAQ06864.1	DUF3046	-	DUF3046	44	KURONO_3081	Mycobacterium tuberculosis str. Kurono	bacteria>actinobacteria	hypothetical protein KURONO_3081 [Mycobacterium tuberculosis str. Kurono]	737519190
+# 41;	PspN-like-full
+AAK47133.1	DUF3046	-	DUF3046	286	MT2813	Mycobacterium tuberculosis CDC1551	bacteria>actinobacteria	hypothetical protein MT2813 [Mycobacterium tuberculosis CDC1551]	13882575
+ABQ74545.1	DUF3046	-	DUF3046	277	MRA_2768	Mycobacterium tuberculosis H37Ra	bacteria>actinobacteria	hypothetical protein MRA_2768 [Mycobacterium tuberculosis H37Ra]	148506736
+ABR07082.1	DUF3046	-	DUF3046	277	TBFG_12755	Mycobacterium tuberculosis F11	bacteria>actinobacteria	conserved arginine rich protein [Mycobacterium tuberculosis F11]	148722457
+ACT24282.1	DUF3046	-	DUF3046	277	TBMG_01233	Mycobacterium tuberculosis KZN 1435	bacteria>actinobacteria	conserved arginine rich protein [Mycobacterium tuberculosis KZN 1435]	253319679
+AEB03372.1	DUF3046	-	DUF3046	277	TBSG_01243	Mycobacterium tuberculosis KZN 4207	bacteria>actinobacteria	conserved arginine rich protein [Mycobacterium tuberculosis KZN 4207]	328457949
+AEN01201.1	DUF3046	-	DUF3046	277	MTCTRI2_2795	Mycobacterium tuberculosis CTRI-2	bacteria>actinobacteria	hypothetical protein MTCTRI2_2795 [Mycobacterium tuberculosis CTRI-2]	344220570
+AFM48619.1	DUF3046	-	DUF3046	277	TBXG_001223	Mycobacterium tuberculosis KZN 605	bacteria>actinobacteria	conserved arginine rich protein [Mycobacterium tuberculosis KZN 605]	392053061
+AFN50716.1	DUF3046	-	DUF3046	277	RVBD_2742c	Mycobacterium tuberculosis H37Rv	bacteria>actinobacteria	arginine rich protein [Mycobacterium tuberculosis H37Rv]	395139557
+AGJ68843.1	DUF3046	-	DUF3046	277	J112_14685	Mycobacterium tuberculosis str. Beijing/NITR203	bacteria>actinobacteria	hypothetical protein J112_14685 [Mycobacterium tuberculosis str. Beijing/NITR203]	478742683
+AGL28191.1	DUF3046	-	DUF3046	277	J113_19045	Mycobacterium tuberculosis CAS/NITR204	bacteria>actinobacteria	hypothetical protein J113_19045 [Mycobacterium tuberculosis CAS/NITR204]	492068586
+AGM01328.1	DUF3046	-	DUF3046	277	CFBS_2895	Mycobacterium tuberculosis CCDC5079	bacteria>actinobacteria	hypothetical protein CFBS_2895 [Mycobacterium tuberculosis CCDC5079]	505811381
+AHJ43539.1	DUF3046	-	DUF3046	277	HKBS1_2893	Mycobacterium tuberculosis HKBS1	bacteria>actinobacteria	hypothetical protein HKBS1_2893 [Mycobacterium tuberculosis HKBS1]	585502528
+AHJ47686.1	DUF3046	-	DUF3046	277	HKBT2_2889	Mycobacterium tuberculosis BT2	bacteria>actinobacteria	hypothetical protein HKBT2_2889 [Mycobacterium tuberculosis BT2]	585516946
+AHJ51832.1	DUF3046	-	DUF3046	277	HKBT1_2886	Mycobacterium tuberculosis BT1	bacteria>actinobacteria	hypothetical protein HKBT1_2886 [Mycobacterium tuberculosis BT1]	585531617
+AHJ55981.1	DUF3046	-	DUF3046	277	CFBR_2896	Mycobacterium tuberculosis CCDC5180	bacteria>actinobacteria	hypothetical protein CFBR_2896 [Mycobacterium tuberculosis CCDC5180]	585542442
+AIB49440.1	DUF3046	-	DUF3046	277	MTBK_28960	Mycobacterium tuberculosis K	bacteria>actinobacteria	hypothetical protein MTBK_28960 [Mycobacterium tuberculosis K]	646276760
+AII91333.1	DUF3046	-	DUF3046	277	IZ84_14640	Mycobacterium tuberculosis	bacteria>actinobacteria	hypothetical protein IZ84_14640 [Mycobacterium tuberculosis]	671747592
+AII95249.1	DUF3046	-	DUF3046	277	JE53_14625	Mycobacterium tuberculosis	bacteria>actinobacteria	hypothetical protein JE53_14625 [Mycobacterium tuberculosis]	671751509
+AIQ05389.1	DUF3046	-	DUF3046	277	LJ70_14830	Mycobacterium tuberculosis	bacteria>actinobacteria	hypothetical protein LJ70_14830 [Mycobacterium tuberculosis]	686573993
+AIQ09407.1	DUF3046	-	DUF3046	277	LJ80_14995	Mycobacterium tuberculosis	bacteria>actinobacteria	hypothetical protein LJ80_14995 [Mycobacterium tuberculosis]	686578013
+AIR15514.1	DUF3046	-	DUF3046	277	LH57_15000	Mycobacterium tuberculosis H37Rv	bacteria>actinobacteria	hypothetical protein LH57_15000 [Mycobacterium tuberculosis H37Rv]	690313483
+AJF04105.1	DUF3046	-	DUF3046	277	Y980_2742c	Mycobacterium tuberculosis H37RvSiena	bacteria>actinobacteria	Conserved hypothetical arginine rich protein [Mycobacterium tuberculosis H37RvSiena]	749195826
+AJW51384.1	DUF3046	-	DUF3046	277	UB21_14545	Mycobacterium tuberculosis	bacteria>actinobacteria	hypothetical protein UB21_14545 [Mycobacterium tuberculosis]	769541286
+ALB19943.1	DUF3046	-	DUF3046	277	AFL40_2843	Mycobacterium tuberculosis	bacteria>actinobacteria	Hypothetical protein AFL40_2843 [Mycobacterium tuberculosis]	923108660
+ANZ83464.1	DUF3046	-	DUF3046	277	BEE65_2861	Mycobacterium tuberculosis	bacteria>actinobacteria	Hypothetical protein BEE65_2861 [Mycobacterium tuberculosis]	1050847623 
+AOE37153.1	DUF3046	-	DUF3046	277	BEE64_2846	Mycobacterium tuberculosis	bacteria>actinobacteria	Hypothetical protein BEE64_2846 [Mycobacterium tuberculosis]	1057480258 
+AOT76884.1	DUF3046	-	DUF3046	277	TM57_01420	Mycobacterium tuberculosis	bacteria>actinobacteria	hypothetical protein TM57_01420 [Mycobacterium tuberculosis]	1072833496 
+APR59512.1	DUF3046	-	DUF3046	277	BTU11_15060	Mycobacterium tuberculosis	bacteria>actinobacteria	hypothetical protein BTU11_15060 [Mycobacterium tuberculosis]	1125941256 
+CCC27817.1	DUF3046	-	DUF3046	277	MAF_27470	Mycobacterium africanum GM041182	bacteria>actinobacteria	conserved hypothetical arginine rich protein [Mycobacterium africanum GM041182]	339332110
+CCC45100.1	DUF3046	-	DUF3046	277	MCAN_27691	Mycobacterium canettii CIPT 140010059	bacteria>actinobacteria	conserved hypothetical arginine rich protein [Mycobacterium canettii CIPT 140010059]	340005933
+CCG12623.1	DUF3046	-	DUF3046	277	MT7199_2775	Mycobacterium tuberculosis 7199-99	bacteria>actinobacteria	putative ARGININE RICH protein [Mycobacterium tuberculosis 7199-99]	440582220
+CCP45541.1	DUF3046	-	DUF3046	277	Rv2742c	Mycobacterium tuberculosis H37Rv	bacteria>actinobacteria	Conserved hypothetical arginine rich protein [Mycobacterium tuberculosis H37Rv]	444896280
+CDM11132.1	DUF3046	-	DUF3046	277	MT49_2995	Mycobacterium tuberculosis 49-02	bacteria>actinobacteria	putative ARGININE RICH PROTEIN [Mycobacterium tuberculosis 49-02]	702071623
+EBA42951.1	DUF3046	-	DUF3046	277	TBHG_02674	Mycobacterium tuberculosis str. Haarlem	bacteria>actinobacteria	arginine rich protein [Mycobacterium tuberculosis str. Haarlem]	134150906
+EGE51290.1	DUF3046	-	DUF3046	277	TBPG_002627	Mycobacterium tuberculosis W-148	bacteria>actinobacteria	arginine rich protein [Mycobacterium tuberculosis W-148]	326904357
+# 41;	PspN-like-Nterm
+AET20025.1	-	-	-	195	BCGMEX_2751c	Mycobacterium bovis BCG str. Mexico	bacteria>actinobacteria	putative arginine rich protein [Mycobacterium bovis BCG str. Mexico]	356594796
+AKR02573.1	-	-	-	195	Mb1595_p3050	Mycobacterium bovis	bacteria>actinobacteria	hypothetical protein Mb1595_p3050 [Mycobacterium bovis]	893681677
+BAH27033.1	-	-	-	195	JTY_2752	Mycobacterium bovis BCG str. Tokyo 172	bacteria>actinobacteria	hypothetical arginine rich protein [Mycobacterium bovis BCG str. Tokyo 172]	224774227
+CAL72746.1	-	-	-	195	BCG_2758c	Mycobacterium bovis BCG str. Pasteur 1173P2	bacteria>actinobacteria	Conserved hypothetical arginine rich protein [first part] [Mycobacterium bovis BCG str. Pasteur 1173P2]	121494268
+CCC65334.1	-	-	-	195	BCGM2741c	Mycobacterium bovis BCG str. Moreau RDJ	bacteria>actinobacteria	conserved hypothetical arginine rich protein [first part] [Mycobacterium bovis BCG str. Moreau RDJ]	341602658
+CDO44027.1	-	-	-	195	Mb2763c	Mycobacterium bovis AF2122/97	bacteria>actinobacteria	CONSERVED HYPOTHETICAL ARGININE RICH PROTEIN [FIRST PART] [Mycobacterium bovis AF2122/97]	768985192
+# 8;	PspN-like-Cterm
+AGL24320.1	DUF3046	-	DUF3046	85	I917_19230	Mycobacterium tuberculosis str. Haarlem/NITR202	bacteria>actinobacteria	hypothetical protein I917_19230 [Mycobacterium tuberculosis str. Haarlem/NITR202]	492062313
+AET20024.1	DUF3046	-	DUF3046	82	BCGMEX_2750c	Mycobacterium bovis BCG str. Mexico	bacteria>actinobacteria	putative arginine rich protein [Mycobacterium bovis BCG str. Mexico]	356594795
+AGE68745.1	DUF3046	-	DUF3046	82	K60_028350	Mycobacterium bovis BCG str. Korea 1168P	bacteria>actinobacteria	hypothetical protein K60_028350 [Mycobacterium bovis BCG str. Korea 1168P]	449033318
+AKR02572.1	DUF3046	-	DUF3046	82	Mb1595_p3049	Mycobacterium bovis	bacteria>actinobacteria	hypothetical protein Mb1595_p3049 [Mycobacterium bovis]	893681676
+BAH27032.1	DUF3046	-	DUF3046	82	JTY_2751	Mycobacterium bovis BCG str. Tokyo 172	bacteria>actinobacteria	hypothetical arginine rich protein [Mycobacterium bovis BCG str. Tokyo 172]	224774226
+CAL72745.1	DUF3046	-	DUF3046	82	BCG_2757c	Mycobacterium bovis BCG str. Pasteur 1173P2	bacteria>actinobacteria	Conserved hypothetical arginine rich protein [second part] [Mycobacterium bovis BCG str. Pasteur 1173P2]	121494267
+CCC65333.1	DUF3046	-	DUF3046	82	BCGM2740c	Mycobacterium bovis BCG str. Moreau RDJ	bacteria>actinobacteria	conserved hypothetical arginine rich protein [second part] [Mycobacterium bovis BCG str. Moreau RDJ]	341602657
+CDO44026.1	DUF3046	-	DUF3046	82	Mb2762c	Mycobacterium bovis AF2122/97	bacteria>actinobacteria	CONSERVED HYPOTHETICAL ARGININE RICH PROTEIN [SECOND PART] [Mycobacterium bovis AF2122/97]	768985191
+# 3;	PspN-trunc
+ABK69442.1	SIG	SIG	-	170	MAV_3632	Mycobacterium avium 104	bacteria>actinobacteria	conserved hypothetical protein [Mycobacterium avium 104]	118168545
+AAS05170.1	-	-	-	141	MAP_2853c	Mycobacterium avium subsp. paratuberculosis K-10	bacteria>actinobacteria	hypothetical protein MAP_2853c [Mycobacterium avium subsp. paratuberculosis K-10]	41397310
+AGL35901.1	-	-	-	141	MAP4_0955	Mycobacterium avium subsp. paratuberculosis MAP4	bacteria>actinobacteria	conserved arginine rich protein [Mycobacterium avium subsp. paratuberculosis MAP4]	494537012
+# 2;	random
+ABM33867.1	SIG+G_glu_transpept	SIG	G_glu_transpept	669	Aave_3307	Acidovorax citrulli AAC00-1	bacteria>proteobacteria>betaproteobacteria	gamma-glutamyltransferase 1 [Acidovorax citrulli AAC00-1]	120590427
+ADX45862.1	SIG+G_glu_transpept	SIG	G_glu_transpept	669	Acav_1948	Acidovorax avenae subsp. avenae ATCC 19860	bacteria>proteobacteria>betaproteobacteria	gamma-glutamyltransferase [Acidovorax avenae subsp. avenae ATCC 19860]	323373593
+# 1;	Other-DUF3046
+AMC51767.1	Glyco_tran_28_C+DUF3046	-	Glyco_tran_28_C+DUF3046	460	RN06_3314	Mycobacterium bovis BCG	bacteria>actinobacteria	alanine-rich transferase [Mycobacterium bovis BCG]	984957669
+AMC78552.1	DUF3046	-	DUF3046	163	RN12_2943	Mycobacterium tuberculosis	bacteria>actinobacteria	hypothetical protein RN12_2943 [Mycobacterium tuberculosis]	984984460
+# 1;	random
+ABP68290.1	SIG+CBM_4_9+Big_4+Big_4+SLH+SLH+SLH	SIG+Concanavalin-like+Concanavalin-like+IG+ZU5+SLH	CBM_4_9+Big_4+Big_4+SLH+SLH+SLH	2593	Csac_2722	Caldicellulosiruptor saccharolyticus DSM 8903	bacteria>firmicutes	S-layer domain protein [Caldicellulosiruptor saccharolyticus DSM 8903]	145411286
+ALF59777.1	IF2_assoc+Atrophin-1+IF2_N+GTP_EFTU+IF-2	IF2-HTH+sGTP	IF2_assoc+Atrophin-1+IF2_N+GTP_EFTU+IF-2	911	AOC03_06790	Psychrobacter urativorans	bacteria>proteobacteria>gammaproteobacteria	translation initiation factor IF-2 [Psychrobacter urativorans]	930357334
+ACZ22840.1	ABC_tran+ABC_tran	ABC-ATPase+ABC-ATPase	ABC_tran+ABC_tran	562	Sked_29380	Sanguibacter keddieii DSM 10542	bacteria>actinobacteria	ATPase component of ABC transporters with duplicated ATPase domain [Sanguibacter keddieii DSM 10542]	269098404
+ALX04274.1	ABC1	-	ABC1	457	AERYTH_05935	Aeromicrobium erythreum	bacteria>actinobacteria	ABC transporter ATP-binding protein [Aeromicrobium erythreum]	973194356
+AFG36873.1	LysM+LysM+Peptidase_M23	LysM+LysM+PTSEIIA1	LysM+LysM+Peptidase_M23	413	Spiaf_0779	Spirochaeta africana DSM 8902	bacteria>spirochaetes	metalloendopeptidase-like membrane protein [Spirochaeta africana DSM 8902]	383106540
+ANY25200.1	Thiolase_N+Thiolase_C	TM	Thiolase_N+Thiolase_C	398	BCM27_22405	Gordonia terrae	bacteria>actinobacteria	fatty acid oxidation complex subunit beta [Gordonia terrae]	1049205003 
+AHG88683.1	SIG+TM+HisKA+HATPase_c	SIG+TM+SHELIX+HISKIN	HisKA+HATPase_c	391	J421_1146	Gemmatirosa kalamazoonesis	bacteria>gemmatimonadetes	ATP-binding region ATPase domain protein [Gemmatirosa kalamazoonesis]	575457566
+AEM88519.1	60KD_IMP+DUF4887	TM+TM	60KD_IMP+DUF4887	379	Strvi_9230	Streptomyces violaceusniger Tu 4113	bacteria>actinobacteria	membrane protein insertase, YidC/Oxa1 family [Streptomyces violaceusniger Tu 4113]	344042794
+APW44806.1	SIG+4HBT_2+Acetyltransf_10	SIG+ACET	4HBT_2+Acetyltransf_10	285	RS694_10565	Rhodoferax saidenbachensis	bacteria>proteobacteria>betaproteobacteria	4-hydroxybenzoyl-CoA thioesterase [Rhodoferax saidenbachensis]	1133323410 
