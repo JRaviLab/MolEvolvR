@@ -2,6 +2,22 @@
 
 library(tidyverse); library(here); library(roxygen2); library(docstring)
 
+
+## Function to have Title Case
+to_titlecase <- function(x, y=" ") {
+    #' Changing case to 'Title Case'
+    #' @author Andrie, Janani Ravi
+    #' @description Translate string to Title Case w/ delimitter.
+    #' @aliases totitle, to_title
+    #' @usage to_titlecase(text, delimitter)
+    #' @param x Character vector.
+    #' @param y Delimitter. Default is space (" ").
+    #' @seealso chartr, toupper, and tolower.
+    s <- strsplit(x, y)[[1]]
+    paste(toupper(substring(s, 1,1)), substring(s, 2),
+          sep="", collapse=y)
+}
+
 ## Function to add leaves to an alignment file
 add_leaves <- function(input_file = "data/alignments/pspa_snf7.aln",
     lin_file = "data/pspa_snf7.txt") {
@@ -34,10 +50,20 @@ add_leaves <- function(input_file = "data/alignments/pspa_snf7.aln",
 
     temp <- aln_lin %>%
         separate(Lineage.final,
-                 into=c("kingdom", "phylum"), sep=">", remove=F) %>%
+                 into=c("kingdom", "phylum"),
+                 sep=">", remove=F,
+                 extra = "merge", fill = "left") %>%
         separate(Species, into=c("genus", "spp"),
-                 sep=" ", remove=F) %>%
-        unite
+                 sep=" ", remove=F,
+                 extra = "merge", fill = "left") %>%
+        mutate(leaf=paste(paste0(str_sub(temp$kingdom,
+                                         start=1, end=1),
+                                 str_sub(temp$phylum, 1, 6)),
+                          paste0(str_sub(temp$genus, start=1, end=1),
+                                 str_sub(temp$spp, start=1, end=3)),
+                          temp$AccNum,
+                          sep="_")) %>%
+        map(leaf, to_titlecase)
 
 
     return(aln_lin)
