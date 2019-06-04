@@ -14,11 +14,14 @@ output:
 ---
 ## Environment & Setup
 ```{r setup, eval=T, results='hide', message=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
 library(tidyverse)
 library(here)
 library(rmarkdown); library(knitr)
+library(wordcloud); library(RColorBrewer)
 source("R/cleanup.R")
 source("R/plotting.R")
+source("R/reverse_operons.R")
 conflicted::conflict_prefer("filter", "dplyr")
 conflicted::conflict_prefer("as_data_frame", "tibble")
 ```
@@ -28,7 +31,8 @@ conflicted::conflict_prefer("as_data_frame", "tibble")
 ```{r import, eval=T, results='hide', message=F}
 prot <- read_delim("data/pspa_snf7.txt", # data/protein_name.txt
                    delim="\t", col_names=T, comment="#", trim_ws=T,
-                   escape_double = FALSE, na = "NA")
+                   escape_double = FALSE, na = "NA") %>%
+  reverse_operons()
 
 lineages_map <- read_delim("data/organisms2lineages_map_bae_20170828.txt",
                            delim="\t", col_names=T, comment="#", trim_ws=T)
@@ -65,6 +69,8 @@ GC.DA.wc %>%
   kable()
 ```
 
+
+
 ### UpSet plots
 ```{r upset-plot-da, eval=T, out.height="300px"}
 upset.plot(prot, 10, "da2doms")
@@ -75,10 +81,11 @@ upset.plot(prot, 75, "gc2da")
 ```
 
 ### Worclouds
-```{r}
-
+```{r , eval= TRUE, out.height='600px'}
+wordcloud(DA.doms.wc$words,DA.doms.wc$freq,min.freq = 1,colors=brewer.pal(8, "Spectral"),scale=c(2.5,.5))
+wordcloud(GC.DA.wc$words,GC.DA.wc$freq,min.freq = 30,colors=brewer.pal(8, "Spectral"), scale=c(2.5,.4))
 ```
-
+#GenContext.norep
 ### Lineage summaries
 ```{r lin-summary, eval=T}
 ## Main Domain Architectures -- Counts by DA and Lineage
@@ -97,10 +104,29 @@ prot.GC.summ.byDALin %>% head() %>% kable()
 prot.GC.summ.byLin %>% head() %>% kable()
 prot.GC.summ %>% head() %>% kable()
 ```
+#.norep as of now
+### Total Counts
+```{r total counts, eval=T, message=FALSE, results='hide'}
+DA.cummulative <- total_counts(prot.DA.summ.byLin, cutoff =0, type = "DA")
+DA.cummulative %>%
+  head() %>%
+  kable()
 
+GC.cummulative <- total_counts(prot.GC.summ.byDALin, cutoff = 50, type = "GC") 
+GC.cummulative %>%
+  head() %>%
+  kable()
+
+
+
+
+```
+#DomArch, GenContext
 ### Lineage summary plots
 ```{r lin-summ-plot, eval=T, out.width='70%'}
+lineage.DA.plot(prot, DA.cummulative,"DomArch.norep", "")
 
+lineage.DA.plot(prot, GC.cummulative,"GenContext.norep", "")
 ```
 
 ### Add Leaves
