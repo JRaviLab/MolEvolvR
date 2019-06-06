@@ -1,4 +1,5 @@
 # List of functions in `the_process` package
 
-- [ ] upset.plot
-- [ ] 
+- [x] upset.plot
+- [ ] cleanup_domains
+- [ ] cleanup_species
