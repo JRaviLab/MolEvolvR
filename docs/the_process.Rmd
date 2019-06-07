@@ -19,7 +19,10 @@ library(tidyverse)
 library(here)
 library(rmarkdown); library(knitr)
 library(wordcloud); library(RColorBrewer)
+#####TEMP####
+setwd("..")
 source("R/cleanup.R")
+source("R/summarize.R")
 source("R/plotting.R")
 source("R/reverse_operons.R")
 conflicted::conflict_prefer("filter", "dplyr")
@@ -31,11 +34,26 @@ conflicted::conflict_prefer("as_data_frame", "tibble")
 ```{r import, eval=T, results='hide', message=F}
 prot <- read_delim("data/pspa_snf7.txt", # data/protein_name.txt
                    delim="\t", col_names=T, comment="#", trim_ws=T,
-                   escape_double = FALSE, na = "NA") %>%
-  reverse_operons()
+                   escape_double = FALSE, na = "NA")
 
 lineages_map <- read_delim("data/organisms2lineages_map_bae_20170828.txt",
                            delim="\t", col_names=T, comment="#", trim_ws=T)
+
+pspdomains.rename <- read_delim("data/pspdomains.rename.txt",
+                                delim = "\t", col_names = TRUE)
+```
+
+
+## Cleanup
+```{r import, eval=T, results='hide', message=F}
+prot <- prot %>%
+  reverse_operons() %>%
+  cleanup_species()
+#Rename DomArch.norep to DomArch because that's what replace_doms requires as a column
+colnames(prot)[colnames(prot)=="DomArch.norep"] <- "DomArch"
+  replace_doms(prot,pspdomains.rename)
+#Give original name back
+colnames(prot)[colnames(prot)=="DomArch"] <- "DomArch.norep"
 ```
 
 ## Data analysis
@@ -43,7 +61,7 @@ lineages_map <- read_delim("data/organisms2lineages_map_bae_20170828.txt",
 ```{r select-cols, eval=T}
 prot_data <- prot %>%
   select(AccNum, Species, Lineage=Lineage.final,
-         DomArch=DomArch.norep, GenContext=GenContext.norep,
+         DomArch = DomArch.norep, GenContext=GenContext.norep,
          Length, GI, GenName, Annotation)
 ```
 

@@ -37,15 +37,15 @@ species.cleanup <- function(x) {
 		str_replace_all(coll("  ", TRUE), " ")
 }
 ## Function to cleanup Toast-rack names
-replace.toastrack <- function(x) {
-	x %>%
-		str_replace_all(coll("toast-rack", TRUE), "Toast-rack") %>%
-		str_replace_all(coll("toastrack", TRUE), "Toast-rack") %>%
-		str_replace_all("DUF4097", "Toast-rack") %>%
-		str_replace_all("DUF2154", "Toast-rack") %>%
-		str_replace_all("DUF2807", "Toast-rack") %>%
-		str_replace_all("DUF2157", "Toast_rack_N")
-}
+# replace.toastrack <- function(x) {
+# 	x %>%
+# 		str_replace_all(coll("toast-rack", TRUE), "Toast-rack") %>%
+# 		str_replace_all(coll("toastrack", TRUE), "Toast-rack") %>%
+# 		str_replace_all("DUF4097", "Toast-rack") %>%
+# 		str_replace_all("DUF2154", "Toast-rack") %>%
+# 		str_replace_all("DUF2807", "Toast-rack") %>%
+# 		str_replace_all("DUF2157", "Toast_rack_N")
+# }
 
 ## Function to deal with REPEATED DOMAINS with (s)!!!
 repeats2s <- function(x){
@@ -84,147 +84,101 @@ remove.empty.rows <- function(x){	x %>%
 		# filter(!grepl("^NA$", DomArch.norep)) %>%			# remove "NA"
 		# filter(!grepl("^$", DomArch.norep))						# remove empty rows
 }
-###########################
-## COUNTS of DAs and GCs ##
-## Before/after break up ##
-###########################
-## Function to obtain element counts (DA, GC)
-counts_elements <- function(x, min.freq) {	x %>%
-		table() %>%
-		as_tibble() %>%
-		`colnames<-`(c("elements", "freq")) %>%
-		filter(!grepl("^-$", elements)) %>%		# remove "-"
-		arrange(-freq) %>% filter(freq>=min.freq)
-}
 
-## Function to break up ELEMENTS to WORDS for DA and GC
-elements2words <- function(x, type) {
-	y <- x %>%
-		str_replace_all("\\,"," ") %>%
-		str_replace_all("\""," ")
-	switch(type,
-				 da2doms = {z <- y %>%
-				 	str_replace_all("\\+"," ")},
-				 gc2da = {z <- y %>%
-				 	str_replace_all("\\<-"," ") %>%
-				 	str_replace_all("-\\>"," ") %>%
-				 	str_replace_all("\\|"," ")})
-	# str_replace_all("^c\\($", " ") %>%		# remove "c("
-	# str_replace_all("\\)$", " ") %>%			# remove ")"
-	# str_replace_all("\\(s\\)"," ") %>%		# Ignoring repeats
-	# str_replace_all("-"," ") %>%
-	## replace \n, \r, \t
-	z %>%
-		str_replace_all("\n"," ") %>%
-		str_replace_all("\r"," ") %>%
-		str_replace_all("\t"," ") %>%
-		## replace multiple spaces ...
-		str_replace_all("    "," ") %>%
-		str_replace_all("   "," ") %>%
-		str_replace_all("  "," ") %>%
-		str_replace_all("  "," ")
-}
 
-## Function to get WORD COUNTS [DOMAINS (DA) or DOMAIN ARCHITECTURES (GC)]
-## to be used after elements2words
-words2wc <- function(x){ x %>%
-		str_replace_all("   "," ") %>%
-		str_replace_all("  "," ") %>% str_replace_all("  "," ") %>%
-		paste(collapse=" ") %>%
-		strsplit(" ") %>%
-		# filter(grepl(query.list[j], Query)) %>% # Create separate WCs for each Query
-		# select(DA.wc) %>%
-		table() %>% as_tibble() %>%
-		`colnames<-`(c("words", "freq")) %>%
-		## filter out 'spurious-looking' domains
-		filter(!grepl(" \\{n\\}", words)) %>%
-		filter(!grepl("^c\\($", words)) %>%		# remove "c("
-		filter(!grepl("^\\)$", words)) %>%		# remove ")"
-		filter(!grepl("^-$", words)) %>%			# remove "-"
-		filter(!grepl("^$", words)) %>%				# remove empty rows
-		filter(!grepl("^\\?$", words)) %>%		# remove "?"
-		filter(!grepl("^\\?\\*$", words)) %>%	# remove "?*"
-		filter(!grepl("^tRNA$", words)) %>%		# remove "tRNA"
-		filter(!grepl("^ncRNA$", words)) %>%	# remove "ncRNA"
-		filter(!grepl("^rRNA$", words)) %>%		# remove "rRNA"
-		# filter(!grepl("\\*", words)) %>%			# Remove/Keep only Query
-		arrange(-freq)
-}
-## Function to filter based on frequencies
-filter.freq <- function(x, min.freq){ x %>%
-		filter(freq>=min.freq)
-}
 
-#########################
-## SUMMARY FUNCTIONS ####
-## Changed Lineage to Lineage.final on Aug 31
-#########################
-## Function to summarize and retrieve counts by Domains & Domains+Lineage
-summ.DA.byLin <- function(x) { x %>%
-		filter(!grepl("^-$", DomArch.norep)) %>%
-		group_by(DomArch.norep, Lineage.final) %>%
-		summarise(count=n()) %>% # , bin=as.numeric(as.logical(n()))
-		arrange(desc(count))
-}
-summ.DA <- function(x){ x %>%
-		group_by(DomArch.norep) %>%
-		summarise(totalcount=sum(count), totallin=n()) %>% # totallin=n_distinct(Lineage),
-		arrange(desc(totallin), desc(totalcount)) %>%
-		filter(!grepl(" \\{n\\}",DomArch.norep)) %>%
-		filter(!grepl("^-$", DomArch.norep))
-}
-summ.GC.byDALin <- function(x) { x %>%
-		filter(!grepl("^-$", GenContext.norep)) %>%
-		filter(!grepl("^-$", DomArch.norep)) %>%
-		filter(!grepl("^-$", Lineage.final)) %>% filter(!grepl("^NA$", DomArch.norep)) %>%
-		group_by(GenContext.norep, DomArch.norep, Lineage.final) %>%
-		summarise(count=n()) %>% # , bin=as.numeric(as.logical(n()))
-		arrange(desc(count))
-}
-summ.GC.byLin <- function(x) { x %>%
-		filter(!grepl("^-$", GenContext.norep)) %>%
-		filter(!grepl("^-$", DomArch.norep)) %>%
-		filter(!grepl("^-$", Lineage.final)) %>% filter(!grepl("^NA$", DomArch.norep)) %>%
-		group_by(GenContext.norep, Lineage.final) %>% # DomArch.norep,
-		summarise(count=n()) %>% # , bin=as.numeric(as.logical(n()))
-		arrange(desc(count))
-}
-summ.GC <- function(x) { x %>%
-		group_by(GenContext.norep) %>%
-		summarise(totalcount=sum(count),
-							totalDA=n_distinct(DomArch.norep),
-							totallin=n_distinct(Lineage.final)) %>% # totallin=n_distinct(Lineage.final),
-		arrange(desc(totalcount), desc(totalDA), desc(totallin)) %>%
-		filter(!grepl(" \\{n\\}",GenContext.norep)) %>%
-		filter(!grepl("^-$", GenContext.norep))
+
+#Function that applies both remove.empty.rows and species.cleanup to a data table
+cleanup_species <- function(prot){
+  prot$Species <- species.cleanup(prot$Species)
+  return(remove.empty.rows(prot))
+
+  # #species.cleanup
+  # prot$Species %>%
+  #   str_replace_all(coll("sp. ", TRUE), "sp ") %>%
+  #   str_replace_all(coll("str. ", TRUE), "str ") %>%
+  #   str_replace_all(coll(" = ", TRUE), " ") %>%
+  #   str_replace_all(coll("-", TRUE), "") %>%
+  #   str_replace_all(coll(".", TRUE), "") %>%
+  #   str_replace_all(coll("(", TRUE), "") %>%
+  #   str_replace_all(coll(")", TRUE), "") %>%
+  #   str_replace_all(coll("[", TRUE), "") %>%
+  #   str_replace_all(coll("]", TRUE), "") %>%
+  #   str_replace_all(coll("\\", TRUE), "") %>%
+  #   str_replace_all(coll("/", TRUE), "") %>%
+  #   str_replace_all(coll("\'", TRUE), "") %>%
+  #   str_replace_all(coll("  ", TRUE), " ")
+  #   #Remove.empty.rows
+  # prot %>%
+  #   as_tibble() %>%
+  #   filter(grepl("\\*", GenContext.norep)) %>%		# Keep only rows with Query*
+  #   filter(!grepl("^-$", GenContext.norep)) %>%		# remove "-"
+  #   filter(!grepl("^NA$", GenContext.norep)) %>%	# remove "NA"
+  #   filter(!grepl("^$", GenContext.norep)) #%>%		# remove empty rows
+  # return(prot)
 }
 
 
-##################
-#'Total Counts
+#'Cleaning Domain Architecture
 #'
-#'Creates a data frame with a totalcount column
+#'Cleans the DomArch column by replacing/removing certain domains
 #'
-#'This function is designed to sum the counts column by either Genomic Context or Domain Architecture and creates a totalcount column from those sums.
+#'This function cleans the DomArch column of one data frame by renaming certain domains according to a second data frame.
+#'Additionally, repeated domains are condensed into the name of the domain with (s) appended. The original data
+#'frame is returned with the clean DomArchs column and the old domains in the DomArchs.old column.
 #'
-#' @param prot A data frame that must contain columns:
-#' \itemize{\item Either 'GenContext.norep' or 'DomArch.norep' \item count}
-#' @param cutoff Numeric. Cutoff for total count. Counts below cutoff value will not be shown. Default is 0.
-#' @param type Character. Either "GC" for a total count by Genomic Context groupings or "DA" for a total count by Domain Architecture groupings.
-#' @examples total_counts(pspa-gc_lin_counts,0,"GC")
-#' @note Please refer to the source code if you have alternate file formats and/or
-#' column names.
-total_counts <- function(prot ,cutoff = 0, type = "GC"){
-  if(type == "GC"){
-    gc_count <- prot %>% group_by(GenContext.norep) %>% summarise(totalcount = sum(count))  %>% filter(totalcount >= cutoff)
-    total <- left_join(prot,gc_count, by = "GenContext.norep")
+#'@param eDNA_data A data frame containing a 'DomArch' column
+#'@param domains_rename A data frame containing the domain names to be replaced in a column 'old' and the corresponding replacement
+#'values in a column 'new'
+#'@examples replace_doms(pspa.sub,pspdomains.rename)
+replace_doms <- function(eDNA_data,domains_rename){
+  DomArch.old <- eDNA_data$DomArch
+  for (j in 1:length(domains_rename$old)) {
+
+    #Find and replace the occurances of domain where it starts with domain+
+    regterm=paste ("^",domains_rename$old[j],"\\+",sep="")
+    #repterm is the string "domofnew+"
+    repterm=paste (domains_rename$new[j],"\\+",sep="")
+    #All indeces in eDNA_data$arch that start with regterm, are replaced with repterm
+    eDNA_data$DomArch[grep(regterm, eDNA_data$DomArch)]=gsub(regterm, repterm,x = eDNA_data$DomArch[grep(regterm, eDNA_data$DomArch)])
+
+    #Find and replace the occurances of domain where it ends in +domain
+    regterm=paste ("\\+",domains_rename$old[j],"$",sep="")
+    #repterm is now "+domainofnew" (very similar to first repterm)
+    repterm=paste ("\\+",domains_rename$new[j],sep="")
+    #All indeces in eDNA_data$arch that match second regterm are replaced with second repterm
+    eDNA_data$DomArch[grep(regterm, eDNA_data$DomArch)]=gsub(regterm, repterm,x = eDNA_data$DomArch[grep(regterm, eDNA_data$DomArch)])
+
+    #What if domain is replaced by "" -- there would be nothing there
+    #regterm3 = "+domainofold+"
+    regterm=paste ("\\+",domains_rename$old[j],"\\+",sep="")
+    repterm=paste ("\\+",domains_rename$new[j],"\\+",sep="")
+    eDNA_data$DomArch[grep(regterm, eDNA_data$DomArch)]=gsub(regterm, repterm,x = eDNA_data$DomArch[grep(regterm, eDNA_data$DomArch)])
+
+    # #all occurances where domain to be renamed occurs by itself is replaced
+    # regterm=paste (domains_rename$old[j],sep="")
+    # repterm=paste (domains_rename$new[j],sep="")
+    # eDNA_data$DomArch[grep(regterm, eDNA_data$DomArch)]=gsub(regterm, repterm,x = eDNA_data$DomArch[grep(regterm, eDNA_data$DomArch)])
+
+    #repterm= domains_rename$new[j]
+    #What does[1] do?
+    #While loop b/c it can appear multiple times
+    #while iterates keeps going until no more strings in eDNA_data$arch match regterm
+    while ( length(eDNA_data$DomArch[grep(regterm[1], eDNA_data$DomArch)]) > 0) {
+      #replace the regterm with repterm
+      eDNA_data$DomArch[grep(regterm, eDNA_data$DomArch)]=gsub(regterm, repterm,x = eDNA_data$DomArch[grep(regterm, eDNA_data$DomArch)])
+
+    }
+
   }
-  else if(type == "DA"){
-    da_count <- prot %>% group_by(DomArch.norep) %>% summarise(totalcount = sum(count))  %>% filter(totalcount >= cutoff)
-    total <- left_join(prot,da_count, by = "DomArch.norep")
-  }
-  return(total)
+
+  eDNA_data$DomArch <- repeats2s(eDNA_data$DomArch) %>%
+    domarch.convert2s.forupset()
+  #eDNA_data$DomArch <- domarch.convert2s.forupset(eDNA_data$DomArch)
+  return(cbind(eDNA_data,DomArch.old))
 }
+
+
 
 ##################################
 ## Descriptions for functions ####
@@ -255,25 +209,4 @@ total_counts <- function(prot ,cutoff = 0, type = "GC"){
 # query.sub <- query %>%
 #   remove.empty.rows()")
 
-# ## counts: Function to obtain element counts (DA, GC)
-# cat("Counts DAs and GCs.
-# \nFor e.g.:
-# query.sub$DomArch.norep %>%
-#   counts(n)
-# query.sub$GenContext.norep %>%
-# counts(n)")
 
-# ## elements2words: Function to break up ELEMENTS to WORDS for DA and GC
-# cat("Converting DA to domains and GC to DAs.\n2 switches: da2doms and gc2da
-# \nFor e.g.:
-# query.sub$DA.doms <- query.sub$DomArch.norep %>%
-#   elements2words(\"da2doms\")
-# query.sub$GC.da <- query.sub$GenContext.norep %>%
-# 	elements2words(\"gc2da\")")
-
-
-# ## words2wc: Function to get WORD COUNTS [DOMAINS (DA) or DOMAIN ARCHITECTURES (GC)]
-# cat("Word counts for broken up domains from DAs and DAs from GCs.
-# \nFor e.g.:
-# DA.doms.wc <- query.sub$DA.doms %>%
-#   words2wc()")

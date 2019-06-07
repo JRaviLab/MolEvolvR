@@ -4,17 +4,18 @@
 \alias{lineage.DA.plot}
 \title{Lineage Plot: Heatmap of Domains/DAs/GCs vs Lineages}
 \usage{
-lineage.DA.plot(query.sub = "toast_rack.sub",
-  query.summ.byLin = "toast_rack.DA.summ.byLin",
-  colname = "DomArch.norep", type = "da2doms")
+lineage.DA.plot(query_data = "prot",
+  query.summ.byLin = "prot.DA.summ.byLin", colname = "DomArch.norep",
+  type = "da2doms")
 }
 \arguments{
-\item{query.sub}{Data frame of protein homologs with the usual 11 columns +
-additional word columns (0/1 format). Default is toast_rack.sub.}
+\item{query_data}{Data frame of protein homologs with the usual 11 columns +
+additional word columns (0/1 format).
+Default is prot (variable w/ protein data).}
 
 \item{query.summ.byLin}{Output of summ.DA.byLin(XXX.sub) or summ.GC.byLin(XXX.sub)}
 
-\item{colname}{Column name from query.sub: "DomArch.norep", "GenContext.norep",
+\item{colname}{Column name from query_data: "DomArch.norep", "GenContext.norep",
 "DomArch.PFAM.norep" or "DomArch.LADB.norep". Default is "DomArch.norep".}
 
 \item{type}{Character. Default is "da2doms" for Domain Architectures.
@@ -26,17 +27,17 @@ Genomic Contexts. Heatmap.
 }
 \details{
 For "da2doms" you would need the file DA.doms.wc as well as the
-column query.sub$DomArch.norep
+column query_data$DomArch.norep
 
 For "gc2da", you would need the file GC.DA.wc as well as the column
-query.sub$GenContext.norep
+query_data$GenContext.norep
 }
 \note{
 Please refer to the source code if you have alternate file formats and/or
 column names.
 }
 \examples{
-lineage.DA.plot(toast_rack.sub, 10, "DomArch.norep", "da2doms")
+lineage.DA.plot(toast_rack_data, 10, "DomArch.norep", "da2doms")
 }
 \author{
 Janani Ravi

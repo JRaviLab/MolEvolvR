@@ -4,16 +4,16 @@
 \alias{lineage.neighbors.plot}
 \title{Lineage Plot for top neighbors}
 \usage{
-lineage.neighbors.plot(query.sub = "toast_rack.sub",
-  query = "toast_rack", colname = "GenContext.norep")
+lineage.neighbors.plot(query_data = "prot", query = "pspa",
+  colname = "GenContext.norep")
 }
 \arguments{
-\item{query.sub}{Data frame of protein homologs with the usual 11 columns +
-additional word columns (0/1 format). Default is toast_rack.sub}
+\item{query_data}{Data frame of protein homologs with the usual 11 columns +
+additional word columns (0/1 format). Default is pspa_data.}
 
-\item{query}{Name of query protein/domain. Default is "toast_rack"}
+\item{query}{Name of query protein/domain. Default is "pspa".}
 
-\item{colname}{Column name from query.sub. Default is "GenContext.norep".}
+\item{colname}{Column name from query_data. Default is "GenContext.norep".}
 }
 \description{
 Lineage plot for top neighbors obtained from DAs of
@@ -21,17 +21,17 @@ Genomic Contexts.
 }
 \details{
 For "da2doms" you would need the file DA.doms.wc as well as the
-column query.sub$DomArch.norep
+column query_data$DomArch.norep
 
 For "gc2da", you would need the file GC.DA.wc as well as the column
-query.sub$GenContext.norep
+query_data$GenContext.norep
 }
 \note{
 Please refer to the source code if you have alternate file formats and/or
 column names.
 }
 \examples{
-lineage.neighbors.plot(toast_rack.sub, toast_rack, "GenContext.norep", "da2doms")
+lineage.neighbors.plot(pspa_data, pspa, "GenContext.norep", "da2doms")
 }
 \author{
 Janani Ravi

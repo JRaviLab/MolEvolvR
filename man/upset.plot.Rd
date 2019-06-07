@@ -4,11 +4,11 @@
 \alias{upset.plot}
 \title{UpSet Plot}
 \usage{
-upset.plot(query.sub = "toast_rack.sub", cutoff = 10,
+upset.plot(query_data = "toast_rack.sub", cutoff = 10,
   type = "da2doms")
 }
 \arguments{
-\item{query.sub}{Data frame of protein homologs with the usual 11 columns +
+\item{query_data}{Data frame of protein homologs with the usual 11 columns +
 additional word columns (0/1 format). Default is toast_rack.sub}
 
 \item{cutoff}{Numeric. Cutoff for word frequency. Default is 10.}
@@ -23,10 +23,10 @@ Genomic Contexts vs Domain Architectures.
 }
 \details{
 For "da2doms" you would need the file DA.doms.wc as well as the
-column query.sub$DomArch.norep
+column query_data$DomArch.norep
 
 For "gc2da", you would need the file GC.DA.wc as well as the column
-query.sub$GenContext.norep
+query_data$GenContext.norep
 }
 \note{
 Please refer to the source code if you have alternate file formats and/or
