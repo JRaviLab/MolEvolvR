@@ -4,8 +4,8 @@
 \alias{add_leaves}
 \title{Adding Leaves to an alignment file w/ accessions}
 \usage{
-add_leaves(input_file = "data/alignments/final_alns/pspa_snf7.aln",
-  lin_file = "data/shiny/pspa.txt")
+add_leaves(input_file = "data/alignments/pspa_snf7.aln",
+  lin_file = "data/pspa_snf7.txt")
 }
 \arguments{
 \item{input_file}{Character. Path to file. Input tab-delimited file +
