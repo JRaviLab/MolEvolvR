@@ -1,3 +1,8 @@
+## To summarize by lineages, DA and GC
+## Modified: Jun 07, 2019
+## Created: Jun 07, 2019 (was part of cleanup.R)
+## Janani Ravi (@jananiravi) & Samuel Chen (@samuelzchen)
+
 ###########################
 ## COUNTS of DAs and GCs ##
 ## Before/after break up ##
