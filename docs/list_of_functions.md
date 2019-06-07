@@ -4,7 +4,7 @@
 - [x] lineage.DA.plot
 - [x] lineage.neighbors.plot
 - [x] lineage.domain_repeats.plot
-- [ ] cleanup_domains
+- [x] replace_doms
 - [ ] cleanup_species
 - [ ] species.cleanup
 - [x] reverse_operons
