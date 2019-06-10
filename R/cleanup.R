@@ -1,9 +1,10 @@
-## Modified: Apr 08, 2019
-## Created: Aug 11, 2017
-## Janani Ravi (@jananiravi)
 ## Functions to clean up .op_ins_cls files
 ## To create consistent names and take care of repeats
 ## To get element and word counts
+
+## Modified: Jun 06, 2019 (some func have been moved to summarize.R)
+## Created: Aug 11, 2017
+## Janani Ravi (@jananiravi) & Samuel Chen (@samuelzchen)
 
 ##############
 ## COLNAMES ##
