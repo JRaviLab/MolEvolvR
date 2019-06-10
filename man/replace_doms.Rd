@@ -4,22 +4,24 @@
 \alias{replace_doms}
 \title{Cleaning Domain Architecture}
 \usage{
-replace_doms(eDNA_data, domains_rename)
+replace_doms(prot, domains_rename, domains_remove)
 }
 \arguments{
-\item{eDNA_data}{A data frame containing a 'DomArch' column}
+\item{prot}{A data frame containing a 'DomArch' column}
 
 \item{domains_rename}{A data frame containing the domain names to be replaced in a column 'old' and the corresponding replacement
 values in a column 'new'}
+
+\item{domains_remove}{A data frame containing the domain names to be removed in a column called 'domains'}
 }
 \description{
 Cleans the DomArch column by replacing/removing certain domains
 }
 \details{
 This function cleans the DomArch column of one data frame by renaming certain domains according to a second data frame.
-Additionally, repeated domains are condensed into the name of the domain with (s) appended. The original data
-frame is returned with the clean DomArchs column and the old domains in the DomArchs.old column.
+Certain domains can be removed according to an additional data frame.
+The original data frame is returned with the clean DomArchs column and the old domains in the DomArchs.old column.
 }
 \examples{
-replace_doms(pspa.sub,pspdomains.rename)
+replace_doms(pspa.sub,domains.replace,domains.remove)
 }

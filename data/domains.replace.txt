@@ -1,10 +1,8 @@
 old	new
+toast-rack	Toast-rack
+toastrack	Toast-rack
 DUF4097	Toast-rack
 DUF2154	Toast-rack
 DUF2807	Toast-rack
 DUF2157	Toast_rack_N
-EP1	
-EIID-AGA	
-LPD29	
-Imm3	
 ASH-IG	IG
