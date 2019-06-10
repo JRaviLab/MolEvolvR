@@ -19,8 +19,6 @@ library(tidyverse)
 library(here)
 library(rmarkdown); library(knitr)
 library(wordcloud); library(RColorBrewer)
-#####TEMP####
-setwd("..")
 source("R/cleanup.R")
 source("R/summarize.R")
 source("R/plotting.R")
@@ -39,8 +37,11 @@ prot <- read_delim("data/pspa_snf7.txt", # data/protein_name.txt
 lineages_map <- read_delim("data/organisms2lineages_map_bae_20170828.txt",
                            delim="\t", col_names=T, comment="#", trim_ws=T)
 
-pspdomains.rename <- read_delim("data/pspdomains.rename.txt",
+domains.replace <- read_delim("data/domains.replace.txt",
                                 delim = "\t", col_names = TRUE)
+
+domains.remove <- read_delim("data/domains.ignore.txt",
+                             delim = "\t", col_names = TRUE)
 ```
 
 
@@ -51,7 +52,7 @@ prot <- prot %>%
   cleanup_species()
 #Rename DomArch.norep to DomArch because that's what replace_doms requires as a column
 colnames(prot)[colnames(prot)=="DomArch.norep"] <- "DomArch"
-  replace_doms(prot,pspdomains.rename)
+  replace_doms(prot,domains.replace,domains.remove)
 #Give original name back
 colnames(prot)[colnames(prot)=="DomArch"] <- "DomArch.norep"
 ```
@@ -103,7 +104,6 @@ upset.plot(prot, 75, "gc2da")
 wordcloud(DA.doms.wc$words,DA.doms.wc$freq,min.freq = 1,colors=brewer.pal(8, "Spectral"),scale=c(2.5,.5))
 wordcloud(GC.DA.wc$words,GC.DA.wc$freq,min.freq = 30,colors=brewer.pal(8, "Spectral"), scale=c(2.5,.4))
 ```
-#GenContext.norep
 ### Lineage summaries
 ```{r lin-summary, eval=T}
 ## Main Domain Architectures -- Counts by DA and Lineage
@@ -122,7 +122,7 @@ prot.GC.summ.byDALin %>% head() %>% kable()
 prot.GC.summ.byLin %>% head() %>% kable()
 prot.GC.summ %>% head() %>% kable()
 ```
-#.norep as of now
+
 ### Total Counts
 ```{r total counts, eval=T, message=FALSE, results='hide'}
 DA.cummulative <- total_counts(prot.DA.summ.byLin, cutoff =0, type = "DA")
@@ -139,7 +139,6 @@ GC.cummulative %>%
 
 
 ```
-#DomArch, GenContext
 ### Lineage summary plots
 ```{r lin-summ-plot, eval=T, out.width='70%'}
 lineage.DA.plot(prot, DA.cummulative,"DomArch.norep", "")
