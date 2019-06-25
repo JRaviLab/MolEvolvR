@@ -16,3 +16,4 @@
 - [ ] summ.GC.byLin
 - [ ] summ.GC
 - [x] total_counts
+- [ ] filter_clusters
