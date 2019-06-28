@@ -17,3 +17,4 @@
 - [ ] summ.GC
 - [x] total_counts
 - [ ] filter_clusters
+- [ ] clust2tab
