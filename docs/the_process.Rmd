@@ -14,17 +14,26 @@ output:
 ---
 ## Environment & Setup
 ```{r setup, eval=T, results='hide', message=FALSE}
-knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file(), setwd(".."))
+
 library(tidyverse)
 library(here)
 library(rmarkdown); library(knitr)
 library(wordcloud); library(RColorBrewer)
+#####TEMP#####
+#setwd("..")
+
 source("R/cleanup.R")
 source("R/summarize.R")
 source("R/plotting.R")
 source("R/reverse_operons.R")
+source("R/add_leaves.R")
+source("R/convert_aln2fa.R")
+source("R/msa.R") 
+source("R/tree.R");
 conflicted::conflict_prefer("filter", "dplyr")
 conflicted::conflict_prefer("as_data_frame", "tibble")
+conflicted::conflict_prefer("strsplit","base")
 ```
 
 
@@ -148,10 +157,27 @@ lineage.DA.plot(prot, GC.cummulative,"GenContext.norep", "")
 
 ### Add Leaves
 ```{r add-leaves, eval=T}
-
+add_leaves(input_file ="data/alignments/pspa_snf7.aln",lin_file="data/pspa_snf7.txt",reduced = TRUE)
 ```
 
 ### Generate MSA + Phylogenetic tree
-```{r msa-tree, eval=T}
+```{r msa-tree,echo=FALSE,results='hide',fig.keep='all',  out.width="50%",out.height="50%"}
+#Create a fasta-file
+convert_aln2fa(input_file= "data/alignments/pspa_snf7.aln",lin_file = "data/pspa_snf7.txt",output_path = "data/alignments/pspa.fasta", reduced = TRUE) %>% head()
 
+msa_pdf("data/alignments/pspa.fasta")
+pdf_convert(pdf = "pspa.fasta.pdf")
+
+files <- list.files(getwd(), pattern ="^pspa.fasta_(.*).png$")
+include_graphics(files)
+
+
+
+#pdf2image then render image here?
+#should I be deleting images
+seq_tree("data/alignments/pspa.fasta")
 ```
+
+
+  
+  
