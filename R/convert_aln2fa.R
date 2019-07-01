@@ -35,7 +35,7 @@ convert_aln2fa <- function(input_file = "data/alignments/pspa_snf7.aln",
     #' @note Please refer to the source code if you have alternate +
     #' file formats and/or column names.
 
-    aln <- add_leaves(input_file,lin_file,reduced)
+    aln <- add_leaves(input_file=input_file,lin_file=lin_file,reduced=reduced)
     names <- aln$Leaf_Acc
     sequences <- aln$Alignment
     aln <- data.table(names,sequences)
