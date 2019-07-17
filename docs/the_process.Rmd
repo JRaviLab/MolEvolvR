@@ -1,6 +1,6 @@
 ---
 title: "The process"
-author: "Janani Ravi"
+author: "Janani Ravi, Samuel Z Chen"
 date: "`r Sys.Date()`"
 output:
   html_document:
@@ -20,6 +20,7 @@ library(tidyverse)
 library(here)
 library(rmarkdown); library(knitr)
 library(wordcloud); library(RColorBrewer)
+# ADD OTHER DEPENDENCIES
 #####TEMP#####
 #setwd("..")
 
