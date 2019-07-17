@@ -39,23 +39,33 @@ conflicted::conflict_prefer("strsplit","base")
 
 ## Data import
 ```{r import, eval=T, results='hide', message=F}
-prot <- read_delim("data/pspa_snf7.txt", # data/protein_name.txt
+prot <- read_delim("data/rawdata_tsv/pspa.txt", # data/protein_name.txt
                    delim="\t", col_names=T, comment="#", trim_ws=T,
                    escape_double = FALSE, na = "NA")
 
-lineages_map <- read_delim("data/organisms2lineages_map_bae_20170828.txt",
+lineages_map <- read_delim("data/acc_files/organisms2lineages_map_bae_20170828.txt",
                            delim="\t", col_names=T, comment="#", trim_ws=T)
 
-domains.replace <- read_delim("data/domains.replace.txt",
+domains.replace <- read_delim("data/acc_files/domains.replace.txt",
                                 delim = "\t", col_names = TRUE)
 
-domains.remove <- read_delim("data/domains.ignore.txt",
+domains.remove <- read_delim("data/acc_files/domains.ignore.txt",
                              delim = "\t", col_names = TRUE)
+
+query.domains <- read_delim("data/acc_files/query_proteins.txt",
+                            delim="\t")
+
+```
+
+## Cleanup
+### Cluster files —> `tsv`
+```{r clust_clean, eval=T,results='hide', message=F}
+
 ```
 
 
-## Cleanup
-```{r import, eval=T, results='hide', message=F}
+### DomArch cleanup & Reversal of operons
+```{r cleanup, eval=T, results='hide', message=F}
 prot <- prot %>%
   reverse_operons() %>%
   cleanup_species()
