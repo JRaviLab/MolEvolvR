@@ -176,7 +176,27 @@ replace_doms <- function(prot,domains_rename, domains_remove){
   return(cbind(prot,DomArch.old))
 }
 
-
+#'Cleaning cluster-file
+#'
+#'Cleans a cluster-file by removing rows that do not contain the query in the cluster
+#'
+#'This function removes irrelevant rows which do not contain the query protein within the ClustName column.
+#'The return value is the cleaned up data frame.
+#'
+#'@param cls_data A data frame that must contain columns Query and ClustName.
+#'
+#'@examples cls_cleanup(all_op_ins)
+cls_cleanup <- function(cls_data){
+   master <- cls_data[0,]
+   #colnames(master) = colnames(cls_data)
+   queryNames <- select(cls_data,Query) %>% distinct()
+   for(i in 1:length(queryNames$Query)){
+     print(queryNames[i,])
+     filtered_by_query <- cls_data %>% filter(Query == as.character(queryNames[i,"Query"]))
+     master <- rbind(master,filtered_by_query[grep(queryNames[i,],filtered_by_query$ClustName,ignore.case = T),])
+   }
+   return(master)
+}
 ##################################
 ## Descriptions for functions ####
 ##################################
