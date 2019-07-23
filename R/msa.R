@@ -43,10 +43,10 @@ msa_pdf <- function(fasta_filepath , lowerbound=NULL, upperbound=NULL){
                    file=paste0(fasta_filepath, ".tex"),
 
                    #aesthetic
-                   ##showNames="left", showLogo="top",
-                   showNames = "none",
-                   showLogo = "none",
-                   ##logoColors="rasmol", # “chemical”, “rasmol”, “hydropathy”, “structure”, “standard area”, “accessible area”
+                   showNames="left", showLogo="top",
+                   # showNames = "none",
+                   # showLogo = "none",
+                   logoColors="rasmol", # “chemical”, “rasmol”, “hydropathy”, “structure”, “standard area”, “accessible area”
                    shadingMode="functional", # or "similar"
                    shadingModeArg="structure",
                    shadingColors="blues",

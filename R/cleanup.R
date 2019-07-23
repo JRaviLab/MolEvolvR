@@ -191,7 +191,7 @@ cls_cleanup <- function(cls_data){
    #colnames(master) = colnames(cls_data)
    queryNames <- select(cls_data,Query) %>% distinct()
    for(i in 1:length(queryNames$Query)){
-     print(queryNames[i,])
+     #print(queryNames[i,])
      filtered_by_query <- cls_data %>% filter(Query == as.character(queryNames[i,"Query"]))
      master <- rbind(master,filtered_by_query[grep(queryNames[i,],filtered_by_query$ClustName,ignore.case = T),])
    }
