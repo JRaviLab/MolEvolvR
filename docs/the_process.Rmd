@@ -25,22 +25,28 @@ library(wordcloud); library(RColorBrewer)
 #setwd("..")
 
 source("R/cleanup.R")
+source("R/cleanup_domarch.R")
+source("R/clean_clust_file.R")
 source("R/summarize.R")
 source("R/plotting.R")
 source("R/reverse_operons.R")
 source("R/add_leaves.R")
 source("R/convert_aln2fa.R")
-source("R/msa.R") 
-source("R/tree.R");
+source("R/msa.R")
+source("R/tree.R")
+source("R/network.R")
+
 conflicted::conflict_prefer("filter", "dplyr")
 conflicted::conflict_prefer("as_data_frame", "tibble")
 conflicted::conflict_prefer("strsplit","base")
 ```
 
-
 ## Data import
 ```{r import, eval=T, results='hide', message=F}
-prot <- read_delim("data/rawdata_tsv/pspa.txt", # data/protein_name.txt
+prot_opinscls <- read_lines("data/rawdata_opinscls/psp.op_ins_cls", #data/rawdata_opinscls/prot.op_ins_cls
+                   n_max=-1, na = "NA")
+
+prot <- read_delim("data/rawdata_tsv/pspa.txt", # data/rawdata_tsv/prot.txt
                    delim="\t", col_names=T, comment="#", trim_ws=T,
                    escape_double = FALSE, na = "NA")
 
@@ -59,7 +65,7 @@ query.domains <- read_delim("data/acc_files/query_proteins.txt",
 ```
 
 ## Cleanup
-### Cluster files —> `tsv`
+### Cluster files `op_ins_cls` —> `tsv`
 ```{r clust_clean, eval=T,results='hide', message=F}
 
 ```
@@ -121,6 +127,7 @@ upset.plot(prot, 75, "gc2da")
 
 ### Worclouds
 ```{r , eval= TRUE, out.height='600px'}
+# move to plotting.R and call just the custom function
 wordcloud(DA.doms.wc$words,DA.doms.wc$freq,min.freq = 1,colors=brewer.pal(8, "Spectral"),scale=c(2.5,.5))
 wordcloud(GC.DA.wc$words,GC.DA.wc$freq,min.freq = 30,colors=brewer.pal(8, "Spectral"), scale=c(2.5,.4))
 ```
@@ -145,13 +152,13 @@ prot.GC.summ %>% head() %>% kable()
 
 ### Total Counts
 ```{r total counts, eval=T, message=FALSE, results='hide'}
-DA.cummulative <- total_counts(prot.DA.summ.byLin, cutoff =0, type = "DA")
-DA.cummulative %>%
+DA.cumulative <- total_counts(prot.DA.summ.byLin, cutoff =0, type = "DA")
+DA.cumulative %>%
   head() %>%
   kable()
 
-GC.cummulative <- total_counts(prot.GC.summ.byDALin, cutoff = 50, type = "GC") 
-GC.cummulative %>%
+GC.cumulative <- total_counts(prot.GC.summ.byDALin, cutoff = 50, type = "GC") 
+GC.cumulative %>%
   head() %>%
   kable()
 
@@ -161,9 +168,9 @@ GC.cummulative %>%
 ```
 ### Lineage summary plots
 ```{r lin-summ-plot, eval=T, out.width='70%'}
-lineage.DA.plot(prot, DA.cummulative,"DomArch.norep", "")
+lineage.DA.plot(prot, DA.cumulative,"DomArch.norep", "")
 
-lineage.DA.plot(prot, GC.cummulative,"GenContext.norep", "")
+lineage.DA.plot(prot, GC.cumulative,"GenContext.norep", "")
 ```
 
 ### Add Leaves
