@@ -145,6 +145,26 @@ total_counts <- function(prot ,cutoff = 0, type = "GC"){
   return(total)
 }
 
+
+#'Find Paralogs
+#'
+#'Creates a data frame of paralogs.
+#'
+#'This function returns a dataframe containing paralogs and the counts.
+#'
+#'@param df A data frame containing columns Species and Lineage
+#'@example find_paralogs(pspa)
+#'@note Please refer to the source code if you have alternate file formats and/or
+#'column names.
+find_paralogs <- function(df){
+  #Remove eukaryotes
+  df <- df %>% filter(!grepl("^eukaryota",Lineage))
+  paralogTable <- select(df,Species) %>% group_by(Species)%>% count()%>% filter(n>1)
+  colnames(paralogTable)[colnames(paralogTable)=="n"] = "Count"
+  return(paralogTable)
+}
+
+
 ##################################
 ## Descriptions for functions ####
 ##################################
