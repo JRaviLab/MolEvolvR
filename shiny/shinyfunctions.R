@@ -2,15 +2,7 @@ library(tidyverse)
 library(UpSetR)
 library(gridExtra)
 library(docstring)
-library(Biostrings)
-#for msa
-library(msa)
-# library(seqinr)
-# library(phylogram)
-# library(phytools) # depends on phangorn which depends on quadprog. so!!!
-library(ape)
-library(ggtree)
-# library(tidytree)
+
 
 #input a table of type xxx_GC_Lin for lineagecounts
 #input a cutoff value for cutoff. A table with all total counts of values greater than cutoff will be generated
@@ -32,9 +24,9 @@ heatmap_slider <- function(prot_lin,type){
     sliderinitial <- 10
   }
   cutoff_init <- as.numeric(protcounts[sliderinitial,"totalcount"])
-
+  max <- as.numeric(protcounts[1,"totalcount"])
   df <- data.frame("rn"=rn,"slider_init"=sliderinitial,
-                   "cutoff_init"=cutoff_init,"max"=500)
+                   "cutoff_init"=cutoff_init,"max"=max)
   return(df)
 }
 
