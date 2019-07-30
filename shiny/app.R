@@ -251,7 +251,7 @@ server <- function(input, output,session){
              "LiaF"= {hs <-heatmap_slider(liai_liaf_GC_lin,"gc")},
              "Toast-rack"= {hs <-heatmap_slider(toast_rack_GC_lin,"gc")}
       )}
-    updateSliderInput(session,inputId = "cutoff",min=0, max=500, value=hs[,"cutoff_init"])
+    updateSliderInput(session,inputId = "cutoff",min=0, max=hs[,"max"], value=hs[,"cutoff_init"])
   })
 
 #   prot_da_lin <- reactive({switch(input$linSelec,
@@ -510,7 +510,7 @@ server <- function(input, output,session){
     req(credentials()$user_auth)
     switch(input$alignSelec,
            "PspA"= find_paralogs(all_op_ins%>% filter(Query=="PspA")))
-  },extensions = c('FixedColumns',"FixedHeader"),
+  },extensions = c('FixedColumns'),
   options = list(pageLength = 10,
                  #The below line seems to disable other pages and the search bar
                  #dom = 't',
