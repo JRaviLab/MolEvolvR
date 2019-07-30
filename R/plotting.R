@@ -255,6 +255,50 @@ lineage.domain_repeats.plot <- function(query_data, colname) {
 }
 
 
+################
+## Wordclouds ##
+################
+#### NEEDS SOME WORK
+
+wordcloud_element <- function(type="da2doms",
+                                # query_data="prot",
+                                min_freq=10){
+  #' Wordclouds for the predominant domains, domain architectures.
+  #' @author Janani Ravi
+  #' @keywords Domains, Domain Architectures, GenomicContexts
+  #' @description Wordclouds for the predominant domains (from DAs) and DAs (from GC)
+  #' @param query_data Data frame of protein homologs with the usual 11 columns +
+  #' additional word columns (0/1 format). Default is "prot".
+  #' @param type Character. Default is "da2doms" for Domain Architectures.
+  #' Other alternative: "gc2da" for Genomic Contexts.
+  #' @examples wordcloud_element(prot, "da2doms", 10)
+  #' @details For "da2doms" you would need the file DA.doms.wc as well as the
+  #' column query_data$DomArch.norep
+  #'
+  #' For "gc2da", you would need the file GC.DA.wc as well as the column
+  #' query_data$GenContext.norep
+  #' @note Please refer to the source code if you have alternate file formats and/or
+  #' column names.
+
+  switch(type, # DA.doms.wc;
+         da2doms={
+           wc <- DA.doms.wc;
+           # colname <- "DomArch.norep"
+           },
+         gc2da={
+           wc <- GC.DA.wc;
+           # colname <- "GenContext.norep"
+         })
+
+  ## commented out since we are directly reading in the wordcount dataframe
+  # temp <- query_data$colname %>%
+  #   words2wc()
+
+  wordcloud(wc$words, wc$freq, min.freq = min_freq,
+            colors=brewer.pal(8, "Spectral"),scale=c(2.5,.5))
+  # wordcloud(GC.DA.wc$words,GC.DA.wc$freq,min.freq = min_freq,
+  #           colors=brewer.pal(8, "Spectral"), scale=c(2.5,.4))
+}
 
 ## COMMENTED LINEAGE.DA.PLOT
 # lineage.plot <- function(query_data, cutoff, type) {
