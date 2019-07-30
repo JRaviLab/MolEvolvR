@@ -128,8 +128,10 @@ upset.plot(prot, 75, "gc2da")
 ### Worclouds
 ```{r , eval= TRUE, out.height='600px'}
 # move to plotting.R and call just the custom function
-wordcloud(DA.doms.wc$words,DA.doms.wc$freq,min.freq = 1,colors=brewer.pal(8, "Spectral"),scale=c(2.5,.5))
-wordcloud(GC.DA.wc$words,GC.DA.wc$freq,min.freq = 30,colors=brewer.pal(8, "Spectral"), scale=c(2.5,.4))
+wordcloud(DA.doms.wc$words,DA.doms.wc$freq,min.freq = 1,
+          colors=brewer.pal(8, "Spectral"),scale=c(2.5,.5))
+wordcloud(GC.DA.wc$words,GC.DA.wc$freq,min.freq = 30,
+          colors=brewer.pal(8, "Spectral"), scale=c(2.5,.4))
 ```
 ### Lineage summaries
 ```{r lin-summary, eval=T}
@@ -152,12 +154,14 @@ prot.GC.summ %>% head() %>% kable()
 
 ### Total Counts
 ```{r total counts, eval=T, message=FALSE, results='hide'}
-DA.cumulative <- total_counts(prot.DA.summ.byLin, cutoff =0, type = "DA")
+DA.cumulative <- total_counts(prot.DA.summ.byLin,
+                              cutoff =0, type = "DA")
 DA.cumulative %>%
   head() %>%
   kable()
 
-GC.cumulative <- total_counts(prot.GC.summ.byDALin, cutoff = 50, type = "GC") 
+GC.cumulative <- total_counts(prot.GC.summ.byDALin,
+                              cutoff = 50, type = "GC") 
 GC.cumulative %>%
   head() %>%
   kable()
@@ -168,20 +172,27 @@ GC.cumulative %>%
 ```
 ### Lineage summary plots
 ```{r lin-summ-plot, eval=T, out.width='70%'}
-lineage.DA.plot(prot, DA.cumulative,"DomArch.norep", "")
+lineage.DA.plot(prot, DA.cumulative,
+                "DomArch.norep", "")
 
-lineage.DA.plot(prot, GC.cumulative,"GenContext.norep", "")
+lineage.DA.plot(prot, GC.cumulative,
+                "GenContext.norep", "")
 ```
 
 ### Add Leaves
 ```{r add-leaves, eval=T}
-add_leaves(input_file ="data/alignments/pspa_snf7.aln",lin_file="data/pspa_snf7.txt",reduced = TRUE)
+add_leaves(input_file ="data/alignments/pspa_snf7.aln",
+           lin_file="data/pspa_snf7.txt",
+           reduced = TRUE)
 ```
 
 ### Generate MSA + Phylogenetic tree
 ```{r msa-tree,echo=FALSE,results='hide',fig.keep='all',  out.width="50%",out.height="50%"}
 #Create a fasta-file
-convert_aln2fa(input_file= "data/alignments/pspa_snf7.aln",lin_file = "data/pspa_snf7.txt",output_path = "data/alignments/pspa.fasta", reduced = TRUE) %>% head()
+convert_aln2fa(input_file= "data/alignments/pspa_snf7.aln",
+               lin_file = "data/pspa_snf7.txt",
+               output_path = "data/alignments/pspa.fasta",
+               reduced = TRUE) %>% head()
 
 msa_pdf("data/alignments/pspa.fasta")
 pdf_convert(pdf = "pspa.fasta.pdf")
