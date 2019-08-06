@@ -24,14 +24,19 @@ domains.remove <- read_delim("data/acc_files/domains.ignore.txt",
 all_op_ins <- all_op_ins %>%
   #cls_cleanup() %>%
   cleanup_species() %>%
-  reverse_operons()
+  reverse_operons() %>%
+  replace_doms_all(domains.replace,domains.remove)
 
-#Rename DomArch.norep to DomArch because that's what replace_doms requires as a column
-colnames(all_op_ins)[colnames(all_op_ins)=="DomArch.norep"] <- "DomArch"
-all_op_ins <- replace_doms(all_op_ins,domains.replace,domains.remove)
-#Give original name back
-#all_op_ins<- as.data.frame(all_op_ins)
-colnames(all_op_ins)[colnames(all_op_ins)=="DomArch"] <- "DomArch.norep"
+all_op_ins<-map(all_op_ins,function(x) x %>%  		str_replace_all("\\+", " ") %>%
+                     str_replace_all("(?i)\\b([a-z0-9_-]+)\\b(?:\\s+\\1\\b)+", "\\1(s)") %>%
+                     str_replace_all(" ", "+")) %>% as.data.frame()
+
+# #Rename DomArch.norep to DomArch because that's what replace_doms requires as a column
+# colnames(all_op_ins)[colnames(all_op_ins)=="DomArch.norep"] <- "DomArch"
+# all_op_ins <- replace_doms(all_op_ins,domains.replace,domains.remove)
+# #Give original name back
+# #all_op_ins<- as.data.frame(all_op_ins)
+# colnames(all_op_ins)[colnames(all_op_ins)=="DomArch"] <- "DomArch.norep"
 
 ####WordCounts####
 create_DA.doms<- function(prot){
@@ -49,6 +54,7 @@ create_GC.DA <- function(prot){
   return(prot)
 }
 
+colnames(all_op_ins)[colnames(all_op_ins)=="DomArch"] <- "DomArch.norep"
 
 all_op_ins <- create_DA.doms(all_op_ins) %>%
   create_GC.DA()

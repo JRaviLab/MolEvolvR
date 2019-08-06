@@ -41,6 +41,7 @@ sidebar<- dashboardSidebar(
               menuItem("Lineage Plots", tabName = "lineagePlots")
               ,
               menuItem("Phylogeny", tabName = "phylogeny")
+              #,menuItem("About",tabName="about")
   )
 )
 ######
@@ -113,24 +114,24 @@ body <- dashboardBody(
             )
     ),
     tabItem("phylogeny",
-            fluidPage(sidebarLayout(
-              headerPanel(
-                selectInput(inputId =  "alignSelec", label = "Protein",
-                            choices = c( "PspA")
-                            , selected = "PspA")),
-              mainPanel(
-                tabsetPanel(
-                  id= "phylo",
-                  tabPanel("Tree", value="Tree",
-                           #,radioButtons(inputId = "plottype", label = "Plot Type",
-                           #                   choices = c("Tree1", "Tree2", "Tree3"),selected = "Tree1"),
+            fluidPage(
+              column(width = 2,
+                     selectInput(inputId =  "alignSelec", label = "Protein",
+                                 choices = c( "PspA")
+                                 , selected = "PspA")),
+              column(width = 12,
+                     tabsetPanel(
+                       id= "phylo",
+                       tabPanel("Tree", value="Tree",
+                                #,radioButtons(inputId = "plottype", label = "Plot Type",
+                                #                   choices = c("Tree1", "Tree2", "Tree3"),selected = "Tree1"),
 
-                           tags$head(tags$script(src = "http://www.elevateweb.co.uk/wp-content/themes/radial/jquery.elevatezoom.min.js")),
-                           actionButton("myBtn", "Press Me for zoom!"),
-                           p("If this button does not work, check if your browser is blocking this script from running"),
-                           htmlOutput(outputId = "msaTree" ),
-                           singleton(
-                             tags$head(tags$script('Shiny.addCustomMessageHandler("testmessage",
+                                tags$head(tags$script(src = "http://www.elevateweb.co.uk/wp-content/themes/radial/jquery.elevatezoom.min.js")),
+                                actionButton("myBtn", "Press Me for zoom!"),
+                                p("If this button does not work, check if your browser is blocking this script from running"),
+                                htmlOutput(outputId = "msaTree" ),
+                                singleton(
+                                  tags$head(tags$script('Shiny.addCustomMessageHandler("testmessage",
   function(message) {
     var image = $("#msaTree img");
     var zoomConfig = {scrollZoom : true};
@@ -145,16 +146,15 @@ body <- dashboardBody(
     }
   }
 );'))
-                           )
-                  ),
-                  tabPanel("MSA", value="MSA",
-                           htmlOutput(outputId="msaPlot")),
-                  tabPanel("Paralog Table", value="Paralog",
-                           DT::dataTableOutput(outputId = "ParalogTable",width = 1000)
-                  )
-                )
+                                )
+                       ),
+                       tabPanel("MSA", value="MSA",
+                                htmlOutput(outputId="msaPlot")),
+                       tabPanel("Paralog Table", value="Paralog",
+                                DT::dataTableOutput(outputId = "ParalogTable",width = 1000)
+                       )
+                     )
               )
-            )
             )
     )
   ),
