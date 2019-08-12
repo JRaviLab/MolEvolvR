@@ -5,7 +5,7 @@
 #############
 
 # install.packages("igraph")
-# library(igraph); library(rgl)
+library(igraph); #library(rgl)
 
 te=data.frame(name=c("A","B","C","D","E"),
               sz=c(48,33,45,34,21),
