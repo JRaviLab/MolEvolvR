@@ -38,21 +38,22 @@ source("R/tree.R")
 
 conflicted::conflict_prefer("filter", "dplyr")
 conflicted::conflict_prefer("as_data_frame", "tibble")
-conflicted::conflict_prefer("strsplit","base")
+conflicted::conflict_prefer("strsplit", "base")
 ```
 
 ### Cluster files `op_ins_cls` —> `tsv`
 Run this chunk only if you do not have 'all.txt'
-```{r clust_clean, eval=T,results='hide', message=F}
+```{r clust_clean, eval=T, results='hide', message=F}
 
-all <- data.frame(matrix(ncol=11,nrow = 0))
-colnames(all) <- c("AccNum", "GenContext","PFAM", "DomArch","arch.TMSIG",
-                   "Length" ,"GenName","Lineage","Species.old", "Annotation","GI")
+all <- data.frame(matrix(ncol=11, nrow = 0))
+colnames(all) <- c("AccNum", "GenContext","PFAM", "DomArch", "arch.TMSIG",
+                   "Length", "GenName", "Lineage", "Species.old",
+                   "Annotation", "GI")
 
 for(x in list.files("data/rawdata_opinscls")){
   print(x)
    prot_name <- str_remove(x,".op_ins_cls")
-   
+   # clean_clust_file(path, writepath=NULL,query)
    prot_opinscls <- clean_clust_file(paste0("data/rawdata_opinscls/",x),
                                      query = prot_name)
   
