@@ -1,22 +1,22 @@
----
-title: "The process"
-author: "Janani Ravi, Samuel Z Chen"
-date: "`r Sys.Date()`"
-output:
-  html_document:
-    toc: true
-    toc_float:
-      collapsed: false
-      smooth_scroll: false
-    depth: 4
-    number_sections: false
-    theme: united
----
-## Environment & Setup
-```{r setup, eval=T, results='hide', message=FALSE}
+#' ---
+#' title: "The process"
+#' author: "Janani Ravi, Samuel Z Chen"
+#' date: "`r Sys.Date()`"
+#' output:
+#'   html_document:
+#'     toc: true
+#'     toc_float:
+#'       collapsed: false
+#'       smooth_scroll: false
+#'     depth: 4
+#'     number_sections: false
+#'     theme: united
+#' ---
+#' ## Environment & Setup
+## ----setup, eval=T, results='hide', message=FALSE------------------------
 knitr::opts_knit$set(root.dir=rprojroot::find_rstudio_root_file())
 # removed setwd option; homedir of *.Rproj is the correct working dir.
-# 
+#
 # knitr::purl("docs/the_process.Rmd", "scripts/the_process_20190814.Rmd", documentation = 2)
 # infile <- "the_process.Rmd"; inpath <- "docs/"; outpath <- "scripts/"
 # name <- strsplit(infile, split = "\\.")[[1]][1]
@@ -25,9 +25,9 @@ knitr::opts_knit$set(root.dir=rprojroot::find_rstudio_root_file())
 #                    "_rmd2r_", format(Sys.time(), "%Y%m%d"),
 #                    ".R", sep = ""),
 #             documentation = 2)
-```
 
-```{r load, eval=T, results='hide', message=FALSE}
+
+## ----load, eval=T, results='hide', message=FALSE-------------------------
 # library(here)
 # library(tidyverse)
 # library(rmarkdown); library(knitr)
@@ -53,11 +53,10 @@ source("R/tree.R")
 conflicted::conflict_prefer("filter", "dplyr")
 conflicted::conflict_prefer("as_data_frame", "tibble")
 conflicted::conflict_prefer("strsplit", "base")
-```
 
-### Cluster files `op_ins_cls` —> `tsv`
-Run this chunk only if you do not have 'all.txt'
-```{r clust_clean_combine, eval=T, results='hide', message=F}
+#' ### Cluster files `op_ins_cls` —> `tsv`
+#' Run this chunk only if you do not have 'all.txt'
+## ----clust_clean_combine, eval=T, results='hide', message=F--------------
 
 # Initialize dataframe for the combined dataset; Will serve for even 1.
 all <- data.frame(matrix(ncol=11, nrow=0))
@@ -71,7 +70,7 @@ for(x in list.files("data/rawdata_opinscls")){
   # clean_clust_file(path, writepath=NULL, query)
   prot_opinscls <- clean_clust_file(paste0("data/rawdata_opinscls/", x),
                                     query=prot_name)
-  
+
   all <- bind_rows(all,prot_opinscls)
   # comment next line to avoid overwriting each time!
   write_tsv(prot_opinscls,
@@ -91,11 +90,9 @@ all <- all %>%
 
 # Write the new combined file; Comment next line to avoid overwriting each time!
 write_tsv(all, path="data/rawdata_tsv/all_raw.txt", col_names=T)
-```
 
-
-## Data import
-```{r import, eval=T, results='hide', message=F}
+#' ## Data import
+## ----import, eval=T, results='hide', message=F---------------------------
 # Example import files: individual or combined ones, pspa.txt, all_raw.txt
 prot <- read_delim("data/rawdata_tsv/all_raw.txt", # data/rawdata_tsv/prot.txt
                    delim="\t", col_names=T, comment="#", trim_ws=T,
@@ -112,11 +109,10 @@ domains.remove <- read_delim("data/acc_files/domains.ignore.txt",
 
 query.domains <- read_delim("data/acc_files/query_proteins.txt",
                             delim="\t")
-```
 
-## Cleanup
-### DomArch cleanup & Reversal of operons
-```{r cleanup, eval=T, results='hide', message=F}
+#' ## Cleanup
+#' ### DomArch cleanup & Reversal of operons
+## ----cleanup, eval=T, results='hide', message=F--------------------------
 prot <- prot %>%
   reverse_operons() %>%
   cleanup_species()
@@ -125,24 +121,21 @@ colnames(prot)[colnames(prot)=="DomArch.norep"] <- "DomArch"
 replace_doms(prot,domains.replace,domains.remove)
 #Give original name back
 colnames(prot)[colnames(prot)=="DomArch"] <- "DomArch.norep"
-```
 
-## Data analysis
-### Select columns for data export
-```{r select-cols, eval=T}
+#' ## Data analysis
+#' ### Select columns for data export
+## ----select-cols, eval=T-------------------------------------------------
 prot_data <- prot %>%
   select(AccNum, Species, Lineage=Lineage.final,
          DomArch=DomArch.norep, GenContext=GenContext.norep,
          Length, GI, GenName, Annotation)
-```
 
-### Viewing your data
-```{r view-data, eval=T}
+#' ### Viewing your data
+## ----view-data, eval=T---------------------------------------------------
 paged_table(prot_data)
-```
 
-### Wordcounts
-```{r wordcounts, eval=T}
+#' ### Wordcounts
+## ----wordcounts, eval=T--------------------------------------------------
 ## Counts of domains in XXX domain architectures
 DA.doms.wc <- prot$DA.doms %>%
   words2wc()
@@ -156,27 +149,24 @@ GC.DA.wc <- prot$GC.DA %>%
 GC.DA.wc %>%
   head() %>%
   kable()
-```
 
-### UpSet plots
-```{r upset-plot-da, eval=T, out.height="300px"}
+#' ### UpSet plots
+## ----upset-plot-da, eval=T, out.height="300px"---------------------------
 upset.plot(prot, 10, "da2doms")
-```
 
-```{r upset-plot-gc, eval=T, out.height="600px"}
+## ----upset-plot-gc, eval=T, out.height="600px"---------------------------
 upset.plot(prot, 75, "gc2da")
-```
 
-### Worclouds
-```{r , eval= TRUE, out.height='600px'}
+#' ### Worclouds
+## ---- eval= TRUE, out.height='600px'-------------------------------------
 # move to plotting.R and call just the custom function
 wordcloud(DA.doms.wc$words, DA.doms.wc$freq, min.freq=1,
           colors=brewer.pal(8, "Spectral"), scale=c(2.5,.5))
 wordcloud(GC.DA.wc$words, GC.DA.wc$freq, min.freq=30,
           colors=brewer.pal(8, "Spectral"), scale=c(2.5,.4))
-```
-### Lineage summaries
-```{r lin-summary, eval=T}
+
+#' ### Lineage summaries
+## ----lin-summary, eval=T-------------------------------------------------
 ## Main Domain Architectures -- Counts by DA and Lineage
 prot.DA.summ.byLin <- summ.DA.byLin(prot)
 prot.DA.summ <- summ.DA(prot.DA.summ.byLin)
@@ -192,10 +182,9 @@ prot.GC.summ <- summ.GC(prot.GC.summ.byDALin)
 prot.GC.summ.byDALin %>% head() %>% kable()
 prot.GC.summ.byLin %>% head() %>% kable()
 prot.GC.summ %>% head() %>% kable()
-```
 
-### Total Counts
-```{r total counts, eval=T, message=FALSE, results='hide'}
+#' ### Total Counts
+## ----total counts, eval=T, message=FALSE, results='hide'-----------------
 DA.cumulative <- total_counts(prot.DA.summ.byLin,
                               cutoff =0, type="DA")
 DA.cumulative %>%
@@ -203,29 +192,27 @@ DA.cumulative %>%
   kable()
 
 GC.cumulative <- total_counts(prot.GC.summ.byDALin,
-                              cutoff=50, type="GC") 
+                              cutoff=50, type="GC")
 GC.cumulative %>%
   head() %>%
   kable()
-```
-### Lineage summary plots
-```{r lin-summ-plot, eval=T, out.width='70%'}
+
+#' ### Lineage summary plots
+## ----lin-summ-plot, eval=T, out.width='70%'------------------------------
 lineage.DA.plot(prot, DA.cumulative,
                 "DomArch.norep", "")
 
 lineage.DA.plot(prot, GC.cumulative,
                 "GenContext.norep", "")
-```
 
-### Add Leaves
-```{r add-leaves, eval=T}
+#' ### Add Leaves
+## ----add-leaves, eval=T--------------------------------------------------
 add_leaves(input_file ="data/alignments/pspa_snf7.aln",
            lin_file="data/pspa_snf7.txt",
            reduced=TRUE)
-```
 
-### Generate MSA + Phylogenetic tree
-```{r msa-tree,echo=FALSE,results='hide',fig.keep='all',  out.width="50%",out.height="50%"}
+#' ### Generate MSA + Phylogenetic tree
+## ----msa-tree,echo=FALSE,results='hide',fig.keep='all',  out.width="50%",out.height="50%"----
 # Create a fasta file
 convert_aln2fa(input_file= "data/alignments/pspa_snf7.aln",
                lin_file="data/pspa_snf7.txt",
@@ -241,8 +228,4 @@ include_graphics(files)
 #pdf2image then render image here?
 #should I be deleting images
 seq_tree("data/alignments/pspa.fasta")
-```
-
-
-
 
