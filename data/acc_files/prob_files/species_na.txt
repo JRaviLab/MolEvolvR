@@ -1,0 +1,179 @@
+AccNum	GenContext	PFAM	DomArch	arch.TMSIG	Length	GenName	Lineage	Species.old	Annotation	GI	Query	ClustID	ClustName	TaxID	Species	GCA_ID
+AJH56079.1	PADR-HTH->DUF1700-alpha-helical+TM+TM+TM+TM+TM+TM*->DUF1700-alpha-helical+TM+TM+TM+TM+TM+TM*->DUF1700-alpha-helical+TM+TM+TM+TM+TM+TM*->	TM+TM+TM+TM+TM	DUF1700-alpha-helical+TM+TM+TM+TM+TM	TM+TM+TM+TM+TM	254	BF89_3965	bacteria>firmicutes	Bacillus anthracis	putative membrane protein [Bacillus anthracis]	753492157	DUF1700-alpha-helical	000003.49	DUF1700-alpha-helical+TM+TM+TM+TM+TM+TM	NA	NA	GCA_000832725.1
+AGL14606.1	PADR-HTH->DUF1700-alpha-helical+TM+TM+TM*->?->?->?->MoxR-AAA->	TM+TM+TM	DUF1700-alpha-helical+TM+TM+TM	TM+TM+TM	343	L083_1096	bacteria>actinobacteria	Actinoplanes sp. N902-109	hypothetical protein L083_1096 [Actinoplanes sp. N902-109]	492003286	DUF1700-alpha-helical	000023.7	DUF1700-alpha-helical+TM+TM+TM	NA	NA	GCA_000389965.1
+AKK03387.1	DUF1707-SHOCT-bihelical+Toast-rack*->	DUF1707+DUF2154	DUF1707-SHOCT-bihelical+Toast-rack	-	198	CEPID_07685	bacteria>actinobacteria	Corynebacterium epidermidicanis	putative DUF1707 family protein/predicted membrane protein (DUF2154) [Corynebacterium epidermidicanis]	827628094	DUF1707-SHOCT	000001.164	DUF1707-SHOCT-bihelical+Toast-rack	NA	NA	GCA_001021025.1
+AKK03387.1	DUF1707-SHOCT-bihelical+Toast-rack*->	DUF1707+DUF2154	DUF1707-SHOCT-bihelical+Toast-rack	-	198	CEPID_07685	bacteria>actinobacteria	Corynebacterium epidermidicanis	putative DUF1707 family protein/predicted membrane protein (DUF2154) [Corynebacterium epidermidicanis]	827628094	DUF1707-SHOCT	000001.164	DUF1707-SHOCT-bihelical+Toast-rack	NA	NA	GCA_001021025.1
+AAW35295.1	<-SIG+TM+TM+TM+TM+TM*	SIG+FHIPEP	SIG+TM+TM+TM+TM+TM+TM	SIG+TM+TM+TM+TM+TM+TM	724	flhA	bacteria>proteobacteria>epsilonproteobacteria	Campylobacter jejuni RM1221	flagellar biosynthesis protein FlhA [Campylobacter jejuni RM1221]	57166516	LiaI-LiaF-TM	000001.2709	SIG+TM+TM+TM+TM+TM	NA	NA	GCA_000011865.1
+AJK82865.1	<-SIG+TM+TM+TM+TM+TM*	SIG+FHIPEP	SIG+TM+TM+TM+TM+TM+TM	SIG+TM+TM+TM+TM+TM+TM	724	flhA	bacteria>proteobacteria>epsilonproteobacteria	Campylobacter jejuni subsp. jejuni	flagellar biosynthesis protein FlhA [Campylobacter jejuni subsp. jejuni]	756090652	LiaI-LiaF-TM	000001.2709	SIG+TM+TM+TM+TM+TM	NA	NA	GCA_000835345.1
+AHC83764.1	<-REC<-HPT+HISKIN+CheW<-SFII-RAD3<-REC<-SIGMA-HTH<-ParA-Soj-PloopNTPase<-SIG+APATPase<-SIG+TM+TM+TM+TM+TM*	FHIPEP	SIG+TM+TM+TM+TM+TM	SIG+TM+TM+TM+TM+TM	709	flhA	bacteria>proteobacteria>gammaproteobacteria	Pseudomonas monteilii SB3078	flagellar biosynthesis protein FlhA [Pseudomonas monteilii SB3078]	567351567	LiaI-LiaF-TM	000001.2709	SIG+TM+TM+TM+TM+TM	NA	NA	GCA_000510285.1
+AJI92027.1	<-SIG+TM<-SIG+TM+TM+TM+TM+TM*<-TM+TM+TM+TM	FHIPEP	SIG+TM+TM+TM+TM+TM	SIG+TM+TM+TM+TM+TM	692	flhA	bacteria>proteobacteria>gammaproteobacteria	Yersinia pestis	flagellar biosynthesis protein FlhA [Yersinia pestis]	755294843	LiaI-LiaF-TM	000001.2709	SIG+TM+TM+TM+TM+TM	NA	NA	GCA_000834235.1
+AJK88848.1	-	SIG+TM+DUF2154	SIG+TM+Toast-rack	SIG+TM	227	HR49_17775	bacteria>firmicutes	Lysinibacillus fusiformis	membrane protein [Lysinibacillus fusiformis]	756121158	LiaI-LiaF-TM	000002.120	LiaI-LiaF-TM+Toast-rack	NA	NA	GCA_000724775.3
+AJK88848.1	-	SIG+TM+DUF2154	SIG+TM+Toast-rack	SIG+TM	227	HR49_17775	bacteria>firmicutes	Lysinibacillus fusiformis	membrane protein [Lysinibacillus fusiformis]	756121158	LiaI-LiaF-TM	000002.120	LiaI-LiaF-TM+Toast-rack	NA	NA	GCA_000724775.3
+AGK52227.1	SIG+TM*->?->LiaI-LiaF-TM+Toast-rack*->?->REC->	SIG	SIG	SIG	119	B1NLA3E_02215	bacteria>firmicutes	Bacillus sp. 1NLA3E	hypothetical protein B1NLA3E_02215 [Bacillus sp. 1NLA3E]	484575429	LiaI-LiaF-TM	000003.96	SIG+TM	NA	NA	GCA_000242895.3
+AIQ14451.1	<-PspC<-?<-LiaI-LiaF-TM*	SIG+TM	LiaI-LiaF-TM	SIG+TM	100	PDUR_23000	bacteria>firmicutes	Paenibacillus durus	hypothetical protein PDUR_23000 [Paenibacillus durus]	686570395	LiaI-LiaF-TM	000007.32	LiaI-LiaF-TM	NA	NA	GCA_000756615.1
+AGP40782.1	<-PspA*	PspA_IM30	PspA	-	243	SCE1572_43620	bacteria>proteobacteria>deltaproteobacteria	Sorangium cellulosum So0157-2	hypothetical protein SCE1572_43620 [Sorangium cellulosum So0157-2]	521007779	pspa	000001.1454	PspA	NA	NA	GCA_000418325.1
+AGX02621.1	PspA*->?->SIG+TM+HISKIN->REC+LuxR-HTH->	PspA_IM30	PspA	-	215	N288_03290	bacteria>firmicutes	Bacillus infantis NRRL B-14911	modulator protein [Bacillus infantis NRRL B-14911]	548703261	pspa	000001.1454	PspA	NA	NA	GCA_000473245.1
+XP_001833565.1	Snf7*->	Snf7	Snf7	-	244	CC1G_03782	eukaryota>fungi>basidiomycota	Coprinopsis cinerea okayama7	NA	NA	NA	NA	NA	NA	NA	NA
+Smed1000013124	-	Snf7	Snf7	-	239	Smed1000013124	eukaryota>metazoa>platyhelminthe	Schmidtea mediterranea	>Smed1000013124	NA	pspa	000002.516	Snf7	NA	NA	-
+Crev1000005838	-	Snf7	Snf7	LPD14	233	Crev1000005838	eukaryota>fungi>kickxellomycotina	Coemansia reversa	>Crev1000005838	NA	pspa	000002.516	Snf7	NA	NA	-
+Pram1000010618	-	Snf7	Snf7	-	233	Pram1000010618	eukaryota>stramenopiles	Phytophthora ramorum	>Pram1000010618	NA	pspa	000002.516	Snf7	NA	NA	-
+Smed1000006740	-	Snf7	Snf7	-	232	Smed1000006740	eukaryota>metazoa>platyhelminthe	Schmidtea mediterranea	>Smed1000006740	NA	pspa	000002.516	Snf7	NA	NA	-
+Bcir1000001833	-	Snf7	Snf7	-	225	Bcir1000001833	eukaryota>fungi>mucoromycotina	Backusella circina	>Bcir1000001833	NA	pspa	000002.516	Snf7	NA	NA	-
+Chet1000000855	-	Snf7	Snf7	-	224	Chet1000000855	eukaryota>fungi>ascomycota	Cochliobolus heterostrophus	>Chet1000000855	NA	pspa	000002.516	Snf7	NA	NA	-
+Smar1000011654	-	Snf7	Snf7	-	224	Smar1000011654	eukaryota>metazoa>arthropoda>myriapoda	Strigamia maritima	>Smar1000011654	NA	pspa	000002.516	Snf7	NA	NA	-
+Lhya1000005072	-	Snf7	Snf7	-	223	Lhya1000005072	eukaryota>fungi>mucoromycotina	Lichtheimia hyalospora	>Lhya1000005072	NA	pspa	000002.516	Snf7	NA	NA	-
+Lhya1000010591	-	Snf7	Snf7	-	223	Lhya1000010591	eukaryota>fungi>mucoromycotina	Lichtheimia hyalospora	>Lhya1000010591	NA	pspa	000002.516	Snf7	NA	NA	-
+Smar1000014167	-	Snf7	Snf7	LPD34	223	Smar1000014167	eukaryota>metazoa>arthropoda>myriapoda	Strigamia maritima	>Smar1000014167	NA	pspa	000002.516	Snf7	NA	NA	-
+Caps1000008300	-	Snf7	Snf7	-	222	Caps1000008300	eukaryota>metazoa>annelida	Capitella spI	>Caps1000008300	NA	pspa	000002.516	Snf7	NA	NA	-
+Bcir1000013302	-	Snf7	Snf7	-	221	Bcir1000013302	eukaryota>fungi>mucoromycotina	Backusella circina	>Bcir1000013302	NA	pspa	000002.516	Snf7	NA	NA	-
+Crev1000000673	-	Snf7	Snf7	-	221	Crev1000000673	eukaryota>fungi>kickxellomycotina	Coemansia reversa	>Crev1000000673	NA	pspa	000002.516	Snf7	NA	NA	-
+Uram1000008596	-	Snf7	Snf7	-	221	Uram1000008596	eukaryota>fungi>mucoromycotina	Umbelopsis ramanniana	>Uram1000008596	NA	pspa	000002.516	Snf7	NA	NA	-
+Uram1000009085	-	Snf7	Snf7	-	220	Uram1000009085	eukaryota>fungi>mucoromycotina	Umbelopsis ramanniana	>Uram1000009085	NA	pspa	000002.516	Snf7	NA	NA	-
+Caps1000013612	-	Snf7	Snf7	-	218	Caps1000013612	eukaryota>metazoa>annelida	Capitella spI	>Caps1000013612	NA	pspa	000002.516	Snf7	NA	NA	-
+XP_001837213.1	Snf7*->	Snf7	Snf7	-	216	CC1G_00349	eukaryota>fungi>basidiomycota	Coprinopsis cinerea okayama7	NA	NA	NA	NA	NA	NA	NA	NA
+Caps1000009008	-	Snf7	Snf7	-	213	Caps1000009008	eukaryota>metazoa>annelida	Capitella spI	>Caps1000009008	NA	pspa	000002.516	Snf7	NA	NA	-
+Smed1000003202	-	Snf7	Snf7	-	210	Smed1000003202	eukaryota>metazoa>platyhelminthe	Schmidtea mediterranea	>Smed1000003202	NA	pspa	000002.516	Snf7	NA	NA	-
+Bnat1000015196	-	Snf7	Snf7	-	209	Bnat1000015196	eukaryota>rhizaria	Bigelowiella natans	>Bnat1000015196	NA	pspa	000002.516	Snf7	NA	NA	-
+Smar1000008259	-	Snf7	Snf7	Tox-HTH	204	Smar1000008259	eukaryota>metazoa>arthropoda>myriapoda	Strigamia maritima	>Smar1000008259	NA	pspa	000002.516	Snf7	NA	NA	-
+Uram1000000498	-	Snf7	Snf7	-	183	Uram1000000498	eukaryota>fungi>mucoromycotina	Umbelopsis ramanniana	>Uram1000000498	NA	pspa	000002.516	Snf7	NA	NA	-
+Pisp1000001682	-	Snf7	Snf7	SIG	149	Pisp1000001682	eukaryota>fungi>neocallimastigomycota	Piromyces sp	>Pisp1000001682	NA	pspa	000002.516	Snf7	NA	NA	-
+Pisp1000009625	-	Snf7	Snf7	SIG	128	Pisp1000009625	eukaryota>fungi>neocallimastigomycota	Piromyces sp	>Pisp1000009625	NA	pspa	000002.516	Snf7	NA	NA	-
+Pram1000011108	-	SIG+Snf7	Snf7	SIG	256	Pram1000011108	eukaryota>stramenopiles	Phytophthora ramorum	>Pram1000011108	NA	pspa	000003.472	Snf7	NA	NA	-
+Crev1000002970	-	Snf7	Snf7	-	253	Crev1000002970	eukaryota>fungi>kickxellomycotina	Coemansia reversa	>Crev1000002970	NA	pspa	000003.472	Snf7	NA	NA	-
+Bnat1000019199	-	SIG+Snf7	Snf7	SIG	239	Bnat1000019199	eukaryota>rhizaria	Bigelowiella natans	>Bnat1000019199	NA	pspa	000003.472	Snf7	NA	NA	-
+Lhya1000007333	-	SIG+Snf7	Snf7	SIG	231	Lhya1000007333	eukaryota>fungi>mucoromycotina	Lichtheimia hyalospora	>Lhya1000007333	NA	pspa	000003.472	Snf7	NA	NA	-
+Pram1000002576	-	Snf7	Snf7	-	229	Pram1000002576	eukaryota>stramenopiles	Phytophthora ramorum	>Pram1000002576	NA	pspa	000003.472	Snf7	NA	NA	-
+Chet1000002205	-	Snf7	Snf7	-	226	Chet1000002205	eukaryota>fungi>ascomycota	Cochliobolus heterostrophus	>Chet1000002205	NA	pspa	000003.472	Snf7	NA	NA	-
+Bnat1000013158	-	SIG+Snf7	Snf7	SIG	225	Bnat1000013158	eukaryota>rhizaria	Bigelowiella natans	>Bnat1000013158	NA	pspa	000003.472	Snf7	NA	NA	-
+Bcir1000002159	-	Snf7	Snf7	-	224	Bcir1000002159	eukaryota>fungi>mucoromycotina	Backusella circina	>Bcir1000002159	NA	pspa	000003.472	Snf7	NA	NA	-
+Smar1000005261	-	Snf7	Snf7	ParB	223	Smar1000005261	eukaryota>metazoa>arthropoda>myriapoda	Strigamia maritima	>Smar1000005261	NA	pspa	000003.472	Snf7	NA	NA	-
+Smar1000000527	-	Snf7	Snf7	-	222	Smar1000000527	eukaryota>metazoa>arthropoda>myriapoda	Strigamia maritima	>Smar1000000527	NA	pspa	000003.472	Snf7	NA	NA	-
+Smed1000025307	-	Snf7	Snf7	ParB	222	Smed1000025307	eukaryota>metazoa>platyhelminthe	Schmidtea mediterranea	>Smed1000025307	NA	pspa	000003.472	Snf7	NA	NA	-
+Uram1000005364	-	SIG+Snf7	Snf7	SIG	222	Uram1000005364	eukaryota>fungi>mucoromycotina	Umbelopsis ramanniana	>Uram1000005364	NA	pspa	000003.472	Snf7	NA	NA	-
+Caps1000007247	-	Snf7	Snf7	ParB	220	Caps1000007247	eukaryota>metazoa>annelida	Capitella spI	>Caps1000007247	NA	pspa	000003.472	Snf7	NA	NA	-
+Caps1000013077	-	Snf7	Snf7	-	219	Caps1000013077	eukaryota>metazoa>annelida	Capitella spI	>Caps1000013077	NA	pspa	000003.472	Snf7	NA	NA	-
+XP_001837127.1	Snf7*->	SIG+Snf7	Snf7	SIG	217	CC1G_00263	eukaryota>fungi>basidiomycota	Coprinopsis cinerea okayama7	NA	NA	NA	NA	NA	NA	NA	NA
+Chet1000008429	-	Snf7	Snf7	SIG	215	Chet1000008429	eukaryota>fungi>ascomycota	Cochliobolus heterostrophus	>Chet1000008429	NA	pspa	000003.472	Snf7	NA	NA	-
+Lhya1000001166	-	SIG+Snf7	Snf7	SIG	215	Lhya1000001166	eukaryota>fungi>mucoromycotina	Lichtheimia hyalospora	>Lhya1000001166	NA	pspa	000003.472	Snf7	NA	NA	-
+Uram1000004439	-	SIG+Snf7	Snf7	SIG	215	Uram1000004439	eukaryota>fungi>mucoromycotina	Umbelopsis ramanniana	>Uram1000004439	NA	pspa	000003.472	Snf7	NA	NA	-
+XP_001837046.1	-	SIG+Snf7	Snf7	SIG	212	CC1G_00182	eukaryota>fungi>basidiomycota	Coprinopsis cinerea okayama7	NA	NA	NA	NA	NA	NA	NA	NA
+Bcir1000010838	-	SIG+Snf7	Snf7	SIG	210	Bcir1000010838	eukaryota>fungi>mucoromycotina	Backusella circina	>Bcir1000010838	NA	pspa	000003.472	Snf7	NA	NA	-
+Smed1000001895	-	Snf7	Snf7	-	204	Smed1000001895	eukaryota>metazoa>platyhelminthe	Schmidtea mediterranea	>Smed1000001895	NA	pspa	000003.472	Snf7	NA	NA	-
+Crev1000006838	-	Snf7	Snf7	-	167	Crev1000006838	eukaryota>fungi>kickxellomycotina	Coemansia reversa	>Crev1000006838	NA	pspa	000003.472	Snf7	NA	NA	-
+Pisp1000002826	-	Snf7	Snf7	-	144	Pisp1000002826	eukaryota>fungi>neocallimastigomycota	Piromyces sp	>Pisp1000002826	NA	pspa	000003.472	Snf7	NA	NA	-
+ACY21447.1	PspA*->	PspA_IM30	PspA	SIG	275	Gbro_2199	bacteria>actinobacteria	Gordonia bronchialis DSM 43247	PspA/IM30 family protein [Gordonia bronchialis DSM 43247]	262085479	pspa	000004.278	PspA	NA	NA	GCA_000024785.1
+Crev1000002310	-	Snf7	Snf7	-	206	Crev1000002310	eukaryota>fungi>kickxellomycotina	Coemansia reversa	>Crev1000002310	NA	pspa	000005.261	Snf7	NA	NA	-
+Uram1000009086	-	SIG+Snf7	Snf7	SIG	204	Uram1000009086	eukaryota>fungi>mucoromycotina	Umbelopsis ramanniana	>Uram1000009086	NA	pspa	000005.261	Snf7	NA	NA	-
+Bcir1000011412	-	Snf7	Snf7	-	203	Bcir1000011412	eukaryota>fungi>mucoromycotina	Backusella circina	>Bcir1000011412	NA	pspa	000005.261	Snf7	NA	NA	-
+Bnat1000016213	-	Snf7	Snf7	-	203	Bnat1000016213	eukaryota>rhizaria	Bigelowiella natans	>Bnat1000016213	NA	pspa	000005.261	Snf7	NA	NA	-
+Caps1000001778	-	Snf7	Snf7	-	203	Caps1000001778	eukaryota>metazoa>annelida	Capitella spI	>Caps1000001778	NA	pspa	000005.261	Snf7	NA	NA	-
+Caps1000011097	-	Snf7	Snf7	-	203	Caps1000011097	eukaryota>metazoa>annelida	Capitella spI	>Caps1000011097	NA	pspa	000005.261	Snf7	NA	NA	-
+Bcir1000000255	-	Snf7	Snf7	-	201	Bcir1000000255	eukaryota>fungi>mucoromycotina	Backusella circina	>Bcir1000000255	NA	pspa	000005.261	Snf7	NA	NA	-
+Lhya1000007154	-	Snf7	Snf7	-	201	Lhya1000007154	eukaryota>fungi>mucoromycotina	Lichtheimia hyalospora	>Lhya1000007154	NA	pspa	000005.261	Snf7	NA	NA	-
+Pram1000013135	-	Snf7	Snf7	-	201	Pram1000013135	eukaryota>stramenopiles	Phytophthora ramorum	>Pram1000013135	NA	pspa	000005.261	Snf7	NA	NA	-
+Smar1000004749	-	Snf7	Snf7	-	199	Smar1000004749	eukaryota>metazoa>arthropoda>myriapoda	Strigamia maritima	>Smar1000004749	NA	pspa	000005.261	Snf7	NA	NA	-
+Smar1000008107	-	Snf7	Snf7	-	199	Smar1000008107	eukaryota>metazoa>arthropoda>myriapoda	Strigamia maritima	>Smar1000008107	NA	pspa	000005.261	Snf7	NA	NA	-
+Chet1000003320	-	Snf7	Snf7	-	198	Chet1000003320	eukaryota>fungi>ascomycota	Cochliobolus heterostrophus	>Chet1000003320	NA	pspa	000005.261	Snf7	NA	NA	-
+Smed1000026970	-	Snf7	Snf7	-	198	Smed1000026970	eukaryota>metazoa>platyhelminthe	Schmidtea mediterranea	>Smed1000026970	NA	pspa	000005.261	Snf7	NA	NA	-
+XP_001837043.2	Snf7*-><-?||?->Snf7*->	Snf7	Snf7	-	196	CC1G_00179	eukaryota>fungi>basidiomycota	Coprinopsis cinerea okayama7	NA	NA	NA	NA	NA	NA	NA	NA
+Smar1000009347	-	Snf7	Snf7	-	184	Smar1000009347	eukaryota>metazoa>arthropoda>myriapoda	Strigamia maritima	>Smar1000009347	NA	pspa	000005.261	Snf7	NA	NA	-
+APW96603.1	PspA*->	PspA_IM30	PspA	-	290	CHINAEXTREME_01925	archaea>euryarchaeota	Halobiforma lacisalsi AJ5	phage shock protein A [Halobiforma lacisalsi AJ5]	1134496586	pspa	000007.206	PspA	NA	NA	GCA_000226975.3
+Pram1000000796	-	SIG+Snf7	SIG+Snf7	SIG	236	Pram1000000796	eukaryota>stramenopiles	Phytophthora ramorum	>Pram1000000796	NA	pspa	000008.183	Snf7	NA	NA	-
+Smed1000021775	-	SIG+Snf7	SIG+Snf7	SIG	231	Smed1000021775	eukaryota>metazoa>platyhelminthe	Schmidtea mediterranea	>Smed1000021775	NA	pspa	000008.183	Snf7	NA	NA	-
+Caps1000018732	-	Snf7	Snf7	-	218	Caps1000018732	eukaryota>metazoa>annelida	Capitella spI	>Caps1000018732	NA	pspa	000008.183	Snf7	NA	NA	-
+Bcir1000016255	-	Snf7	Snf7	-	216	Bcir1000016255	eukaryota>fungi>mucoromycotina	Backusella circina	>Bcir1000016255	NA	pspa	000008.183	Snf7	NA	NA	-
+Crev1000000528	-	SIG+Snf7	Snf7	SIG	216	Crev1000000528	eukaryota>fungi>kickxellomycotina	Coemansia reversa	>Crev1000000528	NA	pspa	000008.183	Snf7	NA	NA	-
+Lhya1000009341	-	SIG+Snf7	Snf7	SIG	215	Lhya1000009341	eukaryota>fungi>mucoromycotina	Lichtheimia hyalospora	>Lhya1000009341	NA	pspa	000008.183	Snf7	NA	NA	-
+Chet1000001560	-	Snf7	Snf7	-	214	Chet1000001560	eukaryota>fungi>ascomycota	Cochliobolus heterostrophus	>Chet1000001560	NA	pspa	000008.183	Snf7	NA	NA	-
+Smar1000006823	-	Snf7	Snf7	-	210	Smar1000006823	eukaryota>metazoa>arthropoda>myriapoda	Strigamia maritima	>Smar1000006823	NA	pspa	000008.183	Snf7	NA	NA	-
+Pisp1000003886	-	SIG+Snf7	SIG+Snf7	SIG	194	Pisp1000003886	eukaryota>fungi>neocallimastigomycota	Piromyces sp	>Pisp1000003886	NA	pspa	000008.183	Snf7	NA	NA	-
+Bnat1000017100	-	Snf7	Snf7	-	152	Bnat1000017100	eukaryota>rhizaria	Bigelowiella natans	>Bnat1000017100	NA	pspa	000008.183	Snf7	NA	NA	-
+Uram1000009541	-	Snf7	Snf7	-	146	Uram1000009541	eukaryota>fungi>mucoromycotina	Umbelopsis ramanniana	>Uram1000009541	NA	pspa	000008.183	Snf7	NA	NA	-
+XP_001829032.2	<-Snf7*	Snf7	Snf7	-	140	CC1G_01712	eukaryota>fungi>basidiomycota	Coprinopsis cinerea okayama7	NA	NA	NA	NA	NA	NA	NA	NA
+CCQ74391.1	<-SIG+TM<-SIG+TM+TM<-PspA*	PspA_IM30	PspA	-	224	MGMAQ_2530	bacteria>proteobacteria>alphaproteobacteria	Magnetospira sp. QH-2	PspA&	NA	NA	NA	NA	NA	NA	NA
+Smar1000007025	-	Snf7	Snf7	-	435	Smar1000007025	eukaryota>metazoa>arthropoda>myriapoda	Strigamia maritima	>Smar1000007025	NA	pspa	000021.18	Snf7	NA	NA	-
+Chet1000001694	-	Snf7+Atrophin-1	Snf7	-	524	Chet1000001694	eukaryota>fungi>ascomycota	Cochliobolus heterostrophus	>Chet1000001694	NA	pspa	000027.11	Snf7	NA	NA	-
+Uram1000003873	-	Snf7	Snf7	-	467	Uram1000003873	eukaryota>fungi>mucoromycotina	Umbelopsis ramanniana	>Uram1000003873	NA	pspa	000047.6	Snf7	NA	NA	-
+Bcir1000007249	-	SIG+Snf7	SIG+Snf7	SIG	425	Bcir1000007249	eukaryota>fungi>mucoromycotina	Backusella circina	>Bcir1000007249	NA	pspa	000047.6	Snf7	NA	NA	-
+XP_001833068.2	<-SIG+Snf7*	Snf7	Snf7	-	472	CC1G_01130	eukaryota>fungi>basidiomycota	Coprinopsis cinerea okayama7	NA	NA	NA	NA	NA	NA	NA	NA
+Bcir1000003327	-	Snf7	Snf7	-	296	Bcir1000003327	eukaryota>fungi>mucoromycotina	Backusella circina	>Bcir1000003327	NA	pspa	000097.3	Snf7	NA	NA	-
+Lhya1000002521	-	Snf7	Snf7	-	290	Lhya1000002521	eukaryota>fungi>mucoromycotina	Lichtheimia hyalospora	>Lhya1000002521	NA	pspa	000097.3	Snf7	NA	NA	-
+Chet1000008504	-	Uso1_p115_head+CALCOCO1+Uso1_p115_C	EP1	-	1037	Chet1000008504	eukaryota>fungi>ascomycota	Cochliobolus heterostrophus	>Chet1000008504	NA	pspa	000139.2	EP1	NA	NA	-
+Smed1000004306	-	-	Snf7	-	93	Smed1000004306	eukaryota>metazoa>platyhelminthe	Schmidtea mediterranea	>Smed1000004306	NA	pspa	000201.2	Snf7	NA	NA	-
+Bcir1000000964	-	Kinesin+CCDC158	Snf7	-	1007	Bcir1000000964	eukaryota>fungi>mucoromycotina	Backusella circina	>Bcir1000000964	NA	pspa	000202.1	Snf7	NA	NA	-
+Bcir1000004713	-	Snf7	Snf7	-	479	Bcir1000004713	eukaryota>fungi>mucoromycotina	Backusella circina	>Bcir1000004713	NA	pspa	000202.1	Snf7	NA	NA	-
+Caps1000024394	-	Snf7	Snf7	-	455	Caps1000024394	eukaryota>metazoa>annelida	Capitella spI	>Caps1000024394	NA	pspa	000202.1	Snf7	NA	NA	-
+Bcir1000003615	-	Snf7	Snf7	-	354	Bcir1000003615	eukaryota>fungi>mucoromycotina	Backusella circina	>Bcir1000003615	NA	pspa	000202.1	Snf7	NA	NA	-
+Smed1000024050	-	Snf7	Snf7	-	272	Smed1000024050	eukaryota>metazoa>platyhelminthe	Schmidtea mediterranea	>Smed1000024050	NA	pspa	000202.1	Snf7	NA	NA	-
+Crev1000003711	-	Snf7	Snf7	-	240	Crev1000003711	eukaryota>fungi>kickxellomycotina	Coemansia reversa	>Crev1000003711	NA	pspa	000202.1	Snf7	NA	NA	-
+Pisp1000009679	-	Snf7	Snf7	SIG	208	Pisp1000009679	eukaryota>fungi>neocallimastigomycota	Piromyces sp	>Pisp1000009679	NA	pspa	000202.1	Snf7	NA	NA	-
+Smed1000006266	-	Snf7	Snf7	ParB	158	Smed1000006266	eukaryota>metazoa>platyhelminthe	Schmidtea mediterranea	>Smed1000006266	NA	pspa	000202.1	Snf7	NA	NA	-
+Bnat1000009644	-	PspA_IM30	PspA	-	157	Bnat1000009644	eukaryota>rhizaria	Bigelowiella natans	>Bnat1000009644	NA	pspa	000203.1	PspA	NA	NA	-
+XP_002911146.1	<-EP1*	ERM+GAS2	EP1	-	1932	CC1G_14578	eukaryota>fungi>basidiomycota	Coprinopsis cinerea okayama7	NA	NA	NA	NA	NA	NA	NA	NA
+XP_001832385.2	<-EP1*	CCDC158+ATG11+PARM	EP1	-	1399	CC1G_07645	eukaryota>fungi>basidiomycota	Coprinopsis cinerea okayama7	NA	NA	NA	NA	NA	NA	NA	NA
+Pram1000007912	-	NupH_GANP+SAC3_GANP+TPH	EP1	-	1281	Pram1000007912	eukaryota>stramenopiles	Phytophthora ramorum	>Pram1000007912	NA	pspa	000204.1	EP1	NA	NA	-
+XP_001834155.2	SIG+SidE*->	SIG+Myosin_tail_1+DUF566	SIG+SidE	SIG	1313	CC1G_09112	eukaryota>fungi>basidiomycota	Coprinopsis cinerea okayama7	NA	NA	NA	NA	NA	NA	NA	NA
+Bnat1000002812	-	DUF4200+DUF2353	PDZ+EP1	-	1026	Bnat1000002812	eukaryota>rhizaria	Bigelowiella natans	>Bnat1000002812	NA	pspa	000272.1	PDZ+EP1	NA	NA	-
+Caps1000014654	-	EF-hand_4+MISS+DUF737+ERM+SH3_9+SH3_1+SH3_1+SH3_9	EP1+SH3+SH3+SH3+SH3	-	1159	Caps1000014654	eukaryota>metazoa>annelida	Capitella spI	>Caps1000014654	NA	pspa	000291.1	EP1+SH3+SH3+SH3+SH3	NA	NA	-
+Caps1000018428	-	VSP+Ephrin_rec_like+TM+TM+SMC_N	TM+TM+EP1+Nop52+EP1	TM+TM	9363	Caps1000018428	eukaryota>metazoa>annelida	Capitella spI	>Caps1000018428	NA	pspa	000345.1	TM+TM+EP1+Nop52+EP1	NA	NA	-
+XP_001833851.1	MIP-T3+EP1+EP1*->	DUF1777+CEP63+ARGLU	MIP-T3+EP1+EP1	-	1988	CC1G_01528	eukaryota>fungi>basidiomycota	Coprinopsis cinerea okayama7	NA	NA	NA	NA	NA	NA	NA	NA
+Bnat1000002828	-	SIG+Granulin+Herpes_BLLF1+HCR+SMC_N	SIG+DUF572+LINK	SIG	1990	Bnat1000002828	eukaryota>rhizaria	Bigelowiella natans	>Bnat1000002828	NA	pspa	000421.1	SIG+DUF572+LINK	NA	NA	-
+Bnat1000015234	-	VSP+VSP+Ephrin_rec_like+Ephrin_rec_like+Ephrin_rec_like+Cast+Myosin_tail_1+ARGLU	EP1+EP1+SPX+PspA+EP1+PspA	-	5799	Bnat1000015234	eukaryota>rhizaria	Bigelowiella natans	>Bnat1000015234	NA	pspa	000458.1	EP1+EP1+SPX+PspA+EP1+PspA	NA	NA	-
+Bnat1000000161	-	TPH	BetaPropeller+BetaPropeller+EP1	-	1077	Bnat1000000161	eukaryota>rhizaria	Bigelowiella natans	>Bnat1000000161	NA	pspa	000467.1	BetaPropeller+BetaPropeller+EP1	NA	NA	-
+Pram1000000683	-	SIG+Cupin_8+CCDC158	JOR+PspA	SIG	959	Pram1000000683	eukaryota>stramenopiles	Phytophthora ramorum	>Pram1000000683	NA	pspa	000473.1	JOR+PspA	NA	NA	-
+-	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	pspa	000485.1		NA	NA	NA
+-	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	pspa	000485.1		NA	NA	NA
+-	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	pspa	000485.1		NA	NA	NA
+Smar1000011578	-	Myosin_N+Myosin_head+Myosin_tail_1	SidE+PspA+PspA	-	2008	Smar1000011578	eukaryota>metazoa>arthropoda>myriapoda	Strigamia maritima	>Smar1000011578	NA	pspa	000486.373	SIGMA-HTH+PspA	NA	NA	-
+Smar1000001431	-	CCDC158+SAM_1+SAM_1+SAM_2	SidE+SAM+SAM+SAM	-	1090	Smar1000001431	eukaryota>metazoa>arthropoda>myriapoda	Strigamia maritima	>Smar1000001431	NA	pspa	000487.313	EP1+SAM+SAM+SAM	NA	NA	-
+AJR22952.1	-	SIG+DUF972	SIG	SIG	107	TZ53_03405	bacteria>proteobacteria>alphaproteobacteria	Sphingobium sp. YBL2	hypothetical protein TZ53_03405 [Sphingobium sp. YBL2]	764452838	pspb	000003.60	TM+PspB	NA	NA	GCA_000943805.1
+ABX48815.1	-	PspC	PspC	TM+TM	128	Sbal195_1642	bacteria>proteobacteria>gammaproteobacteria	Shewanella baltica OS195	phage shock protein C, PspC [Shewanella baltica OS195]	160860281	pspb	000005.19	PspC	NA	NA	GCA_000018765.1
+ABX48815.1	-	PspC	PspC	TM+TM	128	Sbal195_1642	bacteria>proteobacteria>gammaproteobacteria	Shewanella baltica OS195	phage shock protein C, PspC [Shewanella baltica OS195]	160860281	pspb	000005.19	PspC	NA	NA	GCA_000018765.1
+AEB29104.1	Toast-rack->PspC*->SIG+TM+TM+TM->	PspC	PspC	-	103	yvlC	bacteria>firmicutes	Carnobacterium sp. 17-4	putative regulator [Carnobacterium sp. 17-4]	328673058	pspc	000001.1368	PspC	NA	NA	GCA_000195575.1
+ABX48815.1	PspA->PspB->PspC*->CR-ATPase1->TM+TM+IIGP1->	PspC	PspC	-	128	Sbal195_1642	bacteria>proteobacteria>gammaproteobacteria	Shewanella baltica OS195	phage shock protein C, PspC [Shewanella baltica OS195]	160860281	pspc	000002.476	PspC	NA	NA	GCA_000018765.1
+ABX48815.1	PspA->PspB->PspC*->CR-ATPase1->TM+TM+IIGP1->	PspC	PspC	-	128	Sbal195_1642	bacteria>proteobacteria>gammaproteobacteria	Shewanella baltica OS195	phage shock protein C, PspC [Shewanella baltica OS195]	160860281	pspc	000002.476	PspC	NA	NA	GCA_000018765.1
+ACI18584.1	PspC*->PspC+LiaI-LiaF-TM*->LiaI-LiaF-TM+Toast-rack-><-LACI-HTH+PBPI	PspC+TM+TM	PspC+TM+TM	-	121	DICTH_0497	bacteria>dictyoglomi	Dictyoglomus thermophilum H-6-12	PspC domain family [Dictyoglomus thermophilum H-6-12]	206739526	pspc	000004.200	PspC+LiaI-LiaF-TM	NA	NA	GCA_000020965.1
+AIQ14449.1	<-PspA<-PspC*<-PspA	PspC	PspC	-	166	PDUR_22990	bacteria>firmicutes	Paenibacillus durus	hypothetical protein PDUR_22990 [Paenibacillus durus]	686570393	pspc	000010.35	PspC	NA	NA	GCA_000756615.1
+ACY22441.1	PspC*-><-SIG+CW-binding-EndolysinC<-REC+LuxR-HTH	PspC	PspC	-	129	Gbro_3236	bacteria>actinobacteria	Gordonia bronchialis DSM 43247	PspC domain protein [Gordonia bronchialis DSM 43247]	262086473	pspc	000090.1	PspC	NA	NA	GCA_000024785.1
+ACY20665.1	DUF1707-SHOCT-bihelical+Toast-rack*-><-?||?->?->?->UPF0126+UPF0126+TM-><-adh_short	DUF1707+DUF2154	DUF1707-SHOCT-bihelical+Toast-rack	-	217	Gbro_1382	bacteria>actinobacteria	Gordonia bronchialis DSM 43247	protein of unknown function DUF1707 [Gordonia bronchialis DSM 43247]	262084697	Toast-rack	000001.461	DUF1707-SHOCT-bihelical+Toast-rack	NA	NA	GCA_000024785.1
+AKK03387.1	<-TP_methylase<-?<-?||DUF1707-SHOCT-bihelical+Toast-rack*-><-3-dmu-9_3-mt+3-dmu-9_3-mt<-VWA_2<-AAA_5<-Mqo	DUF1707+DUF2154	DUF1707-SHOCT-bihelical+Toast-rack	-	198	CEPID_07685	bacteria>actinobacteria	Corynebacterium epidermidicanis	putative DUF1707 family protein/predicted membrane protein (DUF2154) [Corynebacterium epidermidicanis]	827628094	Toast-rack	000001.461	DUF1707-SHOCT-bihelical+Toast-rack	NA	NA	GCA_001021025.1
+AKK03387.1	<-TP_methylase<-?<-?||DUF1707-SHOCT-bihelical+Toast-rack*-><-3-dmu-9_3-mt+3-dmu-9_3-mt<-VWA_2<-AAA_5<-Mqo	DUF1707+DUF2154	DUF1707-SHOCT-bihelical+Toast-rack	-	198	CEPID_07685	bacteria>actinobacteria	Corynebacterium epidermidicanis	putative DUF1707 family protein/predicted membrane protein (DUF2154) [Corynebacterium epidermidicanis]	827628094	Toast-rack	000001.461	DUF1707-SHOCT-bihelical+Toast-rack	NA	NA	GCA_001021025.1
+ABG98050.1	DUF1707-SHOCT-bihelical+Toast-rack*-><-?<-Aldedh	-	DUF1707-SHOCT-bihelical+Toast-rack	-	130	RHA1_ro06273	bacteria>actinobacteria	Rhodococcus jostii RHA1	conserved hypothetical protein [Rhodococcus jostii RHA1]	110822766	Toast-rack	000002.1	DUF1707-SHOCT-bihelical+Toast-rack	NA	NA	GCA_000014565.1
+ADV42551.1	SIG+Toast-rack*->	SIG+DUF2807	SIG+Toast-rack	SIG	287	Bache_0526	bacteria>bacteroidetes	Bacteroides helcogenes P 36-108	putative lipoprotein [Bacteroides helcogenes P 36-108]	319415440	Toast-rack	000003.344	SIG+Toast-rack	NA	NA	GCA_000186225.1
+AJK88848.1	LiaI-LiaF-TM->PspA->SIG+TM+TM+Toast-rack*->SIG+TM+HISKIN-LiaS-like->REC+LYTTR->	SIG+TM+DUF2154	SIG+TM+Toast-rack	SIG+TM	227	HR49_17775	bacteria>firmicutes	Lysinibacillus fusiformis	membrane protein [Lysinibacillus fusiformis]	756121158	Toast-rack	000006.193	SIG+TM+TM+Toast-rack	NA	NA	GCA_000724775.3
+AJK88848.1	LiaI-LiaF-TM->PspA->SIG+TM+TM+Toast-rack*->SIG+TM+HISKIN-LiaS-like->REC+LYTTR->	SIG+TM+DUF2154	SIG+TM+Toast-rack	SIG+TM	227	HR49_17775	bacteria>firmicutes	Lysinibacillus fusiformis	membrane protein [Lysinibacillus fusiformis]	756121158	Toast-rack	000006.193	SIG+TM+TM+Toast-rack	NA	NA	GCA_000724775.3
+AKA35661.1	SIG+OmpA-beta-barrel->SIG+Toast-rack*->?-><-?||PDT->SIG+Aminotran_1_2->PDH->?-><-?||SIG+Toast-rack*-><-?||?->?->?->?->?->EPSP_synthase->	SIG+DUF2807	SIG+Toast-rack	SIG	266	VC82_2064	bacteria>bacteroidetes	Muricauda lutaonensis	Conserved hypothetical lipoprotein [Muricauda lutaonensis]	787939186	Toast-rack	000022.45	SIG+Toast-rack	NA	NA	GCA_000963865.1
+APY01519.1	SIG+Toast-rack*->	DUF2807	Toast-rack	-	263	BWR22_11045	bacteria>bacteroidetes	Lacinutrix venerupis	hypothetical protein BWR22_11045 [Lacinutrix venerupis]	1134986339	Toast-rack	000032.29	SIG+Toast-rack	NA	NA	GCA_001971745.1
+ACX66911.1	MerR+MerR_1-><-SIG+Toast-rack*	SIG+DUF4097	SIG+Toast-rack	SIG	301	GYMC10_4691	bacteria>firmicutes	Paenibacillus sp. Y412MC10	hypothetical protein GYMC10_4691 [Paenibacillus sp. Y412MC10]	261284940	Toast-rack	000073.12	SIG+Toast-rack	NA	NA	GCA_000024685.1
+ACB75115.1	<-MacB_PCD+FtsX+TM+MacB_PCD+FtsX<-MacB_PCD+FtsX+TM+MacB_PCD+FtsX<-MacB_PCD+FtsX+TM+MacB_PCD+FtsX<-?<-?<-SIG+Toast-rack*	SIG+DUF4097	SIG+Toast-rack	SIG+Ntox27	254	Oter_1832	bacteria>verrucomicrobia	Opitutus terrae PB90-1	conserved hypothetical protein [Opitutus terrae PB90-1]	177840863	Toast-rack	000083.11	SIG+Toast-rack	NA	NA	GCA_000019965.1
+Pram1000005231	-	SIG+DUF2807+TM	SIG+Toast-rack+TM	SIG+TM	435	Pram1000005231	eukaryota>stramenopiles	Phytophthora ramorum	>Pram1000005231	NA	Toast-rack	000132.6	SIG+Toast-rack+TM	NA	NA	-
+Pram1000004800	-	SIG+SWI-SNF_Ssr4+TM+TM+TM+TM+TM+TM	SIG+Beta-Roll+Beta-Roll+7TMEUK	SIG+TM+TM+TM+TM+TM+TM	2153	Pram1000004800	eukaryota>stramenopiles	Phytophthora ramorum	>Pram1000004800	NA	Toast-rack	000198.4	SIG+Beta-Roll+Toast-rack+TM+TM+7TMEUK	NA	NA	-
+AEI39621.1	LiaI-LiaF-TM+Toast-rack*->	SIG+TM+TM+DUF4097	LiaI-LiaF-TM+Toast-rack	SIG+TM+TM+CTXA-Cterm	411	KNP414_01031	bacteria>firmicutes	Paenibacillus mucilaginosus KNP414	hypothetical protein KNP414_01031 [Paenibacillus mucilaginosus KNP414]	336296518	Toast-rack	000205.4	LiaI-LiaF-TM+Toast-rack	NA	NA	GCA_000218915.1
+Pram1000005232	-	DUF2807+TM	Toast-rack+TM	TM	430	Pram1000005232	eukaryota>stramenopiles	Phytophthora ramorum	>Pram1000005232	NA	Toast-rack	000257.3	Toast-rack+TM	NA	NA	-
+Bcir1000015244	-	TM+DUF4097+O-FucT	TM+Toast-rack	TM	970	Bcir1000015244	eukaryota>fungi>mucoromycotina	Backusella circina	>Bcir1000015244	NA	Toast-rack	000325.2	TM+Toast-rack	NA	NA	-
+Lhya1000001619	-	DUF4097	Toast-rack	-	195	Lhya1000001619	eukaryota>fungi>mucoromycotina	Lichtheimia hyalospora	>Lhya1000001619	NA	Toast-rack	000446.1	Toast-rack	NA	NA	-
+Pisp1000011636	-	PAT1+Atrophin-1	Toast-rack	-	996	Pisp1000011636	eukaryota>fungi>neocallimastigomycota	Piromyces sp	>Pisp1000011636	NA	Toast-rack	000446.1	Toast-rack	NA	NA	-
+Pram1000005240	-	Actin+DUF2807	Toast-rack	-	713	Pram1000005240	eukaryota>stramenopiles	Phytophthora ramorum	>Pram1000005240	NA	Toast-rack	000446.1	Toast-rack	NA	NA	-
+Bcir1000011014	-	DUF4097	Toast-rack	-	282	Bcir1000011014	eukaryota>fungi>mucoromycotina	Backusella circina	>Bcir1000011014	NA	Toast-rack	000446.1	Toast-rack	NA	NA	-
+Uram1000002532	-	-	Toast-rack	-	288	Uram1000002532	eukaryota>fungi>mucoromycotina	Umbelopsis ramanniana	>Uram1000002532	NA	Toast-rack	000446.1	Toast-rack	NA	NA	-
+Lhya1000007378	-	-	Toast-rack	-	534	Lhya1000007378	eukaryota>fungi>mucoromycotina	Lichtheimia hyalospora	>Lhya1000007378	NA	Toast-rack	000446.1	Toast-rack	NA	NA	-
+Bcir1000012045	-	-	Toast-rack	-	333	Bcir1000012045	eukaryota>fungi>mucoromycotina	Backusella circina	>Bcir1000012045	NA	Toast-rack	000446.1	Toast-rack	NA	NA	-
+Smar1000007746	-	DUF4097	Toast-rack	-	372	Smar1000007746	eukaryota>metazoa>arthropoda>myriapoda	Strigamia maritima	>Smar1000007746	NA	Toast-rack	000446.1	Toast-rack	NA	NA	-
+Bcir1000012046	-	-	Toast-rack	-	403	Bcir1000012046	eukaryota>fungi>mucoromycotina	Backusella circina	>Bcir1000012046	NA	Toast-rack	000446.1	Toast-rack	NA	NA	-
+Crev1000002900	-	-	Toast-rack	-	455	Crev1000002900	eukaryota>fungi>kickxellomycotina	Coemansia reversa	>Crev1000002900	NA	Toast-rack	000446.1	Toast-rack	NA	NA	-
+Crev1000002893	-	DUF4097	Toast-rack	-	412	Crev1000002893	eukaryota>fungi>kickxellomycotina	Coemansia reversa	>Crev1000002893	NA	Toast-rack	000446.1	Toast-rack	NA	NA	-
+Crev1000002901	-	-	Toast-rack	-	435	Crev1000002901	eukaryota>fungi>kickxellomycotina	Coemansia reversa	>Crev1000002901	NA	Toast-rack	000446.1	Toast-rack	NA	NA	-
+Caps1000008891	-	SIG+DUF4097	SIG+Toast-rack	SIG	378	Caps1000008891	eukaryota>metazoa>annelida	Capitella spI	>Caps1000008891	NA	Toast-rack	000449.1	SIG+Toast-rack	NA	NA	-
+Lhya1000000104	-	SIG+DUF4097	SIG+Toast-rack	SIG	402	Lhya1000000104	eukaryota>fungi>mucoromycotina	Lichtheimia hyalospora	>Lhya1000000104	NA	Toast-rack	000449.1	SIG+Toast-rack	NA	NA	-
+AEE96464.1	ABC-ATPase->?->GNTR-HTH->ABC-ATPase->?->SIG+Toast-rack*->ABC-ATPase->?->?->REC+LYTTR->SIG+TM+HAMP+HISKIN->	SIG+DUF4097	SIG+Toast-rack	SIG	297	Mahau_1270	bacteria>firmicutes	Mahella australiensis 50-1 BON	hypothetical protein Mahau_1270 [Mahella australiensis 50-1 BON]	332699523	Toast-rack	000449.1	SIG+Toast-rack	NA	NA	GCA_000213255.1
+ADB49219.1	<-GFA<-?||SIG+tRNA_U5-meth_tr->?-><-?||ADH_N+ADH_zinc_N->SIG+Toast-rack*-><-?<-UDG<-?<-?<-SIG+CDP-OH_P_transf+TM+TM+TM	SIG+DUF4097	SIG+Toast-rack	SIG	268	Cwoe_0786	bacteria>actinobacteria	Conexibacter woesei DSM 14684	hypothetical protein Cwoe_0786 [Conexibacter woesei DSM 14684]	283946475	Toast-rack	000449.1	SIG+Toast-rack	NA	NA	GCA_000025265.1
+Uram1000008702	-	TM+DUF4097	TM+Toast-rack	TM	664	Uram1000008702	eukaryota>fungi>mucoromycotina	Umbelopsis ramanniana	>Uram1000008702	NA	Toast-rack	000450.1	TM+Toast-rack	NA	NA	-
+Uram1000001527	-	TM+DUF4097	TM+Toast-rack	TM	353	Uram1000001527	eukaryota>fungi>mucoromycotina	Umbelopsis ramanniana	>Uram1000001527	NA	Toast-rack	000450.1	TM+Toast-rack	NA	NA	-
+Lhya1000008967	-	TM	TM+Toast-rack	TM	391	Lhya1000008967	eukaryota>fungi>mucoromycotina	Lichtheimia hyalospora	>Lhya1000008967	NA	Toast-rack	000450.1	TM+Toast-rack	NA	NA	-
+Pram1000005233	-	DUF2807+TM+TM+DUF2807+TM	Toast-rack+TM+TM+Toast-rack+TM	TM+TM+TM	852	Pram1000005233	eukaryota>stramenopiles	Phytophthora ramorum	>Pram1000005233	NA	Toast-rack	000471.1	Toast-rack+TM	NA	NA	-
+Caps1000010355	-	Herpes_BLLF1+TM	Toast-rack+TM	TM	270	Caps1000010355	eukaryota>metazoa>annelida	Capitella spI	>Caps1000010355	NA	Toast-rack	000471.1	Toast-rack+TM	NA	NA	-
+Crev1000006188	-	TM	TM+Toast-rack+Toast-rack	TM	547	Crev1000006188	eukaryota>fungi>kickxellomycotina	Coemansia reversa	>Crev1000006188	NA	Toast-rack	000472.1	TM+TM+TM+Toast-rack	NA	NA	-
+Bcir1000009799	-	SIG+TM	SIG+TM+Toast-rack	SIG+TM	558	Bcir1000009799	eukaryota>fungi>mucoromycotina	Backusella circina	>Bcir1000009799	NA	Toast-rack	000474.1	SIG+Toast-rack	NA	NA	-
+Lhya1000002695	-	SIG+TM	SIG+TM+Toast-rack	SIG+TM	473	Lhya1000002695	eukaryota>fungi>mucoromycotina	Lichtheimia hyalospora	>Lhya1000002695	NA	Toast-rack	000474.1	SIG+Toast-rack	NA	NA	-
+Uram1000009606	-	SIG+RCR+TM+DUF4097	SIG+TM+Toast-rack+Toast-rack	SIG+TM	692	Uram1000009606	eukaryota>fungi>mucoromycotina	Umbelopsis ramanniana	>Uram1000009606	NA	Toast-rack	000474.1	SIG+Toast-rack	NA	NA	-
+Uram1000003181	-	SIG	SIG+Toast-rack+Toast-rack	SIG	412	Uram1000003181	eukaryota>fungi>mucoromycotina	Umbelopsis ramanniana	>Uram1000003181	NA	Toast-rack	000474.1	SIG+Toast-rack	NA	NA	-
