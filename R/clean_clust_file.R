@@ -1,5 +1,18 @@
 library(tidyverse)
 
+##############
+## COLNAMES ##
+##############
+## FUNCTION to ASSIGN COLUMN NAMES based on AUG 2017 VA format
+colnames.op_ins_cls <- c("AccNum", "GenContext.orig",
+                         "arch.PFAM", "DomArch.orig", "arch.TMSIG",
+                         "Length", "GenName",
+                         "Lineage", "Species.orig",
+                         "Annotation", "GI")
+
+###########################
+## Adding ClustIDs/Names ##
+###########################
 #'Clean Cluster File
 #'
 #'Reads and cleans a cluster file
@@ -14,20 +27,16 @@ library(tidyverse)
 #' @examples clean_clust_file("data/pspa.op_ins_cls", writepath=NULL, query="pspa")
 
 clean_clust_file <- function(path, writepath=NULL, query){
-  #Colnames for the cluster file
-  colnames_prot <- c("AccNum", "GenContext", "PFAM", "DomArch", "arch.TMSIG",
-                     "Length", "GenName", "Lineage", "Species.old",
-                     "Annotation", "GI")
-
+  # ?? does the following line need to be changed to read_lines()?
   prot <- read_tsv(path, col_names=F)
 
-  #clust contains a column containing all the clustids
+  # ?? Unused? clust contains a column containing all the clustids
   clust <- prot %>% filter(grepl("^#", X1))
 
   #Separate all rows into columns by spaces and create ClustName and ClustID columns
   #First warning below
   prot <- prot %>%
-    separate(X1, colnames_prot, sep=("  +")) %>%
+    separate(X1, colnames.op_ins_cls, sep=("  +")) %>%
     mutate(ClustName="", ClustID="")
 
   #ind_with_num contains a list of the row numbers with # in them.
@@ -36,15 +45,17 @@ clean_clust_file <- function(path, writepath=NULL, query){
 
   #Separate the clustIDs (# 186;ClustName) by ";" into columns ClustID and ClusName
   clsid <- separate(prot[ind_with_num, "AccNum"], col=AccNum,
-                    into=c("ClustID", "ClusName"), sep=";")
+                    into=c("ClustID", "ClusName"), sep="; ")
 
-  #iterate throught the rows of clsid and get it into proper format
-  #ex) # 186 -> 000001.186
+  #iterate through the rows of clsid and get it into proper format
+  #e.g. # 186 -> 000001.186
   for(x in 1:length(clsid$ClustID)){
     lng <- str_length(x)
     clsid$ClustID[x] <- gsub(pattern="# ",
                              replacement=paste0(strrep("0", (6-lng)), x, "."),
                              clsid$ClustID[x])
+    # removing extra space at the start of ClustName
+    clsid$ClusName[x] <- gsub(pattern="^ ", replacement="", clsid$ClusName[x])
   }
 
   ind_with_num <- ind_with_num %>% append((length(prot$AccNum)+1))
@@ -60,13 +71,6 @@ clean_clust_file <- function(path, writepath=NULL, query){
   prot <- prot %>%
     filter(!grepl("^#", prot$AccNum)) %>%
     mutate(Query=query)
-
-  prot <- select(prot,
-                 AccNum, Query, ClustID, ClustName, GenContext,
-                 PFAM, DomArch, arch.TMSIG, Length, GenName,
-                 Lineage, Species.old, Annotation, GI)
-
-  write_tsv(prot, writepath)
 
   return(prot)
 }
