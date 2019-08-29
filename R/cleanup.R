@@ -4,7 +4,12 @@
 
 ## Modified: Jun 06, 2019 (some func have been moved to summarize.R)
 ## Created: Aug 11, 2017
-## Janani Ravi (@jananiravi) & Samuel Chen (@samuelzchen)
+## Janani Ravi (@jananiravi) & Samuel Chen (@samuelzornchen)
+
+#################
+## Pkgs needed ##
+#################
+library(tidyverse)
 
 ###########################
 #### CLEANUP FUNCTIONS ####
@@ -14,11 +19,10 @@
 #'Cleans up the species column of a data frame by removing certain characters and rows.
 #'
 #'This function removes unneccessary characters from the 'Species' column.
-#'Certain rows may also removed from the table based on values in the 'GenContext.norep' column.
 #'A cleaned up version of the data table is returned.
 #'
-#'@param prot A data frame that contains columns 'Species' and 'GenContext.norep'
-#'@param remove_empty Boolean. If TRUE, rows with empty/unnecessary values in 'GenContext.norep' are removed
+#'@param prot A data frame that contains columns 'Species'.
+#'@param remove_empty Boolean. If TRUE, rows with empty/unnecessary values in 'Species' are removed
 #'@examples cleanup_species(pspa,TRUE)
 cleanup_species <- function(prot, remove_empty = FALSE){
   # FUNCTIONS CALLED HERE, if else might be better since only two options, T and F
@@ -46,32 +50,59 @@ cleanup_species <- function(prot, remove_empty = FALSE){
       filter(!grepl("^NA$", Species)) %>%	# remove "NA"
       filter(!grepl("^$", Species)) #%>%		# remove empty rows
   }
+}
 
-  ##########################
-  #'Cleanup Genomic Contexts
-  #'
-  #'Cleans up the GenContext column of a data frame by removing certain characters and rows.
-  #'
-  #'This function removes empty rows based on the 'GenContext' column.
-  #'A cleaned up version of the data table is returned.
-  #'
-  #'@param prot A data frame that contains columns 'GenContext.norep'
-  #'@param remove_empty Boolean. If TRUE, rows with empty/unnecessary values in 'GenContext.norep' are removed
-  #'@examples cleanup_species(pspa.sub,TRUE)
-  cleanup_gencontext <- function(prot, remove_empty=TRUE)
-    # FUNCTIONS CALLED HERE, if else might be better since only two options, T and F
-    if(remove_empty){
-      prot <- prot %>%
-        as_tibble() %>%
-        filter(grepl("\\*", GenContext.norep)) %>%		# Keep only rows with Query (*)
-        filter(!grepl("^-$", GenContext.norep)) %>%		# remove "-"
-        filter(!grepl("^NA$", GenContext.norep)) %>%	# remove "NA"
-        filter(!grepl("^$", GenContext.norep)) #%>%		# remove empty rows
-    }
-  return(prot)
+##########################
+#'Cleanup Genomic Contexts
+#'
+#'Cleans up the GenContext column of a data frame by removing certain characters and rows.
+#'
+#'This function removes empty rows based on the 'GenContext' column.
+#'A cleaned up version of the data table is returned.
+#'
+#'@param prot A data frame that contains columns 'GenContext'
+#'@param remove_empty Boolean. If TRUE, rows with empty/unnecessary values in 'GenContext' are removed
+#'@examples cleanup_species(pspa.sub,TRUE)
+cleanup_gencontext <- function(prot, remove_empty=TRUE){
+  # prot$GenContext <- prot$GenContext.orig
+  # FUNCTIONS CALLED HERE, if else might be better since only two options, T and F
+  if(remove_empty){
+    prot <- prot %>%
+      as_tibble() %>%
+      filter(grepl("\\*", GenContext)) %>%		# Keep only rows with Query (*)
+      filter(!grepl("^-$", GenContext)) %>%		# remove "-"
+      filter(!grepl("^NA$", GenContext)) %>%	# remove "NA"
+      filter(!grepl("^$", GenContext)) #%>%		# remove empty rows
+  }
+return(prot)
 }
 #Switch case for remove.empty.rows, check efficiency
 #Don't call other psp functions within these functions
+
+###########################
+#'Condense repeated domains
+#'
+#'Condenses repeated domains in the specified column.
+#'
+#'This function ...
+#'Certain domains can be removed according to an additional data frame.
+#'The original data frame is returned with the corresponding cleaned up column.
+#'
+#'@param prot A data frame containing a 'DomArch' column
+#'@param by_column Can take values "DomArch" or "ClustName" to ...
+#'@examples repeat2s(all, "DomArch")
+repeat2s <- function(prot, by_column="DomArch"){
+  switch(by_column,
+         DomArch = (prot$DomArch <- prot$DomArch %>%
+                      str_replace_all("\\+", " ") %>%
+                      str_replace_all("(?i)\\b([a-z0-9_-]+)\\b(?:\\s+\\1\\b)+", "\\1(s)") %>%
+                      str_replace_all(" ", "+")),
+         ClustName = (prot$ClustName <- prot$ClustName %>%
+                        str_replace_all("\\+", " ") %>%
+                        str_replace_all("(?i)\\b([a-z0-9_-]+)\\b(?:\\s+\\1\\b)+", "\\1(s)") %>%
+                        str_replace_all(" ", "+")))
+  return(prot)
+}
 
 ##############################
 #'Cleanup Domain Architectures
@@ -87,9 +118,10 @@ cleanup_species <- function(prot, remove_empty = FALSE){
 #'values in a column 'new'
 #'@param domains_remove A data frame containing the domain names to be removed in a column called 'domains'
 #'@examples replace_doms(pspa.sub,domains.replace,domains.remove)
-cleanup_domarch <- function(prot,domains_rename, domains_remove){ # was "replace_doms"
-  DomArch.old <- prot$DomArch
-
+cleanup_domarch <- function(prot, domains_rename, domains_remove){ # was "replace_doms"
+  prot$DomArch <- prot$DomArch.orig
+  # Calling repeat2s
+  repeat2s(prot=prot, by_column="DomArch")
   #replace domains based on the domains_rename list
   for(j in 1:length(domains_rename$old)){
     prot$DomArch <- str_replace_all(prot$DomArch,
@@ -106,14 +138,8 @@ cleanup_domarch <- function(prot,domains_rename, domains_remove){ # was "replace
   prot$DomArch <- gsub("^\\+","", prot$DomArch)
   prot$DomArch <- gsub("\\+$","", prot$DomArch)
 
-  # Deal with REPEATED DOMAINS by replacing with (s)!!
-  prot$DomArch <- prot$DomArch %>%
-    str_replace_all("\\+", " ") %>%
-    str_replace_all("(?i)\\b([a-z0-9_-]+)\\b(?:\\s+\\1\\b)+", "\\1(s)") %>%
-    str_replace_all(" ", "+")
-
-
-  return(cbind(prot, DomArch.old))
+  return(prot)
+  # return(cbind(prot, DomArch.old))
 }
 
 ######################
@@ -125,11 +151,14 @@ cleanup_domarch <- function(prot,domains_rename, domains_remove){ # was "replace
 #'The return value is the cleaned up data frame.
 #'
 #'@param cls_data A data frame that must contain columns Query and ClustName.
-#'
-#'@examples cls_cleanup(all_op_ins)
-cleanup_clust <- function(cls_data){
+#'@param by_column Can take values "ClustName" or "DomArch" to filter either cluster names
+#' or domain architectures by the query name! Default: ClustName.
+#'@examples cleanup_clust(all, "ClustName")
+cleanup_clust <- function(cls_data, by_column="ClustName"){
   master <- cls_data[0,]
-  #colnames(master) = colnames(cls_data)
+  #colnames(master) <- colnames(cls_data)
+
+  # retrieve unique query names
   queryNames <- select(cls_data, Query) %>%
     distinct()
 
@@ -137,12 +166,22 @@ cleanup_clust <- function(cls_data){
     #print(queryNames[i,])
     filtered_by_query <- cls_data %>%
       filter(Query == as.character(queryNames[i, "Query"]))
-    master <- rbind(master,
-                    filtered_by_query[grep(queryNames[i,],
-                                           filtered_by_query$ClustName,
-                                           ignore.case = T),])
+
+    switch(by_column,
+           # Return BLASTCLUST names that match the query domain
+           ClustName = (master <- rbind(master,
+                                        filtered_by_query[grep(queryNames[i,],
+                                                               filtered_by_query$ClustName,
+                                                               ignore.case = T),])),
+           # Return domain architectures that match the query domain
+           DomArch = (master <- rbind(master,
+                                      filtered_by_query[grep(queryNames[i,],
+                                                             filtered_by_query$DomArch,
+                                                             ignore.case = T),])))
   }
 
+  # !!UNFIXED ISSUE!! SIG+TM+TM+... kind of architectures without explicit domain names are lost.
+  # Need a way to take care of true hits that don't go by the same name.
   return(master)
 }
 

@@ -1,106 +1,131 @@
 ## Functions to cleanup the domain architecture column
+## Originally from V&L
+## Modified by JR, SZC.
 
+#################
+## Pkgs needed ##
+#################
 library(tidyverse)
 
 ## Reading domains.rename
 # Can just use psp again
 # Test run on SIg+TM+LADB... or DomArch
-domains_rename <- read_delim("data/acc_files/domains.replace.txt",
-                             "\t", escape_double = FALSE, col_names = FALSE,
-                             trim_ws = TRUE)
+domains_rename <- read_tsv("data/acc_files/domains_rename.txt")
 # data must have 2 columns (old, new)
-names(domains_rename) <- c("old","new") #rename one column to old and the other to new
+# names(domains_rename) <- c("old", "new") #rename one column to old and the other to new
 
 domains_rename
 
 ## Reading input protein/domain file
-prot <- read_delim("data/rawdata_tsv/all.txt")
+prot <- read_tsv("data/rawdata_tsv/all_raw.txt")
 
-prot$archold <- prot$DomArch
+# edited to create a duplicate 'new' DomArch column
+prot$DomArch <- prot$DomArch.orig
 #prot/eDNA_data is cleanblastclust file, probably could test on DomArch
 
 # For loop iterates through the rows from 1 to the end of domains_rename$old
 for (j in 1:length(domains_rename$old)) {
+  # ?? Replace globally? Or comment out??
+  # prot$DomArch.orig[grep(pattern=domains_rename$old[j],
+  #                x=prot$DomArch.orig)] <- gsub(pattern=domains_rename$old[j],
+  #                                         replacement=domains_rename$new[j],
+  #                                         x=prot$DomArch.orig[grep(domains_rename$old[j],
+  #                                                                  prot$DomArch.orig)])
+  # Tidyverse version
+  # prot$DomArch <- prot$DomArch.orig %>%
+  #   str_replace_all(pattern=domains_rename$old[j], replacement=domains_rename$new[j])
 
-  #prot$arch[grep(domains_rename$old[j], prot$arch)]=gsub(domains_rename$old[j], domains_rename$new[j],x = prot$arch[grep(domains_rename$old[j], prot$arch)])
-  #regterm is the string "^domainofold\\+"
-  regterm <- paste("^",domains_rename$old[j],
-                   "\\+",sep="")
-  #repterm is the string "domofnew+"
-  repterm <- paste(domains_rename$new[j],
-                   "\\+",sep="")
-  #All indeces in prot$arch that match regterm, are replaced with repterm
-  prot$arch[grep(regterm, prot$arch)] <- gsub(regterm, repterm,
-                                              x = prot$arch[grep(regterm, prot$arch)])
+  ## Replace first instance
+  #find_term #1: "^domain_old\\+"
+  find_term <- paste("^", domains_rename$old[j],
+                   "\\+", sep="")
+  #replace_term #1: "domain_new+"
+  replace_term <- paste(domains_rename$new[j],
+                   "\\+", sep="")
+  #All indices in prot$DomArch that match find_term, are replaced with replace_term
+  prot$DomArch[grep(find_term, prot$DomArch)] <- gsub(find_term, replace_term,
+                                                      x=prot$DomArch[grep(find_term,
+                                                                          prot$DomArch)])
 
-  #regterm now is "+domainofold$" (very similar to first regterm)
-  regterm <- paste("\\+",domains_rename$old[j],
-                   "$",sep="")
-  #repterm is now "+domainofnew" (very similar to first repterm)
-  repterm <- paste("\\+",domains_rename$new[j],
+  ## Replace last instance
+  #find_term #2: "+domain_old$" (very similar to first find_term)
+  find_term <- paste("\\+", domains_rename$old[j],
+                   "$", sep="")
+  #replace_term #2: "+domain_new" (very similar to first replace_term)
+  replace_term <- paste("\\+", domains_rename$new[j],
                    sep="")
-  #All indeces in prot$arch that match second regterm are replaced with second repterm
-  prot$arch[grep(regterm, prot$arch)] <- gsub(regterm, repterm,
-                                              x = prot$arch[grep(regterm, prot$arch)])
+  #All indices in prot$DomArch that match second find_term are replaced with second replace_term
+  prot$DomArch[grep(find_term, prot$DomArch)] <- gsub(find_term, replace_term,
+                                                      x=prot$DomArch[grep(find_term,
+                                                                          prot$DomArch)])
 
-  #regterm3 = "+domainofold+"
-  regterm <- paste("\\+", domains_rename$old[j],
+  ## Replace middle instances
+  #find_term #3: "+domain_old+"
+  find_term <- paste("\\+", domains_rename$old[j],
                    "\\+", sep="")
-  #repterm3 = "+domainofnew+"
-  repterm <- paste("\\+", domains_rename$new[j],
+  #replace_term #3: "+domainofnew+"
+  replace_term <- paste("\\+", domains_rename$new[j],
                    "\\+", sep="")
 
-  #repterm= domains_rename$new[j]
+  #replace_term= domains_rename$new[j]
   #What does[1] do?
-  #while iterates keeps going until no more strings in prot$arch match regterm
-  while(length(prot$arch[grep(regterm[1], prot$arch)]) > 0) {
-    #replace the regterm with repterm
-    prot$arch[grep(regterm, prot$arch)] <- gsub(regterm, repterm,
-                                                x = prot$arch[grep(regterm, prot$arch)])
+  #while iterates keeps going until no more strings in prot$DomArch match find_term
+  while(length(prot$DomArch[grep(find_term[1], prot$DomArch)]) > 0) {
+    #replace the find_term with replace_term
+    prot$DomArch[grep(find_term, prot$DomArch)] <- gsub(find_term, replace_term,
+                                                        x=prot$DomArch[grep(find_term,
+                                                                            prot$DomArch)])
   }
 }
 
-## Reading domains.afterrename.group.tsv
+## UNUSED by JR & co. so far!
+## Generating ignore list! Reading in our list instead.
+# ## Reading domains.afterrename.group.tsv
+#
+# domains_afterrename_group <- read_delim("data/acc_files/domains.afterrename.group.tsv",
+#                                         "\t", escape_double = FALSE, col_names = FALSE,
+#                                         trim_ws = TRUE)
+# domains_afterrename_group
+#
+#
+# # Generating domains to ignore and cleaning the names in arch
+# #ge is a vector containing vectors of the strings in prot$DomArch that are split where there is a '\+'
+# ge <- unlist(strsplit(prot$DomArch, "\\+"))
+#
+# #domains_ignore = the elements in ge that aren't in domains_afterrename_group$X1
+# domains_ignore <- setdiff(ge, domains_afterrename_group$X1)
 
-domains_afterrename_group <- read_delim("data/acc_files/domains.afterrename.group.tsv",
-                                        "\t", escape_double = FALSE, col_names = FALSE,
-                                        trim_ws = TRUE)
-domains_afterrename_group
 
-
-# Generating domains to ignore and cleaning the names in arch
-#ge is a vector containing vectors of the strings in prot$arch that are split where there is a '\+'
-ge <- unlist(strsplit(prot$arch, "\\+"))
-
-#domains.ignore = the elements in ge that aren't in domains_afterrename_group$X1
-domains.ignore <- setdiff(ge, domains_afterrename_group$X1)
-
-# for loop essentially replaces the elements in prot$arch that match domains.ignore with
+## Reading domains_ignore
+domains_ignore <- read_tsv("data/acc_files/domains_ignore.txt")
+# for loop essentially replaces the elements in prot$DomArch that match domains_ignore with
 #\+, or maybe just delete them all
 
-# for loop goes from 1 to length of domains.ignore
-for (j in 1:length(domains.ignore)) {
-  #regterm = "\+domains.ignore\+", changes for each iteration
-  regterm <- paste("\\+", domains.ignore[j], "\\+",
+# for loop goes from 1 to length of domains_ignore
+for (j in 1:length(domains_ignore)) {
+  #find_term = "\+domains_ignore\+", changes for each iteration
+  find_term <- paste("\\+", domains_ignore[j], "\\+",
                    sep="")
-  #while loop goes until no more terms in prot$arch match regterm
-  while(length(prot$arch[grep(regterm[1], prot$arch)]) > 0) {
-    #substitute "\+" for regterm in prot$arch
-    prot$arch[grep(regterm[1], prot$arch)] <- gsub(regterm[1], "\\+",
-                                                   x = prot$arch[grep(regterm[1], prot$arch)])
+  #while loop goes until no more terms in prot$DomArch match find_term
+  while(length(prot$DomArch[grep(find_term[1], prot$DomArch)]) > 0) {
+    #substitute "\+" for find_term in prot$DomArch
+    prot$DomArch[grep(find_term[1], prot$DomArch)] <- gsub(find_term[1], "\\+",
+                                                           x=prot$DomArch[grep(find_term[1],
+                                                                               prot$DomArch)])
 
   }
-  #regterm = "^domains.ignore\+|\+domains.ignore$"
-  regterm <- paste("^", domains.ignore[j], "\\+","|","\\+", domains.ignore[j],"$",
+  #find_term = "^domains_ignore\+|\+domains_ignore$"
+  find_term <- paste("^", domains_ignore[j], "\\+", "|", "\\+", domains_ignore[j], "$",
                    sep="")
-  #replace prot$arch elements that match regterm with "" (delete the elements that match domains.ignore)
-  prot$arch[grep(regterm[1], prot$arch)] <- gsub(regterm[1], "",
-                                                 x = prot$arch[grep(regterm[1], prot$arch)] )
+  #replace prot$DomArch elements that match find_term with "" (delete the elements that match domains_ignore)
+  prot$DomArch[grep(find_term[1], prot$DomArch)] <- gsub(find_term[1], "",
+                                                         x=prot$DomArch[grep(find_term[1],
+                                                                             prot$DomArch)] )
 
-  #prot$arch=gsub("\\+{2,}", "+", prot$arch)
-  #prot$arch=gsub("^\\+|\\+$", "", prot$arch)
+  #prot$DomArch=gsub("\\+{2, }", "+", prot$DomArch)
+  #prot$DomArch=gsub("^\\+|\\+$", "", prot$DomArch)
 }
 
 
 ## Cleaning up orphan SIG/TM archs
-prot <- prot[- which (prot$arch == "SIG" | prot$arch == "TM"), ]
+prot <- prot[- which (prot$DomArch == "SIG" | prot$DomArch == "TM"), ]

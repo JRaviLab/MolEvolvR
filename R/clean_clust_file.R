@@ -43,9 +43,9 @@ clean_clust_file <- function(path, writepath=NULL, query){
   #This indicates that the row contains a clust id
   ind_with_num <- which(grepl("^#", prot$AccNum))
 
-  #Separate the clustIDs (# 186;ClustName) by ";" into columns ClustID and ClusName
+  #Separate the clustIDs (# 186;ClustName) by ";" into columns ClustID and ClustName
   clsid <- separate(prot[ind_with_num, "AccNum"], col=AccNum,
-                    into=c("ClustID", "ClusName"), sep="; ")
+                    into=c("ClustID", "ClustName"), sep="; ")
 
   #iterate through the rows of clsid and get it into proper format
   #e.g. # 186 -> 000001.186
@@ -55,14 +55,15 @@ clean_clust_file <- function(path, writepath=NULL, query){
                              replacement=paste0(strrep("0", (6-lng)), x, "."),
                              clsid$ClustID[x])
     # removing extra space at the start of ClustName
-    clsid$ClusName[x] <- gsub(pattern="^ ", replacement="", clsid$ClusName[x])
+    clsid$ClustName[x] <- gsub(pattern="^ ", replacement="",
+                               clsid$ClustName[x])
   }
 
   ind_with_num <- ind_with_num %>% append((length(prot$AccNum)+1))
   #Assign CLS id and CLS name to all rows
   for (x in length(ind_with_num):2) {
     prot[which(as.numeric(rownames(prot))
-               < ind_with_num[x]), "ClustName"]= clsid[x-1, "ClusName"]
+               < ind_with_num[x]), "ClustName"]= clsid[x-1, "ClustName"]
     prot[which(as.numeric(rownames(prot))
                < ind_with_num[x]), "ClustID"]= clsid[x-1, "ClustID"]
   }
