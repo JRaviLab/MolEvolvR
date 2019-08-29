@@ -1,0 +1,17 @@
+domains
+PspA_IM30
+PspA
+Snf7
+SIG
+DUF1700
+DUF1707
+PspB
+PspC
+Toast-rack
+LiaI-LiaF-TM
+LiaI
+LiaF
+LiaG
+PspM
+PspN
+SIG+TM(s)
