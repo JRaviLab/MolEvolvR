@@ -1,6 +1,9 @@
 old	new
 toast-rack	Toast-rack
 toastrack	Toast-rack
+Toastrack	Toast-rack
+toast_rack	Toast-rack
+Toast_rack	Toast-rack
 DUF4097	Toast-rack
 DUF2154	Toast-rack
 DUF2807	Toast-rack
