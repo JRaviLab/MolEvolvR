@@ -3,6 +3,11 @@
 ## Created: Jun 07, 2019 (was part of cleanup.R)
 ## Janani Ravi (@jananiravi) & Samuel Chen (@samuelzchen)
 
+#################
+## Pkgs needed ##
+#################
+library(tidyverse)
+
 ###########################
 ## COUNTS of DAs and GCs ##
 ## Before/after break up ##
