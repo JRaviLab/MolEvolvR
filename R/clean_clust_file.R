@@ -33,19 +33,19 @@ clean_clust_file <- function(path, writepath=NULL, query){
   # ?? Unused? clust contains a column containing all the clustids
   clust <- prot %>% filter(grepl("^#", X1))
 
-  #Separate all rows into columns by spaces and create ClustName and ClustID columns
+  #Separate all rows into columns by spaces and create ClustName.orig and ClustID columns
   #First warning below
   prot <- prot %>%
     separate(X1, colnames.op_ins_cls, sep=("  +")) %>%
-    mutate(ClustName="", ClustID="")
+    mutate(ClustName.orig="", ClustID="")
 
   #ind_with_num contains a list of the row numbers with # in them.
   #This indicates that the row contains a clust id
   ind_with_num <- which(grepl("^#", prot$AccNum))
 
-  #Separate the clustIDs (# 186;ClustName) by ";" into columns ClustID and ClustName
+  #Separate the clustIDs (# 186;ClustName) by ";" into columns ClustID and ClustName.orig
   clsid <- separate(prot[ind_with_num, "AccNum"], col=AccNum,
-                    into=c("ClustID", "ClustName"), sep="; ")
+                    into=c("ClustID", "ClustName.orig"), sep="; ")
 
   #iterate through the rows of clsid and get it into proper format
   #e.g. # 186 -> 000001.186
@@ -55,8 +55,8 @@ clean_clust_file <- function(path, writepath=NULL, query){
                              replacement=paste0(strrep("0", (6-lng)), x, "."),
                              clsid$ClustID[x])
     # removing extra space at the start of ClustName
-    clsid$ClustName[x] <- gsub(pattern="^ ", replacement="",
-                               clsid$ClustName[x])
+    clsid$ClustName.orig[x] <- gsub(pattern="^ ", replacement="",
+                               clsid$ClustName.orig[x])
   }
 
   ind_with_num <- ind_with_num %>% append((length(prot$AccNum)+1))
