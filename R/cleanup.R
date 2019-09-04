@@ -26,7 +26,7 @@ library(tidyverse)
 #'@examples cleanup_species(pspa,TRUE)
 cleanup_species <- function(prot, remove_empty = FALSE){
   # FUNCTIONS CALLED HERE, if else might be better since only two options, T and F
-  prot$Species <- prot$Species %>%
+  prot$Species <- prot$Species.orig %>%
     str_replace_all(coll("sp. ", TRUE), "sp ") %>%
     str_replace_all(coll("str. ", TRUE), "str ") %>%
     str_replace_all(coll(" = ", TRUE), " ") %>%
@@ -63,7 +63,7 @@ cleanup_species <- function(prot, remove_empty = FALSE){
 #'@param prot A data frame that contains columns 'GenContext'
 #'@param remove_empty Boolean. If TRUE, rows with empty/unnecessary values in 'GenContext' are removed
 #'@examples cleanup_species(pspa.sub,TRUE)
-cleanup_gencontext <- function(prot, remove_empty=TRUE){
+cleanup_gencontext <- function(prot, remove_empty=FALSE){
   # prot$GenContext <- prot$GenContext.orig
   # FUNCTIONS CALLED HERE, if else might be better since only two options, T and F
   if(remove_empty){

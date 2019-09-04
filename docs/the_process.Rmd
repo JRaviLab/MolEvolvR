@@ -81,7 +81,7 @@ for(x in list.files("data/rawdata_opinscls")){
 # Appending genome-specific signature columns.
 # Reading TaxIDs
 all_taxid <- read_tsv("data/acc_files/all.taxid", col_names=F)
-colnames(all_taxid) <- c("AccNum", "TaxID", "Species")
+colnames(all_taxid) <- c("AccNum", "TaxID", "Species.q")
 # Reading GCA numbers
 all_gca <- read_tsv("data/acc_files/all.gca", col_names=F)
 colnames(all_gca) <- c("AccNum", "GCA_ID")
@@ -93,7 +93,7 @@ all <- all %>%
 all <- all %>%
   select(AccNum, Query, ClustID, ClustName,
          DomArch.orig, GenContext.orig,
-         Lineage, Species, TaxID, GCA_ID,
+         Lineage, Species.q, TaxID, GCA_ID,
          arch.PFAM, arch.TMSIG,
          Length, GenName,
          Species.orig, Annotation, GI)
