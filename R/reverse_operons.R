@@ -1,71 +1,122 @@
-library(tidyverse)
+# Function to straighten operons (genomic contexts)
+# Written by L. Aravind
+# Modified by Janani Ravi and Samuel Chen
 
-#'Reverse Operons
-#'
-#'Reverses the direction of the operons
-#'
-#'This function reverses the direction of operons in a column of a data frame called 'GenContext'. Returns
-#'the original dataframe with the original operons in a column called 'GenContext.old' and the reversed
-#'operons in a column called 'GenContext'
-#'
-#'@param prot A data frame containing a GenContext column
-#'@examples reverse_operons(pspa.sub)
-reverse_operons <- function(prot){
-  #operon straightner
-  opvec <- prot$GenContext.norep   #operon column from a df containing cleanblastclust columns
-  opvec <- gsub(pattern = ">",replacement = ">|",x = opvec)%>%
-    gsub(pattern = "<",replacement = "|<") %>%
-    gsub(pattern = "\\|\\|",replacement = "\\|=\\|")
 
-  #op.list takes opvec and for each element in opvec, a list of characters are created by spliting the strings
-  op.list <- strsplit(x = opvec, split =  "\\|")%>%
-    replace_na("-")
-  #Removes empty strings from the list
-  op.list <- map(1:length(op.list),
-                 function(x) {
-                   if(any(op.list[[x]]=="")) op.list[[x]][which(op.list[[x]] !="")]
-                   else op.list[[x]] })
-  #te is the
-  te <- map(1:length(op.list),
-            function(x) op.list[[x]][grep("\\*", op.list[[x]])])
-  torev <- grep("^<",te)
+reveql <- function(prot){
+  w <- prot$GenContext # was 'x'
 
-  te <- op.list[torev]%>%
-    map( function(x) gsub(pattern = "<-|->", replacement = "",x = x)) %>%
-    map(rev)
-  witheq <- grep(pattern = "=",x = te)
-  withouteq <- which(!((1:length(te)) %in% witheq))
-  ge <- te[witheq]
+  y <- rep(NA, length(w))
 
-  reveql=function(x){
-    w <- x
-    y <- rep(NA, length(w))
-    d <- 1
-    for(j in 1:length(w)){
-      if(w[j]=="=") d <- d*(-1)
-      if(d==1 && w[j] != "=") {y[j]=paste(w[j],"->", sep = "")
-      } else if (d==-1 && w[j] != "="){
-        y[j] <- paste("<-",w[j], sep = "")
-      } else{
-        y[j] <- "="
-      }
+  d <- 1
+
+  b <- grep("\\*", w)
+
+  for(j in b:length(w)){
+    if(w[j]=="=") {d= d*(-1)}
+
+    if(d==1 && w[j] != "=") {
+      y[j] <- paste( w[j], "->",sep = "")
+    } else if (d==-1 && w[j] != "="){
+      y[j] <- paste("<-",w[j], sep = "")
+    } else{
+      y[j] <- "="
     }
-    return(y)
-  }
+  } # (for)
 
-  ge <- map(1:length(ge), function(x) reveql(ge[[x]]))
-  ye <- te[withouteq]
-  ye <- map(1:length(ye), function(x) unname(sapply(ye[[x]], function(y) paste(y,"->", sep = ""))))
+  if(b >1){
+    d <- 1
 
-  te[witheq] <- ge
-  te[withouteq]<-ye
-  op.list[torev] <- te
+  for(j in (b-1):1){
+    if(w[j]=="=") {d <-  d*(-1)}
 
-  revopvec <- unlist(map(op.list, function(x) paste(x, collapse = "")))%>%
-    gsub(pattern = "=",replacement = "\\|\\|") %>%
-    tibble::enframe(name = NULL)
-  colnames(revopvec) <- (c("GenContext.norep"))
-  names(prot)[names(prot)=='GenContext.norep'] <- "GenContext.norep.old"
-  return(cbind(prot,revopvec))
+    if(d==1 && w[j] != "=") {
+      y[j]=paste( w[j], "->",sep = "")
+    } else if (d==-1 && w[j] != "="){
+      y[j] <- paste("<-",w[j], sep = "")
+    } else{
+      y[j] <- "="
+    }
+  } # (for)
+
+  } # (if b>1)
+
+  return(y)
+
 }
 
+## The function to reverse operons
+
+reverse_operon <- function(prot){
+  gencontext <- prot$GenContext
+
+  gencontext <- gsub(pattern = ">",replacement = ">|",x = gencontext)
+
+  gencontext <- gsub(pattern = "<",replacement = "|<",x = gencontext)
+
+  gencontext <- gsub(pattern = "\\|\\|",replacement = "\\|=\\|",x = gencontext)
+
+
+
+  gc.list <- strsplit(x = gencontext, split =  "\\|")
+
+  if(any(is.na(gc.list))) gc.list[[which(is.na(gc.list))]] <- "-"
+
+  gc.list <- lapply(1:length(gc.list), function(x) {if(any(gc.list[[x]]=="")) gc.list[[x]][which(gc.list[[x]] !="")] else gc.list[[x]] })
+
+
+
+  te <- lapply(1:length(gc.list), function(x) gc.list[[x]][grep("\\*", gc.list[[x]])])
+
+  ye <- unlist(lapply(te, function(x) substr(x[1],1,1)))
+
+  torev <- which(ye=="<")
+
+
+
+  te <- gc.list[torev]
+
+  te <- lapply(te, function(x) gsub(pattern = "<-|->", replacement = "",x = x))
+
+  te <- lapply(te, rev)
+
+  witheq <- grep(pattern = "=",x = te)
+
+  withouteq <- which(!((1:length(te)) %in% witheq))
+
+  ge <- te[witheq]
+
+
+
+  ge <- lapply(1:length(ge), function(x) reveql(ge[[x]]))
+
+  ye <- te[withouteq]
+
+  ye <- lapply(1:length(ye), function(x) unname(sapply(ye[[x]], function(y) paste(y,"->", sep = ""))))
+
+
+
+  te[witheq] <- ge
+
+  te[withouteq] <- ye
+
+  gc.list[torev] <- te
+
+
+
+  rev.gencontext <- unlist(lapply(gc.list, function(x) paste(x, collapse = "")))
+
+  rev.gencontext <- gsub(pattern = "=",replacement = "\\|\\|",rev.gencontext)
+
+  return(rev.gencontext)
+
+}
+
+
+
+##############
+
+colnames(prot) <- c("AccNum","GenContext","len", "GeneName","TaxID","Species")
+
+# straighten operons
+prot$GenContext <- reverse_operon(prot$GenContext)
