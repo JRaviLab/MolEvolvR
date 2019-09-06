@@ -24,7 +24,7 @@ library(tidyverse)
 #'@param prot A data frame that contains columns 'Species'.
 #'@param remove_empty Boolean. If TRUE, rows with empty/unnecessary values in 'Species' are removed
 #'@examples cleanup_species(pspa,TRUE)
-cleanup_species <- function(prot, remove_empty = FALSE){
+cleanup_species <- function(prot, remove_empty=FALSE){
   # FUNCTIONS CALLED HERE, if else might be better since only two options, T and F
   prot$Species <- prot$Species.orig %>%
     str_replace_all(coll("sp. ", TRUE), "sp ") %>%
@@ -52,6 +52,27 @@ cleanup_species <- function(prot, remove_empty = FALSE){
   }
 }
 
+###########################
+#'Condense repeated domains
+#'
+#'Condenses repeated domains in the specified column.
+#'
+#'This function ...
+#'Certain domains can be removed according to an additional data frame.
+#'The original data frame is returned with the corresponding cleaned up column.
+#'
+#'@param prot A data frame containing 'DomArch', 'GenContext', 'ClustName' columns.
+#'@param by_column Column in which repeats are condensed to domain+domain -> domain(s).
+#' Default column is 'DomArch'. Can also take the following as input, 'GenContext', 'ClustName'.
+#'@examples repeat2s(prot, "DomArch")
+repeat2s <- function(prot, by_column="DomArch"){
+  prot[,by_column] <- prot[,by_column] %>%
+                      str_replace_all("\\+", " ") %>%
+                      str_replace_all("(?i)\\b([a-z0-9_-]+)\\b(?:\\s+\\1\\b)+", "\\1(s)") %>%
+                      str_replace_all(" ", "+")
+  return(prot)
+}
+
 ##########################
 #'Cleanup Genomic Contexts
 #'
@@ -60,11 +81,17 @@ cleanup_species <- function(prot, remove_empty = FALSE){
 #'This function removes empty rows based on the 'GenContext' column.
 #'A cleaned up version of the data table is returned.
 #'
-#'@param prot A data frame that contains columns 'GenContext'
+#'@param prot A data frame that contains columns 'GenContext.orig'
+#'@param repeat2s Boolean. If TRUE, repeated domains in 'GenContext' are condensed. Default is TRUE.
 #'@param remove_empty Boolean. If TRUE, rows with empty/unnecessary values in 'GenContext' are removed
-#'@examples cleanup_species(pspa.sub,TRUE)
+#'@examples cleanup_gencontext(prot, FALSE)
 cleanup_gencontext <- function(prot, remove_empty=FALSE){
-  # prot$GenContext <- prot$GenContext.orig
+  prot$GenContext <- prot$GenContext.orig
+  # Condsense repeats
+  if(repeats2s){
+  repeat2s(prot, "GenContext")
+  }
+
   # FUNCTIONS CALLED HERE, if else might be better since only two options, T and F
   if(remove_empty){
     prot <- prot %>%
@@ -79,31 +106,6 @@ return(prot)
 #Switch case for remove.empty.rows, check efficiency
 #Don't call other psp functions within these functions
 
-###########################
-#'Condense repeated domains
-#'
-#'Condenses repeated domains in the specified column.
-#'
-#'This function ...
-#'Certain domains can be removed according to an additional data frame.
-#'The original data frame is returned with the corresponding cleaned up column.
-#'
-#'@param prot A data frame containing a 'DomArch' column
-#'@param by_column Can take values "DomArch" or "ClustName" to ...
-#'@examples repeat2s(all, "DomArch")
-repeat2s <- function(prot, by_column="DomArch"){
-  switch(by_column,
-         DomArch = (prot$DomArch <- prot$DomArch %>%
-                      str_replace_all("\\+", " ") %>%
-                      str_replace_all("(?i)\\b([a-z0-9_-]+)\\b(?:\\s+\\1\\b)+", "\\1(s)") %>%
-                      str_replace_all(" ", "+")),
-         ClustName = (prot$ClustName <- prot$ClustName %>%
-                        str_replace_all("\\+", " ") %>%
-                        str_replace_all("(?i)\\b([a-z0-9_-]+)\\b(?:\\s+\\1\\b)+", "\\1(s)") %>%
-                        str_replace_all(" ", "+")))
-  return(prot)
-}
-
 ##############################
 #'Cleanup Domain Architectures
 #'
@@ -114,26 +116,34 @@ repeat2s <- function(prot, by_column="DomArch"){
 #'The original data frame is returned with the clean DomArchs column and the old domains in the DomArchs.old column.
 #'
 #'@param prot A data frame containing a 'DomArch' column
+#'@param repeat2s Boolean. If TRUE, repeated domains in 'DomArch' are condensed. Default is TRUE.
 #'@param domains_rename A data frame containing the domain names to be replaced in a column 'old' and the corresponding replacement
 #'values in a column 'new'
-#'@param domains_remove A data frame containing the domain names to be removed in a column called 'domains'
-#'@examples replace_doms(pspa.sub,domains.replace,domains.remove)
-cleanup_domarch <- function(prot, domains_rename, domains_remove){ # was "replace_doms"
+#'@param domains_ignore A data frame containing the domain names to be removed in a column called 'domains'
+#'@examples cleanup_domarch(prot, TRUE, domains_rename, domains_ignore)
+cleanup_domarch <- function(prot, repeat2s=TRUE, domains_rename, domains_ignore){
   prot$DomArch <- prot$DomArch.orig
-  # Calling repeat2s
+
+  # Condense repeats
+  if(repeat2s){
   repeat2s(prot=prot, by_column="DomArch")
-  #replace domains based on the domains_rename list
+  }
+
+  # Replace domains based on the domains_rename list
   for(j in 1:length(domains_rename$old)){
     prot$DomArch <- str_replace_all(prot$DomArch,
                                     as.vector(domains_rename$old[j]),
                                     as.vector(domains_rename$new[j]))
   }
-  #remove domains based on the domains_remove list
-  for(j in 1:length(as.vector(domains_remove$domains))){
+
+  # Remove domains based on the domains_ignore list
+  # ?? Remove the domains or the rows? Check, please!
+  for(j in 1:length(as.vector(domains_ignore$domains))){
     prot$DomArch <- str_remove_all(prot$DomArch,
-                                   as.vector(domains_remove$domains[j]))
+                                   as.vector(domains_ignore$domains[j]))
   }
-  #remove '+' at the start and end, as well as consecuative '+'
+
+  # Remove '+' at the start and end, as well as consecuative '+'
   prot$DomArch <- gsub("\\++\\+","\\+", prot$DomArch)
   prot$DomArch <- gsub("^\\+","", prot$DomArch)
   prot$DomArch <- gsub("\\+$","", prot$DomArch)
@@ -151,37 +161,34 @@ cleanup_domarch <- function(prot, domains_rename, domains_remove){ # was "replac
 #'The return value is the cleaned up data frame.
 #'
 #'@param cls_data A data frame that must contain columns Query and ClustName.
-#'@param by_column Can take values "ClustName" or "DomArch" to filter either cluster names
-#' or domain architectures by the query name! Default: ClustName.
-#'@examples cleanup_clust(all, "ClustName")
-cleanup_clust <- function(cls_data, by_column="ClustName"){
+#'@param by_column Boolean. If TRUE, 'ClustName' will be filtered based on domains to keep/remove. Default is TRUE.
+#'@param repeat2s Boolean. If TRUE, repeated domains in 'ClustName' are condensed. Default is TRUE.
+#'@examples cleanup_clust(prot, "ClustName", TRUE)
+cleanup_clust <- function(cls_data, repeat2s=TRUE, domains_keep){
   master <- cls_data[0,]
   #colnames(master) <- colnames(cls_data)
 
-  # retrieve unique query names
-  queryNames <- select(cls_data, Query) %>%
-    distinct()
-
+  # # Retrieve unique query names
+  # queryNames <- select(cls_data, Query) %>%
+  #   distinct()
   for(i in 1:length(queryNames$Query)){
     #print(queryNames[i,])
     filtered_by_query <- cls_data %>%
       filter(Query == as.character(queryNames[i, "Query"]))
+    # Return BLASTCLUST names that match the 'domains to keep' list
+    master <- rbind(master,
+                    filtered_by_query[grep(queryNames[i,],
+                                           filtered_by_query$ClustName,
+                                           ignore.case = T),])
+  }
 
-    switch(by_column,
-           # Return BLASTCLUST names that match the query domain
-           ClustName = (master <- rbind(master,
-                                        filtered_by_query[grep(queryNames[i,],
-                                                               filtered_by_query$ClustName,
-                                                               ignore.case = T),])),
-           # Return domain architectures that match the query domain
-           DomArch = (master <- rbind(master,
-                                      filtered_by_query[grep(queryNames[i,],
-                                                             filtered_by_query$DomArch,
-                                                             ignore.case = T),])))
+  # Condense repeats
+  if(repeat2s){
+    repeat2s(prot, "ClustName")
   }
 
   # !!UNFIXED ISSUE!! SIG+TM+TM+... kind of architectures without explicit domain names are lost.
-  # Need a way to take care of true hits that don't go by the same name.
+  # Need a way to take care of true hits that don't go by the expected domain name.
   return(master)
 }
 
