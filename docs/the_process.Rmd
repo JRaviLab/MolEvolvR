@@ -114,16 +114,16 @@ prot <- read_delim("data/rawdata_tsv/all_raw.txt",
 lineages_map <- read_delim("data/acc_files/organisms2lineages_map_bae_20170828.txt",
                            delim="\t", col_names=T, comment="#", trim_ws=T)
 
-domains.rename <- read_delim("data/acc_files/domains_rename.txt",
+domains_rename <- read_delim("data/acc_files/domains_rename.txt",
                               delim="\t", col_names=TRUE)
 
-domains.ignore <- read_delim("data/acc_files/domains_ignore.txt",
+domains_ignore <- read_delim("data/acc_files/domains_ignore.txt",
                              delim="\t", col_names=T)
 
-domains.keep <- read_delim("data/acc_files/domains_keep.txt",
+domains_keep <- read_delim("data/acc_files/domains_keep.txt",
                             delim="\t", col_names=T)
 
-query.domains <- read_delim("data/acc_files/query_domains.txt",
+query_domains <- read_delim("data/acc_files/query_domains.txt",
                             delim="\t", col_names=T)
 ```
 
@@ -132,29 +132,29 @@ query.domains <- read_delim("data/acc_files/query_domains.txt",
 ```{r cleanup, eval=T, results='hide', message=F}
 # Cleanup Clusters
 prot <- prot %>%
-  cleanup_clust()
+  cleanup_clust(TRUE)
 
 # Cleanup Species
 prot <- prot %>%
-  cleanup_species()
+  cleanup_species(FALSE)
 
 # Cleanup GenContext
 prot <- prot %>%
-  cleanup_gencontext(TRUE)
+  cleanup_gencontext(FALSE)
 
 # Cleanup DomArch
 # Rename DomArch.norep to DomArch because that's what replace_doms requires as a column
 colnames(prot)[colnames(prot)=="DomArch.norep"] <- "DomArch"
 
 prot <- prot %>%
-  cleanup_domarch(domains.replace,domains.remove)
+  cleanup_domarch(TRUE, domains_rename, domains_ignore)
 
 #Give original name back
 colnames(prot)[colnames(prot)=="DomArch"] <- "DomArch.norep"
 
 # Reverse/Straighten Operons
-prot <- prot %>%
-  reverse_operons()
+prot$GenContext.st <- prot %>%
+  reverse_operon()
 ```
 
 ## Data analysis
