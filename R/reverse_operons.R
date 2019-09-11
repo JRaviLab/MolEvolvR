@@ -4,7 +4,7 @@
 
 
 reveql <- function(prot){
-  w <- prot$GenContext # was 'x'
+  w <- prot #$GenContext.orig # was 'x'
 
   y <- rep(NA, length(w))
 
@@ -48,7 +48,7 @@ reveql <- function(prot){
 ## The function to reverse operons
 
 reverse_operon <- function(prot){
-  gencontext <- prot$GenContext
+  gencontext <- prot$GenContext.orig
 
   gencontext <- gsub(pattern = ">",replacement = ">|",x = gencontext)
 
@@ -108,7 +108,9 @@ reverse_operon <- function(prot){
 
   rev.gencontext <- gsub(pattern = "=",replacement = "\\|\\|",rev.gencontext)
 
-  return(rev.gencontext)
+  #return(rev.gencontext)
+
+  return(cbind(prot,"GenContext.norep"=rev.gencontext))
 
 }
 
@@ -116,7 +118,7 @@ reverse_operon <- function(prot){
 
 ##############
 
-colnames(prot) <- c("AccNum","GenContext","len", "GeneName","TaxID","Species")
+colnames(prot) <- c("AccNum","GenContext.orig","len", "GeneName","TaxID","Species")
 
 # straighten operons
-prot$GenContext <- reverse_operon(prot$GenContext)
+prot$GenContext.orig <- reverse_operon(prot)
