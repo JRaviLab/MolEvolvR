@@ -1,0 +1,457 @@
+BAQ29470.1	77	BBKW_1335	actinobacteria	Bifidobacterium catenulatum subsp. kashiwanohense JCM 15439 = DSM	GCA_001042615.1	conserved hypothetical protein [Bifidobacterium catenulatum subsp. kashiwanohense JCM 15439 = DSM 21854].	757808684
+ACJ52047.1	99	Blon_0948	actinobacteria	Bifidobacterium longum subsp. infantis ATCC 15697 = JCM 1222 = DSM	GCA_000020425.1	hypothetical protein Blon_0948 [Bifidobacterium longum subsp. infantis ATCC 15697 = JCM 1222 = DSM 20088].	213523300
+BAJ68555.1	77	BLIJ_0965	actinobacteria	Bifidobacterium longum subsp. infantis ATCC 15697 = JCM 1222 = DSM	GCA_000269965.1	conserved hypothetical protein [Bifidobacterium longum subsp. infantis ATCC 15697 = JCM 1222 = DSM 20088].	320457934
+APW96603.1	290	CHINAEXTREME_01925	archaea>euryarchaeota	Halobiforma lacisalsi AJ5	GCA_000226975.3	phage shock protein A [Halobiforma lacisalsi AJ5].	1134496586
+ALN16120.1	64	ASQ49_13580	bacteria>actinobacteria	Acidipropionibacterium acidipropionici	GCA_001441165.1	hypothetical protein ASQ49_13580 [Acidipropionibacterium acidipropionici].	949807725
+AMS04683.1	64	AXH35_03460	bacteria>actinobacteria	Acidipropionibacterium acidipropionici	GCA_001602115.1	hypothetical protein AXH35_03460 [Acidipropionibacterium acidipropionici].	1012283486
+AOZ46173.1	64	A8L58_04925	bacteria>actinobacteria	Acidipropionibacterium acidipropionici	GCA_001855335.1	hypothetical protein A8L58_04925 [Acidipropionibacterium acidipropionici].	1092999245
+APZ08131.1	64	BWX38_01300	bacteria>actinobacteria	Acidipropionibacterium acidipropionici	GCA_001975205.1	hypothetical protein BWX38_01300 [Acidipropionibacterium acidipropionici].	1137387223
+AFV89337.1	64	PACID_15240	bacteria>actinobacteria	Acidipropionibacterium acidipropionici ATCC 4875	GCA_000310065.1	hypothetical protein PACID_15240 [Acidipropionibacterium acidipropionici ATCC 4875].	410822722
+ABK53265.1	64	Acel_1493	bacteria>actinobacteria	Acidothermus cellulolyticus 11B	GCA_000015025.1	hypothetical protein Acel_1493 [Acidothermus cellulolyticus 11B].	117649163
+AOS65088.1	64	TL08_21505	bacteria>actinobacteria	Actinoalloteichus hymeniacidonis	GCA_001747425.1	putative DUF3046 family protein [Actinoalloteichus hymeniacidonis].	1070872297
+APU16938.1	64	UA74_24620	bacteria>actinobacteria	Actinoalloteichus sp. ADI127-7	GCA_001941625.1	putative DUF3046 family protein [Actinoalloteichus sp. ADI127-7].	1130032617
+APU23018.1	64	UA75_25200	bacteria>actinobacteria	Actinoalloteichus sp. GBA129-24	GCA_001941645.1	putative DUF3046 family protein [Actinoalloteichus sp. GBA129-24].	1130038698
+AMD98075.1	72	AXE84_00375	bacteria>actinobacteria	Actinomyces oris	GCA_001553935.1	hypothetical protein AXE84_00375 [Actinomyces oris].	987462641
+AMD88283.1	74	AXF14_12750	bacteria>actinobacteria	Actinomyces radicidentis	GCA_001553565.1	hypothetical protein AXF14_12750 [Actinomyces radicidentis].	987452844
+AOZ72869.1	75	BK816_05810	bacteria>actinobacteria	Actinomyces sp. VUL4_3	GCA_001856685.1	hypothetical protein BK816_05810 [Actinomyces sp. VUL4_3].	1095164819
+ALC98911.1	77	AM609_04350	bacteria>actinobacteria	Actinomyces sp. oral taxon 414	GCA_001278845.1	hypothetical protein AM609_04350 [Actinomyces sp. oral taxon 414].	925195628
+AGZ45388.1	66	AFR_35660	bacteria>actinobacteria	Actinoplanes friuliensis DSM 7358	GCA_000494755.1	hypothetical protein AFR_35660 [Actinoplanes friuliensis DSM 7358].	556038141
+AGL14606.1	343	L083_1096	bacteria>actinobacteria	Actinoplanes sp. N902-109	GCA_000389965.1	hypothetical protein L083_1096 [Actinoplanes sp. N902-109].	492003286
+AGL20270.1	64	L083_6760	bacteria>actinobacteria	Actinoplanes sp. N902-109	GCA_000389965.1	hypothetical protein L083_6760 [Actinoplanes sp. N902-109].	492008950
+AEV88053.1	66	ACPL_7173	bacteria>actinobacteria	Actinoplanes sp. SE50/110	GCA_000237145.1	hypothetical protein ACPL_7173 [Actinoplanes sp. SE50/110].	359839612
+ACU35370.1	64	Amir_1418	bacteria>actinobacteria	Actinosynnema mirum DSM 43827	GCA_000023245.1	hypothetical protein Amir_1418 [Actinosynnema mirum DSM 43827].	255919859
+AIE82051.1	78	FB03_00795	bacteria>actinobacteria	Actinotignum schaalii	GCA_000724605.1	hypothetical protein FB03_00795 [Actinotignum schaalii].	663076161
+ALX04600.1	64	AERYTH_07780	bacteria>actinobacteria	Aeromicrobium erythreum	GCA_001509405.1	hypothetical protein AERYTH_07780 [Aeromicrobium erythreum].	973194682
+ANJ27434.1	76	ATC03_12665	bacteria>actinobacteria	Agromyces aureus	GCA_001660485.1	signal transduction histidine kinase [Agromyces aureus].	1035532615
+CRK55743.1	64	-	bacteria>actinobacteria	Alloactinosynnema sp. L-07	GCA_900070365.1	hypothetical protein [Alloactinosynnema sp. L-07].	886828071
+AIG78287.1	87	AJAP_27205	bacteria>actinobacteria	Amycolatopsis japonica	GCA_000732925.1	Hypothetical protein AJAP_27205 [Amycolatopsis japonica].	667683671
+AGM04916.1	64	AORI_2328	bacteria>actinobacteria	Amycolatopsis keratiniphila	GCA_000400635.2	hypothetical protein AORI_2328 [Amycolatopsis keratiniphila].	505814993
+AJK55029.1	64	BB31_17350	bacteria>actinobacteria	Amycolatopsis lurida NRRL 2430	GCA_000749465.2	hypothetical protein BB31_17350 [Amycolatopsis lurida NRRL 2430].	755911451
+AGT82981.1	64	B737_2317	bacteria>actinobacteria	Amycolatopsis mediterranei RB	GCA_000454025.1	hypothetical protein B737_2317 [Amycolatopsis mediterranei RB].	532228002
+AEK40873.1	64	RAM_11915	bacteria>actinobacteria	Amycolatopsis mediterranei S699	GCA_000220945.1	hypothetical protein RAM_11915 [Amycolatopsis mediterranei S699].	340525668
+AFO75852.1	64	AMES_2316	bacteria>actinobacteria	Amycolatopsis mediterranei S699	GCA_000282715.1	hypothetical protein AMES_2316 [Amycolatopsis mediterranei S699].	398316905
+ADJ44139.1	64	AMED_2342	bacteria>actinobacteria	Amycolatopsis mediterranei U32	GCA_000196835.1	conserved hypothetical protein [Amycolatopsis mediterranei U32].	299793764
+AIJ25115.1	64	AMETH_5023	bacteria>actinobacteria	Amycolatopsis methanolica 239	GCA_000739085.1	hypothetical protein AMETH_5023 [Amycolatopsis methanolica 239].	672359237
+ANN16420.1	64	SD37_12665	bacteria>actinobacteria	Amycolatopsis orientalis	GCA_000943515.2	hypothetical protein SD37_12665 [Amycolatopsis orientalis].	1039682320
+ADH92382.1	75	Arch_0648	bacteria>actinobacteria	Arcanobacterium haemolyticum DSM 20595	GCA_000092365.1	hypothetical protein Arch_0648 [Arcanobacterium haemolyticum DSM 20595].	296931574
+AKT52198.1	78	ADJ73_14620	bacteria>actinobacteria	Arsenicicoccus sp. oral taxon 190	GCA_001189535.1	histidine kinase [Arsenicicoccus sp. oral taxon 190].	908726409
+ALE91688.1	73	AOC05_03965	bacteria>actinobacteria	Arthrobacter alpinus	GCA_001294625.1	histidine kinase [Arthrobacter alpinus].	928486349
+ALO67563.1	73	AS189_15040	bacteria>actinobacteria	Arthrobacter alpinus	GCA_001445575.1	histidine kinase [Arthrobacter alpinus].	953322280
+ABK02853.1	74	Arth_1459	bacteria>actinobacteria	Arthrobacter sp. FB24	GCA_000196235.1	conserved hypothetical protein [Arthrobacter sp. FB24].	116610129
+BAS13054.1	79	AHiyo8_13570	bacteria>actinobacteria	Arthrobacter sp. Hiyo8	GCA_001549895.1	conserved hypothetical protein [Arthrobacter sp. Hiyo8].	910743655
+APX00781.1	79	BWQ92_02720	bacteria>actinobacteria	Arthrobacter sp. QXT-31	GCA_001969265.1	histidine kinase [Arthrobacter sp. QXT-31].	1134500769
+AFR28421.1	65	ARUE_c15050	bacteria>actinobacteria	Arthrobacter sp. Rue61a	GCA_000294695.2	hypothetical protein ARUE_c15050 [Arthrobacter sp. Rue61a].	403228999
+AOY71919.1	64	ARZXY2_2388	bacteria>actinobacteria	Arthrobacter sp. ZXY-2	GCA_001854365.1	histidine kinase [Arthrobacter sp. ZXY-2].	1092262835
+ACQ80702.1	77	Bcav_2452	bacteria>actinobacteria	Beutenbergia cavernae DSM 12333	GCA_000023105.1	conserved hypothetical protein [Beutenbergia cavernae DSM 12333].	229566851
+AKV55337.1	77	AB656_02820	bacteria>actinobacteria	Bifidobacterium actinocoloniiforme DSM 22766	GCA_001263395.1	hypothetical protein AB656_02820 [Bifidobacterium actinocoloniiforme DSM 22766].	914248428
+AII76492.1	77	BADO_1077	bacteria>actinobacteria	Bifidobacterium adolescentis	GCA_000737885.1	hypothetical protein BADO_1077 [Bifidobacterium adolescentis].	671342976
+AJE06139.1	77	BBMN23_1167	bacteria>actinobacteria	Bifidobacterium adolescentis	GCA_000817995.1	hypothetical protein BBMN23_1167 [Bifidobacterium adolescentis].	747124717
+AMK57939.1	77	Bang102_005335	bacteria>actinobacteria	Bifidobacterium angulatum	GCA_000966445.2	hypothetical protein Bang102_005335 [Bifidobacterium angulatum].	998638892
+BAQ96239.1	77	BBAG_0617	bacteria>actinobacteria	Bifidobacterium angulatum DSM 20098 = JCM 7096	GCA_001025155.1	conserved hypothetical protein [Bifidobacterium angulatum DSM 20098 = JCM 7096].	781871248
+AJD34223.1	79	BAA6_1110	bacteria>actinobacteria	Bifidobacterium animalis	GCA_000817045.1	hypothetical protein BAA6_1110 [Bifidobacterium animalis].	745800561
+ADC86130.1	114	BIF_02265	bacteria>actinobacteria	Bifidobacterium animalis subsp. lactis BB-12	GCA_000025245.1	Hypothetical cytosolic protein [Bifidobacterium animalis subsp. lactis BB-12].	289178884
+AFJ18419.1	79	W91_1140	bacteria>actinobacteria	Bifidobacterium animalis subsp. lactis Bi-07	GCA_000277345.1	hypothetical protein W91_1140 [Bifidobacterium animalis subsp. lactis Bi-07].	386655290
+AEK30566.1	114	BALAC2494_00132	bacteria>actinobacteria	Bifidobacterium animalis subsp. lactis CNCM I-2494	GCA_000220885.1	Hypothetical cytosolic protein [Bifidobacterium animalis subsp. lactis CNCM I-2494].	340365275
+ADG33663.1	83	BalV_1075	bacteria>actinobacteria	Bifidobacterium animalis subsp. lactis V9	GCA_000092765.1	hypothetical protein BalV_1075 [Bifidobacterium animalis subsp. lactis V9].	295794128
+AFU71216.1	77	BAST_0628	bacteria>actinobacteria	Bifidobacterium asteroides PRL2011	GCA_000304215.1	hypothetical protein BAST_0628 [Bifidobacterium asteroides PRL2011].	408465687
+ALE11744.1	77	RY70_1402	bacteria>actinobacteria	Bifidobacterium bifidum	GCA_001281345.1	Hypothetical protein RY70_1402 [Bifidobacterium bifidum].	927300639
+BAQ98466.1	77	BBBF_1259	bacteria>actinobacteria	Bifidobacterium bifidum ATCC 29521 = JCM 1255 = DSM 20456	GCA_001025135.1	conserved hypothetical protein [Bifidobacterium bifidum ATCC 29521 = JCM 1255 = DSM 20456].	781873718
+AFL04843.1	77	BBB_1251	bacteria>actinobacteria	Bifidobacterium bifidum BGN4	GCA_000265095.1	hypothetical protein BBB_1251 [Bifidobacterium bifidum BGN4].	389890776
+ADP36323.1	77	BBPR_1271	bacteria>actinobacteria	Bifidobacterium bifidum PRL2010	GCA_000165905.1	Conserved hypothetical protein [Bifidobacterium bifidum PRL2010].	310866954
+ADO53433.1	77	BBIF_1228	bacteria>actinobacteria	Bifidobacterium bifidum S17	GCA_000164965.1	Conserved hypothetical protein [Bifidobacterium bifidum S17].	309251685
+ALE12881.1	50	RY69_622	bacteria>actinobacteria	Bifidobacterium breve	GCA_001281425.1	Hypothetical protein RY69_622 [Bifidobacterium breve].	927302112
+AQM43268.1	77	BBL520_06740	bacteria>actinobacteria	Bifidobacterium breve	GCA_001990225.1	hypothetical protein BBL520_06740 [Bifidobacterium breve].	1143276931
+BAR00220.1	77	BBBR_1181	bacteria>actinobacteria	Bifidobacterium breve DSM 20213 = JCM 1192	GCA_001025175.1	conserved hypothetical protein [Bifidobacterium breve DSM 20213 = JCM 1192].	781875628
+AHJ19549.1	65	B7019_1279	bacteria>actinobacteria	Bifidobacterium breve JCM 7019	GCA_000569015.1	Hypothetical protein B7019_1279 [Bifidobacterium breve JCM 7019].	585131078
+ABE95860.1	100	Bbr_1182	bacteria>actinobacteria	Bifidobacterium breve UCC2003	GCA_000220135.1	Conserved hypothetical protein [Bifidobacterium breve UCC2003].	339479392
+BAR02111.1	77	BBCT_1143	bacteria>actinobacteria	Bifidobacterium catenulatum DSM 16992 = JCM 1194 = LMG 11043	GCA_001025195.1	conserved hypothetical protein [Bifidobacterium catenulatum DSM 16992 = JCM 1194 = LMG 11043].	781877747
+AII74552.1	77	BCOR_0535	bacteria>actinobacteria	Bifidobacterium coryneforme	GCA_000737865.1	hypothetical protein BCOR_0535 [Bifidobacterium coryneforme].	671340792
+ADB10030.1	77	BDP_1422	bacteria>actinobacteria	Bifidobacterium dentium Bd1	GCA_000024445.1	Conserved hypothetical protein [Bifidobacterium dentium Bd1].	283102924
+BAQ27349.1	77	BBDE_1355	bacteria>actinobacteria	Bifidobacterium dentium JCM 1195 = DSM 20436	GCA_001042595.1	conserved hypothetical protein [Bifidobacterium dentium JCM 1195 = DSM 20436].	757806562
+AIZ14839.1	77	AH68_07075	bacteria>actinobacteria	Bifidobacterium kashiwanohense PV20-2	GCA_000800455.1	hypothetical protein AH68_07075 [Bifidobacterium kashiwanohense PV20-2].	730565971
+ALE09751.1	77	RY67_1739	bacteria>actinobacteria	Bifidobacterium longum subsp. infantis	GCA_001281305.1	Hypothetical protein RY67_1739 [Bifidobacterium longum subsp. infantis].	927298552
+AOP01347.1	77	BL1206_1309	bacteria>actinobacteria	Bifidobacterium longum subsp. longum	GCA_001725985.1	hypothetical protein BL1206_1309 [Bifidobacterium longum subsp. longum].	1064283092
+BAR03877.1	77	BBPC_1199	bacteria>actinobacteria	Bifidobacterium pseudocatenulatum DSM 20438 = JCM 1200 = LMG 10505	GCA_001025215.1	conserved hypothetical protein [Bifidobacterium pseudocatenulatum DSM 20438 = JCM 1200 = LMG 10505].	781879635
+AIZ16524.1	80	AH67_06070	bacteria>actinobacteria	Bifidobacterium pseudolongum PV8-2	GCA_000800475.2	hypothetical protein AH67_06070 [Bifidobacterium pseudolongum PV8-2].	730568096
+AGH40991.1	78	D805_0724	bacteria>actinobacteria	Bifidobacterium thermophilum RBL67	GCA_000347695.1	hypothetical protein D805_0724 [Bifidobacterium thermophilum RBL67].	469498465
+CCG04543.1	64	BLASA_3686	bacteria>actinobacteria	Blastococcus saxobsidens DD2	GCA_000284015.1	conserved protein of unknown function [Blastococcus saxobsidens DD2].	378784872
+ACU84900.1	74	Bfae_10520	bacteria>actinobacteria	Brachybacterium faecium DSM 4810	GCA_000023405.1	hypothetical protein Bfae_10520 [Brachybacterium faecium DSM 4810].	256559053
+APX34451.1	74	BH708_19015	bacteria>actinobacteria	Brachybacterium sp. P6-10-X1	GCA_001969445.1	hypothetical protein BH708_19015 [Brachybacterium sp. P6-10-X1].	1134534653
+AOP54205.1	75	BLSMQ_2499	bacteria>actinobacteria	Brevibacterium aurantiacum	GCA_001729525.1	hypothetical protein BLSMQ_2499 [Brevibacterium aurantiacum].	1066957691
+AMT94326.1	75	A2T55_11500	bacteria>actinobacteria	Brevibacterium linens	GCA_001606005.1	histidine kinase [Brevibacterium linens].	1013857488
+AOY56230.1	75	A4Z71_04510	bacteria>actinobacteria	Candidatus Rhodoluna planktonica	GCA_001854225.1	hypothetical protein A4Z71_04510 [Candidatus Rhodoluna planktonica].	1092202166
+ACU70500.1	52	Caci_1579	bacteria>actinobacteria	Catenulispora acidiphila DSM 44928	GCA_000024025.1	conserved hypothetical protein [Catenulispora acidiphila DSM 44928].	256357003
+AEE45699.1	77	Celf_1565	bacteria>actinobacteria	Cellulomonas fimi ATCC 484	GCA_000212695.1	hypothetical protein Celf_1565 [Cellulomonas fimi ATCC 484].	332339116
+ADG74440.1	80	Cfla_1542	bacteria>actinobacteria	Cellulomonas flavigena DSM 20109	GCA_000092865.1	conserved hypothetical protein [Cellulomonas flavigena DSM 20109].	296021204
+AEI12550.1	77	Celgi_2049	bacteria>actinobacteria	Cellulomonas gilvus ATCC 13127	GCA_000218545.1	hypothetical protein Celgi_2049 [Cellulomonas gilvus ATCC 13127].	336104731
+AJW80505.1	74	VO01_09370	bacteria>actinobacteria	Clavibacter insidiosus	GCA_000958465.1	signal transduction histidine kinase [Clavibacter insidiosus].	772245232
+ALD13179.1	74	AES38_09865	bacteria>actinobacteria	Clavibacter michiganensis subsp. capsici	GCA_001280205.1	signal transduction histidine kinase [Clavibacter michiganensis subsp. capsici].	926442211
+CAN02089.1	77	CMM_2026	bacteria>actinobacteria	Clavibacter michiganensis subsp. michiganensis NCPPB 382	GCA_000063485.1	conserved hypothetical protein [Clavibacter michiganensis subsp. michiganensis NCPPB 382].	147831137
+CCE75930.1	77	CMN_01988	bacteria>actinobacteria	Clavibacter nebraskensis NCPPB 2581	GCA_000355695.1	conserved hypothetical protein [Clavibacter nebraskensis NCPPB 2581].	472822385
+CAQ01322.1	77	CMS1207	bacteria>actinobacteria	Clavibacter sepedonicus	GCA_000069225.1	conserved hypothetical protein [Clavibacter sepedonicus].	169156180
+ADB49219.1	268	Cwoe_0786	bacteria>actinobacteria	Conexibacter woesei DSM 14684	GCA_000025265.1	hypothetical protein Cwoe_0786 [Conexibacter woesei DSM 14684].	283946475
+AQS73544.1	71	CA40472_06175	bacteria>actinobacteria	Corynebacterium ammoniagenes	GCA_002005245.1	hypothetical protein CA40472_06175 [Corynebacterium ammoniagenes].	1148987820
+APT84932.1	68	CAQU_07480	bacteria>actinobacteria	Corynebacterium aquilae DSM 44791	GCA_001941445.1	hypothetical protein CAQU_07480 [Corynebacterium aquilae DSM 44791].	1129919032
+AGU15278.1	68	CARG_05755	bacteria>actinobacteria	Corynebacterium argentoratense DSM 44202	GCA_000590555.1	hypothetical protein CARG_05755 [Corynebacterium argentoratense DSM 44202].	533215950
+AIG64002.1	69	CATYP_04305	bacteria>actinobacteria	Corynebacterium atypicum	GCA_000732945.1	hypothetical protein CATYP_04305 [Corynebacterium atypicum].	667687390
+AGG67084.1	75	H924_08210	bacteria>actinobacteria	Corynebacterium callunae DSM 20147	GCA_000344785.1	hypothetical protein H924_08210 [Corynebacterium callunae DSM 20147].	459384793
+AKE39365.1	71	UL81_07045	bacteria>actinobacteria	Corynebacterium camporealensis	GCA_000980815.1	Protein of unknown function (DUF3046) [Corynebacterium camporealensis].	814960998
+AHI19841.1	71	CCASEI_06325	bacteria>actinobacteria	Corynebacterium casei LMG S-19264	GCA_000550785.1	hypothetical protein CCASEI_06325 [Corynebacterium casei LMG S-19264].	582016495
+ANE05348.1	71	ccrud_08455	bacteria>actinobacteria	Corynebacterium crudilactis	GCA_001643015.1	hypothetical protein ccrud_08455 [Corynebacterium crudilactis].	1027917863
+CKH00437.1	63	ERS451417_01474	bacteria>actinobacteria	Corynebacterium diphtheriae	GCA_001457455.1	Protein of uncharacterised function (DUF3046) [Corynebacterium diphtheriae].	777192446
+AEX42140.1	63	CD31A_1469	bacteria>actinobacteria	Corynebacterium diphtheriae 31A	GCA_000241875.1	hypothetical protein CD31A_1469 [Corynebacterium diphtheriae 31A].	371578472
+AEX48965.1	63	CDBH8_1445	bacteria>actinobacteria	Corynebacterium diphtheriae BH8	GCA_000241935.1	hypothetical protein CDBH8_1445 [Corynebacterium diphtheriae BH8].	371585300
+AEX67647.1	63	CDC7B_1454	bacteria>actinobacteria	Corynebacterium diphtheriae C7 (beta)	GCA_000255175.1	hypothetical protein CDC7B_1454 [Corynebacterium diphtheriae C7 (beta)].	372104050
+AEX70094.1	63	CDPW8_1442	bacteria>actinobacteria	Corynebacterium diphtheriae PW8	GCA_000255275.1	hypothetical protein CDPW8_1442 [Corynebacterium diphtheriae PW8].	372117624
+AIT61305.1	71	CDOO_08570	bacteria>actinobacteria	Corynebacterium doosanense CAU 212 = DSM 45436	GCA_000767055.1	hypothetical protein CDOO_08570 [Corynebacterium doosanense CAU 212 = DSM 45436].	697778569
+BAC18660.1	71	-	bacteria>actinobacteria	Corynebacterium efficiens YS-314	GCA_000011305.1	conserved hypothetical protein [Corynebacterium efficiens YS-314].	23493691
+AKK03350.1	79	CEPID_07495	bacteria>actinobacteria	Corynebacterium epidermidicanis	GCA_001021025.1	putative DUF3046 family protein [Corynebacterium epidermidicanis].	827628057
+AKK03387.1	198	CEPID_07685	bacteria>actinobacteria	Corynebacterium epidermidicanis	GCA_001021025.1	putative DUF1707 family protein/predicted membrane protein (DUF2154) [Corynebacterium epidermidicanis].	827628094
+AHI03265.1	68	CFAL_06250	bacteria>actinobacteria	Corynebacterium falsenii DSM 44353	GCA_000525655.1	hypothetical protein CFAL_06250 [Corynebacterium falsenii DSM 44353].	578015007
+APT87033.1	71	CFLV_07425	bacteria>actinobacteria	Corynebacterium flavescens	GCA_001941465.1	hypothetical protein CFLV_07425 [Corynebacterium flavescens].	1129922827
+APT89066.1	68	CFRA_07150	bacteria>actinobacteria	Corynebacterium frankenforstense DSM 45800	GCA_001941485.1	hypothetical protein CFRA_07150 [Corynebacterium frankenforstense DSM 45800].	1129926115
+BAB99349.1	78	Cgl1956	bacteria>actinobacteria	Corynebacterium glutamicum ATCC 13032	GCA_000011325.1	Hypothetical protein [Corynebacterium glutamicum ATCC 13032].	21324726
+BAF54780.1	78	cgR_1786	bacteria>actinobacteria	Corynebacterium glutamicum R	GCA_000010225.1	hypothetical protein cgR_1786 [Corynebacterium glutamicum R].	140845781
+AGN19467.1	71	C624_09460	bacteria>actinobacteria	Corynebacterium glutamicum SCgG1	GCA_000404145.1	hypothetical protein C624_09460 [Corynebacterium glutamicum SCgG1].	509087222
+AGN22492.1	78	C629_09470	bacteria>actinobacteria	Corynebacterium glutamicum SCgG2	GCA_000404185.1	hypothetical protein C629_09470 [Corynebacterium glutamicum SCgG2].	509090248
+ANR65824.1	71	C627_09325	bacteria>actinobacteria	Corynebacterium glutamicum ZL-6	GCA_001683115.1	hypothetical protein C627_09325 [Corynebacterium glutamicum ZL-6].	1043178622
+AHW64008.1	68	CGLY_07815	bacteria>actinobacteria	Corynebacterium glyciniphilum AJ 3170	GCA_000626675.1	Hypothetical protein CGLY_07815 [Corynebacterium glyciniphilum AJ 3170].	610393045
+AGF72698.1	80	A605_08480	bacteria>actinobacteria	Corynebacterium halotolerans YIM 70093 = DSM 44683	GCA_000341345.1	hypothetical protein A605_08480 [Corynebacterium halotolerans YIM 70093 = DSM 44683].	451903811
+AJE33416.1	71	B842_07835	bacteria>actinobacteria	Corynebacterium humireducens NBRC 106098 = DSM 45392	GCA_000819445.1	hypothetical protein B842_07835 [Corynebacterium humireducens NBRC 106098 = DSM 45392].	748229962
+AIJ33750.1	71	CIMIT_07400	bacteria>actinobacteria	Corynebacterium imitans	GCA_000739455.1	hypothetical protein CIMIT_07400 [Corynebacterium imitans].	672594773
+CAI37281.1	68	jk1117	bacteria>actinobacteria	Corynebacterium jeikeium K411	GCA_000006605.1	hypothetical protein jk1117 [Corynebacterium jeikeium K411].	68263793
+AKE41414.1	68	UL82_06240	bacteria>actinobacteria	Corynebacterium kutscheri	GCA_000980835.1	Protein of unknown function (DUF3046) [Corynebacterium kutscheri].	814963048
+ALA67259.1	68	CLAC_05475	bacteria>actinobacteria	Corynebacterium lactis RW2-5	GCA_001274895.1	hypothetical protein CLAC_05475 [Corynebacterium lactis RW2-5].	922844939
+AGS35043.1	71	B841_07850	bacteria>actinobacteria	Corynebacterium maris DSM 45190	GCA_000442645.1	hypothetical protein B841_07850 [Corynebacterium maris DSM 45190].	528325728
+AKK06146.1	70	CMUST_09145	bacteria>actinobacteria	Corynebacterium mustelae	GCA_001020985.1	putative DUF3046 family protein [Corynebacterium mustelae].	827631027
+APT92364.1	83	CPHO_05040	bacteria>actinobacteria	Corynebacterium phocae	GCA_001941565.1	hypothetical protein CPHO_05040 [Corynebacterium phocae].	1129931776
+AIG07659.1	70	CPTA_01830	bacteria>actinobacteria	Corynebacterium pseudotuberculosis	GCA_000730365.1	hypothetical protein CPTA_01830 [Corynebacterium pseudotuberculosis].	666103782
+AIG09988.1	70	CPTB_01932	bacteria>actinobacteria	Corynebacterium pseudotuberculosis	GCA_000730405.1	hypothetical protein CPTB_01932 [Corynebacterium pseudotuberculosis].	666108220
+AIG12112.1	70	CPTC_01824	bacteria>actinobacteria	Corynebacterium pseudotuberculosis	GCA_000730445.1	hypothetical protein CPTC_01824 [Corynebacterium pseudotuberculosis].	666112053
+AFH52207.1	70	Cp267_1308	bacteria>actinobacteria	Corynebacterium pseudotuberculosis 267	GCA_000258385.1	Hypothetical protein Cp267_1308 [Corynebacterium pseudotuberculosis 267].	383805128
+AFH91074.1	70	Cp31_1266	bacteria>actinobacteria	Corynebacterium pseudotuberculosis 31	GCA_000259155.3	Hypothetical protein Cp31_1266 [Corynebacterium pseudotuberculosis 31].	384477278
+AEI09566.1	68	CRES_1211	bacteria>actinobacteria	Corynebacterium resistens DSM 45100	GCA_000177535.2	hypothetical protein CRES_1211 [Corynebacterium resistens DSM 45100].	336101746
+AMO90147.1	71	WM42_2450	bacteria>actinobacteria	Corynebacterium simulans	GCA_001586215.1	hypothetical protein WM42_2450 [Corynebacterium simulans].	1004391115
+AMO92701.1	71	AWU68_2457	bacteria>actinobacteria	Corynebacterium simulans	GCA_001586235.1	hypothetical protein AWU68_2457 [Corynebacterium simulans].	1004393670
+APT90602.1	70	CSPHI_05615	bacteria>actinobacteria	Corynebacterium sphenisci DSM 44792	GCA_001941505.1	hypothetical protein CSPHI_05615 [Corynebacterium sphenisci DSM 44792].	1129928614
+AMJ44468.1	71	AW169_05770	bacteria>actinobacteria	Corynebacterium stationis	GCA_001561975.1	hypothetical protein AW169_05770 [Corynebacterium stationis].	995959459
+APT94843.1	71	CSTAT_05660	bacteria>actinobacteria	Corynebacterium stationis	GCA_001941345.1	hypothetical protein CSTAT_05660 [Corynebacterium stationis].	1129935551
+AGP30942.1	71	A606_06475	bacteria>actinobacteria	Corynebacterium terpenotabidum Y-11	GCA_000418365.1	hypothetical protein A606_06475 [Corynebacterium terpenotabidum Y-11].	521018390
+AIT89368.1	73	Cul210932_1430	bacteria>actinobacteria	Corynebacterium ulcerans	GCA_000767415.1	Hypothetical protein Cul210932_1430 [Corynebacterium ulcerans].	698189493
+ALD95146.1	73	Cul131001_1449	bacteria>actinobacteria	Corynebacterium ulcerans	GCA_001281445.1	Hypothetical protein Cul131001_1449 [Corynebacterium ulcerans].	927310817
+BAM27677.1	70	CULC0102_1478	bacteria>actinobacteria	Corynebacterium ulcerans 0102	GCA_000306825.1	hypothetical protein CULC0102_1478 [Corynebacterium ulcerans 0102].	393403185
+AEG84071.1	73	CULC22_01361	bacteria>actinobacteria	Corynebacterium ulcerans BR-AD22	GCA_000215665.1	hypothetical protein CULC22_01361 [Corynebacterium ulcerans BR-AD22].	334699275
+AKN77249.1	73	CulFRC58_1395	bacteria>actinobacteria	Corynebacterium ulcerans FRC58	GCA_000499805.2	Hypothetical protein CulFRC58_1395 [Corynebacterium ulcerans FRC58].	852474238
+CAQ04833.1	68	cu0873	bacteria>actinobacteria	Corynebacterium urealyticum DSM 7109	GCA_000069945.1	hypothetical protein cu0873 [Corynebacterium urealyticum DSM 7109].	171851857
+AGE36452.1	68	CU7111_0859	bacteria>actinobacteria	Corynebacterium urealyticum DSM 7111	GCA_000338095.1	hypothetical protein CU7111_0859 [Corynebacterium urealyticum DSM 7111].	448277028
+AIL97100.1	71	CUREI_07170	bacteria>actinobacteria	Corynebacterium ureicelerivorans	GCA_000747315.1	hypothetical protein CUREI_07170 [Corynebacterium ureicelerivorans].	675825410
+AKK11301.1	82	CUTER_06560	bacteria>actinobacteria	Corynebacterium uterequi	GCA_001021065.1	putative DUF3046 family protein [Corynebacterium uterequi].	827636567
+AEK36972.1	78	CVAR_1618	bacteria>actinobacteria	Corynebacterium variabile DSM 44702	GCA_000179395.2	hypothetical protein CVAR_1618 [Corynebacterium variabile DSM 44702].	340534492
+AHI23005.1	68	B843_08100	bacteria>actinobacteria	Corynebacterium vitaeruminis DSM 20294	GCA_000550805.1	hypothetical protein B843_08100 [Corynebacterium vitaeruminis DSM 20294].	582019662
+ANP72114.1	73	PA27867_1148	bacteria>actinobacteria	Cryobacterium arcticum	GCA_001679725.1	hypothetical protein PA27867_1148 [Cryobacterium arcticum].	1042050226
+AOX67444.1	74	BJK06_02085	bacteria>actinobacteria	Curtobacterium sp. BH-2-1-1	GCA_001806325.1	signal transduction histidine kinase [Curtobacterium sp. BH-2-1-1].	1087726369
+AIV39789.1	74	NI26_05375	bacteria>actinobacteria	Curtobacterium sp. MR_MD2014	GCA_000772085.1	signal transduction histidine kinase [Curtobacterium sp. MR_MD2014].	703597829
+ALD69590.1	64	RN83_05415	bacteria>actinobacteria	Cutibacterium acnes	GCA_001281065.1	hypothetical protein RN83_05415 [Cutibacterium acnes].	927038018
+ALT44328.1	64	ALW33_05180	bacteria>actinobacteria	Cutibacterium acnes	GCA_001469565.1	hypothetical protein ALW33_05180 [Cutibacterium acnes].	966545633
+ALT35210.1	64	ALW21_05090	bacteria>actinobacteria	Cutibacterium acnes	GCA_001469595.1	hypothetical protein ALW21_05090 [Cutibacterium acnes].	966536511
+ALT37526.1	64	ALW23_05170	bacteria>actinobacteria	Cutibacterium acnes	GCA_001469615.1	hypothetical protein ALW23_05170 [Cutibacterium acnes].	966538828
+ALT42038.1	64	ALW29_05015	bacteria>actinobacteria	Cutibacterium acnes	GCA_001469655.1	hypothetical protein ALW29_05015 [Cutibacterium acnes].	966543342
+AEE72227.1	64	PAZ_c10530	bacteria>actinobacteria	Cutibacterium acnes 266	GCA_000213155.1	hypothetical protein PAZ_c10530 [Cutibacterium acnes 266].	332675411
+AEH29333.1	64	TIB1ST10_05190	bacteria>actinobacteria	Cutibacterium acnes 6609	GCA_000217615.1	hypothetical protein TIB1ST10_05190 [Cutibacterium acnes 6609].	335277428
+AFU40817.1	64	PAC1_05310	bacteria>actinobacteria	Cutibacterium acnes C1	GCA_000302515.1	hypothetical protein PAC1_05310 [Cutibacterium acnes C1].	407903987
+AAT82763.1	59	PPA1011	bacteria>actinobacteria	Cutibacterium acnes KPA171202	GCA_000008345.1	hypothetical protein PPA1011 [Cutibacterium acnes KPA171202].	50840096
+ADE01186.1	64	HMPREF0675_4070	bacteria>actinobacteria	Cutibacterium acnes SK137	GCA_000025765.1	hypothetical protein HMPREF0675_4070 [Cutibacterium acnes SK137].	291377331
+AOG27512.1	64	BFS79_01995	bacteria>actinobacteria	Cutibacterium avidum	GCA_001714705.1	hypothetical protein BFS79_01995 [Cutibacterium avidum].	1059945375
+AGJ77808.1	68	PALO_06000	bacteria>actinobacteria	Cutibacterium avidum 44067	GCA_000367205.1	hypothetical protein PALO_06000 [Cutibacterium avidum 44067].	480315104
+ANP28187.1	75	DAD186_16370	bacteria>actinobacteria	Dermabacter vaginalis	GCA_001678905.1	hypothetical protein DAD186_16370 [Dermabacter vaginalis].	1041929821
+AIF40516.1	77	HX89_05690	bacteria>actinobacteria	Dermacoccus nishinomiyaensis	GCA_000725405.1	histidine kinase [Dermacoccus nishinomiyaensis].	664687926
+ANI92572.1	66	BJL86_1801	bacteria>actinobacteria	Dietzia timorensis	GCA_001659785.1	Hypothetical protein BJL86_1801 [Dietzia timorensis].	1035339515
+CAJ64352.1	64	FRAAL5720	bacteria>actinobacteria	Frankia alni ACN14a	GCA_000058485.1	conserved hypothetical protein [Frankia alni ACN14a].	111152611
+ABD12879.1	64	Francci3_3526	bacteria>actinobacteria	Frankia casuarinae	GCA_000013345.1	hypothetical protein Francci3_3526 [Frankia casuarinae].	86569070
+ADP79210.1	64	FraEuI1c_1137	bacteria>actinobacteria	Frankia inefficax	GCA_000166135.1	hypothetical protein FraEuI1c_1137 [Frankia inefficax].	311226355
+ABW10672.1	69	Franean1_1218	bacteria>actinobacteria	Frankia sp. EAN1pec	GCA_000018005.1	conserved hypothetical protein [Frankia sp. EAN1pec].	158108475
+AEH10890.1	55	FsymDg_3611	bacteria>actinobacteria	Frankia symbiont of Datisca glomerata	GCA_000177615.2	hypothetical protein FsymDg_3611 [Frankia symbiont of Datisca glomerata].	334860416
+AMM20556.1	74	AX769_10865	bacteria>actinobacteria	Frondihabitans sp. PAMC 28766	GCA_001577365.1	signal transduction histidine kinase [Frondihabitans sp. PAMC 28766].	1001853323
+BAQ33349.1	77	GAVG_0697	bacteria>actinobacteria	Gardnerella vaginalis ATCC 14018 = JCM 11026	GCA_001042655.1	conserved hypothetical protein [Gardnerella vaginalis ATCC 14018 = JCM 11026].	757812565
+ADP38950.1	77	HMPREF0421_20868	bacteria>actinobacteria	Gardnerella vaginalis ATCC 14019	GCA_000159155.2	hypothetical protein HMPREF0421_20868 [Gardnerella vaginalis ATCC 14019].	310946246
+AEF31430.1	77	HMPREF9231_0701	bacteria>actinobacteria	Gardnerella vaginalis HMP9231	GCA_000213955.1	hypothetical protein HMPREF9231_0701 [Gardnerella vaginalis HMP9231].	333393512
+ADB76489.1	71	Gobs_3920	bacteria>actinobacteria	Geodermatophilus obscurus DSM 43160	GCA_000025345.1	conserved hypothetical protein [Geodermatophilus obscurus DSM 43160].	284065551
+CBT75310.1	74	AARI_11000	bacteria>actinobacteria	Glutamicibacter arilaitensis Re117	GCA_000197735.1	conserved hypothetical protein [Glutamicibacter arilaitensis Re117].	307744338
+ALG30772.1	74	AOZ07_05825	bacteria>actinobacteria	Glutamicibacter halophytocola	GCA_001302565.1	histidine kinase [Glutamicibacter halophytocola].	930828071
+ACY20665.1	217	Gbro_1382	bacteria>actinobacteria	Gordonia bronchialis DSM 43247	GCA_000024785.1	protein of unknown function DUF1707 [Gordonia bronchialis DSM 43247].	262084697
+ACY21447.1	275	Gbro_2199	bacteria>actinobacteria	Gordonia bronchialis DSM 43247	GCA_000024785.1	PspA/IM30 family protein [Gordonia bronchialis DSM 43247].	262085479
+ACY21449.1	64	Gbro_2201	bacteria>actinobacteria	Gordonia bronchialis DSM 43247	GCA_000024785.1	hypothetical protein Gbro_2201 [Gordonia bronchialis DSM 43247].	262085481
+ACY22441.1	129	Gbro_3236	bacteria>actinobacteria	Gordonia bronchialis DSM 43247	GCA_000024785.1	PspC domain protein [Gordonia bronchialis DSM 43247].	262086473
+ALG84611.1	64	ACH46_09035	bacteria>actinobacteria	Gordonia phthalatica	GCA_001305675.1	hypothetical protein ACH46_09035 [Gordonia phthalatica].	933681907
+AFA73137.1	64	GPOL_c20980	bacteria>actinobacteria	Gordonia polyisoprenivorans VH2	GCA_000247715.1	protein of unknown function DUF3046 [Gordonia polyisoprenivorans VH2].	375752317
+AFR48755.1	64	KTR9_2118	bacteria>actinobacteria	Gordonia sp. KTR9	GCA_000143885.2	hypothetical protein KTR9_2118 [Gordonia sp. KTR9].	403645515
+ANY23314.1	64	BCM27_11360	bacteria>actinobacteria	Gordonia terrae	GCA_001698225.1	hypothetical protein BCM27_11360 [Gordonia terrae].	1049203117
+AEF40150.1	64	AS9A_1701	bacteria>actinobacteria	Hoyosella subflava DQS3-9A1	GCA_000214175.1	hypothetical protein AS9A_1701 [Hoyosella subflava DQS3-9A1].	333481590
+ADU48681.1	82	Intca_2172	bacteria>actinobacteria	Intrasporangium calvum DSM 43043	GCA_000184685.1	hypothetical protein Intca_2172 [Intrasporangium calvum DSM 43043].	315589384
+ANC30584.1	77	I598_1015	bacteria>actinobacteria	Isoptericola dokdonensis DS-3	GCA_001636295.1	hypothetical protein I598_1015 [Isoptericola dokdonensis DS-3].	1024987372
+AEG44013.1	77	Isova_1244	bacteria>actinobacteria	Isoptericola variabilis 225	GCA_000215105.1	hypothetical protein Isova_1244 [Isoptericola variabilis 225].	334107123
+APH01819.1	84	ASJ30_10025	bacteria>actinobacteria	Janibacter indicus	GCA_001889125.1	histidine kinase [Janibacter indicus].	1110983356
+ACV08696.1	88	Jden_1040	bacteria>actinobacteria	Jonesia denitrificans DSM 20603	GCA_000024065.1	hypothetical protein Jden_1040 [Jonesia denitrificans DSM 20603].	256685803
+ALG07875.1	64	AOZ06_13975	bacteria>actinobacteria	Kibdelosporangium phytohabitans	GCA_001302585.1	hypothetical protein AOZ06_13975 [Kibdelosporangium phytohabitans].	930830672
+BAJ29283.1	64	KSE_34760	bacteria>actinobacteria	Kitasatospora setae KM-6054	GCA_000269985.1	hypothetical protein KSE_34760 [Kitasatospora setae KM-6054].	311896875
+BAJ31129.1	64	KSE_53540	bacteria>actinobacteria	Kitasatospora setae KM-6054	GCA_000269985.1	hypothetical protein KSE_53540 [Kitasatospora setae KM-6054].	311898721
+ALU39775.1	73	AS188_08460	bacteria>actinobacteria	Kocuria flava	GCA_001482365.1	histidine kinase [Kocuria flava].	970325398
+ALB03444.1	73	KPaMU14_08025	bacteria>actinobacteria	Kocuria palustris	GCA_001275345.1	histidine kinase [Kocuria palustris].	923034704
+BAG29932.1	73	KRH_15850	bacteria>actinobacteria	Kocuria rhizophila DC2201	GCA_000010285.1	hypothetical protein KRH_15850 [Kocuria rhizophila DC2201].	183581461
+ADB32065.1	64	Kfla_3000	bacteria>actinobacteria	Kribbella flavida DSM 17836	GCA_000024345.1	hypothetical protein Kfla_3000 [Kribbella flavida DSM 17836].	283810226
+AHI00064.1	64	KALB_6705	bacteria>actinobacteria	Kutzneria albida DSM 43870	GCA_000525635.1	hypothetical protein KALB_6705 [Kutzneria albida DSM 43870].	578011805
+ACV06782.1	80	Ksed_17700	bacteria>actinobacteria	Kytococcus sedentarius DSM 20547	GCA_000023925.1	hypothetical protein Ksed_17700 [Kytococcus sedentarius DSM 20547].	256688980
+ALE18512.1	76	AL705_00880	bacteria>actinobacteria	Lawsonella clevelandensis	GCA_001281505.1	hypothetical protein AL705_00880 [Lawsonella clevelandensis].	927370098
+ANF31093.1	74	A0130_04830	bacteria>actinobacteria	Leifsonia xyli	GCA_001647635.1	signal transduction histidine kinase [Leifsonia xyli].	1029984836
+AGW41876.1	74	O159_18530	bacteria>actinobacteria	Leifsonia xyli subsp. cynodontis DSM 46306	GCA_000470775.1	hypothetical protein O159_18530 [Leifsonia xyli subsp. cynodontis DSM 46306].	545576764
+AAT89397.1	81	Lxx16040	bacteria>actinobacteria	Leifsonia xyli subsp. xyli str. CTCB07	GCA_000007665.1	conserved hypothetical protein [Leifsonia xyli subsp. xyli str. CTCB07].	50951696
+ANZ42433.1	64	BBK82_02020	bacteria>actinobacteria	Lentzea guizhouensis	GCA_001701025.1	hypothetical protein BBK82_02020 [Lentzea guizhouensis].	1050306074
+AKU17300.1	78	VV02_17995	bacteria>actinobacteria	Luteipulveratus mongoliensis	GCA_001190945.1	histidine kinase [Luteipulveratus mongoliensis].	909834509
+APZ34848.1	74	BOH66_11775	bacteria>actinobacteria	Microbacterium aurum	GCA_001974985.1	signal transduction histidine kinase [Microbacterium aurum].	1137414320
+ANG85425.1	72	A8L33_08520	bacteria>actinobacteria	Microbacterium chocolatum	GCA_001652465.1	signal transduction histidine kinase [Microbacterium chocolatum].	1032533841
+APF33787.1	74	BO218_05920	bacteria>actinobacteria	Microbacterium paludicola	GCA_001887285.1	signal transduction histidine kinase [Microbacterium paludicola].	1109118684
+APH44768.1	74	BMW26_07195	bacteria>actinobacteria	Microbacterium sp. 1.5R	GCA_001889265.1	signal transduction histidine kinase [Microbacterium sp. 1.5R].	1111284625
+AOX44970.1	74	BJP65_03485	bacteria>actinobacteria	Microbacterium sp. BH-3-3-3	GCA_001792815.1	signal transduction histidine kinase [Microbacterium sp. BH-3-3-3].	1084380285
+AKV85368.1	74	AKG07_02625	bacteria>actinobacteria	Microbacterium sp. CGR1	GCA_001266755.1	signal transduction histidine kinase [Microbacterium sp. CGR1].	914697926
+ALJ21042.1	73	AOA12_14495	bacteria>actinobacteria	Microbacterium sp. No. 7	GCA_001314225.1	signal transduction histidine kinase [Microbacterium sp. No. 7].	938164402
+AMG84315.1	74	AXH82_13590	bacteria>actinobacteria	Microbacterium sp. PAMC 28756	GCA_001558975.1	signal transduction histidine kinase [Microbacterium sp. PAMC 28756].	991921107
+BAJ73270.1	74	MTES_0306	bacteria>actinobacteria	Microbacterium testaceum StLB037	GCA_000202635.1	hypothetical protein MTES_0306 [Microbacterium testaceum StLB037].	323273125
+ACS30254.1	72	Mlut_07220	bacteria>actinobacteria	Micrococcus luteus NCTC 2665	GCA_000023205.1	hypothetical protein Mlut_07220 [Micrococcus luteus NCTC 2665].	239838457
+BAK35128.1	64	MLP_21140	bacteria>actinobacteria	Microlunatus phosphovorus NM-1	GCA_000270245.1	hypothetical protein MLP_21140 [Microlunatus phosphovorus NM-1].	334685543
+ADL45090.1	66	Micau_1532	bacteria>actinobacteria	Micromonospora aurantiaca ATCC 27029	GCA_000145235.1	hypothetical protein Micau_1532 [Micromonospora aurantiaca ATCC 27029].	302568888
+ADU07325.1	66	ML5_1794	bacteria>actinobacteria	Micromonospora sp. L5	GCA_000177655.2	hypothetical protein ML5_1794 [Micromonospora sp. L5].	315409208
+AMB58952.1	76	AWU67_08840	bacteria>actinobacteria	Microterricola viridarii	GCA_001542775.1	signal transduction histidine kinase [Microterricola viridarii].	984368351
+ADI67740.1	88	HMPREF0573_11421	bacteria>actinobacteria	Mobiluncus curtisii ATCC 43063	GCA_000196535.1	hypothetical protein HMPREF0573_11421 [Mobiluncus curtisii ATCC 43063].	298236608
+CCH89703.1	64	MODMU_4308	bacteria>actinobacteria	Modestobacter marinus	GCA_000306785.1	conserved protein of unknown function [Modestobacter marinus].	388488132
+ABK65264.1	64	MAV_3629	bacteria>actinobacteria	Mycobacterium avium 104	GCA_000014985.1	conserved hypothetical protein [Mycobacterium avium 104].	118164367
+ABK69442.1	170	MAV_3632	bacteria>actinobacteria	Mycobacterium avium 104	GCA_000014985.1	conserved hypothetical protein [Mycobacterium avium 104].	118168545
+AIR57578.1	64	LA63_16650	bacteria>actinobacteria	Mycobacterium avium subsp. avium 2285 (R)	GCA_000758285.1	signal transduction histidine kinase [Mycobacterium avium subsp. avium 2285 (R)].	690308269
+AIR24770.1	64	LA64_16645	bacteria>actinobacteria	Mycobacterium avium subsp. avium 2285 (S)	GCA_000831285.1	signal transduction histidine kinase [Mycobacterium avium subsp. avium 2285 (S)].	690328025
+APT12005.1	64	BS641_18580	bacteria>actinobacteria	Mycobacterium avium subsp. hominissuis	GCA_001936215.1	signal transduction histidine kinase [Mycobacterium avium subsp. hominissuis].	1127838627
+BAN32107.1	55	MAH_3033	bacteria>actinobacteria	Mycobacterium avium subsp. hominissuis TH135	GCA_000829075.1	hypothetical protein MAH_3033 [Mycobacterium avium subsp. hominissuis TH135].	508735672
+CDO44022.1	68	Mb2758c	bacteria>actinobacteria	Mycobacterium bovis AF2122/97	GCA_000195835.1	CONSERVED HYPOTHETICAL PROTEIN [Mycobacterium bovis AF2122/97].	768985187
+CDO44026.1	82	Mb2762c	bacteria>actinobacteria	Mycobacterium bovis AF2122/97	GCA_000195835.1	CONSERVED HYPOTHETICAL ARGININE RICH PROTEIN [SECOND PART] [Mycobacterium bovis AF2122/97].	768985191
+CDO44027.1	195	Mb2763c	bacteria>actinobacteria	Mycobacterium bovis AF2122/97	GCA_000195835.1	CONSERVED HYPOTHETICAL ARGININE RICH PROTEIN [FIRST PART] [Mycobacterium bovis AF2122/97].	768985192
+CCC45096.1	68	MCAN_27651	bacteria>actinobacteria	Mycobacterium canettii CIPT 140010059	GCA_000253375.1	conserved hypothetical protein [Mycobacterium canettii CIPT 140010059].	340005929
+CCC45100.1	277	MCAN_27691	bacteria>actinobacteria	Mycobacterium canettii CIPT 140010059	GCA_000253375.1	conserved hypothetical arginine rich protein [Mycobacterium canettii CIPT 140010059].	340005933
+AOS92968.1	68	AN480_18325	bacteria>actinobacteria	Mycobacterium chimaera	GCA_001750065.2	signal transduction histidine kinase [Mycobacterium chimaera].	1071933265
+AKN17542.1	64	B586_14725	bacteria>actinobacteria	Mycobacterium haemophilum DSM 44634	GCA_000340435.3	signal transduction histidine kinase [Mycobacterium haemophilum DSM 44634].	846149097
+AIT86421.1	68	LG41_16355	bacteria>actinobacteria	Mycobacterium intracellulare 1956	GCA_000767485.1	signal transduction histidine kinase [Mycobacterium intracellulare 1956].	698186545
+AFC44681.1	68	OCU_34620	bacteria>actinobacteria	Mycobacterium intracellulare ATCC 13950	GCA_000277125.1	hypothetical protein OCU_34620 [Mycobacterium intracellulare ATCC 13950].	378800545
+AFC49820.1	68	OCO_34570	bacteria>actinobacteria	Mycobacterium intracellulare MOTT-02	GCA_000277145.1	hypothetical protein OCO_34570 [Mycobacterium intracellulare MOTT-02].	378805685
+AFS15509.1	68	MIP_05203	bacteria>actinobacteria	Mycobacterium intracellulare subsp. intracellulare MTCC 9506	GCA_000298095.1	Hypothetical protein MIP_05203 [Mycobacterium intracellulare subsp. intracellulare MTCC 9506].	405130254
+AGP65037.1	68	OEM_35020	bacteria>actinobacteria	Mycobacterium intracellulare subsp. yongonense 05-1390	GCA_000418535.2	hypothetical protein OEM_35020 [Mycobacterium intracellulare subsp. yongonense 05-1390].	521367202
+AIR21002.1	64	LG40_24940	bacteria>actinobacteria	Mycobacterium kansasii 662	GCA_000831265.1	signal transduction histidine kinase [Mycobacterium kansasii 662].	690323375
+AIR30577.1	64	LH54_25070	bacteria>actinobacteria	Mycobacterium kansasii 824	GCA_000831305.1	signal transduction histidine kinase [Mycobacterium kansasii 824].	690334909
+AGZ53233.1	64	MKAN_25185	bacteria>actinobacteria	Mycobacterium kansasii ATCC 12478	GCA_000157895.2	hypothetical protein MKAN_25185 [Mycobacterium kansasii ATCC 12478].	556026022
+CAC31367.1	67	ML0986	bacteria>actinobacteria	Mycobacterium leprae	GCA_000195855.1	conserved hypothetical protein [Mycobacterium leprae].	13093018
+CAR71081.1	67	MLBr00986	bacteria>actinobacteria	Mycobacterium leprae Br4923	GCA_000026685.1	conserved hypothetical protein [Mycobacterium leprae Br4923].	219933052
+AGC62029.1	77	MULP_02141	bacteria>actinobacteria	Mycobacterium liflandii 128FXT	GCA_000026445.2	hypothetical protein MULP_02141 [Mycobacterium liflandii 128FXT].	442582886
+CDM76046.1	68	MMARE11_18990	bacteria>actinobacteria	Mycobacterium marinum E11	GCA_000723425.2	conserved hypothetical protein [Mycobacterium marinum E11].	641305048
+ACC40425.1	68	MMAR_1975	bacteria>actinobacteria	Mycobacterium marinum M	GCA_000018345.1	conserved hypothetical protein [Mycobacterium marinum M].	183175315
+AFC55091.1	68	OCQ_35790	bacteria>actinobacteria	Mycobacterium paraintracellulare	GCA_000276825.1	hypothetical protein OCQ_35790 [Mycobacterium paraintracellulare].	378810957
+ABN97903.1	64	Mjls_2117	bacteria>actinobacteria	Mycobacterium sp. JLS	GCA_000016005.1	conserved hypothetical protein [Mycobacterium sp. JLS].	126234503
+AGB22869.1	64	Mycsm_02534	bacteria>actinobacteria	Mycobacterium sp. JS623	GCA_000328565.1	Protein of unknown function (DUF3046) [Mycobacterium sp. JS623].	433297049
+ABL91374.1	64	Mkms_2176	bacteria>actinobacteria	Mycobacterium sp. KMS	GCA_000015405.1	conserved hypothetical protein [Mycobacterium sp. KMS].	119694301
+AIY46306.1	64	G155_12735	bacteria>actinobacteria	Mycobacterium sp. VKM Ac-1817D	GCA_000416365.2	hypothetical protein G155_12735 [Mycobacterium sp. VKM Ac-1817D].	725871073
+ANW64391.1	64	BCA37_12995	bacteria>actinobacteria	Mycobacterium sp. djl-10	GCA_001695755.1	hypothetical protein BCA37_12995 [Mycobacterium sp. djl-10].	1047840630
+AMC68411.1	68	RN10_1865	bacteria>actinobacteria	Mycobacterium tuberculosis	GCA_001544895.1	hypothetical protein RN10_1865 [Mycobacterium tuberculosis].	984974317
+AMC74204.1	68	RN11_3194	bacteria>actinobacteria	Mycobacterium tuberculosis	GCA_001544935.1	hypothetical protein RN11_3194 [Mycobacterium tuberculosis].	984980111
+AOZ44023.1	68	BTB1458_3026	bacteria>actinobacteria	Mycobacterium tuberculosis	GCA_001855255.1	hypothetical protein BTB1458_3026 [Mycobacterium tuberculosis].	1092948391
+AOZ44031.1	44	BTB1458_3034	bacteria>actinobacteria	Mycobacterium tuberculosis	GCA_001855255.1	hypothetical protein BTB1458_3034 [Mycobacterium tuberculosis].	1092948399
+CCP45537.1	68	Rv2738c	bacteria>actinobacteria	Mycobacterium tuberculosis H37Rv	GCA_000195955.2	Conserved hypothetical protein [Mycobacterium tuberculosis H37Rv].	444896276
+CCP45541.1	277	Rv2742c	bacteria>actinobacteria	Mycobacterium tuberculosis H37Rv	GCA_000195955.2	Conserved hypothetical arginine rich protein [Mycobacterium tuberculosis H37Rv].	444896280
+BAQ06860.1	64	KURONO_3077	bacteria>actinobacteria	Mycobacterium tuberculosis str. Kurono	GCA_000828995.1	hypothetical protein KURONO_3077 [Mycobacterium tuberculosis str. Kurono].	737519186
+BAQ06864.1	44	KURONO_3081	bacteria>actinobacteria	Mycobacterium tuberculosis str. Kurono	GCA_000828995.1	hypothetical protein KURONO_3081 [Mycobacterium tuberculosis str. Kurono].	737519190
+AMC65078.1	68	RN09_3330	bacteria>actinobacteria	Mycobacterium tuberculosis variant africanum	GCA_001544855.1	hypothetical protein RN09_3330 [Mycobacterium tuberculosis variant africanum].	984970983
+CCC27813.1	68	MAF_27430	bacteria>actinobacteria	Mycobacterium tuberculosis variant africanum GM041182	GCA_000253355.1	conserved hypothetical protein [Mycobacterium tuberculosis variant africanum GM041182].	339332107
+CCC27817.1	277	MAF_27470	bacteria>actinobacteria	Mycobacterium tuberculosis variant africanum GM041182	GCA_000253355.1	conserved hypothetical arginine rich protein [Mycobacterium tuberculosis variant africanum GM041182].	339332110
+AKR02568.1	68	Mb1595_p3045	bacteria>actinobacteria	Mycobacterium tuberculosis variant bovis	GCA_001078615.1	signal transduction histidine kinase [Mycobacterium tuberculosis variant bovis].	893681672
+AKR02572.1	82	Mb1595_p3049	bacteria>actinobacteria	Mycobacterium tuberculosis variant bovis	GCA_001078615.1	hypothetical protein Mb1595_p3049 [Mycobacterium tuberculosis variant bovis].	893681676
+AKR02573.1	195	Mb1595_p3050	bacteria>actinobacteria	Mycobacterium tuberculosis variant bovis	GCA_001078615.1	hypothetical protein Mb1595_p3050 [Mycobacterium tuberculosis variant bovis].	893681677
+AMC56158.1	68	RN07_2927	bacteria>actinobacteria	Mycobacterium tuberculosis variant bovis	GCA_001544775.1	hypothetical protein RN07_2927 [Mycobacterium tuberculosis variant bovis].	984962061
+ALA79284.1	68	BCGR_2967	bacteria>actinobacteria	Mycobacterium tuberculosis variant bovis BCG	GCA_001274555.1	DUF3046 domain-containing protein [Mycobacterium tuberculosis variant bovis BCG].	922678487
+ALA79289.1	44	BCGR_2972	bacteria>actinobacteria	Mycobacterium tuberculosis variant bovis BCG	GCA_001274555.1	DUF3046 domain-containing protein [Mycobacterium tuberculosis variant bovis BCG].	922678492
+AMC51767.1	460	RN06_3314	bacteria>actinobacteria	Mycobacterium tuberculosis variant bovis BCG	GCA_001544735.1	alanine-rich transferase [Mycobacterium tuberculosis variant bovis BCG].	984957669
+AMC60450.1	68	RN08_3023	bacteria>actinobacteria	Mycobacterium tuberculosis variant microti	GCA_001544815.1	hypothetical protein RN08_3023 [Mycobacterium tuberculosis variant microti].	984966354
+ABL05560.1	68	MUL_3382	bacteria>actinobacteria	Mycobacterium ulcerans Agy99	GCA_000013925.2	conserved hypothetical protein [Mycobacterium ulcerans Agy99].	118570809
+CAM63139.1	64	MAB_3061c	bacteria>actinobacteria	Mycobacteroides abscessus ATCC 19977	GCA_000069185.1	Conserved hypothetical protein [Mycobacteroides abscessus ATCC 19977].	169242111
+AKP59046.1	64	MAUC22_16860	bacteria>actinobacteria	Mycobacteroides abscessus UC22	GCA_001050395.1	signal transduction histidine kinase [Mycobacteroides abscessus UC22].	873879409
+AIR39098.1	64	LA62_15545	bacteria>actinobacteria	Mycobacteroides abscessus subsp. bolletii	GCA_000758405.1	signal transduction histidine kinase [Mycobacteroides abscessus subsp. bolletii].	690345027
+AGM29602.1	64	MASS_3000	bacteria>actinobacteria	Mycobacteroides abscessus subsp. bolletii 50594	GCA_000445035.1	hypothetical protein MASS_3000 [Mycobacteroides abscessus subsp. bolletii 50594].	506963221
+BAP97842.1	64	MMASJCM_3066	bacteria>actinobacteria	Mycobacteroides abscessus subsp. massiliense CCUG 48898 = JCM 15300	GCA_000497265.2	hypothetical protein MMASJCM_3066 [Mycobacteroides abscessus subsp. massiliense CCUG 48898 = JCM 15300].	731178205
+ANA99022.1	64	BB28_15430	bacteria>actinobacteria	Mycobacteroides chelonae CCUG 47445	GCA_001632805.1	hypothetical protein BB28_15430 [Mycobacteroides chelonae CCUG 47445].	1023046880
+AMT71616.1	64	ABG82_16215	bacteria>actinobacteria	Mycobacteroides immunogenum	GCA_001605725.1	signal transduction histidine kinase [Mycobacteroides immunogenum].	1013058503
+ANO04738.1	64	BAB75_16460	bacteria>actinobacteria	Mycobacteroides immunogenum	GCA_001677135.1	signal transduction histidine kinase [Mycobacteroides immunogenum].	1041027695
+AEF36485.1	64	JDM601_2485	bacteria>actinobacteria	Mycolicibacter sinensis	GCA_000214155.1	conserved hypothetical protein [Mycolicibacter sinensis].	333487093
+AFM16884.1	64	Mycch_2101	bacteria>actinobacteria	Mycolicibacterium chubuense NBB4	GCA_000266905.1	Protein of unknown function (DUF3046) [Mycolicibacterium chubuense NBB4].	390615734
+ALI26459.1	64	XA26_26160	bacteria>actinobacteria	Mycolicibacterium fortuitum	GCA_001307545.1	hypothetical protein XA26_26160 [Mycolicibacterium fortuitum].	937420460
+ABP46454.1	64	Mflv_3983	bacteria>actinobacteria	Mycolicibacterium gilvum PYR-GCK	GCA_000016365.1	conserved hypothetical protein [Mycolicibacterium gilvum PYR-GCK].	145217050
+ADT99939.1	64	Mspyr1_33280	bacteria>actinobacteria	Mycolicibacterium gilvum Spyr1	GCA_000184435.1	hypothetical protein Mspyr1_33280 [Mycolicibacterium gilvum Spyr1].	315263198
+AKS34770.1	64	AFA91_25980	bacteria>actinobacteria	Mycolicibacterium goodii	GCA_001187505.1	hypothetical protein AFA91_25980 [Mycolicibacterium goodii].	906355135
+AHC25234.1	64	D174_11815	bacteria>actinobacteria	Mycolicibacterium neoaurum VKM Ac-1815D	GCA_000317305.3	signal transduction histidine kinase [Mycolicibacterium neoaurum VKM Ac-1815D].	565685374
+AMO61953.1	64	MPHLCCUG_03148	bacteria>actinobacteria	Mycolicibacterium phlei	GCA_001583415.1	hypothetical protein MPHLCCUG_03148 [Mycolicibacterium phlei].	1003469991
+AEV76087.1	64	MycrhN_5619	bacteria>actinobacteria	Mycolicibacterium rhodesiae NBB3	GCA_000230895.3	Protein of unknown function (DUF3046) [Mycolicibacterium rhodesiae NBB3].	359823274
+AIU14495.1	64	LI99_13435	bacteria>actinobacteria	Mycolicibacterium smegmatis	GCA_000767665.1	hypothetical protein LI99_13435 [Mycolicibacterium smegmatis].	698950301
+AIU21118.1	64	LI98_13440	bacteria>actinobacteria	Mycolicibacterium smegmatis	GCA_000767705.1	hypothetical protein LI98_13440 [Mycolicibacterium smegmatis].	698958583
+CKH69345.1	64	ERS451418_02706	bacteria>actinobacteria	Mycolicibacterium smegmatis	GCA_001457595.1	Protein of uncharacterised function (DUF3046) [Mycolicibacterium smegmatis].	777216780
+ABK71520.1	64	MSMEG_2700	bacteria>actinobacteria	Mycolicibacterium smegmatis MC2 155	GCA_000015005.1	conserved hypothetical protein [Mycolicibacterium smegmatis MC2 155].	118170624
+ABM13216.1	64	Mvan_2402	bacteria>actinobacteria	Mycolicibacterium vanbaalenii PYR-1	GCA_000015305.1	conserved hypothetical protein [Mycolicibacterium vanbaalenii PYR-1].	119956211
+ACV80287.1	69	Namu_3995	bacteria>actinobacteria	Nakamurella multipartita DSM 44233	GCA_000024365.1	hypothetical protein Namu_3995 [Nakamurella multipartita DSM 44233].	258557345
+APF41705.1	81	BHE16_03980	bacteria>actinobacteria	Neomicrococcus aestuarii	GCA_001887245.1	histidine kinase [Neomicrococcus aestuarii].	1109135093
+AFU03962.1	63	O3I_030065	bacteria>actinobacteria	Nocardia brasiliensis ATCC 700358	GCA_000250675.3	hypothetical protein O3I_030065 [Nocardia brasiliensis ATCC 700358].	407310061
+CCF64489.1	62	NOCYR_3726	bacteria>actinobacteria	Nocardia cyriacigeorgica GUH-2	GCA_000284035.1	conserved protein of unknown function [Nocardia cyriacigeorgica GUH-2].	374847419
+CRY73271.1	64	ERS450000_00050	bacteria>actinobacteria	Nocardia farcinica	GCA_001182745.2	Protein of uncharacterised function (DUF3046) [Nocardia farcinica].	873548216
+BAD58697.1	64	NFA_38490	bacteria>actinobacteria	Nocardia farcinica IFM 10152	GCA_000009805.1	hypothetical protein NFA_38490 [Nocardia farcinica IFM 10152].	54017327
+AHH20188.1	72	NONO_c54080	bacteria>actinobacteria	Nocardia nova SH22a	GCA_000523235.1	hypothetical protein NONO_c54080 [Nocardia nova SH22a].	576087798
+APB00150.1	75	NS506_06113	bacteria>actinobacteria	Nocardia seriolae	GCA_001865855.1	hypothetical protein NS506_06113 [Nocardia seriolae].	1098541364
+APE38573.1	63	BOX37_20870	bacteria>actinobacteria	Nocardia sp. Y48	GCA_001886715.1	hypothetical protein BOX37_20870 [Nocardia sp. Y48].	1108546924
+ANH39328.1	67	I601_2912	bacteria>actinobacteria	Nocardioides dokdonensis FR1436	GCA_001653335.1	hypothetical protein I601_2912 [Nocardioides dokdonensis FR1436].	1033004000
+ABL81843.1	64	Noca_2338	bacteria>actinobacteria	Nocardioides sp. JS614	GCA_000015265.1	conserved hypothetical protein [Nocardioides sp. JS614].	119537226
+AFR06313.1	64	B005_3561	bacteria>actinobacteria	Nocardiopsis alba ATCC BAA-2165	GCA_000294515.1	hypothetical protein B005_3561 [Nocardiopsis alba ATCC BAA-2165].	402798903
+ADH66110.1	64	Ndas_0665	bacteria>actinobacteria	Nocardiopsis dassonvillei subsp. dassonvillei DSM 43111	GCA_000092985.1	conserved hypothetical protein [Nocardiopsis dassonvillei subsp. dassonvillei DSM 43111].	296844090
+ABM07901.1	74	AAur_1593	bacteria>actinobacteria	Paenarthrobacter aurescens TC1	GCA_000014925.1	conserved hypothetical protein [Paenarthrobacter aurescens TC1].	119948990
+BAR05243.1	79	PSDT_0724	bacteria>actinobacteria	Parascardovia denticolens DSM 10105 = JCM 12538	GCA_001042675.1	conserved hypothetical protein [Parascardovia denticolens DSM 10105 = JCM 12538].	781881090
+AIY17809.1	64	KR76_15435	bacteria>actinobacteria	Pimelobacter simplex	GCA_000785495.1	hypothetical protein KR76_15435 [Pimelobacter simplex].	723624333
+AJQ90603.1	55	RM25_0881	bacteria>actinobacteria	Propionibacterium freudenreichii subsp. freudenreichii	GCA_000940845.1	Hypothetical protein RM25_0881 [Propionibacterium freudenreichii subsp. freudenreichii].	764032368
+CUW15279.1	55	PFREUDJS001_001260	bacteria>actinobacteria	Propionibacterium freudenreichii subsp. shermanii	GCA_900016155.1	PF11248 family protein [Propionibacterium freudenreichii subsp. shermanii].	1020737036
+CBL56832.1	64	PFREUD_13140	bacteria>actinobacteria	Propionibacterium freudenreichii subsp. shermanii CIRM-BIA1	GCA_000091725.1	Hypothetical protein PFREUD_13140 [Propionibacterium freudenreichii subsp. shermanii CIRM-BIA1].	296922260
+AOH44814.1	64	BCB70_01625	bacteria>actinobacteria	Propionibacterium sp. oral taxon 193	GCA_001717565.1	hypothetical protein BCB70_01625 [Propionibacterium sp. oral taxon 193].	1061027634
+ACL39450.1	74	Achl_1461	bacteria>actinobacteria	Pseudarthrobacter chlorophenolicus A6	GCA_000022025.1	conserved hypothetical protein [Pseudarthrobacter chlorophenolicus A6].	219859108
+ADX72616.1	65	Asphe3_14420	bacteria>actinobacteria	Pseudarthrobacter phenanthrenivorans Sphe3	GCA_000189535.1	hypothetical protein Asphe3_14420 [Pseudarthrobacter phenanthrenivorans Sphe3].	323468931
+ALV40280.1	74	AU252_03100	bacteria>actinobacteria	Pseudarthrobacter sulfonivorans	GCA_001484605.1	histidine kinase [Pseudarthrobacter sulfonivorans].	971340096
+AEA26750.1	64	Psed_4598	bacteria>actinobacteria	Pseudonocardia dioxanivorans CB1190	GCA_000196675.1	hypothetical protein Psed_4598 [Pseudonocardia dioxanivorans CB1190].	326953053
+ALL79128.1	64	AD006_25625	bacteria>actinobacteria	Pseudonocardia sp. EC080610-09	GCA_001420975.1	hypothetical protein AD006_25625 [Pseudonocardia sp. EC080610-09].	944388299
+ALL84304.1	64	AD017_05215	bacteria>actinobacteria	Pseudonocardia sp. EC080619-01	GCA_001420995.1	hypothetical protein AD017_05215 [Pseudonocardia sp. EC080619-01].	944393478
+ALE76451.1	64	FRP1_18170	bacteria>actinobacteria	Pseudonocardia sp. EC080625-04	GCA_001294425.1	hypothetical protein FRP1_18170 [Pseudonocardia sp. EC080625-04].	928465723
+ALE84687.1	64	XF36_17370	bacteria>actinobacteria	Pseudonocardia sp. HH130629-09	GCA_001294645.1	hypothetical protein XF36_17370 [Pseudonocardia sp. HH130629-09].	928474959
+ANY08407.1	64	AFB00_21400	bacteria>actinobacteria	Pseudonocardia sp. HH130630-07	GCA_001698125.1	hypothetical protein AFB00_21400 [Pseudonocardia sp. HH130630-07].	1049188568
+AFN45154.1	64	HMPREF9154_1370	bacteria>actinobacteria	Pseudopropionibacterium propionicum F0230a	GCA_000277715.1	hypothetical protein HMPREF9154_1370 [Pseudopropionibacterium propionicum F0230a].	395141047
+AJM77404.1	74	TI83_04480	bacteria>actinobacteria	Rathayibacter toxicus	GCA_000875675.1	hypothetical protein TI83_04480 [Rathayibacter toxicus].	756778937
+ALS56700.1	74	APU90_01995	bacteria>actinobacteria	Rathayibacter toxicus	GCA_001465855.1	hypothetical protein APU90_01995 [Rathayibacter toxicus].	961558512
+AND16148.1	74	A6122_0998	bacteria>actinobacteria	Rathayibacter tritici	GCA_001641005.1	hypothetical protein A6122_0998 [Rathayibacter tritici].	1026622747
+ABY22468.1	92	RSal33209_0721	bacteria>actinobacteria	Renibacterium salmoninarum ATCC 33209	GCA_000018885.1	hypothetical cytosolic protein [Renibacterium salmoninarum ATCC 33209].	162952953
+AKE92525.1	64	AAT18_11925	bacteria>actinobacteria	Rhodococcus aetherivorans	GCA_000982715.1	hypothetical protein AAT18_11925 [Rhodococcus aetherivorans].	816218729
+AKE00652.1	64	XU06_12865	bacteria>actinobacteria	Rhodococcus erythropolis	GCA_000975175.1	hypothetical protein XU06_12865 [Rhodococcus erythropolis].	808772587
+AGT92390.1	64	O5Y_12645	bacteria>actinobacteria	Rhodococcus erythropolis CCM2595	GCA_000454045.1	hypothetical protein O5Y_12645 [Rhodococcus erythropolis CCM2595].	532222357
+BAH33460.1	67	RER_27520	bacteria>actinobacteria	Rhodococcus erythropolis PR4	GCA_000010105.1	conserved hypothetical protein [Rhodococcus erythropolis PR4].	226185356
+ALU71294.1	64	H351_19675	bacteria>actinobacteria	Rhodococcus erythropolis R138	GCA_000696675.2	hypothetical protein H351_19675 [Rhodococcus erythropolis R138].	970865885
+AMY55836.1	63	A3L23_04533	bacteria>actinobacteria	Rhodococcus fascians D188	GCA_001620305.1	hypothetical protein A3L23_04533 [Rhodococcus fascians D188].	1018280007
+CBH48031.1	64	REQ_19690	bacteria>actinobacteria	Rhodococcus hoagii 103S	GCA_000196695.1	conserved hypothetical protein [Rhodococcus hoagii 103S].	311888719
+ABG98050.1	130	RHA1_ro06273	bacteria>actinobacteria	Rhodococcus jostii RHA1	GCA_000014565.1	conserved hypothetical protein [Rhodococcus jostii RHA1].	110822766
+ABG98536.1	64	RHA1_ro06764	bacteria>actinobacteria	Rhodococcus jostii RHA1	GCA_000014565.1	conserved hypothetical protein [Rhodococcus jostii RHA1].	110823252
+ANS27685.1	48	R1CP_14905	bacteria>actinobacteria	Rhodococcus opacus	GCA_001685605.1	hypothetical protein R1CP_14905 [Rhodococcus opacus].	1043689167
+BAH54997.1	64	ROP_67500	bacteria>actinobacteria	Rhodococcus opacus B4	GCA_000010805.1	hypothetical protein ROP_67500 [Rhodococcus opacus B4].	226244649
+AHK30603.1	64	Pd630_LPD03384	bacteria>actinobacteria	Rhodococcus opacus PD630	GCA_000599545.1	hypothetical protein Pd630_LPD03384 [Rhodococcus opacus PD630].	589065744
+AHD19471.1	64	Y013_01510	bacteria>actinobacteria	Rhodococcus pyridinivorans SB3094	GCA_000511305.1	hypothetical protein Y013_01510 [Rhodococcus pyridinivorans SB3094].	568232566
+ANQ75219.1	64	AOT96_24095	bacteria>actinobacteria	Rhodococcus sp. 008	GCA_001682295.1	hypothetical protein AOT96_24095 [Rhodococcus sp. 008].	1042835355
+APE12087.1	64	BO226_06100	bacteria>actinobacteria	Rhodococcus sp. 2G	GCA_001886355.1	hypothetical protein BO226_06100 [Rhodococcus sp. 2G].	1108520429
+AJW39329.1	63	NY08_1299	bacteria>actinobacteria	Rhodococcus sp. B7740	GCA_000954115.1	hypothetical protein NY08_1299 [Rhodococcus sp. B7740].	769528227
+AQA24454.1	64	BTZ20_2455	bacteria>actinobacteria	Rhodococcus sp. MTM3W5.2	GCA_001984015.1	hypothetical protein BTZ20_2455 [Rhodococcus sp. MTM3W5.2].	1140139921
+ANZ28171.1	64	A4U64_12795	bacteria>actinobacteria	Rhodococcus sp. WB1	GCA_001700945.1	hypothetical protein A4U64_12795 [Rhodococcus sp. WB1].	1050289833
+AIC47295.1	76	Rhola_00004760	bacteria>actinobacteria	Rhodoluna lacicola	GCA_000699505.1	Protein of unknown function (DUF3046) [Rhodoluna lacicola].	649018545
+ADP41035.1	74	HMPREF0733_11578	bacteria>actinobacteria	Rothia dentocariosa ATCC 17931	GCA_000164695.2	hypothetical protein HMPREF0733_11578 [Rothia dentocariosa ATCC 17931].	310944741
+BAS19517.1	73	RM6536_0270	bacteria>actinobacteria	Rothia mucilaginosa	GCA_001548235.1	hypothetical protein RM6536_0270 [Rothia mucilaginosa].	915387034
+BAI65286.1	85	RMDY18_14540	bacteria>actinobacteria	Rothia mucilaginosa DY-18	GCA_000011025.1	signal transduction histidine kinase [Rothia mucilaginosa DY-18].	283134521
+ACU97764.1	64	Svir_27830	bacteria>actinobacteria	Saccharomonospora viridis DSM 43017	GCA_000023865.1	hypothetical protein Svir_27830 [Saccharomonospora viridis DSM 43017].	256586631
+CAM01052.1	55	SACE_1734	bacteria>actinobacteria	Saccharopolyspora erythraea NRRL 2338	GCA_000062885.1	hypothetical protein SACE_1734 [Saccharopolyspora erythraea NRRL 2338].	133910939
+CCH28999.1	64	BN6_16770	bacteria>actinobacteria	Saccharothrix espanaensis DSM 44229	GCA_000328705.1	hypothetical protein BN6_16770 [Saccharothrix espanaensis DSM 44229].	407881356
+ABV97288.1	66	Sare_1388	bacteria>actinobacteria	Salinispora arenicola CNS-205	GCA_000018265.1	conserved hypothetical protein [Salinispora arenicola CNS-205].	157915861
+ABP53890.1	66	Strop_1424	bacteria>actinobacteria	Salinispora tropica CNB-440	GCA_000016425.1	hypothetical protein Strop_1424 [Salinispora tropica CNB-440].	145303308
+ACZ22236.1	79	Sked_23210	bacteria>actinobacteria	Sanguibacter keddieii DSM 10542	GCA_000024925.1	hypothetical protein Sked_23210 [Sanguibacter keddieii DSM 10542].	269097800
+BAR06841.1	78	SCIP_0774	bacteria>actinobacteria	Scardovia inopinata JCM 12537	GCA_001042695.1	conserved hypothetical protein [Scardovia inopinata JCM 12537].	781882867
+AKU64692.1	74	ADJ76_01945	bacteria>actinobacteria	Schaalia meyeri	GCA_001262055.1	hypothetical protein ADJ76_01945 [Schaalia meyeri].	913013736
+ADG97409.1	63	Srot_0935	bacteria>actinobacteria	Segniliparus rotundus DSM 44985	GCA_000092825.1	conserved hypothetical protein [Segniliparus rotundus DSM 44985].	296180503
+ANS80547.1	73	SGUI_3151	bacteria>actinobacteria	Serinicoccus sp. JLT9	GCA_001685415.1	hypothetical protein SGUI_3151 [Serinicoccus sp. JLT9].	1043661428
+AMM32362.1	73	SA2016_1686	bacteria>actinobacteria	Sinomonas atrocyanea	GCA_001577305.1	histidine kinase [Sinomonas atrocyanea].	1001865876
+ADD43834.1	102	Snas_4184	bacteria>actinobacteria	Stackebrandtia nassauensis DSM 44728	GCA_000024545.1	hypothetical protein Snas_4184 [Stackebrandtia nassauensis DSM 44728].	290570869
+AGI87495.1	64	XNR_1096	bacteria>actinobacteria	Streptomyces albidoflavus	GCA_000359525.1	DUF3046 domain containing protein [Streptomyces albidoflavus].	477543542
+AMM07887.1	64	Salbus254_1344	bacteria>actinobacteria	Streptomyces albidoflavus	GCA_001577385.1	hypothetical protein Salbus254_1344 [Streptomyces albidoflavus].	1001840645
+AIA06306.1	64	DC74_5857	bacteria>actinobacteria	Streptomyces albulus	GCA_000695235.1	hypothetical protein DC74_5857 [Streptomyces albulus].	636569621
+AKA03180.1	64	SAZ_12640	bacteria>actinobacteria	Streptomyces albulus ZPM	GCA_000963515.1	hypothetical protein SAZ_12640 [Streptomyces albulus ZPM].	785757392
+AJE81895.1	64	SLNWT_1519	bacteria>actinobacteria	Streptomyces albus	GCA_000827005.1	hypothetical protein SLNWT_1519 [Streptomyces albus].	749176149
+AOU76211.1	64	SLNHY_1520	bacteria>actinobacteria	Streptomyces albus	GCA_001753425.1	hypothetical protein SLNHY_1520 [Streptomyces albus].	1073939454
+APY86037.1	64	A7J05_10220	bacteria>actinobacteria	Streptomyces alfalfae	GCA_001975025.1	hypothetical protein A7J05_10220 [Streptomyces alfalfae].	1137365122
+ANB08918.1	64	SAM40697_4961	bacteria>actinobacteria	Streptomyces ambofaciens	GCA_001632865.1	hypothetical protein SAM40697_4961 [Streptomyces ambofaciens].	1023057066
+AKZ58515.1	64	SAM23877_5470	bacteria>actinobacteria	Streptomyces ambofaciens ATCC 23877	GCA_001267885.1	hypothetical protein SAM23877_5470 [Streptomyces ambofaciens ATCC 23877].	917651846
+AQA14403.1	64	BV401_32325	bacteria>actinobacteria	Streptomyces autolyticus	GCA_001983975.1	hypothetical protein BV401_32325 [Streptomyces autolyticus].	1140129858
+BAC70206.1	64	SAVERM_2495	bacteria>actinobacteria	Streptomyces avermitilis MA-4680 = NBRC 14893	GCA_000009765.2	hypothetical protein SAVERM_2495 [Streptomyces avermitilis MA-4680 = NBRC 14893].	29606143
+ADI06462.1	64	SBI_03341	bacteria>actinobacteria	Streptomyces bingchenggensis BCW-1	GCA_000092385.1	hypothetical protein SBI_03341 [Streptomyces bingchenggensis BCW-1].	297156750
+CCB77231.1	64	SCAT_4543	bacteria>actinobacteria	Streptomyces cattleya NRRL 8057 = DSM 46488	GCA_000237305.1	conserved protein of unknown function [Streptomyces cattleya NRRL 8057 = DSM 46488].	337768518
+AEW96903.1	64	SCATT_45320	bacteria>actinobacteria	Streptomyces cattleya NRRL 8057 = DSM 46488	GCA_000240165.1	hypothetical protein SCATT_45320 [Streptomyces cattleya NRRL 8057 = DSM 46488].	365808687
+ANW17745.1	64	BB341_05635	bacteria>actinobacteria	Streptomyces clavuligerus	GCA_001693675.1	hypothetical protein BB341_05635 [Streptomyces clavuligerus].	1046922011
+CAA15872.1	64	SCO5766	bacteria>actinobacteria	Streptomyces coelicolor A3(2)	GCA_000203835.1	hypothetical protein SC4H8.05 [Streptomyces coelicolor A3(2)].	2687331
+AGS72202.1	64	B446_26970	bacteria>actinobacteria	Streptomyces collinus Tu 365	GCA_000444875.1	hypothetical protein B446_26970 [Streptomyces collinus Tu 365].	529200456
+AJP04145.1	64	TU94_24415	bacteria>actinobacteria	Streptomyces cyaneogriseus subsp. noncyanogenus	GCA_000931445.1	hypothetical protein TU94_24415 [Streptomyces cyaneogriseus subsp. noncyanogenus].	758858989
+AGK80568.1	64	SFUL_5685	bacteria>actinobacteria	Streptomyces fulvissimus DSM 40593	GCA_000385945.1	DUF3046 domain containing protein [Streptomyces fulvissimus DSM 40593].	485097385
+AIS00907.1	64	SGLAU_24845	bacteria>actinobacteria	Streptomyces glaucescens	GCA_000761215.1	hypothetical protein SGLAU_24845 [Streptomyces glaucescens].	692324703
+ALU96613.1	64	WQO_26755	bacteria>actinobacteria	Streptomyces globisporus C-1027	GCA_000261345.2	hypothetical protein WQO_26755 [Streptomyces globisporus C-1027].	971159009
+ANP49877.1	64	AVL59_09865	bacteria>actinobacteria	Streptomyces griseochromogenes	GCA_001542625.2	hypothetical protein AVL59_09865 [Streptomyces griseochromogenes].	1042027982
+BAG18584.1	64	SGR_1755	bacteria>actinobacteria	Streptomyces griseus subsp. griseus NBRC 13350	GCA_000010605.1	conserved hypothetical protein [Streptomyces griseus subsp. griseus NBRC 13350].	178464064
+AEY92120.1	64	SHJG_6853	bacteria>actinobacteria	Streptomyces hygroscopicus subsp. jinggangensis 5008	GCA_000245355.1	hypothetical protein SHJG_6853 [Streptomyces hygroscopicus subsp. jinggangensis 5008].	374103236
+AGF66276.1	62	SHJGH_6613	bacteria>actinobacteria	Streptomyces hygroscopicus subsp. jinggangensis TL01	GCA_000340845.1	hypothetical protein SHJGH_6613 [Streptomyces hygroscopicus subsp. jinggangensis TL01].	451796227
+ALO96551.1	64	SHL15_5485	bacteria>actinobacteria	Streptomyces hygroscopicus subsp. limoneus	GCA_001447075.1	hypothetical protein SHL15_5485 [Streptomyces hygroscopicus subsp. limoneus].	953785031
+CQR61368.1	64	sle_19060	bacteria>actinobacteria	Streptomyces leeuwenhoekii	GCA_001013905.1	Conserved Hypothetical Protein [Streptomyces leeuwenhoekii].	822877578
+ANS68398.1	62	SLINC_6174	bacteria>actinobacteria	Streptomyces lincolnensis	GCA_001685355.1	hypothetical protein SLINC_6174 [Streptomyces lincolnensis].	1043639451
+AIJ12961.1	64	SLIV_09785	bacteria>actinobacteria	Streptomyces lividans TK24	GCA_000739105.1	hypothetical protein SLIV_09785 [Streptomyces lividans TK24].	672369079
+AJT64002.1	64	T261_2319	bacteria>actinobacteria	Streptomyces lydicus	GCA_000952035.2	hypothetical protein T261_2319 [Streptomyces lydicus].	768314221
+AOP49453.1	64	SL103_27275	bacteria>actinobacteria	Streptomyces lydicus	GCA_001729485.1	hypothetical protein SL103_27275 [Streptomyces lydicus].	1066952498
+ANZ15896.1	64	SNOUR_12925	bacteria>actinobacteria	Streptomyces noursei ATCC 11455	GCA_001704275.1	Protein of unknown function (DUF3046) [Streptomyces noursei ATCC 11455].	1051497191
+AOW89408.1	64	BC342_26045	bacteria>actinobacteria	Streptomyces olivaceus	GCA_001767375.1	hypothetical protein BC342_26045 [Streptomyces olivaceus].	1082324682
+AQS67203.1	64	B1H29_09925	bacteria>actinobacteria	Streptomyces pactum	GCA_002005225.1	hypothetical protein B1H29_09925 [Streptomyces pactum].	1148981476
+ANJ09832.1	64	Spa2297_24385	bacteria>actinobacteria	Streptomyces parvulus	GCA_001660045.1	hypothetical protein Spa2297_24385 [Streptomyces parvulus].	1035486662
+ADW03023.1	64	Sfla_1585	bacteria>actinobacteria	Streptomyces pratensis ATCC 33331	GCA_000176115.2	Protein of unknown function DUF3046 [Streptomyces pratensis ATCC 33331].	320008173
+ALC20444.1	64	SPRI_2138	bacteria>actinobacteria	Streptomyces pristinaespiralis	GCA_001278075.1	DUF3046 domain-containing protein [Streptomyces pristinaespiralis].	924534262
+AOR31747.1	64	BFF78_12400	bacteria>actinobacteria	Streptomyces puniciscabiei	GCA_001735805.1	hypothetical protein BFF78_12400 [Streptomyces puniciscabiei].	1069154836
+AMW13257.1	64	A4E84_29450	bacteria>actinobacteria	Streptomyces qaidamensis	GCA_001611795.1	hypothetical protein A4E84_29450 [Streptomyces qaidamensis].	1015642399
+CUW31511.1	64	TUE45_06259	bacteria>actinobacteria	Streptomyces reticuli	GCA_001511815.1	hypothetical protein TUE45_06259 [Streptomyces reticuli].	972711583
+AOT61395.1	64	A4G23_04282	bacteria>actinobacteria	Streptomyces rubrolavendulae	GCA_001750785.1	hypothetical protein A4G23_04282 [Streptomyces rubrolavendulae].	1072813976
+CBG69604.1	64	SCAB_24971	bacteria>actinobacteria	Streptomyces scabiei 87.22	GCA_000091305.1	conserved hypothetical protein [Streptomyces scabiei 87.22].	260646507
+AJC55573.1	64	GZL_02986	bacteria>actinobacteria	Streptomyces sp. 769	GCA_000816025.1	hypothetical protein GZL_02986 [Streptomyces sp. 769].	744773432
+ALV32901.1	64	AS200_13200	bacteria>actinobacteria	Streptomyces sp. CdTB01	GCA_001484565.1	hypothetical protein AS200_13200 [Streptomyces sp. CdTB01].	971332279
+ALM38069.1	62	SFR_1454	bacteria>actinobacteria	Streptomyces sp. FR-008	GCA_001431765.1	DUF3046 domain containing protein [Streptomyces sp. FR-008].	947253087
+AKL68214.1	64	M444_25440	bacteria>actinobacteria	Streptomyces sp. Mg1	GCA_000412265.2	hypothetical protein M444_25440 [Streptomyces sp. Mg1].	829482071
+CUM38048.1	64	BN2537_5061	bacteria>actinobacteria	Streptomyces venezuelae	GCA_001406115.1	FIG01124460: hypothetical protein [Streptomyces venezuelae].	932867037
+ALO11421.1	64	AQF52_5828	bacteria>actinobacteria	Streptomyces venezuelae	GCA_001443625.1	hypothetical protein AQF52_5828 [Streptomyces venezuelae].	952473083
+APE24282.1	64	vnz_26785	bacteria>actinobacteria	Streptomyces venezuelae	GCA_001886595.1	hypothetical protein vnz_26785 [Streptomyces venezuelae].	1108532628
+AJF67624.1	64	SVTN_27800	bacteria>actinobacteria	Streptomyces vietnamensis	GCA_000830005.1	hypothetical protein SVTN_27800 [Streptomyces vietnamensis].	751391536
+AEM81830.1	64	Strvi_2098	bacteria>actinobacteria	Streptomyces violaceusniger Tu 4113	GCA_000147815.3	hypothetical protein Strvi_2098 [Streptomyces violaceusniger Tu 4113].	344036105
+AKG45899.1	64	SXIM_45150	bacteria>actinobacteria	Streptomyces xiamenensis	GCA_000993785.2	hypothetical protein SXIM_45150 [Streptomyces xiamenensis].	818447755
+ACZ85196.1	64	Sros_2214	bacteria>actinobacteria	Streptosporangium roseum DSM 43021	GCA_000024865.1	hypothetical protein Sros_2214 [Streptosporangium roseum DSM 43021].	270506918
+AQP46722.1	64	BW730_03450	bacteria>actinobacteria	Tessaracoccus aquimaris	GCA_001997345.1	hypothetical protein BW730_03450 [Tessaracoccus aquimaris].	1146011327
+AQP51979.1	64	BW733_15270	bacteria>actinobacteria	Tessaracoccus flavescens	GCA_001998865.1	hypothetical protein BW733_15270 [Tessaracoccus flavescens].	1146016585
+AQP44608.1	64	RPIT_07090	bacteria>actinobacteria	Tessaracoccus flavus	GCA_001997295.1	hypothetical protein RPIT_07090 [Tessaracoccus flavus].	1146009212
+AAZ54840.1	82	Tfu_0802	bacteria>actinobacteria	Thermobifida fusca YX	GCA_000012405.1	hypothetical protein Tfu_0802 [Thermobifida fusca YX].	71914938
+ADG87836.1	64	Tbis_1114	bacteria>actinobacteria	Thermobispora bispora DSM 43833	GCA_000092645.1	hypothetical protein Tbis_1114 [Thermobispora bispora DSM 43833].	296091884
+ACY98836.1	64	Tcur_3297	bacteria>actinobacteria	Thermomonospora curvata DSM 43183	GCA_000024385.1	hypothetical protein Tcur_3297 [Thermomonospora curvata DSM 43183].	268312462
+AHU88932.1	70	CQ11_01755	bacteria>actinobacteria	Trueperella pyogenes	GCA_000612055.1	hypothetical protein CQ11_01755 [Trueperella pyogenes].	604188586
+ALD74425.1	70	AN946_09110	bacteria>actinobacteria	Trueperella pyogenes	GCA_001281085.1	hypothetical protein AN946_09110 [Trueperella pyogenes].	927043217
+AJC69776.1	70	X956_06795	bacteria>actinobacteria	Trueperella pyogenes TP8	GCA_000816065.1	histidine kinase [Trueperella pyogenes TP8].	744783343
+ADG78400.1	63	Tpau_1782	bacteria>actinobacteria	Tsukamurella paurometabola DSM 20162	GCA_000092225.1	conserved hypothetical protein [Tsukamurella paurometabola DSM 20162].	296027630
+AEB43562.1	66	VAB18032_12240	bacteria>actinobacteria	Verrucosispora maris AB-18-032	GCA_000204155.1	hypothetical protein VAB18032_12240 [Verrucosispora maris AB-18-032].	328809390
+ACZ30272.1	93	Xcel_1241	bacteria>actinobacteria	Xylanimonas cellulosilytica DSM 15894	GCA_000024965.1	hypothetical protein Xcel_1241 [Xylanimonas cellulosilytica DSM 15894].	269304722
+AKF27700.1	71	YH66_09145	bacteria>actinobacteria	[Brevibacterium] flavum	GCA_000987865.1	hypothetical protein YH66_09145 [[Brevibacterium] flavum].	817155165
+ANR62820.1	71	C628_09420	bacteria>actinobacteria	[Brevibacterium] flavum ZL-1	GCA_001683055.1	hypothetical protein C628_09420 [[Brevibacterium] flavum ZL-1].	1043175617
+ADV42551.1	287	Bache_0526	bacteria>bacteroidetes	Bacteroides helcogenes P 36-108	GCA_000186225.1	putative lipoprotein [Bacteroides helcogenes P 36-108].	319415440
+APY01519.1	263	BWR22_11045	bacteria>bacteroidetes	Lacinutrix venerupis	GCA_001971745.1	hypothetical protein BWR22_11045 [Lacinutrix venerupis].	1134986339
+AKA35661.1	266	VC82_2064	bacteria>bacteroidetes	Muricauda lutaonensis	GCA_000963865.1	Conserved hypothetical lipoprotein [Muricauda lutaonensis].	787939186
+ACI18584.1	121	DICTH_0497	bacteria>dictyoglomi	Dictyoglomus thermophilum H-6-12	GCA_000020965.1	PspC domain family [Dictyoglomus thermophilum H-6-12].	206739526
+AJH56079.1	254	BF89_3965	bacteria>firmicutes	Bacillus anthracis	GCA_000832725.1	putative membrane protein [Bacillus anthracis].	753492157
+AGX02621.1	215	N288_03290	bacteria>firmicutes	Bacillus infantis NRRL B-14911	GCA_000473245.1	modulator protein [Bacillus infantis NRRL B-14911].	548703261
+AGK52227.1	119	B1NLA3E_02215	bacteria>firmicutes	Bacillus sp. 1NLA3E	GCA_000242895.3	hypothetical protein B1NLA3E_02215 [Bacillus sp. 1NLA3E].	484575429
+AEB29104.1	103	yvlC	bacteria>firmicutes	Carnobacterium sp. 17-4	GCA_000195575.1	putative regulator [Carnobacterium sp. 17-4].	328673058
+AJK88848.1	227	HR49_17775	bacteria>firmicutes	Lysinibacillus fusiformis	GCA_000724775.3	membrane protein [Lysinibacillus fusiformis].	756121158
+AEE96464.1	297	Mahau_1270	bacteria>firmicutes	Mahella australiensis 50-1 BON	GCA_000213255.1	hypothetical protein Mahau_1270 [Mahella australiensis 50-1 BON].	332699523
+AIQ14449.1	166	PDUR_22990	bacteria>firmicutes	Paenibacillus durus	GCA_000756615.1	hypothetical protein PDUR_22990 [Paenibacillus durus].	686570393
+AIQ14451.1	100	PDUR_23000	bacteria>firmicutes	Paenibacillus durus	GCA_000756615.1	hypothetical protein PDUR_23000 [Paenibacillus durus].	686570395
+AEI39621.1	411	KNP414_01031	bacteria>firmicutes	Paenibacillus mucilaginosus KNP414	GCA_000218915.1	hypothetical protein KNP414_01031 [Paenibacillus mucilaginosus KNP414].	336296518
+ACX66911.1	301	GYMC10_4691	bacteria>firmicutes	Paenibacillus sp. Y412MC10	GCA_000024685.1	hypothetical protein GYMC10_4691 [Paenibacillus sp. Y412MC10].	261284940
+CCQ74391.1	224	MGMAQ_2530	bacteria>proteobacteria>alphaproteobacteria	Magnetospira sp. QH-2	GCA_000968135.1	PspA（Phage shock protein A）/IM30 family [Magnetospira sp. QH-2].	578037397
+AJR22952.1	107	TZ53_03405	bacteria>proteobacteria>alphaproteobacteria	Sphingobium sp. YBL2	GCA_000943805.1	hypothetical protein TZ53_03405 [Sphingobium sp. YBL2].	764452838
+AGP40782.1	243	SCE1572_43620	bacteria>proteobacteria>deltaproteobacteria	Sorangium cellulosum So0157-2	GCA_000418325.1	hypothetical protein SCE1572_43620 [Sorangium cellulosum So0157-2].	521007779
+AAW35295.1	724	flhA	bacteria>proteobacteria>epsilonproteobacteria	Campylobacter jejuni RM1221	GCA_000011865.1	flagellar biosynthesis protein FlhA [Campylobacter jejuni RM1221].	57166516
+AJK82865.1	724	flhA	bacteria>proteobacteria>epsilonproteobacteria	Campylobacter jejuni subsp. jejuni	GCA_000835345.1	flagellar biosynthesis protein FlhA [Campylobacter jejuni subsp. jejuni].	756090652
+AHC83764.1	709	flhA	bacteria>proteobacteria>gammaproteobacteria	Pseudomonas monteilii SB3078	GCA_000510285.1	flagellar biosynthesis protein FlhA [Pseudomonas monteilii SB3078].	567351567
+ABX48815.1	128	Sbal195_1642	bacteria>proteobacteria>gammaproteobacteria	Shewanella baltica OS195	GCA_000018765.1	phage shock protein C, PspC [Shewanella baltica OS195].	160860281
+AJI92027.1	692	flhA	bacteria>proteobacteria>gammaproteobacteria	Yersinia pestis	GCA_000834235.1	flagellar biosynthesis protein FlhA [Yersinia pestis].	755294843
+ACB75115.1	254	Oter_1832	bacteria>verrucomicrobia	Opitutus terrae PB90-1	GCA_000019965.1	conserved hypothetical protein [Opitutus terrae PB90-1].	177840863
