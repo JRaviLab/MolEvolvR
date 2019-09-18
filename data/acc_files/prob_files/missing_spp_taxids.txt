@@ -1,0 +1,749 @@
+XP_001833565.1	240176	Coprinopsis cinerea okayama7#130
+Smed1000013124		
+Crev1000005838		
+Pram1000010618		
+Smed1000006740		
+Bcir1000001833		
+Chet1000000855		
+Smar1000011654		
+Lhya1000005072		
+Lhya1000010591		
+Smar1000014167		
+Caps1000008300		
+Bcir1000013302		
+Crev1000000673		
+Uram1000008596		
+Uram1000009085		
+Caps1000013612		
+XP_001837213.1	240176	Coprinopsis cinerea okayama7#130
+Caps1000009008		
+Smed1000003202		
+Bnat1000015196		
+Smar1000008259		
+Uram1000000498		
+Pisp1000001682		
+Pisp1000009625		
+Pram1000011108		
+Crev1000002970		
+Bnat1000019199		
+Lhya1000007333		
+Pram1000002576		
+Chet1000002205		
+Bnat1000013158		
+Bcir1000002159		
+Smar1000005261		
+Smar1000000527		
+Smed1000025307		
+Uram1000005364		
+Caps1000007247		
+Caps1000013077		
+XP_001837127.1	240176	Coprinopsis cinerea okayama7#130
+Chet1000008429		
+Lhya1000001166		
+Uram1000004439		
+XP_001837046.1	240176	Coprinopsis cinerea okayama7#130
+Bcir1000010838		
+Smed1000001895		
+Crev1000006838		
+Pisp1000002826		
+Crev1000002310		
+Uram1000009086		
+Bcir1000011412		
+Bnat1000016213		
+Caps1000001778		
+Caps1000011097		
+Bcir1000000255		
+Lhya1000007154		
+Pram1000013135		
+Smar1000004749		
+Smar1000008107		
+Chet1000003320		
+Smed1000026970		
+XP_001837043.2	240176	Coprinopsis cinerea okayama7#130
+Smar1000009347		
+Pram1000000796		
+Smed1000021775		
+Caps1000018732		
+Bcir1000016255		
+Crev1000000528		
+Lhya1000009341		
+Chet1000001560		
+Smar1000006823		
+Pisp1000003886		
+Bnat1000017100		
+Uram1000009541		
+XP_001829032.2	240176	Coprinopsis cinerea okayama7#130
+CCQ74391.1	1288970	Magnetospira sp. QH-2
+Smar1000007025		
+Chet1000001694		
+Uram1000003873		
+Bcir1000007249		
+XP_001833068.2	240176	Coprinopsis cinerea okayama7#130
+Bcir1000003327		
+Lhya1000002521		
+Chet1000008504		
+Smed1000004306		
+Bcir1000000964		
+Bcir1000004713		
+Caps1000024394		
+Bcir1000003615		
+Smed1000024050		
+Crev1000003711		
+Pisp1000009679		
+Smed1000006266		
+Bnat1000009644		
+XP_002911146.1	240176	Coprinopsis cinerea okayama7#130
+XP_001832385.2	240176	Coprinopsis cinerea okayama7#130
+Pram1000007912		
+XP_001834155.2	240176	Coprinopsis cinerea okayama7#130
+Bnat1000002812		
+Caps1000014654		
+Caps1000018428		
+XP_001833851.1	240176	Coprinopsis cinerea okayama7#130
+Bnat1000002828		
+Bnat1000015234		
+Bnat1000000161		
+Pram1000000683		
+Smar1000011578		
+Smar1000001431		
+ALN16120.1	1748	Acidipropionibacterium acidipropionici
+AMS04683.1	1748	Acidipropionibacterium acidipropionici
+AOZ46173.1	1748	Acidipropionibacterium acidipropionici
+APZ08131.1	1748	Acidipropionibacterium acidipropionici
+AFV89337.1	1171373	Acidipropionibacterium acidipropionici ATCC 4875
+ABK53265.1	351607	Acidothermus cellulolyticus 11B
+AOS65088.1	340345	Actinoalloteichus hymeniacidonis
+APU16938.1	1612552	Actinoalloteichus sp. ADI127-7
+APU23018.1	1612551	Actinoalloteichus sp. GBA129-24
+AMD98075.1	544580	Actinomyces oris
+AMD88283.1	111015	Actinomyces radicidentis
+AOZ72869.1	1912795	Actinomyces sp. VUL4_3
+ALC98911.1	712122	Actinomyces sp. oral taxon 414
+AGZ45388.1	1246995	Actinoplanes friuliensis DSM 7358
+AGL20270.1	649831	Actinoplanes sp. N902-109
+AEV88053.1	134676	Actinoplanes sp. SE50/110
+ACU35370.1	446462	Actinosynnema mirum DSM 43827
+AIE82051.1	59505	Actinotignum schaalii
+ALX04600.1	2041	Aeromicrobium erythreum
+ANJ27434.1	453304	Agromyces aureus
+CRK55743.1	1653480	Alloactinosynnema sp. L-07
+AIG78287.1	208439	Amycolatopsis japonica
+AGM04916.1	129921	Amycolatopsis keratiniphila
+AJK55029.1	1460371	Amycolatopsis lurida NRRL 2430
+AGT82981.1	1221524	Amycolatopsis mediterranei RB
+AEK40873.1	713604	Amycolatopsis mediterranei S699
+AFO75852.1	713604	Amycolatopsis mediterranei S699
+ADJ44139.1	749927	Amycolatopsis mediterranei U32
+AIJ25115.1	1068978	Amycolatopsis methanolica 239
+ANN16420.1	31958	Amycolatopsis orientalis
+ADH92382.1	644284	Arcanobacterium haemolyticum DSM 20595
+AKT52198.1	1658671	Arsenicicoccus sp. oral taxon 190
+ALE91688.1	656366	Arthrobacter alpinus
+ALO67563.1	656366	Arthrobacter alpinus
+ABK02853.1	290399	Arthrobacter sp. FB24
+BAS13054.1	1588023	Arthrobacter sp. Hiyo8
+APX00781.1	1357915	Arthrobacter sp. QXT-31
+AFR28421.1	1118963	Arthrobacter sp. Rue61a
+AOY71919.1	1806905	Arthrobacter sp. ZXY-2
+ACQ80702.1	471853	Beutenbergia cavernae DSM 12333
+AKV55337.1	1437605	Bifidobacterium actinocoloniiforme DSM 22766
+AII76492.1	1680	Bifidobacterium adolescentis
+AJE06139.1	1680	Bifidobacterium adolescentis
+AMK57939.1	1683	Bifidobacterium angulatum
+BAQ96239.1	518635	Bifidobacterium angulatum DSM 20098 = JCM 7096
+AJD34223.1	28025	Bifidobacterium animalis
+AFJ18419.1	742729	Bifidobacterium animalis subsp. lactis Bi-07
+ADG33663.1	573236	Bifidobacterium animalis subsp. lactis V9
+AFU71216.1	1147128	Bifidobacterium asteroides PRL2011
+ALE11744.1	1681	Bifidobacterium bifidum
+BAQ98466.1	500634	Bifidobacterium bifidum ATCC 29521 = JCM 1255 = DSM 20456
+AFL04843.1	484020	Bifidobacterium bifidum BGN4
+ADP36323.1	702459	Bifidobacterium bifidum PRL2010
+ADO53433.1	883062	Bifidobacterium bifidum S17
+AQM43268.1	1685	Bifidobacterium breve
+BAR00220.1	518634	Bifidobacterium breve DSM 20213 = JCM 1192
+AHJ19549.1	1385940	Bifidobacterium breve JCM 7019
+ABE95860.1	326426	Bifidobacterium breve UCC2003
+BAR02111.1	566552	Bifidobacterium catenulatum DSM 16992 = JCM 1194 = LMG 11043
+AII74552.1	1687	Bifidobacterium coryneforme
+ADB10030.1	401473	Bifidobacterium dentium Bd1
+BAQ27349.1	1150423	Bifidobacterium dentium JCM 1195 = DSM 20436
+BAQ29470.1	1150460	Bifidobacterium catenulatum subsp. kashiwanohense JCM 15439 = DSM 21854
+AIZ14839.1	1447716	Bifidobacterium kashiwanohense PV20-2
+ALE09751.1	1682	Bifidobacterium longum subsp. infantis
+ACJ52047.1	391904	Bifidobacterium longum subsp. infantis ATCC 15697 = JCM 1222 = DSM 20088
+BAJ68555.1	391904	Bifidobacterium longum subsp. infantis ATCC 15697 = JCM 1222 = DSM 20088
+AOP01347.1	1679	Bifidobacterium longum subsp. longum
+BAR03877.1	547043	Bifidobacterium pseudocatenulatum DSM 20438 = JCM 1200 = LMG 10505
+AIZ16524.1	1447715	Bifidobacterium pseudolongum PV8-2
+AGH40991.1	1254439	Bifidobacterium thermophilum RBL67
+CCG04543.1	1146883	Blastococcus saxobsidens DD2
+ACU84900.1	446465	Brachybacterium faecium DSM 4810
+APX34451.1	1903186	Brachybacterium sp. P6-10-X1
+AOP54205.1	273384	Brevibacterium aurantiacum
+AMT94326.1	1703	Brevibacterium linens
+AOY56230.1	535712	Candidatus Rhodoluna planktonica
+ACU70500.1	479433	Catenulispora acidiphila DSM 44928
+AEE45699.1	590998	Cellulomonas fimi ATCC 484
+ADG74440.1	446466	Cellulomonas flavigena DSM 20109
+AEI12550.1	593907	Cellulomonas gilvus ATCC 13127
+AJW80505.1	33014	Clavibacter insidiosus
+ALD13179.1	1874630	Clavibacter michiganensis subsp. capsici
+CAN02089.1	443906	Clavibacter michiganensis subsp. michiganensis NCPPB 382
+CCE75930.1	1097677	Clavibacter nebraskensis NCPPB 2581
+CAQ01322.1	31964	Clavibacter sepedonicus
+AQS73544.1	1697	Corynebacterium ammoniagenes
+APT84932.1	1431546	Corynebacterium aquilae DSM 44791
+AGU15278.1	1348662	Corynebacterium argentoratense DSM 44202
+AIG64002.1	191610	Corynebacterium atypicum
+AGG67084.1	1121353	Corynebacterium callunae DSM 20147
+AKE39365.1	161896	Corynebacterium camporealensis
+AHI19841.1	1285583	Corynebacterium casei LMG S-19264
+ANE05348.1	1652495	Corynebacterium crudilactis
+CKH00437.1	1717	Corynebacterium diphtheriae
+AEX42140.1	698962	Corynebacterium diphtheriae 31A
+AEX48965.1	698973	Corynebacterium diphtheriae BH8
+AEX67647.1	698963	Corynebacterium diphtheriae C7 (beta)
+AEX70094.1	698964	Corynebacterium diphtheriae PW8
+AIT61305.1	558173	Corynebacterium doosanense CAU 212 = DSM 45436
+BAC18660.1	196164	Corynebacterium efficiens YS-314
+AKK03350.1	1050174	Corynebacterium epidermidicanis
+AHI03265.1	1451189	Corynebacterium falsenii DSM 44353
+APT87033.1	28028	Corynebacterium flavescens
+APT89066.1	1437875	Corynebacterium frankenforstense DSM 45800
+BAB99349.1	196627	Corynebacterium glutamicum ATCC 13032
+BAF54780.1	340322	Corynebacterium glutamicum R
+AGN19467.1	1232381	Corynebacterium glutamicum SCgG1
+AGN22492.1	1232383	Corynebacterium glutamicum SCgG2
+ANR65824.1	1232384	Corynebacterium glutamicum ZL-6
+AHW64008.1	1404245	Corynebacterium glyciniphilum AJ 3170
+AGF72698.1	1121362	Corynebacterium halotolerans YIM 70093 = DSM 44683
+AJE33416.1	1223515	Corynebacterium humireducens NBRC 106098 = DSM 45392
+AIJ33750.1	156978	Corynebacterium imitans
+CAI37281.1	306537	Corynebacterium jeikeium K411
+AKE41414.1	35755	Corynebacterium kutscheri
+ALA67259.1	1408189	Corynebacterium lactis RW2-5
+AGS35043.1	1224163	Corynebacterium maris DSM 45190
+AKK06146.1	571915	Corynebacterium mustelae
+APT92364.1	161895	Corynebacterium phocae
+AIG07659.1	1719	Corynebacterium pseudotuberculosis
+AIG09988.1	1719	Corynebacterium pseudotuberculosis
+AIG12112.1	1719	Corynebacterium pseudotuberculosis
+AFH52207.1	1089446	Corynebacterium pseudotuberculosis 267
+AFH91074.1	1087451	Corynebacterium pseudotuberculosis 31
+AEI09566.1	662755	Corynebacterium resistens DSM 45100
+AMO90147.1	146827	Corynebacterium simulans
+AMO92701.1	146827	Corynebacterium simulans
+APT90602.1	1437874	Corynebacterium sphenisci DSM 44792
+AMJ44468.1	1705	Corynebacterium stationis
+APT94843.1	1705	Corynebacterium stationis
+AGP30942.1	1200352	Corynebacterium terpenotabidum Y-11
+AIT89368.1	65058	Corynebacterium ulcerans
+ALD95146.1	65058	Corynebacterium ulcerans
+BAM27677.1	996634	Corynebacterium ulcerans 0102
+AEG84071.1	945712	Corynebacterium ulcerans BR-AD22
+AKN77249.1	1408268	Corynebacterium ulcerans FRC58
+CAQ04833.1	504474	Corynebacterium urealyticum DSM 7109
+AGE36452.1	1267754	Corynebacterium urealyticum DSM 7111
+AIL97100.1	401472	Corynebacterium ureicelerivorans
+AKK11301.1	1072256	Corynebacterium uterequi
+AEK36972.1	858619	Corynebacterium variabile DSM 44702
+AHI23005.1	1224164	Corynebacterium vitaeruminis DSM 20294
+ANP72114.1	670052	Cryobacterium arcticum
+AOX67444.1	1905847	Curtobacterium sp. BH-2-1-1
+AIV39789.1	1561023	Curtobacterium sp. MR_MD2014
+ALD69590.1	1747	Cutibacterium acnes
+ALT44328.1	1747	Cutibacterium acnes
+ALT35210.1	1747	Cutibacterium acnes
+ALT37526.1	1747	Cutibacterium acnes
+ALT42038.1	1747	Cutibacterium acnes
+AEE72227.1	909952	Cutibacterium acnes 266
+AEH29333.1	1031709	Cutibacterium acnes 6609
+AFU40817.1	1234380	Cutibacterium acnes C1
+AAT82763.1	267747	Cutibacterium acnes KPA171202
+ADE01186.1	553199	Cutibacterium acnes SK137
+AOG27512.1	33010	Cutibacterium avidum
+AGJ77808.1	1170318	Cutibacterium avidum 44067
+ANP28187.1	1630135	Dermabacter vaginalis
+AIF40516.1	1274	Dermacoccus nishinomiyaensis
+ANI92572.1	499555	Dietzia timorensis
+CAJ64352.1	326424	Frankia alni ACN14a
+ABD12879.1	106370	Frankia casuarinae
+ADP79210.1	298654	Frankia inefficax
+ABW10672.1	298653	Frankia sp. EAN1pec
+AEH10890.1	656024	Frankia symbiont of Datisca glomerata
+AMM20556.1	1795630	Frondihabitans sp. PAMC 28766
+BAQ33349.1	585528	Gardnerella vaginalis ATCC 14018 = JCM 11026
+ADP38950.1	525284	Gardnerella vaginalis ATCC 14019
+AEF31430.1	1009464	Gardnerella vaginalis HMP9231
+ADB76489.1	526225	Geodermatophilus obscurus DSM 43160
+CBT75310.1	861360	Glutamicibacter arilaitensis Re117
+ALG30772.1	1933880	Glutamicibacter halophytocola
+ACY21449.1	526226	Gordonia bronchialis DSM 43247
+ALG84611.1	1136941	Gordonia phthalatica
+AFA73137.1	1112204	Gordonia polyisoprenivorans VH2
+AFR48755.1	337191	Gordonia sp. KTR9
+ANY23314.1	2055	Gordonia terrae
+AEF40150.1	443218	Hoyosella subflava DQS3-9A1
+ADU48681.1	710696	Intrasporangium calvum DSM 43043
+ANC30584.1	1300344	Isoptericola dokdonensis DS-3
+AEG44013.1	743718	Isoptericola variabilis 225
+APH01819.1	857417	Janibacter indicus
+ACV08696.1	471856	Jonesia denitrificans DSM 20603
+ALG07875.1	860235	Kibdelosporangium phytohabitans
+BAJ29283.1	452652	Kitasatospora setae KM-6054
+BAJ31129.1	452652	Kitasatospora setae KM-6054
+ALU39775.1	446860	Kocuria flava
+ALB03444.1	71999	Kocuria palustris
+BAG29932.1	378753	Kocuria rhizophila DC2201
+ADB32065.1	479435	Kribbella flavida DSM 17836
+AHI00064.1	1449976	Kutzneria albida DSM 43870
+ACV06782.1	478801	Kytococcus sedentarius DSM 20547
+ALE18512.1	1528099	Lawsonella clevelandensis
+ANF31093.1	1575	Leifsonia xyli
+AGW41876.1	1389489	Leifsonia xyli subsp. cynodontis DSM 46306
+AAT89397.1	281090	Leifsonia xyli subsp. xyli str. CTCB07
+ANZ42433.1	1586287	Lentzea guizhouensis
+AKU17300.1	571913	Luteipulveratus mongoliensis
+APZ34848.1	36805	Microbacterium aurum
+ANG85425.1	84292	Microbacterium chocolatum
+APF33787.1	300019	Microbacterium paludicola
+APH44768.1	1916917	Microbacterium sp. 1.5R
+AOX44970.1	1906742	Microbacterium sp. BH-3-3-3
+AKV85368.1	1696072	Microbacterium sp. CGR1
+ALJ21042.1	1714373	Microbacterium sp. No. 7
+AMG84315.1	1795053	Microbacterium sp. PAMC 28756
+BAJ73270.1	979556	Microbacterium testaceum StLB037
+ACS30254.1	465515	Micrococcus luteus NCTC 2665
+BAK35128.1	1032480	Microlunatus phosphovorus NM-1
+ADL45090.1	644283	Micromonospora aurantiaca ATCC 27029
+ADU07325.1	648999	Micromonospora sp. L5
+AMB58952.1	412690	Microterricola viridarii
+ADI67740.1	548479	Mobiluncus curtisii ATCC 43063
+CCH89703.1	477641	Modestobacter marinus
+ABK65264.1	243243	Mycobacterium avium 104
+AIR57578.1	1299330	Mycobacterium avium subsp. avium 2285 (R)
+AIR24770.1	1299329	Mycobacterium avium subsp. avium 2285 (S)
+APT12005.1	439334	Mycobacterium avium subsp. hominissuis
+BAN32107.1	1229671	Mycobacterium avium subsp. hominissuis TH135
+CDO44022.1	233413	Mycobacterium bovis AF2122/97
+CCC45096.1	1048245	Mycobacterium canettii CIPT 140010059
+AOS92968.1	222805	Mycobacterium chimaera
+AKN17542.1	1202450	Mycobacterium haemophilum DSM 44634
+AIT86421.1	1299331	Mycobacterium intracellulare 1956
+AFC44681.1	487521	Mycobacterium intracellulare ATCC 13950
+AFC49820.1	1138382	Mycobacterium intracellulare MOTT-02
+AFS15509.1	1232724	Mycobacterium intracellulare subsp. intracellulare MTCC 9506
+AGP65037.1	1138871	Mycobacterium intracellulare subsp. yongonense 05-1390
+AIR21002.1	1299326	Mycobacterium kansasii 662
+AIR30577.1	1299328	Mycobacterium kansasii 824
+AGZ53233.1	557599	Mycobacterium kansasii ATCC 12478
+CAC31367.1	1769	Mycobacterium leprae
+CAR71081.1	561304	Mycobacterium leprae Br4923
+AGC62029.1	459424	Mycobacterium liflandii 128FXT
+CDM76046.1	1131442	Mycobacterium marinum E11
+ACC40425.1	216594	Mycobacterium marinum M
+AFC55091.1	1138383	Mycobacterium paraintracellulare
+ABN97903.1	164757	Mycobacterium sp. JLS
+AGB22869.1	212767	Mycobacterium sp. JS623
+ABL91374.1	189918	Mycobacterium sp. KMS
+AIY46306.1	1273687	Mycobacterium sp. VKM Ac-1817D
+ANW64391.1	1879023	Mycobacterium sp. djl-10
+AMC68411.1	1773	Mycobacterium tuberculosis
+AMC74204.1	1773	Mycobacterium tuberculosis
+AOZ44023.1	1773	Mycobacterium tuberculosis
+CCP45537.1	83332	Mycobacterium tuberculosis H37Rv
+BAQ06860.1	1445606	Mycobacterium tuberculosis str. Kurono
+AMC65078.1	33894	Mycobacterium tuberculosis variant africanum
+CCC27813.1	572418	Mycobacterium tuberculosis variant africanum GM041182
+AKR02568.1	1765	Mycobacterium tuberculosis variant bovis
+AMC56158.1	1765	Mycobacterium tuberculosis variant bovis
+ALA79284.1	33892	Mycobacterium tuberculosis variant bovis BCG
+AMC60450.1	1806	Mycobacterium tuberculosis variant microti
+ABL05560.1	362242	Mycobacterium ulcerans Agy99
+CAM63139.1	561007	Mycobacteroides abscessus ATCC 19977
+AKP59046.1	1132508	Mycobacteroides abscessus UC22
+AIR39098.1	319705	Mycobacteroides abscessus subsp. bolletii
+AGM29602.1	1303024	Mycobacteroides abscessus subsp. bolletii 50594
+BAP97842.1	1001714	Mycobacteroides abscessus subsp. massiliense CCUG 48898 = JCM 15300
+ANA99022.1	1460372	Mycobacteroides chelonae CCUG 47445
+AMT71616.1	83262	Mycobacteroides immunogenum
+ANO04738.1	83262	Mycobacteroides immunogenum
+AEF36485.1	875328	Mycolicibacter sinensis
+AFM16884.1	710421	Mycolicibacterium chubuense NBB4
+ALI26459.1	1766	Mycolicibacterium fortuitum
+ABP46454.1	350054	Mycolicibacterium gilvum PYR-GCK
+ADT99939.1	278137	Mycolicibacterium gilvum Spyr1
+AKS34770.1	134601	Mycolicibacterium goodii
+AHC25234.1	700508	Mycolicibacterium neoaurum VKM Ac-1815D
+AMO61953.1	1771	Mycolicibacterium phlei
+AEV76087.1	710685	Mycolicibacterium rhodesiae NBB3
+AIU14495.1	1772	Mycolicibacterium smegmatis
+AIU21118.1	1772	Mycolicibacterium smegmatis
+CKH69345.1	1772	Mycolicibacterium smegmatis
+ABK71520.1	246196	Mycolicibacterium smegmatis MC2 155
+ABM13216.1	350058	Mycolicibacterium vanbaalenii PYR-1
+ACV80287.1	479431	Nakamurella multipartita DSM 44233
+APF41705.1	556325	Neomicrococcus aestuarii
+AFU03962.1	1133849	Nocardia brasiliensis ATCC 700358
+CCF64489.1	1127134	Nocardia cyriacigeorgica GUH-2
+CRY73271.1	37329	Nocardia farcinica
+BAD58697.1	247156	Nocardia farcinica IFM 10152
+AHH20188.1	1415166	Nocardia nova SH22a
+APB00150.1	37332	Nocardia seriolae
+APE38573.1	2213200	Nocardia sp. Y48
+ANH39328.1	1300347	Nocardioides dokdonensis FR1436
+ABL81843.1	196162	Nocardioides sp. JS614
+AFR06313.1	1205910	Nocardiopsis alba ATCC BAA-2165
+ADH66110.1	446468	Nocardiopsis dassonvillei subsp. dassonvillei DSM 43111
+ABM07901.1	290340	Paenarthrobacter aurescens TC1
+BAR05243.1	864564	Parascardovia denticolens DSM 10105 = JCM 12538
+AIY17809.1	2045	Pimelobacter simplex
+AJQ90603.1	66712	Propionibacterium freudenreichii subsp. freudenreichii
+CUW15279.1	1752	Propionibacterium freudenreichii subsp. shermanii
+CBL56832.1	754252	Propionibacterium freudenreichii subsp. shermanii CIRM-BIA1
+AOH44814.1	671223	Propionibacterium sp. oral taxon 193
+ACL39450.1	452863	Pseudarthrobacter chlorophenolicus A6
+ADX72616.1	930171	Pseudarthrobacter phenanthrenivorans Sphe3
+ALV40280.1	121292	Pseudarthrobacter sulfonivorans
+AEA26750.1	675635	Pseudonocardia dioxanivorans CB1190
+ALL79128.1	1688404	Pseudonocardia sp. EC080610-09
+ALL84304.1	1096856	Pseudonocardia sp. EC080619-01
+ALE76451.1	1096868	Pseudonocardia sp. EC080625-04
+ALE84687.1	1641402	Pseudonocardia sp. HH130629-09
+ANY08407.1	1690815	Pseudonocardia sp. HH130630-07
+AFN45154.1	767029	Pseudopropionibacterium propionicum F0230a
+AJM77404.1	145458	Rathayibacter toxicus
+ALS56700.1	145458	Rathayibacter toxicus
+AND16148.1	33888	Rathayibacter tritici
+ABY22468.1	288705	Renibacterium salmoninarum ATCC 33209
+AKE92525.1	191292	Rhodococcus aetherivorans
+AKE00652.1	1833	Rhodococcus erythropolis
+AGT92390.1	1136179	Rhodococcus erythropolis CCM2595
+BAH33460.1	234621	Rhodococcus erythropolis PR4
+ALU71294.1	1289591	Rhodococcus erythropolis R138
+AMY55836.1	1051973	Rhodococcus fascians D188
+CBH48031.1	685727	Rhodococcus hoagii 103S
+ABG98536.1	101510	Rhodococcus jostii RHA1
+ANS27685.1	37919	Rhodococcus opacus
+BAH54997.1	632772	Rhodococcus opacus B4
+AHK30603.1	543736	Rhodococcus opacus PD630
+AHD19471.1	1435356	Rhodococcus pyridinivorans SB3094
+ANQ75219.1	1723645	Rhodococcus sp. 008
+APE12087.1	1570939	Rhodococcus sp. 2G
+AJW39329.1	1564114	Rhodococcus sp. B7740
+AQA24454.1	1805827	Rhodococcus sp. MTM3W5.2
+ANZ28171.1	1033922	Rhodococcus sp. WB1
+AIC47295.1	529884	Rhodoluna lacicola
+ADP41035.1	762948	Rothia dentocariosa ATCC 17931
+BAS19517.1	43675	Rothia mucilaginosa
+BAI65286.1	680646	Rothia mucilaginosa DY-18
+ACU97764.1	471857	Saccharomonospora viridis DSM 43017
+CAM01052.1	405948	Saccharopolyspora erythraea NRRL 2338
+CCH28999.1	1179773	Saccharothrix espanaensis DSM 44229
+ABV97288.1	391037	Salinispora arenicola CNS-205
+ABP53890.1	369723	Salinispora tropica CNB-440
+ACZ22236.1	446469	Sanguibacter keddieii DSM 10542
+BAR06841.1	1150468	Scardovia inopinata JCM 12537
+AKU64692.1	52773	Schaalia meyeri
+ADG97409.1	640132	Segniliparus rotundus DSM 44985
+ANS80547.1	1758689	Serinicoccus sp. JLT9
+AMM32362.1	37927	Sinomonas atrocyanea
+AGI87495.1	1886	Streptomyces albidoflavus
+AMM07887.1	1886	Streptomyces albidoflavus
+AIA06306.1	68570	Streptomyces albulus
+AKA03180.1	1434306	Streptomyces albulus ZPM
+AJE81895.1	1888	Streptomyces albus
+AOU76211.1	1888	Streptomyces albus
+APY86037.1	1642299	Streptomyces alfalfae
+ANB08918.1	1889	Streptomyces ambofaciens
+AKZ58515.1	278992	Streptomyces ambofaciens ATCC 23877
+AQA14403.1	75293	Streptomyces autolyticus
+BAC70206.1	227882	Streptomyces avermitilis MA-4680 = NBRC 14893
+ADI06462.1	749414	Streptomyces bingchenggensis BCW-1
+CCB77231.1	1003195	Streptomyces cattleya NRRL 8057 = DSM 46488
+AEW96903.1	1003195	Streptomyces cattleya NRRL 8057 = DSM 46488
+ANW17745.1	1901	Streptomyces clavuligerus
+CAA15872.1	100226	Streptomyces coelicolor A3(2)
+AGS72202.1	1214242	Streptomyces collinus Tu 365
+AJP04145.1	477245	Streptomyces cyaneogriseus subsp. noncyanogenus
+AGK80568.1	1303692	Streptomyces fulvissimus DSM 40593
+AIS00907.1	1907	Streptomyces glaucescens
+ALU96613.1	1172567	Streptomyces globisporus C-1027
+ANP49877.1	68214	Streptomyces griseochromogenes
+BAG18584.1	455632	Streptomyces griseus subsp. griseus NBRC 13350
+AEY92120.1	1133850	Streptomyces hygroscopicus subsp. jinggangensis 5008
+AGF66276.1	1203460	Streptomyces hygroscopicus subsp. jinggangensis TL01
+ALO96551.1	264445	Streptomyces hygroscopicus subsp. limoneus
+CQR61368.1	1437453	Streptomyces leeuwenhoekii
+ANS68398.1	1915	Streptomyces lincolnensis
+AIJ12961.1	457428	Streptomyces lividans TK24
+AJT64002.1	47763	Streptomyces lydicus
+AOP49453.1	47763	Streptomyces lydicus
+ANZ15896.1	316284	Streptomyces noursei ATCC 11455
+AOW89408.1	47716	Streptomyces olivaceus
+AQS67203.1	68249	Streptomyces pactum
+ANJ09832.1	146923	Streptomyces parvulus
+ADW03023.1	591167	Streptomyces pratensis ATCC 33331
+ALC20444.1	38300	Streptomyces pristinaespiralis
+AOR31747.1	164348	Streptomyces puniciscabiei
+AMW13257.1	1783515	Streptomyces qaidamensis
+CUW31511.1	1926	Streptomyces reticuli
+AOT61395.1	285473	Streptomyces rubrolavendulae
+CBG69604.1	680198	Streptomyces scabiei 87.22
+AJC55573.1	1262452	Streptomyces sp. 769
+ALV32901.1	1725411	Streptomyces sp. CdTB01
+ALM38069.1	206662	Streptomyces sp. FR-008
+AKL68214.1	465541	Streptomyces sp. Mg1
+CUM38048.1	54571	Streptomyces venezuelae
+ALO11421.1	54571	Streptomyces venezuelae
+APE24282.1	54571	Streptomyces venezuelae
+AJF67624.1	362257	Streptomyces vietnamensis
+AEM81830.1	653045	Streptomyces violaceusniger Tu 4113
+AKG45899.1	408015	Streptomyces xiamenensis
+ACZ85196.1	479432	Streptosporangium roseum DSM 43021
+AQP46722.1	1332264	Tessaracoccus aquimaris
+AQP51979.1	399497	Tessaracoccus flavescens
+AQP44608.1	1610493	Tessaracoccus flavus
+AAZ54840.1	269800	Thermobifida fusca YX
+ADG87836.1	469371	Thermobispora bispora DSM 43833
+ACY98836.1	471852	Thermomonospora curvata DSM 43183
+AHU88932.1	1661	Trueperella pyogenes
+ALD74425.1	1661	Trueperella pyogenes
+AJC69776.1	1435056	Trueperella pyogenes TP8
+ADG78400.1	521096	Tsukamurella paurometabola DSM 20162
+AEB43562.1	263358	Verrucosispora maris AB-18-032
+ACZ30272.1	446471	Xylanimonas cellulosilytica DSM 15894
+AKF27700.1	92706	[Brevibacterium] flavum
+ANR62820.1	1232385	[Brevibacterium] flavum ZL-1
+CCC45100.1	1048245	Mycobacterium canettii CIPT 140010059
+CCP45541.1	83332	Mycobacterium tuberculosis H37Rv
+CCC27817.1	572418	Mycobacterium tuberculosis variant africanum GM041182
+AOZ44031.1	1773	Mycobacterium tuberculosis
+BAQ06864.1	1445606	Mycobacterium tuberculosis str. Kurono
+ALA79289.1	33892	Mycobacterium tuberculosis variant bovis BCG
+CDO44027.1	233413	Mycobacterium bovis AF2122/97
+AKR02573.1	1765	Mycobacterium tuberculosis variant bovis
+ADC86130.1	552531	Bifidobacterium animalis subsp. lactis BB-12
+AEK30566.1	1042403	Bifidobacterium animalis subsp. lactis CNCM I-2494
+CDO44026.1	233413	Mycobacterium bovis AF2122/97
+AKR02572.1	1765	Mycobacterium tuberculosis variant bovis
+ALE12881.1	1685	Bifidobacterium breve
+ADD43834.1	446470	Stackebrandtia nassauensis DSM 44728
+AMC51767.1	33892	Mycobacterium tuberculosis variant bovis BCG
+ABK69442.1	243243	Mycobacterium avium 104
+Pram1000005231		
+Pram1000004800		
+Pram1000005232		
+Bcir1000015244		
+Lhya1000001619		
+Pisp1000011636		
+Pram1000005240		
+Bcir1000011014		
+Uram1000002532		
+Lhya1000007378		
+Bcir1000012045		
+Smar1000007746		
+Bcir1000012046		
+Crev1000002900		
+Crev1000002893		
+Crev1000002901		
+Caps1000008891		
+Lhya1000000104		
+Uram1000008702		
+Uram1000001527		
+Lhya1000008967		
+Pram1000005233		
+Caps1000010355		
+Crev1000006188		
+Bcir1000009799		
+Lhya1000002695		
+Uram1000009606		
+Uram1000003181		
+AJH56079.1	1392	Bacillus anthracis
+AGL14606.1	649831	Actinoplanes sp. N902-109
+AKK03387.1	1050174	Corynebacterium epidermidicanis
+AKK03387.1	1050174	Corynebacterium epidermidicanis
+AAW35295.1	195099	Campylobacter jejuni RM1221
+AJK82865.1	32022	Campylobacter jejuni subsp. jejuni
+AHC83764.1	1435044	Pseudomonas monteilii SB3078
+AJI92027.1	632	Yersinia pestis
+AJK88848.1	28031	Lysinibacillus fusiformis
+AJK88848.1	28031	Lysinibacillus fusiformis
+AGK52227.1	666686	Bacillus sp. 1NLA3E
+AIQ14451.1	44251	Paenibacillus durus
+AGP40782.1	1254432	Sorangium cellulosum So0157-2
+AGX02621.1	1367477	Bacillus infantis NRRL B-14911
+XP_001833565.1	240176	Coprinopsis cinerea okayama7#130
+Smed1000013124		
+Crev1000005838		
+Pram1000010618		
+Smed1000006740		
+Bcir1000001833		
+Chet1000000855		
+Smar1000011654		
+Lhya1000005072		
+Lhya1000010591		
+Smar1000014167		
+Caps1000008300		
+Bcir1000013302		
+Crev1000000673		
+Uram1000008596		
+Uram1000009085		
+Caps1000013612		
+XP_001837213.1	240176	Coprinopsis cinerea okayama7#130
+Caps1000009008		
+Smed1000003202		
+Bnat1000015196		
+Smar1000008259		
+Uram1000000498		
+Pisp1000001682		
+Pisp1000009625		
+Pram1000011108		
+Crev1000002970		
+Bnat1000019199		
+Lhya1000007333		
+Pram1000002576		
+Chet1000002205		
+Bnat1000013158		
+Bcir1000002159		
+Smar1000005261		
+Smar1000000527		
+Smed1000025307		
+Uram1000005364		
+Caps1000007247		
+Caps1000013077		
+XP_001837127.1	240176	Coprinopsis cinerea okayama7#130
+Chet1000008429		
+Lhya1000001166		
+Uram1000004439		
+XP_001837046.1	240176	Coprinopsis cinerea okayama7#130
+Bcir1000010838		
+Smed1000001895		
+Crev1000006838		
+Pisp1000002826		
+ACY21447.1	526226	Gordonia bronchialis DSM 43247
+Crev1000002310		
+Uram1000009086		
+Bcir1000011412		
+Bnat1000016213		
+Caps1000001778		
+Caps1000011097		
+Bcir1000000255		
+Lhya1000007154		
+Pram1000013135		
+Smar1000004749		
+Smar1000008107		
+Chet1000003320		
+Smed1000026970		
+XP_001837043.2	240176	Coprinopsis cinerea okayama7#130
+Smar1000009347		
+APW96603.1	358396	Halobiforma lacisalsi AJ5
+Pram1000000796		
+Smed1000021775		
+Caps1000018732		
+Bcir1000016255		
+Crev1000000528		
+Lhya1000009341		
+Chet1000001560		
+Smar1000006823		
+Pisp1000003886		
+Bnat1000017100		
+Uram1000009541		
+XP_001829032.2	240176	Coprinopsis cinerea okayama7#130
+CCQ74391.1	1288970	Magnetospira sp. QH-2
+Smar1000007025		
+Chet1000001694		
+Uram1000003873		
+Bcir1000007249		
+XP_001833068.2	240176	Coprinopsis cinerea okayama7#130
+Bcir1000003327		
+Lhya1000002521		
+Chet1000008504		
+Smed1000004306		
+Bcir1000000964		
+Bcir1000004713		
+Caps1000024394		
+Bcir1000003615		
+Smed1000024050		
+Crev1000003711		
+Pisp1000009679		
+Smed1000006266		
+Bnat1000009644		
+XP_002911146.1	240176	Coprinopsis cinerea okayama7#130
+XP_001832385.2	240176	Coprinopsis cinerea okayama7#130
+Pram1000007912		
+XP_001834155.2	240176	Coprinopsis cinerea okayama7#130
+Bnat1000002812		
+Caps1000014654		
+Caps1000018428		
+XP_001833851.1	240176	Coprinopsis cinerea okayama7#130
+Bnat1000002828		
+Bnat1000015234		
+Bnat1000000161		
+Pram1000000683		
+Smar1000011578		
+Smar1000001431		
+AJR22952.1	484429	Sphingobium sp. YBL2
+ABX48815.1	399599	Shewanella baltica OS195
+ABX48815.1	399599	Shewanella baltica OS195
+AEB29104.1	208596	Carnobacterium sp. 17-4
+ABX48815.1	399599	Shewanella baltica OS195
+ABX48815.1	399599	Shewanella baltica OS195
+ACI18584.1	309799	Dictyoglomus thermophilum H-6-12
+AIQ14449.1	44251	Paenibacillus durus
+ACY22441.1	526226	Gordonia bronchialis DSM 43247
+ACY20665.1	526226	Gordonia bronchialis DSM 43247
+AKK03387.1	1050174	Corynebacterium epidermidicanis
+AKK03387.1	1050174	Corynebacterium epidermidicanis
+ABG98050.1	101510	Rhodococcus jostii RHA1
+ADV42551.1	693979	Bacteroides helcogenes P 36-108
+AJK88848.1	28031	Lysinibacillus fusiformis
+AJK88848.1	28031	Lysinibacillus fusiformis
+AKA35661.1	516051	Muricauda lutaonensis
+APY01519.1	1486034	Lacinutrix venerupis
+ACX66911.1	481743	Paenibacillus sp. Y412MC10
+ACB75115.1	452637	Opitutus terrae PB90-1
+Pram1000005231		
+Pram1000004800		
+AEI39621.1	1036673	Paenibacillus mucilaginosus KNP414
+Pram1000005232		
+Bcir1000015244		
+Lhya1000001619		
+Pisp1000011636		
+Pram1000005240		
+Bcir1000011014		
+Uram1000002532		
+Lhya1000007378		
+Bcir1000012045		
+Smar1000007746		
+Bcir1000012046		
+Crev1000002900		
+Crev1000002893		
+Crev1000002901		
+Caps1000008891		
+Lhya1000000104		
+AEE96464.1	697281	Mahella australiensis 50-1 BON
+ADB49219.1	469383	Conexibacter woesei DSM 14684
+Uram1000008702		
+Uram1000001527		
+Lhya1000008967		
+Pram1000005233		
+Caps1000010355		
+Crev1000006188		
+Bcir1000009799		
+Lhya1000002695		
+Uram1000009606		
+Uram1000003181		
+XP_001833565.1	240176	Coprinopsis cinerea okayama7#130
+XP_001837213.1	240176	Coprinopsis cinerea okayama7#130
+XP_001837127.1	240176	Coprinopsis cinerea okayama7#130
+XP_001837046.1	240176	Coprinopsis cinerea okayama7#130
+XP_001837043.2	240176	Coprinopsis cinerea okayama7#130
+XP_001829032.2	240176	Coprinopsis cinerea okayama7#130
+CCQ74391.1	1288970	Magnetospira sp. QH-2
+XP_001833068.2	240176	Coprinopsis cinerea okayama7#130
+XP_002911146.1	240176	Coprinopsis cinerea okayama7#130
+XP_001832385.2	240176	Coprinopsis cinerea okayama7#130
+XP_001834155.2	240176	Coprinopsis cinerea okayama7#130
+XP_001833851.1	240176	Coprinopsis cinerea okayama7#130
