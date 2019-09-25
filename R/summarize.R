@@ -164,8 +164,14 @@ total_counts <- function(prot ,cutoff = 0, type = "GC"){
 find_paralogs <- function(df){
   #Remove eukaryotes
   df <- df %>% filter(!grepl("^eukaryota",Lineage))
-  paralogTable <- select(df,Species) %>% group_by(Species)%>% count()%>% filter(n>1)
+  paralogTable <- select(df,GCA_ID) %>%
+                   group_by(GCA_ID)%>% count()%>%
+                   filter(n>1) %>% arrange(-n)
   colnames(paralogTable)[colnames(paralogTable)=="n"] = "Count"
+  ###Merge with columns: AccNum,TaxID, and GCA/ Species?
+  paralogTable <- df %>% select(AccNum, TaxID, Species.orig , GCA_ID) %>%
+                    left_join(paralogTable, by= "GCA_ID") %>%
+                    filter(!is.na(Count))
   return(paralogTable)
 }
 
