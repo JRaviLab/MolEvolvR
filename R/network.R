@@ -6,13 +6,14 @@
 #################
 ## Pkgs needed ##
 #################
-library(igraph)
 library(tidyverse)
+library(igraph)
+conflicted::conflict_prefer("filter", "dplyr")
 
 ###########################
-#### CLEANUP FUNCTIONS ####
+#### Network FUNCTIONS ####
 ###########################
-#'Cleanup Species
+#'Domain Network
 #'
 #'This function creates a domain network from the 'DomArch' column.
 #'
@@ -24,12 +25,20 @@ domain_network <- function(prot){
 # by domain networks or all, as required.
 # ye is either all of prot.list or centered on one domain
 
-prot.list <- prot$DomArch # testing with prot$DomArch.orig
-prot.list <- unlist(lapply(prot.list, function(x) gsub(x,pattern = "\\?",replacement = "X")))
+#prot.list=total$arch
+#prot.list <- unlist(lapply(prot.list, function(x) gsub(x,pattern = "\\?",replacement = "X")))
+prot$DomArch.ntwrk <- prot$DomArch.orig %>% # testing with prot$DomArch.orig
+  str_replace_all(coll(pattern="\\?", ignore_case=T), "X")
+
+#dom="LTD"  #your domain name here
 domains_of_interest <- c("PspA || PspA_IM30 || PspA\\_IM30")  # your domain name here
-ye <- prot.list %>%
-  grep(pattern=domains_of_interest, value = T)
-ye <- unlist(strsplit(ye,"\\+"))
+#ye=grep(pattern = dom,x = prot.list,value = T)
+#ye=unlist(strsplit(ye,"\\+"))
+ye <- prot %>%
+  dplyr::filter(grepl(pattern=domains_of_interest,
+                      x=DomArch.ntwrk,
+                      ignore.case=T)) %>%
+  str_split(pattern="\\+")
 
 # Domain network
 domain.list <- strsplit(ye,"\\+")
