@@ -67,9 +67,15 @@ cleanup_species <- function(prot, remove_empty=FALSE){
 #'@examples repeat2s(prot, "DomArch")
 repeat2s <- function(prot, by_column="DomArch"){
   prot[,by_column] <- prot[,by_column] %>%
-                      str_replace_all("\\+", " ") %>%
-                      str_replace_all("(?i)\\b([a-z0-9_-]+)\\b(?:\\s+\\1\\b)+", "\\1(s)") %>%
-                      str_replace_all(" ", "+")
+                      mutate_all(funs(str_replace_all(.,
+                                                      pattern="\\+",
+                                                      replacement=" "))) %>%
+                      mutate_all(funs(str_replace_all(.,
+                                                      pattern="(?i)\\b([a-z0-9_-]+)\\b(?:\\s+\\1\\b)+",
+                                                      replacement="\\1(s)"))) %>%
+                      mutate_all(funs(str_replace_all(.,
+                                                      pattern=" ",
+                                                      replacement="+")))
   return(prot)
 }
 
