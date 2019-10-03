@@ -12,11 +12,12 @@ library(svgPanZoom)
 conflicted::conflict_prefer("intersect", "dplyr")
 conflicted::conflict_prefer("filter", "dplyr")
 conflicted::conflict_prefer("strsplit", "base")
+conflicted::conflict_prefer("count", "dplyr")
 setwd("..")
 source("shiny/PSP_Web_Data.R")
 source("R/plotting.R")
-source("R/cleanup.R")
-source("R/reverse_operons.R")
+#source("R/cleanup.R")
+#source("R/reverse_operons.R")
 source("shiny/shinyfunctions.R")
 
 #########
@@ -41,7 +42,8 @@ sidebar<- dashboardSidebar(
               menuItem("Lineage Plots", tabName = "lineagePlots")
               ,
               menuItem("Phylogeny", tabName = "phylogeny")
-              #,menuItem("About",tabName="about")
+              ,menuItem("Usage", tabName="usage")
+              ,menuItem("About",tabName="about")
   )
 )
 ######
@@ -156,7 +158,83 @@ body <- dashboardBody(
                      )
               )
             )
-    )
+    ),
+    tabItem("about",
+            fluidRow(column(10,
+                            h2('Citation:')
+                            #put citations here
+
+
+                            )),
+            fluidRow(column(10,
+                            h2('Abstract:'),
+
+                            p("The phage shock protein (Psp) stress-response system protects bacteria from envelope stress and
+                            stabilizes the cell membrane. Despite the prevalence of the key effector, PspA, and the functional
+                            Psp system, the various genomic contexts of Psp proteins, as well as their evolution across the kingdoms
+                            of life, have not yet been characterized. Recent work from our group suggests that the psp systems have
+                            evolved independently in distinct Gram-positive and Gram-negative bacterial clades to effect similar stress
+                            response functions. We developed a computational pipeline for comparative genomics and protein
+                            sequence-structure-function analyses to identify sequence homologs, phyletic patterns, domain architectures,
+                            gene neighborhoods, sequence conservation and evolution of the candidates across the tree of life. Using
+                            contextual information from conserved gene neighborhoods and their domain architectures, we delineated the
+                            phyletic patterns of all the Psp members. Next, we systematically identified all possible 'flavors' and
+                            genomic neighborhoods of the Psp systems. Finally, we have traced their evolution leading us to several
+                            interesting observations as to their occurrence and co-migration, suggesting their function and role in
+                            stress-response systems that are often lineage-specific. Conservation of the Psp systems across bacterial
+                            phyla emphasizes the established importance of this stress response system in prokaryotes, while the
+                            modularity in various lineages is indicative of adaptation to bacteria-specific cell-envelope structures,
+                            lifestyles, and adaptation strategies.", style = "font-size:120%")
+
+                            )),
+            fluidRow(column(10,
+                            h2("Links:"),
+                            p("GitHub", style = "font-size:120%"),
+                            tags$br(),
+                            p("Paper", style = "font-size:120%"),
+                            tags$br(),
+                            p("link to lab", style = "font-size:120%")
+
+
+
+                            # tags$dl(
+                            #   tags$dt("Links:"),
+                            #   tags$dd("GitHub"),
+                            #   tags$dd("Paper"),
+                            #   tags$dd("link to lab"))
+
+
+                            )),
+            fluidRow(column(10,
+                            h2("Contacts:")
+
+
+            ))
+
+                            #put link to paper, lab, github, other readings
+
+            ),
+    tabItem("usage",
+            fluidRow(
+              column(12,
+                     tabsetPanel(
+                       id="manual_panel",
+                       tabPanel("Data Table"),
+                       tabPanel("Lineage Plots"),
+                       tabPanel("Phylogeny")
+
+
+                     )
+                     )
+
+            )
+            #Use tabs to have different aspects of the page:
+            #datatable(main)
+            #Lineage tab, with descriptions for the various tools
+            #Phylogeny, again with descriptions for the various tools
+
+
+            )
   ),
   HTML('<div data-iframe-height></div>')
 )
@@ -207,16 +285,16 @@ server <- function(input, output,session){
   pspTable<- reactive({
     req(credentials()$user_auth)
     switch(input$proSelec,
-           "All" = all_op_ins,
-           "DUF1700" = all_op_ins %>% filter(Query=="DUF1700"),
-           "DUF1707" = all_op_ins %>% filter(Query=="DUF1707-SHOCT"),
-           "PspA" = all_op_ins%>% filter(Query=="PspA"),
-           "PspB" = all_op_ins%>% filter(Query=="PspB"),
-           "PspC" = all_op_ins%>% filter(Query=="PspC"),
+           "All" = all,
+           "DUF1700" = all %>% filter(Query=="^DUF1700"),
+           "DUF1707" = all %>% filter(Query=="^DUF1707-SHOCT"),
+           "PspA" = all%>% filter(Query=="pspa"),
+           "PspB" = all%>% filter(Query=="pspb"),
+           "PspC" = all%>% filter(Query=="pspc"),
            "PspM" = pspm_data,
-           "PspN" = all_op_ins%>% filter(Query=="PspN"),
-           "LiaI-LiaF-TM" = all_op_ins%>% filter(Query=="LiaI-LiaF-TM"),
-           "Toast-rack" = all_op_ins%>%filter(Query=="Toast-rack"),
+           "PspN" = all%>% filter(Query=="pspn"),
+           "LiaI-LiaF-TM" = all%>% filter(Query=="LiaI-LiaF-TM"),
+           "Toast-rack" = all%>%filter(Query=="Toast-rack"),
            "LiaG" = liag_data)
   })
   #Render the Data table for selected protein
@@ -509,7 +587,7 @@ server <- function(input, output,session){
   output$ParalogTable <- DT::renderDataTable({
     req(credentials()$user_auth)
     switch(input$alignSelec,
-           "PspA"= find_paralogs(all_op_ins%>% filter(Query=="PspA")))
+           "PspA"= find_paralogs(all%>% filter(Query=="pspa")))
   },extensions = c('FixedColumns'),
   options = list(pageLength = 10,
                  #The below line seems to disable other pages and the search bar
