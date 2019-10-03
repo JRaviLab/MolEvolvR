@@ -91,10 +91,10 @@ repeat2s <- function(prot, by_column="DomArch"){
 #'@param repeat2s Boolean. If TRUE, repeated domains in 'GenContext' are condensed. Default is TRUE.
 #'@param remove_empty Boolean. If TRUE, rows with empty/unnecessary values in 'GenContext' are removed
 #'@examples cleanup_gencontext(prot, FALSE)
-cleanup_gencontext <- function(prot, remove_empty=FALSE){
+cleanup_gencontext <- function(prot, repeat2s=TRUE, remove_empty=FALSE){
   prot$GenContext <- prot$GenContext.orig
-  # Condsense repeats
-  if(repeats2s){
+  # Condsense repeatsd
+  if(repeat2s){
   repeat2s(prot, "GenContext")
   }
 
