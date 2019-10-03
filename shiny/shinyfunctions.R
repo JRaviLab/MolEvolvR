@@ -7,30 +7,30 @@ library(docstring)
 #input a table of type xxx_GC_Lin for lineagecounts
 #input a cutoff value for cutoff. A table with all total counts of values greater than cutoff will be generated
 
-replace_doms_all <- function(prot,domains_rename, domains_remove){
-  DomArch.old <- prot$DomArch
+# replace_doms_all <- function(prot,domains_rename, domains_remove){
+#   DomArch.old <- prot$DomArch
+#
+#   #replace domains based on the domains_rename list
+#   for(j in 1:length(domains_rename$old)){
+#     prot <- map(prot,function(x) x %>% str_replace_all(as.vector(domains_rename$old[j]),as.vector(domains_rename$new[j])))
+#   }
+#   # #remove domains based on the domains_remove list
+#   for(j in 1:length(as.vector(domains_remove$domains))){
+#     prot <- map(prot,function(x)x %>%str_remove_all(as.vector(domains_remove$domains[j])))
+#   }
+#   #remove '+' at the start and end, as well as consecuative '+'
+#   prot <- map(prot, function(x) x%>%  str_replace_all("\\++\\+","\\+")
+#               %>% str_replace_all("^\\+","") %>%
+#                 str_replace_all("\\+$",""))
+#
+#                        # str_replace_all("\\+", " ") %>%
+#                        # str_replace_all("(?i)\\b([a-z0-9_-]+)\\b(?:\\s+\\1\\b)+", "\\1(s)") %>%
+#                        # str_replace_all(" ", "+")) %>% as.data.frame()
+#
+#   return(cbind(as.data.frame(prot),DomArch.old))
+# }
 
-  #replace domains based on the domains_rename list
-  for(j in 1:length(domains_rename$old)){
-    prot <- map(prot,function(x) x %>% str_replace_all(as.vector(domains_rename$old[j]),as.vector(domains_rename$new[j])))
-  }
-  # #remove domains based on the domains_remove list
-  for(j in 1:length(as.vector(domains_remove$domains))){
-    prot <- map(prot,function(x)x %>%str_remove_all(as.vector(domains_remove$domains[j])))
-  }
-  #remove '+' at the start and end, as well as consecuative '+'
-  prot <- map(prot, function(x) x%>%  str_replace_all("\\++\\+","\\+")
-              %>% str_replace_all("^\\+","") %>%
-                str_replace_all("\\+$",""))
-
-                       # str_replace_all("\\+", " ") %>%
-                       # str_replace_all("(?i)\\b([a-z0-9_-]+)\\b(?:\\s+\\1\\b)+", "\\1(s)") %>%
-                       # str_replace_all(" ", "+")) %>% as.data.frame()
-
-  return(as.data.frame(prot))
-}
-
-rd <- replace_doms_all(all_op_ins,domains.replace,domains.remove)
+#rd <- replace_doms_all(all_op_ins,domains.replace,domains.remove)
 
 #Replace twos for all dataframe
 # ab<-map(all_op_ins,function(x) x %>%  		str_replace_all("\\+", " ") %>%

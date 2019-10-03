@@ -2,80 +2,82 @@ library(readr)
 source("R/plotting.R")
 source("R/cleanup.R")
 source("R/summarize.R")
-source("R/reverse_operons.R")
+#source("R/reverse_operons.R")
+#source("shiny/shinyfunctions.R")
 
 ####Data import####
-all_op_ins <- read_tsv("data/rawdata_tsv/all_op_ins_cls.txt") %>%
-  select(AccNum,Query,ClustID,ClustName,GenContext.norep=GenContext,PFAM,DomArch,
-         arch.TMSIG,GenName,Lineage,Species,Annotation,GI)
 
-all_op_ins$Query[which(all_op_ins$Query=="DUF1707-SHOCT.1")] <-"DUF1707-SHOCT"
+all <- read_tsv("data/rawdata_tsv/all_half_cleaned.txt")
+# colnames(all)[colnames(all) == "GenContext"] = "GenContext.norev"
+# colnames(all)[colnames(all) == "GenContext_1"] = "GenContext"
+# write_tsv(all, "data/rawdata_tsv/all_half_cleaned.txt")
 
 lineages_map <- read_delim("data/acc_files/organisms2lineages_map_bae_20170828.txt",
                            delim="\t", col_names=T, comment="#", trim_ws=T)
 
-domains.replace <- read_delim("data/acc_files/domains.replace.txt",
-                              delim = "\t", col_names = TRUE)
+#domains.replace <- read_delim("data/acc_files/domains.replace.txt",
+#                              delim = "\t", col_names = TRUE)
 
-domains.remove <- read_delim("data/acc_files/domains.ignore.txt",
-                             delim = "\t", col_names = TRUE)
+#domains.remove <- read_delim("data/acc_files/domains.ignore.txt",
+#                             delim = "\t", col_names = TRUE)
 ####Cleanup####
-#names(all_op_ins)[names(all_op_ins)=='GenContext'] <- "GenContext.norep"
-all_op_ins <- all_op_ins %>%
+#names(all)[names(all)=='GenContext'] <- "GenContext"
+#all <- all %>%
   #cls_cleanup() %>%
-  cleanup_species() %>%
-  reverse_operons() %>%
-  replace_doms_all(domains.replace,domains.remove)
+#  cleanup_species() %>%
+#  reverse_operons() %>%
+  #Fix this to work on a few columns, not all
+#  replace_doms_all(domains.replace,domains.remove)
 
-all_op_ins<-map(all_op_ins,function(x) x %>%  		str_replace_all("\\+", " ") %>%
+all<-map(all,function(x) x %>%  		str_replace_all("\\+", " ") %>%
                      str_replace_all("(?i)\\b([a-z0-9_-]+)\\b(?:\\s+\\1\\b)+", "\\1(s)") %>%
                      str_replace_all(" ", "+")) %>% as.data.frame()
 
-# #Rename DomArch.norep to DomArch because that's what replace_doms requires as a column
-# colnames(all_op_ins)[colnames(all_op_ins)=="DomArch.norep"] <- "DomArch"
-# all_op_ins <- replace_doms(all_op_ins,domains.replace,domains.remove)
+# #Rename DomArch to DomArch because that's what replace_doms requires as a column
+# colnames(all)[colnames(all)=="DomArch"] <- "DomArch"
+# all <- replace_doms(all,domains.replace,domains.remove)
 # #Give original name back
-# #all_op_ins<- as.data.frame(all_op_ins)
-# colnames(all_op_ins)[colnames(all_op_ins)=="DomArch"] <- "DomArch.norep"
+# #all<- as.data.frame(all)
+# colnames(all)[colnames(all)=="DomArch"] <- "DomArch"
 
 ####WordCounts####
 create_DA.doms<- function(prot){
-  DA <- prot$DomArch.norep
+  DA <- prot$DomArch
   #Replace '+' with " "
   DA <- as.character(map(1:length(DA),function(x){gsub("\\+"," ", DA[x])}))
   prot <- mutate(prot,DA.doms=(DA))
   return(prot)
 }
 create_GC.DA <- function(prot){
-  GC <- prot$GenContext.norep
+  GC <- prot$GenContext
   GC <- as.character(map(1:length(GC),function(x){gsub("->|<-|\\|"," ",GC[x])}))
   GC <- str_replace_all(GC,"  +"," ")
   prot <- mutate(prot,GC.DA=GC)
   return(prot)
 }
 
-colnames(all_op_ins)[colnames(all_op_ins)=="DomArch"] <- "DomArch.norep"
 
-all_op_ins <- create_DA.doms(all_op_ins) %>%
+
+all <- create_DA.doms(all) %>%
   create_GC.DA()
 
 
 
-DUF1700 <- all_op_ins %>% filter(Query=="DUF1700")
-DUF1707 <- all_op_ins %>% filter(Query=="DUF1707-SHOCT")
-pspa <- all_op_ins%>% filter(Query=="PspA")
-pspb <- all_op_ins%>% filter(Query=="PspB")
-pspc <- all_op_ins%>% filter(Query=="PspC")
+DUF1700 <- all %>% filter(Query=="DUF1700-alpha-helical")
+DUF1707 <- all %>% filter(Query=="DUF1707-SHOCT")
+pspa <- all%>% filter(Query=="pspa")
+pspb <- all%>% filter(Query=="pspb")
+pspc <- all%>% filter(Query=="pspc")
 
 pspm_table <- read_tsv("data/201905_data/pspm.renamed.arch.cls.20170619.txt") %>% filter(!grepl(pattern =  "#", AccNum))
 pspm<- pspm_table%>%
   select(AccNum, Species, Lineage,
-         DomArch=SIG.TM.LADB,# GenContext=GenContext.norep,
+         DomArch=SIG.TM.LADB,# GenContext=GenContext,
          Length, GI, GenName, Annotation)
 
-pspn <- all_op_ins%>% filter(Query=="PspN")
-liai_liaf = all_op_ins%>% filter(Query=="LiaI-LiaF-TM")
-toast_rack = all_op_ins%>%filter(Query=="Toast-rack")
+pspn <- all%>% filter(Query=="pspn")
+liai_liaf = all%>% filter(Query=="LiaI-LiaF-TM")
+toast_rack = all%>%filter(Query=="Toast-rack")
 
 liag_table <- read_tsv("data/201905_data/liag.txt")
 liag_data <- liag_table %>%reverse_operons() %>%
@@ -105,27 +107,39 @@ liag_data <- liag_table %>%reverse_operons() %>%
 #Requires total counts
   #Total counts requires summby lin
 create.DA.cummulative <- function(prot){
+  colnames(prot)[colnames(prot)=="DomArch"] <- "DomArch.norep"
   colnames(prot)[colnames(prot)=="Lineage"] <- "Lineage.final"
   prot_DA.cummulative <-  summ.DA.byLin(prot) %>% total_counts( cutoff =0, type = "DA")
   colnames(prot)[colnames(prot)=="Lineage.final"] <- "Lineage"
+  colnames(prot)[colnames(prot)=="DomArch.norep"] <- "DomArch"
   return(prot_DA.cummulative)
 }
 create.GC.cummulative <- function(prot){
+  colnames(prot)[colnames(prot)=="GenContext"] <- "GenContext.norep"
+  colnames(prot)[colnames(prot)=="DomArch"] <- "DomArch.norep"
   colnames(prot)[colnames(prot)=="Lineage"] <- "Lineage.final"
   prot_GC.cummulative <-  summ.GC.byDALin(prot) %>% total_counts( cutoff =0, type = "GC")
   colnames(prot)[colnames(prot)=="Lineage.final"] <- "Lineage"
+  colnames(prot)[colnames(prot)=="DomArch.norep"] <- "DomArch"
+  colnames(prot)[colnames(prot)=="GenContext.norep"] <- "GenContext"
   return(prot_GC.cummulative)
 }
 create.DA.lin <- function(prot){
+  colnames(prot)[colnames(prot)=="DomArch"] <- "DomArch.norep"
   colnames(prot)[colnames(prot)=="Lineage"] <- "Lineage.final"
   prot_DA_lin <-  summ.DA.byLin(prot)
   colnames(prot)[colnames(prot)=="Lineage.final"] <- "Lineage"
+  colnames(prot)[colnames(prot)=="DomArch.norep"] <- "DomArch"
   return(prot_DA_lin)
 }
 create.GC.lin <- function(prot){
+  colnames(prot)[colnames(prot)=="DomArch"] <- "DomArch.norep"
   colnames(prot)[colnames(prot)=="Lineage"] <- "Lineage.final"
+  colnames(prot)[colnames(prot)=="GenContext"] <- "GenContext.norep"
   prot_GC_lin <-  summ.GC.byLin(prot)
   colnames(prot)[colnames(prot)=="Lineage.final"] <- "Lineage"
+  colnames(prot)[colnames(prot)=="GenContext.norep"] <- "GenContext"
+  colnames(prot)[colnames(prot)=="DomArch.norep"] <- "DomArch"
   return(prot_GC_lin)
 }
 pspa_DA.cummulative <- create.DA.cummulative(pspa)
@@ -173,7 +187,7 @@ toast_rack_GC_lin <- create.GC.lin(toast_rack)
 # DUF1700_data <-  DUF1700_table%>%
 #   select(AccNum, Species = Organism,
 #          Lineage,
-#          DomArch,# GenContext=GenContext.norep,
+#          DomArch,# GenContext=GenContext,
 #          Length, GI, GenName, Annotation)
 # #DUF1707-SHOCT.1.op_ins_cls.20170817.txt
 # DUF1707_table <- read_tsv(file ="data/dufs/DUF1707-SHOCT.1.op_ins_cls.20170817.txt", col_names = FALSE, skip = 1)
@@ -184,38 +198,38 @@ toast_rack_GC_lin <- create.GC.lin(toast_rack)
 # pspa_table <- reverse_operons(pspa_table)
 # pspa_data <- pspa_table %>%
 #   select(AccNum, Species, Lineage=Lineage.final,
-#          DomArch=DomArch.norep, GenContext,
+#          DomArch=DomArch, GenContext,
 #          Length, GI, GenName, Annotation)
  #pspm.renamed.arch.cls.20170619.txt
 # #pspb.txt
 # pspb_table <- read_tsv("data/pspb.txt")
 # pspb_data <- pspb_table %>% reverse_operons() %>%
 #               select(AccNum, Species, Lineage=Lineage.final,
-#                 DomArch=DomArch.norep, GenContext,
+#                 DomArch=DomArch, GenContext,
 #                 Length, GI, GenName, Annotation)
 # #pspc.txt
 # pspc_table <- read_tsv("data/pspc.txt")
 # pspc_data <- pspc_table %>% reverse_operons() %>%
 #   select(AccNum, Species, Lineage=Lineage.final,
-#          DomArch=DomArch.norep, GenContext,
+#          DomArch=DomArch, GenContext,
 #          Length, GI, GenName, Annotation)
 # #pspn.renamed.arch.cls.20170619.txt
 # pspn_table <- read_tsv("data/pspn.renamed.arch.cls.20170619.txt") %>% filter(!grepl(pattern =  "#", AccNum))
 # pspn_data <- pspn_table%>%
 #   select(AccNum, Species, Lineage,
-#          DomArch=SIG.TM.LADB,# GenContext=GenContext.norep,
+#          DomArch=SIG.TM.LADB,# GenContext=GenContext,
 #          Length, GI, GenName, Annotation)
 # #liai.txt
 # liai_table <- read_tsv("data/liai.txt")
 # liai_data <- liai_table %>%reverse_operons() %>%
 #   select(AccNum, Species, Lineage=Lineage.final,
-#          DomArch=DomArch.norep, GenContext,
+#          DomArch=DomArch, GenContext,
 #          Length, GI, GenName, Annotation)
 # #liaf.txt
 # liaf_table <- read_tsv("data/liaf.txt")
 # liaf_data <- liaf_table %>%reverse_operons() %>%
 #   select(AccNum, Species, Lineage=Lineage.final,
-#          DomArch=DomArch.norep, GenContext,
+#          DomArch=DomArch, GenContext,
 #          Length, GI, GenName, Annotation)
 # #liag.txt
 
@@ -242,7 +256,7 @@ toast_rack_GC_lin <- create.GC.lin(toast_rack)
 # liai_GC_lin <- read_tsv("data/liai-gc_lin_counts.txt")
 #
 # pspa_cum <- total_counts(pspa_GC_Lin,0)
-# #%>%              select(GenContext.norep, Lineage = Lineage.final, count, totalcount)
+# #%>%              select(GenContext, Lineage = Lineage.final, count, totalcount)
 # pspb_cum <- total_counts(pspb_GC_Lin,0)
 # pspc_cum <- total_counts(pspc_GC_Lin,0)
 # liaf_cum <- total_counts(liaf_GC_lin,0)
