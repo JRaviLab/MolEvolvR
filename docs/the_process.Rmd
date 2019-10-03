@@ -107,7 +107,7 @@ all <- all %>%
 ## Data import
 ```{r import, eval=T, results='hide', message=F}
 # Example import files: individual or combined ones, pspa.txt, all_raw.txt
-prot <- read_delim("data/rawdata_tsv/all_raw.txt",
+prot <- read_delim("data/rawdata_tsv/all_merged_gca_taxid.txt",
                    delim="\t", col_names=T, comment="#", trim_ws=T,
                    escape_double=FALSE, na="NA")
 
@@ -131,10 +131,12 @@ query_domains <- read_delim("data/acc_files/query_domains.txt",
 ### DomArch cleanup & Reversal of operons
 ```{r cleanup, eval=T, results='hide', message=F}
 # Cleanup Clusters
+###Cleanup clust errors
 prot <- prot %>%
   cleanup_clust(TRUE)
 
 # Cleanup Species
+###Currently returns null
 prot <- prot %>%
   cleanup_species(FALSE)
 
@@ -142,18 +144,12 @@ prot <- prot %>%
 prot <- prot %>%
   cleanup_gencontext(FALSE)
 
-# Cleanup DomArch
-# Rename DomArch.norep to DomArch because that's what replace_doms requires as a column
-colnames(prot)[colnames(prot)=="DomArch.norep"] <- "DomArch"
-
 prot <- prot %>%
   cleanup_domarch(TRUE, domains_rename, domains_ignore)
 
-#Give original name back
-colnames(prot)[colnames(prot)=="DomArch"] <- "DomArch.norep"
-
 # Reverse/Straighten Operons
-prot$GenContext.st <- prot %>%
+#####Lots of warnings?
+prot <- prot %>%
   reverse_operon()
 ```
 
