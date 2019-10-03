@@ -50,6 +50,7 @@ cleanup_species <- function(prot, remove_empty=FALSE){
       filter(!grepl("^NA$", Species)) %>%	# remove "NA"
       filter(!grepl("^$", Species)) #%>%		# remove empty rows
   }
+  return(prot)
 }
 
 ###########################
@@ -95,7 +96,7 @@ cleanup_gencontext <- function(prot, repeat2s=TRUE, remove_empty=FALSE){
   prot$GenContext <- prot$GenContext.orig
   # Condsense repeatsd
   if(repeat2s){
-  repeat2s(prot, "GenContext")
+  prot <- repeat2s(prot, "GenContext")
   }
 
   # FUNCTIONS CALLED HERE, if else might be better since only two options, T and F
@@ -107,6 +108,8 @@ cleanup_gencontext <- function(prot, repeat2s=TRUE, remove_empty=FALSE){
       filter(!grepl("^NA$", GenContext)) %>%	# remove "NA"
       filter(!grepl("^$", GenContext)) #%>%		# remove empty rows
   }
+
+  prot <- reverse_operon(prot)
 return(prot)
 }
 #Switch case for remove.empty.rows, check efficiency
@@ -132,7 +135,7 @@ cleanup_domarch <- function(prot, repeat2s=TRUE, domains_rename, domains_ignore)
 
   # Condense repeats
   if(repeat2s){
-  repeat2s(prot=prot, by_column="DomArch")
+  prot <- repeat2s(prot=prot, by_column="DomArch")
   }
 
   # Replace domains based on the domains_rename list
@@ -190,7 +193,7 @@ cleanup_clust <- function(cls_data, repeat2s=TRUE, domains_keep){
 
   # Condense repeats
   if(repeat2s){
-    repeat2s(prot, "ClustName")
+    prot <- repeat2s(prot, "ClustName")
   }
 
   # !!UNFIXED ISSUE!! SIG+TM+TM+... kind of architectures without explicit domain names are lost.
