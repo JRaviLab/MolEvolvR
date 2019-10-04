@@ -1,5 +1,5 @@
-Package: psp
-Title: Psp Evolution
+Package: evolvr
+Title: Molecular Evolution
 Version: 0.0.0.9000
 Authors@R: person("Janani", "Ravi", email = "janani@msu.edu", role = c("aut", "cre"))
 Description: What the package does (one paragraph).
@@ -17,7 +17,6 @@ Imports:
     roxygen2,
     docstring,
     igraph,
-    rgl,
     ape,
     phylogram,
     phytools,
@@ -25,7 +24,8 @@ Imports:
     seqinr,
     ggtree,
     tidytree,
-    Rcpp
+    Rcpp,
+    tidytext
 RoxygenNote: 6.1.1
 LinkingTo: 
     Rcpp
