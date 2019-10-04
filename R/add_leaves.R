@@ -19,8 +19,8 @@ to_titlecase <- function(x, y=" ") {
 }
 
 ## Function to add leaves to an alignment file
-add_leaves <- function(input_file = "data/alignments/pspa_snf7.aln",
-                       lin_file = "data/pspa_snf7.txt",
+add_leaves <- function(input_file = "data/rawdata_aln/pspa_snf7.gismo.aln",
+                       lin_file = "data/rawdata_tsv/PspA.txt",
                        reduced = FALSE) {
   #' Adding Leaves to an alignment file w/ accessions
   #' @author Janani Ravi
