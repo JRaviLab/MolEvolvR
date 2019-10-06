@@ -7,8 +7,8 @@ Depends: R (>= 3.5.1)
 License: MIT License
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/jananiravi/psp-evolution
-BugReports: https://github.com/jananiravi/psp-evolution/issues
+URL: https://github.com/cpathogeno/the-approach
+BugReports: https://github.com/cpathogeno/the-approach/issues
 Imports:
     tidyverse,
     here,
