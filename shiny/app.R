@@ -286,12 +286,12 @@ server <- function(input, output,session){
     req(credentials()$user_auth)
     switch(input$proSelec,
            "All" = all,
-           "DUF1700" = all %>% filter(Query=="^DUF1700"),
-           "DUF1707" = all %>% filter(Query=="^DUF1707-SHOCT"),
+           "DUF1700" = DUF1700,
+           "DUF1707" = DUF1707,
            "PspA" = all%>% filter(Query=="pspa"),
            "PspB" = all%>% filter(Query=="pspb"),
            "PspC" = all%>% filter(Query=="pspc"),
-           "PspM" = pspm_data,
+           "PspM" = pspm,
            "PspN" = all%>% filter(Query=="pspn"),
            "LiaI-LiaF-TM" = all%>% filter(Query=="LiaI-LiaF-TM"),
            "Toast-rack" = all%>%filter(Query=="Toast-rack"),
@@ -309,6 +309,7 @@ server <- function(input, output,session){
                                                  fixedHeader=TRUE,
                                                  fixedColumns = list(leftColumns = 2, rightColumns = 0)))
 
+  #Observer used to determine initial heatmap slider
   observe({
     if(input$DA_GC== "Domain Architecture"){
     switch(input$linSelec,
@@ -587,7 +588,14 @@ server <- function(input, output,session){
   output$ParalogTable <- DT::renderDataTable({
     req(credentials()$user_auth)
     switch(input$alignSelec,
-           "PspA"= find_paralogs(all%>% filter(Query=="pspa")))
+           "PspA"= find_paralogs(all%>% filter(Query=="pspa"))
+           # ,"PspB"= find_paralogs(all%>% filter(Query=="pspb")),
+           # "PspC"= find_paralogs(all%>% filter(Query=="pspc")),
+           # "DUF1700"= find_paralogs(all%>% filter(Query=="DUF1700-alpha-helical")),
+           # "DUF1707"= find_paralogs(all%>% filter(Query=="DUF1707-SHOCT")),
+           # "Toast-rack"= find_paralogs(all%>% filter(Query=="Toast-rack")),
+           # "LiaI-LiaF-TM"= find_paralogs(all%>% filter(Query=="LiaI-LiaF-TM"))
+           )
   },extensions = c('FixedColumns'),
   options = list(pageLength = 10,
                  #The below line seems to disable other pages and the search bar
