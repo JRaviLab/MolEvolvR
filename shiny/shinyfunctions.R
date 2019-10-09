@@ -67,11 +67,12 @@ heatmap_slider <- function(prot_lin,type){
 
 
 #very similar to upset.plot but with the wc param. This param is used for the word count file
+#Word Count file is using words2wc as of now
 lineage.upset <- function(query_data,cutoff,type, wc){
 
   switch(type,
-         da2doms=colname <- "DomArch.norep",
-         gc2da= colname <- "GenContext.norep")
+         da2doms=colname <- "DomArch",
+         gc2da= colname <- "GenContext")
 
   words.gecutoff <- filter(wc, freq>=cutoff)
 
@@ -87,7 +88,7 @@ lineage.upset <- function(query_data,cutoff,type, wc){
 
   ## Creating UpSet data
   upset <- query_data %>%
-    select(AccNum, Lineage, GenContext.norep, DomArch.norep,words.gecutoff$words) %>%
+    select(AccNum, Lineage, GenContext, DomArch,words.gecutoff$words) %>%
     mutate_all(list( ~ if(is.numeric(.))as.integer(.) else .))  %>%
     as.data.frame()
 
