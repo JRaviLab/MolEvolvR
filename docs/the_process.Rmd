@@ -140,6 +140,11 @@ prot <- prot %>%
 prot <- prot %>%
   cleanup_species(FALSE)
 
+# Updated Species column
+prot <- prot %>% mutate(Species.new = Species.q )
+rows_na <- which(is.na(prot$Species.new))
+prot$Species.new[rows_na] <- prot$Species.orig[rows_na]
+
 # Cleanup GenContext
 prot <- prot %>%
   cleanup_gencontext(FALSE)
