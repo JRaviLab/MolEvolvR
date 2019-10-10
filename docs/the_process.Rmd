@@ -42,6 +42,7 @@ paste0("R/", list.files("R/")) %>%
 
 # Avoiding conflicts!
 conflicted::conflict_prefer("filter", "dplyr")
+conflict_prefer("Position", "ggplot2")
 conflicted::conflict_prefer("as_data_frame", "tibble")
 conflicted::conflict_prefer("strsplit", "base")
 ```
