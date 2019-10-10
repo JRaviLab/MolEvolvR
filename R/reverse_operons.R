@@ -117,8 +117,9 @@ reverse_operon <- function(prot){
 
 
 ##############
+# Absorb into the function above?
+## ???
+# colnames(prot) <- c("AccNum","GenContext.orig","len", "GeneName","TaxID","Species")
 
-colnames(prot) <- c("AccNum","GenContext.orig","len", "GeneName","TaxID","Species")
-
-# straighten operons
-prot$GenContext.orig <- reverse_operon(prot)
+## ??? straighten operons
+# prot$GenContext.orig <- reverse_operon(prot)

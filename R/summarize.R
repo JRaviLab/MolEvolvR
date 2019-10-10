@@ -7,6 +7,7 @@
 ## Pkgs needed ##
 #################
 library(tidyverse)
+conflicted::conflict_prefer("filter", "dplyr")
 
 ###########################
 ## COUNTS of DAs and GCs ##
@@ -125,20 +126,21 @@ summ.GC <- function(x) { x %>%
 
 
 ##################
-#'Total Counts
-#'
-#'Creates a data frame with a totalcount column
-#'
-#'This function is designed to sum the counts column by either Genomic Context or Domain Architecture and creates a totalcount column from those sums.
-#'
-#' @param prot A data frame that must contain columns:
-#' \itemize{\item Either 'GenContext.norep' or 'DomArch.norep' \item count}
-#' @param cutoff Numeric. Cutoff for total count. Counts below cutoff value will not be shown. Default is 0.
-#' @param type Character. Either "GC" for a total count by Genomic Context groupings or "DA" for a total count by Domain Architecture groupings.
-#' @examples total_counts(pspa-gc_lin_counts,0,"GC")
-#' @note Please refer to the source code if you have alternate file formats and/or
-#' column names.
 total_counts <- function(prot ,cutoff = 0, type = "GC"){
+  #'Total Counts
+  #'
+  #'Creates a data frame with a totalcount column
+  #'
+  #'This function is designed to sum the counts column by either Genomic Context or Domain Architecture and creates a totalcount column from those sums.
+  #'
+  #' @param prot A data frame that must contain columns:
+  #' \itemize{\item Either 'GenContext.norep' or 'DomArch.norep' \item count}
+  #' @param cutoff Numeric. Cutoff for total count. Counts below cutoff value will not be shown. Default is 0.
+  #' @param type Character. Either "GC" for a total count by Genomic Context groupings or "DA" for a total count by Domain Architecture groupings.
+  #' @examples total_counts(pspa-gc_lin_counts,0,"GC")
+  #' @note Please refer to the source code if you have alternate file formats and/or
+  #' column names.
+
   if(type == "GC"){
     gc_count <- prot %>% group_by(GenContext.norep) %>% summarise(totalcount = sum(count))  %>% filter(totalcount >= cutoff)
     total <- left_join(prot,gc_count, by = "GenContext.norep")
@@ -151,28 +153,29 @@ total_counts <- function(prot ,cutoff = 0, type = "GC"){
 }
 
 
-#'Find Paralogs
-#'
-#'Creates a data frame of paralogs.
-#'
-#'This function returns a dataframe containing paralogs and the counts.
-#'
-#'@param df A data frame containing columns Species and Lineage
-#'@example find_paralogs(pspa)
-#'@note Please refer to the source code if you have alternate file formats and/or
-#'column names.
 find_paralogs <- function(df){
+  #'Find Paralogs
+  #'
+  #'Creates a data frame of paralogs.
+  #'
+  #'This function returns a dataframe containing paralogs and the counts.
+  #'
+  #'@param df A data frame containing columns Species and Lineage
+  #'@example find_paralogs(pspa)
+  #'@note Please refer to the source code if you have alternate file formats and/or
+  #'column names.
+
   #Remove eukaryotes
   df <- df %>% filter(grepl("^eukaryota",Lineage))
   print(colnames(df))
   paralogTable <- df %>% group_by(Query,GCA_ID) %>%
-                   count(DomArch)%>%
-                   filter(n>1) %>% arrange(-n)
+    count(DomArch)%>%
+    filter(n>1) %>% arrange(-n)
   colnames(paralogTable)[colnames(paralogTable)=="n"] = "Count"
   ###Merge with columns: AccNum,TaxID, and GCA/ Species?
   paralogTable <- df %>% select(AccNum, TaxID, Species.orig , GCA_ID, Query) %>%
-                    left_join(paralogTable, by= c("GCA_ID","Query")) %>%
-                    filter(!is.na(Count)) %>% distinct()
+    left_join(paralogTable, by= c("GCA_ID","Query")) %>%
+    filter(!is.na(Count)) %>% distinct()
   return(paralogTable)
 }
 

@@ -13,6 +13,7 @@ conflicted::conflict_prefer("filter", "dplyr")
 ###########################
 #### Network FUNCTIONS ####
 ###########################
+domain_network <- function(prot){
 #'Domain Network
 #'
 #'This function creates a domain network from the 'DomArch' column.
@@ -21,7 +22,7 @@ conflicted::conflict_prefer("filter", "dplyr")
 #'
 #'@param prot A data frame that contains the column 'DomArch'.
 #'@examples domain_network(pspa)
-domain_network <- function(prot){
+
 # by domain networks or all, as required.
 # ye is either all of prot.list or centered on one domain
 

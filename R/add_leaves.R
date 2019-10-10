@@ -1,7 +1,7 @@
 # Created: April 19, 2019
 
 library(tidyverse); library(here); library(roxygen2); library(docstring)
-
+conflicted::conflict_prefer("filter", "dplyr")
 
 ## Function to have Title Case
 to_titlecase <- function(x, y=" ") {

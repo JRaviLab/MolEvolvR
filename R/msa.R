@@ -14,20 +14,20 @@ library(tools)
 
 
 
-#'Multiple Sequence Alignment
-#'
-#'Generates a multiple sequence alignment from a fasta file
-#'
-#'msa_pdf is a function that reads a fasta file and generates a multiple sequence alignment as
-#'a pdf
-#'
-#'@param fasta_filepath Character. The path location of the fasta file to be read.
-#'@param lowerbound Numeric. The column that determines the starting location of the MSA.
-#'Default is NULL. If value is NULL, the entire multiple sequence alignment is printed.
-#'@param upperbound Numeric. The column that determines the ending location of the MSA.
-#'Default is NULL. If value is NULL, the entire multiple sequence alignment is printed.
-# #'@examples msa_pdf()
 msa_pdf <- function(fasta_filepath , lowerbound=NULL, upperbound=NULL){
+  #'Multiple Sequence Alignment
+  #'
+  #'Generates a multiple sequence alignment from a fasta file
+  #'
+  #'msa_pdf is a function that reads a fasta file and generates a multiple sequence alignment as
+  #'a pdf
+  #'
+  #'@param fasta_filepath Character. The path location of the fasta file to be read.
+  #'@param lowerbound Numeric. The column that determines the starting location of the MSA.
+  #'Default is NULL. If value is NULL, the entire multiple sequence alignment is printed.
+  #'@param upperbound Numeric. The column that determines the ending location of the MSA.
+  #'Default is NULL. If value is NULL, the entire multiple sequence alignment is printed.
+  # #'@examples msa_pdf()
 
   #only works for a fasta file
   #first convert tsv to fastafile: pretty easy but something needs to be done first
