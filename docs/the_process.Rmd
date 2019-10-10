@@ -28,26 +28,17 @@ knitr::opts_knit$set(root.dir=rprojroot::find_rstudio_root_file())
 ```
 
 ```{r load, eval=T, results='hide', message=FALSE}
-# library(here)
-# library(tidyverse)
-# library(rmarkdown); library(knitr)
-# library(wordcloud); library(RColorBrewer)
+library(here)
+library(tidyverse)
+library(rmarkdown); library(knitr)
+library(wordcloud); library(RColorBrewer)
 # ADD OTHER DEPENDENCIES
 
 here::here() # checking to see if the homedir location is accurate
 
 # Sourcing scripts containing package functions
-source("R/cleanup.R")
-# source("R/cleanup_domarch.R")
-source("R/clean_clust_file.R")
-source("R/summarize.R")
-source("R/plotting.R")
-source("R/reverse_operons.R")
-source("R/add_leaves.R")
-source("R/convert_aln2fa.R")
-source("R/msa.R")
-source("R/tree.R")
-# source("R/network.R") # waiting for the new script
+paste0("R/", list.files("R/")) %>%
+  purrr::map(source)
 
 # Avoiding conflicts!
 conflicted::conflict_prefer("filter", "dplyr")
