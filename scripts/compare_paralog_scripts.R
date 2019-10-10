@@ -1,4 +1,5 @@
-setwd("C:/Users/samue/Google_Drive/GitHub/the-approach")
+#setwd("C:/Users/samue/Google_Drive/GitHub/the-approach")
+
 find_paralogs_new <- function(df){
   #Remove eukaryotes
   df <- df %>% filter(!grepl("^eukaryota",Lineage))
@@ -13,6 +14,7 @@ find_paralogs_new <- function(df){
     filter(!is.na(Count)) %>% distinct()
   return(paralogTable)
 }
+
 find_paralogs_old <- function(df){
   #Remove eukaryotes
   df <- df %>% filter(!grepl("^eukaryota",Lineage))
@@ -24,7 +26,9 @@ find_paralogs_old <- function(df){
   ###Merge with columns: AccNum,TaxID, and GCA/ Species?
   return(paralogTable)
 }
+
 source("R/summarize.R")
+
 all_with_tax_gca <- read_tsv("data/rawdata_tsv/all_merged_gca_taxid.txt")
 df <- all_with_tax_gca
 para1 <- find_paralogs_old(all_with_tax_gca)

@@ -1,7 +1,7 @@
 #####Generate Missing files
 #####Samuel Chen
 library(tidyverse)
-setwd("C:/Users/samue/Google_Drive/GitHub/the-approach")
+#setwd("C:/Users/samue/Google_Drive/GitHub/the-approach")
 source("R/reverse_operons.R")
 source("R/summarize.R")
 source("R/cleanup.R")
