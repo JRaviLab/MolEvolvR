@@ -19,7 +19,6 @@ Imports:
     igraph,
     ape,
     phylogram,
-    phytools,
     msa,
     seqinr,
     ggtree,
