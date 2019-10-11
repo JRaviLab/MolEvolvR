@@ -9,7 +9,6 @@ AGK52227.1	SIG+TM*->?->LiaI-LiaF-TM+Toast-rack*->?->REC->	SIG	SIG	SIG	119	B1NLA3
 AIQ14451.1	<-PspC<-?<-LiaI-LiaF-TM*	SIG+TM	LiaI-LiaF-TM	SIG+TM	100	PDUR_23000	bacteria>firmicutes	Paenibacillus durus	hypothetical protein PDUR_23000 [Paenibacillus durus]	686570395	LiaI-LiaF-TM	000007.32	LiaI-LiaF-TM	NA	NA	GCA_000756615.1
 AGP40782.1	<-PspA*	PspA_IM30	PspA	-	243	SCE1572_43620	bacteria>proteobacteria>deltaproteobacteria	Sorangium cellulosum So0157-2	hypothetical protein SCE1572_43620 [Sorangium cellulosum So0157-2]	521007779	PspA	000001.1454	pspa	NA	NA	GCA_000418325.1
 AGX02621.1	PspA*->?->SIG+TM+HISKIN->REC+LuxR-HTH->	PspA_IM30	PspA	-	215	N288_03290	bacteria>firmicutes	Bacillus infantis NRRL B-14911	modulator protein [Bacillus infantis NRRL B-14911]	548703261	PspA	000001.1454	pspa	NA	NA	GCA_000473245.1
-XP_001833565.1	Snf7*->	Snf7	Snf7	-	244	CC1G_03782	eukaryota>fungi>basidiomycota	Coprinopsis cinerea okayama7	NA	NA	NA	NA	NA	NA	NA	NA
 Smed1000013124	-	Snf7	Snf7	-	239	Smed1000013124	eukaryota>metazoa>platyhelminthe	Schmidtea mediterranea	>Smed1000013124	NA	Snf7	000002.516	pspa	NA	NA	-
 Crev1000005838	-	Snf7	Snf7	LPD14	233	Crev1000005838	eukaryota>fungi>kickxellomycotina	Coemansia reversa	>Crev1000005838	NA	Snf7	000002.516	pspa	NA	NA	-
 Pram1000010618	-	Snf7	Snf7	-	233	Pram1000010618	eukaryota>stramenopiles	Phytophthora ramorum	>Pram1000010618	NA	Snf7	000002.516	pspa	NA	NA	-
@@ -26,7 +25,6 @@ Crev1000000673	-	Snf7	Snf7	-	221	Crev1000000673	eukaryota>fungi>kickxellomycotin
 Uram1000008596	-	Snf7	Snf7	-	221	Uram1000008596	eukaryota>fungi>mucoromycotina	Umbelopsis ramanniana	>Uram1000008596	NA	Snf7	000002.516	pspa	NA	NA	-
 Uram1000009085	-	Snf7	Snf7	-	220	Uram1000009085	eukaryota>fungi>mucoromycotina	Umbelopsis ramanniana	>Uram1000009085	NA	Snf7	000002.516	pspa	NA	NA	-
 Caps1000013612	-	Snf7	Snf7	-	218	Caps1000013612	eukaryota>metazoa>annelida	Capitella spI	>Caps1000013612	NA	Snf7	000002.516	pspa	NA	NA	-
-XP_001837213.1	Snf7*->	Snf7	Snf7	-	216	CC1G_00349	eukaryota>fungi>basidiomycota	Coprinopsis cinerea okayama7	NA	NA	NA	NA	NA	NA	NA	NA
 Caps1000009008	-	Snf7	Snf7	-	213	Caps1000009008	eukaryota>metazoa>annelida	Capitella spI	>Caps1000009008	NA	Snf7	000002.516	pspa	NA	NA	-
 Smed1000003202	-	Snf7	Snf7	-	210	Smed1000003202	eukaryota>metazoa>platyhelminthe	Schmidtea mediterranea	>Smed1000003202	NA	Snf7	000002.516	pspa	NA	NA	-
 Bnat1000015196	-	Snf7	Snf7	-	209	Bnat1000015196	eukaryota>rhizaria	Bigelowiella natans	>Bnat1000015196	NA	Snf7	000002.516	pspa	NA	NA	-
@@ -48,11 +46,9 @@ Smed1000025307	-	Snf7	Snf7	ParB	222	Smed1000025307	eukaryota>metazoa>platyhelmin
 Uram1000005364	-	SIG+Snf7	Snf7	SIG	222	Uram1000005364	eukaryota>fungi>mucoromycotina	Umbelopsis ramanniana	>Uram1000005364	NA	Snf7	000003.472	pspa	NA	NA	-
 Caps1000007247	-	Snf7	Snf7	ParB	220	Caps1000007247	eukaryota>metazoa>annelida	Capitella spI	>Caps1000007247	NA	Snf7	000003.472	pspa	NA	NA	-
 Caps1000013077	-	Snf7	Snf7	-	219	Caps1000013077	eukaryota>metazoa>annelida	Capitella spI	>Caps1000013077	NA	Snf7	000003.472	pspa	NA	NA	-
-XP_001837127.1	Snf7*->	SIG+Snf7	Snf7	SIG	217	CC1G_00263	eukaryota>fungi>basidiomycota	Coprinopsis cinerea okayama7	NA	NA	NA	NA	NA	NA	NA	NA
 Chet1000008429	-	Snf7	Snf7	SIG	215	Chet1000008429	eukaryota>fungi>ascomycota	Cochliobolus heterostrophus	>Chet1000008429	NA	Snf7	000003.472	pspa	NA	NA	-
 Lhya1000001166	-	SIG+Snf7	Snf7	SIG	215	Lhya1000001166	eukaryota>fungi>mucoromycotina	Lichtheimia hyalospora	>Lhya1000001166	NA	Snf7	000003.472	pspa	NA	NA	-
 Uram1000004439	-	SIG+Snf7	Snf7	SIG	215	Uram1000004439	eukaryota>fungi>mucoromycotina	Umbelopsis ramanniana	>Uram1000004439	NA	Snf7	000003.472	pspa	NA	NA	-
-XP_001837046.1	-	SIG+Snf7	Snf7	SIG	212	CC1G_00182	eukaryota>fungi>basidiomycota	Coprinopsis cinerea okayama7	NA	NA	NA	NA	NA	NA	NA	NA
 Bcir1000010838	-	SIG+Snf7	Snf7	SIG	210	Bcir1000010838	eukaryota>fungi>mucoromycotina	Backusella circina	>Bcir1000010838	NA	Snf7	000003.472	pspa	NA	NA	-
 Smed1000001895	-	Snf7	Snf7	-	204	Smed1000001895	eukaryota>metazoa>platyhelminthe	Schmidtea mediterranea	>Smed1000001895	NA	Snf7	000003.472	pspa	NA	NA	-
 Crev1000006838	-	Snf7	Snf7	-	167	Crev1000006838	eukaryota>fungi>kickxellomycotina	Coemansia reversa	>Crev1000006838	NA	Snf7	000003.472	pspa	NA	NA	-
@@ -71,7 +67,6 @@ Smar1000004749	-	Snf7	Snf7	-	199	Smar1000004749	eukaryota>metazoa>arthropoda>myr
 Smar1000008107	-	Snf7	Snf7	-	199	Smar1000008107	eukaryota>metazoa>arthropoda>myriapoda	Strigamia maritima	>Smar1000008107	NA	Snf7	000005.261	pspa	NA	NA	-
 Chet1000003320	-	Snf7	Snf7	-	198	Chet1000003320	eukaryota>fungi>ascomycota	Cochliobolus heterostrophus	>Chet1000003320	NA	Snf7	000005.261	pspa	NA	NA	-
 Smed1000026970	-	Snf7	Snf7	-	198	Smed1000026970	eukaryota>metazoa>platyhelminthe	Schmidtea mediterranea	>Smed1000026970	NA	Snf7	000005.261	pspa	NA	NA	-
-XP_001837043.2	Snf7*-><-?||?->Snf7*->	Snf7	Snf7	-	196	CC1G_00179	eukaryota>fungi>basidiomycota	Coprinopsis cinerea okayama7	NA	NA	NA	NA	NA	NA	NA	NA
 Smar1000009347	-	Snf7	Snf7	-	184	Smar1000009347	eukaryota>metazoa>arthropoda>myriapoda	Strigamia maritima	>Smar1000009347	NA	Snf7	000005.261	pspa	NA	NA	-
 APW96603.1	PspA*->	PspA_IM30	PspA	-	290	CHINAEXTREME_01925	archaea>euryarchaeota	Halobiforma lacisalsi AJ5	phage shock protein A [Halobiforma lacisalsi AJ5]	1134496586	PspA	000007.206	pspa	NA	NA	GCA_000226975.3
 Pram1000000796	-	SIG+Snf7	SIG+Snf7	SIG	236	Pram1000000796	eukaryota>stramenopiles	Phytophthora ramorum	>Pram1000000796	NA	Snf7	000008.183	pspa	NA	NA	-
@@ -85,13 +80,10 @@ Smar1000006823	-	Snf7	Snf7	-	210	Smar1000006823	eukaryota>metazoa>arthropoda>myr
 Pisp1000003886	-	SIG+Snf7	SIG+Snf7	SIG	194	Pisp1000003886	eukaryota>fungi>neocallimastigomycota	Piromyces sp	>Pisp1000003886	NA	Snf7	000008.183	pspa	NA	NA	-
 Bnat1000017100	-	Snf7	Snf7	-	152	Bnat1000017100	eukaryota>rhizaria	Bigelowiella natans	>Bnat1000017100	NA	Snf7	000008.183	pspa	NA	NA	-
 Uram1000009541	-	Snf7	Snf7	-	146	Uram1000009541	eukaryota>fungi>mucoromycotina	Umbelopsis ramanniana	>Uram1000009541	NA	Snf7	000008.183	pspa	NA	NA	-
-XP_001829032.2	<-Snf7*	Snf7	Snf7	-	140	CC1G_01712	eukaryota>fungi>basidiomycota	Coprinopsis cinerea okayama7	NA	NA	NA	NA	NA	NA	NA	NA
-CCQ74391.1	<-SIG+TM<-SIG+TM+TM<-PspA*	PspA_IM30	PspA	-	224	MGMAQ_2530	bacteria>proteobacteria>alphaproteobacteria	Magnetospira sp. QH-2	PspA&	NA	NA	NA	NA	NA	NA	NA
 Smar1000007025	-	Snf7	Snf7	-	435	Smar1000007025	eukaryota>metazoa>arthropoda>myriapoda	Strigamia maritima	>Smar1000007025	NA	Snf7	000021.18	pspa	NA	NA	-
 Chet1000001694	-	Snf7+Atrophin-1	Snf7	-	524	Chet1000001694	eukaryota>fungi>ascomycota	Cochliobolus heterostrophus	>Chet1000001694	NA	Snf7	000027.11	pspa	NA	NA	-
 Uram1000003873	-	Snf7	Snf7	-	467	Uram1000003873	eukaryota>fungi>mucoromycotina	Umbelopsis ramanniana	>Uram1000003873	NA	Snf7	000047.6	pspa	NA	NA	-
 Bcir1000007249	-	SIG+Snf7	SIG+Snf7	SIG	425	Bcir1000007249	eukaryota>fungi>mucoromycotina	Backusella circina	>Bcir1000007249	NA	Snf7	000047.6	pspa	NA	NA	-
-XP_001833068.2	<-SIG+Snf7*	Snf7	Snf7	-	472	CC1G_01130	eukaryota>fungi>basidiomycota	Coprinopsis cinerea okayama7	NA	NA	NA	NA	NA	NA	NA	NA
 Bcir1000003327	-	Snf7	Snf7	-	296	Bcir1000003327	eukaryota>fungi>mucoromycotina	Backusella circina	>Bcir1000003327	NA	Snf7	000097.3	pspa	NA	NA	-
 Lhya1000002521	-	Snf7	Snf7	-	290	Lhya1000002521	eukaryota>fungi>mucoromycotina	Lichtheimia hyalospora	>Lhya1000002521	NA	Snf7	000097.3	pspa	NA	NA	-
 Chet1000008504	-	Uso1_p115_head+CALCOCO1+Uso1_p115_C	EP1	-	1037	Chet1000008504	eukaryota>fungi>ascomycota	Cochliobolus heterostrophus	>Chet1000008504	NA	EP1	000139.2	pspa	NA	NA	-
@@ -105,14 +97,10 @@ Crev1000003711	-	Snf7	Snf7	-	240	Crev1000003711	eukaryota>fungi>kickxellomycotin
 Pisp1000009679	-	Snf7	Snf7	SIG	208	Pisp1000009679	eukaryota>fungi>neocallimastigomycota	Piromyces sp	>Pisp1000009679	NA	Snf7	000202.1	pspa	NA	NA	-
 Smed1000006266	-	Snf7	Snf7	ParB	158	Smed1000006266	eukaryota>metazoa>platyhelminthe	Schmidtea mediterranea	>Smed1000006266	NA	Snf7	000202.1	pspa	NA	NA	-
 Bnat1000009644	-	PspA_IM30	PspA	-	157	Bnat1000009644	eukaryota>rhizaria	Bigelowiella natans	>Bnat1000009644	NA	PspA	000203.1	pspa	NA	NA	-
-XP_002911146.1	<-EP1*	ERM+GAS2	EP1	-	1932	CC1G_14578	eukaryota>fungi>basidiomycota	Coprinopsis cinerea okayama7	NA	NA	NA	NA	NA	NA	NA	NA
-XP_001832385.2	<-EP1*	CCDC158+ATG11+PARM	EP1	-	1399	CC1G_07645	eukaryota>fungi>basidiomycota	Coprinopsis cinerea okayama7	NA	NA	NA	NA	NA	NA	NA	NA
 Pram1000007912	-	NupH_GANP+SAC3_GANP+TPH	EP1	-	1281	Pram1000007912	eukaryota>stramenopiles	Phytophthora ramorum	>Pram1000007912	NA	EP1	000204.1	pspa	NA	NA	-
-XP_001834155.2	SIG+SidE*->	SIG+Myosin_tail_1+DUF566	SIG+SidE	SIG	1313	CC1G_09112	eukaryota>fungi>basidiomycota	Coprinopsis cinerea okayama7	NA	NA	NA	NA	NA	NA	NA	NA
 Bnat1000002812	-	DUF4200+DUF2353	PDZ+EP1	-	1026	Bnat1000002812	eukaryota>rhizaria	Bigelowiella natans	>Bnat1000002812	NA	PDZ+EP1	000272.1	pspa	NA	NA	-
 Caps1000014654	-	EF-hand_4+MISS+DUF737+ERM+SH3_9+SH3_1+SH3_1+SH3_9	EP1+SH3+SH3+SH3+SH3	-	1159	Caps1000014654	eukaryota>metazoa>annelida	Capitella spI	>Caps1000014654	NA	EP1+SH3+SH3+SH3+SH3	000291.1	pspa	NA	NA	-
 Caps1000018428	-	VSP+Ephrin_rec_like+TM+TM+SMC_N	TM+TM+EP1+Nop52+EP1	TM+TM	9363	Caps1000018428	eukaryota>metazoa>annelida	Capitella spI	>Caps1000018428	NA	TM+TM+EP1+Nop52+EP1	000345.1	pspa	NA	NA	-
-XP_001833851.1	MIP-T3+EP1+EP1*->	DUF1777+CEP63+ARGLU	MIP-T3+EP1+EP1	-	1988	CC1G_01528	eukaryota>fungi>basidiomycota	Coprinopsis cinerea okayama7	NA	NA	NA	NA	NA	NA	NA	NA
 Bnat1000002828	-	SIG+Granulin+Herpes_BLLF1+HCR+SMC_N	SIG+DUF572+LINK	SIG	1990	Bnat1000002828	eukaryota>rhizaria	Bigelowiella natans	>Bnat1000002828	NA	SIG+DUF572+LINK	000421.1	pspa	NA	NA	-
 Bnat1000015234	-	VSP+VSP+Ephrin_rec_like+Ephrin_rec_like+Ephrin_rec_like+Cast+Myosin_tail_1+ARGLU	EP1+EP1+SPX+PspA+EP1+PspA	-	5799	Bnat1000015234	eukaryota>rhizaria	Bigelowiella natans	>Bnat1000015234	NA	EP1+EP1+SPX+PspA+EP1+PspA	000458.1	pspa	NA	NA	-
 Bnat1000000161	-	TPH	BetaPropeller+BetaPropeller+EP1	-	1077	Bnat1000000161	eukaryota>rhizaria	Bigelowiella natans	>Bnat1000000161	NA	BetaPropeller+BetaPropeller+EP1	000467.1	pspa	NA	NA	-
