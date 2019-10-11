@@ -1,5 +1,8 @@
 #####Generate Missing files
 #####Samuel Chen; + JR has joined the party! :(
+## issue: input file hasn't been merged with missing_* files before checking!!
+## everything would have to be rerun soon!
+
 library(tidyverse)
 source("R/reverse_operons.R")
 source("R/summarize.R")
@@ -52,6 +55,10 @@ Sp.q.small <- prot %>%
   summarise(tot=n())
 # Sp.q.small: this is OK except for the first one -- bacterium ...
 
+# Sp.q.small <- prot %>%
+#   filter(!grepl(pattern="[A-Z]", x=Species.q)) %>%
+#   write_tsv("data/acc_files/prob_files/species.q.small_na.txt")
+
 # Species.q with CAPS -- checking...
 Sp.q.caps <- prot %>%
   filter(grepl(pattern="[A-Z]", x=Species.q)) %>%
@@ -63,17 +70,48 @@ Sp.q.caps <- prot %>%
 #########################################
 ## Empty rows in GC, DA, GCA, GCA_non_euk
 ## NEED TO INCLUDE NA and "" as well
-gc_blank <- all_with_tax_gca %>% filter( grepl("^-$", GenContext.orig)) %>% distinct()
-da_blank <- all_with_tax_gca %>% filter( grepl("^-$", DomArch.orig)) %>% distinct()
+empty_match <- c("^$", "^ $", "^-$")
+gc_missing <- all_with_tax_gca %>%
+  filter(grepl(paste(empty_match,collapse="|"), GenContext.orig) |
+           is.na(GenContext.orig))
 
-gca_blank <- all_with_tax_gca %>% filter( grepl("^-$", GCA_ID) | is.na(GCA_ID)) %>% distinct()
-gca_non_euk <- gca_blank %>% filter(!grepl("^eukaryota", Lineage) )
+da_missing <- all_with_tax_gca %>%
+  filter(grepl(paste(empty_match,collapse="|"), DomArch.orig) |
+           is.na(DomArch.orig))
+
+gca_missing <- all_with_tax_gca %>%
+  filter(grepl(paste(empty_match,collapse="|"), GCA_ID) |
+           is.na(GCA_ID))
+gca_non_euk <- gca_missing %>% filter(!grepl("^eukaryota", Lineage))
+
+taxid_missing <- all_with_tax_gca %>%
+  filter(grepl(paste(empty_match,collapse="|"), TaxID) |
+           is.na(TaxID))
+
+spp_oldnew_missing <- all_with_tax_gca %>%
+  filter(grepl(paste(empty_match,collapse="|"), Species.orig) |
+           is.na(Species.orig) |
+           grepl(paste(empty_match,collapse="|"), Species.q) |
+           is.na(Species.q))
+
+lin_missing <- all_with_tax_gca %>%
+  filter(grepl(paste(empty_match,collapse="|"), Lineage) |
+           is.na(Lineage))
+
+gi_missing <- all_with_tax_gca %>%
+  filter(grepl(paste(empty_match,collapse="|"), GI) |
+           is.na(GI))
 
 # Summarizing by lineage
 # ?? wonder why??
 lineage_fix <- all_with_tax_gca %>% group_by(Lineage) %>% summarise(count = n()) %>% arrange(+count)
 
+# Last written: Oct 11, 2019
 #write_tsv(lineage_fix,"data/acc_files/prob_files/lineage_summary.txt")
-#write_tsv(gc_blank, "data/acc_files/prob_files/gc_blank.txt")
-#write_tsv(gca_blank, "data/acc_files/prob_files/gca_blank.txt")
-#write_tsv(da_blank, "data/acc_files/prob_files/da_blank.txt")
+# write_tsv(gc_missing, "data/acc_files/prob_files/gc_missing.txt")
+# write_tsv(gca_missing, "data/acc_files/prob_files/gca_missing.txt")
+# write_tsv(da_missing, "data/acc_files/prob_files/da_missing.txt")
+# write_tsv(taxid_missing, "data/acc_files/prob_files/taxid_missing.txt")
+# write_tsv(spp_oldnew_missing,
+#           "data/acc_files/prob_files/spp_oldnew_missing.txt")
+# write_tsv(gi_missing, "data/acc_files/prob_files/gi_missing.txt")
