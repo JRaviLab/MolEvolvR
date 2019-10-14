@@ -41,9 +41,10 @@
   - [ ] filter_for_phylo
 
 ## Summary stats
-- [ ] counts_elements
-- [ ] elements2words
-- [ ] words2wc
+- [ ] count_bycol
+- [ ] generate_wordcount
+  - [ ] elements2words
+  - [ ] words2wc
 - [ ] summary_bylin (for DA, GC)
   - [ ] summ_DA_byLin
   - [ ] summ_GC_byDALin
@@ -55,13 +56,14 @@
 - [ ] find_paralogs
 
 ## Plotting
-- [x] upset_plot
+- [ ] upset_plot
+  - [ ] should depend on generate_wordcount
 - [x] lineage_DA_plot
 - [x] lineage_GC_plot
 - [x] lineage_domain_repeats_plot??
 - [ ] wordcloud
-- [ ] msa
-- [ ] phylotree?
 - [ ] msa_tree
+  - [ ] msa
+  - [ ] phylotree?
 - [ ] full network
 - [ ] network subsets
