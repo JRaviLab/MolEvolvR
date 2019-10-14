@@ -1,11 +1,15 @@
 #setwd("C:/Users/samue/Google_Drive/GitHub/the-approach")
 
+# Also, get some numbers for eukaryotes!
+
 find_paralogs_new <- function(df){
   #Remove eukaryotes
   df <- df %>% filter(!grepl("^eukaryota",Lineage))
-  paralogTable <- df %>% group_by(Query,GCA_ID) %>%
-    count(DomArch.orig)%>%
-    filter(n>1) %>% arrange(-n)
+  paralogTable <- df %>%
+    group_by(Query,GCA_ID) %>%
+    count(DomArch.orig) %>%
+    filter(n>1) %>%
+    arrange(-n)
   colnames(paralogTable)[colnames(paralogTable)=="n"] = "Count"
   ###Merge with columns: AccNum,TaxID, and GCA/ Species?
   #paralogTable <- df %>% select(AccNum, TaxID, GCA_ID) %>%
@@ -20,7 +24,8 @@ find_paralogs_old <- function(df){
   df <- df %>% filter(!grepl("^eukaryota",Lineage))
   paralogTable <- df
   print(colnames(paralogTable))
-  paralogTable <-  group_by(.data = paralogTable, Query,Species.orig ) %>% count()%>%
+  paralogTable <-  group_by(.data = paralogTable, Query,Species.orig ) %>%
+    count()%>%
     filter(n>1) %>% arrange(-n)
   colnames(paralogTable)[colnames(paralogTable)=="n"] = "Count"
   ###Merge with columns: AccNum,TaxID, and GCA/ Species?

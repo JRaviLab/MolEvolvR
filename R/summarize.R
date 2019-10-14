@@ -8,29 +8,35 @@
 #################
 library(tidyverse)
 conflicted::conflict_prefer("filter", "dplyr")
+prot <- read_tsv("data/rawdata_tsv/all_raw.txt")
 
 ###########################
 ## COUNTS of DAs and GCs ##
 ## Before/after break up ##
 ###########################
 ## Function to obtain element counts (DA, GC)
-counts_elements <- function(x, min.freq) {	x %>%
+count_bycol <- function(prot=prot, column="DomArch", min.freq=1) {
+  counts <- prot %>%
+    select(column) %>%
     table() %>%
     as_tibble() %>%
-    `colnames<-`(c("elements", "freq")) %>%
-    filter(!grepl("^-$", elements)) %>%		# remove "-"
+    `colnames<-`(c(column, "freq")) %>%
+    filter(!grepl("^-$", column)) %>%		# remove "-"
+    filter(!is.na(column)) %>%
     arrange(-freq) %>% filter(freq>=min.freq)
+  return(counts)
 }
 
 ## Function to break up ELEMENTS to WORDS for DA and GC
-elements2words <- function(x, type) {
-  y <- x %>%
+elements2words <- function(prot, column= "DomArch",conversion_type="da2doms") {
+  z1 <- prot %>%
+    select(column) %>%
     str_replace_all("\\,"," ") %>%
     str_replace_all("\""," ")
-  switch(type,
-         da2doms = {z <- y %>%
+  switch(conversion_type,
+         da2doms = { z2 <- z1 %>%
            str_replace_all("\\+"," ")},
-         gc2da = {z <- y %>%
+         gc2da = { z2 <- z1 %>%
            str_replace_all("\\<-"," ") %>%
            str_replace_all("-\\>"," ") %>%
            str_replace_all("\\|"," ")})
@@ -39,7 +45,7 @@ elements2words <- function(x, type) {
   # str_replace_all("\\(s\\)"," ") %>%		# Ignoring repeats
   # str_replace_all("-"," ") %>%
   ## replace \n, \r, \t
-  z %>%
+  z3 <- z2 %>%
     str_replace_all("\n"," ") %>%
     str_replace_all("\r"," ") %>%
     str_replace_all("\t"," ") %>%
@@ -48,6 +54,7 @@ elements2words <- function(x, type) {
     str_replace_all("   "," ") %>%
     str_replace_all("  "," ") %>%
     str_replace_all("  "," ")
+  return(z3)
 }
 
 ## Function to get WORD COUNTS [DOMAINS (DA) or DOMAIN ARCHITECTURES (GC)]
@@ -84,6 +91,21 @@ filter.freq <- function(x, min.freq){ x %>%
 ## SUMMARY FUNCTIONS ####
 ## Changed Lineage to Lineage.final on Aug 31
 #########################
+summarize_bylin <- function(prot="prot", column="DomArch", by="Lineage",
+                            query="PspA"){
+  column <- as.name(column); by <- as.name(by)
+  if(query==which("all")){
+    prot <- prot
+  } else { prot <- prot %>% filter(grepl(pattern=query, x=Query,
+                                         ignore.case=T))}
+  prot %>%
+    filter(!grepl("^-$", {{column}})) %>%
+    group_by({{column}}, {{by}}) %>%
+    summarise(count=n()) %>% # , bin=as.numeric(as.logical(n()))
+    arrange(desc(count))
+}
+
+
 ## Function to summarize and retrieve counts by Domains & Domains+Lineage
 summ.DA.byLin <- function(x) { x %>%
     filter(!grepl("^-$", DomArch.norep)) %>%
