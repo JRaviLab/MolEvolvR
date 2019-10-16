@@ -50,11 +50,11 @@ all_mis <- missing_gis %>% group_by(AccNum) %>% count() %>% arrange(-n) # AccNum
 all_acc <- all_reduce_merge %>%group_by(AccNum) %>%count() %>% arrange(-n) %>% filter(n!=1)
 
 
-missing_spp_taxids <-read_tsv("data/acc_files/prob_files/missing_spp_taxids.txt", col_names = F)
+missing_spp_taxids <-read_tsv("data/acc_files/prob_files/missing_spp_taxids.txt", col_names = F) %>% distinct()
 colnames(missing_spp_taxids) = c("AccNum", "TaxID", "Species")
 missing_spp_taxids %>% group_by(AccNum,Species) %>% count() %>% arrange(-n)
 
-missing_gis <- left_join(missing_gis,missing_spp_taxids, c("AccNum","Species") ) %>% distinct()#11 extra rows
+#missing_gis <- left_join(missing_gis,missing_spp_taxids, c("AccNum","Species") ) %>% distinct()#11 extra rows
 
 length(setdiff(all_mis$AccNum,all_acc$AccNum)) #only 454, I want it to be 457
 #intersect(all_mis$AccNum,all_acc$AccNum)
@@ -72,9 +72,19 @@ for( x in missing_gis$AccNum){
   all_test[acc_index,"GCA_ID"] <- acc_match$GCA_ID
   all_test[acc_index,"Annotation"] <- acc_match$Annotation
   all_test[acc_index,"GI"] <- acc_match$GI
+  #all_test[acc_index,"TaxID"] <- acc_match$TaxID
+}
+
+for( x in missing_spp_taxids$AccNum){
+  acc_match <- filter(missing_spp_taxids, AccNum==x) #Gets the observations of row
+  acc_index <- grep(x,all_reduce_merge$AccNum) #Gets the row numbers
+  all_test[acc_index,"Species.q"] <- acc_match$Species
   all_test[acc_index,"TaxID"] <- acc_match$TaxID
 }
 
+all_test$Length = as.numeric(all_test$Length)
+ALLL$GI = as.character(ALLL$GI)
+Diff <- setdiff(all_test,ALLL)
 
 diff <- setdiff(all_test,all_reduce_merge)
 
