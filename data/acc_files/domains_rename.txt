@@ -1,4 +1,8 @@
 old	new
+PspA_IM30  PspA
+PspA/IM30  PspA
+DUF1700-alpha-helical  DUF1700-ahelical
+DUF1707-SHOCT-bihelical  DUF1707-SHOCT
 toast-rack	Toast-rack
 toastrack	Toast-rack
 Toastrack	Toast-rack
@@ -7,5 +11,5 @@ Toast_rack	Toast-rack
 DUF4097	Toast-rack
 DUF2154	Toast-rack
 DUF2807	Toast-rack
-DUF2157	Toast_rack_N
+DUF2157	Toast-rack_N
 ASH-IG	IG
