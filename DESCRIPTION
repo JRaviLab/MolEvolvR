@@ -12,6 +12,7 @@ BugReports: https://github.com/cpathogeno/the-approach/issues
 biocViews:
 Imports:
     tidyverse,
+    conflicted,
     here,
     UpSetR,
     gridExtra,

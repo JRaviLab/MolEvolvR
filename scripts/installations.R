@@ -1,7 +1,7 @@
 
 # CRAN installations
 install.packages(c("devtools", "BiocManager",
-                   "docstring", "roxygen2",
+                   "conflicted","docstring", "roxygen2",
                    "tidyverse", "here", "testthat", "reprex", "data.table",
                    "rmarkdown", "knitr", "blogdown", "bookdown",
                    "Rcpp", "rgl",
