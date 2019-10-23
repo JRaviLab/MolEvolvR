@@ -1,10 +1,13 @@
 domains
 DUF1700-alpha-helical
-DUF1707-SHOCT
+DUF1700-ahelical
 DUF1700
+DUF1707-SHOCT-bihelical
+DUF1707-SHOCT
 DUF1707
-DUF3046
 LiaI-LiaF-TM
+Toast-rack
+Toast-rack_N
 LiaI
 LiaF
 LiaG
@@ -13,7 +16,7 @@ PspA_IM30
 PspB
 PspC
 PspM
+PspN_N
 PspN
-Toast-rack
-Toast-rack_N
+DUF3046
 Snf7
