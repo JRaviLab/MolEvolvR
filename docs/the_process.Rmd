@@ -99,7 +99,7 @@ all <- all %>%
 ## Data import
 ```{r import, eval=T, results='hide', message=F}
 # Example import files: individual or combined ones, pspa.txt, all_raw.txt
-prot <- read_delim("data/rawdata_tsv/all_merged_gca_taxid.txt",
+prot <- read_delim("data/rawdata_tsv/all_raw_notax.txt",
                    delim="\t", col_names=T, comment="#", trim_ws=T,
                    escape_double=FALSE, na="NA")
 
@@ -109,8 +109,8 @@ lineages_map <- read_delim("data/acc_files/organisms2lineages_map_bae_20170828.t
 domains_rename <- read_delim("data/acc_files/domains_rename.txt",
                               delim="\t", col_names=TRUE)
 
-domains_ignore <- read_delim("data/acc_files/domains_ignore.txt",
-                             delim="\t", col_names=T)
+# domains_ignore <- read_delim("data/acc_files/domains_ignore.txt",
+#                              delim="\t", col_names=T)
 
 domains_keep <- read_delim("data/acc_files/domains_keep.txt",
                             delim="\t", col_names=T)
@@ -139,24 +139,24 @@ prot$Species.new[rows_na] <- prot$Species.orig[rows_na]
 
 # Cleanup GenContext
 prot <- prot %>%
-  cleanup_gencontext(FALSE)
-
-prot <- prot %>%
-  cleanup_domarch(TRUE, domains_rename, domains_ignore)
-
+  cleanup_gencontext(TRUE) #TRUE? Calls RevOperons?
 # Reverse/Straighten Operons
 #####Lots of warnings?
 prot <- prot %>%
   reverse_operon()
+
+prot <- prot %>%
+  cleanup_domarch(TRUE, domains_rename) # shouldn't call domains_ignore
+
 ```
 
 ## Data analysis
 ### Select columns for data export
 ```{r select-cols, eval=T}
 prot_data <- prot %>%
-  select(AccNum, Species, Lineage=Lineage.final,
-         DomArch=DomArch.norep, GenContext=GenContext.norep,
-         Length, GI, GenName, Annotation)
+  select(AccNum, Species, Lineage,
+         DomArch, GenContext,
+         Length, GeneName, TaxID, GCA_ID)
 ```
 
 ### Viewing your data
