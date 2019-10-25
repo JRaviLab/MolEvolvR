@@ -117,7 +117,7 @@ cleanup_gencontext <- function(prot, repeat2s=TRUE, remove_empty=FALSE){
 #Don't call other psp functions within these functions
 
 ##############################
-cleanup_domarch <- function(prot, repeat2s=TRUE, domains_rename, domains_ignore){
+cleanup_domarch <- function(prot, repeat2s=TRUE, domains_rename, domains_ignore = NULL){
   #'Cleanup Domain Architectures
   #'
   #'Cleans the DomArch column by replacing/removing certain domains
@@ -137,6 +137,7 @@ cleanup_domarch <- function(prot, repeat2s=TRUE, domains_rename, domains_ignore)
 
   # Condense repeats
   if(repeat2s){
+    ## Error in UseMethod("tbl_vars") : no applicable method for 'tbl_vars' applied to an object of class "character"
     prot <- repeat2s(prot=prot, by_column="DomArch")
   }
 
@@ -149,11 +150,12 @@ cleanup_domarch <- function(prot, repeat2s=TRUE, domains_rename, domains_ignore)
 
   # Remove domains based on the domains_ignore list
   # ?? Remove the domains or the rows? Check, please!
-  for(j in 1:length(as.vector(domains_ignore$domains))){
-    prot$DomArch <- str_remove_all(prot$DomArch,
-                                   as.vector(domains_ignore$domains[j]))
+  if( !is.null(domains_ignore)){
+    for(j in 1:length(domains_ignore$domains)){
+      prot$DomArch <- str_remove_all(prot$DomArch,
+                                     as.vector(domains_ignore$domains[j]))
+    }
   }
-
   # Remove '+' at the start and end, as well as consecuative '+'
   prot$DomArch <- gsub("\\++\\+","\\+", prot$DomArch)
   prot$DomArch <- gsub("^\\+","", prot$DomArch)
@@ -187,7 +189,6 @@ cleanup_clust <- function(cls_data, repeat2s=TRUE, domains_keep, domains_rename)
 
   for(x in 1:length(domains_rename$old)){
     target <- domains_rename$old[x]
-    print(target)
     replacement <- domains_rename$new[x]
     cls_data$ClustName <- cls_data$ClustName %>% str_replace_all(target,replacement)
   }

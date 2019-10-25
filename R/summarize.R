@@ -8,7 +8,6 @@
 #################
 library(tidyverse)
 conflicted::conflict_prefer("filter", "dplyr")
-prot <- read_tsv("data/rawdata_tsv/all_raw.txt")
 
 ###########################
 ## COUNTS of DAs and GCs ##

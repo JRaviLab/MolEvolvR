@@ -132,17 +132,14 @@ prot <- prot %>%
   cleanup_species(FALSE)
 
 # Updated Species column
-prot <- prot %>% mutate(Species.new = Species.q )
-rows_na <- which(is.na(prot$Species.new))
-prot$Species.new[rows_na] <- prot$Species.orig[rows_na]
+#prot <- prot %>% mutate(Species.new = Species.q )
+#rows_na <- which(is.na(prot$Species.new))
+#prot$Species.new[rows_na] <- prot$Species.orig[rows_na]
 
 # Cleanup GenContext
+# Calls reverse_operons
 prot <- prot %>%
   cleanup_gencontext(TRUE) #TRUE? Calls RevOperons?
-# Reverse/Straighten Operons
-#####Lots of warnings?
-prot <- prot %>%
-  reverse_operon()
 
 prot <- prot %>%
   cleanup_domarch(TRUE, domains_rename) # shouldn't call domains_ignore
