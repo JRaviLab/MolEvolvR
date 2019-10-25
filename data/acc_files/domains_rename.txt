@@ -1,8 +1,8 @@
 old	new
-PspA_IM30  PspA
-PspA/IM30  PspA
-DUF1700-alpha-helical  DUF1700-ahelical
-DUF1707-SHOCT-bihelical  DUF1707-SHOCT
+PspA_IM30	PspA
+PspA/IM30	PspA
+DUF1700-alpha-helical	DUF1700-ahelical
+DUF1707-SHOCT-bihelical	DUF1707-SHOCT
 toast-rack	Toast-rack
 toastrack	Toast-rack
 Toastrack	Toast-rack
