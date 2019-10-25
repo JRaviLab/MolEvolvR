@@ -123,9 +123,8 @@ query_domains <- read_delim("data/acc_files/query_domains.txt",
 ### DomArch cleanup & Reversal of operons
 ```{r cleanup, eval=T, results='hide', message=F}
 # Cleanup Clusters
-###Cleanup clust errors
 prot <- prot %>%
-  cleanup_clust(TRUE)
+  cleanup_clust(TRUE,domains_keep, domains_rename)
 
 # Cleanup Species
 ###Currently returns null
