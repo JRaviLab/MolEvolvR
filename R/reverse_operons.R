@@ -110,7 +110,7 @@ reverse_operon <- function(prot){
 
   #return(rev.gencontext)
 
-  return(cbind(prot,"GenContext.norep"=rev.gencontext))
+  return(as.tbl(cbind(prot,"GenContext.norep"=rev.gencontext)))
 
 }
 
