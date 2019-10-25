@@ -164,7 +164,7 @@ cleanup_domarch <- function(prot, repeat2s=TRUE, domains_rename, domains_ignore)
 }
 
 ######################
-cleanup_clust <- function(cls_data, repeat2s=TRUE, domains_keep){
+cleanup_clust <- function(cls_data, repeat2s=TRUE, domains_keep, domains_rename){
   #'Cleanup cluster file
   #'
   #'Cleans a cluster file by removing rows that do not contain the query in the cluster.
@@ -177,22 +177,21 @@ cleanup_clust <- function(cls_data, repeat2s=TRUE, domains_keep){
   #'@param repeat2s Boolean. If TRUE, repeated domains in 'ClustName' are condensed. Default is TRUE.
   #'@examples cleanup_clust(prot, "ClustName", TRUE)
 
-  master <- cls_data[0,]
-  #colnames(master) <- colnames(cls_data)
+  # Character for greping for rows with domains_keep
+  # Contains all domains separated by "|"
+  domains_for_grep <- paste(domains_keep$domains, collapse = "|")
 
-  # # Retrieve unique query names
-  # queryNames <- select(cls_data, Query) %>%
-  #   distinct()
-  for(i in 1:length(queryNames$Query)){
-    #print(queryNames[i,])
-    filtered_by_query <- cls_data %>%
-      filter(Query == as.character(queryNames[i, "Query"]))
-    # Return BLASTCLUST names that match the 'domains to keep' list
-    master <- rbind(master,
-                    filtered_by_query[grep(queryNames[i,],
-                                           filtered_by_query$ClustName,
-                                           ignore.case = T),])
+  # Remove rows with no domains contained within domains_keep
+  cls_data <- cls_data %>% filter(grepl(domains_for_grep,ClustName))
+
+
+  for(x in 1:length(domains_rename$old)){
+    target <- domains_rename$old[x]
+    print(target)
+    replacement <- domains_rename$new[x]
+    cls_data$ClustName <- cls_data$ClustName %>% str_replace_all(target,replacement)
   }
+
 
   # Condense repeats
   if(repeat2s){
@@ -201,6 +200,6 @@ cleanup_clust <- function(cls_data, repeat2s=TRUE, domains_keep){
 
   # !!UNFIXED ISSUE!! SIG+TM+TM+... kind of architectures without explicit domain names are lost.
   # Need a way to take care of true hits that don't go by the expected domain name.
-  return(master)
+  return(cls_data)
 }
 
