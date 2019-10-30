@@ -100,11 +100,11 @@ all <- all %>%
 ```{r import, eval=T, results='hide', message=F}
 # Example import files: individual or combined ones, pspa.txt, all_raw.txt
 prot <- read_delim("data/rawdata_tsv/all_raw_notax.txt",
-                   delim="\t", col_names=T, comment="#", trim_ws=T,
+                   delim="\t", col_names=T, trim_ws=T,
                    escape_double=FALSE, na="NA")
 
 lineages_map <- read_delim("data/acc_files/organisms2lineages_map_bae_20170828.txt",
-                           delim="\t", col_names=T, comment="#", trim_ws=T)
+                           delim="\t", col_names=T, trim_ws=T)
 
 domains_rename <- read_delim("data/acc_files/domains_rename.txt",
                               delim="\t", col_names=TRUE)
@@ -123,26 +123,21 @@ query_domains <- read_delim("data/acc_files/query_domains.txt",
 ### DomArch cleanup & Reversal of operons
 ```{r cleanup, eval=T, results='hide', message=F}
 # Cleanup Clusters
+# Remove tails (singletons)?
 prot <- prot %>%
-  cleanup_clust(TRUE,domains_keep, domains_rename)
+  cleanup_clust(repeat2s = TRUE,domains_keep, domains_rename)
 
 # Cleanup Species
-###Currently returns null
 prot <- prot %>%
-  cleanup_species(FALSE)
-
-# Updated Species column
-#prot <- prot %>% mutate(Species.new = Species.q )
-#rows_na <- which(is.na(prot$Species.new))
-#prot$Species.new[rows_na] <- prot$Species.orig[rows_na]
+  cleanup_species(remove_empty = FALSE)
 
 # Cleanup GenContext
 # Calls reverse_operons
 prot <- prot %>%
-  cleanup_gencontext(TRUE) #TRUE? Calls RevOperons?
+  cleanup_gencontext(repeat2s = TRUE, remove_empty = FALSE, domains_rename) 
 
 prot <- prot %>%
-  cleanup_domarch(TRUE, domains_rename) # shouldn't call domains_ignore
+  cleanup_domarch(repeat2s = TRUE, domains_rename)
 
 ```
 
@@ -152,7 +147,7 @@ prot <- prot %>%
 prot_data <- prot %>%
   select(AccNum, Species, Lineage,
          DomArch, GenContext,
-         Length, GeneName, TaxID, GCA_ID)
+         Length, GeneName, GCA_ID)
 ```
 
 ### Viewing your data
@@ -163,14 +158,18 @@ paged_table(prot_data)
 ### Wordcounts
 ```{r wordcounts, eval=T}
 ## Counts of domains in XXX domain architectures
-DA.doms.wc <- prot$DA.doms %>%
+
+##### Obsolete Now: word counts now handled in upset/wordcloud functions #####
+
+## minimal functions may be able to removed and put within other summarize/ plotting functions
+DA.doms.wc <- prot %>% elements2words(column = "DomArch", conversion_type = "da2doms") %>%
   words2wc()
 DA.doms.wc %>%
   head() %>%
   kable()
 # DA.doms.wc.ge5 <- filter.freq(DA.doms.wc, 5)
 ## Counts of domain architectures in the GenContext of XXX homologs
-GC.DA.wc <- prot$GC.DA %>%
+GC.DA.wc <- prot %>% elements2words(column = "GenContext", conversion_type = "gc2da") %>%
   words2wc()
 GC.DA.wc %>%
   head() %>%
@@ -179,6 +178,7 @@ GC.DA.wc %>%
 
 ### UpSet plots
 ```{r upset-plot-da, eval=T, out.height="300px"}
+# Per
 upset.plot(prot, 10, "da2doms")
 ```
 
@@ -229,11 +229,14 @@ GC.cumulative %>%
 ```
 ### Lineage summary plots
 ```{r lin-summ-plot, eval=T, out.width='70%'}
-lineage.DA.plot(prot, DA.cumulative,
-                "DomArch.norep", "")
 
-lineage.DA.plot(prot, GC.cumulative,
-                "GenContext.norep", "")
+# now calculates and filters by totalcounts within function
+
+lineage.DA.plot(prot, 
+                colname = "DomArch", type = "da2doms", cutoff = 200)
+
+lineage.DA.plot(prot,
+                "GenContext", type = "gc2da", cutoff = 500)
 ```
 
 ### Add Leaves

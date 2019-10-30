@@ -48,7 +48,7 @@ reveql <- function(prot){
 ## The function to reverse operons
 
 reverse_operon <- function(prot){
-  gencontext <- prot$GenContext.orig
+  gencontext <- prot$GenContext
 
   gencontext <- gsub(pattern = ">",replacement = ">|",x = gencontext)
 
@@ -108,10 +108,9 @@ reverse_operon <- function(prot){
 
   rev.gencontext <- gsub(pattern = "=",replacement = "\\|\\|",rev.gencontext)
 
-  #return(rev.gencontext)
+  prot$GenContext <- rev.gencontext
 
-  return(as.tbl(cbind(prot,"GenContext.norep"=rev.gencontext)))
-
+  return(prot)
 }
 
 

@@ -40,8 +40,11 @@ upset.plot <- function(query_data="toast_rack.sub",
   #' column names.
 
   switch(type, # DA.doms.wc;
-         da2doms={wc <- DA.doms.wc; colname <- "DomArch.norep"},
-         gc2da={wc <- GC.DA.wc; colname <- "GenContext.norep"})
+         da2doms={wc <- query_data %>% elements2words(column = "DomArch",conversion_type = type)%>%
+           words2wc();
+                  colname <- "DomArch"},
+         gc2da={wc <- query_data %>% elements2words(column = "GenContext",conversion_type = type) %>% words2wc();
+                colname <- "GenContext"})
 
   ## Cutoff for most/least prevalent words
   words.gecutoff <- filter(wc, freq>=cutoff) # words.gecutoff <- DA.doms.wc
@@ -60,8 +63,8 @@ upset.plot <- function(query_data="toast_rack.sub",
   ## Creating UpSet data
   upset <- query_data %>%
     # filter(grepl(queryname, Query)) %>%
-    select(AccNum, Lineage, GenContext.norep, DomArch.norep,
-           words.gecutoff$words) %>%
+    select(AccNum, Lineage, GenContext, DomArch,
+           words.gecutoff$words) %>% ###What is this words.gecutoff$words?
     mutate_all(list(~if(is.numeric(.)) as.integer(.) else .)) %>%
     as.data.frame()
   ## Fix order of x and y variables
@@ -88,8 +91,9 @@ upset.plot <- function(query_data="toast_rack.sub",
 ###################
 
 lineage.DA.plot <- function(query_data="prot",
-                            query.summ.byLin="prot.DA.summ.byLin",
-                            colname="DomArch.norep", type="da2doms"){ # query.elements, query.words,
+                            #query.summ.byLin="prot.DA.summ.byLin",
+                            colname="DomArch",
+                            type="da2doms", cutoff = 0){ # query.elements, query.words,
   #' Lineage Plot: Heatmap of Domains/DAs/GCs vs Lineages
   #' @author Janani Ravi
   #' @keywords Lineages, Domains, Domain Architectures, GenomicContexts
@@ -113,22 +117,26 @@ lineage.DA.plot <- function(query_data="prot",
   #' column names.
 
   switch(type,
-         da2doms={colname <- "DomArch"},
-         gc2da={colname <- "GenContext"})
+         da2doms={colname <- "DomArch";
+         query.summ.byLin <- summ.DA.byLin(query_data) %>% total_counts(cutoff = cutoff, type="DA")},
+         gc2da={colname <- "GenContext";
+         query.summ.byLin <- summ.GC.byLin(query_data) %>% total_counts(cutoff = cutoff, type="GC")
+         })
+
 
   query_data <- query_data %>% filter(grepl("a", Lineage))
 
   query.summ.byLin.ggplot <- drop_na(query.summ.byLin) %>%
-    filter(count>1) %>%
-    within(Lineage.final <- factor(Lineage.final,
-                                   levels=names(sort(table(Lineage.final),
+    filter(count>1) %>%  # count or total count?
+    within(Lineage <- factor(Lineage,
+                                   levels=names(sort(table(Lineage),
                                                      decreasing=TRUE)))) %>%
     within(colname <- factor(colname,
                              levels=names(sort(table(colname),
                                                decreasing=F))))
   ## Tile plot
   ggplot(data=query.summ.byLin.ggplot,
-         aes_string(x="Lineage.final", y=colname)) +
+         aes_string(x="Lineage", y=colname)) +
     geom_tile(data=subset(query.summ.byLin.ggplot,
                           !is.na(count)),
               aes(fill=count),
@@ -159,7 +167,7 @@ lineage.neighbors.plot <- function(query_data="prot", query="pspa",
   #' @note Please refer to the source code if you have alternate file formats and/or
   #' column names.
 
-  query_data <- query_data %>% filter(grepl("a", Lineage.final))
+  query_data <- query_data %>% filter(grepl("a", Lineage))
   query.GCDA <- read_delim(paste0("Top-",query,"-neighbors.txt"),
                            delim="\t", escape_double=FALSE, col_names=FALSE,
                            na="NA", comment="#", trim_ws=TRUE)
@@ -179,18 +187,18 @@ lineage.neighbors.plot <- function(query_data="prot", query="pspa",
 
   query.ggplot <- query_data %>%
     gather(key=TopNeighbors.DA, value=count, 19:ncol(query_data)) %>%
-    select("Lineage.final", "TopNeighbors.DA", "count") %>% # "DomArch.norep","GenContext.norep",
-    group_by(TopNeighbors.DA, Lineage.final) %>%
+    select("Lineage", "TopNeighbors.DA", "count") %>% # "DomArch.norep","GenContext.norep",
+    group_by(TopNeighbors.DA, Lineage) %>%
     summarise(lincount=sum(count), bin=as.numeric(as.logical(lincount))) %>%
     arrange(desc(lincount)) %>%
     within(TopNeighbors.DA <- factor(TopNeighbors.DA,
                                      levels=rev(names(sort(table(TopNeighbors.DA),
                                                            decreasing=TRUE))))) %>%
-    within(Lineage.final <- factor(Lineage.final,
-                                   levels=names(sort(table(Lineage.final),
+    within(Lineage <- factor(Lineage,
+                                   levels=names(sort(table(Lineage),
                                                      decreasing=TRUE))))
 
-  ggplot(query.ggplot, aes(x=Lineage.final, y=TopNeighbors.DA)) +
+  ggplot(query.ggplot, aes(x=Lineage, y=TopNeighbors.DA)) +
     geom_tile(data=subset(query.ggplot,
                           !is.na(lincount)),		# bin
               aes(fill=lincount),								# bin
@@ -222,7 +230,7 @@ lineage.domain_repeats.plot <- function(query_data, colname) {
   ## Subsetting relevant columns
   ggplot.data <- query_data %>%
     # filter(grepl(queryname, Query)) %>%
-    select(DomArch.norep, Lineage.final, GenContext.norep,
+    select(DomArch.norep, Lineage, GenContext.norep,
            SIG.TM.LADB, GenContext, AccNum,
            query.DAdoms$domains) %>% # words.gecutoff$words
     mutate_all(list(~ if(is.numeric(.)) as.integer(.) else .)) %>%
@@ -235,7 +243,7 @@ lineage.domain_repeats.plot <- function(query_data, colname) {
   ## Gathering element/word columns
   ggplot.data.gather <- ggplot.data %>%
     gather(key=domains, value=count, 7:ncol(ggplot.data)) # %>%
-  # select(DomArch.norep, Lineage.final, domains, count)
+  # select(DomArch.norep, Lineage, domains, count)
 
   # ## written on Sep 4
   # write_delim(ggplot.data.gather,
@@ -243,7 +251,7 @@ lineage.domain_repeats.plot <- function(query_data, colname) {
   # 						delim="\t", col_names=TRUE)
 
   ## Stacked column plot
-  ggplot(data=ggplot.data.gather, aes(x=Lineage.final, y=domains)) + # aes_string # plot <- (
+  ggplot(data=ggplot.data.gather, aes(x=Lineage, y=domains)) + # aes_string # plot <- (
     # geom_col(position="fill") +
     geom_tile(data=subset(ggplot.data.gather, !is.na(count)),
               aes(fill=as.numeric(as.logical(count))),
@@ -282,11 +290,11 @@ wordcloud_element <- function(type="da2doms",
 
   switch(type, # DA.doms.wc;
          da2doms={
-           wc <- DA.doms.wc;
+           wc <- query_data %>% elements2words(column = "DomArch",conversion_type = type) %>% words2wc();
            # colname <- "DomArch.norep"
            },
          gc2da={
-           wc <- GC.DA.wc;
+           wc <- query_data %>% elements2words(column = "GenContext",conversion_type = type) %>% words2wc();
            # colname <- "GenContext.norep"
          })
 

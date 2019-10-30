@@ -82,7 +82,7 @@ repeat2s <- function(prot, by_column="DomArch"){
 }
 
 ##########################
-cleanup_gencontext <- function(prot, repeat2s=TRUE, remove_empty=FALSE){
+cleanup_gencontext <- function(prot, repeat2s=TRUE, remove_empty=FALSE, domains_rename){
   #'Cleanup Genomic Contexts
   #'
   #'Cleans up the GenContext column of a data frame by removing certain characters and rows.
@@ -98,6 +98,12 @@ cleanup_gencontext <- function(prot, repeat2s=TRUE, remove_empty=FALSE){
   # Condsense repeatsd
   if(repeat2s){
     prot <- repeat2s(prot, "GenContext")
+  }
+
+  for(x in 1:length(domains_rename$old)){
+    target <- domains_rename$old[x]
+    replacement <- domains_rename$new[x]
+    prot$GenContext <- prot$GenContext %>% str_replace_all(target,replacement)
   }
 
   # FUNCTIONS CALLED HERE, if else might be better since only two options, T and F
@@ -162,7 +168,6 @@ cleanup_domarch <- function(prot, repeat2s=TRUE, domains_rename, domains_ignore 
   prot$DomArch <- gsub("\\+$","", prot$DomArch)
 
   return(prot)
-  # return(cbind(prot, DomArch.old))
 }
 
 ######################
@@ -178,6 +183,9 @@ cleanup_clust <- function(cls_data, repeat2s=TRUE, domains_keep, domains_rename)
   #'@param by_column Boolean. If TRUE, 'ClustName' will be filtered based on domains to keep/remove. Default is TRUE.
   #'@param repeat2s Boolean. If TRUE, repeated domains in 'ClustName' are condensed. Default is TRUE.
   #'@examples cleanup_clust(prot, "ClustName", TRUE)
+
+
+  cls_data$ClustName <- cls_data$ClustName.orig
 
   # Character for greping for rows with domains_keep
   # Contains all domains separated by "|"
@@ -196,7 +204,7 @@ cleanup_clust <- function(cls_data, repeat2s=TRUE, domains_keep, domains_rename)
 
   # Condense repeats
   if(repeat2s){
-    prot <- repeat2s(prot, "ClustName")
+    cls_data <- repeat2s(cls_data, "ClustName")
   }
 
   # !!UNFIXED ISSUE!! SIG+TM+TM+... kind of architectures without explicit domain names are lost.
