@@ -88,7 +88,6 @@ filter.freq <- function(x, min.freq){ x %>%
 
 #########################
 ## SUMMARY FUNCTIONS ####
-## Changed Lineage to Lineage.final on Aug 31
 #########################
 summarize_bylin <- function(prot="prot", column="DomArch", by="Lineage",
                             query="PspA"){
@@ -107,42 +106,42 @@ summarize_bylin <- function(prot="prot", column="DomArch", by="Lineage",
 
 ## Function to summarize and retrieve counts by Domains & Domains+Lineage
 summ.DA.byLin <- function(x) { x %>%
-    filter(!grepl("^-$", DomArch.norep)) %>%
-    group_by(DomArch.norep, Lineage.final) %>%
+    filter(!grepl("^-$", DomArch)) %>%
+    group_by(DomArch, Lineage) %>%
     summarise(count=n()) %>% # , bin=as.numeric(as.logical(n()))
     arrange(desc(count))
 }
 summ.DA <- function(x){ x %>%
-    group_by(DomArch.norep) %>%
+    group_by(DomArch) %>%
     summarise(totalcount=sum(count), totallin=n()) %>% # totallin=n_distinct(Lineage),
     arrange(desc(totallin), desc(totalcount)) %>%
-    filter(!grepl(" \\{n\\}",DomArch.norep)) %>%
-    filter(!grepl("^-$", DomArch.norep))
+    filter(!grepl(" \\{n\\}",DomArch)) %>%
+    filter(!grepl("^-$", DomArch))
 }
 summ.GC.byDALin <- function(x) { x %>%
-    filter(!grepl("^-$", GenContext.norep)) %>%
-    filter(!grepl("^-$", DomArch.norep)) %>%
-    filter(!grepl("^-$", Lineage.final)) %>% filter(!grepl("^NA$", DomArch.norep)) %>%
-    group_by(GenContext.norep, DomArch.norep, Lineage.final) %>%
+    filter(!grepl("^-$", GenContext)) %>%
+    filter(!grepl("^-$", DomArch)) %>%
+    filter(!grepl("^-$", Lineage)) %>% filter(!grepl("^NA$", DomArch)) %>%
+    group_by(GenContext, DomArch, Lineage) %>%
     summarise(count=n()) %>% # , bin=as.numeric(as.logical(n()))
     arrange(desc(count))
 }
 summ.GC.byLin <- function(x) { x %>%
-    filter(!grepl("^-$", GenContext.norep)) %>%
-    filter(!grepl("^-$", DomArch.norep)) %>%
-    filter(!grepl("^-$", Lineage.final)) %>% filter(!grepl("^NA$", DomArch.norep)) %>%
-    group_by(GenContext.norep, Lineage.final) %>% # DomArch.norep,
+    filter(!grepl("^-$", GenContext)) %>%
+    filter(!grepl("^-$", DomArch)) %>%
+    filter(!grepl("^-$", Lineage)) %>% filter(!grepl("^NA$", DomArch)) %>%
+    group_by(GenContext, Lineage) %>% # DomArch.norep,
     summarise(count=n()) %>% # , bin=as.numeric(as.logical(n()))
     arrange(desc(count))
 }
 summ.GC <- function(x) { x %>%
-    group_by(GenContext.norep) %>%
+    group_by(GenContext) %>%
     summarise(totalcount=sum(count),
-              totalDA=n_distinct(DomArch.norep),
-              totallin=n_distinct(Lineage.final)) %>% # totallin=n_distinct(Lineage.final),
+              totalDA=n_distinct(DomArch),
+              totallin=n_distinct(Lineage)) %>% # totallin=n_distinct(Lineage),
     arrange(desc(totalcount), desc(totalDA), desc(totallin)) %>%
-    filter(!grepl(" \\{n\\}",GenContext.norep)) %>%
-    filter(!grepl("^-$", GenContext.norep))
+    filter(!grepl(" \\{n\\}",GenContext)) %>%
+    filter(!grepl("^-$", GenContext))
 }
 
 
@@ -155,7 +154,7 @@ total_counts <- function(prot ,cutoff = 0, type = "GC"){
   #'This function is designed to sum the counts column by either Genomic Context or Domain Architecture and creates a totalcount column from those sums.
   #'
   #' @param prot A data frame that must contain columns:
-  #' \itemize{\item Either 'GenContext.norep' or 'DomArch.norep' \item count}
+  #' \itemize{\item Either 'GenContext' or 'DomArch.norep' \item count}
   #' @param cutoff Numeric. Cutoff for total count. Counts below cutoff value will not be shown. Default is 0.
   #' @param type Character. Either "GC" for a total count by Genomic Context groupings or "DA" for a total count by Domain Architecture groupings.
   #' @examples total_counts(pspa-gc_lin_counts,0,"GC")
@@ -163,12 +162,12 @@ total_counts <- function(prot ,cutoff = 0, type = "GC"){
   #' column names.
 
   if(type == "GC"){
-    gc_count <- prot %>% group_by(GenContext.norep) %>% summarise(totalcount = sum(count))  %>% filter(totalcount >= cutoff)
-    total <- left_join(prot,gc_count, by = "GenContext.norep")
+    gc_count <- prot %>% group_by(GenContext) %>% summarise(totalcount = sum(count))  %>% filter(totalcount >= cutoff)
+    total <- left_join(prot,gc_count, by = "GenContext")
   }
   else if(type == "DA"){
-    da_count <- prot %>% group_by(DomArch.norep) %>% summarise(totalcount = sum(count))  %>% filter(totalcount >= cutoff)
-    total <- left_join(prot,da_count, by = "DomArch.norep")
+    da_count <- prot %>% group_by(DomArch) %>% summarise(totalcount = sum(count))  %>% filter(totalcount >= cutoff)
+    total <- left_join(prot,da_count, by = "DomArch")
   }
   return(total)
 }
@@ -209,7 +208,7 @@ find_paralogs <- function(df){
 # \nFor e.g.:
 # query.sub$DomArch.norep %>%
 #   counts(n)
-# query.sub$GenContext.norep %>%
+# query.sub$GenContext %>%
 # counts(n)")
 
 # ## elements2words: Function to break up ELEMENTS to WORDS for DA and GC
@@ -217,7 +216,7 @@ find_paralogs <- function(df){
 # \nFor e.g.:
 # query.sub$DA.doms <- query.sub$DomArch.norep %>%
 #   elements2words(\"da2doms\")
-# query.sub$GC.da <- query.sub$GenContext.norep %>%
+# query.sub$GC.da <- query.sub$GenContext %>%
 # 	elements2words(\"gc2da\")")
 
 
