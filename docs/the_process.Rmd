@@ -37,7 +37,7 @@ library(wordcloud); library(RColorBrewer)
 here::here() # checking to see if the homedir location is accurate
 
 # Sourcing scripts containing package functions
-paste0("R/", list.files("R/")) %>%
+paste0("R/", list.files("../R/")) %>%
   purrr::map(source)
 
 # Avoiding conflicts!
@@ -103,6 +103,8 @@ prot <- read_delim("data/rawdata_tsv/all_raw_notax.txt",
                    delim="\t", col_names=T, trim_ws=T,
                    escape_double=FALSE, na="NA")
 
+prot <- read_tsv("data/rawdata_opinscls/all.op_ins_cls", col_names = c("AccNum", "ClustID", "ClustName.orig", "GenContext.orig", "DomArch.Pfam","DomArch.orig","-", "Length", "GeneName", "Lineage", "Species.orig", "GCA_ID", "Annotation", "GI")) %>% select(-"-", -GI,-Annotation)
+
 lineages_map <- read_delim("data/acc_files/organisms2lineages_map_bae_20170828.txt",
                            delim="\t", col_names=T, trim_ws=T)
 
@@ -125,7 +127,7 @@ query_domains <- read_delim("data/acc_files/query_domains.txt",
 # Cleanup Clusters
 # Remove tails (singletons)?
 prot <- prot %>%
-  cleanup_clust(repeat2s = TRUE,domains_keep, domains_rename)
+  cleanup_clust(repeat2s = TRUE,remove_tails = TRUE, domains_keep, domains_rename)
 
 # Cleanup Species
 prot <- prot %>%
@@ -179,20 +181,19 @@ GC.DA.wc %>%
 ### UpSet plots
 ```{r upset-plot-da, eval=T, out.height="300px"}
 # Per
-upset.plot(prot, 10, "da2doms")
+pspa <- prot %>% filter(grepl("pspa|snf7",ignore.case = T,ClustName))
+upset.plot(pspa, 30, "da2doms")
 ```
 
 ```{r upset-plot-gc, eval=T, out.height="600px"}
-upset.plot(prot, 75, "gc2da")
+upset.plot(pspa, 100, "gc2da")
 ```
 
 ### Worclouds
 ```{r , eval= TRUE, out.height='600px'}
 # move to plotting.R and call just the custom function
-wordcloud(DA.doms.wc$words, DA.doms.wc$freq, min.freq=1,
-          colors=brewer.pal(8, "Spectral"), scale=c(2.5,.5))
-wordcloud(GC.DA.wc$words, GC.DA.wc$freq, min.freq=30,
-          colors=brewer.pal(8, "Spectral"), scale=c(2.5,.4))
+wordcloud_element("da2doms", pspa, min_freq = 10) 
+wordcloud_element("gc2da", pspa, min_freq = 100)
 ```
 ### Lineage summaries
 ```{r lin-summary, eval=T}
@@ -232,11 +233,22 @@ GC.cumulative %>%
 
 # now calculates and filters by totalcounts within function
 
-lineage.DA.plot(prot, 
+lineage.DA.plot(pspa, 
                 colname = "DomArch", type = "da2doms", cutoff = 200)
 
-lineage.DA.plot(prot,
-                "GenContext", type = "gc2da", cutoff = 500)
+lineage.DA.plot(pspa,
+                "GenContext", type = "gc2da", cutoff = 100)
+```
+```{r network-plot, eval=T, out.width='70%'}
+
+domain_network(pspa, "DomArch")
+
+
+```
+
+
+```{r paralog table}
+#paralogs <- find_paralogs(pspa)
 ```
 
 ### Add Leaves

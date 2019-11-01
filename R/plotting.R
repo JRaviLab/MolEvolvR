@@ -269,7 +269,7 @@ lineage.domain_repeats.plot <- function(query_data, colname) {
 #### NEEDS SOME WORK
 
 wordcloud_element <- function(type="da2doms",
-                                # query_data="prot",
+                                query_data="prot",
                                 min_freq=10){
   #' Wordclouds for the predominant domains, domain architectures.
   #' @author Janani Ravi
