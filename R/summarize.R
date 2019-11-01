@@ -111,6 +111,8 @@ summ.DA.byLin <- function(x) { x %>%
     summarise(count=n()) %>% # , bin=as.numeric(as.logical(n()))
     arrange(desc(count))
 }
+
+## Function to retrieve counts of how many lineages a DomArch appears in
 summ.DA <- function(x){ x %>%
     group_by(DomArch) %>%
     summarise(totalcount=sum(count), totallin=n()) %>% # totallin=n_distinct(Lineage),
