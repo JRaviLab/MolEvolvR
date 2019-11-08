@@ -1,0 +1,170 @@
+AccNum	ClustID	ClustName.orig	GenContext.orig	DomArch.Pfam	DomArch.orig	Length	GeneName	Lineage	Species.orig	GCA_ID	ClustName	Species	GenContext	DomArch
+AKH41084.1	000002.169	SIG+PspB	-	SIG+FBPase_2	SIG	90	WYH_00017	bacteria>proteobacteria>alphaproteobacteria	Altererythrobacter atlanticus	GCA_001008165.2	SIG+PspB	Altererythrobacter atlanticus	-	SIG
+AKH41086.1	000002.169	SIG+PspB	-	SIG	PspB	100	WYH_00019	bacteria>proteobacteria>alphaproteobacteria	Altererythrobacter atlanticus	GCA_001008165.2	SIG+PspB	Altererythrobacter atlanticus	-	PspB
+ANY19544.1	000002.169	SIG+PspB	-	SIG	SIG	91	A6F68_01022	bacteria>proteobacteria>alphaproteobacteria	Altererythrobacter dongtanensis	GCA_001698205.1	SIG+PspB	Altererythrobacter dongtanensis	-	SIG
+ANY19546.1	000002.169	SIG+PspB	-	SIG	SIG	104	A6F68_01024	bacteria>proteobacteria>alphaproteobacteria	Altererythrobacter dongtanensis	GCA_001698205.1	SIG+PspB	Altererythrobacter dongtanensis	-	SIG
+ALE16984.1	000002.169	SIG+PspB	-	SIG	SIG	104	AMC99_01693	bacteria>proteobacteria>alphaproteobacteria	Altererythrobacter epoxidivorans	GCA_001281485.1	SIG+PspB	Altererythrobacter epoxidivorans	-	SIG
+ALE16985.1	000002.169	SIG+PspB	-	SIG	SIG	100	AMC99_01694	bacteria>proteobacteria>alphaproteobacteria	Altererythrobacter epoxidivorans	GCA_001281485.1	SIG+PspB	Altererythrobacter epoxidivorans	-	SIG
+AKM07644.1	000002.169	SIG+PspB	-	SIG	SIG	104	AM2010_1575	bacteria>proteobacteria>alphaproteobacteria	Altererythrobacter marensis	GCA_001028625.1	SIG+PspB	Altererythrobacter marensis	-	SIG
+ANU08488.1	000002.169	SIG+PspB	-	SIG	SIG	107	A6F65_02203	bacteria>proteobacteria>alphaproteobacteria	Altererythrobacter namhicola	GCA_001687545.1	SIG+PspB	Altererythrobacter namhicola	-	SIG
+ANU08489.1	000002.169	SIG+PspB	-	SIG	SIG	94	A6F65_02204	bacteria>proteobacteria>alphaproteobacteria	Altererythrobacter namhicola	GCA_001687545.1	SIG+PspB	Altererythrobacter namhicola	-	SIG
+AOF99819.1	000002.169	SIG+PspB	-	SIG	SIG	89	BSY18_428	bacteria>proteobacteria>alphaproteobacteria	Blastomonas sp. RAC04	GCA_001713435.1	SIG+PspB	Blastomonas sp RAC04	-	SIG
+AOG00393.1	000002.169	SIG+PspB	-	SIG	SIG	84	BSY18_429	bacteria>proteobacteria>alphaproteobacteria	Blastomonas sp. RAC04	GCA_001713435.1	SIG+PspB	Blastomonas sp RAC04	-	SIG
+ALG61356.1	000002.169	SIG+PspB	-	SIG	SIG	103	WG74_11330	bacteria>proteobacteria>alphaproteobacteria	Citromicrobium sp. JL477	GCA_001304795.1	SIG+PspB	Citromicrobium sp JL477	-	SIG
+AKM08853.1	000002.169	SIG+PspB	-	SIG	SIG	96	AB433_00840	bacteria>proteobacteria>alphaproteobacteria	Croceicoccus naphthovorans	GCA_001028705.1	SIG+PspB	Croceicoccus naphthovorans	-	SIG
+AKM08854.1	000002.169	SIG+PspB	-	SIG	SIG	86	AB433_00845	bacteria>proteobacteria>alphaproteobacteria	Croceicoccus naphthovorans	GCA_001028705.1	SIG+PspB	Croceicoccus naphthovorans	-	SIG
+AKQ42562.1	000002.169	SIG+PspB	-	SIG	SIG	103	CP97_11745	bacteria>proteobacteria>alphaproteobacteria	Erythrobacter atlanticus	GCA_001077815.2	SIG+PspB	Erythrobacter atlanticus	-	SIG
+AKQ42565.1	000002.169	SIG+PspB	-	SIG	SIG	98	CP97_11760	bacteria>proteobacteria>alphaproteobacteria	Erythrobacter atlanticus	GCA_001077815.2	SIG+PspB	Erythrobacter atlanticus	-	SIG
+AKQ42566.1	000002.169	SIG+PspB	-	SIG	SIG	80	CP97_11765	bacteria>proteobacteria>alphaproteobacteria	Erythrobacter atlanticus	GCA_001077815.2	SIG+PspB	Erythrobacter atlanticus	-	SIG
+APE26932.1	000002.169	SIG+PspB	-	PspB	PspB	102	BMF35_a0103	bacteria>proteobacteria>alphaproteobacteria	Erythrobacter gangjinensis	GCA_001886695.1	SIG+PspB	Erythrobacter gangjinensis	-	PspB
+APE26935.1	000002.169	SIG+PspB	-	SIG	SIG	98	BMF35_a0106	bacteria>proteobacteria>alphaproteobacteria	Erythrobacter gangjinensis	GCA_001886695.1	SIG+PspB	Erythrobacter gangjinensis	-	SIG
+APE26936.1	000002.169	SIG+PspB	-	SIG	SIG	78	BMF35_a0107	bacteria>proteobacteria>alphaproteobacteria	Erythrobacter gangjinensis	GCA_001886695.1	SIG+PspB	Erythrobacter gangjinensis	-	SIG
+AOL22917.1	000002.169	SIG+PspB	-	SIG	SIG	103	Ga0102493_111896	bacteria>proteobacteria>alphaproteobacteria	Erythrobacter litoralis	GCA_001719165.1	SIG+PspB	Erythrobacter litoralis	-	SIG
+ABC62762.1	000002.169	SIG+PspB	-	SIG	SIG	84	ELI_03350	bacteria>proteobacteria>alphaproteobacteria	Erythrobacter litoralis HTCC2594	GCA_000013005.1	SIG+PspB	Erythrobacter litoralis HTCC2594	-	SIG
+ABC62767.1	000002.169	SIG+PspB	-	SIG	SIG	96	ELI_03375	bacteria>proteobacteria>alphaproteobacteria	Erythrobacter litoralis HTCC2594	GCA_000013005.1	SIG+PspB	Erythrobacter litoralis HTCC2594	-	SIG
+ABI78519.1	000002.169	SIG+PspB	-	SIG	SIG	76	HNE_3265	bacteria>proteobacteria>alphaproteobacteria	Hyphomonas neptunium ATCC 15444	GCA_000013025.1	SIG+PspB	Hyphomonas neptunium ATCC 15444	-	SIG
+ABD25604.1	000002.169	SIG+PspB	-	SIG	SIG	93	Saro_1159	bacteria>proteobacteria>alphaproteobacteria	Novosphingobium aromaticivorans DSM 12444	GCA_000013325.1	SIG+PspB	Novosphingobium aromaticivorans DSM 12444	-	SIG
+ABD25606.1	000002.169	SIG+PspB	-	SIG	PspB	90	Saro_1161	bacteria>proteobacteria>alphaproteobacteria	Novosphingobium aromaticivorans DSM 12444	GCA_000013325.1	SIG+PspB	Novosphingobium aromaticivorans DSM 12444	-	PspB
+ABD25607.1	000002.169	SIG+PspB	-	SIG+Rabaptin	SIG	84	Saro_1162	bacteria>proteobacteria>alphaproteobacteria	Novosphingobium aromaticivorans DSM 12444	GCA_000013325.1	SIG+PspB	Novosphingobium aromaticivorans DSM 12444	-	SIG
+AIT79428.1	000002.169	SIG+PspB	-	SIG	SIG	94	JI59_06355	bacteria>proteobacteria>alphaproteobacteria	Novosphingobium pentaromativorans US6-1	GCA_000767465.1	SIG+PspB	Novosphingobium pentaromativorans US61	-	SIG
+AIT79429.1	000002.169	SIG+PspB	-	SIG	SIG	97	JI59_06360	bacteria>proteobacteria>alphaproteobacteria	Novosphingobium pentaromativorans US6-1	GCA_000767465.1	SIG+PspB	Novosphingobium pentaromativorans US61	-	SIG
+AIT79430.1	000002.169	SIG+PspB	-	SIG	SIG	78	JI59_06365	bacteria>proteobacteria>alphaproteobacteria	Novosphingobium pentaromativorans US6-1	GCA_000767465.1	SIG+PspB	Novosphingobium pentaromativorans US61	-	SIG
+AOR78367.1	000002.169	SIG+PspB	-	SIG	SIG	83	BES08_17620	bacteria>proteobacteria>alphaproteobacteria	Novosphingobium resinovorum	GCA_001742225.1	SIG+PspB	Novosphingobium resinovorum	-	SIG
+AOR78368.1	000002.169	SIG+PspB	-	SIG	SIG	102	BES08_17625	bacteria>proteobacteria>alphaproteobacteria	Novosphingobium resinovorum	GCA_001742225.1	SIG+PspB	Novosphingobium resinovorum	-	SIG
+AOR78370.1	000002.169	SIG+PspB	-	SIG	SIG	93	BES08_17635	bacteria>proteobacteria>alphaproteobacteria	Novosphingobium resinovorum	GCA_001742225.1	SIG+PspB	Novosphingobium resinovorum	-	SIG
+CCA92037.1	000002.169	SIG+PspB	-	SIG	SIG	97	PP1Y_AT11142	bacteria>proteobacteria>alphaproteobacteria	Novosphingobium sp. PP1Y	GCA_000253255.1	SIG+PspB	Novosphingobium sp PP1Y	-	SIG
+CCA92038.1	000002.169	SIG+PspB	-	SIG	SIG	94	PP1Y_AT11147	bacteria>proteobacteria>alphaproteobacteria	Novosphingobium sp. PP1Y	GCA_000253255.1	SIG+PspB	Novosphingobium sp PP1Y	-	SIG
+ANK13981.1	000002.169	SIG+PspB	-	SIG	SIG	95	A9D12_01045	bacteria>proteobacteria>alphaproteobacteria	Porphyrobacter neustonensis	GCA_001663175.1	SIG+PspB	Porphyrobacter neustonensis	-	SIG
+ANK11765.1	000002.169	SIG+PspB	-	SIG	SIG	104	A9D12_01055	bacteria>proteobacteria>alphaproteobacteria	Porphyrobacter neustonensis	GCA_001663175.1	SIG+PspB	Porphyrobacter neustonensis	-	SIG
+AOL95526.1	000002.169	SIG+PspB	-	SIG	PspB	104	BG023_112616	bacteria>proteobacteria>alphaproteobacteria	Porphyrobacter sp. LM 6	GCA_001720465.1	SIG+PspB	Porphyrobacter sp LM 6	-	PspB
+AOL95529.1	000002.169	SIG+PspB	-	SIG	SIG	103	BG023_112619	bacteria>proteobacteria>alphaproteobacteria	Porphyrobacter sp. LM 6	GCA_001720465.1	SIG+PspB	Porphyrobacter sp LM 6	-	SIG
+ALR19604.1	000002.169	SIG+PspB	-	SIG	SIG	83	ATN00_04060	bacteria>proteobacteria>alphaproteobacteria	Sphingobium baderi	GCA_001456115.1	SIG+PspB	Sphingobium baderi	-	SIG
+AEG49716.1	000002.169	SIG+PspB	-	SIG	SIG	82	Sphch_2039	bacteria>proteobacteria>alphaproteobacteria	Sphingobium chlorophenolicum L-1	GCA_000147835.3	SIG+PspB	Sphingobium chlorophenolicum L1	-	SIG
+APL95935.1	000002.169	SIG+PspB	-	SIG	SIG	83	SIDU_16255	bacteria>proteobacteria>alphaproteobacteria	Sphingobium indicum B90A	GCA_000264945.2	SIG+PspB	Sphingobium indicum B90A	-	SIG
+BAI98242.1	000002.169	SIG+PspB	-	SIG	SIG	83	SJA_C1-34080	bacteria>proteobacteria>alphaproteobacteria	Sphingobium japonicum UT26S	GCA_000091125.1	SIG+PspB	Sphingobium japonicum UT26S	-	SIG
+ANI77981.1	000002.169	SIG+PspB	-	SIG	SIG	83	EP837_01565	bacteria>proteobacteria>alphaproteobacteria	Sphingobium sp. EP60837	GCA_001658005.1	SIG+PspB	Sphingobium sp EP60837	-	SIG
+AOF96659.1	000002.169	SIG+PspB	-	SIG	SIG	83	BSY17_1531	bacteria>proteobacteria>alphaproteobacteria	Sphingobium sp. RAC03	GCA_001713415.1	SIG+PspB	Sphingobium sp RAC03	-	SIG
+AMK24974.1	000002.169	SIG+PspB	-	SIG	SIG	83	K426_20225	bacteria>proteobacteria>alphaproteobacteria	Sphingobium sp. TKS	GCA_001563265.1	SIG+PspB	Sphingobium sp TKS	-	SIG
+AJR22951.1	000002.169	SIG+PspB	-	SIG	SIG	83	TZ53_03400	bacteria>proteobacteria>alphaproteobacteria	Sphingobium sp. YBL2	GCA_000943805.1	SIG+PspB	Sphingobium sp YBL2	-	SIG
+AJP74405.1	000002.169	SIG+PspB	-	SIG	SIG	87	TS85_09465	bacteria>proteobacteria>alphaproteobacteria	Sphingomonas hengshuiensis	GCA_000935025.1	SIG+PspB	Sphingomonas hengshuiensis	-	SIG
+AJP71966.1	000002.169	SIG+PspB	-	SIG	SIG	93	TS85_09470	bacteria>proteobacteria>alphaproteobacteria	Sphingomonas hengshuiensis	GCA_000935025.1	SIG+PspB	Sphingomonas hengshuiensis	-	SIG
+APR53663.1	000002.169	SIG+PspB	-	SIG	SIG+PspB	92	BRX40_15635	bacteria>proteobacteria>alphaproteobacteria	Sphingomonas koreensis	GCA_001922385.1	SIG+PspB	Sphingomonas koreensis	-	SIG+PspB
+APR53664.1	000002.169	SIG+PspB	-	SIG	SIG	88	BRX40_15640	bacteria>proteobacteria>alphaproteobacteria	Sphingomonas koreensis	GCA_001922385.1	SIG+PspB	Sphingomonas koreensis	-	SIG
+AOW25116.1	000002.169	SIG+PspB	-	SIG	SIG	83	BJP26_17470	bacteria>proteobacteria>alphaproteobacteria	Sphingomonas melonis TY	GCA_001761345.1	SIG+PspB	Sphingomonas melonis TY	-	SIG
+AOW25117.1	000002.169	SIG+PspB	-	SIG	SIG	93	BJP26_17475	bacteria>proteobacteria>alphaproteobacteria	Sphingomonas melonis TY	GCA_001761345.1	SIG+PspB	Sphingomonas melonis TY	-	SIG
+AOH85478.1	000002.169	SIG+PspB	-	SIG	SIG	89	AWL63_17585	bacteria>proteobacteria>alphaproteobacteria	Sphingomonas panacis	GCA_001717955.1	SIG+PspB	Sphingomonas panacis	-	SIG
+AHE54341.1	000002.169	SIG+PspB	-	SIG	SIG	81	NX02_13215	bacteria>proteobacteria>alphaproteobacteria	Sphingomonas sanxanigenens DSM 19645 = NX02	GCA_000512205.2	SIG+PspB	Sphingomonas sanxanigenens DSM 19645 NX02	-	SIG
+APX66689.1	000002.169	SIG+PspB	-	SIG	PspB	95	AV944_13600	bacteria>proteobacteria>alphaproteobacteria	Sphingomonas sp. LK11	GCA_001971605.1	SIG+PspB	Sphingomonas sp LK11	-	PspB
+APX67702.1	000002.169	SIG+PspB	-	SIG	SIG	79	AV944_13605	bacteria>proteobacteria>alphaproteobacteria	Sphingomonas sp. LK11	GCA_001971605.1	SIG+PspB	Sphingomonas sp LK11	-	SIG
+AQR72584.1	000002.169	SIG+PspB	-	SIG	SIG	91	BXU08_01900	bacteria>proteobacteria>alphaproteobacteria	Sphingomonas sp. LM7	GCA_002002925.1	SIG+PspB	Sphingomonas sp LM7	-	SIG
+AQR75618.1	000002.169	SIG+PspB	-	SIG	SIG	87	BXU08_01905	bacteria>proteobacteria>alphaproteobacteria	Sphingomonas sp. LM7	GCA_002002925.1	SIG+PspB	Sphingomonas sp LM7	-	SIG
+AGH48363.1	000002.169	SIG+PspB	-	SIG	SIG	85	G432_03180	bacteria>proteobacteria>alphaproteobacteria	Sphingomonas sp. MM-1	GCA_000347675.2	SIG+PspB	Sphingomonas sp MM1	-	SIG
+AIT06084.1	000002.169	SIG+PspB	-	SIG	SIG	92	MC45_06385	bacteria>proteobacteria>alphaproteobacteria	Sphingomonas taxi	GCA_000764535.1	SIG+PspB	Sphingomonas taxi	-	SIG
+ABQ69293.1	000002.169	SIG+PspB	-	SIG	PspB	85	Swit_2941	bacteria>proteobacteria>alphaproteobacteria	Sphingomonas wittichii RW1	GCA_000016765.1	SIG+PspB	Sphingomonas wittichii RW1	-	PspB
+ABQ69294.1	000002.169	SIG+PspB	-	SIG	SIG	84	Swit_2942	bacteria>proteobacteria>alphaproteobacteria	Sphingomonas wittichii RW1	GCA_000016765.1	SIG+PspB	Sphingomonas wittichii RW1	-	SIG
+ABF51936.1	000002.169	SIG+PspB	-	SIG	PspB	87	Sala_0212	bacteria>proteobacteria>alphaproteobacteria	Sphingopyxis alaskensis RB2256	GCA_000013985.1	SIG+PspB	Sphingopyxis alaskensis RB2256	-	PspB
+ABF51937.1	000002.169	SIG+PspB	-	SIG	SIG	86	Sala_0213	bacteria>proteobacteria>alphaproteobacteria	Sphingopyxis alaskensis RB2256	GCA_000013985.1	SIG+PspB	Sphingopyxis alaskensis RB2256	-	SIG
+AJA10531.1	000002.169	SIG+PspB	-	SIG	SIG	87	SKP52_18305	bacteria>proteobacteria>alphaproteobacteria	Sphingopyxis fribergensis	GCA_000803645.1	SIG+PspB	Sphingopyxis fribergensis	-	SIG
+AJA10532.1	000002.169	SIG+PspB	-	SIG	SIG	87	SKP52_18310	bacteria>proteobacteria>alphaproteobacteria	Sphingopyxis fribergensis	GCA_000803645.1	SIG+PspB	Sphingopyxis fribergensis	-	SIG
+AMG75923.1	000002.169	SIG+PspB	-	SIG	SIG	87	SGRAN_3582	bacteria>proteobacteria>alphaproteobacteria	Sphingopyxis granuli	GCA_001559015.1	SIG+PspB	Sphingopyxis granuli	-	SIG
+AMG75924.1	000002.169	SIG+PspB	-	SIG	SIG	82	SGRAN_3583	bacteria>proteobacteria>alphaproteobacteria	Sphingopyxis granuli	GCA_001559015.1	SIG+PspB	Sphingopyxis granuli	-	SIG
+ALH81906.1	000002.169	SIG+PspB	-	SIG+CALCOCO1	SIG	89	AN936_16540	bacteria>proteobacteria>alphaproteobacteria	Sphingopyxis macrogoltabida	GCA_001307295.1	SIG+PspB	Sphingopyxis macrogoltabida	-	SIG
+ALH81907.1	000002.169	SIG+PspB	-	SIG	SIG	82	AN936_16545	bacteria>proteobacteria>alphaproteobacteria	Sphingopyxis macrogoltabida	GCA_001307295.1	SIG+PspB	Sphingopyxis macrogoltabida	-	SIG
+ALJ14968.1	000002.169	SIG+PspB	-	SIG+CALCOCO1	SIG	89	LH19_19020	bacteria>proteobacteria>alphaproteobacteria	Sphingopyxis macrogoltabida	GCA_001314325.1	SIG+PspB	Sphingopyxis macrogoltabida	-	SIG
+ALJ14969.1	000002.169	SIG+PspB	-	SIG	SIG	82	LH19_19025	bacteria>proteobacteria>alphaproteobacteria	Sphingopyxis macrogoltabida	GCA_001314325.1	SIG+PspB	Sphingopyxis macrogoltabida	-	SIG
+AMU91217.1	000002.169	SIG+PspB	-	SIG+CALCOCO1	SIG	89	ATM17_19575	bacteria>proteobacteria>alphaproteobacteria	Sphingopyxis macrogoltabida	GCA_001610995.1	SIG+PspB	Sphingopyxis macrogoltabida	-	SIG
+AMU91218.1	000002.169	SIG+PspB	-	SIG	SIG	82	ATM17_19580	bacteria>proteobacteria>alphaproteobacteria	Sphingopyxis macrogoltabida	GCA_001610995.1	SIG+PspB	Sphingopyxis macrogoltabida	-	SIG
+ALC13603.1	000002.169	SIG+PspB	-	SIG	SIG	87	LH20_16715	bacteria>proteobacteria>alphaproteobacteria	Sphingopyxis sp. 113P3	GCA_001278035.1	SIG+PspB	Sphingopyxis sp 113P3	-	SIG
+ALC13604.1	000002.169	SIG+PspB	-	SIG	SIG+PspB	90	LH20_16720	bacteria>proteobacteria>alphaproteobacteria	Sphingopyxis sp. 113P3	GCA_001278035.1	SIG+PspB	Sphingopyxis sp 113P3	-	SIG+PspB
+APG62661.1	000002.169	SIG+PspB	-	SIG	SIG	88	LPB140_07520	bacteria>proteobacteria>alphaproteobacteria	Sphingopyxis sp. LPB0140	GCA_001889025.1	SIG+PspB	Sphingopyxis sp LPB0140	-	SIG
+APG62662.1	000002.169	SIG+PspB	-	SIG	SIG	95	LPB140_07525	bacteria>proteobacteria>alphaproteobacteria	Sphingopyxis sp. LPB0140	GCA_001889025.1	SIG+PspB	Sphingopyxis sp LPB0140	-	SIG
+APZ99368.1	000002.169	SIG+PspB	-	SIG	SIG	87	BWQ93_13405	bacteria>proteobacteria>alphaproteobacteria	Sphingopyxis sp. QXT-31	GCA_001984035.1	SIG+PspB	Sphingopyxis sp QXT31	-	SIG
+APZ99369.1	000002.169	SIG+PspB	-	SIG	PspB	87	BWQ93_13410	bacteria>proteobacteria>alphaproteobacteria	Sphingopyxis sp. QXT-31	GCA_001984035.1	SIG+PspB	Sphingopyxis sp QXT31	-	PspB
+AMU93571.1	000002.169	SIG+PspB	-	SIG	SIG+COOHNH2ligase	89	AOA14_02990	bacteria>proteobacteria>alphaproteobacteria	Sphingopyxis terrae subsp. terrae NBRC 15098	GCA_001610975.1	SIG+PspB	Sphingopyxis terrae subsp terrae NBRC 15098	-	SIG+COOHNH2ligase
+AMU93572.1	000002.169	SIG+PspB	-	SIG	SIG	82	AOA14_02995	bacteria>proteobacteria>alphaproteobacteria	Sphingopyxis terrae subsp. terrae NBRC 15098	GCA_001610975.1	SIG+PspB	Sphingopyxis terrae subsp terrae NBRC 15098	-	SIG
+AMO71693.1	000002.169	SIG+PspB	-	SIG	SIG	86	AZE99_07390	bacteria>proteobacteria>alphaproteobacteria	Sphingorhabdus sp. M41	GCA_001586275.1	SIG+PspB	Sphingorhabdus sp M41	-	SIG
+AMO71694.1	000002.169	SIG+PspB	-	SIG	SIG	84	AZE99_07395	bacteria>proteobacteria>alphaproteobacteria	Sphingorhabdus sp. M41	GCA_001586275.1	SIG+PspB	Sphingorhabdus sp M41	-	SIG
+AMJ93712.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	PspB	77	AVL56_04935	bacteria>proteobacteria>gammaproteobacteria	Alteromonas addita	GCA_001562195.1	SIG+PspB	Alteromonas addita	SIG+PspB*->	PspB
+AIF98085.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	SIG	77	EP13_04870	bacteria>proteobacteria>gammaproteobacteria	Alteromonas australica	GCA_000730385.1	SIG+PspB	Alteromonas australica	SIG+PspB*->	SIG
+AJP43142.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	SIG	77	EP12_04925	bacteria>proteobacteria>gammaproteobacteria	Alteromonas australica	GCA_000934525.1	SIG+PspB	Alteromonas australica	SIG+PspB*->	SIG
+AMJ97533.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	SIG	77	AVL55_04785	bacteria>proteobacteria>gammaproteobacteria	Alteromonas macleodii	GCA_001562235.1	SIG+PspB	Alteromonas macleodii	SIG+PspB*->	SIG
+AMN10982.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	SIG	77	ACZ81_04930	bacteria>proteobacteria>gammaproteobacteria	Alteromonas macleodii	GCA_001578515.1	SIG+PspB	Alteromonas macleodii	SIG+PspB*->	SIG
+AFS36456.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	SIG	77	MASE_04535	bacteria>proteobacteria>gammaproteobacteria	Alteromonas macleodii ATCC 27126	GCA_000172635.2	SIG+PspB	Alteromonas macleodii ATCC 27126	SIG+PspB*->	SIG
+AFT94438.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	SIG	75	AMBAS45_04800	bacteria>proteobacteria>gammaproteobacteria	Alteromonas macleodii str. 'Balearic Sea AD45'	GCA_000300175.1	SIG+PspB	Alteromonas macleodii str Balearic Sea AD45	SIG+PspB*->	SIG
+AFT73628.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	SIG	75	AMEC673_04655	bacteria>proteobacteria>gammaproteobacteria	Alteromonas macleodii str. 'English Channel 673'	GCA_000299955.1	SIG+PspB	Alteromonas macleodii str English Channel 673	SIG+PspB*->	SIG
+AMJ81837.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	SIG	77	AV941_04880	bacteria>proteobacteria>gammaproteobacteria	Alteromonas mediterranea	GCA_001562295.1	SIG+PspB	Alteromonas mediterranea	SIG+PspB*->	SIG
+APD89093.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	SIG	77	BM524_04295	bacteria>proteobacteria>gammaproteobacteria	Alteromonas mediterranea	GCA_001886395.1	SIG+PspB	Alteromonas mediterranea	SIG+PspB*->	SIG
+APD96918.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	SIG	77	BM525_04350	bacteria>proteobacteria>gammaproteobacteria	Alteromonas mediterranea	GCA_001886415.1	SIG+PspB	Alteromonas mediterranea	SIG+PspB*->	SIG
+AFV84509.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	SIG	75	amad1_04925	bacteria>proteobacteria>gammaproteobacteria	Alteromonas mediterranea DE1	GCA_000310085.1	SIG+PspB	Alteromonas mediterranea DE1	SIG+PspB*->	SIG
+AGP96516.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	SIG	75	I635_04895	bacteria>proteobacteria>gammaproteobacteria	Alteromonas mediterranea UM7	GCA_000439575.1	SIG+PspB	Alteromonas mediterranea UM7	SIG+PspB*->	SIG
+AEF04240.1	000002.169	SIG+PspB	SIG+PspB*->	SIG	SIG	77	ambt_13610	bacteria>proteobacteria>gammaproteobacteria	Alteromonas naphthalenivorans	GCA_000213655.1	SIG+PspB	Alteromonas naphthalenivorans	SIG+PspB*->	SIG
+AMJ86019.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	PspB	77	AV939_05135	bacteria>proteobacteria>gammaproteobacteria	Alteromonas sp. Mac1	GCA_001562125.1	SIG+PspB	Alteromonas sp Mac1	SIG+PspB*->	PspB
+AMJ89875.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	PspB	77	AV940_04980	bacteria>proteobacteria>gammaproteobacteria	Alteromonas sp. Mac2	GCA_001562155.1	SIG+PspB	Alteromonas sp Mac2	SIG+PspB*->	PspB
+APD85390.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	SIG	77	BM527_04425	bacteria>proteobacteria>gammaproteobacteria	Alteromonas sp. Mex14	GCA_001886375.1	SIG+PspB	Alteromonas sp Mex14	SIG+PspB*->	SIG
+APE05132.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	SIG	77	BM528_04545	bacteria>proteobacteria>gammaproteobacteria	Alteromonas sp. RW2A1	GCA_001886475.1	SIG+PspB	Alteromonas sp RW2A1	SIG+PspB*->	SIG
+AMJ73584.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	PspB	77	AVL57_06095	bacteria>proteobacteria>gammaproteobacteria	Alteromonas stellipolaris	GCA_001562115.1	SIG+PspB	Alteromonas stellipolaris	SIG+PspB*->	PspB
+ANB23338.1	000002.169	SIG+PspB	SIG+PspB*->	SIG	PspB	77	A6K25_20010	bacteria>proteobacteria>gammaproteobacteria	Alteromonas stellipolaris	GCA_001632765.1	SIG+PspB	Alteromonas stellipolaris	SIG+PspB*->	PspB
+ANB26340.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	PspB	77	A6F57_14780	bacteria>proteobacteria>gammaproteobacteria	Alteromonas stellipolaris	GCA_001632825.1	SIG+PspB	Alteromonas stellipolaris	SIG+PspB*->	PspB
+ALM91533.1	000002.169	SIG+PspB	SIG+PspB*->	SIG	PspB	77	AOR13_2528	bacteria>proteobacteria>gammaproteobacteria	Alteromonas stellipolaris LMG 21856	GCA_001433715.1	SIG+PspB	Alteromonas stellipolaris LMG 21856	SIG+PspB*->	PspB
+AAZ25678.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	SIG	78	CPS_1699	bacteria>proteobacteria>gammaproteobacteria	Colwellia psychrerythraea 34H	GCA_000012325.1	SIG+PspB	Colwellia psychrerythraea 34H	SIG+PspB*->	SIG
+ALO35240.1	000002.169	SIG+PspB	SIG+PspB*->	SIG	SIG	78	CMT41_11310	bacteria>proteobacteria>gammaproteobacteria	Colwellia sp. MT41	GCA_001444365.1	SIG+PspB	Colwellia sp MT41	SIG+PspB*->	SIG
+ADN74775.1	000002.169	SIG+PspB	SIG+PspB*->SIG+PspB*->SIG+PspB*->	SIG	SIG+PspB	76	Fbal_0561	bacteria>proteobacteria>gammaproteobacteria	Ferrimonas balearica DSM 9799	GCA_000148645.1	SIG+PspB	Ferrimonas balearica DSM 9799	SIG+PspB*->SIG+PspB*->SIG+PspB*->	SIG+PspB
+AEP30531.1	000002.169	SIG+PspB	SIG+PspB*->	SIG	PspB	75	GNIT_2434	bacteria>proteobacteria>gammaproteobacteria	Glaciecola nitratireducens FR1064	GCA_000226565.1	SIG+PspB	Glaciecola nitratireducens FR1064	SIG+PspB*->	PspB
+AEE22178.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	SIG+PspB	77	Glaag_1217	bacteria>proteobacteria>gammaproteobacteria	Glaciecola sp. 4H-3-7+YE-5	GCA_000212335.1	SIG+PspB	Glaciecola sp 4H37+YE5	SIG+PspB*->	SIG+PspB
+ALS99114.1	000002.169	SIG+PspB	SIG+PspB*->	SIG	PspB	70	AT746_13130	bacteria>proteobacteria>gammaproteobacteria	Lacimicrobium alkaliphilum	GCA_001466725.1	SIG+PspB	Lacimicrobium alkaliphilum	SIG+PspB*->	PspB
+AJR09095.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	SIG	78	H744_2c2439	bacteria>proteobacteria>gammaproteobacteria	Photobacterium gaetbulicola Gung47	GCA_000940995.1	SIG+PspB	Photobacterium gaetbulicola Gung47	SIG+PspB*->	SIG
+AQQ00836.1	000002.169	SIG+PspB	<-SIG+PspB*	LRRFIP	SIG+PspB	80	B0W48_14065	bacteria>proteobacteria>gammaproteobacteria	Pseudoalteromonas aliena	GCA_001999225.1	SIG+PspB	Pseudoalteromonas aliena	SIG+PspB*->	SIG+PspB
+ABG41622.1	000002.169	SIG+PspB	SIG+PspB*->	SIG	SIG	77	Patl_3116	bacteria>proteobacteria>gammaproteobacteria	Pseudoalteromonas atlantica T6c	GCA_000014225.1	SIG+PspB	Pseudoalteromonas atlantica T6c	SIG+PspB*->	SIG
+CAI86189.1	000002.169	SIG+PspB	<-SIG+PspB*	Tim54	SIG+PspB	80	PSHAa1114	bacteria>proteobacteria>gammaproteobacteria	Pseudoalteromonas haloplanktis TAC125	GCA_000026085.1	SIG+PspB	Pseudoalteromonas haloplanktis TAC125	SIG+PspB*->	SIG+PspB
+ALQ55143.1	000002.169	SIG+PspB	SIG+PspB*->	SIG	SIG+PspB	80	PI2015_1854	bacteria>proteobacteria>gammaproteobacteria	Pseudoalteromonas issachenkonii	GCA_001455325.1	SIG+PspB	Pseudoalteromonas issachenkonii	SIG+PspB*->	SIG+PspB
+AOT09142.1	000002.169	SIG+PspB	SIG+PspB*->	SIG	PspB	76	S4054249_15390	bacteria>proteobacteria>gammaproteobacteria	Pseudoalteromonas luteoviolacea	GCA_001750165.1	SIG+PspB	Pseudoalteromonas luteoviolacea	SIG+PspB*->	PspB
+AOT18970.1	000002.169	SIG+PspB	SIG+PspB*->	SIG	PspB	76	S4054_15365	bacteria>proteobacteria>gammaproteobacteria	Pseudoalteromonas luteoviolacea	GCA_001750185.1	SIG+PspB	Pseudoalteromonas luteoviolacea	SIG+PspB*->	PspB
+AOT14055.1	000002.169	SIG+PspB	SIG+PspB*->	SIG	PspB	76	S40542_15360	bacteria>proteobacteria>gammaproteobacteria	Pseudoalteromonas luteoviolacea	GCA_001750405.1	SIG+PspB	Pseudoalteromonas luteoviolacea	SIG+PspB*->	PspB
+ALO41860.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	SIG	76	PP2015_1351	bacteria>proteobacteria>gammaproteobacteria	Pseudoalteromonas phenolica	GCA_001444405.1	SIG+PspB	Pseudoalteromonas phenolica	SIG+PspB*->	SIG
+AIY65806.1	000002.169	SIG+PspB	pspF-NtrC-AAA+FIS-HTH->SIG+PspB*->	SIG+DUF4407	SIG+PspB	80	OM33_12115	bacteria>proteobacteria>gammaproteobacteria	Pseudoalteromonas piratica	GCA_000788395.1	SIG+PspB	Pseudoalteromonas piratica	pspF-NtrC-AAA+FIS-HTH->SIG+PspB*->	SIG+PspB
+ALU41522.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	SIG	76	AT705_00410	bacteria>proteobacteria>gammaproteobacteria	Pseudoalteromonas rubra	GCA_001482385.1	SIG+PspB	Pseudoalteromonas rubra	SIG+PspB*->	SIG
+ALQ08629.1	000002.169	SIG+PspB	SIG+PspB*->	SIG	SIG+PspB	80	D172_011440	bacteria>proteobacteria>gammaproteobacteria	Pseudoalteromonas sp. Bsw20308	GCA_000310105.2	SIG+PspB	Pseudoalteromonas sp Bsw20308	SIG+PspB*->	SIG+PspB
+ADT68838.1	000002.169	SIG+PspB	SIG+PspB*->	SIG	SIG+PspB	80	PSM_A1914	bacteria>proteobacteria>gammaproteobacteria	Pseudoalteromonas sp. SM9913	GCA_000184065.1	SIG+PspB	Pseudoalteromonas sp SM9913	SIG+PspB*->	SIG+PspB
+ALS32535.1	000002.169	SIG+PspB	<-SIG+PspB*	Tim54	SIG+PspB	80	PTRA_a1302	bacteria>proteobacteria>gammaproteobacteria	Pseudoalteromonas translucida KMM 520	GCA_001465295.1	SIG+PspB	Pseudoalteromonas translucida KMM 520	SIG+PspB*->	SIG+PspB
+ABL99802.1	000002.169	SIG+PspB	SIG+PspB*->	SIG	SIG	79	Sama_1595	bacteria>proteobacteria>gammaproteobacteria	Shewanella amazonensis SB2B	GCA_000015245.1	SIG+PspB	Shewanella amazonensis SB2B	SIG+PspB*->	SIG
+AEH12478.1	000002.169	SIG+PspB	SIG+PspB*->	SIG	SIG	76	Sbal117_0688	bacteria>proteobacteria>gammaproteobacteria	Shewanella baltica OS117	GCA_000215895.1	SIG+PspB	Shewanella baltica OS117	SIG+PspB*->	SIG
+ABN60115.1	000002.169	SIG+PspB	SIG+PspB*->	SIG	SIG	76	Sbal_0586	bacteria>proteobacteria>gammaproteobacteria	Shewanella baltica OS155	GCA_000015845.1	SIG+PspB	Shewanella baltica OS155	SIG+PspB*->	SIG
+ABX51025.1	000002.169	SIG+PspB	<-SIG+PspC*	SIG	SIG	76	Sbal195_3865	bacteria>proteobacteria>gammaproteobacteria	Shewanella baltica OS195	GCA_000018765.1	SIG+PspB	Shewanella baltica OS195	SIG+PspC*->	SIG
+ACK48160.1	000002.169	SIG+PspB	<-SIG+PspC*	SIG	SIG	76	Sbal223_3682	bacteria>proteobacteria>gammaproteobacteria	Shewanella baltica OS223	GCA_000021665.1	SIG+PspB	Shewanella baltica OS223	SIG+PspC*->	SIG
+ADT96025.1	000002.169	SIG+PspB	<-SIG+PspC*	SIG	SIG	76	Sbal678_3895	bacteria>proteobacteria>gammaproteobacteria	Shewanella baltica OS678	GCA_000178875.2	SIG+PspB	Shewanella baltica OS678	SIG+PspC*->	SIG
+ABE53572.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	PspB	76	Sden_0276	bacteria>proteobacteria>gammaproteobacteria	Shewanella denitrificans OS217	GCA_000013765.1	SIG+PspB	Shewanella denitrificans OS217	SIG+PspB*->	PspB
+ABI71414.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	PspB	76	Sfri_1563	bacteria>proteobacteria>gammaproteobacteria	Shewanella frigidimarina NCIMB 400	GCA_000014705.1	SIG+PspB	Shewanella frigidimarina NCIMB 400	SIG+PspB*->	PspB
+AAN56986.2	000002.169	SIG+PspB	<-SIG+PspB*	SIG	SIG	76	SO_4012	bacteria>proteobacteria>gammaproteobacteria	Shewanella oneidensis MR-1	GCA_000146165.2	SIG+PspB	Shewanella oneidensis MR1	SIG+PspB*->	SIG
+ADV53074.1	000002.169	SIG+PspB	SIG+PspB*->	SIG	SIG	76	Sput200_0590	bacteria>proteobacteria>gammaproteobacteria	Shewanella putrefaciens 200	GCA_000169215.2	SIG+PspB	Shewanella putrefaciens 200	SIG+PspB*->	SIG
+ABP74389.1	000002.169	SIG+PspB	SIG+PspB*->	SIG	SIG	76	Sputcn32_0659	bacteria>proteobacteria>gammaproteobacteria	Shewanella putrefaciens CN-32	GCA_000016585.1	SIG+PspB	Shewanella putrefaciens CN32	SIG+PspB*->	SIG
+ABK46868.1	000002.169	SIG+PspB	SIG+PspB*->	SIG	SIG	76	Shewana3_0629	bacteria>proteobacteria>gammaproteobacteria	Shewanella sp. ANA-3	GCA_000203935.1	SIG+PspB	Shewanella sp ANA3	SIG+PspB*->	SIG
+ABI37709.1	000002.169	SIG+PspB	SIG+PspB*->	SIG	SIG	76	Shewmr4_0629	bacteria>proteobacteria>gammaproteobacteria	Shewanella sp. MR-4	GCA_000014685.1	SIG+PspB	Shewanella sp MR4	SIG+PspB*->	SIG
+ABI44381.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	SIG	76	Shewmr7_3400	bacteria>proteobacteria>gammaproteobacteria	Shewanella sp. MR-7	GCA_000014665.1	SIG+PspB	Shewanella sp MR7	SIG+PspB*->	SIG
+ABM26327.1	000002.169	SIG+PspB	<-SIG+PspB*	SIG	SIG	76	Sputw3181_3515	bacteria>proteobacteria>gammaproteobacteria	Shewanella sp. W3-18-1	GCA_000015185.1	SIG+PspB	Shewanella sp W3181	SIG+PspB*->	SIG
+BAO43940.1	000002.169	SIG+PspB	-	SIG	PspB	76	TBH_C1010	bacteria>proteobacteria>gammaproteobacteria	Thiolapillus brandeum	GCA_000828615.1	SIG+PspB	Thiolapillus brandeum	-	PspB
+ALR94095.1	000002.169	SIG+PspB	SIG+PspC*->	SIG+Fmp27_WPPW	SIG	84	AT730_17325	bacteria>proteobacteria>gammaproteobacteria	Vibrio alginolyticus	GCA_001469735.1	SIG+PspB	Vibrio alginolyticus	SIG+PspC*->	SIG
+ANP67252.1	000002.169	SIG+PspB	<-SIG+PspC*	SIG+Fmp27_WPPW	SIG	84	BAU10_20075	bacteria>proteobacteria>gammaproteobacteria	Vibrio alginolyticus	GCA_001679745.1	SIG+PspB	Vibrio alginolyticus	SIG+PspC*->	SIG
+AGV20182.1	000002.169	SIG+PspB	<-SIG+PspC*	SIG+Fmp27_WPPW	SIG	84	N646_4373	bacteria>proteobacteria>gammaproteobacteria	Vibrio alginolyticus NBRC 15630 = ATCC 17749	GCA_000354175.2	SIG+PspB	Vibrio alginolyticus NBRC 15630 ATCC 17749	SIG+PspC*->	SIG
+ACY52745.1	000002.169	SIG+PspB	SIG+PspC*->	SIG+Fmp27_WPPW	SIG	84	VEA_000057	bacteria>proteobacteria>gammaproteobacteria	Vibrio antiquarius	GCA_000024825.1	SIG+PspB	Vibrio antiquarius	SIG+PspC*->	SIG
+APX08636.1	000002.169	SIG+PspB	SIG+PspC*->	SIG	SIG	81	BWP24_20875	bacteria>proteobacteria>gammaproteobacteria	Vibrio campbellii	GCA_001969325.1	SIG+PspB	Vibrio campbellii	SIG+PspC*->	SIG
+ABU73578.1	000002.169	SIG+PspB	SIG+PspC*->	SIG	SIG	81	VIBHAR_05680	bacteria>proteobacteria>gammaproteobacteria	Vibrio campbellii ATCC BAA-1116	GCA_000017705.1	SIG+PspB	Vibrio campbellii ATCC BAA1116	SIG+PspC*->	SIG
+AGU97591.1	000002.169	SIG+PspB	<-SIG+PspC*	SIG	SIG	81	M892_23235	bacteria>proteobacteria>gammaproteobacteria	Vibrio campbellii ATCC BAA-1116	GCA_000464435.1	SIG+PspB	Vibrio campbellii ATCC BAA1116	SIG+PspC*->	SIG
+AIV08969.1	000002.169	SIG+PspB	<-SIG+PspC*	SIG	SIG	81	LA59_26685	bacteria>proteobacteria>gammaproteobacteria	Vibrio harveyi	GCA_000770115.2	SIG+PspB	Vibrio harveyi	SIG+PspC*->	SIG
+AMG00870.1	000002.169	SIG+PspB	<-SIG+PspC*	SIG	SIG	81	AL538_24690	bacteria>proteobacteria>gammaproteobacteria	Vibrio harveyi	GCA_001558435.1	SIG+PspB	Vibrio harveyi	SIG+PspC*->	SIG
+APP07694.1	000002.169	SIG+PspB	SIG+PspC*->	SIG	SIG	81	BG259_20700	bacteria>proteobacteria>gammaproteobacteria	Vibrio harveyi	GCA_001908435.2	SIG+PspB	Vibrio harveyi	SIG+PspC*->	SIG
+ANQ19354.1	000002.169	SIG+PspB	SIG+PspC*->	SIG+Fmp27_WPPW	SIG	84	BA891_19465	bacteria>proteobacteria>gammaproteobacteria	Vibrio natriegens	GCA_001680045.1	SIG+PspB	Vibrio natriegens	SIG+PspC*->	SIG
+ANQ24153.1	000002.169	SIG+PspB	SIG+PspC*->	SIG+Fmp27_WPPW	SIG	84	BA893_21295	bacteria>proteobacteria>gammaproteobacteria	Vibrio natriegens	GCA_001680065.1	SIG+PspB	Vibrio natriegens	SIG+PspC*->	SIG
+ANQ29294.1	000002.169	SIG+PspB	<-SIG+PspC*	SIG+Fmp27_WPPW	SIG	84	BA894_23205	bacteria>proteobacteria>gammaproteobacteria	Vibrio natriegens	GCA_001680085.1	SIG+PspB	Vibrio natriegens	SIG+PspC*->	SIG
+ALR18268.1	000002.169	SIG+PspB	SIG+PspC*->	SIG+Fmp27_WPPW	SIG	84	PN96_20265	bacteria>proteobacteria>gammaproteobacteria	Vibrio natriegens NBRC 15636 = ATCC 14048 = DSM 759	GCA_001456255.1	SIG+PspB	Vibrio natriegens NBRC 15636 ATCC 14048 DSM 759	SIG+PspC*->	SIG
+ANQ14216.1	000002.169	SIG+PspB	SIG+PspC*->	SIG+Fmp27_WPPW	SIG	84	BA890_15765	bacteria>proteobacteria>gammaproteobacteria	Vibrio natriegens NBRC 15636 = ATCC 14048 = DSM 759	GCA_001680025.1	SIG+PspB	Vibrio natriegens NBRC 15636 ATCC 14048 DSM 759	SIG+PspC*->	SIG
+ANB99723.1	000002.169	SIG+PspB	<-SIG+PspC*	SIG+Fmp27_WPPW	SIG	84	FORC14_4027	bacteria>proteobacteria>gammaproteobacteria	Vibrio parahaemolyticus	GCA_001636035.1	SIG+PspB	Vibrio parahaemolyticus	SIG+PspC*->	SIG
+APC89984.1	000002.169	SIG+PspB	<-SIG+PspC*	SIG+Fmp27_WPPW	SIG	84	FORC22_4123	bacteria>proteobacteria>gammaproteobacteria	Vibrio parahaemolyticus	GCA_001879585.1	SIG+PspB	Vibrio parahaemolyticus	SIG+PspC*->	SIG
+AGQ93586.1	000002.169	SIG+PspB	<-SIG+PspC*	SIG+Fmp27_WPPW	SIG	84	M634_22900	bacteria>proteobacteria>gammaproteobacteria	Vibrio parahaemolyticus O1:Kuk str. FDA_R31	GCA_000430405.1	SIG+PspB	Vibrio parahaemolyticus O1:Kuk str FDA_R31	SIG+PspC*->	SIG
+BAC62341.1	000002.169	SIG+PspB	<-SIG+PspC*	SIG+Fmp27_WPPW	SIG	84	VPA0998	bacteria>proteobacteria>gammaproteobacteria	Vibrio parahaemolyticus RIMD 2210633	GCA_000196095.1	SIG+PspB	Vibrio parahaemolyticus RIMD 2210633	SIG+PspC*->	SIG
+AHJ02004.1	000002.169	SIG+PspB	<-SIG+PspC*	SIG+Fmp27_WPPW	SIG	84	VPUCM_20883	bacteria>proteobacteria>gammaproteobacteria	Vibrio parahaemolyticus UCM-V493	GCA_000568495.1	SIG+PspB	Vibrio parahaemolyticus UCMV493	SIG+PspC*->	SIG
+AEX24321.1	000002.169	SIG+PspB	SIG+PspC*->	SIG+Fmp27_WPPW	SIG	84	VEJY3_19511	bacteria>proteobacteria>gammaproteobacteria	Vibrio sp. EJY3	GCA_000241385.1	SIG+PspB	Vibrio sp EJY3	SIG+PspC*->	SIG
+AIL72670.1	000002.169	SIG+PspB	SIG+PspB*->	SIG	SIG	84	VV93_v1c36100	bacteria>proteobacteria>gammaproteobacteria	Vibrio vulnificus	GCA_000746665.1	SIG+PspB	Vibrio vulnificus	SIG+PspB*->	SIG
+ALM73003.1	000002.169	SIG+PspB	SIG+PspB*->	SIG	SIG	84	FORC9_3486	bacteria>proteobacteria>gammaproteobacteria	Vibrio vulnificus	GCA_001433435.1	SIG+PspB	Vibrio vulnificus	SIG+PspB*->	SIG
+ANN28593.1	000002.169	SIG+PspB	SIG+PspB*->	SIG	SIG	84	FORC17_3530	bacteria>proteobacteria>gammaproteobacteria	Vibrio vulnificus	GCA_001675245.1	SIG+PspB	Vibrio vulnificus	SIG+PspB*->	SIG
+ADV88618.1	000002.169	SIG+PspB	SIG+PspB*->	SIG	SIG	84	VVMO6_03596	bacteria>proteobacteria>gammaproteobacteria	Vibrio vulnificus MO6-24/O	GCA_000186585.1	SIG+PspB	Vibrio vulnificus MO624O	SIG+PspB*->	SIG
+BAC96633.1	000002.169	SIG+PspB	SIG+PspB*->	SIG	SIG	84	VVA0607	bacteria>proteobacteria>gammaproteobacteria	Vibrio vulnificus YJ016	GCA_000009745.1	SIG+PspB	Vibrio vulnificus YJ016	SIG+PspB*->	SIG
