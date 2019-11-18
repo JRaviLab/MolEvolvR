@@ -216,3 +216,9 @@ cleanup_clust <- function(cls_data, repeat2s=TRUE, remove_tails = FALSE, domains
   return(cls_data)
 }
 
+
+remove_tails <- function(prot){
+  domain_count <- prot %>% group_by(DomArch) %>% summarize(count = n())
+  tails <- domain_count %>% filter(count == 1)
+  prot <- prot %>% filter(!(DomArch %in% tails))
+}
