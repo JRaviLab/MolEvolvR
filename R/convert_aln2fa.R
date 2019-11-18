@@ -2,7 +2,7 @@
 
 library(tidyverse)
 library(data.table)
-library(seqRFLP)
+#library(seqRFLP)
 source("R/add_leaves.R")
 # library(here)
 # library(roxygen2)
@@ -10,7 +10,8 @@ source("R/add_leaves.R")
 
 
 convert_aln2fa <- function(input_file = "data/alignments/pspa_snf7.aln",
-                           lin_file = "data/pspa_snf7.txt",
+                           lin = read_tsv("data/pspa_snf7.txt"),
+                           #lin_file = "data/pspa_snf7.txt",
                            output_path = NULL,
                            reduced = FALSE) {
     #' Adding Leaves to an alignment file w/ accessions
@@ -35,12 +36,25 @@ convert_aln2fa <- function(input_file = "data/alignments/pspa_snf7.aln",
     #' @note Please refer to the source code if you have alternate +
     #' file formats and/or column names.
 
-    aln <- add_leaves(input_file=input_file,lin_file=lin_file,reduced=reduced)
+    aln <- add_leaves(input_file=input_file,
+                      lin = lin,
+                      #lin_file=lin_file,
+                      reduced=reduced)
     names <- aln$Leaf_Acc
     sequences <- aln$Alignment
     aln <- data.table(names,sequences)
-    fasta_file <- dataframe2fas(aln, output_path)
-    return(fasta_file)
+
+    fasta <- ""
+    for(i in 1:length(aln$names)){
+      fasta <- paste0(fasta,">",aln$names[i],"\n",aln$sequences[i],"\n")
+    }
+
+    if(!is.null(output_path)){
+      write_file(fasta, output_path)
+    }
+
+    #fasta_file <- dataframe2fas(aln, output_path)
+    return(fasta)
 }
 
 
