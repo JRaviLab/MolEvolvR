@@ -20,7 +20,8 @@ to_titlecase <- function(x, y=" ") {
 
 ## Function to add leaves to an alignment file
 add_leaves <- function(input_file = "data/rawdata_aln/pspa_snf7.gismo.aln",
-                       lin_file = "data/rawdata_tsv/PspA.txt",
+                       lin = read_tsv("data/PspA.txt"),
+                       #lin_file = "data/rawdata_tsv/PspA.txt",
                        reduced = FALSE) {
   #' Adding Leaves to an alignment file w/ accessions
   #' @author Janani Ravi
@@ -56,23 +57,24 @@ add_leaves <- function(input_file = "data/rawdata_aln/pspa_snf7.gismo.aln",
   }
 
 
-  lin <- read_tsv(lin_file)
+  #lin <- read_tsv(lin_file)
+
   colnames(aln) <- c("AccNum", "Alignment")
 
   aln_lin <- left_join(aln, lin, by = "AccNum") %>%
     select(AccNum, Alignment,
-           Species, Lineage.final)
+           Species, Lineage)
 
   #Removes rows with NA
   aln_lin <- aln_lin[complete.cases(aln_lin),]
 
   if(reduced){
     #Removes duplicate lineages
-    aln_lin <- aln_lin %>% distinct(Lineage.final, .keep_all = TRUE)
+    aln_lin <- aln_lin %>% distinct(Lineage, .keep_all = TRUE)
 }
 
   temp <- aln_lin %>%
-    separate(Lineage.final,
+    separate(Lineage,
              into=c("kingdom", "phylum"),
              sep=">", remove=F,
              extra = "merge", fill = "left") %>%

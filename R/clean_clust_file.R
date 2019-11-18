@@ -63,7 +63,7 @@ clean_clust_file <- function(path, writepath=NULL, query){
   #Assign CLS id and CLS name to all rows
   for (x in length(ind_with_num):2) {
     prot[which(as.numeric(rownames(prot))
-               < ind_with_num[x]), "ClustName"]= clsid[x-1, "ClustName"]
+               < ind_with_num[x]), "ClustName.orig"]= clsid[x-1, "ClustName.orig"]
     prot[which(as.numeric(rownames(prot))
                < ind_with_num[x]), "ClustID"]= clsid[x-1, "ClustID"]
   }

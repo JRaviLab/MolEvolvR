@@ -175,29 +175,29 @@ total_counts <- function(prot ,cutoff = 0, type = "GC"){
 }
 
 
-find_paralogs <- function(df){
+find_paralogs <- function(prot){
   #'Find Paralogs
   #'
   #'Creates a data frame of paralogs.
   #'
   #'This function returns a dataframe containing paralogs and the counts.
   #'
-  #'@param df A data frame containing columns Species and Lineage
+  #'@param prot A data frame filtered by a Query, containing columns Species and Lineage
   #'@example find_paralogs(pspa)
   #'@note Please refer to the source code if you have alternate file formats and/or
   #'column names.
 
+
   #Remove eukaryotes
-  df <- df %>% filter(grepl("^eukaryota",Lineage))
-  print(colnames(df))
-  paralogTable <- df %>% group_by(Query,GCA_ID) %>%
+  prot <- prot %>% filter(grepl("^eukaryota",Lineage))
+  paralogTable <- prot %>% group_by(GCA_ID) %>%
     count(DomArch)%>%
-    filter(n>1) %>% arrange(-n)
+    filter(n>1 & GCA_ID != "-") %>% arrange(-n)
   colnames(paralogTable)[colnames(paralogTable)=="n"] = "Count"
   ###Merge with columns: AccNum,TaxID, and GCA/ Species?
-  paralogTable <- df %>% select(AccNum, TaxID, Species.orig , GCA_ID, Query) %>%
-    left_join(paralogTable, by= c("GCA_ID","Query")) %>%
-    filter(!is.na(Count)) %>% distinct()
+  paralogTable <- prot %>% select(AccNum, Species , GCA_ID) %>%
+    left_join(paralogTable, by= c("GCA_ID")) %>%
+    filter(!is.na(Count)) %>% distinct() %>% arrange(-Count)
   return(paralogTable)
 }
 
