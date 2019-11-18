@@ -1,6 +1,7 @@
 library(tidyverse)
 library(msa)
 # library(seqinr)
+
 library(Biostrings)
 library(tools)
 
@@ -14,7 +15,7 @@ library(tools)
 
 
 
-msa_pdf <- function(fasta_filepath , lowerbound=NULL, upperbound=NULL){
+msa_pdf <- function(fasta_filepath , lowerbound=NULL, upperbound=NULL, output_path = NULL){
   #'Multiple Sequence Alignment
   #'
   #'Generates a multiple sequence alignment from a fasta file
@@ -27,11 +28,10 @@ msa_pdf <- function(fasta_filepath , lowerbound=NULL, upperbound=NULL){
   #'Default is NULL. If value is NULL, the entire multiple sequence alignment is printed.
   #'@param upperbound Numeric. The column that determines the ending location of the MSA.
   #'Default is NULL. If value is NULL, the entire multiple sequence alignment is printed.
+  #'@param output_path Character. The path location of the output pdf to write.
+  #'Default is NULL. If value is NULL, the pdf is written to the same directory as the fasta file.
   # #'@examples msa_pdf()
 
-  #only works for a fasta file
-  #first convert tsv to fastafile: pretty easy but something needs to be done first
-  #tab replaced with something and < in front
   # don't want accesation numbers, must be mapped to a species
   #This is
   my_seqs <- readAAStringSet(fasta_filepath)
@@ -77,7 +77,36 @@ msa_pdf <- function(fasta_filepath , lowerbound=NULL, upperbound=NULL){
                                  "\\showruler{1}{top}"))
   }
 
-  texi2pdf(file = paste0(fasta_filepath,".tex"), clean= TRUE)
+  fastafile_split = strsplit(fasta_filepath, "/")[[1]]
+  fastafile_name = fastafile_split[length(fastafile_split)]
+
+  #texi2pdf(file = paste0(fasta_filepath,".tex"), clean= TRUE)
+
+  ### BELOW not working: maybe use function to move file after texi2pdf called?
+  curr_dir <- getwd()
+
+  if(is.null(output_path)){
+    setwd(paste0(fasta_filepath,"/.."))
+    #texi2pdf outputs files to the current working directory
+    # make it output to directory of the fasta_file
+    texi2pdf(file = paste0(fastafile_name,".tex"), clean= TRUE)
+  }
+  else{
+    outfile_split = strsplit(output_path, "/")[[1]]
+    outfile_name = outfile_split[length(outfile_split)]
+
+    fasta_dir <- paste0(curr_dir,"/", fasta_filepath)
+
+    setwd(paste0(curr_dir,"/",output_path,"/.."))
+
+
+    #texi2pdf outputs files to the current working directory
+    # make it output to directory of the output_path
+    texi2pdf(file = paste0(fasta_dir, ".tex"), clean= TRUE)
+
+    file.rename(paste0(fastafile_name, ".pdf"), paste0(outfile_name,".pdf"))
+  }
+  setwd(curr_dir)
 }
 
 ## Input files: Fasta format
