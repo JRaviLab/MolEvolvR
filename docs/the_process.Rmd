@@ -37,9 +37,15 @@ library(wordcloud); library(RColorBrewer)
 here::here() # checking to see if the homedir location is accurate
 
 # Sourcing scripts containing package functions
-paste0("R/", list.files("../R/")) %>%
-  purrr::map(source)
+#paste0("R/", list.files("../R/")) %>%
+#  purrr::map(source)
 
+for (i in list.files("R/")){
+   #print(here::here())
+   print(i)
+   if(i == "201906data.R") next
+   source(paste0("R/",i))
+ }
 # Avoiding conflicts!
 conflicted::conflict_prefer("filter", "dplyr")
 conflicted::conflict_prefer("Position", "ggplot2")
@@ -99,11 +105,11 @@ all <- all %>%
 ## Data import
 ```{r import, eval=T, results='hide', message=F}
 # Example import files: individual or combined ones, pspa.txt, all_raw.txt
-prot <- read_delim("data/rawdata_tsv/all_raw_notax.txt",
-                   delim="\t", col_names=T, trim_ws=T,
-                   escape_double=FALSE, na="NA")
+#prot <- read_delim("data/rawdata_tsv/all_raw_notax.txt",
+#                   delim="\t", col_names=T, trim_ws=T,
+#                   escape_double=FALSE, na="NA")
 
-prot <- read_tsv("data/rawdata_opinscls/all.op_ins_cls", col_names = c("AccNum", "ClustID", "ClustName.orig", "GenContext.orig", "DomArch.Pfam","DomArch.orig","-", "Length", "GeneName", "Lineage", "Species.orig", "GCA_ID", "Annotation", "GI")) %>% select(-"-", -GI,-Annotation)
+prot <- read_tsv("data/rawdata_tsv/all_raw_query_uniqop.txt", col_names = c("AccNum", "ClustID", "ClustName.orig", "GenContext.orig", "DomArch.Pfam","DomArch.orig","-", "Length", "GeneName", "Lineage", "Species.orig", "GCA_ID", "Annotation", "GI")) %>% select(-"-", -GI,-Annotation)
 
 lineages_map <- read_delim("data/acc_files/organisms2lineages_map_bae_20170828.txt",
                            delim="\t", col_names=T, trim_ws=T)
@@ -123,11 +129,11 @@ query_domains <- read_delim("data/acc_files/query_domains.txt",
 
 ## Cleanup
 ### DomArch cleanup & Reversal of operons
-```{r cleanup, eval=T, results='hide', message=F}
+```{r cleanup, eval=T, results='hide', message=F,warning=FALSE}
 # Cleanup Clusters
 # Remove tails (singletons)?
 prot <- prot %>%
-  cleanup_clust(repeat2s = TRUE,remove_tails = TRUE, domains_keep, domains_rename)
+  cleanup_clust(repeat2s = TRUE,remove_tails = FALSE, domains_keep, domains_rename)
 
 # Cleanup Species
 prot <- prot %>%
@@ -140,6 +146,8 @@ prot <- prot %>%
 
 prot <- prot %>%
   cleanup_domarch(repeat2s = TRUE, domains_rename)
+
+prot <- prot %>% remove_tails()
 
 ```
 
@@ -213,6 +221,13 @@ prot.GC.summ.byDALin %>% head() %>% kable()
 prot.GC.summ.byLin %>% head() %>% kable()
 prot.GC.summ %>% head() %>% kable()
 ```
+### Paralog Table
+```{r paralog table, eval=T, message=FALSE, results='hide'}
+# Use prot with Query column
+paralogs <- find_paralogs(pspa) %>%
+  head() %>%
+  kable()
+```
 
 ### Total Counts
 ```{r total counts, eval=T, message=FALSE, results='hide'}
@@ -239,42 +254,53 @@ lineage.DA.plot(pspa,
 lineage.DA.plot(pspa,
                 "GenContext", type = "gc2da", cutoff = 100)
 ```
-```{r network-plot, eval=T, out.width='70%'}
 
+
+```{r network-plot, eval=T, out.width='70%'}
+#liai_liaf <- prot %>% filter(grepl("liai-liaf",ignore.case = T, ClustName))
+#pspb <- prot %>% filter(grepl("pspb",ignore.case = T, ClustName))
+
+#pspa_only <- prot %>% filter(grepl("pspa",ignore.case = T, ClustName))
+#snf7 <- prot %>% filter(grepl("snf7",ignore.case = T, ClustName))
 domain_network(pspa, "DomArch")
 
 
 ```
 
 
-```{r paralog table}
-#paralogs <- find_paralogs(pspa)
-```
+
 
 ### Add Leaves
 ```{r add-leaves, eval=T}
-add_leaves(input_file ="data/alignments/pspa_snf7.aln",
-           lin_file="data/pspa_snf7.txt",
+add_leaves(input_file ="data/rawdata_aln/pspa_snf7.gismo.aln",
+           lin = pspa,
            reduced=TRUE)
 ```
 
 ### Generate MSA + Phylogenetic tree
 ```{r msa-tree,echo=FALSE,results='hide',fig.keep='all',  out.width="50%",out.height="50%"}
 # Create a fasta file
-convert_aln2fa(input_file= "data/alignments/pspa_snf7.aln",
-               lin_file="data/pspa_snf7.txt",
+convert_aln2fa(input_file= "data/rawdata_aln/pspa_snf7.gismo.aln",
+               lin = pspa,
+               #lin_file="data/pspa_snf7.txt",
                output_path="data/alignments/pspa.fasta",
                reduced=TRUE) %>% head()
+# Texi2pdf outputs its files in current working directory, not where the file is
+msa_pdf("data/alignments/pspa.fasta", output_path = NULL)
+#pdf_convert(pdf="data/alignments/pspa.fasta.pdf")
+pdf_convert(pdf ="data/alignments/pspa.fasta.pdf")
 
-msa_pdf("data/alignments/pspa.fasta")
-pdf_convert(pdf="pspa.fasta.pdf")
-
-files <- list.files(getwd(), pattern ="^pspa.fasta_(.*).png$")
+files <- list.files(getwd(), pattern ="^pspa.fasta(.*).png$")
 include_graphics(files)
+
+#pdf(files)
+
+file.remove(files)
 
 #pdf2image then render image here?
 #should I be deleting images
 seq_tree("data/alignments/pspa.fasta")
+
 ```
 
 
