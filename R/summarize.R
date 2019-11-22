@@ -164,12 +164,14 @@ total_counts <- function(prot ,cutoff = 0, type = "GC"){
   #' column names.
 
   if(type == "GC"){
-    gc_count <- prot %>% group_by(GenContext) %>% summarise(totalcount = sum(count))  %>% filter(totalcount >= cutoff)
-    total <- left_join(prot,gc_count, by = "GenContext")
+    prot <- summ.GC.byDALin(prot)
+    gc_count <- prot %>%group_by(GenContext) %>% summarise(totalcount = sum(count))
+    total <- left_join(prot,gc_count, by = "GenContext")  %>% filter(totalcount >= cutoff)
   }
   else if(type == "DA"){
-    da_count <- prot %>% group_by(DomArch) %>% summarise(totalcount = sum(count))  %>% filter(totalcount >= cutoff)
-    total <- left_join(prot,da_count, by = "DomArch")
+    prot <- summ.DA.byLin(prot)
+    da_count <- prot %>% group_by(DomArch) %>% summarise(totalcount = sum(count))
+    total <- left_join(prot,da_count, by = "DomArch") %>% filter(totalcount >= cutoff)
   }
   return(total)
 }

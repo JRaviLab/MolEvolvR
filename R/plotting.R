@@ -118,9 +118,9 @@ lineage.DA.plot <- function(query_data="prot",
 
   switch(type,
          da2doms={colname <- "DomArch";
-         query.summ.byLin <- summ.DA.byLin(query_data) %>% total_counts(cutoff = cutoff, type="DA")},
+         query.summ.byLin <- query_data %>% total_counts(cutoff = cutoff, type="DA")},
          gc2da={colname <- "GenContext";
-         query.summ.byLin <- summ.GC.byLin(query_data) %>% total_counts(cutoff = cutoff, type="GC")
+         query.summ.byLin <- query_data %>% total_counts(cutoff = cutoff, type="GC")
          })
 
 
