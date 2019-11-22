@@ -13,7 +13,7 @@ conflicted::conflict_prefer("filter", "dplyr")
 ###########################
 #### Network FUNCTIONS ####
 ###########################
-domain_network <- function(prot, column = "DomArch"){
+domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff_type = "Lineage", cutoff = 1, layout = "grid"){
   #'Domain Network
   #'
   #'This function creates a domain network from the 'DomArch' column.
@@ -26,13 +26,16 @@ domain_network <- function(prot, column = "DomArch"){
   # by domain networks or all, as required.
   # ye is either all of prot.list or centered on one domain
 
-  # if( cutoff > 2){
-  #   prot_cummulative <- summ.DA.byLin(prot) %>% total_counts(cutoff = 2, type="DA")
-  #   prot_doms <- prot_cummulative %>% select(DomArch) %>% distinct()
-  #   prot <- prot[which(prot$DomArch %in% prot_doms$DomArch),]
-  #
-  # }
-  # Keep the rows that contain one of the domains in the cummulative
+  column_name <- as.name(column)
+  if(cutoff_type == "Lineage"){
+    lin_summary <- prot %>% summ.DA.byLin() %>% summ.DA()
+    doms_above_cutoff <- (lin_summary %>% filter(totallin >= cutoff))[[column_name]]
+  }
+  else if(cutoff_type == "Total Count"){ #Change this type?
+    doms_above_cutoff <- (prot %>% total_counts( type ="DA", cutoff = cutoff))[[column_name]]
+  }
+
+  prot <- prot[which(prot[[column_name]] %in% doms_above_cutoff),]
 
   #prot.list=total$arch
   #prot.list <- unlist(lapply(prot.list, function(x) gsub(x,pattern = "\\?",replacement = "X")))
@@ -74,7 +77,7 @@ domain_network <- function(prot, column = "DomArch"){
   V(g)$size <- v.sz[V(g)$name]
   V(g)$size <- (V(g)$size-min(V(g)$size))/(max(V(g)$size)-min(V(g)$size))*20+10 # scaled by degree
   # setting vertex color by size
-  V(g)$color <- rainbow(5)[round((V(g)$size-min(V(g)$size))/(max(V(g)$size)-min(V(g)$size))*4+1)]
+  V(g)$color <- rainbow(5,alpha = .5)[round((V(g)$size-min(V(g)$size))/(max(V(g)$size)-min(V(g)$size))*4+1)]
   V(g)$frame.color <- V(g)$color
   # scaling edge width
   E(g)$width <- e.sz
@@ -85,7 +88,14 @@ domain_network <- function(prot, column = "DomArch"){
                     function(x) if(x>=ew[1] && x<=ew[2]) E(g)$color="cadetblue" else if(x>ew[2]) E(g)$color="maroon" else E(g)$color="gray55")
 
 
-  plot.igraph(g,layout = layout_randomly(g),vertex.label.dist=0,asp=0,edge.curved=F, vertex.label.color="black")
+  switch(layout,
+         "random" = plot.igraph(g,layout = layout_randomly(g),vertex.label.dist=0,asp=0,edge.curved=F, vertex.label.color="black"),
+         "grid" = plot.igraph(g,layout = layout_on_grid(g),vertex.label.dist=0,asp=0,edge.curved=F, vertex.label.color="black"),
+         "circle" = plot.igraph(g,layout = layout.circle(g),vertex.label.dist=0,asp=0,edge.curved=F, vertex.label.color="black"),
+         "auto" =plot.igraph(g,layout = layout.auto(g),vertex.label.dist=0,asp=0,edge.curved=F, vertex.label.color="black")
+         )
+
+  #plot.igraph(g,layout = layout_randomly(g),vertex.label.dist=0,asp=0,edge.curved=F, vertex.label.color="black")
   ### Tkplot does not work with shiny
   #tkplot(g, layout=layout_with_gem(g),
   #       vertex.label.dist=1,asp=0,
