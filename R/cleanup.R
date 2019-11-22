@@ -171,7 +171,9 @@ cleanup_domarch <- function(prot, repeat2s=TRUE, domains_rename, domains_ignore 
 }
 
 ######################
-cleanup_clust <- function(cls_data, repeat2s=TRUE, remove_tails = FALSE, domains_keep, domains_rename){
+cleanup_clust <- function(cls_data, repeat2s=TRUE,
+                          #remove_tails = FALSE,
+                          domains_keep, domains_rename){
   #'Cleanup cluster file
   #'
   #'Cleans a cluster file by removing rows that do not contain the query in the cluster.
@@ -207,9 +209,9 @@ cleanup_clust <- function(cls_data, repeat2s=TRUE, remove_tails = FALSE, domains
     cls_data <- repeat2s(cls_data, "ClustName")
   }
 
-  if(remove_tails){
-    cls_data <- cls_data %>% filter(!grepl(".1$", ClustID))
-  }
+  #if(remove_tails){
+  #  cls_data <- cls_data %>% filter(!grepl(".1$", ClustID))
+  #}
 
   # !!UNFIXED ISSUE!! SIG+TM+TM+... kind of architectures without explicit domain names are lost.
   # Need a way to take care of true hits that don't go by the expected domain name.
