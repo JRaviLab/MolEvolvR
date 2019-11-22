@@ -133,7 +133,7 @@ query_domains <- read_delim("data/acc_files/query_domains.txt",
 # Cleanup Clusters
 # Remove tails (singletons)?
 prot <- prot %>%
-  cleanup_clust(repeat2s = TRUE,remove_tails = FALSE, domains_keep, domains_rename)
+  cleanup_clust(repeat2s = TRUE, domains_keep, domains_rename)
 
 # Cleanup Species
 prot <- prot %>%
@@ -231,13 +231,13 @@ paralogs <- find_paralogs(pspa) %>%
 
 ### Total Counts
 ```{r total counts, eval=T, message=FALSE, results='hide'}
-DA.cumulative <- total_counts(prot.DA.summ.byLin,
+DA.cumulative <- total_counts(pspa,
                               cutoff =0, type="DA")
 DA.cumulative %>%
   head() %>%
   kable()
 
-GC.cumulative <- total_counts(prot.GC.summ.byDALin,
+GC.cumulative <- total_counts(pspa,
                               cutoff=50, type="GC") 
 GC.cumulative %>%
   head() %>%
@@ -262,8 +262,10 @@ lineage.DA.plot(pspa,
 
 #pspa_only <- prot %>% filter(grepl("pspa",ignore.case = T, ClustName))
 #snf7 <- prot %>% filter(grepl("snf7",ignore.case = T, ClustName))
-domain_network(pspa, "DomArch")
+domain_network(pspa, "DomArch",domains_of_interest = "", cutoff_type = "Lineage", 2, "circle")
 
+### ADD filters,
+### Add params layout
 
 ```
 
@@ -281,7 +283,7 @@ add_leaves(input_file ="data/rawdata_aln/pspa_snf7.gismo.aln",
 ```{r msa-tree,echo=FALSE,results='hide',fig.keep='all',  out.width="50%",out.height="50%"}
 # Create a fasta file
 convert_aln2fa(input_file= "data/rawdata_aln/pspa_snf7.gismo.aln",
-               lin = pspa,
+               lin = pspa,0
                #lin_file="data/pspa_snf7.txt",
                output_path="data/alignments/pspa.fasta",
                reduced=TRUE) %>% head()
