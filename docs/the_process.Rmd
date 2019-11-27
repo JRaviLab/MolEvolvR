@@ -40,11 +40,13 @@ here::here() # checking to see if the homedir location is accurate
 #paste0("R/", list.files("../R/")) %>%
 #  purrr::map(source)
 
+##! problem with path? Should start with the-approach, but starts with docs.
+## adding path explicitly paste0(path, "/R/") doesn't seem to help either.
 for (i in list.files("R/")){
    #print(here::here())
    print(i)
    if(i == "201906data.R") next
-   source(paste0("R/",i))
+   source("R/",i)
  }
 # Avoiding conflicts!
 conflicted::conflict_prefer("filter", "dplyr")
@@ -109,7 +111,13 @@ all <- all %>%
 #                   delim="\t", col_names=T, trim_ws=T,
 #                   escape_double=FALSE, na="NA")
 
-prot <- read_tsv("data/rawdata_tsv/all_raw_query_uniqop.txt", col_names = c("AccNum", "ClustID", "ClustName.orig", "GenContext.orig", "DomArch.Pfam","DomArch.orig","-", "Length", "GeneName", "Lineage", "Species.orig", "GCA_ID", "Annotation", "GI")) %>% select(-"-", -GI,-Annotation)
+prot <- read_tsv("data/rawdata_opinscls/all.op_ins_cls.clus2table",
+                 col_names = c("AccNum", "ClustID", "ClustName.orig",
+                               "GenContext.orig", "DomArch.Pfam", "DomArch.orig",
+                               "-", "Length", "GeneName",
+                               "Lineage", "Species.orig", "GCA_ID",
+                               "Annotation", "GI")) %>%
+  select(-"-", -GI, -Annotation)
 
 lineages_map <- read_delim("data/acc_files/organisms2lineages_map_bae_20170828.txt",
                            delim="\t", col_names=T, trim_ws=T)
@@ -147,7 +155,8 @@ prot <- prot %>%
 prot <- prot %>%
   cleanup_domarch(repeat2s = TRUE, domains_rename)
 
-prot <- prot %>% remove_tails()
+prot <- prot %>%
+  remove_tails()
 
 ```
 
