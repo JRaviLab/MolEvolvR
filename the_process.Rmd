@@ -11,20 +11,22 @@ output:
     depth: 4
     number_sections: false
     theme: united
+editor_options: 
+  chunk_output_type: console
 ---
 ## Environment & Setup
 ```{r setup, eval=T, results='hide', message=FALSE}
 knitr::opts_knit$set(root.dir=rprojroot::find_rstudio_root_file())
 # removed setwd option; homedir of *.Rproj is the correct working dir.
 # 
-# knitr::purl("docs/the_process.Rmd", "scripts/the_process_20190814.Rmd", documentation = 2)
+# knitr::purl("docs/the_process.Rmd", "scripts/the_process_20190814.Rmd", documentation=2)
 # infile <- "the_process.Rmd"; inpath <- "docs/"; outpath <- "scripts/"
-# name <- strsplit(infile, split = "\\.")[[1]][1]
+# name <- strsplit(infile, split="\\.")[[1]][1]
 # knitr::purl(paste0(inpath, infile),
 #             paste0(outpath, name,
 #                    "_rmd2r_", format(Sys.time(), "%Y%m%d"),
-#                    ".R", sep = ""),
-#             documentation = 2)
+#                    ".R", sep=""),
+#             documentation=2)
 ```
 
 ```{r load, eval=T, results='hide', message=FALSE}
@@ -42,12 +44,15 @@ here::here() # checking to see if the homedir location is accurate
 
 ##! problem with path? Should start with the-approach, but starts with docs.
 ## adding path explicitly paste0(path, "/R/") doesn't seem to help either.
-for (i in list.files("R/")){
-   #print(here::here())
-   print(i)
-   if(i == "201906data.R") next
-   source("R/",i)
- }
+# for (i in list.files("R/")){
+#    #print(here::here())
+#    print(i)
+#    if(i == "201906data.R") next
+#    source("R/",i)
+#  }
+source_files <- list.files("R/")
+map(paste0("R/", source_files), source)
+
 # Avoiding conflicts!
 conflicted::conflict_prefer("filter", "dplyr")
 conflicted::conflict_prefer("Position", "ggplot2")
@@ -112,7 +117,7 @@ all <- all %>%
 #                   escape_double=FALSE, na="NA")
 
 prot <- read_tsv("data/rawdata_opinscls/all.op_ins_cls.clus2table",
-                 col_names = c("AccNum", "ClustID", "ClustName.orig",
+                 col_names=c("AccNum", "ClustID", "ClustName.orig",
                                "GenContext.orig", "DomArch.Pfam", "DomArch.orig",
                                "-", "Length", "GeneName",
                                "Lineage", "Species.orig", "GCA_ID",
@@ -141,19 +146,20 @@ query_domains <- read_delim("data/acc_files/query_domains.txt",
 # Cleanup Clusters
 # Remove tails (singletons)?
 prot <- prot %>%
-  cleanup_clust(repeat2s = TRUE, domains_keep, domains_rename)
+  cleanup_clust(repeat2s=TRUE, #remove_tails=F,
+                domains_keep, domains_rename)
 
 # Cleanup Species
 prot <- prot %>%
-  cleanup_species(remove_empty = FALSE)
+  cleanup_species(remove_empty=FALSE)
 
 # Cleanup GenContext
 # Calls reverse_operons
 prot <- prot %>%
-  cleanup_gencontext(repeat2s = TRUE, remove_empty = FALSE, domains_rename) 
+  cleanup_gencontext(repeat2s=TRUE, remove_empty=FALSE, domains_rename) 
 
 prot <- prot %>%
-  cleanup_domarch(repeat2s = TRUE, domains_rename)
+  cleanup_domarch(repeat2s=TRUE, domains_rename)
 
 prot <- prot %>%
   remove_tails()
@@ -181,14 +187,14 @@ paged_table(prot_data)
 ##### Obsolete Now: word counts now handled in upset/wordcloud functions #####
 
 ## minimal functions may be able to removed and put within other summarize/ plotting functions
-DA.doms.wc <- prot %>% elements2words(column = "DomArch", conversion_type = "da2doms") %>%
+DA.doms.wc <- prot %>% elements2words(column="DomArch", conversion_type="da2doms") %>%
   words2wc()
 DA.doms.wc %>%
   head() %>%
   kable()
 # DA.doms.wc.ge5 <- filter.freq(DA.doms.wc, 5)
 ## Counts of domain architectures in the GenContext of XXX homologs
-GC.DA.wc <- prot %>% elements2words(column = "GenContext", conversion_type = "gc2da") %>%
+GC.DA.wc <- prot %>% elements2words(column="GenContext", conversion_type="gc2da") %>%
   words2wc()
 GC.DA.wc %>%
   head() %>%
@@ -198,7 +204,7 @@ GC.DA.wc %>%
 ### UpSet plots
 ```{r upset-plot-da, eval=T, out.height="300px"}
 # Per
-pspa <- prot %>% filter(grepl("pspa|snf7",ignore.case = T,ClustName))
+pspa <- prot %>% filter(grepl("pspa|snf7",ignore.case=T,ClustName))
 upset.plot(pspa, 30, "da2doms")
 ```
 
@@ -209,8 +215,8 @@ upset.plot(pspa, 100, "gc2da")
 ### Worclouds
 ```{r , eval= TRUE, out.height='600px'}
 # move to plotting.R and call just the custom function
-wordcloud_element("da2doms", pspa, min_freq = 10) 
-wordcloud_element("gc2da", pspa, min_freq = 100)
+wordcloud_element("da2doms", pspa, min_freq=10) 
+wordcloud_element("gc2da", pspa, min_freq=100)
 ```
 ### Lineage summaries
 ```{r lin-summary, eval=T}
@@ -258,20 +264,20 @@ GC.cumulative %>%
 # now calculates and filters by totalcounts within function
 
 lineage.DA.plot(pspa, 
-                colname = "DomArch", type = "da2doms", cutoff = 200)
+                colname="DomArch", type="da2doms", cutoff=200)
 
 lineage.DA.plot(pspa,
-                "GenContext", type = "gc2da", cutoff = 100)
+                "GenContext", type="gc2da", cutoff=100)
 ```
 
 
 ```{r network-plot, eval=T, out.width='70%'}
-#liai_liaf <- prot %>% filter(grepl("liai-liaf",ignore.case = T, ClustName))
-#pspb <- prot %>% filter(grepl("pspb",ignore.case = T, ClustName))
+#liai_liaf <- prot %>% filter(grepl("liai-liaf",ignore.case=T, ClustName))
+#pspb <- prot %>% filter(grepl("pspb",ignore.case=T, ClustName))
 
-#pspa_only <- prot %>% filter(grepl("pspa",ignore.case = T, ClustName))
-#snf7 <- prot %>% filter(grepl("snf7",ignore.case = T, ClustName))
-domain_network(pspa, "DomArch",domains_of_interest = "", cutoff_type = "Lineage", 2, "circle")
+#pspa_only <- prot %>% filter(grepl("pspa",ignore.case=T, ClustName))
+#snf7 <- prot %>% filter(grepl("snf7",ignore.case=T, ClustName))
+domain_network(pspa, "DomArch",domains_of_interest="", cutoff_type="Lineage", 2, "circle")
 
 ### ADD filters,
 ### Add params layout
@@ -284,7 +290,7 @@ domain_network(pspa, "DomArch",domains_of_interest = "", cutoff_type = "Lineage"
 ### Add Leaves
 ```{r add-leaves, eval=T}
 add_leaves(input_file ="data/rawdata_aln/pspa_snf7.gismo.aln",
-           lin = pspa,
+           lin=pspa,
            reduced=TRUE)
 ```
 
@@ -292,12 +298,12 @@ add_leaves(input_file ="data/rawdata_aln/pspa_snf7.gismo.aln",
 ```{r msa-tree,echo=FALSE,results='hide',fig.keep='all',  out.width="50%",out.height="50%"}
 # Create a fasta file
 convert_aln2fa(input_file= "data/rawdata_aln/pspa_snf7.gismo.aln",
-               lin = pspa,0
+               lin=pspa,0
                #lin_file="data/pspa_snf7.txt",
                output_path="data/alignments/pspa.fasta",
                reduced=TRUE) %>% head()
 # Texi2pdf outputs its files in current working directory, not where the file is
-msa_pdf("data/alignments/pspa.fasta", output_path = NULL)
+msa_pdf("data/alignments/pspa.fasta", output_path=NULL)
 #pdf_convert(pdf="data/alignments/pspa.fasta.pdf")
 pdf_convert(pdf ="data/alignments/pspa.fasta.pdf")
 
