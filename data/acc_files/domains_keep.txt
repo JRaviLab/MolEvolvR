@@ -20,3 +20,5 @@ PspN_N
 PspN
 DUF3046
 Snf7
+PspAA
+Tfu_1009
