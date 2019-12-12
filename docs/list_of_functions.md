@@ -61,6 +61,7 @@
 - [ ] `generate_wordcount`
   - [ ] `elements2words`
   - [ ] `words2wc`
+  - [ ] `filter_freq` | mostly used within other functions
 - [ ] `summary_bylin` (for DA, GC)
   - [ ] `summ_DA_byLin`
   - [ ] `summ_GC_byDALin`
@@ -79,7 +80,10 @@
 - [x] `lineage_domain_repeats_plot`??
 - [ ] `wordcloud`
 - [ ] `msa_tree`
-  - [ ] `msa`
+  - [ ] `convert_aln2fa` | `convert_aln2tsv`
+  - [ ] `to_titlecase`
+  - [ ] `add_leaves`
+  - [ ] `msa_pdf`
   - [ ] `phylotree`?
 - [ ] `prot_network`
   - [ ] by DA/domains
