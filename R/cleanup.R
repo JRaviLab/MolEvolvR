@@ -1,9 +1,8 @@
-## Functions to clean up .op_ins_cls files
-## To create consistent names and take care of repeats
-## To get element and word counts
-
-## Modified: Jun 06, 2019 (some func have been moved to summarize.R)
+## Functions to clean up .op_ins_cls files by:
+## Species, ClustName, DomArch, GenContext
+## To create consistent names and take care of repeats & remove empty rows
 ## Created: Aug 11, 2017
+## Modified: Dec 11, 2019
 ## Janani Ravi (@jananiravi) & Samuel Chen (@samuelzornchen)
 
 #################

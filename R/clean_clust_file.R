@@ -1,3 +1,14 @@
+## Functions to convert cluster files .op_ins_cls --> tsv
+## Created: July 01, 2019
+## Modified: Dec 11, 2019
+## Janani Ravi (@jananiravi) & Samuel Chen (@samuelzornchen)
+
+##!! Note: this may not work at all since the column names here and in
+## op_ins_cls, convert_opinscls_tsv.R may not match. Check files to fix issues!
+
+#################
+## Pkgs needed ##
+#################
 library(tidyverse)
 
 ##############
@@ -5,10 +16,16 @@ library(tidyverse)
 ##############
 ## FUNCTION to ASSIGN COLUMN NAMES based on AUG 2017 VA format
 colnames.op_ins_cls <- c("AccNum", "GenContext.orig",
-                         "arch.PFAM", "DomArch.orig", "arch.TMSIG",
-                         "Length", "GenName",
+                         "DomArch.PFAM", "DomArch.orig", "DomArch.TMSIG",
+                         "Length", "GeneName",
                          "Lineage", "Species.orig",
                          "Annotation", "GI")
+## FUNCTION to ASSIGN COLUMN NAMES based on DEC 2019 VA format
+colnames.op_ins_cls.clus2table <- c("AccNum", "ClustID", "ClustName.orig",
+                                    "GenContext.orig", "DomArch.Pfam", "DomArch.orig",
+                                    "-", "Length", "GeneName",
+                                    "Lineage", "Species.orig", "GCA_ID",
+                                    "Annotation", "GI")
 
 ###########################
 ## Adding ClustIDs/Names ##
