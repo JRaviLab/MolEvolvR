@@ -50,10 +50,10 @@
 
 - [ ] `add_leaves`
   - [ ] `to_titlecase`
-  - [ ] adding leaves based on AccNum, Lineage and Spp.
-  - [ ] add DA to leaf too?
-  - [ ] `aln2fasta`
-  - [ ] `accnum2fasta`
+  - [ ] `convert_aln2fa` | `convert_aln2tsv`
+  - [ ] `add_leaves` | adding leaves based on AccNum, Lineage and Spp.
+  - [ ] add DA to `add_leaves` too?
+  - [ ] `convert_accnum2fasta`
   - [ ] `filter_for_phylo`
 
 ## Summary stats
@@ -80,9 +80,6 @@
 - [x] `lineage_domain_repeats_plot`??
 - [ ] `wordcloud`
 - [ ] `msa_tree`
-  - [ ] `convert_aln2fa` | `convert_aln2tsv`
-  - [ ] `to_titlecase`
-  - [ ] `add_leaves`
   - [ ] `msa_pdf`
   - [ ] `phylotree`?
 - [ ] `prot_network`
