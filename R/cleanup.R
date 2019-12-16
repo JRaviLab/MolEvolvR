@@ -69,7 +69,8 @@ repeat2s <- function(prot, by_column="DomArch"){
 }
 
 ###########################
-remove_tails <- function(prot, by_column="DomArch"){
+remove_tails <- function(prot, by_column="DomArch",
+                         domains_keep=domains_keep){ #!! currently redundant
   #'Remove tails/singletons
   #'
   #'
@@ -79,9 +80,25 @@ remove_tails <- function(prot, by_column="DomArch"){
   #'
   #'@param prot A data frame containing 'DomArch', 'GenContext', 'ClustName' columns.
   #'@param by_column Default column is 'DomArch'. Can also take 'ClustName', 'GenContext' as input.
+  #'@param keep_query Default is TRUE. Keeps tail entries that contain the query domains.
   #'@examples remove_tails(prot, "DomArch")
-  domain_count <- prot %>% group_by({{by_column}}) %>% summarize(count = n())
+  by_column <- sym(by_column)
+  domain_count <- prot %>%
+    group_by({{by_column}}) %>%
+    summarize(count = n())
+
+  ## Identify tails
   tails <- domain_count %>% filter(count == 1)
+
+  ## Domains_keep
+  # Keep tails with query domains
+  # Contains all domains separated by "|"
+  domains_for_grep <- paste(domains_keep$domains, collapse = "|")
+  # Remove rows with no domains contained within domains_keep
+  tails <- tails %>%
+    filter(!grepl(domains_for_grep, {{by_column}})) ## CRAZY thing doesn't work!
+
+  # Remove tails
   prot <- prot %>% filter(!({{by_column}} %in% tails))
 
   return(prot)
@@ -155,19 +172,19 @@ cleanup_clust <- function(prot,
   prot$ClustName <- gsub("^\\+","", prot$ClustName)
   prot$ClustName <- gsub("\\+$","", prot$ClustName)
 
-  ## Domains_keep
-  # Character for greping for rows with domains_keep
-  # Contains all domains separated by "|"
-  domains_for_grep <- paste(domains_keep$domains, collapse = "|")
-  # Remove rows with no domains contained within domains_keep
-  prot <- prot %>% filter(grepl(domains_for_grep,ClustName))
-
   ## Domains_rename
   for(x in 1:length(domains_rename$old)){
     target <- domains_rename$old[x]
     replacement <- domains_rename$new[x]
     prot$ClustName <- prot$ClustName %>% str_replace_all(target,replacement)
   }
+
+  ## Domains_keep
+  # Character for greping for rows with domains_keep
+  # Contains all domains separated by "|"
+  domains_for_grep <- paste(domains_keep$domains, collapse = "|")
+  # Remove rows with no domains contained within domains_keep
+  prot <- prot %>% filter(grepl(domains_for_grep,ClustName))
 
   ## Optional parameters
   # Condense repeats
@@ -224,13 +241,6 @@ cleanup_domarch <- function(prot,
   prot$DomArch <- gsub("^\\+","", prot$DomArch)
   prot$DomArch <- gsub("\\+$","", prot$DomArch)
 
-  ## Domains_keep
-  # Character for greping for rows with domains_keep
-  # Contains all domains separated by "|"
-  domains_for_grep <- paste(domains_keep$domains, collapse = "|")
-  # Remove rows with no domains contained within domains_keep
-  prot <- prot %>% filter(grepl(domains_for_grep, DomArch))
-
   ## Domains_rename
   # Replace domains based on the domains_rename list
   for(j in 1:length(domains_rename$old)){
@@ -238,6 +248,13 @@ cleanup_domarch <- function(prot,
                                     as.vector(domains_rename$old[j]),
                                     as.vector(domains_rename$new[j]))
   }
+
+  ## Domains_keep
+  # Character for greping for rows with domains_keep
+  # Contains all domains separated by "|"
+  domains_for_grep <- paste(domains_keep$domains, collapse = "|")
+  # Remove rows with no domains contained within domains_keep
+  prot <- prot %>% filter(grepl(domains_for_grep, DomArch))
 
   # ##!! NOT RUN !!
   # ## Domains_ignore
