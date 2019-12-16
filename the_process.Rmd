@@ -71,6 +71,8 @@ prot <- read_tsv("data/rawdata_opinscls/all.op_ins_cls.clus2table",
                  col_names=colnames.op_ins_cls.clus2table) %>%
   select(-"-", -GI) # -Annotation # Let's keep 'annotation' for now.
 
+#write_tsv(x=prot, path="data/rawdata_tsv/all_raw.txt", col_names=T)
+
 lineages_map <- read_delim("data/acc_files/organisms2lineages_map_bae_20170828.txt",
                            delim="\t", col_names=T, trim_ws=T)
 
@@ -104,7 +106,7 @@ prot <- prot %>%
                 remove_empty=F) #new! check below if it works!
 
 prot <- prot %>%
-  cleanup_domarch(domains_keep=domains_keep,
+  cleanup_domarch(domains_keep=NULL, # filter applied to only ClustName for now.
                 domains_rename=domains_rename,
                 domains_ignore=NULL, # should check and remove soon!
                 repeat2s=TRUE,
@@ -122,6 +124,7 @@ prot <- prot %>%
   cleanup_gencontext(domains_rename=domains_rename,
                      repeat2s=T)
 
+# write_tsv(x=prot, path="data/rawdata_tsv/all_semiclean.txt", col_names=T)
 ```
 
 ## Data analysis
@@ -146,14 +149,16 @@ paged_table(prot_data)
 ##### Obsolete Now: word counts now handled in upset/wordcloud functions #####
 
 ## minimal functions may be able to removed and put within other summarize/ plotting functions
-DA.doms.wc <- prot %>% elements2words(column="DomArch", conversion_type="da2doms") %>%
+DA.doms.wc <- prot %>%
+  elements2words(column="DomArch", conversion_type="da2doms") %>%
   words2wc()
 DA.doms.wc %>%
   head() %>%
   kable()
-# DA.doms.wc.ge5 <- filter.freq(DA.doms.wc, 5)
+# DA.doms.wc.ge5 <- filter_freq(DA.doms.wc, 5)
 ## Counts of domain architectures in the GenContext of XXX homologs
-GC.DA.wc <- prot %>% elements2words(column="GenContext", conversion_type="gc2da") %>%
+GC.DA.wc <- prot %>%
+  elements2words(column="GenContext", conversion_type="gc2da") %>%
   words2wc()
 GC.DA.wc %>%
   head() %>%

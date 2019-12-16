@@ -1,6 +1,6 @@
 ## To summarize by lineages, DA and GC
-## Modified: Jun 07, 2019
-## Created: Jun 07, 2019 (was part of cleanup.R)
+## Created: Jun 07, 2019
+## Modified: Dec 12, 2019
 ## Janani Ravi (@jananiravi) & Samuel Chen (@samuelzchen)
 
 #################
@@ -82,7 +82,7 @@ words2wc <- function(x){ x %>%
     arrange(-freq)
 }
 ## Function to filter based on frequencies
-filter.freq <- function(x, min.freq){ x %>%
+filter_freq <- function(x, min.freq){ x %>%
     filter(freq>=min.freq)
 }
 
