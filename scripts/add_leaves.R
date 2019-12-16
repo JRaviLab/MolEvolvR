@@ -1,9 +1,18 @@
-# Created: April 19, 2019
+## Functions to create leaves for MSA and Phylogenetic Tree
+## Created: April 19, 2019
+## Modified: Dec 12, 2019 (moved to pre-msa-tree.R)
+## Janani Ravi (@jananiravi) & Samuel Chen (@samuelzornchen)
 
-library(tidyverse); library(here); library(roxygen2); library(docstring)
+#################
+## Pkgs needed ##
+#################
+library(tidyverse)
 conflicted::conflict_prefer("filter", "dplyr")
 
-## Function to have Title Case
+###################
+## Adding leaves ##
+###################
+## Function to convert to 'Title Case'
 to_titlecase <- function(x, y=" ") {
   #' Changing case to 'Title Case'
   #' @author Andrie, Janani Ravi
