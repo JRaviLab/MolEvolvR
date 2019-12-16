@@ -1,13 +1,16 @@
-# Created: April 19, 2019
+## Functions to convert alignment 'aln' to fasta format for MSA + Tree
+## Created: April 19, 2019
+## Modified: Dec 12, 2019 (moved to pre-msa-tree.R)
+## Janani Ravi (@jananiravi) & Samuel Chen (@samuelzornchen)
+
+#################
+## Pkgs needed ##
+#################
 
 library(tidyverse)
 library(data.table)
 #library(seqRFLP)
 source("R/add_leaves.R")
-# library(here)
-# library(roxygen2)
-# library(docstring)
-
 
 convert_aln2fa <- function(input_file = "data/alignments/pspa_snf7.aln",
                            lin = read_tsv("data/pspa_snf7.txt"),
