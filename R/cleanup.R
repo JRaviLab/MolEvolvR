@@ -2,13 +2,14 @@
 ## Species, ClustName, DomArch, GenContext
 ## To create consistent names and take care of repeats & remove empty rows
 ## Created: Aug 11, 2017
-## Modified: Dec 11, 2019
+## Modified: Dec 18, 2019
 ## Janani Ravi (@jananiravi) & Samuel Chen (@samuelzornchen)
 
 #################
 ## Pkgs needed ##
 #################
 library(tidyverse)
+library(glue); library(rlang) # needed?
 conflicted::conflict_prefer("filter", "dplyr")
 
 ###########################
@@ -27,10 +28,7 @@ remove_empty <- function(prot, by_column="DomArch"){
   #' Default column is 'DomArch'. Can also take the following as input, 'Species', 'GenContext', 'ClustName'.
   #'@examples remove_empty(prot, "DomArch")
 
-  #Switch case for remove_empty, check efficiency
-  #Don't call other psp functions within these functions
-  #! FUNCTIONS CALLED HERE, if else might be better since only two options, T and F
-  #! Make a separate function of out of this?
+  #?? Don't call other psp functions within these functions
   prot <- prot %>%
     as_tibble() %>%
     #filter(grepl("\\*", {{by_column}})) %>%		  # Keep only rows with Query (*) for GenContext
@@ -47,14 +45,16 @@ repeat2s <- function(prot, by_column="DomArch"){
   #'
   #'Condenses repeated domains in the specified column.
   #'
-  #'This function ...
-  #'Certain domains can be removed according to an additional data frame.
+  #'This function identifies repeated domains and condenses them to (s).
+  #'?? Certain domains can be removed according to an additional data frame.
   #'The original data frame is returned with the corresponding cleaned up column.
   #'
   #'@param prot A data frame containing 'DomArch', 'GenContext', 'ClustName' columns.
   #'@param by_column Column in which repeats are condensed to domain+domain -> domain(s).
   #' Default column is 'DomArch'. Can also take the following as input, 'GenContext', 'ClustName'.
   #'@examples repeat2s(prot, "DomArch")
+
+  #!! FUNS is soft-deprecated. FIX!!!
   prot[,by_column] <- prot[,by_column] %>%
     mutate_all(funs(str_replace_all(.,
                                     pattern="\\+",
@@ -70,7 +70,7 @@ repeat2s <- function(prot, by_column="DomArch"){
 
 ###########################
 remove_tails <- function(prot, by_column="DomArch",
-                         domains_keep=domains_keep){ #!! currently redundant
+                         keep_domains=FALSE){ #!! currently redundant
   #'Remove tails/singletons
   #'
   #'
@@ -80,7 +80,7 @@ remove_tails <- function(prot, by_column="DomArch",
   #'
   #'@param prot A data frame containing 'DomArch', 'GenContext', 'ClustName' columns.
   #'@param by_column Default column is 'DomArch'. Can also take 'ClustName', 'GenContext' as input.
-  #'@param keep_query Default is TRUE. Keeps tail entries that contain the query domains.
+  #'@param keep_domains Default is False Keeps tail entries that contain the query domains.
   #'@examples remove_tails(prot, "DomArch")
   by_column <- sym(by_column)
   domain_count <- prot %>%
@@ -91,14 +91,21 @@ remove_tails <- function(prot, by_column="DomArch",
   tails <- domain_count %>% filter(count == 1)
 
   ## Domains_keep
+  if(keep_domains){
   # Keep tails with query domains
+  #!! Insert line to read domains_keep
+
   # Contains all domains separated by "|"
   domains_for_grep <- paste(domains_keep$domains, collapse = "|")
   # Remove rows with no domains contained within domains_keep
+  # Redundant for ClustName since we already set the filter to only these doms.
   tails <- tails %>%
-    filter(!grepl(domains_for_grep, {{by_column}})) ## CRAZY thing doesn't work!
+    filter(!grepl(domains_for_grep, {{by_column}}))
+  }
 
   # Remove tails
+  # tails <- tails %>% select({{by_column}}) %>% unlist()
+  tails <- tails %>% pull({{by_column}})
   prot <- prot %>% filter(!({{by_column}} %in% tails))
 
   return(prot)
@@ -118,9 +125,13 @@ cleanup_species <- function(prot, remove_empty=FALSE){
   #' Default is false.
   #'@examples cleanup_species(prot,TRUE)
   # FUNCTIONS CALLED HERE, if else might be better since only two options, T and F
+
+  # Create cleaned up Species column
   prot$Species <- prot$Species.orig %>%
+    # remove dots after sp and str
     str_replace_all(coll("sp. ", TRUE), "sp ") %>%
     str_replace_all(coll("str. ", TRUE), "str ") %>%
+    # remove special characters and brackets
     str_replace_all(coll(" = ", TRUE), " ") %>%
     str_replace_all(coll("-", TRUE), "") %>%
     str_replace_all(coll(".", TRUE), "") %>%
@@ -131,9 +142,9 @@ cleanup_species <- function(prot, remove_empty=FALSE){
     str_replace_all(coll("\\", TRUE), "") %>%
     str_replace_all(coll("/", TRUE), "") %>%
     str_replace_all(coll("\'", TRUE), "") %>%
+    # remove extra spaces
     str_replace_all(coll("  ", TRUE), " ")
 
-  # ADD SOMETHING (!) for removing empty rows
   # !! CHECK !! Species vs Species_old
   if(remove_empty){
     prot <- remove_empty(prot=prot, by_column="Species")
@@ -144,7 +155,7 @@ cleanup_species <- function(prot, remove_empty=FALSE){
 
 ######################
 cleanup_clust <- function(prot,
-                          domains_keep, domains_rename,
+                          domains_rename, domains_keep,
                           repeat2s=TRUE, remove_tails = FALSE,
                           remove_empty=FALSE){
   #'Cleanup cluster file
@@ -155,15 +166,14 @@ cleanup_clust <- function(prot,
   #'The return value is the cleaned up data frame.
   #'
   #'@param prot A data frame that must contain columns Query and ClustName.
+  #'@param domains_rename A data frame containing the domain names to be replaced in a column 'old' and the corresponding replacement values in a column 'new'.
   #'@param domains_keep A data frame containing the domain names to be retained.
-  #'@param domains_rename A data frame containing the domain names to be replaced in a column 'old' and the
-  #'corresponding replacement values in a column 'new'.
   #'@param repeat2s Boolean. If TRUE, repeated domains in 'ClustName' are condensed. Default is TRUE.
   #'@param remove_tails Boolean. If TRUE, 'ClustName' will be filtered based on domains to keep/remove. Default is FALSE.
   #'@param remove_empty Boolean. If TRUE, rows with empty/unnecessary values in 'ClustName' are removed. Default is FALSE.
   #'@examples cleanup_clust(prot, TRUE, FALSE, domains_keep, domains_rename)
 
-
+  # Create cleaned up ClustName column
   prot$ClustName <- prot$ClustName.orig
 
   ## Basic Cleanup
@@ -176,7 +186,8 @@ cleanup_clust <- function(prot,
   for(x in 1:length(domains_rename$old)){
     target <- domains_rename$old[x]
     replacement <- domains_rename$new[x]
-    prot$ClustName <- prot$ClustName %>% str_replace_all(target,replacement)
+    prot$ClustName <- prot$ClustName %>%
+      str_replace_all(target, replacement)
   }
 
   ## Domains_keep
@@ -184,7 +195,7 @@ cleanup_clust <- function(prot,
   # Contains all domains separated by "|"
   domains_for_grep <- paste(domains_keep$domains, collapse = "|")
   # Remove rows with no domains contained within domains_keep
-  prot <- prot %>% filter(grepl(domains_for_grep,ClustName))
+  prot <- prot %>% filter(grepl(domains_for_grep, ClustName))
 
   ## Optional parameters
   # Condense repeats
@@ -233,6 +244,7 @@ cleanup_domarch <- function(prot,
   #'@param domains_ignore A data frame containing the domain names to be removed in a column called 'domains'
   #'@examples cleanup_domarch(prot, TRUE, FALSE, domains_keep, domains_rename, domains_ignore=NULL)
 
+  # Create cleaned up DomArch column
   prot$DomArch <- prot$DomArch.orig
 
   ## Basic Cleanup
@@ -301,6 +313,8 @@ cleanup_gencontext <- function(prot, domains_rename,
   #'@param domains_rename A data frame containing the domain names to be replaced in a column 'old' and the
   #'@param repeat2s Boolean. If TRUE, repeated domains in 'GenContext' are condensed. Default is TRUE.
   #'@examples cleanup_gencontext(prot, domains_rename, T, F)
+
+  # Create cleaned up GenContext column
   prot$GenContext <- prot$GenContext.orig
 
   ## Domains_rename
