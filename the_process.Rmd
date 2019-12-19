@@ -1,5 +1,5 @@
 ---
-title: "The process"
+title: "evolvR | The Process"
 author: "Janani Ravi, Samuel Z Chen"
 date: "`r Sys.Date()`"
 output:
@@ -29,18 +29,21 @@ knitr::opts_knit$set(root.dir=rprojroot::find_rstudio_root_file())
 #             documentation=2)
 ```
 
+### Loading & Sourcing
 ```{r load, eval=T, results='hide', message=FALSE}
 library(here)
-library(tidyverse)
+library(tidyverse); library(rlang)
 library(rmarkdown); library(knitr)
 library(wordcloud); library(RColorBrewer)
+library(pdftools); library(latexpdf); library(tools)
 # ADD OTHER DEPENDENCIES
 
 here::here() # checking to see if the homedir location is accurate
+# This should be the path to the main 'the-approach' directory!
 
 # Sourcing scripts containing package functions
-#paste0("R/", list.files("../R/")) %>%
-#  purrr::map(source)
+source_files <- list.files(here("R/"))
+map(paste0(here("R/"), source_files), source)
 
 ##! problem with path? Should start with the-approach, but starts with docs.
 ## adding path explicitly paste0(path, "/R/") doesn't seem to help either.
@@ -50,8 +53,6 @@ here::here() # checking to see if the homedir location is accurate
 #    if(i == "201906data.R") next
 #    source("R/",i)
 #  }
-source_files <- list.files("R/")
-map(paste0("R/", source_files), source)
 
 # Avoiding conflicts!
 conflicted::conflict_prefer("filter", "dplyr")
@@ -67,56 +68,56 @@ conflicted::conflict_prefer("strsplit", "base")
 #                   delim="\t", col_names=T, trim_ws=T,
 #                   escape_double=FALSE, na="NA")
 
-prot <- read_tsv("data/rawdata_opinscls/all.op_ins_cls.clus2table",
-                 col_names=colnames.op_ins_cls.clus2table) %>%
-  select(-"-", -GI) # -Annotation # Let's keep 'annotation' for now.
+# prot <- read_tsv(here("data/rawdata_opinscls/all.op_ins_cls.clus2table"),
+#                  col_names=colnames.op_ins_cls.clus2table) %>%
+#   select(-"-", -GI) # -Annotation # Let's keep 'annotation' for now.
+# # write_tsv(x=prot, path=here("data/rawdata_tsv/all_raw.txt"), col_names=T)
+# prot <- read_tsv(here("data/rawdata_tsv/all_raw.txt"), col_names=TRUE)
+# Post-cleanup
+prot <- read_tsv(here("data/rawdata_tsv/all_semiclean.txt"), col_names=TRUE)
 
-#write_tsv(x=prot, path="data/rawdata_tsv/all_raw.txt", col_names=T)
-
-lineages_map <- read_delim("data/acc_files/organisms2lineages_map_bae_20170828.txt",
+lineages_map <- read_delim(here("data/acc_files/organisms2lineages_map_bae_20170828.txt"),
                            delim="\t", col_names=T, trim_ws=T)
 
-domains_rename <- read_delim("data/acc_files/domains_rename.txt",
-                              delim="\t", col_names=TRUE)
+domains_rename <- read_delim(here("data/acc_files/domains_rename.txt"),
+                             delim="\t", col_names=TRUE)
 
 # domains_ignore <- read_delim("data/acc_files/domains_ignore.txt",
 #                              delim="\t", col_names=T)
 
-domains_keep <- read_delim("data/acc_files/domains_keep.txt",
-                            delim="\t", col_names=T)
+domains_keep <- read_delim(here("data/acc_files/domains_keep.txt"),
+                           delim="\t", col_names=T)
 
-query_domains <- read_delim("data/acc_files/query_domains.txt",
+query_domains <- read_delim(here("data/acc_files/query_domains.txt"),
                             delim="\t", col_names=T)
 ```
 
 ## Cleanup
-### DomArch cleanup & Reversal of operons
-```{r cleanup, eval=T, results='hide', message=F,warning=FALSE}
+### Column cleanup & Reversal of operons
+- Columns cleaned: `ClustName`, `DomArch`, `GenContext`, `Species`.
+- Tails removed.
+- GenContext straightened out.
+
+```{r cleanup, eval=T, results='hide', message=F, warning=FALSE}
 # Cleanup Species
 prot <- prot %>%
   cleanup_species(remove_empty=FALSE)
 
 # Cleanup ClusterNames & DomArchs
-# Remove tails (singletons)?
 prot <- prot %>%
-  cleanup_clust(domains_keep=domains_keep,
-                domains_rename=domains_rename,
+  cleanup_clust(domains_rename=domains_rename,
+                domains_keep=domains_keep,
                 repeat2s=TRUE,
-                remove_tails=F, #new! check below if it works!
-                remove_empty=F) #new! check below if it works!
+                remove_tails=F,        #new! check below if it works!
+                remove_empty=T)        #new! redundant? domains_keep will remove these rows anyway!
 
 prot <- prot %>%
-  cleanup_domarch(domains_keep=NULL, # filter applied to only ClustName for now.
-                domains_rename=domains_rename,
-                domains_ignore=NULL, # should check and remove soon!
-                repeat2s=TRUE,
-                remove_tails=F, #new! check below if it works!
-                remove_empty=F) #new! check below if it works!
-
-#! Check!!! ClustName already renamed to DomArch?
-# Once this is clarified, may not need this explicitly called.
-prot <- prot %>%
-  remove_tails(by_column="ClustName")
+  cleanup_domarch(domains_rename=domains_rename,
+                  domains_keep=NULL,   # filter applied to only ClustName for now.
+                  domains_ignore=NULL, #!! should check and remove soon!
+                  repeat2s=TRUE,
+                  remove_tails=F,      #new! check below if it works!
+                  remove_empty=F)      #new! needed?
 
 # Cleanup GenContext
 # Calls reverse_operons
@@ -124,7 +125,24 @@ prot <- prot %>%
   cleanup_gencontext(domains_rename=domains_rename,
                      repeat2s=T)
 
-# write_tsv(x=prot, path="data/rawdata_tsv/all_semiclean.txt", col_names=T)
+#!! Remove tails (singletons)?
+#!! Check!!! ClustName already renamed to DomArch?
+# Once this is clarified, may not need this explicitly called.
+prot <- prot %>%
+  remove_tails(by_column="ClustName", keep_domains=F)
+
+# write_tsv(x=prot, path=here("data/rawdata_tsv/all_semiclean.txt"), col_names=T)
+```
+
+### Subsetting by protein/domain of interest
+```{r prot_subset, eval=T, results='hide', message=F, warning=FALSE}
+## Subset by Protein/Domain
+dropdown_var <- "pspa_snf7"
+dropdown_search <- "pspa|snf7"
+dropdown_aln <- here("data/rawdata_aln/pspa_snf7.gismo.aln")
+dropdown <- prot %>%
+  filter(grepl(dropdown_search, ignore.case=T, ClustName)) %>%
+  filter(!grepl("pspaa", ignore.case=T, ClustName))
 ```
 
 ## Data analysis
@@ -146,9 +164,10 @@ paged_table(prot_data)
 ```{r wordcounts, eval=T}
 ## Counts of domains in XXX domain architectures
 
-##### Obsolete Now: word counts now handled in upset/wordcloud functions #####
+##!!xx Obsolete Now: word counts now handled in upset/wordcloud functions #####
+##!! minimal functions may be able to removed and put within other summarize/ plotting functions
 
-## minimal functions may be able to removed and put within other summarize/ plotting functions
+##!! Is this reading ClustName or DomArch?
 DA.doms.wc <- prot %>%
   elements2words(column="DomArch", conversion_type="da2doms") %>%
   words2wc()
@@ -156,6 +175,7 @@ DA.doms.wc %>%
   head() %>%
   kable()
 # DA.doms.wc.ge5 <- filter_freq(DA.doms.wc, 5)
+
 ## Counts of domain architectures in the GenContext of XXX homologs
 GC.DA.wc <- prot %>%
   elements2words(column="GenContext", conversion_type="gc2da") %>%
@@ -167,24 +187,27 @@ GC.DA.wc %>%
 
 ### UpSet plots
 ```{r upset-plot-da, eval=T, out.height="300px"}
-# Per
-pspa <- prot %>% filter(grepl("pspa|snf7",ignore.case=T,ClustName))
-upset.plot(pspa, 30, "da2doms")
+# Per ...?
+##!! Is this reading ClustName or DomArch?
+upset.plot(dropdown, 30, "da2doms")
 ```
 
 ```{r upset-plot-gc, eval=T, out.height="600px"}
-upset.plot(pspa, 100, "gc2da")
+upset.plot(dropdown, 100, "gc2da")
 ```
 
 ### Worclouds
 ```{r , eval= TRUE, out.height='600px'}
 # move to plotting.R and call just the custom function
-wordcloud_element("da2doms", pspa, min_freq=10) 
-wordcloud_element("gc2da", pspa, min_freq=100)
+##!! Is this reading ClustName or DomArch?
+wordcloud_element("da2doms", dropdown, min_freq=10) 
+wordcloud_element("gc2da", dropdown, min_freq=100)
 ```
+
 ### Lineage summaries
 ```{r lin-summary, eval=T}
 ## Main Domain Architectures -- Counts by DA and Lineage
+##!! Is this reading ClustName or DomArch?
 prot.DA.summ.byLin <- summ.DA.byLin(prot)
 prot.DA.summ <- summ.DA(prot.DA.summ.byLin)
 
@@ -200,23 +223,26 @@ prot.GC.summ.byDALin %>% head() %>% kable()
 prot.GC.summ.byLin %>% head() %>% kable()
 prot.GC.summ %>% head() %>% kable()
 ```
+
 ### Paralog Table
 ```{r paralog table, eval=T, message=FALSE, results='hide'}
 # Use prot with Query column
-paralogs <- find_paralogs(pspa) %>%
+paralogs <- find_paralogs(dropdown)
+paralogs %>%
   head() %>%
   kable()
 ```
 
 ### Total Counts
 ```{r total counts, eval=T, message=FALSE, results='hide'}
-DA.cumulative <- total_counts(pspa,
+##!! Is this reading ClustName or DomArch?
+DA.cumulative <- total_counts(dropdown,
                               cutoff =0, type="DA")
 DA.cumulative %>%
   head() %>%
   kable()
 
-GC.cumulative <- total_counts(pspa,
+GC.cumulative <- total_counts(dropdown,
                               cutoff=50, type="GC") 
 GC.cumulative %>%
   head() %>%
@@ -227,10 +253,10 @@ GC.cumulative %>%
 
 # now calculates and filters by totalcounts within function
 
-lineage.DA.plot(pspa, 
-                colname="DomArch", type="da2doms", cutoff=200)
+lineage.DA.plot(dropdown, 
+                colname="ClustName", type="da2doms", cutoff=200)
 
-lineage.DA.plot(pspa,
+lineage.DA.plot(dropdown,
                 "GenContext", type="gc2da", cutoff=100)
 ```
 
@@ -241,37 +267,45 @@ lineage.DA.plot(pspa,
 
 #pspa_only <- prot %>% filter(grepl("pspa",ignore.case=T, ClustName))
 #snf7 <- prot %>% filter(grepl("snf7",ignore.case=T, ClustName))
-domain_network(pspa, "DomArch",domains_of_interest="", cutoff_type="Lineage", 2, "circle")
+domain_network(dropdown, "ClustName",
+               domains_of_interest="", cutoff_type="Lineage",
+               2, "circle")
 
-### ADD filters,
-### Add params layout
-
+##!! ADD filters,
+##!! Add params layout
+##!! Add Network for genomic contexts -- new function? adapt existing one?
 ```
 
-
-
-
-### Add Leaves
-```{r add-leaves, eval=T}
-add_leaves(input_file ="data/rawdata_aln/pspa_snf7.gismo.aln",
-           lin=pspa,
-           reduced=TRUE)
-```
 
 ### Generate MSA + Phylogenetic tree
-```{r msa-tree,echo=FALSE,results='hide',fig.keep='all',  out.width="50%",out.height="50%"}
-# Create a fasta file
-convert_aln2fa(input_file= "data/rawdata_aln/pspa_snf7.gismo.aln",
-               lin=pspa,0
-               #lin_file="data/pspa_snf7.txt",
-               output_path="data/alignments/pspa.fasta",
-               reduced=TRUE) %>% head()
-# Texi2pdf outputs its files in current working directory, not where the file is
-msa_pdf("data/alignments/pspa.fasta", output_path=NULL)
-#pdf_convert(pdf="data/alignments/pspa.fasta.pdf")
-pdf_convert(pdf ="data/alignments/pspa.fasta.pdf")
+```{r msa-tree, echo=FALSE, results='hide', fig.keep='all', out.width="50%", out.height="50%"}
+# Add Leaves
+leaf_aln <- add_leaves(input_file=dropdown_aln,
+                       lin=prot,
+                       reduced=T)
+leaf_aln %>% head() %>% kable()
 
-files <- list.files(getwd(), pattern ="^pspa.fasta(.*).png$")
+# Create a fasta file
+convert_aln2fa(input_file=dropdown_aln,
+               lin=prot,
+               output_path=paste0("data/alns/", dropdown_var, ".fasta"),
+               reduced=T)
+
+msa_pdf(fasta_filepath=paste0(here("data/alns/"), dropdown_var, ".fasta"),
+        out_filepath=NULL) #!! specifying path makes a difference?
+
+# Texi2pdf outputs its files in current working directory, not where the file is
+# tex2pdf(paste0(here("data/alns/"), dropdown_var, ".tex")) # part of latexpdf
+
+#!! Not able to install pdftools or run the following command.
+#pdf_convert(pdf="data/alignments/pspa.fasta.pdf")
+# pdf_convert(pdf = paste0(here("data/alns/"),
+#                          dropdown_var, ".pdf"))      #!! CHECK!!
+
+files <- list.files(here("data/alns/"),
+                    pattern =paste0("^",       #!! CHECK!!
+                                    dropdown_var,
+                                    "(.*).png$"))
 include_graphics(files)
 
 #pdf(files)
@@ -280,7 +314,7 @@ file.remove(files)
 
 #pdf2image then render image here?
 #should I be deleting images
-seq_tree("data/alignments/pspa.fasta")
+seq_tree(paste0(here("data/alns/"), dropdown_var, ".fasta"))
 
 ```
 
