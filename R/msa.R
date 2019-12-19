@@ -1,11 +1,17 @@
+## Function to generate MSA: fasta —> PDF
+## Created: Jun 19, 2019
+## Modified: Dec 18, 2019
+## Janani Ravi (@jananiravi) & Samuel Chen (@samuelzornchen)
+
+#################
+## Pkgs needed ##
+#################
 library(tidyverse)
-library(msa)
-# library(seqinr)
+library(msa); library(Biostrings)#; library(seqinr)
+library(pdftools); library(latexpdf); library(tools); library(tinytex) #needed?
 
-library(Biostrings)
-library(tools)
-
-#output generated before hand:ideally y
+##!! FEATURES, BUGS, NOTES thus far!!
+#output generated before hand:ideally
 #is determined by sliders
 #for psp, don't need to get too complex, tree
 #and alignment generated backend
@@ -13,9 +19,11 @@ library(tools)
 #look at other outputs and functions of msa that produce other outputs
 #or other packages, to embed
 
-
-
-msa_pdf <- function(fasta_filepath , lowerbound=NULL, upperbound=NULL, output_path = NULL){
+#############
+#### MSA ####
+#############
+msa_pdf <- function(fasta_filepath, out_filepath = NULL,
+                    lowerbound=NULL, upperbound=NULL){
   #'Multiple Sequence Alignment
   #'
   #'Generates a multiple sequence alignment from a fasta file
@@ -24,51 +32,68 @@ msa_pdf <- function(fasta_filepath , lowerbound=NULL, upperbound=NULL, output_pa
   #'a pdf
   #'
   #'@param fasta_filepath Character. The path location of the fasta file to be read.
+  #'@param out_filepath Character. The path location of the output pdf to write.
+  #'Default is NULL. If value is NULL, the pdf is written to the same directory as the fasta file.
   #'@param lowerbound Numeric. The column that determines the starting location of the MSA.
   #'Default is NULL. If value is NULL, the entire multiple sequence alignment is printed.
   #'@param upperbound Numeric. The column that determines the ending location of the MSA.
   #'Default is NULL. If value is NULL, the entire multiple sequence alignment is printed.
-  #'@param output_path Character. The path location of the output pdf to write.
-  #'Default is NULL. If value is NULL, the pdf is written to the same directory as the fasta file.
   # #'@examples msa_pdf()
 
-  # don't want accesation numbers, must be mapped to a species
-  #This is
+  ## SAMPLE ARGUMENTS to test run
+  # fasta_filepath=paste0(here("data/alns/"), dropdown_var, ".fasta")
+  # out_filepath=NULL; lowerbound=NULL; upperbound=NULL
+
+  ## PATH DEFINITIONS
+  # path+filename
+  fastafile_split = strsplit(fasta_filepath, "/")[[1]]
+  # retrieving the filename without the '.fasta' extension
+  # --> to prefix .tex and .pdf
+  fastafile_name = fastafile_split[length(fastafile_split)] %>%
+    str_replace(pattern=".fasta", replacement="")
+  # path to the fasta file
+  fasta_path <- paste0(fastafile_split[1:(length(fastafile_split)-1)],
+                       collapse="/")
+  # tex & pdf filepaths
+  # tex_filepath <- paste0(fasta_path, "/", fastafile_name, ".tex")
+  pdf_filepath <- paste0(fasta_path, "/", fastafile_name, ".pdf")
+  print(pdf_filepath) ## Needs initialization
+
+  ## MSA
+  #!! don't want accession numbers, must be mapped to a species?
   my_seqs <- readAAStringSet(fasta_filepath)
   my_seqs_msa <- msa(my_seqs)
 
+  ## Printing MSA to TeX
   #print the whole MSA if either bound is NULL
   if(is.null(lowerbound) | is.null(upperbound)){
-    msaPrettyPrint(my_seqs_msa, output="tex",
-                   file=paste0(fasta_filepath, ".tex"),
-
+    msaPrettyPrint(x=my_seqs_msa, output="pdf",
+                   alFile=fasta_filepath, file=pdf_filepath,
                    #aesthetic
                    showNames="left", showLogo="top",
-                   # showNames = "none",
-                   # showLogo = "none",
-                   logoColors="rasmol", # “chemical”, “rasmol”, “hydropathy”, “structure”, “standard area”, “accessible area”
-                   shadingMode="functional", # or "similar"
+                   # showConsensus="top",
+                   # showNames = "none", showLogo = "none",
+                   logoColors="rasmol",
+                   shadingMode="functional",
                    shadingModeArg="structure",
                    shadingColors="blues",
                    consensusColors="ColdHot",
                    askForOverwrite=FALSE, verbose=FALSE,
                    furtherCode=c("\\defconsensus{.}{lower}{upper}",
                                  "\\showruler{1}{top}"))
-  }
-  #If bounds are not NULL
-  else{
-    msaPrettyPrint(my_seqs_msa, output="tex",
-                   file=paste0(fasta_filepath, ".tex"),
-
-                   #if user doesn't input either lowerbound or upperbound, default to either length, or 0
-                   #how do I get the length?
+  } else{ #If bounds are not NULL
+    msaPrettyPrint(my_seqs_msa, output="pdf",
+                   alFile=fasta_filepath, file=pdf_filepath,
+                   #if user doesn't input either lowerbound or upperbound,
+                   #default to either length, or 0
+                   #!!how do I get the length?
                    y=c(lowerbound,upperbound),
                    #aesthetic
-                   ##showNames="left", showLogo="top",
-                   showNames = "none",
-                   showLogo = "none",
-                   ##logoColors="rasmol", # “chemical”, “rasmol”, “hydropathy”, “structure”, “standard area”, “accessible area”
-                   shadingMode="functional", # or "similar"
+                   showNames="left", showLogo="top",
+                   # showConsensus="top",
+                   # showNames = "none", showLogo = "none",
+                   logoColors="rasmol",
+                   shadingMode="functional",
                    shadingModeArg="structure",
                    shadingColors="blues",
                    consensusColors="ColdHot",
@@ -77,36 +102,43 @@ msa_pdf <- function(fasta_filepath , lowerbound=NULL, upperbound=NULL, output_pa
                                  "\\showruler{1}{top}"))
   }
 
-  fastafile_split = strsplit(fasta_filepath, "/")[[1]]
-  fastafile_name = fastafile_split[length(fastafile_split)]
+  file.rename(paste0(fastafile_name, ".pdf"), pdf_filepath)
 
-  #texi2pdf(file = paste0(fasta_filepath,".tex"), clean= TRUE)
+  ## To convert TeX to PDF
+  ## Errors with large number of sequences
+  # print(pdf_filepath)
+  # texi2dvi(file=tex_filepath, clean= TRUE, pdf=TRUE)
+  # tex2pdf(tex_filepath, clean=TRUE) ## DOESN'T WORK EITHER!
 
   ### BELOW not working: maybe use function to move file after texi2pdf called?
-  curr_dir <- getwd()
+  # curr_dir <- here("data/alns")
 
-  if(is.null(output_path)){
-    setwd(paste0(fasta_filepath,"/.."))
-    #texi2pdf outputs files to the current working directory
-    # make it output to directory of the fasta_file
-    texi2pdf(file = paste0(fastafile_name,".tex"), clean= TRUE)
-  }
-  else{
-    outfile_split = strsplit(output_path, "/")[[1]]
-    outfile_name = outfile_split[length(outfile_split)]
-
-    fasta_dir <- paste0(curr_dir,"/", fasta_filepath)
-
-    setwd(paste0(curr_dir,"/",output_path,"/.."))
-
-
-    #texi2pdf outputs files to the current working directory
-    # make it output to directory of the output_path
-    texi2pdf(file = paste0(fasta_dir, ".tex"), clean= TRUE)
-
-    file.rename(paste0(fastafile_name, ".pdf"), paste0(outfile_name,".pdf"))
-  }
-  setwd(curr_dir)
+  ##??
+  # if(is.null(out_filepath)){
+  #   #texi2pdf outputs files to the current working directory
+  #   # make it output to directory of the fasta_file
+  #   # texi2pdf(file = paste0(fasta_path, "/", fastafile_name,".tex"), clean= TRUE)
+  #   ##?? Alternative that works?
+  #   tex2pdf(paste0(fasta_path, "/", fastafile_name,".tex"))
+  # }
+  # else{
+  #   outfile_split = strsplit(out_filepath, "/")[[1]]
+  #   outfile_name = outfile_split[length(outfile_split)]
+  #
+  #   ##!! I guess, we have these above now. please check if it works!
+  #   # fasta_dir <- paste0(curr_dir,"/", fasta_filepath)
+  #   # setwd(paste0(curr_dir,"/",output_path,"/.."))
+  #
+  #   #texi2pdf outputs files to the current working directory
+  #   # make it output to directory of the output_path
+  #   # texi2pdf(file = paste0(fasta_path, "/", fastafile_name, ".tex"), clean= TRUE)
+  #   ##?? Alternative that works?
+  #   tex2pdf(paste0(fasta_path, "/", fastafile_name,".tex"))
+  #   file.rename(paste0(fastafile_name, ".pdf"), paste0(outfile_name,".pdf"))
+  #   ##!! add a small clause to make sure that .pdf.pdf get replaced with .pdf!
+  # }
+  # ##!! is this still needed?
+  # # setwd(curr_dir)
 }
 
 ## Input files: Fasta format
