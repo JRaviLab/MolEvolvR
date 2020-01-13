@@ -288,15 +288,15 @@ leaf_aln %>% head() %>% kable()
 # Create a fasta file
 convert_aln2fa(input_file=dropdown_aln,
                lin=prot,
-               output_path=paste0("data/alns/", dropdown_var, ".fasta"),
+               output_path=paste0("data/alns/", dropdown_var, ".fa"),
                reduced=F)
 # reduced version for MSA?
 convert_aln2fa(input_file=dropdown_aln,
                lin=prot,
-               output_path=paste0("data/alns/", dropdown_var, "_red.fasta"),
+               output_path=paste0("data/alns/", dropdown_var, "_red.fa"),
                reduced=T)
 
-msa_pdf(fasta_filepath=paste0(here("data/alns/"), dropdown_var, "_red.fasta"),
+msa_pdf(fasta_filepath=paste0(here("data/alns/"), dropdown_var, "_red.fa"),
         out_filepath=NULL) #!! specifying path makes a difference?
 
 # Texi2pdf outputs its files in current working directory, not where the file is
