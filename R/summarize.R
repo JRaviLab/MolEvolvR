@@ -91,8 +91,8 @@ filter_freq <- function(x, min.freq){ x %>%
 #########################
 summarize_bylin <- function(prot="prot", column="DomArch", by="Lineage",
                             query="PspA"){
-  column <- as.name(column); by <- as.name(by)
-  if(query==which("all")){
+  column <- sym(column); by <- sym(by)
+  if(query== "all"){
     prot <- prot
   } else { prot <- prot %>% filter(grepl(pattern=query, x=Query,
                                          ignore.case=T))}
@@ -148,7 +148,10 @@ summ.GC <- function(x) { x %>%
 
 
 ##################
-total_counts <- function(prot ,cutoff = 0, type = "GC"){
+total_counts <- function(prot, column = "DomArch",
+                         cutoff = 90
+                         #type = "GC"
+){
   #'Total Counts
   #'
   #'Creates a data frame with a totalcount column
@@ -158,24 +161,54 @@ total_counts <- function(prot ,cutoff = 0, type = "GC"){
   #' @param prot A data frame that must contain columns:
   #' \itemize{\item Either 'GenContext' or 'DomArch.norep' \item count}
   #' @param cutoff Numeric. Cutoff for total count. Counts below cutoff value will not be shown. Default is 0.
-  #' @param type Character. Either "GC" for a total count by Genomic Context groupings or "DA" for a total count by Domain Architecture groupings.
+  #' @param column Character. The column to summarize
   #' @examples total_counts(pspa-gc_lin_counts,0,"GC")
   #' @note Please refer to the source code if you have alternate file formats and/or
   #' column names.
+  # if(type == "GC"){
+  #   prot <- summ.GC.byDALin(prot)
+  #   gc_count <- prot %>%group_by(GenContext) %>% summarise(totalcount = sum(count))
+  #   total <- left_join(prot,gc_count, by = "GenContext")
+  # }
+  # else if(type == "DA"){
+  #   prot <- summ.DA.byLin(prot)
+  #   da_count <- prot %>% group_by(DomArch) %>% summarise(totalcount = sum(count))
+  #   total <- left_join(prot,da_count, by = "DomArch")
+  # }
 
-  if(type == "GC"){
-    prot <- summ.GC.byDALin(prot)
-    gc_count <- prot %>%group_by(GenContext) %>% summarise(totalcount = sum(count))
-    total <- left_join(prot,gc_count, by = "GenContext")  %>% filter(totalcount >= cutoff)
+
+  prot <- summarize_bylin(prot, column, by = "Lineage", query = "all")
+  column <- sym(column)
+  col_count <-  prot %>% group_by({{column}}) %>% summarise(totalcount = sum(count))
+  total <- left_join(prot,col_count, by = as_string(column))
+
+  #sum_totalC <- sum(total$totalcount)
+  sum_count <- sum(total$count)
+  total <- total %>% mutate("IndividualCountPercent" = totalcount/sum_count*100) %>% arrange(totalcount)
+
+  cumm_percent <- total %>% select({{column}}, totalcount) %>% distinct() %>% mutate("CumulativePercent"=0)
+  total_counter = 0
+  for(x in 1:length(cumm_percent$totalcount)){
+    total_counter = total_counter + cumm_percent$totalcount[x]
+    cumm_percent$CumulativePercent[x] = total_counter/sum_count * 100
   }
-  else if(type == "DA"){
-    prot <- summ.DA.byLin(prot)
-    da_count <- prot %>% group_by(DomArch) %>% summarise(totalcount = sum(count))
-    total <- left_join(prot,da_count, by = "DomArch") %>% filter(totalcount >= cutoff)
+
+  cumm_percent <- cumm_percent %>% select( CumulativePercent, {{column}})
+
+  total <- total %>% left_join(cumm_percent, by = as_string(column))
+
+  t <- total %>% filter(CumulativePercent >= 100-cutoff)
+  if(length(t) == 0){
+    cutoff_count = 0
   }
+  else{
+    cutoff_count = t$totalcount[1]
+  }
+
+  total <- total %>% filter(totalcount >= cutoff_count)
+
   return(total)
 }
-
 
 find_paralogs <- function(prot){
   #'Find Paralogs
