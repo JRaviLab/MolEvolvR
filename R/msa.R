@@ -8,6 +8,7 @@
 #################
 library(tidyverse)
 library(msa); library(Biostrings)#; library(seqinr)
+library(rMSA) # to implement kalign
 library(pdftools); library(latexpdf); library(tools); library(tinytex) #needed?
 
 ##!! FEATURES, BUGS, NOTES thus far!!
@@ -22,6 +23,8 @@ library(pdftools); library(latexpdf); library(tools); library(tinytex) #needed?
 #############
 #### MSA ####
 #############
+
+####################
 msa_pdf <- function(fasta_filepath, out_filepath = NULL,
                     lowerbound=NULL, upperbound=NULL){
   #'Multiple Sequence Alignment
@@ -104,6 +107,9 @@ msa_pdf <- function(fasta_filepath, out_filepath = NULL,
 
   file.rename(paste0(fastafile_name, ".pdf"), pdf_filepath)
 
+  ############
+  ## REMOVE ##
+  ############
   ## To convert TeX to PDF
   ## Errors with large number of sequences
   # print(pdf_filepath)
@@ -141,6 +147,28 @@ msa_pdf <- function(fasta_filepath, out_filepath = NULL,
   # # setwd(curr_dir)
 }
 
+####################
+## Work-in-progress
+## Function to generate MSA using kalign
+## ref: https://rdrr.io/github/mhahsler/rMSA/man/kalign.html
+## https://github.com/mhahsler/rMSA
+generate_msa <- function(fa_file="", outfile=""){
+  prot_aa <- readAAStringSet(filepath=fa_file,
+                             format="fasta")
+  prot_aa
+
+  ## Install kalign ?rMSA_INSTALL
+  ## Messed up! Reimplement from kalign.R
+  ## https://github.com/mhahsler/rMSA/blob/master/R/kalign.R
+
+  source("scripts/c2r.R")
+
+  ## align the sequences
+  al <- kalign(prot_aa) #!! won't work!
+  al
+}
+
+############################
 ## Input files: Fasta format
 #my_seqs_file <- read_tsv("data/alignments/pspn-duf3046-aln/pspn.31seq.aln.txt")
 # colnames(my_seqs_file) <- c("name", "sequence")
