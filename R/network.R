@@ -34,16 +34,16 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
   # by domain networks or all, as required.
   # ye is either all of prot.list or centered on one domain
 
-  column_name <- as.name(column)
+  column_name <- sym(column)
   if(cutoff_type == "Lineage"){
     lin_summary <- prot %>% summ.DA.byLin() %>% summ.DA()
-    doms_above_cutoff <- (lin_summary %>% filter(totallin >= cutoff))[[column_name]]
+    doms_above_cutoff <- (lin_summary %>% filter(totallin >= cutoff))[[column]]
   }
   else if(cutoff_type == "Total Count"){ #Change this type?
-    doms_above_cutoff <- (prot %>% total_counts( type ="DA", cutoff = cutoff))[[column_name]]
+    doms_above_cutoff <- (prot %>% total_counts( column =  column, cutoff = cutoff))[[column]]
   }
 
-  prot <- prot[which(prot[[column_name]] %in% doms_above_cutoff),]
+  prot <- prot[which(prot[[as_string(column_name)]] %in% doms_above_cutoff),]
 
   #prot.list=total$arch
   #prot.list <- unlist(lapply(prot.list, function(x) gsub(x,pattern = "\\?",replacement = "X")))
@@ -51,7 +51,7 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
     str_replace_all(coll(pattern="\\?", ignore_case=T), "X")
 
   #dom="LTD"  #your domain name here
-  domains_of_interest <- c("PspA || PspA_IM30 || PspA\\_IM30")  # your domain name here
+  #domains_of_interest <- c("PspA || PspA_IM30 || PspA\\_IM30")  # your domain name here
   #ye=grep(pattern = dom,x = prot.list,value = T)
   #ye=unlist(strsplit(ye,"\\+"))
   ye <- prot %>%
