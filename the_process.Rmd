@@ -34,7 +34,7 @@ knitr::opts_knit$set(root.dir=rprojroot::find_rstudio_root_file())
 library(here)
 library(tidyverse); library(rlang)
 library(rmarkdown); library(knitr)
-library(wordcloud); library(RColorBrewer)
+#library(wordcloud); library(RColorBrewer)
 library(pdftools); library(latexpdf); library(tools)
 # ADD OTHER DEPENDENCIES
 
@@ -43,7 +43,7 @@ here::here() # checking to see if the homedir location is accurate
 
 # Sourcing scripts containing package functions
 source_files <- list.files(here("R/"))
-map(paste0(here("R/"), source_files), source)
+map(paste0(here("R/"), "/",source_files), source)
 
 ##! problem with path? Should start with the-approach, but starts with docs.
 ## adding path explicitly paste0(path, "/R/") doesn't seem to help either.
@@ -189,19 +189,19 @@ GC.DA.wc %>%
 ```{r upset-plot-da, eval=T, out.height="300px"}
 # Per ...?
 ##!! Is this reading ClustName or DomArch?
-upset.plot(dropdown, 30, "da2doms")
+upset.plot(dropdown, 99, "da2doms")
 ```
 
 ```{r upset-plot-gc, eval=T, out.height="600px"}
-upset.plot(dropdown, 100, "gc2da")
+upset.plot(dropdown, 90, "gc2da")
 ```
 
 ### Worclouds
 ```{r , eval= TRUE, out.height='600px'}
 # move to plotting.R and call just the custom function
 ##!! Is this reading ClustName or DomArch?
-wordcloud_element("da2doms", dropdown, min_freq=10) 
-wordcloud_element("gc2da", dropdown, min_freq=100)
+wordcloud_element("da2doms", dropdown, cutoff = 100) 
+wordcloud_element("gc2da", dropdown, cutoff = 70)
 ```
 
 ### Lineage summaries
@@ -236,14 +236,14 @@ paralogs %>%
 ### Total Counts
 ```{r total counts, eval=T, message=FALSE, results='hide'}
 ##!! Is this reading ClustName or DomArch?
-DA.cumulative <- total_counts(dropdown,
-                              cutoff =0, type="DA")
+DA.cumulative <- total_counts(dropdown,"DomArch",
+                              cutoff =100)
 DA.cumulative %>%
   head() %>%
   kable()
 
-GC.cumulative <- total_counts(dropdown,
-                              cutoff=50, type="GC") 
+GC.cumulative <- total_counts(dropdown,"GenContext",
+                              cutoff=50) 
 GC.cumulative %>%
   head() %>%
   kable()
@@ -254,10 +254,10 @@ GC.cumulative %>%
 # now calculates and filters by totalcounts within function
 
 lineage.DA.plot(dropdown, 
-                colname="ClustName", type="da2doms", cutoff=200)
+                colname="ClustName", type="da2doms", cutoff=80)
 
 lineage.DA.plot(dropdown,
-                "GenContext", type="gc2da", cutoff=100)
+                "GenContext", type="gc2da", cutoff=40)
 ```
 
 
@@ -268,8 +268,8 @@ lineage.DA.plot(dropdown,
 #pspa_only <- prot %>% filter(grepl("pspa",ignore.case=T, ClustName))
 #snf7 <- prot %>% filter(grepl("snf7",ignore.case=T, ClustName))
 domain_network(dropdown, "ClustName",
-               domains_of_interest="", cutoff_type="Lineage",
-               2, "circle")
+               domains_of_interest="pspa|snf7", cutoff_type="Total Count",
+               100, "circle")
 
 ##!! ADD filters,
 ##!! Add params layout
@@ -319,7 +319,7 @@ file.remove(files)
 
 #pdf2image then render image here?
 #should I be deleting images
-seq_tree(paste0(here("data/alns/"), dropdown_var, ".fasta"))
+seq_tree(paste0(here("data/alns//"), dropdown_var, ".fa"))
 
 ```
 
