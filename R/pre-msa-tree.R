@@ -226,7 +226,46 @@ generate_all_aln2fa <- function(aln_path=here("data/rawdata_aln/"),
 
 ################################
 ## convert_accnum2fa
+#######
+## 1 ##
+#######
+## Accnum2fa
+# ref <- c("U15717", "U15718", "U15719", "U15720",
+#          "U15721", "U15722", "U15723", "U15724")
+# ref_gb <- read.GenBank(ref)
+# cbind(attr(ref_gb, "species"), names(ref_gb))
+# attr(ref_gb, "description")
 
+#######
+## 2 ##
+#######
+## GenBank 2 fasta file format
+# seqinr::gb2fasta(source.file="", destination.file="")
+
+#######
+## 3 ##
+#######
+## Ref: https://a-little-book-of-r-for-bioinformatics.readthedocs.io/en/latest/src/chapter5.html
+# retrieveseqs <- function(seqnames,acnucdb)
+# {
+#   myseqs <- list()   # Make a list to store the sequences
+#   require("seqinr")  # This function requires the SeqinR R package
+#   choosebank(acnucdb)
+#   for (i in 1:length(seqnames))
+#   {
+#     seqname <- seqnames[i]
+#     print(paste("Retrieving sequence",seqname,"..."))
+#     queryname <- "query2"
+#     query <- paste("AC=",seqname,sep="")
+#     query(`queryname`,`query`)
+#     seq <- getSequence(query2$req[[1]]) # Makes a vector "seq" containing the sequence
+#     myseqs[[i]] <- seq
+#   }
+#   closebank()
+#   return(myseqs)
+# }
+# seqnames <- c("Q10572","E3M2K8","Q8WS01","E1FUV2","A8NSK3","Q9VT99")
+# seqs <- retrieveseqs(seqnames,"swissprot")
 
 ################################
 ## convert_aln2tsv
