@@ -12,7 +12,8 @@
 library(tidyverse)
 library(UpSetR)
 library(gridExtra)
-library(docstring)
+library(wordcloud)
+#library(docstring)
 
 #################
 ## UpSet Plots
@@ -46,8 +47,27 @@ upset.plot <- function(query_data="toast_rack.sub",
          gc2da={wc <- query_data %>% elements2words(column = "GenContext",conversion_type = type) %>% words2wc();
                 colname <- "GenContext"})
 
+  TotalWordsFreq  = sum(wc$freq)
+  wc <- wc %>% mutate("WordsPercentage" = 0) %>% arrange(freq)
+
+  total_counter = 0
+  for(x in 1:length(wc$freq)){
+    total_counter = total_counter + wc$freq[x]
+    wc$WordsPercentage[x] = total_counter/TotalWordsFreq * 100
+  }
+
+  words_above <- wc %>% filter(WordsPercentage >= 100 - cutoff)
+  if(length(words_above) == 0){
+    cutoff_count = 0
+  }
+  else{
+    cutoff_count = words_above$freq[1]
+  }
+
+
+  words.gecutoff <- filter(wc, WordsPercentage >= cutoff_count)
   ## Cutoff for most/least prevalent words
-  words.gecutoff <- filter(wc, freq>=cutoff) # words.gecutoff <- DA.doms.wc
+  #words.gecutoff <- filter(wc, freq>=cutoff) # words.gecutoff <- DA.doms.wc
   # words.ltcutoff <- filter(wc, freq<cutoff)
 
   ## Create columns for domains/DAs and fill them with 1/0
@@ -118,9 +138,9 @@ lineage.DA.plot <- function(query_data="prot",
 
   switch(type,
          da2doms={colname <- "DomArch";
-         query.summ.byLin <- query_data %>% total_counts(cutoff = cutoff, type="DA")},
+         query.summ.byLin <- query_data %>% total_counts(cutoff = cutoff, column = colname)},
          gc2da={colname <- "GenContext";
-         query.summ.byLin <- query_data %>% total_counts(cutoff = cutoff, type="GC")
+         query.summ.byLin <- query_data %>% total_counts(cutoff = cutoff, column = colname)
          })
 
 
@@ -270,7 +290,8 @@ lineage.domain_repeats.plot <- function(query_data, colname) {
 
 wordcloud_element <- function(type="da2doms",
                                 query_data="prot",
-                                min_freq=10){
+                                cutoff = 50
+                              ){
   #' Wordclouds for the predominant domains, domain architectures.
   #' @author Janani Ravi
   #' @keywords Domains, Domain Architectures, GenomicContexts
@@ -298,12 +319,41 @@ wordcloud_element <- function(type="da2doms",
            # colname <- "GenContext.norep"
          })
 
-  ## commented out since we are directly reading in the wordcount dataframe
-  # temp <- query_data$colname %>%
-  #   words2wc()
 
-  wordcloud(wc$words, wc$freq, min.freq = min_freq,
-            colors=brewer.pal(8, "Spectral"),scale=c(2.5,.5))
+  # Cutoff for the percentage: convert x% to show the top x% of values
+  # Find what wc value the % corresponds to
+  # cutoff_row <- length(wc$words) * (cutoff/100) - 1
+  #
+  # # Handle rows that are outside of range
+  # if(cutoff_row < 1){
+  #   cutoff_row = 1
+  # }
+  # else if(cutoff_row > length(wc$words)){
+  #   cutoff_row = length(wc$words)
+  # }
+  #
+  # # Obtain minimum word cutoff
+  # cutoff_wc <- as.integer(wc[cutoff_row, "freq"])
+
+  TotalWordsFreq  = sum(wc$freq)
+  wc <- wc %>% mutate("WordsPercentage" = 0) %>% arrange(freq)
+
+  total_counter = 0
+  for(x in 1:length(wc$freq)){
+    total_counter = total_counter + wc$freq[x]
+    wc$WordsPercentage[x] = total_counter/TotalWordsFreq * 100
+  }
+
+  words_above <- wc %>% filter(WordsPercentage >= 100 - cutoff)
+  if(length(words_above) == 0){
+    cutoff_count = 0
+  }
+  else{
+    cutoff_count = words_above$freq[1]
+  }
+
+  wordcloud(wc$words, wc$freq, min.freq = cutoff_count,
+            colors=brewer.pal(8, "Spectral"),scale=c(4.5,1))
   # wordcloud(GC.DA.wc$words,GC.DA.wc$freq,min.freq = min_freq,
   #           colors=brewer.pal(8, "Spectral"), scale=c(2.5,.4))
 }
