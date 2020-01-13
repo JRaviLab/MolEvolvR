@@ -2,4 +2,6 @@ install.packages(c("sourcetools", "geometry", "crosstalk", "vdiffr", "rnaturalea
 install.packages(c("shiny", "manipulateWidget", "quadprog", "fastmatch", "maps", "gtools", "mnormt", "covr", "testthat", "geiger", "phangorn", "DT", "rgl"), dependencies=T)
 install.packages(c("phytools", "phangorn"), dependencies=T)
 
+install.packages(c("Conflicted","here","tidyverse","pdftools","latexpdf","UpSetR","wordcloud"))
+
 remotes::install_github("mhahsler/rMSA")
