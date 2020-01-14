@@ -57,7 +57,7 @@ generate_fa2tre <- function(fa_file = "data/alns/pspa_snf7.fa",
   prot_dist <- dist.alignment(prot_aln, matrix="similarity")
   prot_nj <- NJ(prot_dist)
   prot_nj_tree <- plot(prot_nj, main = "Neighbor Joining")
-  write.tree(prot_nj_tree, "pspa_snf7_nj.tree")
+  write.tree(prot_nj_tree, "pspa_snf7_nj.tre")
 
   ###########################
   ## Approach 2
