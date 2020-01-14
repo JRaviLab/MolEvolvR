@@ -1,22 +1,21 @@
-## Generate Phylogenetic Tree
+## Generating Phylogenetic Trees from Alignment Fasta files
 ## Includes the following functions:
-## generate_fa2tre
-## Modified: Dec 27, 2019
-## Molecular Ecologist (@molecologist), Janani Ravi (@jananiravi)
+## generate_trees, convert_fa2tre, generate_fa2tre
+## Modified: Jan, 2020
+## Janani Ravi (@jananiravi), Molecular Ecologist (@molecologist)
 
 #################
 ## Pkgs needed ##
 #################
-library(ape)
-library(phangorn)
-library(seqinr)
-library(here); library(tidyverse)
+library(here); library(tidyverse) # Only these two are needed for FastTree
 library(data.table)
+library(ape); library(phangorn); library(seqinr)
 conflicted::conflict_prefer("filter", "dplyr")
 
 ###############
 ## References #
 ###############
+## 0. Using FastTree 2.0: http://www.microbesonline.org/fasttree/
 ## 1a. Quick & Dirty Tree building in R: https://www.molecularecologist.com/2016/02/quick-and-dirty-tree-building-in-r/ &
 ## 1b: Script: https://github.com/elinck/molecologist/blob/master/molecoltutorial_treesinR.R
 ## 2. ape: https://cran.r-project.org/web/packages/ape/ape.pdf
@@ -27,6 +26,46 @@ conflicted::conflict_prefer("filter", "dplyr")
 ###############
 ## Functions ##
 ###############
+
+###########################
+## Approach 0 | FastTree2.0
+###########################
+##!! FastTree will only work if there are unique sequence names!!
+convert_fa2tre <- function(fa_filepath = here("data/alns/pspa_snf7.fa"),
+                           tre_filepath = here("data/alns/pspa_snf7.tre"),
+                           fasttree_path = here("src/FastTree")){
+  # fa_filepath = here("data/alns/pspa_snf7.fa")
+  # tre_filepath = here("data/alns/pspa_snf7.tre")
+  # fasttree_path = here("src/FastTree")
+  print(fa_filepath)
+  system2(command=fasttree_path, args=paste(c(fa_filepath, ">", tre_filepath),
+                                            sep="", collapse=" "))
+  ################################
+  ## Compiling FastTree.c on a Mac
+  ################################
+  ## Other platforms? Check http://www.microbesonline.org/fasttree/
+  # system(paste("gcc -DNO_SSE -O3 -finline-functions -funroll-loops -Wall -o",
+  #              here("src/FastTree"),
+  #              here("src/FastTree.c"), "-lm", collapse=" "))
+}
+## Generate Trees for ALL fasta files in "data/alns"
+generate_trees <- function(aln_path=here("data/alns/")){
+  # finding all fasta alignment files
+  fa_filenames <- list.files(path=aln_path, pattern="*.fa")
+  fa_filepaths <- paste0(aln_path, fa_filenames)
+  variable <- str_replace_all(basename(fa_filenames),
+                              pattern=".fa", replacement="")
+
+  ## Using purrr::pmap to generate trees for each of the fa files!
+  fa2tre_args <- list(fa_filepath=fa_filepaths,
+                      tre_filepath=paste0(aln_path, variable, ".tre"))
+  pmap(.l=fa2tre_args, .f=convert_fa2tre,
+       fasttree_path = here("src/FastTree"))
+}
+
+##############################
+## REFS: 1-4
+############
 generate_fa2tre <- function(fa_file = "data/alns/pspa_snf7.fa",
                             out_file = "data/alns/pspa_snf7.tre") {
   #' Generating phylogenetic tree from alignment file '.fa'
