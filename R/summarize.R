@@ -197,6 +197,10 @@ total_counts <- function(prot, column = "DomArch",
 
   total <- total %>% left_join(cumm_percent, by = as_string(column))
 
+  # Round the percentage columns
+  total$CumulativePercent <- total$CumulativePercent %>% round(digits = 2)
+  total$IndividualCountPercent <- total$IndividualCountPercent %>% round(digits = 2)
+
   t <- total %>% filter(CumulativePercent >= 100-cutoff)
   if(length(t) == 0){
     cutoff_count = 0
@@ -205,7 +209,7 @@ total_counts <- function(prot, column = "DomArch",
     cutoff_count = t$totalcount[1]
   }
 
-  total <- total %>% filter(totalcount >= cutoff_count)
+  total <- total %>% filter(totalcount >= cutoff_count) %>% arrange(-totalcount,-count)
 
   return(total)
 }
