@@ -7,6 +7,7 @@
 ## Pkgs needed ##
 #################
 library(tidyverse)
+library(rlang)
 conflicted::conflict_prefer("filter", "dplyr")
 
 ###########################
@@ -94,7 +95,7 @@ summarize_bylin <- function(prot="prot", column="DomArch", by="Lineage",
   column <- sym(column); by <- sym(by)
   if(query== "all"){
     prot <- prot
-  } else { prot <- prot %>% filter(grepl(pattern=query, x=Query,
+  } else { prot <- prot %>% filter(grepl(pattern=query, x={{column}},
                                          ignore.case=T))}
   prot %>%
     filter(!grepl("^-$", {{column}})) %>%
@@ -228,13 +229,15 @@ find_paralogs <- function(prot){
 
 
   #Remove eukaryotes
-  prot <- prot %>% filter(grepl("^eukaryota",Lineage))
+  prot <- prot %>% filter(!grepl("^eukaryota",Lineage))
   paralogTable <- prot %>% group_by(GCA_ID) %>%
     count(DomArch)%>%
     filter(n>1 & GCA_ID != "-") %>% arrange(-n)
+    #%>% ccNums" = filter(prot, grepl(GCA_ID, prot))$AccNum)
+  paralogTable$AccNums <- map(paralogTable$GCA_ID, function(x) filter(prot,grepl(x,GCA_ID))$AccNum)
   colnames(paralogTable)[colnames(paralogTable)=="n"] = "Count"
   ###Merge with columns: AccNum,TaxID, and GCA/ Species?
-  paralogTable <- prot %>% select(AccNum, Species , GCA_ID) %>%
+  paralogTable <- prot %>% select(Species , GCA_ID) %>%
     left_join(paralogTable, by= c("GCA_ID")) %>%
     filter(!is.na(Count)) %>% distinct() %>% arrange(-Count)
   return(paralogTable)
