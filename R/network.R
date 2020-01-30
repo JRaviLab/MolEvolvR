@@ -74,8 +74,8 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
     pwise=pwise[-which((pwise[,1]=="") | pwise[,2]==""),]
     }
   pwise.ass <- sapply(1:length(pwise[,1]), function(x) paste(pwise[x,],collapse = "->"))
-  e.sz <- sort(table(pwise.ass),decreasing = T)
-  v.sz <- sort(table(pwise),decreasing = T)
+  e.sz <- sort(table(pwise.ass),decreasing = T)  # Edge weights
+  v.sz <- sort(table(pwise),decreasing = T)   # Vertex weights
   pwise <- strsplit(names(e.sz), "\\->")
   pwise <- cbind(unlist(lapply(pwise, function(x) x[1])),unlist(lapply(pwise, function(x) x[2])))
 
