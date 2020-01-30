@@ -167,6 +167,93 @@ lineage.DA.plot <- function(query_data="prot",
     theme(axis.text.x=element_text(angle=90,hjust=0,vjust=0.5))
 }
 
+
+
+lineage.Query.plot <- function(query_data="prot",
+                               queries,
+                               #colname = "ClustName",
+                               cutoff
+){
+  #' Lineage Plot: Heatmap of Queries vs Lineages
+  #' @authors Janani Ravi, Samuel Chen
+  #' @keywords Lineages, Domains, Domain Architectures, GenomicContexts
+  #' @description Lineage plot for queries. Heatmap.
+  #' @param query_data Data frame of protein homologs with the usual 11 columns +
+  #' additional word columns (0/1 format).
+  #' Default is prot (variable w/ protein data).
+  #' @param queries Character Vector containing the queries that will be used for the categories
+  #' @examples lineage.Query.plot(prot, c("PspA","PspB","PspC","PspM","PspN"), 95)
+  #' @note Please refer to the source code if you have alternate file formats and/or
+  #' column names.
+
+  query_by_lineage <- function(data, query, column, by){
+    column <- sym(column); by <- sym(by)
+
+    # filter the protein by the query
+    prot <- prot %>% filter(grepl(pattern=query, x={{column}},
+                                  ignore.case=T)) %>% select({{by}})
+
+    prot$Query <- query
+
+    prot %>% filter(!grepl("^-$", {{by}})) %>%
+      group_by(Query, {{by}}) %>%
+      summarise(count=n()) %>%
+      arrange(desc(count))
+
+  }
+
+  # query_data contains all rows that possess a lineage
+  query_data <- query_data %>% filter(grepl("a", Lineage))
+
+  query_lin_counts = data.frame("Query" = character(0), "Lineage" = character(0), "count"= integer())
+  for(q in queries){
+    query_lin <- query_by_lineage(data = query_data, query = q, column = "ClustName", by = "Lineage")
+    query_lin_counts <- dplyr::union(query_lin_counts, query_lin)
+  }
+
+  # Total counts of each lineage
+  lin_count_totals <- query_lin_counts %>%group_by(Lineage) %>% summarize(total_c = sum(count)) %>% arrange(total_c)
+  sum_lin <- sum(lin_count_totals$total_c)
+
+  # Calculate the percent each lineage makes up
+  lin_count_totals$IndividualPercentage = lin_count_totals$total_c/sum_lin * 100
+  lin_count_totals <- lin_count_totals %>% mutate("CumulativePercent"=0)
+  total_counter = 0
+  for(x in 1:length(lin_count_totals$IndividualPercentage)){
+    total_counter = total_counter + lin_count_totals$IndividualPercentage[x]
+    lin_count_totals$CumulativePercent[x] = total_counter
+  }
+
+  # Get lineages that are above the cutoff percentage value
+  count_cutoff <- (lin_count_totals %>% filter(CumulativePercent >= (100-cutoff)))
+
+  lins_above_cutoff <- (lin_count_totals %>% filter(total_c >= count_cutoff$total_c[1]))$Lineage
+
+  # Query lin counts now contains only the data that have lineages that are above cutoff
+  query_lin_counts <- query_lin_counts %>% filter(Lineage %in% lins_above_cutoff)
+
+  query.summ.byLin.ggplot <- drop_na(query_lin_counts) %>%
+    filter(count>1) %>%  # count or total count?
+    within(Lineage <- factor(Lineage,
+                             levels=names(sort(table(Lineage),
+                                               decreasing=TRUE)))) %>%
+    within(Query <- factor(Query,
+                           levels=names(sort(table(Query),
+                                             decreasing=F))))
+  ## Tile plot
+  ggplot(data=query.summ.byLin.ggplot,
+         aes_string(x="Lineage", y="Query")) +
+    geom_tile(data=subset(query.summ.byLin.ggplot,
+                          !is.na(count)),
+              aes(fill=count),
+              colour="darkred", size=0.3) + #, width=0.7, height=0.7),
+    scale_fill_gradient(low="white", high="darkred") +
+    scale_x_discrete(position="top") +
+    theme_minimal() +  coord_flip() +
+    theme(axis.text.x=element_text(angle=90,hjust=0,vjust=0.5))
+}
+
+
 lineage.neighbors.plot <- function(query_data="prot", query="pspa",
                                    colname="GenContext.norep"){
   #' Lineage Plot for top neighbors
