@@ -1,5 +1,3 @@
-#For Temp App, Commented out phylogeny, Removed DUFs
-
 library(shiny)
 library(tidyverse)
 library(DT)
@@ -16,6 +14,7 @@ conflicted::conflict_prefer("count", "dplyr")
 setwd("..")
 source("shiny/PSP_Web_Data.R")
 source("R/plotting.R")
+source("R/network.R")
 #source("R/cleanup.R")
 #source("R/reverse_operons.R")
 source("shiny/shinyfunctions.R")
@@ -67,7 +66,7 @@ body <- dashboardBody(
                      #Dropdown to select protein for viewing
                      selectInput(inputId =  "proSelec", label = "Protein",
                                  choices = c( "All","DUF1700", "DUF1707",
-                                              "PspA", "PspB", "PspC", "PspM", "PspN","LiaI-LiaF-TM","LiaG","Toast-rack" )
+                                              "PspA-Snf7", "PspB", "PspC", "PspM", "PspN","LiaI-LiaF-TM","Toast-rack" )
                                  , selected = "All")
               ),
               #Buttons to select which file type to download
@@ -88,14 +87,16 @@ body <- dashboardBody(
                 sidebarPanel(
                   #dropdown to select protein
                   selectInput(inputId =  "linSelec", label = "Protein",
-                              choices = c( "PspA", "PspB", "PspC","PspN", "LiaF","Toast-rack")
+                              choices = c( "PspA-Snf7", "PspB", "PspC","PspN", "LiaI-LiaF-TM","Toast-rack")
                               , selected = "PspA"),
                   #Radiobuttons to selext domain architecture and genomic context
                   radioButtons(inputId = "DA_GC", label = "Lineage by:"
-                               , choices= c("Domain Architecture", "Genomic Context")
+                               , choices = c("Domain Architecture", "Genomic Context")
+                               #, choiceNames= c("Domain Architecture", "Genomic Context",)
+                               #, choiceValues = c("da2doms", "gc2da")
                                , selected = "Domain Architecture"),
                   #Slider input to determine cutoff value for totalcounts
-                  sliderInput(inputId = "cutoff", label = "Total Count Cutoff:", min = 0, max = 500, value = 30)
+                  sliderInput(inputId = "cutoff", label = "Total Count Cutoff:", min = 0, max = 100, value = 95)
                   #sliderInput(inputId = "nr", label="Rows",min=0,max=10,value=0)
                 ),
                 #mainpanel dictates what is displayed on screen depending on which tabset panel is selected
@@ -107,7 +108,8 @@ body <- dashboardBody(
                              column(downloadButton(outputId = "downloadCounts", label = "Download"),radioButtons(inputId = "countDownloadType", label = "Download Type:",
                                                                                                                  choices= c("tsv", "csv"), selected = "tsv" ),width = 10)),
                     tabPanel("Upset Plot",plotOutput(outputId = "upsetP")),
-                    tabPanel("Wordcloud", plotOutput(outputId = "wordcloud"))
+                    tabPanel("Wordcloud", plotOutput(outputId = "wordcloud")),
+                    tabPanel("Network",plotOutput(outputId = "network"))
                   )
                 )
 
@@ -119,8 +121,8 @@ body <- dashboardBody(
             fluidPage(
               column(width = 2,
                      selectInput(inputId =  "alignSelec", label = "Protein",
-                                 choices = c( "PspA")
-                                 , selected = "PspA")),
+                                 choices = c( "PspA-Snf7", "PspB", "PspC")
+                                 , selected = "PspA-Snf7")),
               column(width = 12,
                      tabsetPanel(
                        id= "phylo",
@@ -288,19 +290,19 @@ server <- function(input, output,session){
            "All" = all,
            "DUF1700" = DUF1700,
            "DUF1707" = DUF1707,
-           "PspA" = all%>% filter(Query=="pspa"),
-           "PspB" = all%>% filter(Query=="pspb"),
-           "PspC" = all%>% filter(Query=="pspc"),
+           "PspA-Snf7" = pspa,
+           "PspB" = pspb,
+           "PspC" = pspc,
            "PspM" = pspm,
-           "PspN" = all%>% filter(Query=="pspn"),
-           "LiaI-LiaF-TM" = all%>% filter(Query=="LiaI-LiaF-TM"),
-           "Toast-rack" = all%>%filter(Query=="Toast-rack"),
-           "LiaG" = liag_data)
+           "PspN" = pspn,
+           "LiaI-LiaF-TM" = liai_liaf,
+           "Toast-rack" = toast_rack)
   })
   #Render the Data table for selected protein
   output$proTable <- DT::renderDT({
     req(credentials()$user_auth)
-    paged_table(pspTable())}, extensions = c('FixedColumns',"FixedHeader"),
+    ##### Can use select here to determine what columns shown
+    paged_table(pspTable() )}, extensions = c('FixedColumns',"FixedHeader"),
                                   options = list(pageLength = 10,
                                                  #The below line seems to disable other pages and the search bar
                                                  #dom = 't',
@@ -309,29 +311,45 @@ server <- function(input, output,session){
                                                  fixedHeader=TRUE,
                                                  fixedColumns = list(leftColumns = 2, rightColumns = 0)))
 
-  #Observer used to determine initial heatmap slider
-  observe({
-    if(input$DA_GC== "Domain Architecture"){
+
+  #### Reactive expression determining data for which plotting is based. Controlled by dropdown ####
+  plotting_prot <-  reactive({
     switch(input$linSelec,
-        "PspA"= {hs <-heatmap_slider(pspa_DA_lin,"da")},
-        "PspB"= {hs <-heatmap_slider(pspb_DA_lin,"da")},
-        "PspC"= {hs <-heatmap_slider(pspc_DA_lin,"da")},
-        "PspN"= {hs <-heatmap_slider(pspn_DA_lin,"da")},
-        "LiaF"= {hs <-heatmap_slider(liai_liaf_DA_lin,"da")},
-        #"LiaG"= {hs <-heatmap_slider(liag_DA_lin)},
-        "Toast-rack"= {hs <-heatmap_slider(toast_rack_DA_lin,"da")}
-    )}
-    else{
-      switch(input$linSelec,
-             "PspA"= {hs <-heatmap_slider(pspa_GC_lin,"gc")},
-             "PspB"= {hs <-heatmap_slider(pspb_GC_lin,"gc")},
-             "PspC"= {hs <-heatmap_slider(pspc_GC_lin,"gc")},
-             "PspN"= {hs <-heatmap_slider(pspn_GC_lin,"gc")},
-             "LiaF"= {hs <-heatmap_slider(liai_liaf_GC_lin,"gc")},
-             "Toast-rack"= {hs <-heatmap_slider(toast_rack_GC_lin,"gc")}
-      )}
-    updateSliderInput(session,inputId = "cutoff",min=0, max=hs[,"max"], value=hs[,"cutoff_init"])
+           "All" = all,
+           "DUF1700" = DUF1700,
+           "DUF1707" = DUF1707,
+           "PspA-Snf7" = pspa,
+           "PspB" = pspb,
+           "PspC" = pspc,
+           "PspM" = pspm,
+           "PspN" = pspn,
+           "LiaI-LiaF-TM" = liai_liaf,
+           "Toast-rack" = toast_rack)
   })
+
+  #Observer used to determine initial heatmap slider
+  # observe({
+  #   if(input$DA_GC== "Domain Architecture"){
+  #   switch(input$linSelec,
+  #       "PspA"= {hs <-heatmap_slider(pspa_DA_lin,"da")},
+  #       "PspB"= {hs <-heatmap_slider(pspb_DA_lin,"da")},
+  #       "PspC"= {hs <-heatmap_slider(pspc_DA_lin,"da")},
+  #       "PspN"= {hs <-heatmap_slider(pspn_DA_lin,"da")},
+  #       "LiaF"= {hs <-heatmap_slider(liai_liaf_DA_lin,"da")},
+  #       #"LiaG"= {hs <-heatmap_slider(liag_DA_lin)},
+  #       "Toast-rack"= {hs <-heatmap_slider(toast_rack_DA_lin,"da")}
+  #   )}
+  #   else{
+  #     switch(input$linSelec,
+  #            "PspA"= {hs <-heatmap_slider(pspa_GC_lin,"gc")},
+  #            "PspB"= {hs <-heatmap_slider(pspb_GC_lin,"gc")},
+  #            "PspC"= {hs <-heatmap_slider(pspc_GC_lin,"gc")},
+  #            "PspN"= {hs <-heatmap_slider(pspn_GC_lin,"gc")},
+  #            "LiaF"= {hs <-heatmap_slider(liai_liaf_GC_lin,"gc")},
+  #            "Toast-rack"= {hs <-heatmap_slider(toast_rack_GC_lin,"gc")}
+  #     )}
+  #   updateSliderInput(session,inputId = "cutoff",min=0, max=hs[,"max"], value=hs[,"cutoff_init"])
+  # })
 
 #   prot_da_lin <- reactive({switch(input$linSelec,
 #                         "PspA"= pspa_DA_Lin,
@@ -417,53 +435,30 @@ server <- function(input, output,session){
 
 
 
-
-  #Renders the heatmap
+  ####
+  ##### Render the heatmap #####
+  ####
   output$LinPlot <- renderPlot({
     req(credentials()$user_auth)
     if(input$DA_GC == "Domain Architecture"){
-      switch(input$linSelec,
-             "PspA" = lineage.DA.plot(pspa, filter(pspa_DA.cummulative,totalcount >= input$cutoff),"DomArch.norep", ""),
-             "PspB" = lineage.DA.plot(pspb, filter(pspb_DA.cummulative,totalcount >= input$cutoff),"DomArch.norep", ""),
-             "PspC" = lineage.DA.plot(pspc, filter(pspc_DA.cummulative,totalcount>= input$cutoff),"DomArch.norep", ""),
-             "PspN" = lineage.DA.plot(pspc, filter(pspn_DA.cummulative,totalcount>= input$cutoff),"DomArch.norep", ""),
-             "LiaF" = lineage.DA.plot(liai_liaf, filter(liai_liaf_DA.cummulative,totalcount>=input$cutoff),"DomArch.norep", ""),
-             "Toast-rack" = lineage.DA.plot(toast_rack, filter(toast_rack_DA.cummulative,totalcount>=input$cutoff),"DomArch.norep", ""))
-             #"LiaI" = lineage.DA.plot(pspa, pspa_DA.cummulative,"DomArch.norep", ""))
+      lineage.DA.plot(plotting_prot(), colname = "DomArch", type = "da2doms", cutoff = input$cutoff)
     }
     else{
-      switch(input$linSelec,
-             "PspA" = lineage.DA.plot(pspa, filter(pspa_GC.cummulative,totalcount>=input$cutoff),"GenContext.norep", ""),
-             "PspB" = lineage.DA.plot(pspb, filter(pspb_GC.cummulative,totalcount>=input$cutoff),"GenContext.norep", ""),
-             "PspC" = lineage.DA.plot(pspc, filter(pspc_GC.cummulative,totalcount>=input$cutoff),"GenContext.norep", ""),
-             "PspN" = lineage.DA.plot(pspc, filter(pspn_GC.cummulative,totalcount>=input$cutoff),"GenContext.norep", ""),
-             "LiaF" = lineage.DA.plot(liai_liaf, filter(liai_liaf_GC.cummulative,totalcount>=input$cutoff),"GenContext.norep", ""),
-             "Toast-rack" = lineage.DA.plot(toast_rack, filter(toast_rack_GC.cummulative,totalcount>=input$cutoff),"GenContext.norep", ""))
+      lineage.DA.plot(plotting_prot(), colname = "GenContext", type = "gc2da", cutoff = input$cutoff)
     }
   }, height = 500)
 
-  #Renders the datatable for the lineage counts
+  ####
+  ##### Render the datatable for the lineage counts #####
+  ####
   output$LinTable <- DT::renderDT({
     req(credentials()$user_auth)
     paged_table(
     if(input$DA_GC == "Domain Architecture"){
-      switch(input$linSelec,
-             "PspA" = filter(pspa_DA.cummulative,totalcount >= input$cutoff),
-             "PspB" = filter(pspb_DA.cummulative,totalcount >= input$cutoff),
-             "PspC" = filter(pspc_DA.cummulative,totalcount >= input$cutoff),
-             "PspN" = filter(pspn_DA.cummulative,totalcount >= input$cutoff),
-             "LiaF" = filter(liai_liaf_DA.cummulative, totalcount >= input$cutoff),
-             "Toast-rack" = filter(toast_rack_DA.cummulative, totalcount >= input$cutoff)
-      )}
+      total_counts(plotting_prot(), cutoff = input$cutoff, column = "DomArch")
+      }
     else{
-      switch(input$linSelec,
-             "PspA" = filter(pspa_GC.cummulative,totalcount >= input$cutoff),
-             "PspB" = filter(pspb_GC.cummulative,totalcount >= input$cutoff),
-             "PspC" = filter(pspc_GC.cummulative,totalcount >= input$cutoff),
-             "PspN" = filter(pspn_GC.cummulative,totalcount >= input$cutoff),
-             "LiaF" = filter(liai_liaf_GC.cummulative,totalcount >= input$cutoff),
-             "Toast-rack" = filter(toast_rack_GC.cummulative,totalcount >= input$cutoff)
-      )
+      total_counts(plotting_prot(), cutoff = input$cutoff, column = "GenContext")
     }
   )
   }, extensions = c('FixedColumns',"FixedHeader"),
@@ -474,53 +469,64 @@ server <- function(input, output,session){
                  fixedColumns = list(leftColumns = 2, rightColumns = 0)))
 
 
-  upset_vals <- reactiveValues(GC.DA.wc=pspa$GC.DA %>% words2wc(), DA.doms.wc=pspa$DA.doms %>% words2wc())
-  observeEvent(input$linSelec,{
-      upset_vals$GC.DA.wc <- switch(input$linSelec,
-                              "PspA" = pspa$GC.DA %>% words2wc(),
-                              "PspB" = pspb$GC.DA %>% words2wc(),
-                              "PspC" = pspc$GC.DA %>% words2wc(),
-                              "PspN" = pspn$GC.DA %>% words2wc(),
-                              "LiaF" = liai_liaf$GC.DA %>% words2wc(),
-                              "Toast-rack" = toast_rack$GC.DA %>% words2wc(),
-                              "Liag" = liag$GC.DA %>% words2wc())
-      upset_vals$DA.doms.wc <- switch(input$linSelec,
-                                "PspA" = pspa$DA.doms %>% words2wc(),
-                                "PspB" = pspb$DA.doms %>% words2wc(),
-                                "PspC" = pspc$DA.doms %>% words2wc(),
-                                "PspN" = pspn$DA.doms %>% words2wc(),
-                                "LiaF" = liai_liaf$DA.doms %>% words2wc(),
-                                "Toast-rack" = toast_rack$DA.doms %>% words2wc(),
-                                "Liag" = liag$DA.doms %>% words2wc())
-  }
-  )
+  # upset_vals <- reactiveValues(GC.DA.wc=pspa$GC.DA %>% words2wc(), DA.doms.wc=pspa$DA.doms %>% words2wc())
+  # observeEvent(input$linSelec,{
+  #     upset_vals$GC.DA.wc <- switch(input$linSelec,
+  #                             "PspA" = pspa$GC.DA %>% words2wc(),
+  #                             "PspB" = pspb$GC.DA %>% words2wc(),
+  #                             "PspC" = pspc$GC.DA %>% words2wc(),
+  #                             "PspN" = pspn$GC.DA %>% words2wc(),
+  #                             "LiaF" = liai_liaf$GC.DA %>% words2wc(),
+  #                             "Toast-rack" = toast_rack$GC.DA %>% words2wc(),
+  #                             "Liag" = liag$GC.DA %>% words2wc())
+  #     upset_vals$DA.doms.wc <- switch(input$linSelec,
+  #                               "PspA" = pspa$DA.doms %>% words2wc(),
+  #                               "PspB" = pspb$DA.doms %>% words2wc(),
+  #                               "PspC" = pspc$DA.doms %>% words2wc(),
+  #                               "PspN" = pspn$DA.doms %>% words2wc(),
+  #                               "LiaF" = liai_liaf$DA.doms %>% words2wc(),
+  #                               "Toast-rack" = toast_rack$DA.doms %>% words2wc(),
+  #                               "Liag" = liag$DA.doms %>% words2wc())
+  # }
+  # )
 
+  #Change from: "PspA"= lineage.upset(pspa,input$cutoff, "da2doms",upset_vals$DA.doms.wc)
+  # to filtering the data with cutoff of Total count first then just running it through?
   #Renders the upsetPlot
   output$upsetP <- renderPlot({
     req(credentials()$user_auth)
     selected <- input$linSelec
     DA_or_GC <- input$DA_GC
     if(DA_or_GC == "Domain Architecture"){
-      switch(selected,
-             "PspA"= lineage.upset(pspa,input$cutoff, "da2doms",upset_vals$DA.doms.wc),
-             "PspB"= lineage.upset(pspb,input$cutoff, "da2doms",upset_vals$DA.doms.wc),
-             "PspC"= lineage.upset(pspc,input$cutoff, "da2doms",upset_vals$DA.doms.wc),
-             "PspN"= lineage.upset(pspn,input$cutoff, "da2doms",pspn$DA.doms %>% words2wc()),
-             "LiaF"= lineage.upset(liai_liaf,input$cutoff, "da2doms",upset_vals$DA.doms.wc),
-             "Toast-rack"= lineage.upset(toast_rack,input$cutoff, "da2doms",upset_vals$DA.doms.wc)
-      )
+      upset.plot(plotting_prot(), cutoff = input$cutoff, type = "da2doms" )
     }
     else{
-      switch(selected,
-             "PspA"= lineage.upset(pspa, input$cutoff, "gc2da",upset_vals$GC.DA.wc),
-             "PspB"= lineage.upset(pspb, input$cutoff, "gc2da",upset_vals$GC.DA.wc),
-             "PspC"= lineage.upset(pspc, input$cutoff, "gc2da",upset_vals$GC.DA.wc),
-             "PspN"= lineage.upset(pspn, input$cutoff, "gc2da",pspn$GC.DA %>% words2wc()),
-             "LiaF"= lineage.upset(liai_liaf, input$cutoff, "gc2da",upset_vals$GC.DA.wc),
-             "Toast-rack"= lineage.upset(toast_rack, input$cutoff, "gc2da",upset_vals$GC.DA.wc)
-      )
+      upset.plot(plotting_prot(), cutoff = input$cutoff, type = "gc2da")
     }
   }, height = 550)
+
+
+  #### Reactive expression determining domain of interest for plotting domain networks
+  network_domain_interest <-  reactive({
+    switch(input$linSelec,
+           "All" = "all",
+           "DUF1700" = "DUF1700-ahelical",
+           "DUF1707" = "DUF1707-SHOCT",
+           "PspA-Snf7" = "pspa|snf7",
+           "PspB" = "pspb",
+           "PspC" = "pspc",
+           "PspM" = "pspm",
+           "PspN" = "pspn",
+           "LiaI-LiaF-TM" = "LiaI-LiaF-TM",
+           "Toast-rack" = "Toast-rack")
+  })
+
+
+  ### Network Output ###
+  output$network <- renderPlot({
+    domain_network(plotting_prot(), column = "DomArch.repeats", cutoff_type = "Total Count", cutoff = input$cutoff, layout = "auto", domains_of_interest = network_domain_interest())
+    #domain_network(pspa,0)
+  })
 
 
   #Render Wordcloud
@@ -528,10 +534,10 @@ server <- function(input, output,session){
   output$wordcloud <- renderPlot({
     req(credentials()$user_auth)
     if(input$DA_GC == "Genomic Context"){
-      wordcloud(upset_vals$GC.DA.wc$words, upset_vals$GC.DA.wc$freq, min.freq = input$cutoff,colors = brewer.pal(8, "Spectral"))
+      wordcloud_element(type = "gc2da", query_data = plotting_prot(), cutoff = input$cutoff)
     }
     else{
-      wordcloud(upset_vals$DA.doms.wc$words, upset_vals$DA.doms.wc$freq, min.freq = input$cutoff,colors = brewer.pal(8, "Spectral"))
+      wordcloud_element(type = "da2doms", query_data = plotting_prot(), cutoff = input$cutoff)
     }
 
   }, height = 550)
@@ -541,12 +547,22 @@ server <- function(input, output,session){
   output$msaTree <- renderUI({
     print(input$phylo)
     req(credentials()$user_auth)
-    img(src="rseqtree.png", "data-zoom-image" ="rseqtree.png", height=1024,width=800)
+    switch(input$alignSelec,
+      "PspA-Snf7" = img(src="pspa_tree.png", "data-zoom-image" ="pspa_tree.png"),#, height=1024,width=800),
+      "PspB" = img(src="pspb_tree.png", "data-zoom-image" ="pspb_tree.png"),#, height=1024,width=800),
+      "PspC" = img(src="pspc_tree.png", "data-zoom-image" ="pspc_tree.png")#, height=1024,width=800)
+    )
   })
 
   output$msaPlot <- renderUI({
     req(credentials()$user_auth)
+    #switch(input$alignSelec,
     tags$iframe(style="height:600px; width:100%", src="pspa_reduced.fasta.pdf", seamless=T)
+
+
+
+      #     )
+
     # mytest <-tags$iframe(src="www.rstudio.com",scrolling="yes",seamless=T, height=600, width=535)
     # print(mytest)
     # mytest
@@ -588,9 +604,9 @@ server <- function(input, output,session){
   output$ParalogTable <- DT::renderDataTable({
     req(credentials()$user_auth)
     switch(input$alignSelec,
-           "PspA"= find_paralogs(all%>% filter(Query=="pspa"))
-           # ,"PspB"= find_paralogs(all%>% filter(Query=="pspb")),
-           # "PspC"= find_paralogs(all%>% filter(Query=="pspc")),
+           "PspA-Snf7"= find_paralogs(pspa)
+           ,"PspB"= find_paralogs(pspb),
+           "PspC"= find_paralogs(pspc)
            # "DUF1700"= find_paralogs(all%>% filter(Query=="DUF1700-alpha-helical")),
            # "DUF1707"= find_paralogs(all%>% filter(Query=="DUF1707-SHOCT")),
            # "Toast-rack"= find_paralogs(all%>% filter(Query=="Toast-rack")),
@@ -618,7 +634,8 @@ server <- function(input, output,session){
     else  paste(input$proSelec, ".csv", sep = "")
   })
 
-  #Downloads the data from datatable
+  ###### Downloads the data from datatable #####
+  ### Should it download cleaned data? or all rows?
   output$downloadData <- downloadHandler(
     filename = function() {
       fileNam()
@@ -632,7 +649,9 @@ server <- function(input, output,session){
     }
   )
 
-  #Download Data for Lin Table
+  #####
+  ##### Download Data for Lin Table #####
+  #####
   output$downloadCounts <- downloadHandler(
     req(credentials()$user_auth),
     filename = function(){
@@ -674,5 +693,4 @@ server <- function(input, output,session){
 
 #Call to shiny app
 shinyApp(ui = ui, server = server)
-
 
