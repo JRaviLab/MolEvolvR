@@ -171,7 +171,7 @@ lineage.DA.plot <- function(query_data="prot",
 
 lineage.Query.plot <- function(query_data="prot",
                                queries,
-                               #colname = "ClustName",
+                               colname = "ClustName",
                                cutoff
 ){
   #' Lineage Plot: Heatmap of Queries vs Lineages
@@ -190,24 +190,27 @@ lineage.Query.plot <- function(query_data="prot",
     column <- sym(column); by <- sym(by)
 
     # filter the protein by the query
-    prot <- prot %>% filter(grepl(pattern=query, x={{column}},
+    data <- data %>% filter(grepl(pattern=query, x={{column}},
                                   ignore.case=T)) %>% select({{by}})
 
-    prot$Query <- query
+    data$Query <- query
 
-    prot %>% filter(!grepl("^-$", {{by}})) %>%
+    data <- data %>% filter(!grepl("^-$", {{by}})) %>%
       group_by(Query, {{by}}) %>%
       summarise(count=n()) %>%
       arrange(desc(count))
+    return(data)
 
   }
+
+  col <- sym(colname)
 
   # query_data contains all rows that possess a lineage
   query_data <- query_data %>% filter(grepl("a", Lineage))
 
   query_lin_counts = data.frame("Query" = character(0), "Lineage" = character(0), "count"= integer())
   for(q in queries){
-    query_lin <- query_by_lineage(data = query_data, query = q, column = "ClustName", by = "Lineage")
+    query_lin <- query_by_lineage(data = query_data, query = q, column = {{col}}, by = "Lineage")
     query_lin_counts <- dplyr::union(query_lin_counts, query_lin)
   }
 
