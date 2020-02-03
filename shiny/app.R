@@ -15,6 +15,7 @@ setwd("..")
 source("shiny/PSP_Web_Data.R")
 source("R/plotting.R")
 source("R/network.R")
+source("R/GC_network_directed.R")
 #source("R/cleanup.R")
 #source("R/reverse_operons.R")
 source("shiny/shinyfunctions.R")
@@ -66,7 +67,8 @@ body <- dashboardBody(
                      #Dropdown to select protein for viewing
                      selectInput(inputId =  "proSelec", label = "Protein",
                                  choices = c( "All","DUF1700", "DUF1707",
-                                              "PspA-Snf7", "PspB", "PspC", "PspM", "PspN","LiaI-LiaF-TM","Toast-rack" )
+                                              "PspA-Snf7","Psp-AA", "PspB", "PspC", "PspM", "PspN",
+                                              "LiaI-LiaF-TM","Toast-rack", "Tfu-1009" )
                                  , selected = "All")
               ),
               #Buttons to select which file type to download
@@ -85,9 +87,9 @@ body <- dashboardBody(
             fluidPage(
               sidebarLayout(
                 sidebarPanel(
-                  #dropdown to select protein
+                  #dropdown to select protein for plots
                   selectInput(inputId =  "linSelec", label = "Protein",
-                              choices = c( "PspA-Snf7", "PspB", "PspC","PspN", "LiaI-LiaF-TM","Toast-rack")
+                              choices = c("All", "PspA-Snf7", "PspB", "PspC","PspN", "LiaI-LiaF-TM","Toast-rack")
                               , selected = "PspA"),
                   #Radiobuttons to selext domain architecture and genomic context
                   radioButtons(inputId = "DA_GC", label = "Lineage by:"
@@ -291,12 +293,15 @@ server <- function(input, output,session){
            "DUF1700" = DUF1700,
            "DUF1707" = DUF1707,
            "PspA-Snf7" = pspa,
+           "Psp-AA" = psp_aa,
            "PspB" = pspb,
            "PspC" = pspc,
            "PspM" = pspm,
            "PspN" = pspn,
            "LiaI-LiaF-TM" = liai_liaf,
-           "Toast-rack" = toast_rack)
+           "Toast-rack" = toast_rack,
+           "Tfu-1009" = tfu_1009
+           )
   })
   #Render the Data table for selected protein
   output$proTable <- DT::renderDT({
@@ -319,12 +324,14 @@ server <- function(input, output,session){
            "DUF1700" = DUF1700,
            "DUF1707" = DUF1707,
            "PspA-Snf7" = pspa,
+           "Psp-AA" = psp_aa,
            "PspB" = pspb,
            "PspC" = pspc,
            "PspM" = pspm,
            "PspN" = pspn,
            "LiaI-LiaF-TM" = liai_liaf,
-           "Toast-rack" = toast_rack)
+           "Toast-rack" = toast_rack,
+           "Tfu-1009" = tfu_1009)
   })
 
   #Observer used to determine initial heatmap slider
@@ -441,10 +448,20 @@ server <- function(input, output,session){
   output$LinPlot <- renderPlot({
     req(credentials()$user_auth)
     if(input$DA_GC == "Domain Architecture"){
-      lineage.DA.plot(plotting_prot(), colname = "DomArch", type = "da2doms", cutoff = input$cutoff)
+      if(input$linSelec != "All"){
+        lineage.DA.plot(plotting_prot(), colname = "DomArch", type = "da2doms", cutoff = input$cutoff)
+      }
+      else{
+        lineage.Query.plot(plotting_prot(), queries = queries, colname = "DomArch", cutoff = input$cutoff)
+      }
     }
     else{
-      lineage.DA.plot(plotting_prot(), colname = "GenContext", type = "gc2da", cutoff = input$cutoff)
+      if(input$linSelec != "All"){
+        lineage.DA.plot(plotting_prot(), colname = "GenContext", type = "gc2da", cutoff = input$cutoff)
+      }
+      else{
+        lineage.Query.plot(plotting_prot(), queries = queries, colname = "GenContext", cutoff = input$cutoff)
+      }
     }
   }, height = 500)
 
@@ -509,7 +526,7 @@ server <- function(input, output,session){
   #### Reactive expression determining domain of interest for plotting domain networks
   network_domain_interest <-  reactive({
     switch(input$linSelec,
-           "All" = "all",
+           "All" = "DUF1700-ahelical|DUF1707-SHOCT|pspa|snf7|pspb|pspc|pspm|pspn|LiaI-LiaF-TM|Toast-rack",
            "DUF1700" = "DUF1700-ahelical",
            "DUF1707" = "DUF1707-SHOCT",
            "PspA-Snf7" = "pspa|snf7",
@@ -524,8 +541,13 @@ server <- function(input, output,session){
 
   ### Network Output ###
   output$network <- renderPlot({
-    domain_network(plotting_prot(), column = "DomArch.repeats", cutoff_type = "Total Count", cutoff = input$cutoff, layout = "auto", domains_of_interest = network_domain_interest())
-    #domain_network(pspa,0)
+    if(input$DA_GC == "Domain Architecture"){
+      domain_network(plotting_prot(), column = "DomArch.repeats", cutoff_type = "Total Count", cutoff = input$cutoff, layout = "auto", domains_of_interest = network_domain_interest())
+    }
+    else{
+      gc_directed_network(plotting_prot(), column = "GenContext", cutoff_type = "Total Count",
+                            cutoff = input$cutoff)
+    }
   })
 
 

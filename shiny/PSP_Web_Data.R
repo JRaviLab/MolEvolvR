@@ -7,7 +7,7 @@ source("R/reverse_operons.R")
 
 ####Data import####
 
-all <- read_tsv("data/rawdata_tsv/old_txt/all_semiclean_20191219.txt")
+all <- read_tsv("data/rawdata_tsv/all_semiclean.txt")
 
 lineages_map <- read_delim("data/acc_files/organisms2lineages_map_bae_20170828.txt",
                            delim="\t", col_names=T, trim_ws=T)
@@ -57,9 +57,14 @@ all <- all %>% select(AccNum, DomArch, DomArch.repeats, DomArch.ind, GenContext,
 DUF1700 <- all %>% filter(grepl("DUF1700-ahelical",ignore.case = T, DomArch))
 DUF1707 <- all %>% filter(grepl("DUF1707-SHOCT",ignore.case = T, DomArch))
 pspa <- all%>% filter(grepl("pspa|snf7",ignore.case = T,DomArch))
+psp_aa <- all %>% filter(grepl("Psp-AA",ignore.case = T, DomArch))
 pspb <- all%>% filter(grepl("pspb",ignore.case = T, DomArch))
 pspc <- all%>% filter(grepl("pspc",ignore.case = T, DomArch))
 pspm <- all%>% filter(grepl("pspm",ignore.case = T, DomArch))
 pspn <- all%>% filter(grepl("pspn",ignore.case = T, DomArch))
 liai_liaf = all%>% filter(grepl("LiaI-LiaF-TM",ignore.case = T, DomArch))
 toast_rack = all%>%filter(grepl("Toast-rack",ignore.case = T, DomArch))
+tfu_1009 <- all %>% filter(grepl("Tfu_1009", ignore.case = T, DomArch))
+
+# Used for lineage by query
+queries = c("DUF1700", "DUF1707", "PspA|Snf7", "Psp-AA", "PspB","PspC", "PspM", "PspN", "LiaI-LiaF-TM", "Toast-rack", "Tfu_1009")
