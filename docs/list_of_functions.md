@@ -16,73 +16,73 @@
 - [x] `remove_tails`
   - [x] by DomArch
  
-- [ ] `remove_empty_rows`
-  - [ ] by Species, DomArch, ClustName, GenContext
+- [x] `remove_empty_rows`
+  - [x] by Species, DomArch, ClustName, GenContext
   
-- [ ] `cleanup_clust`
+- [x] `cleanup_clust`
   - [ ] ! `ClustName` acts as `DomArch`?
-  - [ ] remove start and end '+'s
-  - [ ] `domains_keep` remove rows without query (reads `query_domains`, `domains_keep`)
-  - [ ] `domains_rename`   (reads `domains_rename`)
+  - [x] remove start and end '+'s
+  - [x] `domains_keep` remove rows without query (reads `query_domains`, `domains_keep`)
+  - [x] `domains_rename`   (reads `domains_rename`)
   - [ ] ignored?           (reads `clustnames_ignore`)
-  - [ ] `repeat2s`: repeated domains with `(s)`
-  - [ ] `remove_tails`
-  - [ ] remove empty rows?
+  - [x] `repeat2s`: repeated domains with `(s)`
+  - [x] `remove_tails`
+  - [x] remove empty rows?
   
-- [ ] `cleanup_species`
+- [x] `cleanup_species`
   - [ ] `remove_empty` rows (!change it to an alert about AccNums w/ no lineage/spp)
-  - [ ] removes special characters
-  - [ ] check if empty rows/taxIDs are because of server retrieval errors!
+  - [x] removes special characters
+  - [x] check if empty rows/taxIDs are because of server retrieval errors!
 
-- [ ] `cleanup_domarch`
+- [x] `cleanup_domarch`
   - [ ] ignored           (reads `domains_ignore`)
-  - [ ] `domains_keep` remove rows without query (reads `query_domains`, `domains_keep`)
-  - [ ] replaced domains  (reads `domains_rename`)
-  - [ ] remove start and end '+'s
-  - [ ] `repeat2s`: repeated domains with `(s)`
-  - [ ] remove empty rows?
-  - [ ] `remove_tails`
+  - [x] `domains_keep` remove rows without query (reads `query_domains`, `domains_keep`)
+  - [x] replaced domains  (reads `domains_rename`)
+  - [x] remove start and end '+'s
+  - [x] `repeat2s`: repeated domains with `(s)`
+  - [x] remove empty rows?
+  - [x] `remove_tails`
   
-- [ ] `cleanup_gencontext`
+- [x] `cleanup_gencontext`
   - [x] `reverse_operons`
-  - [ ] `repeat2s`: repeated domains with `(s)`
+  - [x] `repeat2s`: repeated domains with `(s)`
   - [ ] remove empty rows? risky. many eukaryotes don't carry gencontexts!
 
-- [ ] `add_leaves`
-  - [ ] `to_titlecase`
-  - [ ] `convert_aln2fa` | `convert_aln2tsv`
-  - [ ] `add_leaves` | adding leaves based on AccNum, Lineage and Spp.
+- [x] `add_leaves`
+  - [x] `to_titlecase`
+  - [x] `convert_aln2fa` | `convert_aln2tsv`
+  - [x] `add_leaves` | adding leaves based on AccNum, Lineage and Spp.
   - [ ] add DA to `add_leaves` too?
   - [ ] `convert_accnum2fasta`
   - [ ] `filter_for_phylo`
 
 ## Summary stats
-- [ ] `count_bycol`
+- [x] `count_bycol`
 - [ ] `generate_wordcount`
-  - [ ] `elements2words`
-  - [ ] `words2wc`
+  - [x] `elements2words`
+  - [x] `words2wc`
   - [ ] `filter_freq` | mostly used within other functions
-- [ ] `summary_bylin` (for DA, GC)
-  - [ ] `summ_DA_byLin`
-  - [ ] `summ_GC_byDALin`
-  - [ ] `summ_GC_byLin`
-- [ ] `summary_stats` (for DA, GC)
-  - [ ] `summ_DA`
-  - [ ] `summ_GC`
+- [x] `summary_bylin` (for DA, GC)
+  - [x] `summ_DA_byLin`
+  - [x] `summ_GC_byDALin`
+  - [x] `summ_GC_byLin`
+- [x] `summary_stats` (for DA, GC)
+  - [x] `summ_DA`
+  - [x] `summ_GC`
 - [x] `total_counts`
-- [ ] `find_paralogs`
+- [x] `find_paralogs`
 
 ## Plotting
-- [ ] `upset_plot`
+- [x] `upset_plot`
   - [ ] should depend on generate_wordcount
 - [x] `lineage_DA_plot`
 - [x] `lineage_GC_plot`
 - [x] `lineage_domain_repeats_plot`??
-- [ ] `wordcloud`
+- [x] `wordcloud`
 - [ ] `msa_tree`
   - [ ] `msa_pdf`
   - [ ] `phylotree`?
-- [ ] `prot_network`
-  - [ ] by DA/domains
-  - [ ] by GC/DA
-  - [ ] subsets by prot/domain
+- [x] `prot_network`
+  - [x] by DA/domains
+  - [x] by GC/DA
+  - [x] subsets by prot/domain
