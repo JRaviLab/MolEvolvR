@@ -90,7 +90,7 @@ add_leaves <- function(aln_file = "",
   #Removes rows with NA
   aln_lin <- aln_lin[complete.cases(aln_lin),]
   #Removes duplicated rows
-  aln_lin <- aln_lin %>% unique()
+  aln_lin <- aln_lin %>% distinct()
 
   ##!! REVISE or REMOVE??? MSA doesn't work with too many sequences!!
   ##!! FIX ASAP.
