@@ -68,3 +68,12 @@ tfu_1009 <- all %>% filter(grepl("Tfu_1009", ignore.case = T, DomArch))
 
 # Used for lineage by query
 queries = c("DUF1700", "DUF1707", "PspA|Snf7", "Psp-AA", "PspB","PspC", "PspM", "PspN", "LiaI-LiaF-TM", "Toast-rack", "Tfu_1009")
+
+heatmap_legend = "Heatmap of the presence of --. The color
+gradiant represents number of -- within each lineage.
+Columns"
+
+upset_legend = ""
+
+
+

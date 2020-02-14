@@ -19,7 +19,7 @@ library(wordcloud)
 ## UpSet Plots
 #################
 upset.plot <- function(query_data="toast_rack.sub",
-                       cutoff=10, type="da2doms") {
+                       cutoff=90, type="da2doms") {
   #' UpSet Plot
   #' @author Janani Ravi
   #' @keywords UpSetR, Domains, Domain Architectures, GenomicContexts
@@ -65,7 +65,7 @@ upset.plot <- function(query_data="toast_rack.sub",
   }
 
 
-  words.gecutoff <- filter(wc, WordsPercentage >= cutoff_count)
+  words.gecutoff <- filter(wc, freq >= cutoff_count)
   ## Cutoff for most/least prevalent words
   #words.gecutoff <- filter(wc, freq>=cutoff) # words.gecutoff <- DA.doms.wc
   # words.ltcutoff <- filter(wc, freq<cutoff)
