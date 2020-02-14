@@ -11,6 +11,7 @@ conflicted::conflict_prefer("intersect", "dplyr")
 conflicted::conflict_prefer("filter", "dplyr")
 conflicted::conflict_prefer("strsplit", "base")
 conflicted::conflict_prefer("count", "dplyr")
+conflicted::conflict_prefer("box", "shinydashboard")
 setwd("..")
 source("shiny/PSP_Web_Data.R")
 source("R/plotting.R")
@@ -98,10 +99,20 @@ body <- dashboardBody(
                                #, choiceValues = c("da2doms", "gc2da")
                                , selected = "Domain Architecture"),
                   #Slider input to determine cutoff value for totalcounts
-                  sliderInput(inputId = "cutoff", label = "Total Count Cutoff:", min = 0, max = 100, value = 95)
+                  sliderInput(inputId = "cutoff", label = "Total Count Cutoff:", min = 0, max = 100, value = 95),
                   #sliderInput(inputId = "nr", label="Rows",min=0,max=10,value=0)
+
+                  # ,box(
+                  #   textOutput("Legend"),
+                  #   height = 300
+                  #   ,collapsible = T
+                  # ),
+
+                  textOutput("Legend")
+
                 ),
                 #mainpanel dictates what is displayed on screen depending on which tabset panel is selected
+
                 mainPanel(
                   tabsetPanel(
                     id= 'lin_data',
@@ -114,6 +125,21 @@ body <- dashboardBody(
                     tabPanel("Network",plotOutput(outputId = "network"))
                   )
                 )
+
+                # box(
+                #   tabsetPanel(
+                #     id= 'lin_data',
+                #     tabPanel("Heatmap",plotOutput(outputId = "LinPlot", height = '500px' )),
+                #     tabPanel("Table", DT::dataTableOutput(outputId = "LinTable"),
+                #              column(downloadButton(outputId = "downloadCounts", label = "Download"),radioButtons(inputId = "countDownloadType", label = "Download Type:",
+                #                                                                                                  choices= c("tsv", "csv"), selected = "tsv" ),width = 10)),
+                #     tabPanel("Upset Plot",plotOutput(outputId = "upsetP")),
+                #     tabPanel("Wordcloud", plotOutput(outputId = "wordcloud")),
+                #     tabPanel("Network",plotOutput(outputId = "network"))
+                #   ),
+                #   width = 10,
+                #   height = 600
+                # )
 
 
               )
@@ -563,6 +589,12 @@ server <- function(input, output,session){
     }
 
   }, height = 550)
+
+
+  output$Legend <- renderText({
+    "This is placeholder text for the legend information. It tells you really useful things and stuff,
+    such as how to use the plots and what information is derived from said plots."
+  })
 
 
 
