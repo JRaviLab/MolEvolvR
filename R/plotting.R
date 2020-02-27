@@ -252,7 +252,7 @@ lineage.Query.plot <- function(query_data="prot",
               colour="darkred", size=0.3) + #, width=0.7, height=0.7),
     scale_fill_gradient(low="white", high="darkred") +
     scale_x_discrete(position="top") +
-    theme_minimal() +  coord_flip() +
+    theme_minimal() +
     theme(axis.text.x=element_text(angle=90,hjust=0,vjust=0.5))
 }
 
@@ -408,22 +408,6 @@ wordcloud_element <- function(type="da2doms",
            wc <- query_data %>% elements2words(column = "GenContext",conversion_type = type) %>% words2wc();
            # colname <- "GenContext.norep"
          })
-
-
-  # Cutoff for the percentage: convert x% to show the top x% of values
-  # Find what wc value the % corresponds to
-  # cutoff_row <- length(wc$words) * (cutoff/100) - 1
-  #
-  # # Handle rows that are outside of range
-  # if(cutoff_row < 1){
-  #   cutoff_row = 1
-  # }
-  # else if(cutoff_row > length(wc$words)){
-  #   cutoff_row = length(wc$words)
-  # }
-  #
-  # # Obtain minimum word cutoff
-  # cutoff_wc <- as.integer(wc[cutoff_row, "freq"])
 
   TotalWordsFreq  = sum(wc$freq)
   wc <- wc %>% mutate("WordsPercentage" = 0) %>% arrange(freq)
