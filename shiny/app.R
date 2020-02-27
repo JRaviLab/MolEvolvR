@@ -568,10 +568,11 @@ server <- function(input, output,session){
   ### Network Output ###
   output$network <- renderPlot({
     if(input$DA_GC == "Domain Architecture"){
-      domain_network(plotting_prot(), column = "DomArch.repeats", cutoff_type = "Total Count", cutoff = input$cutoff, layout = "auto", domains_of_interest = network_domain_interest())
+      domain_network(plotting_prot(), column = "DomArch.repeats", cutoff = input$cutoff, layout = "auto",
+                     domains_of_interest = network_domain_interest())
     }
     else{
-      gc_directed_network(plotting_prot(), column = "GenContext", cutoff_type = "Total Count",
+      gc_directed_network(plotting_prot(), column = "GenContext",
                             cutoff = input$cutoff)
     }
   })
