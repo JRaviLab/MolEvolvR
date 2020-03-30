@@ -20,6 +20,8 @@ source("R/GC_network_directed.R")
 #source("R/cleanup.R")
 #source("R/reverse_operons.R")
 source("shiny/shinyfunctions.R")
+source("shiny/initialCutoff.R")
+source("shiny/legend_text.R")
 
 #########
 ##Users##
@@ -32,18 +34,34 @@ user_base <- data.frame(
   stringsAsFactors = FALSE
 )
 
+########
+#Header#
+########
+header <- dashboardHeader(title = "PSP Data",
 
+
+                          ### Github Icon in header
+                          tags$li(
+                            a(href = "https://github.com/jananiravi/psp-evolution",
+                              icon("github-square",
+                                   "fa-2x",
+                                   lib = "font-awesome")
+                          ),
+                          class = "dropdown"
+                          )
+)
 
 #########
 #Sidebar#
 #########
 sidebar<- dashboardSidebar(
+  width = 180,
+
   sidebarMenu(id = "mainTabs",
               menuItem("Data Table", tabName = "datatable"),
-              menuItem("Lineage Plots", tabName = "lineagePlots")
-              ,
+              menuItem("Lineage Plots", tabName = "lineagePlots"),
               menuItem("Phylogeny", tabName = "phylogeny")
-              ,menuItem("Usage", tabName="usage")
+              #,menuItem("Usage", tabName="usage")
               ,menuItem("About",tabName="about")
   )
 )
@@ -83,188 +101,15 @@ body <- dashboardBody(
               column(
                 DT::dataTableOutput(outputId = "proTable"), width = 12)))
     ,
+
     #lineagePlots contains a heatmap, datatable, and upset plot
-    tabItem("lineagePlots",
-            fluidPage(
-              sidebarLayout(
-                sidebarPanel(
-                  #dropdown to select protein for plots
-                  selectInput(inputId =  "linSelec", label = "Protein",
-                              choices = c("All", "PspA-Snf7", "PspB", "PspC","PspN", "LiaI-LiaF-TM","Toast-rack")
-                              , selected = "PspA"),
-                  #Radiobuttons to selext domain architecture and genomic context
-                  radioButtons(inputId = "DA_GC", label = "Lineage by:"
-                               , choices = c("Domain Architecture", "Genomic Context")
-                               #, choiceNames= c("Domain Architecture", "Genomic Context",)
-                               #, choiceValues = c("da2doms", "gc2da")
-                               , selected = "Domain Architecture"),
-                  #Slider input to determine cutoff value for totalcounts
-                  sliderInput(inputId = "cutoff", label = "Total Count Cutoff:", min = 0, max = 100, value = 95),
-                  #sliderInput(inputId = "nr", label="Rows",min=0,max=10,value=0)
+    ### Load Lineage Tab ###
+    source("shiny/ui/lineagePlots.R")$value,
 
-                  # ,box(
-                  #   textOutput("Legend"),
-                  #   height = 300
-                  #   ,collapsible = T
-                  # ),
+    source("shiny/ui/phylogenyUI.R")$value,
 
-                  textOutput("Legend")
-
-                ),
-                #mainpanel dictates what is displayed on screen depending on which tabset panel is selected
-
-                mainPanel(
-                  tabsetPanel(
-                    id= 'lin_data',
-                    tabPanel("Heatmap",plotOutput(outputId = "LinPlot", height = '500px' )),
-                    tabPanel("Table", DT::dataTableOutput(outputId = "LinTable"),
-                             column(downloadButton(outputId = "downloadCounts", label = "Download"),radioButtons(inputId = "countDownloadType", label = "Download Type:",
-                                                                                                                 choices= c("tsv", "csv"), selected = "tsv" ),width = 10)),
-                    tabPanel("Upset Plot",plotOutput(outputId = "upsetP")),
-                    tabPanel("Wordcloud", plotOutput(outputId = "wordcloud")),
-                    tabPanel("Network",plotOutput(outputId = "network"))
-                  )
-                )
-
-                # box(
-                #   tabsetPanel(
-                #     id= 'lin_data',
-                #     tabPanel("Heatmap",plotOutput(outputId = "LinPlot", height = '500px' )),
-                #     tabPanel("Table", DT::dataTableOutput(outputId = "LinTable"),
-                #              column(downloadButton(outputId = "downloadCounts", label = "Download"),radioButtons(inputId = "countDownloadType", label = "Download Type:",
-                #                                                                                                  choices= c("tsv", "csv"), selected = "tsv" ),width = 10)),
-                #     tabPanel("Upset Plot",plotOutput(outputId = "upsetP")),
-                #     tabPanel("Wordcloud", plotOutput(outputId = "wordcloud")),
-                #     tabPanel("Network",plotOutput(outputId = "network"))
-                #   ),
-                #   width = 10,
-                #   height = 600
-                # )
-
-
-              )
-            )
-    ),
-    tabItem("phylogeny",
-            fluidPage(
-              column(width = 2,
-                     selectInput(inputId =  "alignSelec", label = "Protein",
-                                 choices = c( "PspA-Snf7", "PspB", "PspC")
-                                 , selected = "PspA-Snf7")),
-              column(width = 12,
-                     tabsetPanel(
-                       id= "phylo",
-                       tabPanel("Tree", value="Tree",
-                                #,radioButtons(inputId = "plottype", label = "Plot Type",
-                                #                   choices = c("Tree1", "Tree2", "Tree3"),selected = "Tree1"),
-
-                                tags$head(tags$script(src = "http://www.elevateweb.co.uk/wp-content/themes/radial/jquery.elevatezoom.min.js")),
-                                actionButton("myBtn", "Press Me for zoom!"),
-                                p("If this button does not work, check if your browser is blocking this script from running"),
-                                htmlOutput(outputId = "msaTree" ),
-                                singleton(
-                                  tags$head(tags$script('Shiny.addCustomMessageHandler("testmessage",
-  function(message) {
-    var image = $("#msaTree img");
-    var zoomConfig = {scrollZoom : true};
-    if(message.value == "ZoomOn"){
-        //$("#msaTree img").elevateZoom({scrollZoom : true});
-        image.elevateZoom(zoomConfig);
-    }
-    else{
-       $.removeData(image, "elevateZoom");//remove zoom instance from image;
-
-       $(".zoomContainer").remove();// remove zoom container from DOM;
-    }
-  }
-);'))
-                                )
-                       ),
-                       tabPanel("MSA", value="MSA",
-                                htmlOutput(outputId="msaPlot")),
-                       tabPanel("Paralog Table", value="Paralog",
-                                DT::dataTableOutput(outputId = "ParalogTable",width = 1000)
-                       )
-                     )
-              )
-            )
-    ),
-    tabItem("about",
-            fluidRow(column(10,
-                            h2('Citation:')
-                            #put citations here
-
-
-                            )),
-            fluidRow(column(10,
-                            h2('Abstract:'),
-
-                            p("The phage shock protein (Psp) stress-response system protects bacteria from envelope stress and
-                            stabilizes the cell membrane. Despite the prevalence of the key effector, PspA, and the functional
-                            Psp system, the various genomic contexts of Psp proteins, as well as their evolution across the kingdoms
-                            of life, have not yet been characterized. Recent work from our group suggests that the psp systems have
-                            evolved independently in distinct Gram-positive and Gram-negative bacterial clades to effect similar stress
-                            response functions. We developed a computational pipeline for comparative genomics and protein
-                            sequence-structure-function analyses to identify sequence homologs, phyletic patterns, domain architectures,
-                            gene neighborhoods, sequence conservation and evolution of the candidates across the tree of life. Using
-                            contextual information from conserved gene neighborhoods and their domain architectures, we delineated the
-                            phyletic patterns of all the Psp members. Next, we systematically identified all possible 'flavors' and
-                            genomic neighborhoods of the Psp systems. Finally, we have traced their evolution leading us to several
-                            interesting observations as to their occurrence and co-migration, suggesting their function and role in
-                            stress-response systems that are often lineage-specific. Conservation of the Psp systems across bacterial
-                            phyla emphasizes the established importance of this stress response system in prokaryotes, while the
-                            modularity in various lineages is indicative of adaptation to bacteria-specific cell-envelope structures,
-                            lifestyles, and adaptation strategies.", style = "font-size:120%")
-
-                            )),
-            fluidRow(column(10,
-                            h2("Links:"),
-                            p("GitHub", style = "font-size:120%"),
-                            tags$br(),
-                            p("Paper", style = "font-size:120%"),
-                            tags$br(),
-                            p("link to lab", style = "font-size:120%")
-
-
-
-                            # tags$dl(
-                            #   tags$dt("Links:"),
-                            #   tags$dd("GitHub"),
-                            #   tags$dd("Paper"),
-                            #   tags$dd("link to lab"))
-
-
-                            )),
-            fluidRow(column(10,
-                            h2("Contacts:")
-
-
-            ))
-
-                            #put link to paper, lab, github, other readings
-
-            ),
-    tabItem("usage",
-            fluidRow(
-              column(12,
-                     tabsetPanel(
-                       id="manual_panel",
-                       tabPanel("Data Table"),
-                       tabPanel("Lineage Plots"),
-                       tabPanel("Phylogeny")
-
-
-                     )
-                     )
-
-            )
-            #Use tabs to have different aspects of the page:
-            #datatable(main)
-            #Lineage tab, with descriptions for the various tools
-            #Phylogeny, again with descriptions for the various tools
-
-
-            )
+    ### Load About Tab ###
+    source("shiny/ui/aboutUI.R")$value
   ),
   HTML('<div data-iframe-height></div>')
 )
@@ -273,11 +118,11 @@ body <- dashboardBody(
 ####
 ui <- dashboardPage(
   skin = "green",
-                    #App title
-                    dashboardHeader(title = "PSP Data"),
-                    #Create Sidebar with inputs and download button output
-                    sidebar,
-                    body
+  #App title
+  header,
+  #Create Sidebar with inputs and download button output
+  sidebar,
+  body
 )
 
 ########
@@ -327,20 +172,20 @@ server <- function(input, output,session){
            "LiaI-LiaF-TM" = liai_liaf,
            "Toast-rack" = toast_rack,
            "Tfu-1009" = tfu_1009
-           )
+    )
   })
   #Render the Data table for selected protein
   output$proTable <- DT::renderDT({
     req(credentials()$user_auth)
     ##### Can use select here to determine what columns shown
     paged_table(pspTable() )}, extensions = c('FixedColumns',"FixedHeader"),
-                                  options = list(pageLength = 10,
-                                                 #The below line seems to disable other pages and the search bar
-                                                 #dom = 't',
-                                                 scrollX = TRUE,
-                                                 paging=TRUE,
-                                                 fixedHeader=TRUE,
-                                                 fixedColumns = list(leftColumns = 2, rightColumns = 0)))
+    options = list(pageLength = 10,
+                   #The below line seems to disable other pages and the search bar
+                   #dom = 't',
+                   scrollX = TRUE,
+                   paging=TRUE,
+                   fixedHeader=TRUE,
+                   fixedColumns = list(leftColumns = 2, rightColumns = 0)))
 
 
   #### Reactive expression determining data for which plotting is based. Controlled by dropdown ####
@@ -361,110 +206,15 @@ server <- function(input, output,session){
   })
 
   #Observer used to determine initial heatmap slider
-  # observe({
-  #   if(input$DA_GC== "Domain Architecture"){
-  #   switch(input$linSelec,
-  #       "PspA"= {hs <-heatmap_slider(pspa_DA_lin,"da")},
-  #       "PspB"= {hs <-heatmap_slider(pspb_DA_lin,"da")},
-  #       "PspC"= {hs <-heatmap_slider(pspc_DA_lin,"da")},
-  #       "PspN"= {hs <-heatmap_slider(pspn_DA_lin,"da")},
-  #       "LiaF"= {hs <-heatmap_slider(liai_liaf_DA_lin,"da")},
-  #       #"LiaG"= {hs <-heatmap_slider(liag_DA_lin)},
-  #       "Toast-rack"= {hs <-heatmap_slider(toast_rack_DA_lin,"da")}
-  #   )}
-  #   else{
-  #     switch(input$linSelec,
-  #            "PspA"= {hs <-heatmap_slider(pspa_GC_lin,"gc")},
-  #            "PspB"= {hs <-heatmap_slider(pspb_GC_lin,"gc")},
-  #            "PspC"= {hs <-heatmap_slider(pspc_GC_lin,"gc")},
-  #            "PspN"= {hs <-heatmap_slider(pspn_GC_lin,"gc")},
-  #            "LiaF"= {hs <-heatmap_slider(liai_liaf_GC_lin,"gc")},
-  #            "Toast-rack"= {hs <-heatmap_slider(toast_rack_GC_lin,"gc")}
-  #     )}
-  #   updateSliderInput(session,inputId = "cutoff",min=0, max=hs[,"max"], value=hs[,"cutoff_init"])
-  # })
-
-#   prot_da_lin <- reactive({switch(input$linSelec,
-#                         "PspA"= pspa_DA_Lin,
-#                         "PspB"= pspb_DA_Lin,
-#                         "PspC"= pspc_DA_Lin,
-#                         "LiaG"= liag_DA_Lin,
-#                         "LiaF"= liaf_DA_Lin,
-#                         "LiaI"= liai_DA_Lin
-#   )})
-#     prot<- reactive({
-#       prot_da_lin%>% group_by(DomArch.norep)%>%
-#         summarise(totalcount = sum(count)) %>%
-#         filter(totalcount >1) %>% arrange(desc(totalcount))
-#     })
-#
-#     prot_filt <- reactive({
-#       filter(prot,totalcount >= input$cutoff)
-#     })
-# current_row <- reactive({
-#   length(prot_filt$totalcount)
-#   }
-# )
-# current_cutoff <- reactive({
-#   prot[current_row,"totalcount"]
-# })
-#   observeEvent(input$nr,{
-#     updateSliderInput(session,inputId = "cutoff",value = current_cutoff)
-#   })
-#
-#   observeEvent(input$cutoff,  {
-#     updateSliderInput(session = session, inputId = "nr", value = current_row)
-#   })
-
-
-#   observe({
-#     current_row <- as.numeric(input$nr)
-#     prot_da_lin <- switch(input$linSelec,
-#            "PspA"= pspa_DA_Lin,
-#            "PspB"= pspb_DA_Lin,
-#            "PspC"= pspc_DA_Lin,
-#            "LiaG"= liag_DA_Lin,
-#            "LiaF"= liaf_DA_Lin,
-#            "LiaI"= liai_DA_Lin
-#            )
-#
-#
-#     prot <- prot_da_lin %>% group_by(DomArch.norep)%>%
-#       summarise(totalcount = sum(count)) %>%
-#       filter(totalcount >1) %>% arrange(desc(totalcount))
-#     cutoff_val <- prot[current_row,"totalcount"]
-#   })
-#
-#   prot<- reactive({
-#     prot_da_lin <- switch(input$linSelec,
-#                           "PspA"= pspa_DA_Lin,
-#                           "PspB"= pspb_DA_Lin,
-#                           "PspC"= pspc_DA_Lin,
-#                           "LiaG"= liag_DA_Lin,
-#                           "LiaF"= liaf_DA_Lin,
-#                           "LiaI"= liai_DA_Lin
-#     )
-#     prot <- prot_da_lin%>% group_by(DomArch.norep)%>%
-#       summarise(totalcount = sum(count)) %>%
-#       filter(totalcount >1) %>% arrange(desc(totalcount))
-#   })
-#   cutoff_val <- reactive({
-#     prot[current_row,"totalcount"]}
-#   )
-#
-#   observeEvent(input$cutoff, {
-#     v$x <- input$cutoff
-#   })
-#   observeEvent(input$nr, {
-#     v$x <- prot[input$nr,"totalcount"]
-#   })
-#
-# observeEvent(input$cutoff,{
-#   if(v$x != input$cutoff) updateSliderInput(session, "cutoff",value=cutoff_val)
-#
-#   if(v$x != input$nr) updateSliderInput(session,"nr",value =length(filter(prot,totalcount>=cutoff_val)))
-#   }
-#)
+  observe({
+    if(input$DA_GC== "Domain Architecture"){
+      cutoff_init <- top_n_rows_cutoff(plotting_prot(), column = "DomArch", n_rows = 10)
+    }
+    else{
+      cutoff_init <- top_n_rows_cutoff(plotting_prot(), column = "GenContext", n_rows = 10)
+    }
+    updateSliderInput(session,inputId = "cutoff",min=0, max=100, value=cutoff_init)
+  })
 
 
 
@@ -497,13 +247,13 @@ server <- function(input, output,session){
   output$LinTable <- DT::renderDT({
     req(credentials()$user_auth)
     paged_table(
-    if(input$DA_GC == "Domain Architecture"){
-      total_counts(plotting_prot(), cutoff = input$cutoff, column = "DomArch")
+      if(input$DA_GC == "Domain Architecture"){
+        total_counts(plotting_prot(), cutoff = input$cutoff, column = "DomArch")
       }
-    else{
-      total_counts(plotting_prot(), cutoff = input$cutoff, column = "GenContext")
-    }
-  )
+      else{
+        total_counts(plotting_prot(), cutoff = input$cutoff, column = "GenContext")
+      }
+    )
   }, extensions = c('FixedColumns',"FixedHeader"),
   options = list(pageLength = 15,
                  scrollX = TRUE,
@@ -572,8 +322,8 @@ server <- function(input, output,session){
                      domains_of_interest = network_domain_interest())
     }
     else{
-      gc_directed_network(plotting_prot(), column = "GenContext",
-                            cutoff = input$cutoff)
+      gc_directed_network(plotting_prot(), column = "GenContext.repeats",
+                          cutoff = input$cutoff)
     }
   })
 
@@ -591,36 +341,93 @@ server <- function(input, output,session){
 
   }, height = 550)
 
+  ### Observe changes in tabset panel to determine legend text ###
+  legend_txt <- reactive({
+    # switch(input$lin_data,
+    #   "Upset" = Upset_txt,
+    #   "Heatmap" = LineageHeatmap_txt
+    # )
+    if(input$lin_data == "Heatmap" & input$linSelec != "All"){
+      LineageHeatmap_txt
+    }
+    else if(input$lin_data == "Heatmap" & input$linSelec == "All"){
+      AllLineageHeatmap_txt
+    }
+    else if(input$lin_data == "Upset"){
+      Upset_txt
+    }
+    else if(input$lin_data == "Lintables"){
+      LinTable_txt
+    }
+    else if(input$lin_data == "Network_WC"){
+      paste(Network_txt, Wordcloud_txt, sep = "\n")
+    }
+
+
+  })
 
   output$Legend <- renderText({
-    "This is placeholder text for the legend information. It tells you really useful things and stuff,
-    such as how to use the plots and what information is derived from said plots."
+    legend_txt()
   })
 
 
+
+
+  observe({
+    if(input$phylo == "Tree"){
+      choices = c(
+        "LiaI-LiaF-TM.allfa50",
+        "LiaI-LiaF-TM_LiaFN.2",
+        "LiaI-LiaF-TM_LiaI.1",
+        "LiaI-LiaF-TM_PspC.3",
+        "PspA Only",
+        "PspA Snf7 Gismo",
+        "PspA Snf7",
+        "PspB Gismo",
+        "PspC Gismo",
+        "Snf7 Only",
+        "Toast-rack DUF2154-LiaF",
+        "Toast-rack DUF2807",
+        "Toast-rack DUF4097",
+        "Toast-rack PspC-Cterm"
+      )
+      selected = "PspA Snf7"
+    }
+    else{
+      choices = c("PspA-Snf7",
+                  "PspB",
+                  "PspC")
+      selected = "PspA-Snf7"
+    }
+    updateSelectInput(session, inputId = "alignSelec",
+                      choices = choices, selected = selected)
+  })
 
   output$msaTree <- renderUI({
     print(input$phylo)
     req(credentials()$user_auth)
     switch(input$alignSelec,
-      "PspA-Snf7" = img(src="pspa_tree.png", "data-zoom-image" ="pspa_tree.png"),#, height=1024,width=800),
-      "PspB" = img(src="pspb_tree.png", "data-zoom-image" ="pspb_tree.png"),#, height=1024,width=800),
-      "PspC" = img(src="pspc_tree.png", "data-zoom-image" ="pspc_tree.png")#, height=1024,width=800)
+           "LiaI-LiaF-TM.allfa50" = tags$iframe(style="height:600px; width:100%", src="FigTrees/LiaI-LiaF-TM.allfa50_tree.pdf", seamless=T),
+           "LiaI-LiaF-TM_LiaFN.2"= tags$iframe(style="height:600px; width:100%", src="FigTrees/LiaI-LiaF-TM_LiaFN.2_tree.pdf", seamless=T),
+           "LiaI-LiaF-TM_LiaI.1" = tags$iframe(style="height:600px; width:100%", src="FigTrees/LiaI-LiaF-TM_LiaI.1_tree.pdf", seamless=T),
+           "LiaI-LiaF-TM_PspC.3" = tags$iframe(style="height:600px; width:100%", src="FigTrees/LiaI-LiaF-TM_PspC.3_tree.pdf", seamless=T),
+           "PspA Only" = tags$iframe(style="height:600px; width:100%", src="FigTrees/pspa_only.1_tree.pdf", seamless=T),
+           "PspA Snf7" = tags$iframe(style="height:600px; width:100%", src="FigTrees/pspa_snf7_tree.pdf", seamless=T),
+           "PspA Snf7 Gismo" = tags$iframe(style="height:600px; width:100%", src="FigTrees/pspa_snf7.gismo_tree.pdf", seamless=T),
+             #tags$embed(src="pspa_snf7_tree.pdf"), #, "data-zoom-image" ="pspa_snf7_tree.pdf"),#, height=1024,width=800),
+           "PspB Gismo" = tags$iframe(style="height:600px; width:100%", src="FigTrees/pspb.gismo_tree.pdf", seamless=T),
+           "PspC Gismo" = tags$iframe(style="height:600px; width:100%", src="FigTrees/pspc.gismo_tree.pdf", seamless=T),
+           "Snf7 Only" = tags$iframe(style="height:600px; width:100%", src="FigTrees/snf7_only.1_tree.pdf", seamless=T),
+           "Toast-rack DUF2154-LiaF" = tags$iframe(style="height:600px; width:100%", src="FigTrees/Toast-rack_DUF2154-LiaF.1_tree.pdf", seamless=T),
+           "Toast-rack DUF2807" = tags$iframe(style="height:600px; width:100%", src="FigTrees/Toast-rack_DUF2807.2_tree.pdf", seamless=T),
+           "Toast-rack DUF4097" = tags$iframe(style="height:600px; width:100%", src="Toast-rack_DUF4097-LiaG.3.allfa.2nd_tree.pdf", seamless=T),
+           "Toast-rack PspC-Cterm" = tags$iframe(style="height:600px; width:100%", src="FigTrees/Toast-Rack_PspC-Cterm.4_tree.pdf", seamless=T)
     )
   })
 
   output$msaPlot <- renderUI({
     req(credentials()$user_auth)
-    #switch(input$alignSelec,
     tags$iframe(style="height:600px; width:100%", src="pspa_reduced.fasta.pdf", seamless=T)
-
-
-
-      #     )
-
-    # mytest <-tags$iframe(src="www.rstudio.com",scrolling="yes",seamless=T, height=600, width=535)
-    # print(mytest)
-    # mytest
   })
 
   vals <- reactiveValues(btn = 0, tab = "home")
@@ -666,7 +473,7 @@ server <- function(input, output,session){
            # "DUF1707"= find_paralogs(all%>% filter(Query=="DUF1707-SHOCT")),
            # "Toast-rack"= find_paralogs(all%>% filter(Query=="Toast-rack")),
            # "LiaI-LiaF-TM"= find_paralogs(all%>% filter(Query=="LiaI-LiaF-TM"))
-           )
+    )
   },extensions = c('FixedColumns'),
   options = list(pageLength = 10,
                  #The below line seems to disable other pages and the search bar
