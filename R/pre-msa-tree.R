@@ -102,14 +102,17 @@ add_leaves <- function(aln_file = "",
   temp <- aln_lin %>%
     separate(Lineage,
              into=c("Kingdom", "Phylum"),
-             sep=">", remove=F,
-             extra = "merge", fill = "left") %>%
+             sep=">", remove=F,      ### Some  lineages don't have a phylum, What should those be turned into
+             extra = "merge", fill = "right") %>%
+    replace_na(replace = list(Kingdom = "", Phylum = "")) %>%
     separate(Species, into=c("Genus", "Spp"),
              sep=" ", remove=F,
              extra = "merge", fill = "left") %>%
-    #Can remove the temp and should work
+
+    # 3char from kingdom, 6 char from phylum, 1 char from Genus, 3 char from species
+    # kingdomPhylum_GenusSpecies
     mutate(Leaf=paste(paste0(str_sub(Kingdom,
-                                     start=1, end=1),
+                                     start=1, end=3),
                              str_sub(Phylum, 1, 6)),
                       paste0(str_sub(Genus, start=1, end=1),
                              str_sub(Spp, start=1, end=3)),
@@ -214,13 +217,13 @@ generate_all_aln2fa <- function(aln_path=here("data/rawdata_aln/"),
   # lin_file <- here("data/rawdata_tsv/all_semiclean.txt")
 
   aln_filenames <- list.files(path=aln_path, pattern="*.aln")
-  aln_filepaths <- paste0(aln_path, aln_filenames)
+  aln_filepaths <- paste0(aln_path,"/", aln_filenames)
   variable <- str_replace_all(basename(aln_filenames),
                               pattern=".aln", replacement="")
 
   ## Using purrr::pmap
   aln2fa_args <- list(aln_file=aln_filepaths,
-                      fa_outpath=paste0(fa_outpath, variable, ".fa"))
+                      fa_outpath=paste0(fa_outpath, "/", variable, ".fa"))
   pmap(.l=aln2fa_args, .f=convert_aln2fa,
        lin_file=lin_file,
        reduced=reduced)

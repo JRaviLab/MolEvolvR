@@ -9,7 +9,7 @@ conflicted::conflict_prefer("filter", "dplyr")
 #### Network FUNCTIONS ####
 ###########################
 gc_directed_network <- function(prot, column = "GenContext",
-                                cutoff_type = "Lineage", cutoff = 40,
+                                 cutoff = 40,
                                 layout = "grid"){
   #'Genomic Context Directed Network
   #'
