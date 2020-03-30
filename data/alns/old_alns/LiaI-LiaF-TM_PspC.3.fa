@@ -90,7 +90,7 @@ AG-EQ---FGpl--------------------AQ-------------------SS--SN-----------LVSHLFTT--
 PK-RE---STlski------------------LL-------------------FP--FR-----------IIGLFFSF-------LGRLVKPFAL---ILKIMAGIFL---MFIGISAAFSII-VA--LSVF-----F-GILSasewiq---FG-------DL---E-V-Q-K--L---LAE-IH----------------------PLGA--VFIFFAV--FI-PAIAL--IFA-GAMLTV-G-KNFGNRN-F-WL---TLLLI---WFTGMVGSISFGTKISL-N-YAH---RTVEV
 >Bacbacter_Msp_AMR31059.1
 LG-HE---AKpl--------------------VY-------------------KT--RD-----------FAGDVFGH-------VGSFAGGASK---LLLKFIGLVL---LVSCFGALISLV-IA--IVMFta---Y-GSTF---------LAh------VF---P-F-N-I--V---NQE-AN----------------------TIFL--VCAFLML--AM-PLLAI--ILA-IIGYVF-K-GNTVGRT-T-GS---ALFMV---WVIALSVVIYYSAKASA-N-FRT---GATFS
->Bac_CFal_OGF25770.1
+>NAbacter_CFal_OGF25770.1
 GR-EA---LSrlknnrvwyri-----------LN-------------------FP--VR-----------VIERIFYF-------FKKSAGFVFP---VLSIFLGVIF---LLSTLAAILGLT-IA--LGAMvlh--I-GSPF---------IHs------DV---P-L-KeL--S---SNP-FY----------------------YLAA--LSVYFTV--FV-PLVFL--SFL-GITMIR-R-KNAFAPI-A-SG---ILVGI---WMLAVVGAVIAAGDLVP-R-FRV---WVEDT
 >Bacbacter_Rtib_ALI99849.1
 NG-QE---STlakv------------------LL-------------------FP--VR-----------LVSQIIQAlsrv---LHPVMGFLIT---MIRVFAGLLM---MVVSGAFMVALL-AG--LMVG-----L-GIYDkpeyfn---FG-------EI---P-A-A-A--F---VNA-VP----------------------SWMF--WAGFFAG--II-PALLL--FLL-GVGLLA-K-KFLLRPT-V-GW---PMLGV---WLIAVAALISGIALTSR-N-FQE---TGEYA
@@ -110,13 +110,13 @@ TG-ET---YT-------------------------------------------HI--SR-----------PVNRLAE---
 ES-SKve-STskri------------------VL-------------------AP--FR-----------FLGKAINAigka---LGPFGAFLLA---VIRVFFGLLI---FTLGMVILIIPL-AF--LGLYseli-I-NNDWaym------WD-------GF---P-I-N-T--I---AEL-LP----------------------VWLA--IALSVIV--FI-PSIVL--VLL-GISVLI-K-RNLIDGR-F-GL---VIFGI---WIMCILLGAFQAPKIIG-Q-FKS---EGSFT
 >Bacbacter_Cpin_ACU58281.1
 FG-ND---VKnf--------------------SQg------------------RG--RQ-----------VGSDIERA-------FRSIFEALGK---VLLLLTKGFF---YFLAVVILISLIsVG--IGIT-----A-SSAA---------LY-------PL---K-N-L-I--L---AGT-VQn---------------------LLLW--CSILFLV--GI-PIVAL--IMF-FVRKAT-G-IKEANRY-V-GY---TLSLL---WFAGLICAVALVASVIR-D-FRT---GPGRI
->Bac_Pgro_KKS36834.1
+>NAbacter_Pgro_KKS36834.1
 ID-EKkigETtrgl------------------WE-------------------NI--RS-----------FLQNVFTF-------LRKFIQFFFK---IITVVVGFAL---LLLGAFGIAGLV-SA--VSVI-----W-LGEStwirpe---FH-------EI---L-T-T-L--L---ANP-AS----------------------YLFI--PALLVSI--TI-PLLVF--IIL-GGSLVS-G-KNLFTLT-K-GI---ILGVV---WIVAITLAVTLGVVYQP-I-RIE---TDRFS
 >Bacbacter_Pdis_ABR44469.1
 VS-NN---VNdfis------------------SD-------------------KP--RN-----------FFQKLADV-------FVLVIGFILK---FFIILAGIFL---LPPLVLVVFILV-VV--TFALlmggaG-FIYN---------LS-------PF---G-A-D-L--I---NGA-PLsma-------------------IMGC--IGTILFI--GI-PIFSL--IYA-ICCQLF-K-VRPLPTQ-A-RW---ILLAL---WLISLVLCGVYIHQSGM-L-YDW---HDYWN
 >Bacbacter_Scya_ALO15992.1
 VK-NSga-YK-------------------------------------------KA--RD-----------GVNRGASA-------AGEIVSFILK---AIVIIIGIGM---VTGAVVSIVAIVnLV--IFHS-----P-TIYFhgevqgif-FP-------VL---E-A-F-F--E---NEL-TL----------------------IIFL--LSSILLA--LI-PILVI--LFL-GVKLVF-N-FKTNNKV-I-GL---SALGI---WLISLAAVITIGISLGA-R-YTY---PSDVE
->Bac_CFal_OGF25487.1
+>NAbacter_CFal_OGF25487.1
 LA-KS---KGiiyki-----------------FN-------------------FP--FR-----------VLENIFSF-------LKKIIGGIWP---FTSICLGVIF---VLSSFFMILGLS-IF--LGIL-----I-FYVDspy------IVs------DF---P-L-S-Q--L---TDS-PL----------------------YFITg-ISVYFVI--LI-PIFFI--LML-GFTMLR-R-KNSFSTA-I-SG---ILISL---WIVAIAGAVVTGGEFAL-K-VNS---E--LQ
 >Bacbacter_Fbac_AHM63093.1
 EG-EE---ESllari-----------------LL-------------------FP--FR-----------LVASIFSGdnvn---VRVIITFLAD---AIRVVLGLIL---SFGGFMALLALL-IS--ATVV-----S-GVYPdtylhl---FDl------EI---P-H-A-M--V---RNT-IP----------------------DALL--VAVLVLA--SI-PALFI--MLL-GIGLVA-G-RWVVHRT-V-GW---GLAGA---WIIALICVAVMAPRILV-N-YSQ---DDYYQ
@@ -134,7 +134,7 @@ AS-ET---LS------------------------------------------------K-----------SGRKIGDN--
 SK-EE---STarkv------------------LM-------------------AP--FRvlgm-------IINGIGTA-------LGPIGNVLLA---IIRVLFGLII---FLIGLAITITPI-VA--LALY-----F-NIVPqeelfv---WGsl-----HL---P-T-T-W--I---TDI-VT----------------------DWLA--IAASLVI--LI-PGLVL--ITL-AISVWV-K-RSIIEAR-M-GL---ITFGI---WLLSIGVCAFQIPSVVN-E-FNT---NVTHT
 >Bacbacter_Ssp_AIM35508.1
 LK-EN---FSgv--------------------GN-------------------TF--NK-----------GVSSAGNA-------FGEII----K---LFAKVIGLIV---AFTIGLSLISLL-IA--LIFFs----L-GIAG---------ITdrg----VIe--P-L-N-L--I---DPT-QA----------------------PWAL--AAAFLAV--AI-PFAGL--FYL-IIRLLF-N-RRSMNNY-L-TT---SLFLV---WLISLGAMVYYAGSVAK-D-FKE---ESRIV
->Bac_Pgro_KKS29113.1
+>NAbacter_Pgro_KKS29113.1
 ID-ERk--ISeatrgl----------------WA-------------------TT--RG-----------FLQNIFAF-------LGKFIRFFFK---IITMLVGLGL---LLVGAFGIAGLV-SA--VSVI-----W-LGESawirpe---FH-------EI---L-D-T-L--F---ANP-AS----------------------YLFI--PAILVAV--TI-PLLVS--IIL-GGSLVS-E-KNLFTLT-K-GI---ILGVV---WIVAVTLAITLGIAYQP-I-HIE---TDTFL
 >Bacbacter_Bvis_AHF12881.1
 EE-QG---SS-------------------------------------------AP--TG-------------SALSHT-------LGEIFRGVFK---VFFIGIGALI---ALSIIGALVTCI-VS--LLSL-----L-FLGStavvtpf--IS-------IF---P-G-H-IdvV---NGH-WEl---------------------ILFT--VSLLLTF--GI-PLYAI--LRL-VLGSIF-H-WKSQSTA-L-NI---FLSVL---WLLSLAGLFFATFVAIP-G-QE---------
@@ -146,7 +146,7 @@ VK-DR---VKdwskev----------------AD-------------------TA--TRlgqtgkvygrnFGREFGSA--
 AD-DP---VT----------------------TN-------------------RP--VGa----------FVEDAARS-------LRPLVDFIGS---AIRIVAGVLL---TIGGFSLLLALA-IM--LGAG-----I-GLIPnseniv---AG-------DV---P-A-H-V--L---LNG-VP----------------------TWGL--LAGFFAA--AI-PALAL--LLA-GLNLLL-R-RSLMSRT-V-SL---SLLGL---WLLSVVGVTMAIAQQSR-Q-FQY---DAEVE
 >Bacbacter_Eano_AIL46888.1
 LK-EQ---SNkv--------------------VQ-------------------FA--TD-----------SSEKVNQFyqnnkgqANDVGNAFLK---ALSIIFGLFT---SAIAVSFFLGSI-AV--LFGGls---F-GEGA---------IDipe----NI---N-F-Y-F--N---DGV-TG----------------------SAII--FFGFLSM--FI-PAIIF--TLI-SLKLFSpN-LKI--KY-M-GYliaTLVLC---WIVLIGFIGYSASKA---N-FRF---NGHNE
->Bac_CKai_OGG65427.1
+>NAbacter_CKai_OGG65427.1
 IE-QFdy-SKtkgv------------------WY-------------------TL--RG-----------FLDKLFQI-------LGSVLTFIIS---VLRYVVGIGV---ILAGAFGTAGLV-AA--YSVI-----L-LSEKvm-------FGaevqq--VF---E-T-L-Q--G----TT-LG----------------------ITAL--VSLFITI--AI-PLIVA--IVV-GVSLLA-K-RNYFTVQ-K-TV---TLGVL---WIVAGVLAATTIALQVE-Q-VVQ---QVGPI
 >Bacbacter_Cgal_AKK71479.1
 LK-NE---SNkl--------------------VQ-------------------FA--NE-----------STQRVGEIynenkpyISNAGSGIWN---VFKYIIGAFS---VLMAVGSIIGVF-VL--FALF-----G-MDTD---------FPgan----QI---R-F-Y-M--D---DNG-LD----------------------KVLA--AIMIIGS--LI-PAILF--SLL-SIKIFSpK-TKL--RN-L-GW---LVGGL---FLLLIGLGTYFGISMAKkN-LIY---KGNKE
@@ -160,11 +160,11 @@ RG-EG---VTlsgi------------------DNnlrataldadgnpvatapnRP--VGa----------FLEGAARG--
 LK-NE---SSki--------------------VK-------------------FA--ND-----------STQRINEVyqdtrpvINEAGNSILN---ALRYVIGGFL---GLLGLVFLAGAF-MV--FGVSvt---G-TGLT---------LP-------GF---V-G-F-Y--I---DDT-NIk---------------------FAGL--ALAFVTM--LI-PALIF--IFL-SIKLFSpK-TKL--KY-V-GY---IIGALcfvWLVLLGITGFSAMNYQT-N-FR-----GSNE
 >Bacbacter_Prum_ADE81832.1
 EG-KD---ITpqnladvvvege----------KQ-------------------HV--QRpg---------FMRLLFII-------LMKMVIAFVV---IISIVVCIAL---SLGFFGVLIATV-SA--MVLP-----L-NSTLp--------FSlgam---GL---E-G-A-W--V---SNPkLL----------------------IIFV--IALFLVL--LL-PIYAI--IHM-VLSLTG-K-IRPMGVI-Q-RI---VNIVL---WVIAVCIAVPLGITIAN-YhYDY---Y----
->Bac_Pgro_KKW09515.1
+>NAbacter_Pgro_KKW09515.1
 TA-EK---IKnetw------------------WK-------------------KS--VR-----------STSKALSAafgvt--FKKIIPVFFK---VVAVIIGVSI---LISAILALLALT-FA--FAVL-----I-FNLDst-------LV-------DF---P-LrT-I--L---SSS-LL----------------------LTTL--ISAFVAA--AV-PIIFI--LIL-GL-LFT-K-MRMMQIGwL-AL---GLLGL---WFASLIALGVCATKIVP-A-YQY---A--IQ
->Bac_CFal_KKQ62073.1
+>NAbacter_CFal_KKQ62073.1
 IR-EE---LKkkdpgllknl------------VA-------------------FP--FK-----------IIEAIVTF-------IKNIVRSLGP---IIAFLIGLSV---IALAICGIIGIS-FA--SGVF-----L-FHADspl------INt------NM---P-L-E-E--F---AKT-SE----------------------YIVTa-VAFYLTG--LI-PLIFL--LLF-GISCIR-R-KNSFKLA-S-SL---FFLVV---WIAATVVFGLGLFDLVP-R-IQE---KYESE
->Bac_CMag_KKT25162.1
+>NAbacter_CMag_KKT25162.1
 AT-QT---VTaaskrv----------------SV-------------------TT--KV-----------GANSAGKT-------LV-------R---IVSLLLGIGL---LVTGVAGVIGIS-ILcyTALL-----G-GIES---------FS-------FI---PgL-A-L--Y---TAS-FYt---------------------PLFL--GSLWLTI--AL-PFAFF--LSL-GIALVS-R-RPLKLRF-L-FV---TMLIL---WMIAITVLGGLLLHIVL-P-RL---------
 >Bacbacter_Modo_ALU26406.1
 VT-SK---INdvdyehi---------------KN-------------------QT--KR-----------AGERSG------------------K---IILNIIGIFF---IVISVLSIFSSI-IG--ISAAlinkeI-ILEE---------IGs------EF---P-L-L-S--A----GV-YP----------------------FWVSt-LLLTSLV--TL-PFIGL--LII-GLRMIYtN-IKYVALI-I--I---GLLLL---WFISLGLFSIPFLNA-K-N-YES---R--HV
