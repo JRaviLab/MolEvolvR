@@ -52,7 +52,15 @@ colnames(all)[which(colnames(all) == "ClustName")] = "DomArch.repeats"
 
 colnames(all)[which(colnames(all) == "ClustName.orig")] = "DomArch.orig"
 
-all <- all %>% select(AccNum, DomArch, DomArch.repeats, DomArch.ind, GenContext, Lineage, Species, GeneName, Length, GCA_ID)
+colnames(all)[which(colnames(all) == "GenContext")] = "Temp"
+
+all <- cleanup_gencontext(all,domains_rename = domains_rename, repeat2s = FALSE)
+colnames(all)[which(colnames(all) == "GenContext")] = "GenContext.repeats"
+colnames(all)[which(colnames(all) =="Temp")] = "GenContext"
+
+
+all <- all %>% select(AccNum, DomArch, DomArch.repeats, DomArch.ind, GenContext, GenContext.repeats,
+                      Lineage, Species, GeneName, Length, GCA_ID)
 
 DUF1700 <- all %>% filter(grepl("DUF1700-ahelical",ignore.case = T, DomArch))
 DUF1707 <- all %>% filter(grepl("DUF1707-SHOCT",ignore.case = T, DomArch))

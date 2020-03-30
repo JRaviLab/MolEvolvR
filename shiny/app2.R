@@ -1,0 +1,832 @@
+library(shiny)
+library(tidyverse)
+library(DT)
+library(rmarkdown)
+library(shinydashboard)
+library(shinyjqui)
+library(wordcloud)
+library(shinyauthr)
+library(svgPanZoom)
+conflicted::conflict_prefer("intersect", "dplyr")
+conflicted::conflict_prefer("filter", "dplyr")
+conflicted::conflict_prefer("strsplit", "base")
+conflicted::conflict_prefer("count", "dplyr")
+conflicted::conflict_prefer("box", "shinydashboard")
+setwd("..")
+source("shiny/PSP_Web_Data.R")
+source("R/plotting.R")
+source("R/network.R")
+source("R/GC_network_directed.R")
+#source("R/cleanup.R")
+#source("R/reverse_operons.R")
+source("shiny/shinyfunctions.R")
+
+#########
+##Users##
+#########
+user_base <- data.frame(
+  user = c("pspevolution"),
+  password = c("cpathogeno2019"),
+  permissions = c("admin"),
+  name = c("User One"),
+  stringsAsFactors = FALSE
+)
+
+
+
+#########
+#Sidebar#
+#########
+sidebar<- dashboardSidebar(
+  width = 180,
+
+  sidebarMenu(id = "mainTabs",
+              menuItem("Data Table", tabName = "datatable"),
+              menuItem("Domain Architecture", tabName = "DAPlots"),
+              menuItem("Genomic Context", tabName = "GCPlots"),
+              menuItem("Phylogeny", tabName = "phylogeny"),
+              menuItem("Usage", tabName="usage"),
+              menuItem("About",tabName="about")
+  )
+)
+######
+#Body#
+######
+body <- dashboardBody(
+  # must turn shinyjs on
+  shinyjs::useShinyjs(),
+  # add logout button UI
+
+  #div(class = "pull-right", shinyauthr::logoutUI(id = "logout")),
+  # add login panel UI function
+  # shinyauthr::loginUI(id = "login"),
+
+  uiOutput("user_table"),
+  uiOutput("testUI"),
+  tabItems(
+    #Datatable tab contains all protein datatables
+    tabItem("datatable",
+            fluidPage(
+              column(width = 2,
+                     #Dropdown to select protein for viewing
+                     selectInput(inputId =  "proSelec", label = "Protein",
+                                 choices = c( "All","DUF1700", "DUF1707",
+                                              "PspA-Snf7","Psp-AA", "PspB", "PspC", "PspM", "PspN",
+                                              "LiaI-LiaF-TM","Toast-rack", "Tfu-1009" )
+                                 , selected = "All")
+              ),
+              #Buttons to select which file type to download
+              column( width = 3, offset= 1,
+                      #Radiobuttons to select what to download data table as: tab separated or comma seperated
+                      radioButtons(inputId = "downloadType", label = "Download Type:",
+                                   choices= c("tsv", "csv"), selected = "tsv" ),
+                      #Output download button
+                      downloadButton(outputId = "downloadData", label = "Download")),
+              #Create mainpanel where dataTable is displayed
+              column(
+                DT::dataTableOutput(outputId = "proTable"), width = 12)))
+    ,
+    ### Domain Architecture tab
+    tabItem(tabName = "DAPlots",
+            fluidRow(
+              column(width = 3, offset = 0,
+                     fluidRow(
+                       sidebarPanel(
+                         width = 12,
+                         #dropdown to select protein for plots
+                         selectInput(inputId =  "DAlinSelec", label = "Protein",
+                                     choices = c("All", "PspA-Snf7", "PspB", "PspC","PspN", "LiaI-LiaF-TM","Toast-rack")
+                                     , selected = "PspA"),
+                         #Slider input to determine cutoff value for totalcounts
+                         sliderInput(inputId = "DAcutoff", label = "Total Count Cutoff:", min = 0, max = 100, value = 95)
+                         #sliderInput(inputId = "nr", label="Rows",min=0,max=10,value=0)
+
+                       )
+                     )
+              )
+              ,
+
+
+              column(width = 9, offset = 0,
+                     #mainpanel dictates what is displayed on screen depending on which tabset panel is selected
+                     mainPanel(
+                       width = 12,
+                       tabsetPanel(
+                         id= 'DALin_data',
+                        tabPanel("Heatmap",plotOutput(outputId = "DALinPlot", height = '500px' )),
+                        tabPanel("Table", DT::dataTableOutput(outputId = "DALinTable"),
+                                 column(downloadButton(outputId = "DAdownloadCounts", label = "Download"),radioButtons(inputId = "DAcountDownloadType", label = "Download Type:",
+                                                                                                                      choices= c("tsv", "csv"), selected = "tsv" ),width = 10)),
+                        tabPanel("Upset Plot",plotOutput(outputId = "DAUpsetP")),
+                         tabPanel("Network",
+                                  fluidRow(
+                                    box(width = 12,
+                                        plotOutput(outputId = "DANetwork")
+                                    ),
+                                    box(width = 12,
+                                        plotOutput(outputId = "DAwordcloud")
+                                    )
+                                  )
+
+
+                         )
+                       )
+                     )
+              )
+            )
+    )
+    ,
+
+    ### Genomic Context tab
+    tabItem(tabName = "GCPlots",
+            fluidRow(
+              column(width = 3, offset = 0,
+                     fluidRow(
+                       sidebarPanel(
+                         width = 12,
+                         #dropdown to select protein for plots
+                         selectInput(inputId =  "GClinSelec", label = "Protein",
+                                     choices = c("All", "PspA-Snf7", "PspB", "PspC","PspN", "LiaI-LiaF-TM","Toast-rack")
+                                     , selected = "PspA"),
+                         #Slider input to determine cutoff value for totalcounts
+                         sliderInput(inputId = "GCcutoff", label = "Total Count Cutoff:", min = 0, max = 100, value = 95),
+                         textOutput("Legend")
+                       )
+                     )
+              )
+              ,
+              column(width = 9, offset = 0,
+                     #mainpanel dictates what is displayed on screen depending on which tabset panel is selected
+                     mainPanel(
+                       width = 12,
+                       tabsetPanel(
+                         id= 'GCLin_data',
+                         tabPanel("Heatmap",plotOutput(outputId = "GCLinPlot", height = '500px' )),
+                         tabPanel("Table", DT::dataTableOutput(outputId = "GCLinTable"),
+                                  column(downloadButton(outputId = "GCDownloadCounts", label = "Download"),radioButtons(inputId = "GCcountDownloadType", label = "Download Type:",
+                                                                                                                        choices= c("tsv", "csv"), selected = "tsv" ),width = 10)),
+                         tabPanel("Upset Plot",plotOutput(outputId = "GCUpsetP")),
+                         tabPanel("Network",
+                                  fluidRow(
+                                    box(width = 12,
+                                        plotOutput(outputId = "GCNetwork")
+                                    ),
+                                    box(width = 12,
+                                        plotOutput(outputId = "GCwordcloud")
+                                    )
+                                  )
+                         )
+                       )
+                     )
+              )
+            )
+    )
+    ,
+
+
+    tabItem("phylogeny",
+            fluidPage(
+              column(width = 2,
+                     selectInput(inputId =  "alignSelec", label = "Protein",
+                                 choices = c( "PspA-Snf7", "PspB", "PspC")
+                                 , selected = "PspA-Snf7")),
+              column(width = 12,
+                     tabsetPanel(
+                       id= "phylo",
+                       tabPanel("Tree", value="Tree",
+                                #,radioButtons(inputId = "plottype", label = "Plot Type",
+                                #                   choices = c("Tree1", "Tree2", "Tree3"),selected = "Tree1"),
+
+                                tags$head(tags$script(src = "http://www.elevateweb.co.uk/wp-content/themes/radial/jquery.elevatezoom.min.js")),
+                                actionButton("myBtn", "Press Me for zoom!"),
+                                p("If this button does not work, check if your browser is blocking this script from running"),
+                                htmlOutput(outputId = "msaTree" ),
+                                singleton(
+                                  tags$head(tags$script('Shiny.addCustomMessageHandler("testmessage",
+  function(message) {
+    var image = $("#msaTree img");
+    var zoomConfig = {scrollZoom : true};
+    if(message.value == "ZoomOn"){
+        //$("#msaTree img").elevateZoom({scrollZoom : true});
+        image.elevateZoom(zoomConfig);
+    }
+    else{
+       $.removeData(image, "elevateZoom");//remove zoom instance from image;
+
+       $(".zoomContainer").remove();// remove zoom container from DOM;
+    }
+  }
+);'))
+                                )
+                       ),
+                       tabPanel("MSA", value="MSA",
+                                htmlOutput(outputId="msaPlot")),
+                       tabPanel("Paralog Table", value="Paralog",
+                                DT::dataTableOutput(outputId = "ParalogTable",width = 1000)
+                       )
+                     )
+              )
+            )
+    ),
+    tabItem("about",
+            fluidRow(column(10,
+                            h2('Citation:')
+                            #put citations here
+
+
+            )),
+            fluidRow(column(10,
+                            h2('Abstract:'),
+
+                            p("The phage shock protein (Psp) stress-response system protects bacteria from envelope stress and
+                            stabilizes the cell membrane. Despite the prevalence of the key effector, PspA, and the functional
+                            Psp system, the various genomic contexts of Psp proteins, as well as their evolution across the kingdoms
+                            of life, have not yet been characterized. Recent work from our group suggests that the psp systems have
+                            evolved independently in distinct Gram-positive and Gram-negative bacterial clades to effect similar stress
+                            response functions. We developed a computational pipeline for comparative genomics and protein
+                            sequence-structure-function analyses to identify sequence homologs, phyletic patterns, domain architectures,
+                            gene neighborhoods, sequence conservation and evolution of the candidates across the tree of life. Using
+                            contextual information from conserved gene neighborhoods and their domain architectures, we delineated the
+                            phyletic patterns of all the Psp members. Next, we systematically identified all possible 'flavors' and
+                            genomic neighborhoods of the Psp systems. Finally, we have traced their evolution leading us to several
+                            interesting observations as to their occurrence and co-migration, suggesting their function and role in
+                            stress-response systems that are often lineage-specific. Conservation of the Psp systems across bacterial
+                            phyla emphasizes the established importance of this stress response system in prokaryotes, while the
+                            modularity in various lineages is indicative of adaptation to bacteria-specific cell-envelope structures,
+                            lifestyles, and adaptation strategies.", style = "font-size:120%")
+
+            )),
+            fluidRow(column(10,
+                            h2("Links:"),
+                            p("GitHub", style = "font-size:120%"),
+                            tags$br(),
+                            p("Paper", style = "font-size:120%"),
+                            tags$br(),
+                            p("link to lab", style = "font-size:120%")
+
+
+
+                            # tags$dl(
+                            #   tags$dt("Links:"),
+                            #   tags$dd("GitHub"),
+                            #   tags$dd("Paper"),
+                            #   tags$dd("link to lab"))
+
+
+            )),
+            fluidRow(column(10,
+                            h2("Contacts:")
+
+
+            ))
+
+            #put link to paper, lab, github, other readings
+
+    ),
+    tabItem("usage",
+            fluidRow(
+              column(12,
+                     tabsetPanel(
+                       id="manual_panel",
+                       tabPanel("Data Table"),
+                       tabPanel("Lineage Plots"),
+                       tabPanel("Phylogeny")
+
+
+                     )
+              )
+
+            )
+            #Use tabs to have different aspects of the page:
+            #datatable(main)
+            #Lineage tab, with descriptions for the various tools
+            #Phylogeny, again with descriptions for the various tools
+
+
+    )
+  ),
+  HTML('<div data-iframe-height></div>')
+)
+####
+#UI#
+####
+ui <- dashboardPage(
+  skin = "green",
+  #App title
+  dashboardHeader(title = "PSP Data"),
+  #Create Sidebar with inputs and download button output
+  sidebar,
+  body
+)
+
+########
+#Server#
+########
+server <- function(input, output,session){
+  # # call the logout module with reactive trigger to hide/show
+  # logout_init <- callModule(shinyauthr::logout,
+  #                           id = "logout",
+  #                           active = reactive(credentials()$user_auth))
+  #
+  # # call login module supplying data frame, user and password cols
+  # # and reactive trigger
+  # credentials <- callModule(shinyauthr::login,
+  #                           id = "login",
+  #                           data = user_base,
+  #                           user_col = user,
+  #                           pwd_col = password,
+  #                           log_out = reactive(logout_init()))
+  #
+  # # pulls out the user information returned from login module
+  # user_data <- reactive({credentials()$info})
+  #
+  # observe({
+  #   if(credentials()$user_auth) {
+  #     shinyjs::removeClass(selector = "body", class = "sidebar-collapse")
+  #   } else {
+  #     shinyjs::addClass(selector = "body", class = "sidebar-collapse")
+  #   }
+  # })
+
+
+  #Reactive expression used to determine which data table should be displayed
+  #based on selected input
+  pspTable<- reactive({
+    #req(credentials()$user_auth)
+    switch(input$proSelec,
+           "All" = all,
+           "DUF1700" = DUF1700,
+           "DUF1707" = DUF1707,
+           "PspA-Snf7" = pspa,
+           "Psp-AA" = psp_aa,
+           "PspB" = pspb,
+           "PspC" = pspc,
+           "PspM" = pspm,
+           "PspN" = pspn,
+           "LiaI-LiaF-TM" = liai_liaf,
+           "Toast-rack" = toast_rack,
+           "Tfu-1009" = tfu_1009
+    )
+  })
+  #Render the Data table for selected protein
+  output$proTable <- DT::renderDT({
+    #req(credentials()$user_auth)
+    ##### Can use select here to determine what columns shown
+    paged_table(pspTable() )}, extensions = c('FixedColumns',"FixedHeader"),
+    options = list(pageLength = 10,
+                   #The below line seems to disable other pages and the search bar
+                   #dom = 't',
+                   scrollX = TRUE,
+                   paging=TRUE,
+                   fixedHeader=TRUE,
+                   fixedColumns = list(leftColumns = 2, rightColumns = 0)))
+
+
+
+  #### Reactive expression determining data for which plotting is based. Controlled by dropdown ####
+  DA_plotting_prot <-  reactive({
+    switch(input$DAlinSelec,
+           "All" = all,
+           "DUF1700" = DUF1700,
+           "DUF1707" = DUF1707,
+           "PspA-Snf7" = pspa,
+           "Psp-AA" = psp_aa,
+           "PspB" = pspb,
+           "PspC" = pspc,
+           "PspM" = pspm,
+           "PspN" = pspn,
+           "LiaI-LiaF-TM" = liai_liaf,
+           "Toast-rack" = toast_rack,
+           "Tfu-1009" = tfu_1009)
+  })
+
+  GC_plotting_prot <-  reactive({
+    switch(input$GClinSelec,
+           "All" = all,
+           "DUF1700" = DUF1700,
+           "DUF1707" = DUF1707,
+           "PspA-Snf7" = pspa,
+           "Psp-AA" = psp_aa,
+           "PspB" = pspb,
+           "PspC" = pspc,
+           "PspM" = pspm,
+           "PspN" = pspn,
+           "LiaI-LiaF-TM" = liai_liaf,
+           "Toast-rack" = toast_rack,
+           "Tfu-1009" = tfu_1009)
+  })
+
+  #Observer used to determine initial heatmap slider
+  # observe({
+  #   if(input$DA_GC== "Domain Architecture"){
+  #   switch(input$linSelec,
+  #       "PspA"= {hs <-heatmap_slider(pspa_DA_lin,"da")},
+  #       "PspB"= {hs <-heatmap_slider(pspb_DA_lin,"da")},
+  #       "PspC"= {hs <-heatmap_slider(pspc_DA_lin,"da")},
+  #       "PspN"= {hs <-heatmap_slider(pspn_DA_lin,"da")},
+  #       "LiaF"= {hs <-heatmap_slider(liai_liaf_DA_lin,"da")},
+  #       #"LiaG"= {hs <-heatmap_slider(liag_DA_lin)},
+  #       "Toast-rack"= {hs <-heatmap_slider(toast_rack_DA_lin,"da")}
+  #   )}
+  #   else{
+  #     switch(input$linSelec,
+  #            "PspA"= {hs <-heatmap_slider(pspa_GC_lin,"gc")},
+  #            "PspB"= {hs <-heatmap_slider(pspb_GC_lin,"gc")},
+  #            "PspC"= {hs <-heatmap_slider(pspc_GC_lin,"gc")},
+  #            "PspN"= {hs <-heatmap_slider(pspn_GC_lin,"gc")},
+  #            "LiaF"= {hs <-heatmap_slider(liai_liaf_GC_lin,"gc")},
+  #            "Toast-rack"= {hs <-heatmap_slider(toast_rack_GC_lin,"gc")}
+  #     )}
+  #   updateSliderInput(session,inputId = "cutoff",min=0, max=hs[,"max"], value=hs[,"cutoff_init"])
+  # })
+
+  #   prot_da_lin <- reactive({switch(input$linSelec,
+  #                         "PspA"= pspa_DA_Lin,
+  #                         "PspB"= pspb_DA_Lin,
+  #                         "PspC"= pspc_DA_Lin,
+  #                         "LiaG"= liag_DA_Lin,
+  #                         "LiaF"= liaf_DA_Lin,
+  #                         "LiaI"= liai_DA_Lin
+  #   )})
+  #     prot<- reactive({
+  #       prot_da_lin%>% group_by(DomArch.norep)%>%
+  #         summarise(totalcount = sum(count)) %>%
+  #         filter(totalcount >1) %>% arrange(desc(totalcount))
+  #     })
+  #
+  #     prot_filt <- reactive({
+  #       filter(prot,totalcount >= input$cutoff)
+  #     })
+  # current_row <- reactive({
+  #   length(prot_filt$totalcount)
+  #   }
+  # )
+  # current_cutoff <- reactive({
+  #   prot[current_row,"totalcount"]
+  # })
+  #   observeEvent(input$nr,{
+  #     updateSliderInput(session,inputId = "cutoff",value = current_cutoff)
+  #   })
+  #
+  #   observeEvent(input$cutoff,  {
+  #     updateSliderInput(session = session, inputId = "nr", value = current_row)
+  #   })
+
+
+  #   observe({
+  #     current_row <- as.numeric(input$nr)
+  #     prot_da_lin <- switch(input$linSelec,
+  #            "PspA"= pspa_DA_Lin,
+  #            "PspB"= pspb_DA_Lin,
+  #            "PspC"= pspc_DA_Lin,
+  #            "LiaG"= liag_DA_Lin,
+  #            "LiaF"= liaf_DA_Lin,
+  #            "LiaI"= liai_DA_Lin
+  #            )
+  #
+  #
+  #     prot <- prot_da_lin %>% group_by(DomArch.norep)%>%
+  #       summarise(totalcount = sum(count)) %>%
+  #       filter(totalcount >1) %>% arrange(desc(totalcount))
+  #     cutoff_val <- prot[current_row,"totalcount"]
+  #   })
+  #
+  #   prot<- reactive({
+  #     prot_da_lin <- switch(input$linSelec,
+  #                           "PspA"= pspa_DA_Lin,
+  #                           "PspB"= pspb_DA_Lin,
+  #                           "PspC"= pspc_DA_Lin,
+  #                           "LiaG"= liag_DA_Lin,
+  #                           "LiaF"= liaf_DA_Lin,
+  #                           "LiaI"= liai_DA_Lin
+  #     )
+  #     prot <- prot_da_lin%>% group_by(DomArch.norep)%>%
+  #       summarise(totalcount = sum(count)) %>%
+  #       filter(totalcount >1) %>% arrange(desc(totalcount))
+  #   })
+  #   cutoff_val <- reactive({
+  #     prot[current_row,"totalcount"]}
+  #   )
+  #
+  #   observeEvent(input$cutoff, {
+  #     v$x <- input$cutoff
+  #   })
+  #   observeEvent(input$nr, {
+  #     v$x <- prot[input$nr,"totalcount"]
+  #   })
+  #
+  # observeEvent(input$cutoff,{
+  #   if(v$x != input$cutoff) updateSliderInput(session, "cutoff",value=cutoff_val)
+  #
+  #   if(v$x != input$nr) updateSliderInput(session,"nr",value =length(filter(prot,totalcount>=cutoff_val)))
+  #   }
+  #)
+
+
+
+  ####
+  ##### Render the heatmap #####
+  ####
+
+  #### DA
+  output$DALinPlot <- renderPlot({
+    #req(credentials()$user_auth)
+    if(input$DAlinSelec != "All"){
+      lineage.DA.plot(DA_plotting_prot(), colname = "DomArch", type = "da2doms", cutoff = input$DAcutoff)
+    }
+    else{
+      lineage.Query.plot(DA_plotting_prot(), queries = queries, colname = "DomArch", cutoff = input$DAcutoff)
+    }
+  }, height = 500)
+
+  #### GC
+  output$GCLinPlot <- renderPlot({
+    #req(credentials()$user_auth)
+    if(input$GClinSelec != "All"){
+      lineage.DA.plot(GC_plotting_prot(), colname = "GenContext", type = "gc2da", cutoff = input$GCcutoff)
+    }
+    else{
+      lineage.Query.plot(GC_plotting_prot(), queries = queries, colname = "GenContext", cutoff = input$GCcutoff)
+    }
+
+  }, height = 500)
+
+  ####
+  ##### Render the datatable for the lineage counts #####
+  ####
+
+  ## DA Lin Table
+  output$DALinTable <- DT::renderDT({
+    #req(credentials()$user_auth)
+    paged_table(
+      total_counts(DA_plotting_prot(), cutoff = input$DAcutoff, column = "DomArch")
+    )
+  }, extensions = c('FixedColumns',"FixedHeader"),
+  options = list(pageLength = 15,
+                 scrollX = TRUE,
+                 paging=TRUE,
+                 fixedHeader=TRUE,
+                 fixedColumns = list(leftColumns = 2, rightColumns = 0)))
+
+  ## GC Lin Table
+  output$GCLinTable <- DT::renderDT({
+    #req(credentials()$user_auth)
+    paged_table(
+      total_counts(GC_plotting_prot(), cutoff = input$GCcutoff, column = "GenContext")
+    )
+  }, extensions = c('FixedColumns',"FixedHeader"),
+  options = list(pageLength = 15,
+                 scrollX = TRUE,
+                 paging=TRUE,
+                 fixedHeader=TRUE,
+                 fixedColumns = list(leftColumns = 2, rightColumns = 0)))
+
+
+  # upset_vals <- reactiveValues(GC.DA.wc=pspa$GC.DA %>% words2wc(), DA.doms.wc=pspa$DA.doms %>% words2wc())
+  # observeEvent(input$linSelec,{
+  #     upset_vals$GC.DA.wc <- switch(input$linSelec,
+  #                             "PspA" = pspa$GC.DA %>% words2wc(),
+  #                             "PspB" = pspb$GC.DA %>% words2wc(),
+  #                             "PspC" = pspc$GC.DA %>% words2wc(),
+  #                             "PspN" = pspn$GC.DA %>% words2wc(),
+  #                             "LiaF" = liai_liaf$GC.DA %>% words2wc(),
+  #                             "Toast-rack" = toast_rack$GC.DA %>% words2wc(),
+  #                             "Liag" = liag$GC.DA %>% words2wc())
+  #     upset_vals$DA.doms.wc <- switch(input$linSelec,
+  #                               "PspA" = pspa$DA.doms %>% words2wc(),
+  #                               "PspB" = pspb$DA.doms %>% words2wc(),
+  #                               "PspC" = pspc$DA.doms %>% words2wc(),
+  #                               "PspN" = pspn$DA.doms %>% words2wc(),
+  #                               "LiaF" = liai_liaf$DA.doms %>% words2wc(),
+  #                               "Toast-rack" = toast_rack$DA.doms %>% words2wc(),
+  #                               "Liag" = liag$DA.doms %>% words2wc())
+  # }
+  # )
+
+  # DA Upset plot
+  output$DAUpsetP <- renderPlot({
+    #req(credentials()$user_auth)
+    upset.plot(DA_plotting_prot(), cutoff = input$DAcutoff, type = "da2doms" )
+  }, height = 550)
+
+  # GC Upset Plot
+  output$GCUpsetP <- renderPlot({
+    #req(credentials()$user_auth)
+    upset.plot(GC_plotting_prot(), cutoff = input$GCcutoff, type = "gc2da" )
+  }, height = 550)
+
+  #### Reactive expression determining domain of interest for plotting domain networks
+  network_domain_interest <-  reactive({
+    switch(input$DAlinSelec,
+           "All" = "DUF1700-ahelical|DUF1707-SHOCT|pspa|snf7|pspb|pspc|pspm|pspn|LiaI-LiaF-TM|Toast-rack",
+           "DUF1700" = "DUF1700-ahelical",
+           "DUF1707" = "DUF1707-SHOCT",
+           "PspA-Snf7" = "pspa|snf7",
+           "PspB" = "pspb",
+           "PspC" = "pspc",
+           "PspM" = "pspm",
+           "PspN" = "pspn",
+           "LiaI-LiaF-TM" = "LiaI-LiaF-TM",
+           "Toast-rack" = "Toast-rack")
+  })
+
+
+  ### GC Network Output ###
+  output$GCNetwork <- renderPlot({
+    #req(credentials()$user_auth)
+    gc_directed_network(GC_plotting_prot(), column = "GenContext.repeats",
+                        cutoff = input$GCcutoff)
+  })
+
+  ### DA Network Output ###
+  output$DANetwork <- renderPlot({
+    #req(credentials()$user_auth)
+    domain_network(DA_plotting_prot(), column = "DomArch.repeats", cutoff = input$DAcutoff, layout = "auto",
+                   domains_of_interest = network_domain_interest())
+  })
+
+  #Render Wordcloud
+
+  ### DA Wordcloud ###
+  output$DAwordcloud <- renderPlot({
+    #req(credentials()$user_auth)
+    wordcloud_element(type = "da2doms", query_data = DA_plotting_prot(), cutoff = input$DAcutoff)
+  }
+  )
+
+  ### GC Wordcloud ###
+  output$GCwordcloud <- renderPlot({
+    #req(credentials()$user_auth)
+    wordcloud_element(type = "gc2da", query_data = GC_plotting_prot(), cutoff = input$GCcutoff)
+  }
+  )
+
+
+  output$Legend <- renderText({
+    "This is placeholder text for the legend information. It tells you really useful things and stuff,
+    such as how to use the plots and what information is derived from said plots."
+  })
+
+
+
+  output$msaTree <- renderUI({
+    print(input$phylo)
+    #req(credentials()$user_auth)
+    switch(input$alignSelec,
+           "PspA-Snf7" = img(src="pspa_tree.png", "data-zoom-image" ="pspa_tree.png"),#, height=1024,width=800),
+           "PspB" = img(src="pspb_tree.png", "data-zoom-image" ="pspb_tree.png"),#, height=1024,width=800),
+           "PspC" = img(src="pspc_tree.png", "data-zoom-image" ="pspc_tree.png")#, height=1024,width=800)
+    )
+  })
+
+  output$msaPlot <- renderUI({
+    #req(credentials()$user_auth)
+    #switch(input$alignSelec,
+    tags$iframe(style="height:600px; width:100%", src="pspa_reduced.fasta.pdf", seamless=T)
+
+
+
+    #     )
+
+    # mytest <-tags$iframe(src="www.rstudio.com",scrolling="yes",seamless=T, height=600, width=535)
+    # print(mytest)
+    # mytest
+  })
+
+  vals <- reactiveValues(btn = 0, tab = "home")
+
+
+  observeEvent(input$myBtn,{
+    if( input$phylo =="Tree" ){
+      vals$btn <- 1
+      vals$tab <- input$phylo
+    }
+  }
+  )
+  observeEvent(input$phylo,{
+    if( input$phylo !="Tree"){
+      vals$tab <- "notphylo"
+      vals$btn <- 0
+    }
+  }
+  )
+
+
+  observe({
+    if(vals$btn == 1 && input$mainTabs == "phylogeny"){
+      session$sendCustomMessage(type = 'testmessage'
+                                ,message = list(value="ZoomOn")
+      )
+    }
+    else{
+      session$sendCustomMessage(type = 'testmessage'
+                                ,message = list(value="ZoomOff")
+      )
+    }
+  })
+
+
+  output$ParalogTable <- DT::renderDataTable({
+    #req(credentials()$user_auth)
+    switch(input$alignSelec,
+           "PspA-Snf7"= find_paralogs(pspa)
+           ,"PspB"= find_paralogs(pspb),
+           "PspC"= find_paralogs(pspc)
+           # "DUF1700"= find_paralogs(all%>% filter(Query=="DUF1700-alpha-helical")),
+           # "DUF1707"= find_paralogs(all%>% filter(Query=="DUF1707-SHOCT")),
+           # "Toast-rack"= find_paralogs(all%>% filter(Query=="Toast-rack")),
+           # "LiaI-LiaF-TM"= find_paralogs(all%>% filter(Query=="LiaI-LiaF-TM"))
+    )
+  },extensions = c('FixedColumns'),
+  options = list(pageLength = 10,
+                 #The below line seems to disable other pages and the search bar
+                 #dom = 't',
+                 scrollX = TRUE,
+                 paging=TRUE,
+                 fixedHeader=TRUE,
+                 fixedColumns = list(leftColumns = 2, rightColumns = 0)))
+
+
+
+
+
+
+  #Reactive expresion to change file name depending on which protein is selected
+  fileNam <- reactive({
+    if(input$downloadType == "tsv"){
+      paste(input$proSelec, ".txt", sep = "")
+    }
+    else  paste(input$proSelec, ".csv", sep = "")
+  })
+
+  ###### Downloads the data from datatable #####
+  ### Should it download cleaned data? or all rows?
+  output$downloadData <- downloadHandler(
+    filename = function() {
+      fileNam()
+    },
+    content = function(file) {
+
+      if(input$downloadType == "tsv"){
+        write_tsv(pspTable(), file)
+      }
+      else  write.csv(pspTable(), file, row.names = FALSE)
+    }
+  )
+
+  #####
+  ##### Download DA Data for Lin Table #####
+  #####
+  output$DADownloadCounts <- downloadHandler(
+    #req(credentials()$user_auth),
+    filename = function(){
+      extension <- "-da_lin_counts"
+      if(input$DAcountDownloadType == "tsv"){
+        paste(input$DAlinSelec,extension,".txt", sep = "")
+      }
+      else{  paste(input$DAlinSelec,extension , ".csv", sep = "")}
+    },
+    content = function(file){
+      selected <- total_counts(DA_plotting_prot(), cutoff = 100, column = "DomArch")
+
+      if(input$DAcountDownloadType == "tsv"){
+        write_tsv(selected, file )
+      }
+      else if(input$DAcountDownloadType == "csv"){
+        write.csv(selected,file)
+      }
+    }
+  )
+
+
+  #####
+  ##### Download GC Data for Lin Table #####
+  #####
+  output$GCDownloadCounts <- downloadHandler(
+    #req(credentials()$user_auth),
+    filename = function(){
+      extension <- "-gc_lin_counts"
+      if(input$GCcountDownloadType == "tsv"){
+        paste(input$GClinSelec,extension,".txt", sep = "")
+      }
+      else{  paste(input$GClinSelec,extension , ".csv", sep = "")}
+    },
+    content = function(file){
+      selected <- total_counts(GC_plotting_prot(), cutoff = 100, column = "GenContext")
+
+      if(input$GCcountDownloadType == "tsv"){
+        write_tsv(selected, file )
+      }
+      else if(input$GCcountDownloadType == "csv"){
+        write.csv(selected,file)
+      }
+    }
+  )
+
+
+
+}
+
+#Call to shiny app
+shinyApp(ui = ui, server = server)
+
