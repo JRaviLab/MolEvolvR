@@ -19,7 +19,7 @@ library(wordcloud)
 ## UpSet Plots
 #################
 upset.plot <- function(query_data="toast_rack.sub",
-                       cutoff=90, type="da2doms") {
+                        colname = "DomArch", cutoff = 90) {
   #' UpSet Plot
   #' @author Janani Ravi
   #' @keywords UpSetR, Domains, Domain Architectures, GenomicContexts
@@ -40,38 +40,17 @@ upset.plot <- function(query_data="toast_rack.sub",
   #' @note Please refer to the source code if you have alternate file formats and/or
   #' column names.
 
-  switch(type, # DA.doms.wc;
-         da2doms={wc <- query_data %>% elements2words(column = "DomArch",conversion_type = type)%>%
-           words2wc();
-                  colname <- "DomArch"},
-         gc2da={wc <- query_data %>% elements2words(column = "GenContext",conversion_type = type) %>% words2wc();
-                colname <- "GenContext"})
 
-  TotalWordsFreq  = sum(wc$freq)
-  wc <- wc %>% mutate("WordsPercentage" = 0) %>% arrange(freq)
+  # Get Total Counts
+  # colname = string(colname)
+  tc <- query_data %>% total_counts(column =  "DomArch", cutoff = cutoff)
 
-  total_counter = 0
-  for(x in 1:length(wc$freq)){
-    total_counter = total_counter + wc$freq[x]
-    wc$WordsPercentage[x] = total_counter/TotalWordsFreq * 100
-  }
-
-  words_above <- wc %>% filter(WordsPercentage >= 100 - cutoff)
-  if(length(words_above) == 0){
-    cutoff_count = 0
-  }
-  else{
-    cutoff_count = words_above$freq[1]
-  }
-
-
-  words.gecutoff <- filter(wc, freq >= cutoff_count)
-  ## Cutoff for most/least prevalent words
-  #words.gecutoff <- filter(wc, freq>=cutoff) # words.gecutoff <- DA.doms.wc
-  # words.ltcutoff <- filter(wc, freq<cutoff)
+  # Get words from filter
+  words.tc <- tc %>% select({{column}}) %>% distinct()
+  names(words.tc)[1] <- "words"
 
   ## Create columns for domains/DAs and fill them with 1/0
-  for(i in words.gecutoff$words)
+  for(i in words.tc$words)
   {
     j <- str_replace_all(string=i, pattern="\\(", replacement="\\\\(")
     j <- str_replace_all(string=j, pattern="\\)", replacement="\\\\)")
@@ -84,7 +63,7 @@ upset.plot <- function(query_data="toast_rack.sub",
   upset <- query_data %>%
     # filter(grepl(queryname, Query)) %>%
     select(AccNum, Lineage, GenContext, DomArch,
-           words.gecutoff$words) %>% ###What is this words.gecutoff$words?
+           words.tc$words) %>% ###What is this words.gecutoff$words?
     mutate_all(list(~if(is.numeric(.)) as.integer(.) else .)) %>%
     as.data.frame()
   ## Fix order of x and y variables
@@ -95,7 +74,7 @@ upset.plot <- function(query_data="toast_rack.sub",
   ## UpSetR plot
   par(oma=c(5,5,5,5), mar=c(3,3,3,3))
   upset(upset.cutoff[c(3,5:ncol(upset.cutoff))],	# text.scale=1.5,
-        sets=words.gecutoff$words, sets.bar.color="turquoise3",
+        sets=words.tc$words, sets.bar.color="turquoise3",
         main.bar.color="coral3",									#56B4E9 lightblue
         group.by="degree", order.by=c("freq"),		# "degree"
         mb.ratio=c(0.3, 0.7), # nintersects=20,

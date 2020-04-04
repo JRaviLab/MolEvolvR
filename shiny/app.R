@@ -291,10 +291,10 @@ server <- function(input, output,session){
     selected <- input$linSelec
     DA_or_GC <- input$DA_GC
     if(DA_or_GC == "Domain Architecture"){
-      upset.plot(plotting_prot(), cutoff = input$cutoff, type = "da2doms" )
+      upset.plot(plotting_prot(), cutoff = input$cutoff, colname = "DomArch" )
     }
     else{
-      upset.plot(plotting_prot(), cutoff = input$cutoff, type = "gc2da")
+      upset.plot(plotting_prot(), cutoff = input$cutoff, colname = "GenContext")
     }
   }, height = 550)
 
