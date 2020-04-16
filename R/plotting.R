@@ -13,13 +13,39 @@ library(tidyverse)
 library(UpSetR)
 library(gridExtra)
 library(wordcloud)
+library(wordcloud2)
 #library(docstring)
+
+remove_astrk <- function(query_data, colname = "GenContext")
+{
+  # Remove the asterisks from a column of data
+  # Used for removing * from GenContext columns
+  query_data[,colname] <- map(query_data[,colname],function(x) str_remove_all(x,pattern = "\\*"))
+
+  return(query_data)
+}
+
+shorten_lineage <- function(data, colname = "Lineage")
+{
+  abbrv <- function(x){
+    pos_gt = str_locate(x,">")
+    pos_gt = pos_gt[1]
+    if(is.na(pos_gt)){
+      return(substr(x,1,1))
+    }
+    return(paste0(substr(x,1,1),substr(x,pos_gt, nchar(as.character(x)))))
+  }
+  # Shorten lineages to include only the first letter of kingdom
+  data$Lineage <- unlist((pmap(list(data$Lineage), function(x) abbrv(x) )))
+  return(data)
+}
+
 
 #################
 ## UpSet Plots
 #################
 upset.plot <- function(query_data="toast_rack.sub",
-                        colname = "DomArch", cutoff = 90) {
+                       colname = "DomArch", cutoff = 90, remove_astrk = TRUE) {
   #' UpSet Plot
   #' @author Janani Ravi
   #' @keywords UpSetR, Domains, Domain Architectures, GenomicContexts
@@ -40,11 +66,16 @@ upset.plot <- function(query_data="toast_rack.sub",
   #' @note Please refer to the source code if you have alternate file formats and/or
   #' column names.
 
+  if(remove_astrk){
+    query_data <- remove_astrk(query_data, colname)
+  }
+
 
   # Get Total Counts
   # colname = string(colname)
-  tc <- query_data %>% total_counts(column =  "DomArch", cutoff = cutoff)
+  tc <- query_data %>% total_counts(column =  colname, cutoff = cutoff)
 
+  column <- sym(colname)
   # Get words from filter
   words.tc <- tc %>% select({{column}}) %>% distinct()
   names(words.tc)[1] <- "words"
@@ -57,7 +88,7 @@ upset.plot <- function(query_data="toast_rack.sub",
     j <- str_replace_all(string=j, pattern="\\+", replacement="\\\\+")
     j <- str_replace_all(string=j, pattern="\\_", replacement="\\\\_")
     query_data[[i]] <- if_else(grepl(j, as.matrix(query_data[,colname])),
-                              true=1, false=0)
+                               true=1, false=0)
   }
   ## Creating UpSet data
   upset <- query_data %>%
@@ -90,9 +121,9 @@ upset.plot <- function(query_data="toast_rack.sub",
 ###################
 
 lineage.DA.plot <- function(query_data="prot",
-                            #query.summ.byLin="prot.DA.summ.byLin",
                             colname="DomArch",
-                            type="da2doms", cutoff = 0){ # query.elements, query.words,
+                            cutoff = 90,
+                            remove_astrk = TRUE){ # query.elements, query.words,
   #' Lineage Plot: Heatmap of Domains/DAs/GCs vs Lineages
   #' @author Janani Ravi
   #' @keywords Lineages, Domains, Domain Architectures, GenomicContexts
@@ -115,21 +146,21 @@ lineage.DA.plot <- function(query_data="prot",
   #' @note Please refer to the source code if you have alternate file formats and/or
   #' column names.
 
-  switch(type,
-         da2doms={colname <- "DomArch";
-         query.summ.byLin <- query_data %>% total_counts(cutoff = cutoff, column = colname)},
-         gc2da={colname <- "GenContext";
-         query.summ.byLin <- query_data %>% total_counts(cutoff = cutoff, column = colname)
-         })
+  if(remove_astrk)
+  {
+    query_data <- query_data %>% remove_astrk(colname = colname)
+  }
+  query_data <- shorten_lineage(query_data, "Lineage")
 
+  query.summ.byLin <- query_data %>% total_counts(cutoff = cutoff, column = colname)
 
   query_data <- query_data %>% filter(grepl("a", Lineage))
 
   query.summ.byLin.ggplot <- drop_na(query.summ.byLin) %>%
     filter(count>1) %>%  # count or total count?
     within(Lineage <- factor(Lineage,
-                                   levels=names(sort(table(Lineage),
-                                                     decreasing=TRUE)))) %>%
+                             levels=names(sort(table(Lineage),
+                                               decreasing=TRUE)))) %>%
     within(colname <- factor(colname,
                              levels=names(sort(table(colname),
                                                decreasing=F))))
@@ -151,7 +182,8 @@ lineage.DA.plot <- function(query_data="prot",
 lineage.Query.plot <- function(query_data="prot",
                                queries,
                                colname = "ClustName",
-                               cutoff
+                               cutoff,
+                               remove_astrk = TRUE
 ){
   #' Lineage Plot: Heatmap of Queries vs Lineages
   #' @authors Janani Ravi, Samuel Chen
@@ -186,6 +218,12 @@ lineage.Query.plot <- function(query_data="prot",
 
   # query_data contains all rows that possess a lineage
   query_data <- query_data %>% filter(grepl("a", Lineage))
+
+  query_data <- shorten_lineage(query_data, "Lineage")
+
+  if(remove_astrk){
+    query_data <- query_data %>% remove_astrk(colname = colname)
+  }
 
   query_lin_counts = data.frame("Query" = character(0), "Lineage" = character(0), "count"= integer())
   for(q in queries){
@@ -271,7 +309,7 @@ lineage.neighbors.plot <- function(query_data="prot", query="pspa",
     j <- str_replace_all(string=j, pattern="\\_", replacement="\\\\_")
     # j <- str_replace_all(string=j, pattern="\\-", replacement="\\\\-")
     query_data[[i]] <- if_else(grepl(j, as.matrix(query_data[,colname])),
-                              true=1, false=0)
+                               true=1, false=0)
   }
 
   query.ggplot <- query_data %>%
@@ -284,8 +322,8 @@ lineage.neighbors.plot <- function(query_data="prot", query="pspa",
                                      levels=rev(names(sort(table(TopNeighbors.DA),
                                                            decreasing=TRUE))))) %>%
     within(Lineage <- factor(Lineage,
-                                   levels=names(sort(table(Lineage),
-                                                     decreasing=TRUE))))
+                             levels=names(sort(table(Lineage),
+                                               decreasing=TRUE))))
 
   ggplot(query.ggplot, aes(x=Lineage, y=TopNeighbors.DA)) +
     geom_tile(data=subset(query.ggplot,
@@ -313,7 +351,7 @@ lineage.domain_repeats.plot <- function(query_data, colname) {
     # query_data[[i]] <- if_else(grepl(j, as.matrix(query_data[,colname])),
     # 													true=1, false=0)		## BINARY
     query_data[[i]] <- str_count(string=as.matrix(query_data[,colname]),
-                                pattern=j)					## ACTUAL COUNTS
+                                 pattern=j)					## ACTUAL COUNTS
   }
 
   ## Subsetting relevant columns
@@ -357,10 +395,10 @@ lineage.domain_repeats.plot <- function(query_data, colname) {
 ################
 #### NEEDS SOME WORK
 
-wordcloud_element <- function(type="da2doms",
-                                query_data="prot",
-                                cutoff = 50
-                              ){
+wordcloud_element <- function(query_data="prot",
+                              colname = "DomArch",
+                              cutoff = 50, remove_astrk = TRUE
+){
   #' Wordclouds for the predominant domains, domain architectures.
   #' @author Janani Ravi
   #' @keywords Domains, Domain Architectures, GenomicContexts
@@ -378,35 +416,24 @@ wordcloud_element <- function(type="da2doms",
   #' @note Please refer to the source code if you have alternate file formats and/or
   #' column names.
 
-  switch(type, # DA.doms.wc;
-         da2doms={
-           wc <- query_data %>% elements2words(column = "DomArch",conversion_type = type) %>% words2wc();
-           # colname <- "DomArch.norep"
-           },
-         gc2da={
-           wc <- query_data %>% elements2words(column = "GenContext",conversion_type = type) %>% words2wc();
-           # colname <- "GenContext.norep"
-         })
+  # Get Total Counts
+  # colname = string(colname)
 
-  TotalWordsFreq  = sum(wc$freq)
-  wc <- wc %>% mutate("WordsPercentage" = 0) %>% arrange(freq)
-
-  total_counter = 0
-  for(x in 1:length(wc$freq)){
-    total_counter = total_counter + wc$freq[x]
-    wc$WordsPercentage[x] = total_counter/TotalWordsFreq * 100
+  if(remove_astrk){
+    query_data <- remove_astrk(query_data, colname)
   }
 
-  words_above <- wc %>% filter(WordsPercentage >= 100 - cutoff)
-  if(length(words_above) == 0){
-    cutoff_count = 0
-  }
-  else{
-    cutoff_count = words_above$freq[1]
-  }
+  tc <- query_data %>% total_counts(column =  colname, cutoff = cutoff)
 
-  wordcloud(wc$words, wc$freq, min.freq = cutoff_count,
-            colors=brewer.pal(8, "Spectral"),scale=c(4.5,1))
+  column <- sym(colname)
+  # Get words from filter
+  words.tc <- tc %>% select({{column}}, totalcount) %>% distinct()
+  names(words.tc)[1] <- "words"
+
+  wordcloud2(words.tc,minSize = 1)
+
+  # wordcloud(words.tc$words, words.tc$totalcount, min.freq = 1,
+  #           colors=brewer.pal(8, "Spectral"),scale=c(4.5,1))
   # wordcloud(GC.DA.wc$words,GC.DA.wc$freq,min.freq = min_freq,
   #           colors=brewer.pal(8, "Spectral"), scale=c(2.5,.4))
 }

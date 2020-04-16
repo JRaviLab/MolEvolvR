@@ -5,6 +5,7 @@ library(rmarkdown)
 library(shinydashboard)
 library(shinyjqui)
 library(wordcloud)
+
 library(shinyauthr)
 library(svgPanZoom)
 conflicted::conflict_prefer("intersect", "dplyr")
@@ -225,15 +226,15 @@ server <- function(input, output,session){
     req(credentials()$user_auth)
     if(input$DA_GC == "Domain Architecture"){
       if(input$linSelec != "All"){
-        lineage.DA.plot(plotting_prot(), colname = "DomArch", type = "da2doms", cutoff = input$cutoff)
+        lineage.DA.plot(plotting_prot(), colname = "DomArch", cutoff = input$cutoff, remove_astrk = F)
       }
       else{
-        lineage.Query.plot(plotting_prot(), queries = queries, colname = "DomArch", cutoff = input$cutoff)
+        lineage.Query.plot(plotting_prot(), queries = queries, colname = "DomArch", cutoff = input$cutoff, remove_astrk = F)
       }
     }
     else{
       if(input$linSelec != "All"){
-        lineage.DA.plot(plotting_prot(), colname = "GenContext", type = "gc2da", cutoff = input$cutoff)
+        lineage.DA.plot(plotting_prot(), colname = "GenContext", cutoff = input$cutoff)
       }
       else{
         lineage.Query.plot(plotting_prot(), queries = queries, colname = "GenContext", cutoff = input$cutoff)
@@ -333,13 +334,13 @@ server <- function(input, output,session){
   output$wordcloud <- renderPlot({
     req(credentials()$user_auth)
     if(input$DA_GC == "Genomic Context"){
-      wordcloud_element(type = "gc2da", query_data = plotting_prot(), cutoff = input$cutoff)
+      wordcloud_element(query_data = plotting_prot(), colname = "GenContext", cutoff = input$cutoff)
     }
     else{
-      wordcloud_element(type = "da2doms", query_data = plotting_prot(), cutoff = input$cutoff)
+      wordcloud_element(query_data = plotting_prot(), colname = "DomArch", cutoff = input$cutoff)
     }
 
-  }, height = 550)
+  })
 
   ### Observe changes in tabset panel to determine legend text ###
   legend_txt <- reactive({
