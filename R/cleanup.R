@@ -40,7 +40,7 @@ remove_empty <- function(prot, by_column="DomArch"){
 }
 
 ###########################
-repeat2s <- function(prot, by_column="DomArch"){
+repeat2s <- function(prot, by_column="DomArch", excluded_prots = c()){
   #'Condense repeated domains
   #'
   #'Condenses repeated domains in the specified column.
@@ -52,7 +52,17 @@ repeat2s <- function(prot, by_column="DomArch"){
   #'@param prot A data frame containing 'DomArch', 'GenContext', 'ClustName' columns.
   #'@param by_column Column in which repeats are condensed to domain+domain -> domain(s).
   #' Default column is 'DomArch'. Can also take the following as input, 'GenContext', 'ClustName'.
+  #'@param excluded_prots Vector of strings that repeat2s should not reduce to (s). Defaults to c()
   #'@examples repeat2s(prot, "DomArch")
+
+
+  # If there are strings that repeat2s should not affect, the pattern to search
+  # for must be changed to exclude a search for those desired strings
+
+  collapsed_prots <- paste0(excluded_prots, collapse = "\\s|")
+  regex_exclude <- paste0("(?!", collapsed_prots, "\\s)")
+  regex_identify_repeats = paste0("(?i)",regex_exclude, "\\b([a-z0-9_-]+)\\b(?:\\s+\\1\\b)+")
+
 
   #!! FUNS is soft-deprecated. FIX!!!
   prot[,by_column] <- prot[,by_column] %>%
@@ -60,13 +70,23 @@ repeat2s <- function(prot, by_column="DomArch"){
                                     pattern="\\+",
                                     replacement=" "))) %>%
     mutate_all(funs(str_replace_all(.,
-                                    pattern="(?i)\\b([a-z0-9_-]+)\\b(?:\\s+\\1\\b)+",
+                                    pattern=regex_identify_repeats,
                                     replacement="\\1(s)"))) %>%
     mutate_all(funs(str_replace_all(.,
                                     pattern=" ",
                                     replacement="+")))
   return(prot)
 }
+
+remove_astrk <- function(query_data, colname = "GenContext")
+{
+  # Remove the asterisks from a column of data
+  # Used for removing * from GenContext columns
+  query_data[,colname] <- map(query_data[,colname],function(x) str_remove_all(x,pattern = "\\*"))
+
+  return(query_data)
+}
+
 
 ###########################
 remove_tails <- function(prot, by_column="DomArch",
@@ -92,15 +112,15 @@ remove_tails <- function(prot, by_column="DomArch",
 
   ## Domains_keep
   if(keep_domains){
-  # Keep tails with query domains
-  #!! Insert line to read domains_keep
+    # Keep tails with query domains
+    #!! Insert line to read domains_keep
 
-  # Contains all domains separated by "|"
-  domains_for_grep <- paste(domains_keep$domains, collapse = "|")
-  # Remove rows with no domains contained within domains_keep
-  # Redundant for ClustName since we already set the filter to only these doms.
-  tails <- tails %>%
-    filter(!grepl(domains_for_grep, {{by_column}}))
+    # Contains all domains separated by "|"
+    domains_for_grep <- paste(domains_keep$domains, collapse = "|")
+    # Remove rows with no domains contained within domains_keep
+    # Redundant for ClustName since we already set the filter to only these doms.
+    tails <- tails %>%
+      filter(!grepl(domains_for_grep, {{by_column}}))
   }
 
   # Remove tails
@@ -171,6 +191,7 @@ cleanup_clust <- function(prot,
   #'@param repeat2s Boolean. If TRUE, repeated domains in 'ClustName' are condensed. Default is TRUE.
   #'@param remove_tails Boolean. If TRUE, 'ClustName' will be filtered based on domains to keep/remove. Default is FALSE.
   #'@param remove_empty Boolean. If TRUE, rows with empty/unnecessary values in 'ClustName' are removed. Default is FALSE.
+
   #'@examples cleanup_clust(prot, TRUE, FALSE, domains_keep, domains_rename)
 
   # Create cleaned up ClustName column
@@ -301,7 +322,7 @@ cleanup_domarch <- function(prot,
 
 ##########################
 cleanup_gencontext <- function(prot, domains_rename,
-                               repeat2s=TRUE){
+                               repeat2s=TRUE, remove_asterisk = TRUE){
   #'Cleanup Genomic Contexts
   #'
   #'Cleans up the GenContext column of a data frame by removing certain characters and rows.
@@ -312,6 +333,7 @@ cleanup_gencontext <- function(prot, domains_rename,
   #'@param prot A data frame that contains columns 'GenContext.orig'
   #'@param domains_rename A data frame containing the domain names to be replaced in a column 'old' and the
   #'@param repeat2s Boolean. If TRUE, repeated domains in 'GenContext' are condensed. Default is TRUE.
+  #'@param remove_asterisk Boolean. If TRUE, asterisks in 'ClustName' are removed. Default is TRUE.
   #'@examples cleanup_gencontext(prot, domains_rename, T, F)
 
   # Create cleaned up GenContext column
@@ -331,6 +353,12 @@ cleanup_gencontext <- function(prot, domains_rename,
   # Condense repeats
   if(repeat2s){
     prot <- repeat2s(prot, "GenContext")
+  }
+
+  # Remove the Asterisks
+  if(remove_asterisk)
+  {
+    prot <- remove_astrk(prot, colname = "GenContext")
   }
 
   return(prot)
