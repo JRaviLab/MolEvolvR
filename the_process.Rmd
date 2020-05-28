@@ -74,7 +74,11 @@ conflicted::conflict_prefer("strsplit", "base")
 # # write_tsv(x=prot, path=here("data/rawdata_tsv/all_raw.txt"), col_names=T)
 # prot <- read_tsv(here("data/rawdata_tsv/all_raw.txt"), col_names=TRUE)
 # Post-cleanup
-prot <- read_tsv(here("data/rawdata_tsv/all_semiclean.txt"), col_names=TRUE)
+#colnames_prot <- c("AccNum", "ClustID", "ClustName.orig", "GenContext.orig","DomArch.Pfam", "DomArch.orig", "-", "Length", "GeneName", "Lineage", "Species.orig", "GCA_ID", "Annotation", "GI")
+prot <- read_tsv(here("data/rawdata_tsv/all_semiclean.txt"), col_names= T) #colnames_prot)
+#prot_uniq <- read_tsv(here("data/rawdata_tsv/all_uniqgc.txt"), col_names=colnames_prot)
+#prot_uniq <- prot_uniq %>% cleanup_gencontext(domains_rename=domains_rename, repeat2s=T)
+#prot$GenContext.uniq <- prot_uniq$GenContext
 
 lineages_map <- read_delim(here("data/acc_files/organisms2lineages_map_bae_20170828.txt"),
                            delim="\t", col_names=T, trim_ws=T)
@@ -130,6 +134,9 @@ prot <- prot %>%
 # Once this is clarified, may not need this explicitly called.
 prot <- prot %>%
   remove_tails(by_column="ClustName", keep_domains=F)
+
+# # Remove repeated observations
+# prot <- prot %>% distinct()
 
 # write_tsv(x=prot, path=here("data/rawdata_tsv/all_semiclean.txt"), col_names=T)
 ```
