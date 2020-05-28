@@ -1,5 +1,14 @@
 # UI component containing Lineage Plots
 
+##############
+# Code that collapses a box programatically
+##############
+jscode <- "
+shinyjs.collapse = function(boxid) {
+$('#' + boxid).closest('.box').find('[data-widget=collapse]').click();
+}
+"
+
 
 tabItem("lineagePlots",
         fluidRow(
@@ -7,6 +16,8 @@ tabItem("lineagePlots",
                  fluidRow(
                    sidebarPanel(
                      width = 12,
+                     useShinyjs(),
+                     extendShinyjs(text = jscode),
                      #dropdown to select protein for plots
                      selectInput(inputId =  "linSelec", label = "Protein",
                                  choices = c("All", "PspA-Snf7", "PspB", "PspC","PspN", "LiaI-LiaF-TM","Toast-rack")
@@ -14,10 +25,28 @@ tabItem("lineagePlots",
 
                      radioButtons(inputId = "DA_GC", label = "DA or GC:",
                                   choices= c("Domain Architecture", "Genomic Context"), selected = "Domain Architecture" ),
-                     #Slider input to determine cutoff value for totalcounts
-                     sliderInput(inputId = "cutoff", label = "Total Count Cutoff:", min = 0, max = 100, value = 95),
-                     #sliderInput(inputId = "nr", label="Rows",min=0,max=10,value=0)
 
+
+                    column(width = 9, offset = 3,
+                    fluidRow(
+                     actionButton(inputId = "CutoffSwitch", label = tags$b("Row Cutoff")),
+                    )
+                    ),
+                    sliderInput(inputId = "cutoff", label = "Percent Cutoff:", min = 1, max = 100, value = 95),
+#                      #Slider input to determine cutoff value for totalcounts
+#                      box(id = "boxPC",
+#                          title = "Percent Cutoff", collapsible = TRUE, width = 12,
+#                          sliderInput(inputId = "cutoff", label = "Total Count Cutoff:", min = 0, max = 100, value = 95)
+#                      ),
+#                      #sliderInput(inputId = "rowsCutoff", label="Rows",min=0,max=10,value=0),
+#
+#                      box(id = "boxRC",
+#                          title = "Row Cutoff", collapsible = TRUE, width = 12,
+#                          collapsed = TRUE,
+#                          sliderInput(inputId = "rowsCutoff", label="Rows",min=0,max=10,value=0)),
+#
+#                      collapseInput(inputId = "iscollapseboxPC", boxId = "boxPC"),
+#                      collapseInput(inputId = "iscollapseboxRC", boxId = "boxRC"),
 
                      textOutput("Legend")
                    )
@@ -34,7 +63,7 @@ tabItem("lineagePlots",
                      id= 'lin_data',
                      tabPanel("Heatmap",
                               value = "Heatmap",
-                              plotOutput(outputId = "LinPlot", height = '500px' )),
+                              plotOutput(outputId = "LinPlot", height = "650px", width = "100%")),
                      tabPanel("Table",
                               value = "Lintables",
                               DT::dataTableOutput(outputId = "LinTable"),
@@ -46,11 +75,11 @@ tabItem("lineagePlots",
                      tabPanel("Network",
                               value = "Network_WC",
                               fluidRow(
-                                box(width = 12,
-                                    plotOutput(outputId = "network")
+                                box(width = 12,height = '100%',
+                                    plotOutput(outputId = "network", width = '100%')
                                 ),
                                 box(width = 12,
-                                    plotOutput(outputId = "wordcloud")
+                                    wordcloud2Output(outputId = "wordcloud")
                                 )
                               )
                      )

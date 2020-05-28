@@ -3,7 +3,7 @@ source("R/plotting.R")
 source("R/cleanup.R")
 source("R/summarize.R")
 source("R/reverse_operons.R")
-#source("shiny/shinyfunctions.R")
+source("shiny/shinyfunctions.R")
 
 ####Data import####
 
@@ -59,8 +59,8 @@ colnames(all)[which(colnames(all) == "GenContext")] = "GenContext.repeats"
 colnames(all)[which(colnames(all) =="Temp")] = "GenContext"
 
 
-all <- all %>% select(AccNum, DomArch, DomArch.repeats, DomArch.ind, GenContext, GenContext.repeats,
-                      Lineage, Species, GeneName, Length, GCA_ID)
+all <- all %>% select(AccNum, DomArch, DomArch.repeats, GenContext, GenContext.repeats,
+                      Lineage, Species, GeneName, Length, GCA_ID) %>% distinct()
 
 DUF1700 <- all %>% filter(grepl("DUF1700-ahelical",ignore.case = T, DomArch))
 DUF1707 <- all %>% filter(grepl("DUF1707-SHOCT",ignore.case = T, DomArch))
@@ -74,6 +74,9 @@ liai_liaf = all%>% filter(grepl("LiaI-LiaF-TM",ignore.case = T, DomArch))
 toast_rack = all%>%filter(grepl("Toast-rack",ignore.case = T, DomArch))
 tfu_1009 <- all %>% filter(grepl("Tfu_1009", ignore.case = T, DomArch))
 
+# Columns to include in table visualization
+viewing_cols = c("AccNum", "DomArch", "GenContext","Lineage", "Species", "GeneName", "Length", "GCA_ID")
+
 # Used for lineage by query
 queries = c("DUF1700", "DUF1707", "PspA|Snf7", "Psp-AA", "PspB","PspC", "PspM", "PspN", "LiaI-LiaF-TM", "Toast-rack", "Tfu_1009")
 
@@ -83,5 +86,15 @@ Columns"
 
 upset_legend = ""
 
+# Rows and Max Percents
+query_DA_row_CutoffPercs = Queries_MaxPercent(all, queries, "DomArch")
+query_GC_row_CutoffPercs = Queries_MaxPercent(all, queries, "GenContext", RemoveAstrk = T)
 
-
+# pspa_word_percs_da = max_word_percents
+# pspaa_word_percs_da = max_word_percents(psp_aa, "DomArch", F)
+# pspb_word_percs_da = max_word_percents(pspb, "DomArch", F)
+# pspc_word_percs_da = max_word_percents(pspc, "DomArch", F)
+# pspm_word_percs_da = max_word_percents(pspm, "DomArch", F)
+# pspn_word_percs_da = max_word_percents(pspn, "DomArch", F)
+# liai_liaf_word_percs_da = max_word_percents(liai_liaf, "DomArch", F)
+# toast_rack_word_percs_da = max_word_percents(toast_rack, "DomArch", F)

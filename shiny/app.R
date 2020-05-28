@@ -5,9 +5,9 @@ library(rmarkdown)
 library(shinydashboard)
 library(shinyjqui)
 library(wordcloud)
-
+library(shinyjs)
 library(shinyauthr)
-library(svgPanZoom)
+library(V8)
 conflicted::conflict_prefer("intersect", "dplyr")
 conflicted::conflict_prefer("filter", "dplyr")
 conflicted::conflict_prefer("strsplit", "base")
@@ -23,6 +23,16 @@ source("R/GC_network_directed.R")
 source("shiny/shinyfunctions.R")
 source("shiny/initialCutoff.R")
 source("shiny/legend_text.R")
+
+##############
+# Code that collapses a box programatically
+##############
+jscode <- "
+shinyjs.collapse = function(boxid) {
+$('#' + boxid).closest('.box').find('[data-widget=collapse]').click();
+}
+"
+
 
 #########
 ##Users##
@@ -47,8 +57,8 @@ header <- dashboardHeader(title = "PSP Data",
                               icon("github-square",
                                    "fa-2x",
                                    lib = "font-awesome")
-                          ),
-                          class = "dropdown"
+                            ),
+                            class = "dropdown"
                           )
 )
 
@@ -161,18 +171,18 @@ server <- function(input, output,session){
   pspTable<- reactive({
     req(credentials()$user_auth)
     switch(input$proSelec,
-           "All" = all,
-           "DUF1700" = DUF1700,
-           "DUF1707" = DUF1707,
-           "PspA-Snf7" = pspa,
-           "Psp-AA" = psp_aa,
-           "PspB" = pspb,
-           "PspC" = pspc,
-           "PspM" = pspm,
-           "PspN" = pspn,
-           "LiaI-LiaF-TM" = liai_liaf,
-           "Toast-rack" = toast_rack,
-           "Tfu-1009" = tfu_1009
+           "All" = all %>% select(viewing_cols) %>% distinct(),
+           "DUF1700" = DUF1700%>% select(viewing_cols) %>% distinct(),
+           "DUF1707" = DUF1707%>% select(viewing_cols) %>% distinct(),
+           "PspA-Snf7" = pspa%>% select(viewing_cols) %>% distinct(),
+           "Psp-AA" = psp_aa%>% select(viewing_cols) %>% distinct(),
+           "PspB" = pspb%>% select(viewing_cols) %>% distinct(),
+           "PspC" = pspc%>% select(viewing_cols) %>% distinct(),
+           "PspM" = pspm%>% select(viewing_cols) %>% distinct(),
+           "PspN" = pspn%>% select(viewing_cols) %>% distinct(),
+           "LiaI-LiaF-TM" = liai_liaf%>% select(viewing_cols) %>% distinct(),
+           "Toast-rack" = toast_rack%>% select(viewing_cols) %>% distinct(),
+           "Tfu-1009" = tfu_1009%>% select(viewing_cols) %>% distinct()
     )
   })
   #Render the Data table for selected protein
@@ -206,16 +216,145 @@ server <- function(input, output,session){
            "Tfu-1009" = tfu_1009)
   })
 
-  #Observer used to determine initial heatmap slider
-  observe({
-    if(input$DA_GC== "Domain Architecture"){
-      cutoff_init <- top_n_rows_cutoff(plotting_prot(), column = "DomArch", n_rows = 10)
+  prot_word_percents <- reactive({
+    if(input$DA_GC == "Domain Architecture"){
+      #### Should these be on DomArch.repeats for Network?
+      max_word_percents(plotting_prot(), "DomArch")
     }
     else{
-      cutoff_init <- top_n_rows_cutoff(plotting_prot(), column = "GenContext", n_rows = 10)
+      max_word_percents(plotting_prot(), "GenContext")
     }
-    updateSliderInput(session,inputId = "cutoff",min=0, max=100, value=cutoff_init)
   })
+
+
+  ### Adaptive cutoff value to be used for plotting functions
+  ### Converts the cutoff slider's value into respective percentage value
+  ### if the cutoff status is "Row"
+  cutoff_val <- reactive({
+    if(cutoff_status() == "Percent")
+    {
+      # Cutoff type is Percentage already, so use original slider value
+      input$cutoff
+    }
+    else
+    {
+      # Cutoff type is Row, convert it to the percentage
+      if(input$lin_data == "Heatmap")
+      {
+        if(input$linSelec == "All")
+        {
+          if(input$DA_GC== "Domain Architecture"){
+            100 - query_DA_row_CutoffPercs$maxPercent[input$cutoff]
+          }
+          else
+          {
+            100 - query_GC_row_CutoffPercs$maxPercent[input$cutoff]
+          }
+        }
+        else{
+          if(input$DA_GC== "Domain Architecture"){
+            column = "DomArch"
+            rmAstrk = F
+          }
+          else
+          {
+            column = "GenContext"
+            rmAstrk = T
+          }
+          rownumber_to_cutoff(plotting_prot(),input$cutoff, col = column)
+        }
+      }
+
+      else
+      {
+        # Cutoff to percent for upset and wordclouds and network
+        100 - prot_word_percents()$MaxPercent[input$cutoff]
+      }
+    }
+  })
+
+  #### Total Number of Rows the currently selected protein has
+  plotting_prot_maxRows <- reactive(
+    {
+      if(input$lin_data == "Heatmap")
+      {
+        # Current tab is Heatmap
+        if(input$linSelec == "All"){
+          length(queries)
+        }
+        else if(input$DA_GC== "Domain Architecture"){
+          RowNums(plotting_prot(), column = "DomArch")
+        }
+        else
+        {
+          RowNums(plotting_prot(), column = "GenContext")
+        }
+      }
+
+      else
+      {
+        # Current tab is not Heatmap
+        nrow(prot_word_percents())
+      }
+
+    }
+  )
+
+  #### Initial number of rows that should be selected For the selected protein
+  init_rowCutoff <- reactive({
+    min(10,plotting_prot_maxRows())
+  })
+
+  ### Current type of cutoff that is being used either
+  cutoff_status <- reactiveVal("Percent")
+
+  rows_cutoff <- reactive({
+    cutoff_status() == "Row"
+  })
+  #Observer used to determine initial heatmap slider whenever protein changes or type(DA/GC) changes
+  observe({
+    if(cutoff_status() == "Percent"){
+      label_val = "Percent Cutoff"
+      max_val = 100
+      if(input$DA_GC== "Domain Architecture"){
+        cutoff_init <- top_n_rows_cutoff(plotting_prot(), column = "DomArch", n_rows = 10)
+      }
+      else{
+        cutoff_init <- top_n_rows_cutoff(plotting_prot(), column = "GenContext", n_rows = 10)
+      }
+    }
+    else
+    {
+      # Use Row Cutoffs: update
+      label_val = "Row Cutoff"
+      max_val = plotting_prot_maxRows()
+      cutoff_init = init_rowCutoff()
+    }
+    updateSliderInput(session, label = label_val, inputId = "cutoff",min=1, max= max_val, value=cutoff_init)
+  })
+
+
+  ### Observe when the CutoffSwitch is pressed, and toggle the text and set to the correct status
+  observeEvent(input$CutoffSwitch,
+               {
+                 if(cutoff_status() == "Percent" )
+                 {
+                   # The current cutoff status is Percent, switch to Rows
+                   cutoff_status("Row")
+
+                   # Update Action button text to "Row Cutoff"
+                   updateActionButton(session, "CutoffSwitch",
+                                      label = ("Percent Cutoff"))
+                 }
+                 else if(cutoff_status() == "Row")
+                 {
+                   cutoff_status("Percent")
+
+                   # Update Action button text to "Percent Cutoff"
+                   updateActionButton(session, "CutoffSwitch",
+                                      label = ("Row Cutoff"))
+                 }
+               })
 
 
 
@@ -226,21 +365,21 @@ server <- function(input, output,session){
     req(credentials()$user_auth)
     if(input$DA_GC == "Domain Architecture"){
       if(input$linSelec != "All"){
-        lineage.DA.plot(plotting_prot(), colname = "DomArch", cutoff = input$cutoff, remove_astrk = F)
+        lineage.DA.plot(plotting_prot(), colname = "DomArch", cutoff = cutoff_val(), RowsCutoff = rows_cutoff())
       }
       else{
-        lineage.Query.plot(plotting_prot(), queries = queries, colname = "DomArch", cutoff = input$cutoff, remove_astrk = F)
+        lineage.Query.plot(plotting_prot(), queries = queries, colname = "DomArch", cutoff = cutoff_val())
       }
     }
     else{
       if(input$linSelec != "All"){
-        lineage.DA.plot(plotting_prot(), colname = "GenContext", cutoff = input$cutoff)
+        lineage.DA.plot(plotting_prot(), colname = "GenContext", cutoff = cutoff_val(), RowsCutoff = rows_cutoff())
       }
       else{
-        lineage.Query.plot(plotting_prot(), queries = queries, colname = "GenContext", cutoff = input$cutoff)
+        lineage.Query.plot(plotting_prot(), queries = queries, colname = "GenContext", cutoff = cutoff_val())
       }
     }
-  }, height = 500)
+  }, height = "auto")
 
   ####
   ##### Render the datatable for the lineage counts #####
@@ -249,10 +388,10 @@ server <- function(input, output,session){
     req(credentials()$user_auth)
     paged_table(
       if(input$DA_GC == "Domain Architecture"){
-        total_counts(plotting_prot(), cutoff = input$cutoff, column = "DomArch")
+        total_counts(plotting_prot(), cutoff = cutoff_val(), column = "DomArch", RowsCutoff = rows_cutoff()) # %>% arrange(CumulativePercent)
       }
       else{
-        total_counts(plotting_prot(), cutoff = input$cutoff, column = "GenContext")
+        total_counts(plotting_prot(), cutoff = cutoff_val(), column = "GenContext", RowsCutoff = rows_cutoff()) # %>% arrange(CumulativePercent)
       }
     )
   }, extensions = c('FixedColumns',"FixedHeader"),
@@ -292,10 +431,10 @@ server <- function(input, output,session){
     selected <- input$linSelec
     DA_or_GC <- input$DA_GC
     if(DA_or_GC == "Domain Architecture"){
-      upset.plot(plotting_prot(), cutoff = input$cutoff, colname = "DomArch" )
+      upset.plot(plotting_prot(), cutoff = cutoff_val(), colname = "DomArch", RowsCutoff = rows_cutoff())
     }
     else{
-      upset.plot(plotting_prot(), cutoff = input$cutoff, colname = "GenContext")
+      upset.plot(plotting_prot(), cutoff = cutoff_val(), colname = "GenContext", RowsCutoff = rows_cutoff())
     }
   }, height = 550)
 
@@ -303,14 +442,14 @@ server <- function(input, output,session){
   #### Reactive expression determining domain of interest for plotting domain networks
   network_domain_interest <-  reactive({
     switch(input$linSelec,
-           "All" = "DUF1700-ahelical|DUF1707-SHOCT|pspa|snf7|pspb|pspc|pspm|pspn|LiaI-LiaF-TM|Toast-rack",
+           "All" = c("DUF1700-ahelical","DUF1707-SHOCT","PspA", "Snf7","PspB","PspC","PspM","PspN","LiaI-LiaF-TM","Toast-rack"),
            "DUF1700" = "DUF1700-ahelical",
            "DUF1707" = "DUF1707-SHOCT",
-           "PspA-Snf7" = "pspa|snf7",
-           "PspB" = "pspb",
-           "PspC" = "pspc",
-           "PspM" = "pspm",
-           "PspN" = "pspn",
+           "PspA-Snf7" = c("PspA","Snf7"),
+           "PspB" = "PspB",
+           "PspC" = "PspC",
+           "PspM" = "PspM",
+           "PspN" = "PspN",
            "LiaI-LiaF-TM" = "LiaI-LiaF-TM",
            "Toast-rack" = "Toast-rack")
   })
@@ -319,25 +458,26 @@ server <- function(input, output,session){
   ### Network Output ###
   output$network <- renderPlot({
     if(input$DA_GC == "Domain Architecture"){
-      domain_network(plotting_prot(), column = "DomArch.repeats", cutoff = input$cutoff, layout = "auto",
-                     domains_of_interest = network_domain_interest())
+      domain_network(prot = plotting_prot(), column = "DomArch.repeats",
+                     domains_of_interest = network_domain_interest(),
+                     cutoff = input$cutoff,
+                      layout = "random")
     }
     else{
       gc_directed_network(plotting_prot(), column = "GenContext.repeats",
-                          cutoff = input$cutoff)
+                          cutoff = cutoff_val())
     }
   })
 
 
   #Render Wordcloud
-  #reverse_operons probably not necessary anymore
-  output$wordcloud <- renderPlot({
+  output$wordcloud <- renderWordcloud2({
     req(credentials()$user_auth)
     if(input$DA_GC == "Genomic Context"){
-      wordcloud_element(query_data = plotting_prot(), colname = "GenContext", cutoff = input$cutoff)
+      wordcloud_element(query_data = plotting_prot(), colname = "GenContext", cutoff = cutoff_val())
     }
     else{
-      wordcloud_element(query_data = plotting_prot(), colname = "DomArch", cutoff = input$cutoff)
+      wordcloud_element(query_data = plotting_prot(), colname = "DomArch", cutoff = cutoff_val())
     }
 
   })
@@ -415,7 +555,6 @@ server <- function(input, output,session){
            "PspA Only" = tags$iframe(style="height:600px; width:100%", src="FigTrees/pspa_only.1_tree.pdf", seamless=T),
            "PspA Snf7" = tags$iframe(style="height:600px; width:100%", src="FigTrees/pspa_snf7_tree.pdf", seamless=T),
            "PspA Snf7 Gismo" = tags$iframe(style="height:600px; width:100%", src="FigTrees/pspa_snf7.gismo_tree.pdf", seamless=T),
-             #tags$embed(src="pspa_snf7_tree.pdf"), #, "data-zoom-image" ="pspa_snf7_tree.pdf"),#, height=1024,width=800),
            "PspB Gismo" = tags$iframe(style="height:600px; width:100%", src="FigTrees/pspb.gismo_tree.pdf", seamless=T),
            "PspC Gismo" = tags$iframe(style="height:600px; width:100%", src="FigTrees/pspc.gismo_tree.pdf", seamless=T),
            "Snf7 Only" = tags$iframe(style="height:600px; width:100%", src="FigTrees/snf7_only.1_tree.pdf", seamless=T),
@@ -431,37 +570,9 @@ server <- function(input, output,session){
     tags$iframe(style="height:600px; width:100%", src="pspa_reduced.fasta.pdf", seamless=T)
   })
 
-  vals <- reactiveValues(btn = 0, tab = "home")
 
 
-  observeEvent(input$myBtn,{
-    if( input$phylo =="Tree" ){
-      vals$btn <- 1
-      vals$tab <- input$phylo
-    }
-  }
-  )
-  observeEvent(input$phylo,{
-    if( input$phylo !="Tree"){
-      vals$tab <- "notphylo"
-      vals$btn <- 0
-    }
-  }
-  )
 
-
-  observe({
-    if(vals$btn == 1 && input$mainTabs == "phylogeny"){
-      session$sendCustomMessage(type = 'testmessage'
-                                ,message = list(value="ZoomOn")
-      )
-    }
-    else{
-      session$sendCustomMessage(type = 'testmessage'
-                                ,message = list(value="ZoomOff")
-      )
-    }
-  })
 
 
   output$ParalogTable <- DT::renderDataTable({
