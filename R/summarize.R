@@ -150,7 +150,7 @@ summ.GC <- function(x) { x %>%
 
 ##################
 total_counts <- function(prot, column = "DomArch",
-                         cutoff = 90
+                         cutoff = 90, RowsCutoff = FALSE, digits = 2
                          #type = "GC"
 ){
   #'Total Counts
@@ -166,30 +166,19 @@ total_counts <- function(prot, column = "DomArch",
   #' @examples total_counts(pspa-gc_lin_counts,0,"GC")
   #' @note Please refer to the source code if you have alternate file formats and/or
   #' column names.
-  # if(type == "GC"){
-  #   prot <- summ.GC.byDALin(prot)
-  #   gc_count <- prot %>%group_by(GenContext) %>% summarise(totalcount = sum(count))
-  #   total <- left_join(prot,gc_count, by = "GenContext")
-  # }
-  # else if(type == "DA"){
-  #   prot <- summ.DA.byLin(prot)
-  #   da_count <- prot %>% group_by(DomArch) %>% summarise(totalcount = sum(count))
-  #   total <- left_join(prot,da_count, by = "DomArch")
-  # }
-
 
   prot <- summarize_bylin(prot, column, by = "Lineage", query = "all")
   column <- sym(column)
   col_count <-  prot %>% group_by({{column}}) %>% summarise(totalcount = sum(count))
+
   total <- left_join(prot,col_count, by = as_string(column))
 
-  #sum_totalC <- sum(total$totalcount)
   sum_count <- sum(total$count)
-  total <- total %>% mutate("IndividualCountPercent" = totalcount/sum_count*100) %>% arrange(totalcount)
+  total <- total %>% mutate("IndividualCountPercent" = totalcount/sum_count*100) %>%  arrange(-totalcount,-count)
 
   cumm_percent <- total %>% select({{column}}, totalcount) %>% distinct() %>% mutate("CumulativePercent"=0)
   total_counter = 0
-  for(x in 1:length(cumm_percent$totalcount)){
+  for(x in length(cumm_percent$totalcount):1){
     total_counter = total_counter + cumm_percent$totalcount[x]
     cumm_percent$CumulativePercent[x] = total_counter/sum_count * 100
   }
@@ -199,21 +188,110 @@ total_counts <- function(prot, column = "DomArch",
   total <- total %>% left_join(cumm_percent, by = as_string(column))
 
   # Round the percentage columns
-  total$CumulativePercent <- total$CumulativePercent %>% round(digits = 2)
-  total$IndividualCountPercent <- total$IndividualCountPercent %>% round(digits = 2)
+  total$CumulativePercent <- total$CumulativePercent %>% round(digits = digits)
+  total$IndividualCountPercent <- total$IndividualCountPercent %>% round(digits = digits)
 
+  if(RowsCutoff)
+  {
+    # If total counts is being used for plotting based on number of rows,
+    # don't include other observations that fall below the cummulative percent cutoff
+    #, but that have the same 'totalcount' number as the cutoff observation
+    total <- total %>% filter(CumulativePercent >= 100-cutoff)
+    return(total)
+  }
+
+  # Include observations that fall below the cummulative percent cutoff,
+  # but that have the same 'totalcount' as the cutoff observation
   t <- total %>% filter(CumulativePercent >= 100-cutoff)
   if(length(t) == 0){
     cutoff_count = 0
   }
   else{
-    cutoff_count = t$totalcount[1]
+    cutoff_count = t$totalcount[nrow(t)]
   }
 
-  total <- total %>% filter(totalcount >= cutoff_count) %>% arrange(-totalcount,-count)
+  total <- total %>% filter(totalcount >= cutoff_count) %>% ungroup()
 
   return(total)
 }
+
+
+
+# total_counts_by_query <- function(query_data, queries, colname,cutoff, RemoveAstrk = F)
+# {
+#   ## Get the total counts by the Queries.
+#
+#   lineage_by_query <- function(data, query, column, by){
+#     # Function to filter data by a query and summarise it by lineage
+#
+#     column <- sym(column); by <- sym(by)
+#
+#     # filter the protein by the query
+#     data <- data %>% filter(grepl(pattern=query, x={{column}},
+#                                   ignore.case=T)) %>% select({{by}})
+#
+#     data$Query <- query
+#
+#     data <- data %>% filter(!grepl("^-$", {{by}})) %>%
+#       group_by(Query, {{by}}) %>%
+#       summarise(count=n()) %>%
+#       arrange(desc(count))
+#     return(data)
+#   }
+#
+#
+#   col <- sym(colname)
+#
+#   # query_data contains all rows that possess a lineage
+#   query_data <- query_data %>% filter(grepl("a", Lineage))
+#
+#   query_data <- shorten_lineage(query_data, "Lineage")
+#
+#   if(RemoveAstrk){
+#     # Remove Asterisk (*) if necessary
+#     query_data <- query_data %>% remove_astrk(colname = colname)
+#   }
+#
+#   query_lin_counts = data.frame("Query" = character(0), "Lineage" = character(0), "count"= integer())
+#
+#   for(q in queries){
+#     # iterate over queries and do filtering/Lineage by query
+#     query_lin <- lineage_by_query(data = query_data, query = q, column = {{col}}, by = "Lineage")
+#     query_lin_counts <- dplyr::union(query_lin_counts, query_lin)
+#   }
+#
+#   # Total counts of each lineage
+#   lin_count_totals <- query_lin_counts %>%group_by(Lineage) %>% summarize(total_c = sum(count)) %>% arrange(total_c)
+#   sum_lin <- sum(lin_count_totals$total_c)
+#
+#   # Calculate the percent each lineage makes up
+#   lin_count_totals$IndividualPercent = lin_count_totals$total_c/sum_lin * 100
+#   lin_count_totals <- lin_count_totals %>% mutate("CumulativePercent"=0)
+#   total_counter = 0
+#   for(x in 1:length(lin_count_totals$IndividualPercent)){
+#     total_counter = total_counter + lin_count_totals$IndividualPercent[x]
+#     lin_count_totals$CumulativePercent[x] = total_counter
+#   }
+#
+#   query_total_counts <- left_join(query_lin_counts, lin_count_totals, by = "Lineage")
+#
+#   query_total_counts <- query_total_counts%>% group_by(total_c,count) %>% arrange(-total_c, -count)
+#   # Get lineages that are above the cutoff percentage value
+#   count_cutoff <- (query_total_counts %>% filter(CumulativePercent >= (100-cutoff)))
+#
+#   query_total_counts <- (query_total_counts %>% filter(total_c >= count_cutoff$total_c[nrow(count_cutoff)]))
+#
+#   # Round to 3 digits
+#   query_total_counts$CumulativePercent <- query_total_counts$CumulativePercent %>% round(digits = 3)
+#   query_total_counts$IndividualPercent <- query_total_counts$IndividualPercent %>% round(digits = 3)
+#
+#   return(query_total_counts)
+# }
+
+
+
+
+
 
 find_paralogs <- function(prot){
   #'Find Paralogs
@@ -237,9 +315,9 @@ find_paralogs <- function(prot){
   paralogTable$AccNums <- map(paralogTable$GCA_ID, function(x) filter(prot,grepl(x,GCA_ID))$AccNum)
   colnames(paralogTable)[colnames(paralogTable)=="n"] = "Count"
   ###Merge with columns: AccNum,TaxID, and GCA/ Species?
-  paralogTable <- prot %>% select(Species , GCA_ID) %>%
+  paralogTable <- prot %>% select(Species , GCA_ID, Lineage) %>%
     left_join(paralogTable, by= c("GCA_ID")) %>%
-    filter(!is.na(Count)) %>% distinct() %>% arrange(-Count)
+    filter(!is.na(Count)) %>% distinct() %>% arrange(-Count) %>% select(-GCA_ID)
   return(paralogTable)
 }
 
