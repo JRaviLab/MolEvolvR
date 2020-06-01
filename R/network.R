@@ -11,7 +11,7 @@ conflicted::conflict_prefer("filter", "dplyr")
 ###########################
 #### Network FUNCTIONS ####
 ###########################
-domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff = 1, layout = "grid"){
+domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff = 1, layout = "grid", UsingRowsCutoff = F){
   #'Domain Network
   #'
   #'This function creates a domain network from the 'DomArch' column.
@@ -33,7 +33,7 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
 
   column_name <- sym(column)
 
-  prot_tc <- prot %>% total_counts(column =  column, cutoff = cutoff)
+  prot_tc <- prot %>% total_counts(column =  column, cutoff = cutoff, RowsCutoff = UsingRowsCutoff, digits = 5)
 
   within_list <- prot_tc %>% select({{column_name}}) %>% distinct()
   within_list <- pull(within_list, {{column_name}})
