@@ -1,16 +1,7 @@
-# UI component containing Lineage Plots
+#### UI for the Domain Architecture tab ####
+#### Contains plots and tables pertainent to Domain Architecture
 
-##############
-# Code that collapses a box programatically
-##############
-jscode <- "
-shinyjs.collapse = function(boxid) {
-$('#' + boxid).closest('.box').find('[data-widget=collapse]').click();
-}
-"
-
-
-tabItem("lineagePlots",
+tabItem("domainArchitecture",
         fluidRow(
           column(width = 3, offset = 0,
                  fluidRow(
@@ -23,16 +14,12 @@ tabItem("lineagePlots",
                                  choices = c("All", "PspA-Snf7", "PspB", "PspC","PspN", "LiaI-LiaF-TM","Toast-rack")
                                  , selected = "PspA"),
 
-                     radioButtons(inputId = "DA_GC", label = "DA or GC:",
-                                  choices= c("Domain Architecture", "Genomic Context"), selected = "Domain Architecture" ),
-
-
-                    column(width = 9, offset = 3,
-                    fluidRow(
-                     actionButton(inputId = "CutoffSwitch", label = tags$b("Row Cutoff")),
-                    )
-                    ),
-                    sliderInput(inputId = "cutoff", label = "Percent Cutoff:", min = 1, max = 100, value = 95),
+                     column(width = 9, offset = 3,
+                            fluidRow(
+                              actionButton(inputId = "CutoffSwitch", label = tags$b("Row Cutoff")),
+                            )
+                     ),
+                     sliderInput(inputId = "cutoff", label = "Percent Cutoff:", min = 1, max = 100, value = 95),
                      textOutput("Legend")
                    )
                  )
