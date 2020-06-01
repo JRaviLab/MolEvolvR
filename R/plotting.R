@@ -14,6 +14,7 @@ library(UpSetR)
 library(gridExtra)
 library(wordcloud)
 library(wordcloud2)
+library(sunburstR)
 
 
 source("R/wordcloud3.R")
@@ -62,7 +63,7 @@ upset.plot <- function(query_data="toast_rack.sub",
 
   # Get Total Counts
   # colname = string(colname)
-  tc <- query_data %>% total_counts(column =  colname, cutoff = cutoff, RowsCutoff = RowsCutoff)
+  tc <- query_data %>% total_counts(column =  colname, cutoff = cutoff, RowsCutoff = RowsCutoff, digits = 5)
 
 
   ##### Remove Tails ####
@@ -417,7 +418,8 @@ lineage.domain_repeats.plot <- function(query_data, colname) {
 
 wordcloud_element <- function(query_data="prot",
                               colname = "DomArch",
-                              cutoff = 50
+                              cutoff = 70,
+                              UsingRowsCutoff = FALSE
 ){
   #' Wordclouds for the predominant domains, domain architectures.
   #' @author Janani Ravi
@@ -439,12 +441,28 @@ wordcloud_element <- function(query_data="prot",
   # Get Total Counts
   # colname = string(colname)
 
-  tc <- query_data %>% total_counts(column =  colname, cutoff = cutoff)
+  tc <- query_data %>% total_counts(column =  colname, cutoff = cutoff, RowsCutoff = UsingRowsCutoff, digits = 5)
 
   column <- sym(colname)
   # Get words from filter
-  words.tc <- tc %>% select({{column}}, totalcount) %>% distinct()
-  names(words.tc) <- c("words", "freq")
+  # words.tc <- tc %>% select({{column}}, totalcount) %>% distinct()
+
+  query_data = query_data %>% filter({{column}} %in% pull(tc,{{colname}}))
+
+  if(grepl("DomArch|Clustname", colname))
+  {
+    type = "da2doms"
+  }
+  else if(grepl("GenContext", colname))
+  {
+    type = "gc2da"
+  }
+
+  words.tc <- query_data %>% elements2words(column = colname,
+                                            conversion_type = type) %>%
+                words2wc()
+
+  # names(words.tc) <- c("words", "freq")
 
   # need a label column for actual frequencies, and frequencies will be the
   # normalized sizes
@@ -456,10 +474,8 @@ wordcloud_element <- function(query_data="prot",
 
   wordcloud3(words.tc, minSize = 0)
 
-  # wordcloud(words.tc$words, words.tc$totalcount, min.freq = 1,
+  # wordcloud(words.tc$words, words.tc$freq, min.freq = 1,
   #           colors=brewer.pal(8, "Spectral"),scale=c(4.5,1))
-  # wordcloud(GC.DA.wc$words,GC.DA.wc$freq,min.freq = min_freq,
-  #           colors=brewer.pal(8, "Spectral"), scale=c(2.5,.4))
 }
 
 ## COMMENTED LINEAGE.DA.PLOT
