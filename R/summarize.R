@@ -196,7 +196,7 @@ total_counts <- function(prot, column = "DomArch",
     # If total counts is being used for plotting based on number of rows,
     # don't include other observations that fall below the cummulative percent cutoff
     #, but that have the same 'totalcount' number as the cutoff observation
-    total <- total %>% filter(CumulativePercent >= 100-cutoff)
+    total <- total %>% filter(CumulativePercent >= 100-cutoff-.0001)
     return(total)
   }
 
