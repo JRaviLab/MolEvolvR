@@ -43,10 +43,7 @@ rownumber_to_cutoff <- function(query_data, rownumber, col, RemoveAstrk = F)
 
   rows <- tc %>% select({{column}},'CumulativePercent') %>% distinct() #%>% arrange(CumulativePercent)
 
-  cutoff <- rows[rownumber,'CumulativePercent'] - .001
-
-  print(100-cutoff)
-
+  cutoff <- (rows[rownumber,'CumulativePercent'] - .001)$CumulativePercent
   return(100-cutoff)
 }
 
