@@ -1,3 +1,4 @@
+#
 wordcloud3 <- function (data, size = 1, minSize = 0, gridSize = 0, fontFamily = "Segoe UI",
                         fontWeight = "bold", color = "random-dark", backgroundColor = "white",
                         minRotation = -pi/4, maxRotation = pi/4, shuffle = TRUE,
@@ -38,40 +39,7 @@ wordcloud3 <- function (data, size = 1, minSize = 0, gridSize = 0, fontFamily = 
   chart = htmlwidgets::createWidget("wordcloud2", settings,
                                     width = widgetsize[1], height = widgetsize[2], sizingPolicy = htmlwidgets::sizingPolicy(viewer.padding = 0,
                                                                                                                             browser.padding = 0, browser.fill = TRUE))
-  htmlwidgets::onRender(chart, "function(el,x){\n                        console.log(123);\n                        if(!iii){\n                          window.location.reload();\n                          iii = False;\n\n                        }\n  }")
+
+  chart
+  #htmlwidgets::onRender(chart, "function(el,x){\n                        console.log(123);\n                        if(!iii){\n                          window.location.reload();\n                          iii = False;\n\n                        }\n  }")
 }
-
-
-#'
-#'
-#'
-#' getClickedWord <- function(WordInputId) {
-#'   #OUPUT
-#'   #       - referencing input in server will return a string of form word:freq (same as hover info shown in wordcloud; ie 'super:32')
-#'   shiny::tags$script(shiny::HTML(
-#'     "$(document).on('click', '#canvas', function(evt) {",
-#'     'var id = evt.target.nextElementSibling.firstChild.id;',
-#'     'word = document.getElementById(id).innerHTML;',
-#'     'console.log(id);',
-#'     "Shiny.onInputChange(id.replace('wcSpan','_clicked_word'), word);",
-#'     #sprintf("Shiny.onInputChange(id'_%s', word);",WordInputId),
-#'     "});"
-#'   ))
-#' }
-#'
-#'
-#'
-#' #' @rdname wordcloud2-shiny
-#' #' @export
-#' wordcloud2Output <- function(outputId, width = "100%", height = "400px") {
-#'   widget_out <- htmlwidgets::shinyWidgetOutput(outputId, "wordcloud2", width, height, package = "wordcloud2")
-#'
-#'   shiny::div(getClickedWord(), widget_out)
-#' }
-#'
-#' #' @rdname wordcloud2-shiny
-#' #' @export
-#' renderWordcloud2 <- function(expr, env = parent.frame(), quoted = FALSE) {
-#'   if (!quoted) { expr <- substitute(expr) } # force quoted
-#'   htmlwidgets::shinyRenderWidget(expr, wordcloud2Output, env, quoted = TRUE)
-#' }
