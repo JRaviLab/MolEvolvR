@@ -15,6 +15,7 @@ library(gridExtra)
 library(wordcloud)
 library(wordcloud2)
 library(sunburstR)
+library(d3r)
 
 
 source("R/wordcloud3.R")
@@ -477,6 +478,32 @@ wordcloud_element <- function(query_data="prot",
   # wordcloud(words.tc$words, words.tc$freq, min.freq = 1,
   #           colors=brewer.pal(8, "Spectral"),scale=c(4.5,1))
 }
+
+
+#### Sunburst #####
+lineage_sunburst <- function(prot, lineage_column = "Lineage")
+{
+  #'
+  #'
+  #'@param prot Data frame containing a lineage column that the sunburst plot will be generated for
+  #'@param lineage_column String. Name of the lineage column within the data frame. Defaults to "Lineage"
+
+
+  lin_col <- sym(lineage_column)
+
+  # Take lineage column and break into the first to levels
+  prot <- prot %>% select({{lin_col}})
+  protLevels <- prot %>% separate({{lin_col}}, into = c("level1","level2"), sep = ">")
+  # Count the occurrance of each group of levels
+  protLevels = protLevels %>% group_by(level1,level2) %>% summarise(size = n())
+
+  tree <- d3_nest(protLevels, value_cols = "size")
+
+  # Plot sunburst
+  # sunburst(tree)
+  sund2b(tree)
+}
+
 
 ## COMMENTED LINEAGE.DA.PLOT
 # lineage.plot <- function(query_data, cutoff, type) {
