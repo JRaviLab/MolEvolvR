@@ -495,16 +495,16 @@ lineage_sunburst <- function(prot, lineage_column = "Lineage", type = "sunburst"
 
   # Take lineage column and break into the first to levels
   prot <- prot %>% select({{lin_col}})
-  protLevels <- prot %>% separate({{lin_col}}, into = c("level1","level2"), sep = ">")
+  protLevels <- prot %>% separate({{lin_col}}, into = c("level1","level2", "level3","level4", "level5"), sep = ">")
   # Count the occurrance of each group of levels
-  protLevels = protLevels %>% group_by(level1,level2) %>% summarise(size = n())
+  protLevels = protLevels %>% group_by(level1,level2,level3,level4,level5) %>% summarise(size = n())
 
   tree <- d3_nest(protLevels, value_cols = "size")
 
   # Plot sunburst
   if(type == "sunburst")
   {
-    sunburst(tree)
+    sunburst(tree, legend = list(w = 150, h = 15, r = 3, s = 3))
   }
   else if(type == "sund2b")
   {

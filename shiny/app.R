@@ -758,7 +758,11 @@ server <- function(input, output,session){
     else{
       choices = c("PspA-Snf7",
                   "PspB",
-                  "PspC")
+                  "PspC",
+                  "PspN",
+                  "LiaI-LiaF-TM",
+                  "Toast-rack"
+                  )
       selected = "PspA-Snf7"
     }
     updateSelectInput(session, inputId = "alignSelec",
@@ -790,14 +794,14 @@ server <- function(input, output,session){
 
   #### Sunburst ####
 
-  output$sund2b <- renderSund2b({
-    req(credentials()$user_auth)
-    lineage_sunburst(pspa, lineage_column = "Lineage", type = "sund2b")
-  })
+  # output$sund2b <- renderSund2b({
+  #   req(credentials()$user_auth)
+  #   lineage_sunburst(pspa, lineage_column = "Lineage", type = "sund2b")
+  # })
 
   output$sunburst <- renderSunburst({
     req(credentials()$user_auth)
-    lineage_sunburst(pspa, lineage_column = "Lineage", type = "sunburst")
+    lineage_sunburst(phylogeny_prot(), lineage_column = "Lineage", type = "sunburst")
   })
 
 
@@ -814,15 +818,7 @@ server <- function(input, output,session){
 
   output$ParalogTable <- DT::renderDataTable({
     req(credentials()$user_auth)
-    switch(input$alignSelec,
-           "PspA-Snf7"= find_paralogs(pspa)
-           ,"PspB"= find_paralogs(pspb),
-           "PspC"= find_paralogs(pspc)
-           # "DUF1700"= find_paralogs(all%>% filter(Query=="DUF1700-alpha-helical")),
-           # "DUF1707"= find_paralogs(all%>% filter(Query=="DUF1707-SHOCT")),
-           # "Toast-rack"= find_paralogs(all%>% filter(Query=="Toast-rack")),
-           # "LiaI-LiaF-TM"= find_paralogs(all%>% filter(Query=="LiaI-LiaF-TM"))
-    )
+    find_paralogs(phylogeny_prot())
   },extensions = c('FixedColumns'),
   options = list(pageLength = 10,
                  #The below line seems to disable other pages and the search bar
