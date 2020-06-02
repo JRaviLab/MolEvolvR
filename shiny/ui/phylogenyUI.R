@@ -25,13 +25,16 @@ tabItem("phylogeny",
                    tabPanel("Tree", value="Tree",
                             htmlOutput(outputId = "msaTree" ),
                             #sunburstOutput(outputId = "sunburst")
-                            fluidRow(
-                              column(width = 2,
-                                     p("Note: the sunburst plot shown is for PspA and currently does not change with the dropdown", style = "font-size:160%")) ,
-                              column(width = 5, sund2bOutput(outputId = "sund2b")),
-                              column(width = 5, sunburstOutput(outputId = "sunburst"))
-                              )
+                            # fluidRow(
+                            #   column(width = 2,
+                            #          p("Note: the sunburst plot shown is for PspA and currently does not change with the dropdown", style = "font-size:160%")) ,
+                            #   column(width = 5, sund2bOutput(outputId = "sund2b")),
+                            #   column(width = 5, sunburstOutput(outputId = "sunburst"))
+                            #   )
                    ),
+                   tabPanel("Sunburst", value ="sunburst",
+                           sunburstOutput(outputId = "sunburst")
+                            ),
                    tabPanel("MSA", value="MSA",
                             htmlOutput(outputId="msaPlot")),
                    tabPanel("Paralog Table", value="Paralog",
