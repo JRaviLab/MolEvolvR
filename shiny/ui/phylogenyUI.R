@@ -28,7 +28,8 @@ tabItem("phylogeny",
                             fluidRow(
                               column(width = 2,
                                      p("Note: the sunburst plot shown is for PspA and currently does not change with the dropdown", style = "font-size:160%")) ,
-                              column(width = 10, sund2bOutput(outputId = "sunburst"))
+                              column(width = 5, sund2bOutput(outputId = "sund2b")),
+                              column(width = 5, sunburstOutput(outputId = "sunburst"))
                               )
                    ),
                    tabPanel("MSA", value="MSA",

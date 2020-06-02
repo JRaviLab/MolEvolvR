@@ -13,6 +13,7 @@ conflicted::conflict_prefer("filter", "dplyr")
 conflicted::conflict_prefer("strsplit", "base")
 conflicted::conflict_prefer("count", "dplyr")
 conflicted::conflict_prefer("box", "shinydashboard")
+conflicted::conflict_prefer("upset", "UpSetR")
 setwd("..")
 source("shiny/PSP_Web_Data.R")
 source("R/plotting.R")
@@ -81,28 +82,10 @@ body <- dashboardBody(
   uiOutput("user_table"),
   uiOutput("testUI"),
   tabItems(
-    #Datatable tab contains all protein datatables
-    tabItem("datatable",
-            fluidPage(
-              column(width = 2,
-                     #Dropdown to select protein for viewing
-                     selectInput(inputId =  "proSelec", label = "Protein",
-                                 choices = c( "All","DUF1700", "DUF1707",
-                                              "PspA-Snf7","Psp-AA", "PspB", "PspC", "PspM", "PspN",
-                                              "LiaI-LiaF-TM","Toast-rack", "Tfu-1009" )
-                                 , selected = "All")
-              ),
-              #Buttons to select which file type to download
-              column( width = 3, offset= 1,
-                      #Radiobuttons to select what to download data table as: tab separated or comma seperated
-                      radioButtons(inputId = "downloadType", label = "Download Type:",
-                                   choices= c("tsv", "csv"), selected = "tsv" ),
-                      #Output download button
-                      downloadButton(outputId = "downloadData", label = "Download")),
-              #Create mainpanel where dataTable is displayed
-              column(
-                DT::dataTableOutput(outputId = "proTable"), width = 12)))
-    ,
+    # Source main data tab and query heatmap
+    source("shiny/UI/queryDataUI.R")$value,
+
+
 
     #lineagePlots contains a heatmap, datatable, and upset plot
     ### Load Lineage Tab ###
@@ -145,13 +128,13 @@ body <- dashboardBody(
                        tabsetPanel(
                          id= 'DALin_data',
                          tabPanel("Heatmap", value = "Heatmap",
-                                  plotOutput(outputId = "DALinPlot", height = '500px' )),
+                                  plotOutput(outputId = "DALinPlot", height = '600px' )),
                          tabPanel("Table", value = "LinTable",
                                   DT::dataTableOutput(outputId = "DALinTable"),
                                   column(downloadButton(outputId = "DAdownloadCounts", label = "Download"),radioButtons(inputId = "DAcountDownloadType", label = "Download Type:",
                                                                                                                         choices= c("tsv", "csv"), selected = "tsv" ),width = 10)),
                          tabPanel("Upset Plot", value = "Upset",
-                                  plotOutput(outputId = "DAUpsetP")),
+                                  plotOutput(outputId = "DAUpsetP", height = '600px')),
 
                          tabPanel("Network",
                                   value = "Network_WC",
@@ -198,13 +181,13 @@ body <- dashboardBody(
                        tabsetPanel(
                          id= 'GCLin_data',
                          tabPanel("Heatmap", value = "Heatmap",
-                                  plotOutput(outputId = "GCLinPlot", height = '500px' )),
+                                  plotOutput(outputId = "GCLinPlot", height = '600px' )),
                          tabPanel("Table", value = "LinTable",
                                   DT::dataTableOutput(outputId = "GCLinTable"),
                                   column(downloadButton(outputId = "GCDownloadCounts", label = "Download"),radioButtons(inputId = "GCcountDownloadType", label = "Download Type:",
                                                                                                                         choices= c("tsv", "csv"), selected = "tsv" ),width = 10)),
                          tabPanel("Upset Plot", value = "Upset",
-                                  plotOutput(outputId = "GCUpsetP")),
+                                  plotOutput(outputId = "GCUpsetP", height = '600px')),
                          tabPanel("WordCloud", value = "Network_WC",
                                   fluidRow(
                                     # box(width = 12,
@@ -295,13 +278,20 @@ server <- function(input, output,session){
     req(credentials()$user_auth)
     ##### Can use select here to determine what columns shown
     paged_table(pspTable() )}, extensions = c('FixedColumns',"FixedHeader"),
-    options = list(pageLength = 10,
+    options = list(pageLength = 100,
                    #The below line seems to disable other pages and the search bar
                    #dom = 't',
                    scrollX = TRUE,
                    paging=TRUE,
                    fixedHeader=TRUE,
                    fixedColumns = list(leftColumns = 2, rightColumns = 0)))
+
+  #### Query Heatmap ####
+  output$queryHeatmap <- renderPlot({
+    req(credentials()$user_auth)
+    lineage.Query.plot(query_data = all, queries = queries, colname = "DomArch", cutoff = 100)
+  })
+
 
 
   #### Reactive expression determining data for which plotting is based. Controlled by dropdown
@@ -352,35 +342,28 @@ server <- function(input, output,session){
 
 
   DA_cutoff_val <- reactive({
-      if(cutoff_status() == "Percent")
+    if(cutoff_status() == "Percent")
+    {
+      ## Percent cutoff, no need for conversion
+      input$DA_Cutoff
+    }
+    else
+    {
+      # Cutoff type is Row, convert it to the percentage
+      if(input$DALin_data == "Heatmap")
       {
-        ## Percent cutoff, no need for conversion
-          input$DA_Cutoff
+
+        rownumber_to_cutoff(plotting_prot(),input$DA_Cutoff, col = "DomArch")
       }
+
       else
       {
-        # Cutoff type is Row, convert it to the percentage
-        if(input$DALin_data == "Heatmap")
-        {
-          if(input$DAlinSelec == "All")
-          {
-            # Add .001 to accomodate rounding that may have occured
-            100 - query_DA_row_CutoffPercs$maxPercent[input$DA_Cutoff]+.001
-
-          }
-          else{
-            rownumber_to_cutoff(plotting_prot(),input$DA_Cutoff, col = "DomArch")
-          }
-        }
-
-        else
-        {
-          #### Do some other row cutoff based on the words
-          #input$DA_Cutoff
-          100-max_word_percents(plotting_prot(), "DomArch")[input$DA_Cutoff, 'MaxPercent']
-        }
-
+        #### Do some other row cutoff based on the words
+        #input$DA_Cutoff
+        100-max_word_percents(plotting_prot(), "DomArch")[input$DA_Cutoff, 'MaxPercent']
       }
+
+    }
   })
 
   GC_cutoff_val <- reactive({
@@ -445,13 +428,9 @@ server <- function(input, output,session){
       if(input$DALin_data == "Heatmap")
       {
         # Current tab is Heatmap
-        if(input$DAlinSelec == "All"){
-          length(queries)
-        }
-        else
-        {
+
         RowNums(plotting_prot(), column = "DomArch")
-        }
+
       }
       else
       {
@@ -533,22 +512,14 @@ server <- function(input, output,session){
 
   output$DALinPlot <- renderPlot({
     req(credentials()$user_auth)
-    if(input$DAlinSelec != "All"){
-      lineage.DA.plot(plotting_prot(), colname = "DomArch", cutoff = DA_cutoff_val(), RowsCutoff = rows_cutoff())
-    }
-    else{
-      lineage.Query.plot(plotting_prot(), queries = queries, colname = "DomArch", cutoff = DA_cutoff_val())
-    }
+    lineage.DA.plot(plotting_prot(), colname = "DomArch", cutoff = DA_cutoff_val(), RowsCutoff = rows_cutoff())
+
   })
 
   output$GCLinPlot <- renderPlot({
     req(credentials()$user_auth)
-    if(input$GClinSelec != "All"){
-      lineage.DA.plot(plotting_prot(), colname = "GenContext", cutoff = GC_cutoff_val(), RowsCutoff = rows_cutoff())
-    }
-    else{
-      lineage.Query.plot(plotting_prot(), queries = queries, colname = "GenContext", cutoff = GC_cutoff_val())
-    }
+    lineage.DA.plot(plotting_prot(), colname = "GenContext", cutoff = GC_cutoff_val(), RowsCutoff = rows_cutoff())
+
   })
 
 
@@ -760,7 +731,7 @@ server <- function(input, output,session){
            "LiaI-LiaF-TM" = liai_liaf,
            "Toast-rack" = toast_rack,
            "Tfu-1009" = tfu_1009
-           )
+    )
   })
 
   observe({
@@ -819,16 +790,15 @@ server <- function(input, output,session){
 
   #### Sunburst ####
 
-  output$sunburst <- renderSund2b({
+  output$sund2b <- renderSund2b({
     req(credentials()$user_auth)
-    lineage_sunburst(pspa, lineage_column = "Lineage")
+    lineage_sunburst(pspa, lineage_column = "Lineage", type = "sund2b")
   })
 
-  # output$sunburstNotice <- renderText(
-  #   {
-  #     "Note: the sunburst plot shown is for PspA and currently does not change with the dropdown"
-  #   })
-
+  output$sunburst <- renderSunburst({
+    req(credentials()$user_auth)
+    lineage_sunburst(pspa, lineage_column = "Lineage", type = "sunburst")
+  })
 
 
   output$msaPlot <- renderUI({
