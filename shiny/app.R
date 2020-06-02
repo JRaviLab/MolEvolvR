@@ -491,6 +491,13 @@ server <- function(input, output,session){
     updateSliderInput(session, label = label_val, inputId = "DA_Cutoff",min=1, max= max_val, value=cutoff_init)
   })
 
+  #Observer used to determine initial linplot slider whenever protein changes for GC
+  observe({
+    init_val = top_n_rows_cutoff(plotting_prot(), "GenContext", 10)
+    updateSliderInput(session, "Percent Cutoff", inputId = "GC_Cutoff", min = 1, max = 100, value = init_val)
+  })
+
+
 
   # ### Observe when the CutoffSwitch is pressed, and toggle the text and set to the correct status
   observeEvent(input$DACutoffSwitch,
