@@ -290,9 +290,9 @@ lineage.Query.plot <- function(query_data=all,
     scale_x_discrete(position="top") +
     theme_minimal() +
     theme(axis.text.x=element_text(angle=65,hjust=0,vjust=0.5))
-    # scale_y_discrete(position = "bottom") +
-    # scale_x_discrete(position = "bottom") +
-    # coord_flip()
+  # scale_y_discrete(position = "bottom") +
+  # scale_x_discrete(position = "bottom") +
+  # coord_flip()
 }
 
 
@@ -461,7 +461,7 @@ wordcloud_element <- function(query_data="prot",
 
   words.tc <- query_data %>% elements2words(column = colname,
                                             conversion_type = type) %>%
-                words2wc()
+    words2wc()
 
   # names(words.tc) <- c("words", "freq")
 
@@ -481,12 +481,14 @@ wordcloud_element <- function(query_data="prot",
 
 
 #### Sunburst #####
-lineage_sunburst <- function(prot, lineage_column = "Lineage")
+lineage_sunburst <- function(prot, lineage_column = "Lineage", type = "sunburst")
 {
   #'
   #'
   #'@param prot Data frame containing a lineage column that the sunburst plot will be generated for
   #'@param lineage_column String. Name of the lineage column within the data frame. Defaults to "Lineage"
+  #'@param type String, either "sunburst" or "sund2b". If type is "sunburst", a sunburst plot of the lineage
+  #'will be rendered. If the type is sund2b, a sund2b plot will be rendered.
 
 
   lin_col <- sym(lineage_column)
@@ -500,8 +502,14 @@ lineage_sunburst <- function(prot, lineage_column = "Lineage")
   tree <- d3_nest(protLevels, value_cols = "size")
 
   # Plot sunburst
-  # sunburst(tree)
-  sund2b(tree)
+  if(type == "sunburst")
+  {
+    sunburst(tree)
+  }
+  else if(type == "sund2b")
+  {
+    sund2b(tree)
+  }
 }
 
 
