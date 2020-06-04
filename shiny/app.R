@@ -58,10 +58,10 @@ sidebar<- dashboardSidebar(
   width = 180,
 
   sidebarMenu(id = "mainTabs",
-              menuItem("Data Table", tabName = "datatable"),
+              menuItem("Data/Query", tabName = "datatable"),
               #menuItem("Lineage Plots", tabName = "lineagePlots"),
               menuItem("Domain Architecture", tabName = "domainArchitecture"),
-              menuItem("Genomic Contect", tabName = "genomicContext"),
+              menuItem("Genomic Context", tabName = "genomicContext"),
               menuItem("Phylogeny", tabName = "phylogeny"),
               #menuItem("Usage", tabName="usage"),
               menuItem("About",tabName="about")
@@ -83,7 +83,7 @@ body <- dashboardBody(
   uiOutput("testUI"),
   tabItems(
     # Source main data tab and query heatmap
-    source("shiny/UI/queryDataUI.R")$value,
+    source("shiny/ui/queryDataUI.R")$value,
 
 
 
@@ -543,54 +543,136 @@ server <- function(input, output,session){
   #   }
   # }, height = "auto")
 
+  ##   #   ###    #    ##
+  # Total Counts for DA #
+  ##   #   ###    #    ##
+  DA_TotalCounts <- reactive({
+    prot_tc <- total_counts(plotting_prot(), cutoff = DA_cutoff_val(), column = "DomArch")
+    prot_tc$Lineage = map(prot_tc$Lineage, function(x) str_replace_all(string = x,pattern = ">", replacement = "_")) %>%
+      unlist()
+    prot_tc
+  })
+
+
+
   ####
   ##### Render the datatable for the lineage counts #####
   ####
+  DAlin_count_table <- reactive({
+    DA_TotalCounts() %>% group_by(DomArch, totalcount, CumulativePercent) %>%
+      summarize(LineageCount = n()) %>%
+      select(DomArch, LineageCount, totalcount, CumulativePercent) %>%
+      arrange(-totalcount)
+  })
   output$DALinTable <- DT::renderDT({
     req(credentials()$user_auth)
     paged_table(
-      total_counts(plotting_prot(), cutoff = DA_cutoff_val(),column = "DomArch")
+      {
+        DAlin_count_table()
+      }
     )
   },
-  extensions = c('FixedColumns',"FixedHeader"),
-  options = list(pageLength = 15,
-                 scrollX = TRUE,
+  selection = 'single',
+  extensions = c("FixedHeader"),
+  options = list(pageLength = 25,
+                scrollX = F,
                  paging=TRUE,
                  fixedHeader=TRUE,
-                 fixedColumns = list(leftColumns = 2, rightColumns = 0)))
+                 fixedColumns = list(leftColumns = 0, rightColumns = 0)
+                 ))
 
+  ## Dialog box that appears when a row is selected
+  observeEvent(input$DALinTable_rows_selected, {
+    selected_DA = DAlin_count_table()$DomArch[input$DALinTable_rows_selected]
+    showModal(modalDialog(
+      title = paste("Lineages Of:", selected_DA),
+      DT::renderDT({
+        # regexDAs = paste0( DAlin_count_table()$DomArch[input$DALinTable_rows_selected],collapse = "$|^") %>%
+        #   str_replace_all(pattern = "\\+", replacement = "\\\\+") %>%
+        #   str_replace_all(pattern = "\\(", replacement = "\\\\(") %>%
+        #   str_replace_all(pattern = "\\)", replacement = "\\\\)") %>%
+        #   unlist()
+        # regexDAs = paste0("^", regexDAs, "$")
+
+        DA_TotalCounts() %>% select(DomArch, Lineage, count) %>% arrange(-count) %>%
+                          filter(DomArch == selected_DA)
+          #filter(grepl(regexDAs, DomArch))
+      },
+      options = list(pageLength = 15,
+                     scrollX = F,
+                     paging=TRUE,
+                     fixedHeader=TRUE,
+                     fixedColumns = list(leftColumns = 0, rightColumns = 0))
+      ),
+      size = "l",
+      footer = modalButton(label = "Close"),
+      easyClose = T
+
+    ))
+  })
+
+
+
+
+  ##   #   ###    #    ##
+  # Total Counts for GC #
+  ##   #   ###    #    ##
+  GC_TotalCounts <- reactive({
+    prot_tc <- total_counts(plotting_prot(), cutoff = GC_cutoff_val(), column = "GenContext")
+    prot_tc$Lineage = map(prot_tc$Lineage, function(x) str_replace_all(string = x,pattern = ">", replacement = "_")) %>%
+      unlist()
+    prot_tc
+  })
+
+
+
+  ####
+  ##### Render the datatable for the lineage counts #####
+  ####
+  GClin_count_table <- reactive({
+    GC_TotalCounts() %>% group_by(GenContext, totalcount, CumulativePercent) %>%
+      summarize(LineageCount = n()) %>%
+      select(GenContext, LineageCount, totalcount, CumulativePercent) %>%
+      arrange(-totalcount)
+  })
   output$GCLinTable <- DT::renderDT({
     req(credentials()$user_auth)
     paged_table(
-      total_counts(plotting_prot(), cutoff = GC_cutoff_val(), column = "GenContext")
+      {
+        GClin_count_table()
+      }
     )
-
   },
-  extensions = c('FixedColumns',"FixedHeader"),
-  options = list(pageLength = 15,
-                 scrollX = TRUE,
+  selection = 'single',
+  extensions = c("FixedHeader"),
+  options = list(pageLength = 25,
+                 scrollX = F,
                  paging=TRUE,
                  fixedHeader=TRUE,
-                 fixedColumns = list(leftColumns = 2, rightColumns = 0)))
+                 fixedColumns = list(leftColumns = 0, rightColumns = 0)
+  ))
 
+  ## Dialog box that appears when a row is selected
+  observeEvent(input$GCLinTable_rows_selected, {
+    selected_GC = GClin_count_table()$GenContext[input$GCLinTable_rows_selected]
+    showModal(modalDialog(
+      title = paste("Lineages Of:", selected_GC),
+      DT::renderDT({
+        GC_TotalCounts() %>% select(GenContext, Lineage, count) %>% arrange(-count) %>%
+          filter(GenContext == selected_GC)
+      },
+      options = list(pageLength = 15,
+                     scrollX = F,
+                     paging=TRUE,
+                     fixedHeader=TRUE,
+                     fixedColumns = list(leftColumns = 0, rightColumns = 0))
+      ),
+      size = "l",
+      footer = modalButton(label = "Close"),
+      easyClose = T
 
-  # output$LinTable <- DT::renderDT({
-  #   req(credentials()$user_auth)
-  #   paged_table(
-  #     if(input$DA_GC == "Domain Architecture"){
-  #       total_counts(plotting_prot(), cutoff = cutoff_val(), column = "DomArch", RowsCutoff = rows_cutoff()) # %>% arrange(CumulativePercent)
-  #     }
-  #     else{
-  #       total_counts(plotting_prot(), cutoff = cutoff_val(), column = "GenContext", RowsCutoff = rows_cutoff()) # %>% arrange(CumulativePercent)
-  #     }
-  #   )
-  # }, extensions = c('FixedColumns',"FixedHeader"),
-  # options = list(pageLength = 15,
-  #                scrollX = TRUE,
-  #                paging=TRUE,
-  #                fixedHeader=TRUE,
-  #                fixedColumns = list(leftColumns = 2, rightColumns = 0)))
-
+    ))
+  })
 
 
   #### Upset Plots ####
@@ -603,18 +685,6 @@ server <- function(input, output,session){
     req(credentials()$user_auth)
     upset.plot(plotting_prot(), cutoff = GC_cutoff_val(), colname = "GenContext", RowsCutoff = rows_cutoff())
   })
-
-  #   output$upsetP <- renderPlot({
-  #     req(credentials()$user_auth)
-  #     selected <- input$linSelec
-  #     DA_or_GC <- input$DA_GC
-  #     if(DA_or_GC == "Domain Architecture"){
-  #       upset.plot(plotting_prot(), cutoff = cutoff_val(), colname = "DomArch", RowsCutoff = rows_cutoff())
-  #     }
-  #     else{
-  #       upset.plot(plotting_prot(), cutoff = cutoff_val(), colname = "GenContext", RowsCutoff = rows_cutoff())
-  #     }
-  #   }, height = 550)
 
 
   #### Reactive expression determining domain of interest for plotting domain networks
@@ -673,17 +743,6 @@ server <- function(input, output,session){
   #     wordcloud_element(query_data = plotting_prot(), colname = "DomArch", cutoff = cutoff_val())
   #   }
   # })
-
-  # output$wordcloud <- renderPlot({
-  #   req(credentials()$user_auth)
-  #   if(input$DA_GC == "Genomic Context"){
-  #     wordcloud_element(query_data = plotting_prot(), colname = "GenContext", cutoff = cutoff_val())
-  #   }
-  #   else{
-  #     wordcloud_element(query_data = plotting_prot(), colname = "DomArch", cutoff = cutoff_val())
-  #   }
-  # })
-
 
   #### Legends ####
 
@@ -762,7 +821,7 @@ server <- function(input, output,session){
                   "PspN",
                   "LiaI-LiaF-TM",
                   "Toast-rack"
-                  )
+      )
       selected = "PspA-Snf7"
     }
     updateSelectInput(session, inputId = "alignSelec",
