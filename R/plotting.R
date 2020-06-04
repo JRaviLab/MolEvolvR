@@ -170,16 +170,22 @@ lineage.DA.plot <- function(query_data="prot",
 
   query.summ.byLin <- query_data %>% total_counts(cutoff = cutoff, column = colname, RowsCutoff = RowsCutoff)
 
+  query.summ.byLin$Lineage <- map(query.summ.byLin$Lineage, function(x) str_replace_all(string = x,pattern = ">", replacement = "_")) %>%
+    unlist()
+
   query_data <- query_data %>% filter(grepl("a", Lineage))
 
-  query.summ.byLin.ggplot <- drop_na(query.summ.byLin) %>%
-    filter(count>1) %>%  # count or total count?
-    within(Lineage <- factor(Lineage,
-                             levels=names(sort(table(Lineage),
-                                               decreasing=TRUE)))) %>%
-    within(colname <- factor(colname,
-                             levels=names(sort(table(colname),
-                                               decreasing=F))))
+  column <- sym(colname)
+
+  query.summ.byLin.ggplot <-  drop_na(query.summ.byLin) %>%
+                                filter(count>1) %>%# count or total count?
+                                arrange(totalcount)
+  query.summ.byLin.ggplot[,colname] <- factor(pull(query.summ.byLin.ggplot, {{column}}) ,
+                                            levels = (pull(query.summ.byLin.ggplot, {{column}}) %>% unique()))
+
+  query.summ.byLin.ggplot$Lineage <- factor(query.summ.byLin.ggplot$Lineage,
+                                            levels = names(sort(table(query.summ.byLin.ggplot$Lineage),decreasing=TRUE)))
+
   ## Tile plot
   ggplot(data=query.summ.byLin.ggplot,
          aes_string(x="Lineage", y=colname)) +
@@ -250,26 +256,8 @@ lineage.Query.plot <- function(query_data=all,
     query_lin_counts <- dplyr::union(query_lin_counts, query_lin)
   }
 
-  # # Total counts of each lineage
-  # lin_count_totals <- query_lin_counts %>%group_by(Lineage) %>% summarize(total_c = sum(count)) %>% arrange(total_c)
-  # sum_lin <- sum(lin_count_totals$total_c)
-  #
-  # # Calculate the percent each lineage makes up
-  # lin_count_totals$IndividualPercentage = lin_count_totals$total_c/sum_lin * 100
-  # lin_count_totals <- lin_count_totals %>% mutate("CumulativePercent"=0)
-  # total_counter = 0
-  # for(x in 1:length(lin_count_totals$IndividualPercentage)){
-  #   total_counter = total_counter + lin_count_totals$IndividualPercentage[x]
-  #   lin_count_totals$CumulativePercent[x] = total_counter
-  # }
-  #
-  # # Get lineages that are above the cutoff percentage value
-  # count_cutoff <- (lin_count_totals %>% filter(CumulativePercent >= (100-cutoff)))
-  #
-  # lins_above_cutoff <- (lin_count_totals %>% filter(total_c >= count_cutoff$total_c[1]))$Lineage
-  #
-  # # Query lin counts now contains only the data that have lineages that are above cutoff
-  # query_lin_counts <- query_lin_counts %>% filter(Lineage %in% lins_above_cutoff)
+  query_lin_counts$Lineage <- map(query_lin_counts$Lineage, function(x) str_replace_all(string = x,pattern = ">", replacement = "_")) %>%
+    unlist()
 
   query.summ.byLin.ggplot <- drop_na(query_lin_counts) %>%
     filter(count>1) %>%  # count or total count?
