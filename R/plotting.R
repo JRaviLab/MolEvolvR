@@ -103,8 +103,17 @@ upset.plot <- function(query_data="toast_rack.sub",
     j <- str_replace_all(string=j, pattern="\\)", replacement="\\\\)")
     j <- str_replace_all(string=j, pattern="\\+", replacement="\\\\+")
     j <- str_replace_all(string=j, pattern="\\_", replacement="\\\\_")
-    query_data[[i]] <- if_else(grepl(j, as.matrix(query_data[,colname])),
-                               true=1, false=0)
+
+    j <- paste0(j,"(?!\\()")
+
+    # Grep doesn't work with string+negative lookahead?
+    # Use str_detect instead
+    # query_data[[i]] <- if_else(grepl(j, as.matrix(query_data[,colname])),
+    #                            true=1, false=0)
+
+    query_data[[i]] <- if_else(str_detect(string = as.matrix(query_data[,"DomArch"]), pattern = j),
+                         true=1, false=0)
+
   }
   ## Creating UpSet data
   upset <- query_data %>%
