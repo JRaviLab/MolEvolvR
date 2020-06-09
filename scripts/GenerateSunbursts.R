@@ -1,6 +1,14 @@
 source("plotting.R")
 
-par(mfrow=c(4,2))
+# all requires columns Lineage and Domarch/Clustname
+all <- read_tsv("data/rawdata_tsv/all_semiclean.txt")
+
+colnames(all)[which(colnames(all) == "DomArch")] = "DomArch.ind"
+colnames(all)[which(colnames(all) == "DomArch.orig")] = "DomArch.ind.orig"
+
+colnames(all)[which(colnames(all) == "ClustName")] = "DomArch"
+
+all <- all %>% select(DomArch, Lineage)
 
 prot_all <- all
 
@@ -16,16 +24,6 @@ prot_all$Lineage = unlist(map(prot_all$Lineage, function(x){
   }
 } ))
 
-#lin_counts <- prot_all %>% group_by(Lineage) %>% summarise(count = n()) %>% arrange(-count)
-
-# # Take lineage column and break into the first to levels
-# prot_all <- prot_all %>% select(Lineage)
-# protLevels <- prot_all %>% separate(Lineage, into = c("Level1","Level2"), sep = ">")
-# # Count the occurrance of each group of levels
-# protLevels = protLevels %>% group_by_at(levels_vec) %>% summarise(size = n())
-#
-# tree <- d3_nest(protLevels, value_cols = "size")
-
 
 df <- prot_all
 
@@ -35,14 +33,17 @@ legend_items <- unique(unlist(strsplit(df$Lineage, ">")))
 
 cols <- sample(colorRampPalette(brewer.pal(12, 'Set3'))(length(legend_items)))
 
-queries = c("PspA", "Snf7", "Psp-AA", "PspB","PspC",  "PspN", "LiaI-LiaF-TM", "Toast-rack")
+queries = c("PspA", "Snf7", "PspB","PspC", "PspM",  "PspN", "LiaI-LiaF-TM", "Toast-rack")
+
+# df$Lineage <- str_replace_all(df$Lineage, "-", "_")
+#
+# df$relationship <- str_replace_all(df$Lineage, ">", "-")
 
 # plot each lineage
 plt_fun <- function(query){
   # filter for dt
   plt_df <- df %>%
-    filter(grepl(query, DomArch, ignore.case = T)) %>%
-    select(-DomArch)
+    filter(grepl(query, DomArch, ignore.case = T))
 
   # Take lineage column and break into the first to levels
   prot <- plt_df %>% select(Lineage)
@@ -52,7 +53,7 @@ plt_fun <- function(query){
 
   tree <- d3_nest(protLevels, value_cols = "size")
 
-  sunburst(
+  sb <- sunburst(
     tree,
     #  colors can now also accept a list
     #   specifying range and/or domain of the color scale
@@ -60,17 +61,22 @@ plt_fun <- function(query){
       range=cols,
       domain=legend_items
     ),
-    legendOrder=legend_items,
+    #legendOrder=legend_items, ##### Plotting with legendOrder screws things up
+    legend = F,
     width="100%"
   )
+
+  sb <- htmlwidgets::prependContent(sb, htmltools::h3(query))
+  sb
+
 }
 
 
 library(htmltools)
-browsable(
+sb_plots <- browsable(
   tagList(
     lapply(
-      1:2,
+      1:length(queries),
       function(n){
         tags$div(
           style="width:48%; float:left;",
@@ -82,9 +88,39 @@ browsable(
 )
 
 
+sb_plots
 
-all_sun <- lineage_sunburst(all)
+#### Save as png and html ####
 
-pspa_sun <- lineage_sunburst(pspa, "Lineage", "sunburst", 2, legendOrder = legend_order)
+# install.packages("webshot")
+library(webshot)
 
-pspb_sun <- lineage_sunburst(pspb, "Lineage", "sunburst", 2)
+save_html(sb_plots, "sunburst_queries.html")
+
+webshot("sunburst_queries.html", "sunburst_queries.png")
+        #vwidth = 480, vheight = 900)
+
+
+
+##### Get Legend #####
+
+# Take lineage column and break into the first to levels
+prot <- df %>% select(Lineage)
+protLevels <- prot %>% separate(Lineage, into = levels_vec, sep = ">")
+# Count the occurrance of each group of levels
+protLevels = protLevels %>% group_by_at(levels_vec) %>% summarise(size = n())
+
+tree <- d3_nest(protLevels, value_cols = "size")
+
+sunburst(
+  tree,
+  #  colors can now also accept a list
+  #   specifying range and/or domain of the color scale
+  colors = list(
+    range=cols,
+    domain=legend_items
+  ),
+  #legendOrder=legend_items,
+  legend = list(w = 150, h = 15, r = 3, s = 3), ##### Plotting with legend screws things up
+  width="100%"
+)
