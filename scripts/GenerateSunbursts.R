@@ -59,6 +59,21 @@ cols <- sample(colorRampPalette(brewer.pal(12, 'Paired'))(length(legend_items)))
 
 queries = c("PspA", "Snf7", "PspB","PspC", "PspM",  "PspN", "LiaI-LiaF-TM", "Toast-rack")
 
+# cols %>% paste0(collapse = "','")
+
+## Current Colors
+cols = c('F48829','#E42622','#7F9D55','#B294C7','#D49B84',
+  '#8963AD','#F6F399','#A3D77F','#AA9C6C','#6CA9CF',
+  '#E62B2C','#89BBD9','#D29F57','#88CA6B','#754AA0',
+  '#3385BB','#E2C26F','#A6CEE3','#F06161','#F58F57',
+  '#EA4933','#977899','#D6CA99','#B15928','#F57C7C',
+  '#5097C5','#37A22F','#E99356','#F3E587','#52AF43',
+  '#A3D58E','#4693A8','#FDB660','#277DB1','#C6ADD3',
+  '#D3A9B0','#65A99F','#84BF96','#FDA848','#FA9796',
+  '#DE9E83','#784F99','#F06C45','#EB4647','#C17C3F',
+  '#FE9B31','#FE8D19','#9D7BBA','#B7A199','#559E3E',
+  '#FE8002','#6DBD57','#FBB268')
+
 # df$Lineage <- str_replace_all(df$Lineage, "-", "_")
 #
 # df$relationship <- str_replace_all(df$Lineage, ">", "-")
@@ -120,9 +135,10 @@ sb_plots
 # install.packages("webshot")
 library(webshot)
 
-save_html(sb_plots, "sunburst_queries.html")
+save_html(sb_plots, "sunburst_queries.html", libdir = "data/figures/")
 
-webshot("sunburst_queries.html", "sunburst_queries.png")
+webshot("sunburst_queries.html", "data/figures/sunburst_queries.png"
+        , zoom = 10) # zoom increases dpi
         #vwidth = 480, vheight = 900)
 
 
@@ -137,8 +153,9 @@ protLevels = protLevels %>% group_by_at(levels_vec) %>% summarise(size = n())
 
 tree <- d3_nest(protLevels, value_cols = "size")
 
-sunburst(
+sun <- sunburst(
   tree,
+  withD3 = T,
   #  colors can now also accept a list
   #   specifying range and/or domain of the color scale
   colors = list(
@@ -149,5 +166,16 @@ sunburst(
   legend = list(w = 150, h = 15, r = 3, s = 3), ##### Plotting with legend screws things up
   width="100%"
 )
+
+## Change font to Helvetica
+htmlwidgets::onRender(
+  sun,
+  "
+    function(el, x) {
+    d3.selectAll('.sunburst-legend text').attr('font-family', 'Helvetica');
+    }
+    "
+)
+
 
 ## At this point, I just took a snip of the legend
