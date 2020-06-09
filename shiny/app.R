@@ -18,7 +18,7 @@ setwd("..")
 source("shiny/PSP_Web_Data.R")
 source("R/plotting.R")
 source("R/network.R")
-source("R/GC_network_directed.R")
+# source("R/GC_network_directed.R")
 #source("R/cleanup.R")
 #source("R/reverse_operons.R")
 source("shiny/shinyfunctions.R")
@@ -33,196 +33,50 @@ user_base <- data.frame(
   password = c("cpathogeno2019"),
   permissions = c("admin"),
   name = c("User One"),
-  stringsAsFactors = FALSE
+  stringsAsFactors = FALSE,
+  row.names = NULL
 )
 
-###
-#### Header ####
-###
-header <- dashboardHeader(title = "PSP Data",
-                          ### Github Icon in header
-                          tags$li(
-                            a(href = "https://github.com/jananiravi/psp-evolution",
-                              icon("github-square",
-                                   "fa-2x",
-                                   lib = "font-awesome")
-                            ),
-                            class = "dropdown"
-                          )
-)
-
-###
-#### Sidebar ####
-###
-sidebar<- dashboardSidebar(
-  width = 180,
-
-  sidebarMenu(id = "mainTabs",
-              menuItem("Data/Query", tabName = "datatable"),
-              #menuItem("Lineage Plots", tabName = "lineagePlots"),
-              menuItem("Domain Architecture", tabName = "domainArchitecture"),
-              menuItem("Genomic Context", tabName = "genomicContext"),
-              menuItem("Phylogeny", tabName = "phylogeny"),
-              #menuItem("Usage", tabName="usage"),
-              menuItem("About",tabName="about")
-  )
-)
-
-####
-#### Body ####
-####
-body <- dashboardBody(
-  # must turn shinyjs on
-  shinyjs::useShinyjs(),
-  # add logout button UI
-  div(class = "pull-right", shinyauthr::logoutUI(id = "logout")),
-  # add login panel UI function
-  shinyauthr::loginUI(id = "login"),
-
-  uiOutput("user_table"),
-  uiOutput("testUI"),
-  tabItems(
-    # Source main data tab and query heatmap
-    source("shiny/ui/queryDataUI.R")$value,
 
 
-
-    #lineagePlots contains a heatmap, datatable, and upset plot
-    ### Load Lineage Tab ###
-    # source("shiny/ui/lineagePlots.R")$value,
-
-    ### Load Domain Architecture Tab ###
-    tabItem(tabName = "domainArchitecture",
-            fluidRow(
-              column(width = 3, offset = 0,
-                     fluidRow(
-                       sidebarPanel(
-                         width = 12,
-                         #dropdown to select protein for plots
-                         selectInput(inputId =  "DAlinSelec", label = "Protein",
-                                     choices = c("All", "PspA-Snf7", "PspB", "PspC","PspN", "LiaI-LiaF-TM","Toast-rack")
-                                     , selected = "PspA"),
-
-
-                         column(width = 9, offset = 3,
-                                fluidRow(
-                                  actionButton(inputId = "DACutoffSwitch", label = tags$b("Row Cutoff")),
-                                )
-                         ),
-
-                         #Slider input to determine cutoff value for totalcounts
-                         sliderInput(inputId = "DA_Cutoff", label = "Total Count Cutoff:", min = 0, max = 100, value = 95),
-
-
-                         textOutput("DALegend")
-                       )
-                     )
-              )
-              ,
-
-
-              column(width = 9, offset = 0,
-                     #mainpanel dictates what is displayed on screen depending on which tabset panel is selected
-                     mainPanel(
-                       width = 12,
-                       tabsetPanel(
-                         id= 'DALin_data',
-                         tabPanel("Heatmap", value = "Heatmap",
-                                  plotOutput(outputId = "DALinPlot", height = '600px' )),
-                         tabPanel("Table", value = "LinTable",
-                                  DT::dataTableOutput(outputId = "DALinTable"),
-                                  column(downloadButton(outputId = "DAdownloadCounts", label = "Download"),radioButtons(inputId = "DAcountDownloadType", label = "Download Type:",
-                                                                                                                        choices= c("tsv", "csv"), selected = "tsv" ),width = 10)),
-                         tabPanel("Upset Plot", value = "Upset",
-                                  plotOutput(outputId = "DAUpsetP", height = '600px')),
-
-                         tabPanel("Network",
-                                  value = "Network_WC",
-                                  fluidRow(
-                                    box(width = 12,
-                                        plotOutput(outputId = "DANetwork")
-                                    ),
-                                    box(width = 12,
-                                        #plotOutput(outputId = "DAwordcloud")
-                                        wordcloud2Output(outputId = "DAwordcloud")
-                                    )
-                                  )
-
-
-                         )
-
-                       )
-                     )
-              )
-            )
-    ),
-    ### Genomic Context tab
-    tabItem(tabName = "genomicContext",
-            fluidRow(
-              column(width = 3, offset = 0,
-                     fluidRow(
-                       sidebarPanel(
-                         width = 12,
-                         #dropdown to select protein for plots
-                         selectInput(inputId =  "GClinSelec", label = "Protein",
-                                     choices = c("All", "PspA-Snf7", "PspB", "PspC","PspN", "LiaI-LiaF-TM","Toast-rack")
-                                     , selected = "PspA"),
-                         #Slider input to determine cutoff value for totalcounts
-                         sliderInput(inputId = "GC_Cutoff", label = "Total Count Cutoff:", min = 0, max = 100, value = 95),
-                         textOutput("GCLegend")
-                       )
-                     )
-              )
-              ,
-              column(width = 9, offset = 0,
-                     #mainpanel dictates what is displayed on screen depending on which tabset panel is selected
-                     mainPanel(
-                       width = 12,
-                       tabsetPanel(
-                         id= 'GCLin_data',
-                         tabPanel("Heatmap", value = "Heatmap",
-                                  plotOutput(outputId = "GCLinPlot", height = '600px' )),
-                         tabPanel("Table", value = "LinTable",
-                                  DT::dataTableOutput(outputId = "GCLinTable"),
-                                  column(downloadButton(outputId = "GCDownloadCounts", label = "Download"),radioButtons(inputId = "GCcountDownloadType", label = "Download Type:",
-                                                                                                                        choices= c("tsv", "csv"), selected = "tsv" ),width = 10)),
-                         tabPanel("Upset Plot", value = "Upset",
-                                  plotOutput(outputId = "GCUpsetP", height = '600px')),
-                         tabPanel("WordCloud", value = "Network_WC",
-                                  fluidRow(
-                                    # box(width = 12,
-                                    #     plotOutput(outputId = "GCNetwork")
-                                    # ),
-                                    box(width = 12,
-                                        #plotOutput(outputId = "GCwordcloud")
-                                        wordcloud2Output(outputId = "GCwordcloud")
-                                    )
-                                  )
-
-                         )
-                       )
-                     )
-              )
-            )
-    ),
-
-    source("shiny/ui/phylogenyUI.R")$value,
-
-    ### Load About Tab ###
-    source("shiny/ui/aboutUI.R")$value
-  ),
-  HTML('<div data-iframe-height></div>')
-)
 ####
 #### UI ####
 ####
-ui <- dashboardPage(
-  skin = "green",
-  #App title
-  header,
-  #Create Sidebar with inputs and download button output
-  sidebar,
-  body
+ui <- tagList(
+  shinyjs::useShinyjs(),
+  tags$head(includeScript("shiny/logout-button.js")),
+  tags$head(includeScript("shiny/github-button.js")),
+  tags$head(
+    tags$style(HTML("
+                      .innerbox {
+                        /*border: 2px solid black;*/
+                        box-shadow: 2px 2px 3px 3px #ccc;
+                        margin: auto;
+                        padding: 20px;
+                      }
+
+                      .bord {
+                        margin: auto;
+                        padding: 20px;
+                      }
+                      "))
+  ),
+  navbarPage(
+    # must turn shinyjs on
+    title = "PSP",
+    id = "pspMenu",
+    inverse = TRUE,
+    selected = "datatable",
+    #App title
+    # header,
+    #body
+    source("shiny/ui/queryDataUI.R")$value,
+    source("shiny/ui/domainArchitectureUI.R")$value,
+    source("shiny/ui/genomicContextUI.R")$value,
+    source("shiny/ui/phylogenyUI.R")$value,
+    source("shiny/ui/aboutUI.R")$value
+
+  )
 )
 
 ####
@@ -245,14 +99,11 @@ server <- function(input, output,session){
   # pulls out the user information returned from login module
   user_data <- reactive({credentials()$info})
 
-  observe({
-    if(credentials()$user_auth) {
-      shinyjs::removeClass(selector = "body", class = "sidebar-collapse")
-    } else {
-      shinyjs::addClass(selector = "body", class = "sidebar-collapse")
-    }
+  output$user_table <- renderTable({
+    # use req to only render results when credentials()$user_auth is TRUE
+    req(credentials()$user_auth)
+    user_data()
   })
-
 
   #Reactive expression used to determine which data table should be displayed
   #based on selected input
@@ -276,15 +127,16 @@ server <- function(input, output,session){
   #Render the Data table for selected protein
   output$proTable <- DT::renderDT({
     req(credentials()$user_auth)
-    ##### Can use select here to determine what columns shown
-    paged_table(pspTable() )}, extensions = c('FixedColumns',"FixedHeader"),
-    options = list(pageLength = 100,
-                   #The below line seems to disable other pages and the search bar
-                   #dom = 't',
-                   scrollX = TRUE,
-                   paging=TRUE,
-                   fixedHeader=TRUE,
-                   fixedColumns = list(leftColumns = 2, rightColumns = 0)))
+      d = DT::datatable(
+        paged_table(pspTable() ), extensions = c('FixedColumns',"FixedHeader"),
+        options = list(pageLength = 100,
+                       #The below line seems to disable other pages and the search bar
+                       #dom = 't',
+                       scrollX = TRUE,
+                       paging=TRUE,
+                       fixedHeader= TRUE,
+                       fixedColumns = list(leftColumns = 2, rightColumns = 0)))
+  })
 
   #### Query Heatmap ####
   output$queryHeatmap <- renderPlot({
@@ -296,7 +148,7 @@ server <- function(input, output,session){
 
   #### Reactive expression determining data for which plotting is based. Controlled by dropdown
   plotting_prot <-  reactive({
-    if(input$mainTabs == "domainArchitecture"){
+    if(input$pspMenu == "domainArchitecture"){
       switch(input$DAlinSelec,
              "All" = all,
              "DUF1700" = DUF1700,
@@ -330,15 +182,15 @@ server <- function(input, output,session){
     }
   })
 
-  # prot_word_percents <- reactive({
-  #   if(input$mainTabs == "domainArchitecture"){
-  #     #### Should these be on DomArch.repeats for Network?
-  #     max_word_percents(plotting_prot(), "DomArch")
-  #   }
-  #   # else if(input$mainTabs == "genomicContext"){
-  #   #   max_word_percents(plotting_prot(), "GenContext")
-  #   # }
-  # })
+  prot_word_percents <- reactive({
+    if(input$pspMenu == "domainArchitecture"){
+      #### Should these be on DomArch.repeats for Network?
+      max_word_percents(plotting_prot(), "DomArch")
+    }
+    # else if(input$mainTabs == "genomicContext"){
+    #   max_word_percents(plotting_prot(), "GenContext")
+    # }
+  })
 
 
   DA_cutoff_val <- reactive({
@@ -370,57 +222,57 @@ server <- function(input, output,session){
     input$GC_Cutoff
   })
 
-  # ### Adaptive cutoff value to be used for plotting functions
-  # ### Converts the cutoff slider's value into respective percentage value
-  # ### if the cutoff status is "Row"
-  # cutoff_val <- reactive({
-  #   if(cutoff_status() == "Percent")
-  #   {
-  #     # Cutoff type is Percentage already, so use original slider value
-  #     if(input$mainTabs == "domainArchitecture"){
-  #       input$DA_cutoff
-  #     }
-  #     else if(input$mainTabs == "genomicContext")
-  #     {
-  #       input$GC_Cutoff
-  #     }
-  #   }
-  #   else
-  #   {
-  #     # Cutoff type is Row, convert it to the percentage
-  #     if(input$lin_data == "Heatmap")
-  #     {
-  #       if(input$linSelec == "All")
-  #       {
-  #         if(input$DA_GC== "Domain Architecture"){
-  #           100 - query_DA_row_CutoffPercs$maxPercent[input$cutoff]
-  #         }
-  #         else
-  #         {
-  #           100 - query_GC_row_CutoffPercs$maxPercent[input$cutoff]
-  #         }
-  #       }
-  #       else{
-  #         if(input$DA_GC== "Domain Architecture"){
-  #           column = "DomArch"
-  #           rmAstrk = F
-  #         }
-  #         else
-  #         {
-  #           column = "GenContext"
-  #           rmAstrk = T
-  #         }
-  #         rownumber_to_cutoff(plotting_prot(),input$cutoff, col = column)
-  #       }
-  #     }
-  #
-  #     else
-  #     {
-  #       # Cutoff to percent for upset and wordclouds and network
-  #       100 - prot_word_percents()$MaxPercent[input$cutoff]
-  #     }
-  #   }
-  # })
+  ### Adaptive cutoff value to be used for plotting functions
+  ### Converts the cutoff slider's value into respective percentage value
+  ### if the cutoff status is "Row"
+  cutoff_val <- reactive({
+    if(cutoff_status() == "Percent")
+    {
+      # Cutoff type is Percentage already, so use original slider value
+      if(input$mainTabs == "domainArchitecture"){
+        input$DA_cutoff
+      }
+      else if(input$mainTabs == "genomicContext")
+      {
+        input$GC_Cutoff
+      }
+    }
+    else
+    {
+      # Cutoff type is Row, convert it to the percentage
+      if(input$lin_data == "Heatmap")
+      {
+        if(input$linSelec == "All")
+        {
+          if(input$DA_GC== "Domain Architecture"){
+            100 - query_DA_row_CutoffPercs$maxPercent[input$cutoff]
+          }
+          else
+          {
+            100 - query_GC_row_CutoffPercs$maxPercent[input$cutoff]
+          }
+        }
+        else{
+          if(input$DA_GC== "Domain Architecture"){
+            column = "DomArch"
+            rmAstrk = F
+          }
+          else
+          {
+            column = "GenContext"
+            rmAstrk = T
+          }
+          rownumber_to_cutoff(plotting_prot(),input$cutoff, col = column)
+        }
+      }
+
+      else
+      {
+        # Cutoff to percent for upset and wordclouds and network
+        100 - prot_word_percents()$MaxPercent[input$cutoff]
+      }
+    }
+  })
 
   # #### Total Number of Rows the currently selected protein has
   plotting_prot_maxRows <- reactive(
@@ -523,25 +375,6 @@ server <- function(input, output,session){
   })
 
 
-  # output$LinPlot <- renderPlot({
-  #   req(credentials()$user_auth)
-  #   if(input$DA_GC == "Domain Architecture"){
-  #     if(input$linSelec != "All"){
-  #       lineage.DA.plot(plotting_prot(), colname = "DomArch", cutoff = cutoff_val(), RowsCutoff = rows_cutoff())
-  #     }
-  #     else{
-  #       lineage.Query.plot(plotting_prot(), queries = queries, colname = "DomArch", cutoff = cutoff_val())
-  #     }
-  #   }
-  #   else{
-  #     if(input$linSelec != "All"){
-  #       lineage.DA.plot(plotting_prot(), colname = "GenContext", cutoff = cutoff_val(), RowsCutoff = rows_cutoff())
-  #     }
-  #     else{
-  #       lineage.Query.plot(plotting_prot(), queries = queries, colname = "GenContext", cutoff = cutoff_val())
-  #     }
-  #   }
-  # }, height = "auto")
 
   ##   #   ###    #    ##
   # Total Counts for DA #
@@ -575,11 +408,11 @@ server <- function(input, output,session){
   selection = 'single',
   extensions = c("FixedHeader"),
   options = list(pageLength = 25,
-                scrollX = F,
+                 scrollX = F,
                  paging=TRUE,
                  fixedHeader=TRUE,
                  fixedColumns = list(leftColumns = 0, rightColumns = 0)
-                 ))
+  ))
 
   ## Dialog box that appears when a row is selected
   observeEvent(input$DALinTable_rows_selected, {
@@ -595,8 +428,8 @@ server <- function(input, output,session){
         # regexDAs = paste0("^", regexDAs, "$")
 
         DA_TotalCounts() %>% select(DomArch, Lineage, count) %>% arrange(-count) %>%
-                          filter(DomArch == selected_DA)
-          #filter(grepl(regexDAs, DomArch))
+          filter(DomArch == selected_DA)
+        #filter(grepl(regexDAs, DomArch))
       },
       options = list(pageLength = 15,
                      scrollX = F,
@@ -673,7 +506,6 @@ server <- function(input, output,session){
 
     ))
   })
-
 
   #### Upset Plots ####
   output$DAUpsetP <-renderPlot({
@@ -860,7 +692,7 @@ server <- function(input, output,session){
 
   output$sunburst <- renderSunburst({
     req(credentials()$user_auth)
-    lineage_sunburst(phylogeny_prot(), lineage_column = "Lineage", type = "sunburst")
+    lineage_sunburst(phylogeny_prot(), lineage_column = "Lineage", type = "sunburst", levels = 5)
   })
 
 

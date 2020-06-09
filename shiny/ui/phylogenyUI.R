@@ -1,4 +1,5 @@
-tabItem("phylogeny",
+tabPanel( title = "Phylogeny",
+  value = "phylogeny",
         fluidPage(
           column(width = 2,
                  selectInput(inputId =  "alignSelec", label = "Protein",

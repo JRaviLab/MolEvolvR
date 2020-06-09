@@ -1,7 +1,8 @@
 # Datatable tab contains all protein datatables
-tabItem("datatable",
+tabPanel( title = "Data/Query",
+  value = "datatable",
+  loginUI("login"),
         fluidPage(
-
           tabsetPanel(id = "QueryData",
                       tabPanel("Data Table", value = "mainData",
                                column(width = 2,
