@@ -1,6 +1,6 @@
 source("plotting.R")
 
-# all requires columns Lineage and Domarch/Clustname
+# read in all and clean
 all <- read_tsv("data/rawdata_tsv/all_semiclean.txt")
 
 colnames(all)[which(colnames(all) == "DomArch")] = "DomArch.ind"
@@ -8,7 +8,24 @@ colnames(all)[which(colnames(all) == "DomArch.orig")] = "DomArch.ind.orig"
 
 colnames(all)[which(colnames(all) == "ClustName")] = "DomArch"
 
-all <- all %>% select(DomArch, Lineage)
+all <- all %>%
+  cleanup_clust(domains_keep = domains_keep, domains_rename = domains_rename,repeat2s = FALSE)
+colnames(all)[which(colnames(all) == "ClustName")] = "DomArch.repeats"
+
+colnames(all)[which(colnames(all) == "ClustName.orig")] = "DomArch.orig"
+
+colnames(all)[which(colnames(all) == "GenContext")] = "Temp"
+
+all <- cleanup_gencontext(all,domains_rename = domains_rename, repeat2s = FALSE)
+colnames(all)[which(colnames(all) == "GenContext")] = "GenContext.repeats"
+colnames(all)[which(colnames(all) =="Temp")] = "GenContext"
+
+
+all <- all %>% select(AccNum, DomArch, DomArch.repeats, GenContext, GenContext.repeats,
+                      Lineage, Species, GeneName, Length, GCA_ID) %>% distinct()
+
+
+# all requires columns Lineage and Domarch/Clustname
 
 prot_all <- all
 
@@ -31,7 +48,10 @@ rownames(df) <- NULL
 
 legend_items <- unique(unlist(strsplit(df$Lineage, ">")))
 
-cols <- sample(colorRampPalette(brewer.pal(12, 'Set3'))(length(legend_items)))
+## Assign Colors:
+cols <- sample(colorRampPalette(brewer.pal(9, 'Set1'))(length(legend_items)))
+# cols <- sample(colorRampPalette(brewer.pal(12, 'Paired'))(length(legend_items)))
+# cols <- sample(colorRampPalette(brewer.pal(12, 'Pastel2'))(length(legend_items)))
 
 queries = c("PspA", "Snf7", "PspB","PspC", "PspM",  "PspN", "LiaI-LiaF-TM", "Toast-rack")
 
@@ -66,7 +86,8 @@ plt_fun <- function(query){
     width="100%"
   )
 
-  sb <- htmlwidgets::prependContent(sb, htmltools::h3(query))
+  # Add Title to Sunburst
+  sb <- htmlwidgets::prependContent(sb, htmltools::h3(query, style = "font-family:Helvetica"))
   sb
 
 }
@@ -79,7 +100,7 @@ sb_plots <- browsable(
       1:length(queries),
       function(n){
         tags$div(
-          style="width:48%; float:left;",
+          style="width:25%; float:left;",
           plt_fun(queries[n])
         )
       }
@@ -124,3 +145,5 @@ sunburst(
   legend = list(w = 150, h = 15, r = 3, s = 3), ##### Plotting with legend screws things up
   width="100%"
 )
+
+## At this point, I just took a snip of the legend
