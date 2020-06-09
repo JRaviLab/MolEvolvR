@@ -1,4 +1,8 @@
-source("plotting.R")
+library(tidyverse)
+library(sunburstR)
+library(RColorBrewer)
+library(d3r)
+source("R/cleanup.R")
 
 # read in all and clean
 all <- read_tsv("data/rawdata_tsv/all_semiclean.txt")
@@ -49,8 +53,8 @@ rownames(df) <- NULL
 legend_items <- unique(unlist(strsplit(df$Lineage, ">")))
 
 ## Assign Colors:
-cols <- sample(colorRampPalette(brewer.pal(9, 'Set1'))(length(legend_items)))
-# cols <- sample(colorRampPalette(brewer.pal(12, 'Paired'))(length(legend_items)))
+#cols <- sample(colorRampPalette(brewer.pal(9, 'Set1'))(length(legend_items)))
+cols <- sample(colorRampPalette(brewer.pal(12, 'Paired'))(length(legend_items)))
 # cols <- sample(colorRampPalette(brewer.pal(12, 'Pastel2'))(length(legend_items)))
 
 queries = c("PspA", "Snf7", "PspB","PspC", "PspM",  "PspN", "LiaI-LiaF-TM", "Toast-rack")
