@@ -1,7 +1,35 @@
 library(tidyverse)
-# library(viridis)
-# library(hrbrthemes)
-## Generate stacked barplot of 'all' without PspA and Snf7
+
+source("R/cleanup.R")
+
+# read in all and clean
+all <- read_tsv("data/rawdata_tsv/all_semiclean.txt")
+
+colnames(all)[which(colnames(all) == "DomArch")] = "DomArch.ind"
+colnames(all)[which(colnames(all) == "DomArch.orig")] = "DomArch.ind.orig"
+
+colnames(all)[which(colnames(all) == "ClustName")] = "DomArch"
+
+all <- all %>%
+  cleanup_clust(domains_keep = domains_keep, domains_rename = domains_rename,repeat2s = FALSE)
+colnames(all)[which(colnames(all) == "ClustName")] = "DomArch.repeats"
+
+colnames(all)[which(colnames(all) == "ClustName.orig")] = "DomArch.orig"
+
+colnames(all)[which(colnames(all) == "GenContext")] = "Temp"
+
+all <- cleanup_gencontext(all,domains_rename = domains_rename, repeat2s = FALSE)
+colnames(all)[which(colnames(all) == "GenContext")] = "GenContext.repeats"
+colnames(all)[which(colnames(all) =="Temp")] = "GenContext"
+
+
+all <- all %>% select(AccNum, DomArch, DomArch.repeats, GenContext, GenContext.repeats,
+                      Lineage, Species, GeneName, Length, GCA_ID) %>% distinct()
+
+
+
+
+## data frame requires DomArch(Clustname) and Lineage
 
 prot <- all %>% filter(!grepl("PspA|Snf7", DomArch))
 
