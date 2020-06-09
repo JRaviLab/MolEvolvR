@@ -1,7 +1,8 @@
 source("shiny/ui/aboutText.R")
 library("here")
 
-tabItem("about",
+tabPanel(title = "About",
+         value = "about",
         fluidRow(column(10,
                         h2('Citation:')
                         #put citations here

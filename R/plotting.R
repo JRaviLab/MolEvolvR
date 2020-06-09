@@ -189,11 +189,14 @@ lineage.DA.plot <- function(query_data="prot",
   query.summ.byLin.ggplot <-  drop_na(query.summ.byLin) %>%
                                 filter(count>1) %>%# count or total count?
                                 arrange(totalcount)
+
+  query.summ.byLin.ggplot$Lineage <- factor(query.summ.byLin.ggplot$Lineage,
+                                            levels = sort(names(sort(table(query.summ.byLin.ggplot$Lineage),decreasing=TRUE))))
+
   query.summ.byLin.ggplot[,colname] <- factor(pull(query.summ.byLin.ggplot, {{column}}) ,
                                             levels = (pull(query.summ.byLin.ggplot, {{column}}) %>% unique()))
 
-  query.summ.byLin.ggplot$Lineage <- factor(query.summ.byLin.ggplot$Lineage,
-                                            levels = names(sort(table(query.summ.byLin.ggplot$Lineage),decreasing=TRUE)))
+
 
   ## Tile plot
   ggplot(data=query.summ.byLin.ggplot,
@@ -271,8 +274,8 @@ lineage.Query.plot <- function(query_data=all,
   query.summ.byLin.ggplot <- drop_na(query_lin_counts) %>%
     filter(count>1) %>%  # count or total count?
     within(Lineage <- factor(Lineage,
-                             levels=names(sort(table(Lineage),
-                                               decreasing=TRUE)))) %>%
+                             levels= sort(names(sort(table(Lineage),
+                                               decreasing=TRUE))))) %>%
     within(Query <- factor(Query,
                            levels=names(sort(table(Query),
                                              decreasing=F))))
@@ -478,30 +481,41 @@ wordcloud_element <- function(query_data="prot",
 
 
 #### Sunburst #####
-lineage_sunburst <- function(prot, lineage_column = "Lineage", type = "sunburst")
+lineage_sunburst <- function(prot, lineage_column = "Lineage",
+                             type = "sunburst",
+                             levels = 2, colors = NULL, legendOrder = NULL)
 {
   #'
   #'
   #'@param prot Data frame containing a lineage column that the sunburst plot will be generated for
   #'@param lineage_column String. Name of the lineage column within the data frame. Defaults to "Lineage"
   #'@param type String, either "sunburst" or "sund2b". If type is "sunburst", a sunburst plot of the lineage
+  #'@param levels Integer. Number of levels the sunburst will have.
+  #'@param legendOrder String vector. The order of the legend. If legendOrder is NULL,
+  #' then the legend will be in the descending order of the top level hierarchy.
   #'will be rendered. If the type is sund2b, a sund2b plot will be rendered.
 
 
   lin_col <- sym(lineage_column)
 
+  levels_vec = c()
+  for(i in 1:levels)
+  {
+    levels_vec = append(levels_vec, paste0("level",i))
+  }
+
   # Take lineage column and break into the first to levels
   prot <- prot %>% select({{lin_col}})
-  protLevels <- prot %>% separate({{lin_col}}, into = c("level1","level2", "level3","level4", "level5"), sep = ">")
+  protLevels <- prot %>% separate({{lin_col}}, into = levels_vec, sep = ">")
   # Count the occurrance of each group of levels
-  protLevels = protLevels %>% group_by(level1,level2,level3,level4,level5) %>% summarise(size = n())
+  protLevels = protLevels %>% group_by_at(levels_vec) %>% summarise(size = n())
 
   tree <- d3_nest(protLevels, value_cols = "size")
 
   # Plot sunburst
   if(type == "sunburst")
   {
-    sunburst(tree, legend = list(w = 150, h = 15, r = 3, s = 3))
+    sunburst(tree, legend = list(w = 150, h = 15, r = 3, s = 3), colors = colors, legendOrder = legendOrder)
   }
   else if(type == "sund2b")
   {
