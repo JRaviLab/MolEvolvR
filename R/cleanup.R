@@ -78,6 +78,29 @@ repeat2s <- function(prot, by_column="DomArch", excluded_prots = c()){
   return(prot)
 }
 
+
+replaceQMs <- function(prot, by_column="GenContext")
+{
+  #' Replace consecutive '?' separated by '->', '<-' or '||' with 'X(s)'
+  #' Replace '?' with 'X'
+  #' @param prot DataTable to operate on
+  #' @param by_column Column to operate on
+
+  by <- sym(by_column)
+
+  # Regex for finding repeated `?`
+  regex_findRepeatedQ = "(?i)(?!\\s)([?]+)(?:[\\|><\\s-]+\\1)+"
+
+  # Replace Repeated ? with X(s) and ? with 'X'
+  prot[,by_column] <- prot %>% pull({{by}}) %>%
+    str_replace_all(pattern = regex_findRepeatedQ, replacement = "X(s)") %>%
+    str_replace_all(pattern = "\\?", replacement = "X")
+
+
+  return(prot)
+}
+
+
 remove_astrk <- function(query_data, colname = "GenContext")
 {
   # Remove the asterisks from a column of data
