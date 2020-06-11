@@ -1,17 +1,16 @@
 # Datatable tab contains all protein datatables
 tabPanel( title = "Data/Query",
   value = "datatable",
-  loginUI("login"),
         fluidPage(
           tabsetPanel(id = "QueryData",
                       tabPanel("Data Table", value = "mainData",
                                column(width = 2,
                                       #Dropdown to select protein for viewing
                                       selectInput(inputId =  "proSelec", label = "Protein",
-                                                  choices = c( "All","DUF1700", "DUF1707",
-                                                               "PspA-Snf7","Psp-AA", "PspB", "PspC", "PspM", "PspN",
-                                                               "LiaI-LiaF-TM","Toast-rack", "Tfu-1009" )
-                                                  , selected = "All")
+                                                  choices = c("All", "PspA-Snf7", "PspB","PspC", "LiaI-LiaF-TM",
+                                                               "Toast-rack", "PspM", "PspN","Tfu-1009",
+                                                               "DUF1700", "DUF1707"), selected = "PspA-Snf7")
+
                                ),
 
                                #Buttons to select which file type to download

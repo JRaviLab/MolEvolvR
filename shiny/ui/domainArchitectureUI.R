@@ -1,5 +1,5 @@
 # Domain Architecture Panel
-tabPanel( title = "Domain Architecure",
+tabPanel( title = "Domain Architecture",
           value = "domainArchitecture",
           fluidRow(
 
@@ -10,7 +10,7 @@ tabPanel( title = "Domain Architecure",
                         #dropdown to select protein for plots
                         selectInput(inputId =  "DAlinSelec", label = "Protein",
                                     choices = c("All", "PspA-Snf7", "PspB", "PspC","PspN", "LiaI-LiaF-TM","Toast-rack")
-                                    , selected = "PspA", width = "100%")
+                                    , selected = "PspA-Snf7", width = "100%")
                  ),
 
                  column(width = 4,
