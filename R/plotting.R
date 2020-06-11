@@ -90,7 +90,8 @@ upset.plot <- function(query_data="toast_rack.sub",
   # Get words from filter
   words.tc <- tc %>% select({{column}}) %>% distinct() %>% elements2words(column = colname,conversion_type = type)
   # names(words.tc)[1] <- "words"
-  words.tc <- words.tc %>% str_split(pattern = " ") %>% unlist()
+  words.tc <- words.tc %>% str_split(pattern = " ")
+  words.tc = as.data.frame(words.tc, col.names = "Words", stringsAsFactors = F) %>% filter(!grepl("^X$|^X\\(s\\)$",Words)) %>% pull(Words)# remove "X" and "X(s)"
   words.tc <- words.tc[2:(length(words.tc)-1)]
 
   # Only use the DAs/GCs that are within the total count cutoff
@@ -103,6 +104,7 @@ upset.plot <- function(query_data="toast_rack.sub",
     j <- str_replace_all(string=j, pattern="\\)", replacement="\\\\)")
     j <- str_replace_all(string=j, pattern="\\+", replacement="\\\\+")
     j <- str_replace_all(string=j, pattern="\\_", replacement="\\\\_")
+    j <- str_replace_all(string=j, pattern="\\?", replacement="\\\\?")
 
     j <- paste0(j,"(?!\\()")
 
@@ -111,7 +113,7 @@ upset.plot <- function(query_data="toast_rack.sub",
     # query_data[[i]] <- if_else(grepl(j, as.matrix(query_data[,colname])),
     #                            true=1, false=0)
 
-    query_data[[i]] <- if_else(str_detect(string = as.matrix(query_data[,"DomArch"]), pattern = j),
+    query_data[[i]] <- if_else(str_detect(string = as.matrix(query_data[,colname]), pattern = j),
                          true=1, false=0)
 
   }
@@ -130,7 +132,7 @@ upset.plot <- function(query_data="toast_rack.sub",
   ## UpSetR plot
   par(oma=c(5,5,5,5), mar=c(3,3,3,3))
   upset(upset.cutoff[c(3,5:ncol(upset.cutoff))],	# text.scale=1.5,
-        # sets=words.tc,
+        #sets=words.tc,
         nsets = length(words.tc),
         nintersects = NA,
         sets.bar.color="turquoise3",

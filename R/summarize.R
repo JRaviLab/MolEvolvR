@@ -79,6 +79,8 @@ words2wc <- function(x){ x %>%
     filter(!grepl("^tRNA$", words)) %>%		# remove "tRNA"
     filter(!grepl("^ncRNA$", words)) %>%	# remove "ncRNA"
     filter(!grepl("^rRNA$", words)) %>%		# remove "rRNA"
+    filter(!grepl("^X$|^X\\(s\\)$", words)) %>% # remove "X" and "X(s)"
+
     # filter(!grepl("\\*", words)) %>%			# Remove/Keep only Query
     arrange(-freq)
 }
