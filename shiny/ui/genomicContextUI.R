@@ -7,7 +7,7 @@ tabPanel(title = "Genomic Context",
                       #dropdown to select protein for plots
                       selectInput(inputId =  "GClinSelec", label = "Protein",
                                   choices = c("All", "PspA-Snf7", "PspB", "PspC","PspN", "LiaI-LiaF-TM","Toast-rack")
-                                  , selected = "PspA")
+                                  , selected = "PspA-Snf7")
            ),
            column(width = 4,
                       #Slider input to determine cutoff value for totalcounts
@@ -30,7 +30,7 @@ tabPanel(title = "Genomic Context",
                                plotOutput(outputId = "GCLinPlot", height = '600px' )),
                       tabPanel("Table", value = "LinTable",
                                DT::dataTableOutput(outputId = "GCLinTable"),
-                               column(downloadButton(outputId = "GCDownloadCounts", label = "Download"),radioButtons(inputId = "GCcountDownloadType", label = "Download Type:",
+                               column(downloadButton(outputId = "GCdownloadCounts", label = "Download"),radioButtons(inputId = "GCcountDownloadType", label = "Download Type:",
                                                                                                                      choices= c("tsv", "csv"), selected = "tsv" ),width = 10)),
                       tabPanel("Upset Plot", value = "Upset",
                                plotOutput(outputId = "GCUpsetP", height = '600px')),

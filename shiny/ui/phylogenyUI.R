@@ -33,7 +33,7 @@ tabPanel( title = "Phylogeny",
                    tabPanel("MSA", value="MSA",
                             htmlOutput(outputId="msaPlot")),
                    tabPanel("Paralog Table", value="Paralog",
-                            DT::dataTableOutput(outputId = "ParalogTable",width = 1000)
+                            DT::dataTableOutput(outputId = "ParalogTable")
                    )
                  )
           )

@@ -46,6 +46,7 @@ ui <- tagList(
   shinyjs::useShinyjs(),
   tags$head(includeScript("shiny/logout-button.js")),
   tags$head(includeScript("shiny/github-button.js")),
+  #tags$head(includeScript("shiny/navbar-title-hyperlink.js")),
   tags$head(
     tags$style(HTML("
                       .innerbox {
@@ -59,23 +60,52 @@ ui <- tagList(
                         margin: auto;
                         padding: 20px;
                       }
+
+                      .lightblue-link{
+                        color:#11aad9;
+                      }
+
+                      .iMargin{
+                        margin: 5px;
+                      }
+
+                     a{
+                        color: #141414;
+                        text-decoration:none;
+                      }
+
+
+                      a:visited{
+                        color:none;
+                      }
+
+                      .noDec{
+                        color:white;
+                        text-decoration:none;
+                      }
+
+                      .zoom:hover {
+                        /*color:white;*/
+                        transform: scale(1.3);
+                      }
                       "))
   ),
   navbarPage(
     # must turn shinyjs on
-    title = "PSP",
+    title = tags$div( class = "zoom", actionLink(inputId = "homeButton", style ="text-decoration=none;", tags$div(class = "noDec",  "Psp"))),
     id = "pspMenu",
     inverse = TRUE,
-    selected = "datatable",
+    selected = "appInfo",
+    # collapsible = T,
     #App title
     # header,
     #body
+    source("shiny/ui/appInfoUI.R")$value,
     source("shiny/ui/queryDataUI.R")$value,
     source("shiny/ui/domainArchitectureUI.R")$value,
     source("shiny/ui/genomicContextUI.R")$value,
     source("shiny/ui/phylogenyUI.R")$value,
     source("shiny/ui/aboutUI.R")$value
-
   )
 )
 
@@ -105,20 +135,39 @@ server <- function(input, output,session){
     user_data()
   })
 
+
+  observeEvent(input$homeButton, updateNavbarPage(session, "pspMenu" ,"appInfo"))
+
+  ### Reorder all to be ordered by query
+  reorder_all <- function(prot, queries)
+  {
+    all_reordered <- c()
+    for(q in queries)
+    {
+      all_reordered <- append(all_reordered, grep(q, all$DomArch))
+    }
+
+    all_reordered <- unique(all_reordered)
+
+    all_re <- all[all_reordered,]
+    return(all_re)
+  }
+
   #Reactive expression used to determine which data table should be displayed
   #based on selected input
   pspTable<- reactive({
     req(credentials()$user_auth)
     switch(input$proSelec,
-           "All" = all %>% select(viewing_cols) %>% distinct(),
+           "All" = all %>% select(viewing_cols) %>% distinct() %>% reorder_all(queries),
            "DUF1700" = DUF1700%>% select(viewing_cols) %>% distinct(),
            "DUF1707" = DUF1707%>% select(viewing_cols) %>% distinct(),
            "PspA-Snf7" = pspa%>% select(viewing_cols) %>% distinct(),
-           "Psp-AA" = psp_aa%>% select(viewing_cols) %>% distinct(),
+           #"Psp-AA" = psp_aa%>% select(viewing_cols) %>% distinct(),
            "PspB" = pspb%>% select(viewing_cols) %>% distinct(),
            "PspC" = pspc%>% select(viewing_cols) %>% distinct(),
            "PspM" = pspm%>% select(viewing_cols) %>% distinct(),
            "PspN" = pspn%>% select(viewing_cols) %>% distinct(),
+           "DUF3046" = DUF3046 %>% select(viewing_cols) %>% distinct(),
            "LiaI-LiaF-TM" = liai_liaf%>% select(viewing_cols) %>% distinct(),
            "Toast-rack" = toast_rack%>% select(viewing_cols) %>% distinct(),
            "Tfu-1009" = tfu_1009%>% select(viewing_cols) %>% distinct()
@@ -127,15 +176,15 @@ server <- function(input, output,session){
   #Render the Data table for selected protein
   output$proTable <- DT::renderDT({
     req(credentials()$user_auth)
-      d = DT::datatable(
-        paged_table(pspTable() ), extensions = c('FixedColumns',"FixedHeader"),
-        options = list(pageLength = 100,
-                       #The below line seems to disable other pages and the search bar
-                       #dom = 't',
-                       scrollX = TRUE,
-                       paging=TRUE,
-                       fixedHeader= TRUE,
-                       fixedColumns = list(leftColumns = 2, rightColumns = 0)))
+    d = DT::datatable(
+      paged_table(pspTable() ), extensions = c('FixedColumns',"FixedHeader"),
+      options = list(pageLength = 100,
+                     #The below line seems to disable other pages and the search bar
+                     #dom = 't',
+                     scrollX = TRUE,
+                     paging=TRUE,
+                     fixedHeader= TRUE,
+                     fixedColumns = list(leftColumns = 2, rightColumns = 0)))
   })
 
   #### Query Heatmap ####
@@ -432,10 +481,10 @@ server <- function(input, output,session){
         #filter(grepl(regexDAs, DomArch))
       },
       options = list(pageLength = 15,
-                     scrollX = F,
+                     scrollX = T,
                      paging=TRUE,
                      fixedHeader=TRUE,
-                     fixedColumns = list(leftColumns = 0, rightColumns = 0))
+                     fixedColumns = FALSE)
       ),
       size = "l",
       footer = modalButton(label = "Close"),
@@ -495,7 +544,7 @@ server <- function(input, output,session){
           filter(GenContext == selected_GC)
       },
       options = list(pageLength = 15,
-                     scrollX = F,
+                     scrollX = T,
                      paging=TRUE,
                      fixedHeader=TRUE,
                      fixedColumns = list(leftColumns = 0, rightColumns = 0))
@@ -711,18 +760,13 @@ server <- function(input, output,session){
     req(credentials()$user_auth)
     find_paralogs(phylogeny_prot())
   },extensions = c('FixedColumns'),
-  options = list(pageLength = 10,
+  options = list(pageLength = 25,
                  #The below line seems to disable other pages and the search bar
                  #dom = 't',
                  scrollX = TRUE,
                  paging=TRUE,
                  fixedHeader=TRUE,
-                 fixedColumns = list(leftColumns = 2, rightColumns = 0)))
-
-
-
-
-
+                 fixedColumns = FALSE))
 
   #Reactive expresion to change file name depending on which protein is selected
   fileNam <- reactive({
@@ -732,10 +776,10 @@ server <- function(input, output,session){
     else  paste(input$proSelec, ".csv", sep = "")
   })
 
-  ###### Downloads the data from datatable #####
-  ### Should it download cleaned data? or all rows?
+  ##### Download main data table #####
+  # Should it download cleaned data? or all rows?
   output$downloadData <- downloadHandler(
-    filename = function() {
+    filename <-  function() {
       fileNam()
     },
     content = function(file) {
@@ -747,46 +791,56 @@ server <- function(input, output,session){
     }
   )
 
-  #####
+
+  # # #                             # # #
   ##### Download Data for Lin Table #####
-  #####
-  output$downloadCounts <- downloadHandler(
+  # # #                             # # #
+
+  ## DA lin table download
+  output$DAdownloadCounts <- downloadHandler(
     req(credentials()$user_auth),
     filename = function(){
-      if(input$DA_GC == "Domain Architecture"){extension <- "-da_lin_counts"}
-      else if(input$DA_GC == "Genomic Context"){ extension <- "-gc_lin_counts"}
-      if(input$downloadType == "tsv"){
-        paste(input$linSelec,extension,".txt", sep = "")
+      extension <- "-da_lin_counts"
+      if(input$DAcountDownloadType == "tsv"){
+        paste(input$DAlinSelec,extension,".txt", sep = "")
       }
-      else{  paste(input$linSelec,extension , ".csv", sep = "")}
+      else{  paste(input$DAlinSelec,extension , ".csv", sep = "")}
     },
     content = function(file){
-      if(input$DA_GC == "Domain Architecture"){
-        selected <- switch(input$linSelec,
-                           "PspA" = pspa_totalC,
-                           "PspB" = pspb_totalC,
-                           "PspC" = pspc_totalc,
-                           "LiaF" = liaf_totalC,
-                           "LiaG" = liag_totalC,
-                           "LiaI" = liai_totalC)
-      }
-      else if(input$DA_GC == "Genomic Context"){
-        selected <- switch(input$linSelec,
-                           "PspA" = pspa_cum,
-                           "PspB" = pspb_cum,
-                           "PspC" = pspc_cum,
-                           "LiaF" = liaf_cum,
-                           "LiaG" = liag_cum,
-                           "LiaI" = liai_cum)
-      }
-      if(input$countDownloadType == "tsv"){
+      selected <- DA_TotalCounts()
+      if(input$DAcountDownloadType == "tsv"){
         write_tsv(selected, file )
       }
-      else if(input$countDownloadType == "csv"){
+      else if(input$DAcountDownloadType == "csv"){
         write.csv(selected,file)
       }
     }
   )
+
+
+  ## GC lin table download
+  output$GCdownloadCounts <- downloadHandler(
+    req(credentials()$user_auth),
+    filename = function(){
+      extension <- "-gc_lin_counts"
+      if(input$GCcountDownloadType == "tsv"){
+        paste(input$GClinSelec,extension,".txt", sep = "")
+      }
+      else{  paste(input$GClinSelec,extension , ".csv", sep = "")}
+    },
+    content = function(file){
+
+      selected <- GC_TotalCounts()
+      if(input$GCcountDownloadType == "tsv"){
+        write_tsv(selected, file )
+      }
+      else if(input$GCcountDownloadType == "csv"){
+        write.csv(selected,file)
+      }
+    }
+  )
+
+
 }
 
 #Call to shiny app
