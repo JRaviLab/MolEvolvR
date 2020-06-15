@@ -88,11 +88,14 @@ ui <- tagList(
                         /*color:white;*/
                         transform: scale(1.3);
                       }
+
                       "))
   ),
   navbarPage(
     # must turn shinyjs on
-    title = tags$div( class = "zoom", actionLink(inputId = "homeButton", style ="text-decoration=none;", tags$div(class = "noDec",  "Psp"))),
+    title =  actionLink(inputId = "homeButton",
+                        style ="text-decoration:none; color:white;"
+                        , tags$div(class= "zoom",  "Psp")),
     id = "pspMenu",
     inverse = TRUE,
     selected = "appInfo",
@@ -112,6 +115,10 @@ ui <- tagList(
 ####
 #### Server ####
 server <- function(input, output,session){
+
+  ## Change title tab name (ie: chrome tab name) to Psp-Evolution
+  shinyjs::runjs('document.title = "Psp-Evolution;"')
+
   # call the logout module with reactive trigger to hide/show
   logout_init <- callModule(shinyauthr::logout,
                             id = "logout",
@@ -159,9 +166,11 @@ server <- function(input, output,session){
     req(credentials()$user_auth)
     switch(input$proSelec,
            "All" = all %>% select(viewing_cols) %>% distinct() %>% reorder_all(queries),
-           "DUF1700" = DUF1700%>% select(viewing_cols) %>% distinct(),
-           "DUF1707" = DUF1707%>% select(viewing_cols) %>% distinct(),
-           "PspA-Snf7" = pspa%>% select(viewing_cols) %>% distinct(),
+           "DUF1700-ahelical" = DUF1700%>% select(viewing_cols) %>% distinct(),
+           "DUF1707-SHOCT" = DUF1707%>% select(viewing_cols) %>% distinct(),
+           "PspA-Snf7" = pspa_snf7%>% select(viewing_cols) %>% distinct(),
+           "PspA" = pspa%>% select(viewing_cols) %>% distinct(),
+           "Snf7" = snf7%>% select(viewing_cols) %>% distinct(),
            #"Psp-AA" = psp_aa%>% select(viewing_cols) %>% distinct(),
            "PspB" = pspb%>% select(viewing_cols) %>% distinct(),
            "PspC" = pspc%>% select(viewing_cols) %>% distinct(),
@@ -200,10 +209,10 @@ server <- function(input, output,session){
     if(input$pspMenu == "domainArchitecture"){
       switch(input$DAlinSelec,
              "All" = all,
-             "DUF1700" = DUF1700,
-             "DUF1707" = DUF1707,
-             "PspA-Snf7" = pspa,
-             "Psp-AA" = psp_aa,
+             "DUF1700-ahelical" = DUF1700,
+             "DUF1707-SHOCT" = DUF1707,
+             "PspA" = pspa,
+             "Snf7" = snf7,
              "PspB" = pspb,
              "PspC" = pspc,
              "PspM" = pspm,
@@ -217,10 +226,11 @@ server <- function(input, output,session){
     else{
       switch(input$GClinSelec,
              "All" = all,
-             "DUF1700" = DUF1700,
-             "DUF1707" = DUF1707,
-             "PspA-Snf7" = pspa,
-             "Psp-AA" = psp_aa,
+             "DUF1700-ahelical" = DUF1700,
+             "DUF1707-SHOCT" = DUF1707,
+             # "PspA-Snf7" = pspa,
+             "PspA" = pspa,
+             "Snf7" = snf7,
              "PspB" = pspb,
              "PspC" = pspc,
              "PspM" = pspm,
@@ -571,16 +581,19 @@ server <- function(input, output,session){
   #### Reactive expression determining domain of interest for plotting domain networks
   network_domain_interest <-  reactive({
     switch(input$DAlinSelec,
-           "All" = c("DUF1700-ahelical","DUF1707-SHOCT","PspA", "Snf7","PspB","PspC","PspM","PspN","LiaI-LiaF-TM","Toast-rack"),
-           "DUF1700" = "DUF1700-ahelical",
-           "DUF1707" = "DUF1707-SHOCT",
+           "All" = ".*",  #c("DUF1700-ahelical","DUF1707-SHOCT","PspA", "Snf7","PspB","PspC", "PspM","PspN","LiaI-LiaF-TM","Toast-rack"),
+           "DUF1700-ahelical" = "DUF1700-ahelical",
+           "DUF1707-ahelical" = "DUF1707-SHOCT",
            "PspA-Snf7" = c("PspA","Snf7"),
+           "PspA" = "PspA",
+           "Snf7" = "Snf7",
            "PspB" = "PspB",
            "PspC" = "PspC",
            "PspM" = "PspM",
            "PspN" = "PspN",
            "LiaI-LiaF-TM" = "LiaI-LiaF-TM",
-           "Toast-rack" = "Toast-rack")
+           "Toast-rack" = "Toast-rack",
+           "Tfu-1009" = "Tfu_1009")
   })
 
 
@@ -741,7 +754,8 @@ server <- function(input, output,session){
 
   output$sunburst <- renderSunburst({
     req(credentials()$user_auth)
-    lineage_sunburst(phylogeny_prot(), lineage_column = "Lineage", type = "sunburst", levels = 5)
+    req(input$levels)
+    lineage_sunburst(phylogeny_prot(), lineage_column = "Lineage", type = "sunburst", levels = input$levels)
   })
 
 
@@ -755,11 +769,15 @@ server <- function(input, output,session){
 
 
   #### Paralogs ####
+  paralog_table <- reactive({
+    find_paralogs(phylogeny_prot())
+  })
 
   output$ParalogTable <- DT::renderDataTable({
     req(credentials()$user_auth)
-    find_paralogs(phylogeny_prot())
+    paralog_table()
   },extensions = c('FixedColumns'),
+  selection = 'single',
   options = list(pageLength = 25,
                  #The below line seems to disable other pages and the search bar
                  #dom = 't',
@@ -767,6 +785,32 @@ server <- function(input, output,session){
                  paging=TRUE,
                  fixedHeader=TRUE,
                  fixedColumns = FALSE))
+
+  ## Dialog box for rows selected in the paralog table
+  observeEvent(input$ParalogTable_rows_selected,
+    {
+      selected_paralogs = paralog_table()$AccNums[input$ParalogTable_rows_selected] %>% unlist()
+      selected_paralogs = paste(selected_paralogs, collapse = "|")
+      showModal(modalDialog(
+        title = "",
+        DT::renderDT({
+          phylogeny_prot() %>% filter(grepl(selected_paralogs,AccNum))
+        },
+        options = list(pageLength = 15,
+                       scrollX = T,
+                       paging=TRUE,
+                       fixedHeader=TRUE,
+                       fixedColumns = list(leftColumns = 0, rightColumns = 0))
+        ),
+        size = "l",
+        footer = modalButton(label = "Close"),
+        easyClose = T
+      ))
+    }
+  )
+
+
+
 
   #Reactive expresion to change file name depending on which protein is selected
   fileNam <- reactive({
@@ -790,6 +834,48 @@ server <- function(input, output,session){
       else  write.csv(pspTable(), file, row.names = FALSE)
     }
   )
+
+
+  #### About Text ####
+  output$aboutApp <- renderUI({
+    req(credentials()$user_auth)
+    tagList(
+      h4("Background"),
+      "This web app was built to provide a visual and interactive supplement for the Psp Evolution paper.",
+
+
+
+      h4("Code"),
+      tags$span(
+        "Code and data used to generate this Shiny app are available on ",
+        a(href = "https://github.com/JRaviLab/the-approach",
+          class ="lightblue-link", "GitHub.")
+      )
+    )
+  })
+
+  output$aboutAbstract <- renderUI({
+    req(credentials()$user_auth)
+
+    tagList(
+    h1("Phage-shock-protein (Psp) Envelope Stress Response:
+                           Evolutionary History & Discovery of Novel Players"),
+
+    h4("Janani Ravi", tags$sup("1,2*"),", Vivek Anantharaman", tags$sup("3")
+       , ", Samuel Zorn Chen", tags$sup("1"), ", Pratik Datta", tags$sup("2"),
+       ", L Aravind", tags$sup("3*"),", Maria Laura Gennaro", tags$sup("2*"),"."),
+    tags$sup("1"),"Pathobiology and Diagnostic Investigation, Michigan State University, East Lansing, MI;",
+    tags$sup("2"), "Public Health Research Institute, Rutgers University, Newark, NJ; ",
+    tags$sup("3"),"National Center for Biotechnology Information, National Institutes of Health, Bethesda, MD.",
+    tags$br(),
+    "*Corresponding authors. janani@msu.edu; aravind@nih.gov; marila.gennaro@rutgers.edu ",
+
+    h2('Abstract:'),
+
+    p(abstract, style = "font-size:120%"))
+
+  })
+
 
 
   # # #                             # # #

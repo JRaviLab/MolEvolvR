@@ -65,7 +65,9 @@ all <- all %>% select(AccNum, DomArch, DomArch.repeats, GenContext, GenContext.r
 
 DUF1700 <- all %>% filter(grepl("DUF1700-ahelical",ignore.case = T, DomArch))
 DUF1707 <- all %>% filter(grepl("DUF1707-SHOCT",ignore.case = T, DomArch))
-pspa <- all%>% filter(grepl("pspa|snf7",ignore.case = T,DomArch))
+pspa_snf7 <- all%>% filter(grepl("pspa|snf7",ignore.case = T,DomArch))
+pspa <- all%>% filter(grepl("pspa",ignore.case = T,DomArch))
+snf7 <- all%>% filter(grepl("snf7",ignore.case = T,DomArch))
 # psp_aa <- all %>% filter(grepl("Psp-AA",ignore.case = T, DomArch))
 pspb <- all%>% filter(grepl("pspb",ignore.case = T, DomArch))
 pspc <- all%>% filter(grepl("pspc",ignore.case = T, DomArch))

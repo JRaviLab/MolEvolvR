@@ -24,6 +24,7 @@ tabPanel( title = "Phylogeny",
                  tabsetPanel(
                    id= "phylo",
                    tabPanel("Sunburst", value ="sunburst",
+                            numericInput(inputId = "levels",label = "Number of Levels:" ,value = 2, min = 1, max = 5),
                             sunburstOutput(outputId = "sunburst")
                    ),
                    tabPanel("Tree", value="Tree",
@@ -33,6 +34,7 @@ tabPanel( title = "Phylogeny",
                    tabPanel("MSA", value="MSA",
                             htmlOutput(outputId="msaPlot")),
                    tabPanel("Paralog Table", value="Paralog",
+                            p("Select a row for more information about those paralogs", style = "text-align:center"),
                             DT::dataTableOutput(outputId = "ParalogTable")
                    )
                  )
