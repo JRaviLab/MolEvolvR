@@ -7,21 +7,7 @@ tabPanel(title = "About",
         fluidRow(
         ),
         fluidRow(column(10,
-                        h1("Phage-shock-protein (Psp) Envelope Stress Response:
-                           Evolutionary History & Discovery of Novel Players"),
-
-                        h4("Janani Ravi", tags$sup("1,2*"),", Vivek Anantharaman", tags$sup("3")
-                        , ", Samuel Zorn Chen", tags$sup("1"), ", Pratik Datta", tags$sup("2"),
-                        ", L Aravind", tags$sup("3*"),", Maria Laura Gennaro", tags$sup("2*"),"."),
-tags$sup("1"),"Pathobiology and Diagnostic Investigation, Michigan State University, East Lansing, MI;",
-tags$sup("2"), "Public Health Research Institute, Rutgers University, Newark, NJ; ",
-tags$sup("3"),"National Center for Biotechnology Information, National Institutes of Health, Bethesda, MD.",
-tags$br(),
-"*Corresponding authors. janani@msu.edu; aravind@nih.gov; marila.gennaro@rutgers.edu ",
-
-                        h2('Abstract:'),
-
-                        p(abstract, style = "font-size:120%")
+                        htmlOutput("aboutAbstract")
 
         )),
         fluidRow(column(10,

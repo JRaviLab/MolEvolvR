@@ -6,8 +6,10 @@ tabPanel(title = "Genomic Context",
            column(width = 4,
                       #dropdown to select protein for plots
                       selectInput(inputId =  "GClinSelec", label = "Protein",
-                                  choices = c("All", "PspA-Snf7", "PspB", "PspC","PspN", "LiaI-LiaF-TM","Toast-rack")
-                                  , selected = "PspA-Snf7")
+                                  choices = c("All", "PspA","Snf7", "PspB", "PspC", "LiaI-LiaF-TM",
+                                              "Toast-rack","PspM","PspN", "DUF1700-ahelical",
+                                              "DUF1707-SHOCT", "Tfu-1009")
+                                  , selected = "PspA")
            ),
            column(width = 4,
                       #Slider input to determine cutoff value for totalcounts
@@ -27,8 +29,9 @@ tabPanel(title = "Genomic Context",
                     tabsetPanel(
                       id= 'GCLin_data',
                       tabPanel("Heatmap", value = "Heatmap",
-                               plotOutput(outputId = "GCLinPlot", height = '600px' )),
+                               plotOutput(outputId = "GCLinPlot", height = '600px', width = "1440px" )),
                       tabPanel("Table", value = "LinTable",
+                               p("Select a row to see which lineages the gencomic context is present in", style = "color:#242320; text-align:center;"),
                                DT::dataTableOutput(outputId = "GCLinTable"),
                                column(downloadButton(outputId = "GCdownloadCounts", label = "Download"),radioButtons(inputId = "GCcountDownloadType", label = "Download Type:",
                                                                                                                      choices= c("tsv", "csv"), selected = "tsv" ),width = 10)),

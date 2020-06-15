@@ -312,14 +312,14 @@ find_paralogs <- function(prot){
   prot <- prot %>% filter(!grepl("^eukaryota",Lineage))
   paralogTable <- prot %>% group_by(GCA_ID) %>%
     count(DomArch)%>%
-    filter(n>1 & GCA_ID != "-") %>% arrange(-n)
+    filter(n>1 & GCA_ID != "-") %>% arrange(-n) %>% distinct()
     #%>% ccNums" = filter(prot, grepl(GCA_ID, prot))$AccNum)
   paralogTable$AccNums <- map(paralogTable$GCA_ID, function(x) filter(prot,grepl(x,GCA_ID))$AccNum)
   colnames(paralogTable)[colnames(paralogTable)=="n"] = "Count"
   ###Merge with columns: AccNum,TaxID, and GCA/ Species?
   paralogTable <- prot %>% select(Species , GCA_ID, Lineage) %>%
-    left_join(paralogTable, by= c("GCA_ID")) %>%
-    filter(!is.na(Count)) %>% distinct() %>% arrange(-Count) %>% select(-GCA_ID)
+    right_join(paralogTable, by= c("GCA_ID")) %>%
+    filter(!is.na(Count)) %>% arrange(-Count) %>% select(-GCA_ID) %>% distinct()
   return(paralogTable)
 }
 
