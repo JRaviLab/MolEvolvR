@@ -55,8 +55,11 @@ tabPanel( title = "Domain Architecture",
                                 fluidRow(
                                   tags$div(class = "bord",
                                            tags$div(class = "innerbox",
-
-                                      plotOutput(outputId = "DANetwork")
+                                                    selectInput(inputId = "networkLayout", label = "Layout:",
+                                                                choices = c("nice", "grid", "circle", "random"),
+                                                                selected = "nice"),
+                                      visNetworkOutput(outputId = "DANetwork")
+                                      #plotOutput(outputId = "DANetwork")
                                            )
                                   ),
                                   tags$div( class = "bord",

@@ -598,12 +598,12 @@ server <- function(input, output,session){
 
 
   #### Network Output ####
-  output$DANetwork <- renderPlot({
+  output$DANetwork <- renderVisNetwork({
     req(credentials()$user_auth)
     domain_network(prot = plotting_prot(), column = "DomArch.repeats",
                    domains_of_interest = network_domain_interest(),
                    cutoff = DA_cutoff_val(),
-                   layout = "auto")
+                   layout = input$networkLayout)
   })
 
 
