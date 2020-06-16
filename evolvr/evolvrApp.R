@@ -65,6 +65,8 @@ server <- function(input, output, session)
                    "csv" = read_csv(input$fileUpload$datapath))
     }
 
+    print(input$fileUpload)
+
     df
 
   })
@@ -306,11 +308,11 @@ server <- function(input, output, session)
     }
   })
   #### Network ####
-  output$DANetwork <- renderPlot({
+  output$DANetwork <- renderVisNetwork({
     domain_network(prot = DA_Prot(), column = "DomArch.repeats",
                    domains_of_interest = network_domain_interest(),
-                   cutoff = 100)
-                   #layout = "layou")
+                   cutoff = 100,
+                   layout = input$networkLayout)
   })
 
 

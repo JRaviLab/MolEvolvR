@@ -7,11 +7,12 @@
 #################
 library(tidyverse)
 library(igraph)
+library(visNetwork)
 conflicted::conflict_prefer("filter", "dplyr")
 ###########################
 #### Network FUNCTIONS ####
 ###########################
-domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff = 1, layout = "grid", UsingRowsCutoff = F){
+domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff = 70, layout = "nice", UsingRowsCutoff = F){
   #'Domain Network
   #'
   #'This function creates a domain network from the 'DomArch' column.
@@ -132,12 +133,26 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
                          function(x) if(x>=ew[1] && x<=ew[2]) E(g)$color="cadetblue" else if(x>ew[2]) E(g)$color="maroon" else E(g)$color="gray55")
   }
 
+
+
+
+
   # par(mar=c(2.5, 2, 2, 1))
+  # switch(layout,
+  #        "random" = plot.igraph(g,layout = layout_randomly(g),vertex.label.dist=0,asp=0,edge.curved=F, vertex.label.color="black", edge.arrow.size = .1),
+  #        "grid" = plot.igraph(g,layout = layout_on_grid(g),vertex.label.dist=0,asp=0,edge.curved=F, vertex.label.color="black", edge.arrow.size = .1),
+  #        "circle" = plot.igraph(g,layout = layout.circle(g),vertex.label.dist=0,asp=0,edge.curved=F, vertex.label.color="black", edge.arrow.size = .1),
+  #        "auto" =plot.igraph(g,layout = layout.auto(g),vertex.label.dist=0,asp=0,edge.curved=F, vertex.label.color="black", edge.arrow.size = .1)
+  # )
+
+  g = visIgraph(g, type ="full")
+
   switch(layout,
-         "random" = plot.igraph(g,layout = layout_randomly(g),vertex.label.dist=0,asp=0,edge.curved=F, vertex.label.color="black", edge.arrow.size = .1),
-         "grid" = plot.igraph(g,layout = layout_on_grid(g),vertex.label.dist=0,asp=0,edge.curved=F, vertex.label.color="black", edge.arrow.size = .1),
-         "circle" = plot.igraph(g,layout = layout.circle(g),vertex.label.dist=0,asp=0,edge.curved=F, vertex.label.color="black", edge.arrow.size = .1),
-         "auto" =plot.igraph(g,layout = layout.auto(g),vertex.label.dist=0,asp=0,edge.curved=F, vertex.label.color="black", edge.arrow.size = .1)
+         "nice" = visIgraphLayout(g,"layout_nicely"),
+         "random" = visIgraphLayout(g, "layout_randomly"),
+         "grid" = visIgraphLayout(g, "layout_on_grid"),
+         "circle" = visIgraphLayout(g, "layout.circle"),
+         "auto" =  visIgraphLayout(g, "layout.auto")
   )
 
 }
