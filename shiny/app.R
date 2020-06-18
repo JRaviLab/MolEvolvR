@@ -117,7 +117,7 @@ ui <- tagList(
 server <- function(input, output,session){
 
   ## Change title tab name (ie: chrome tab name) to Psp-Evolution
-  shinyjs::runjs('document.title = "Psp-Evolution;"')
+  shinyjs::runjs('document.title = "Psp-Evolution"')
 
   # call the logout module with reactive trigger to hide/show
   logout_init <- callModule(shinyauthr::logout,
@@ -931,4 +931,3 @@ server <- function(input, output,session){
 
 #Call to shiny app
 shinyApp(ui = ui, server = server)
-
