@@ -8,13 +8,13 @@ tabPanel( title = "Domain Architecture",
                                choices = c("All"), selected = "All", width = "100%")
             ),
 
-            # column(width = 4,
-            #        actionButton(inputId = "DACutoffSwitch", label = tags$b("Row Cutoff")),
-            #
-            #
-            #        #Slider input to determine cutoff value for totalcounts
-            #        sliderInput(inputId = "DA_Cutoff", label = "Total Count Cutoff:", min = 0, max = 100, value = 95)
-            # ),
+            column(width = 4,
+                   # actionButton(inputId = "DACutoffSwitch", label = tags$b("Row Cutoff")),
+
+
+                   #Slider input to determine cutoff value for totalcounts
+                   sliderInput(inputId = "DA_Cutoff", label = "Total Count Cutoff:", min = 0, max = 100, value = 95)
+            ),
 
 
             textOutput("DALegend", inline = T)
