@@ -8,10 +8,10 @@ tabPanel(title = "Genomic Context",
                       selectInput(inputId =  "GCSelect", label = "Protein",
                                   choices = c("All"), selected = "All")
            ),
-           # column(width = 4,
-           #            #Slider input to determine cutoff value for totalcounts
-           #            sliderInput(inputId = "GC_Cutoff", label = "Total Count Cutoff:", min = 0, max = 100, value = 95)
-           # ),
+           column(width = 4,
+                      #Slider input to determine cutoff value for totalcounts
+                      sliderInput(inputId = "GC_Cutoff", label = "Total Count Cutoff:", min = 0, max = 100, value = 30)
+           ),
 
                   textOutput("GCLegend"),
 

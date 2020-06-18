@@ -1,0 +1,20 @@
+
+/* Create shadowed boxes */
+.innerbox {
+    /*border: 2px solid black;*/
+	box-shadow: 2px 2px 3px 3px #ccc;
+	margin: auto;
+	padding: 20px;
+}
+
+/* Add a margin to the box */
+.bord {
+	margin: auto;
+	padding: 20px;
+}
+
+/* Grow the object on hover */
+.zoom:hover {
+	/*color:white;*/
+	transform: scale(1.3);
+}

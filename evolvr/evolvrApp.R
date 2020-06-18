@@ -10,65 +10,79 @@ source("R/plotting.R")
 source("R/network.R")
 
 
+example_data = read_tsv("data/rawdata_tsv/all_clean.txt")
+
+
+
 #### UI ####
-ui <- navbarPage(
-  title = "EvolvR",
-  id = 'evolvrMenu',
-  tabPanel(
-    title = "Upload",
-    value = "upload",
-    fluidRow(
+ui <- tagList(
+  includeCSS("evolvr/styles.css"),
+  navbarPage(
+    title = actionLink(inputId = "homeButton",
+                       style ="text-decoration:none; color:white;"
+                       , tags$div(class= "zoom",  "EvolvR")),
+    id = 'evolvrMenu',
+    inverse = T,
+    tabPanel(
+      title = "Upload",
+      value = "upload",
+      fluidRow(
 
-      fileInput(inputId = "fileUpload",
-                label = "Choose --- File"
-                  ),
-      radioButtons(inputId = "fileType", label = "File Type:",
-                   choices = c("tsv", "csv")),
-      actionButton(inputId = "loadExample", "Example Data"),
+        fileInput(inputId = "fileUpload",
+                  label = "Choose --- File"
+        ),
+        radioButtons(inputId = "fileType", label = "File Type:",
+                     choices = c("tsv", "csv")),
+        actionButton(inputId = "loadExample", "Example Data"),
 
 
 
-      textInput(inputId = "queryInput", label = "Queries:", value = ""),
+        textInput(inputId = "queryInput", label = "Queries:", value = ""),
 
-      verbatimTextOutput("queryVect"),
+        verbatimTextOutput("queryVect"),
 
-      tableOutput("uploadedContent")
-      #dataTableOutput(outputId = "uploadedContent")
-    )
-  ),
-  source("evolvr/ui/queryDataUI.R")$value,
-  source("evolvr/ui/domainArchitectureUI.R")$value,
-  source("evolvr/ui/genomicContextUI.R")$value,
-  source("evolvr/ui/phylogenyUI.R")$value
-
+        tableOutput("uploadedContent")
+        #dataTableOutput(outputId = "uploadedContent")
+      )
+    ),
+    source("evolvr/ui/queryDataUI.R")$value,
+    source("evolvr/ui/domainArchitectureUI.R")$value,
+    source("evolvr/ui/genomicContextUI.R")$value,
+    source("evolvr/ui/phylogenyUI.R")$value
+  )
 )
 
 
 server <- function(input, output, session)
 {
 
+  ## Change title tab name (ie: chrome tab name) to EvolvR
+  shinyjs::runjs('document.title = "EvolvR;"')
+
+  ## Redirect click on the app title to the upload-data page
+  observeEvent(input$homeButton, updateNavbarPage(session, "evolvrMenu" ,"upload"))
+
   last_button_val = reactiveVal(0)
 
   #### Load Data ####
-  data <- reactive({
-    #req(input$fileUpload)
-    if(input$loadExample != last_button_val())
-    {
-      print(input$loadExample)
-      df = read_tsv("data/rawdata_tsv/all_clean.txt")
-      last_button_val(last_button_val()+1)
-    }
-    else
-    {
-      df <- switch(input$fileType,
-                   "tsv" = read_tsv(input$fileUpload$datapath),
-                   "csv" = read_csv(input$fileUpload$datapath))
-    }
+  observeEvent(input$fileUpload,
+               {
+                 print("Upload")
+                 df <- switch(input$fileType,
+                              "tsv" = read_tsv(input$fileUpload$datapath),
+                              "csv" = read_csv(input$fileUpload$datapath))
+                 data(df)
+               })
 
-    print(input$fileUpload)
 
-    df
+  data <- reactiveVal(data.frame())
 
+  DACutoff <- reactive({
+    input$DA_Cutoff
+  })
+
+  GCCutoff <- reactive({
+    input$GC_Cutoff
   })
 
   # Convert query data into vector
@@ -82,7 +96,6 @@ server <- function(input, output, session)
   })
 
   output$uploadedContent <- renderTable({
-    req(input$fileUpload)
     head(data(),n =  5)
   })
 
@@ -92,6 +105,14 @@ server <- function(input, output, session)
                  updateTextInput(session, inputId = "queryInput", value =
                                    c("PspA", "Snf7", "PspB","PspC", "PspM", "PspN","DUF3046", "LiaI-LiaF-TM", "Toast-rack",
                                      "Tfu_1009","DUF1700-ahelical", "DUF1707-SHOCT"))
+                 print("Button1")
+                 if(last_button_val() < input$loadExample)
+                 {
+                   print("Button2")
+                   data(example_data)
+
+                   last_button_val(last_button_val()+1)
+                 }
 
                })
 
@@ -101,7 +122,6 @@ server <- function(input, output, session)
     updateSelectInput(session, "mainSelect", label = "Protein", choices = append("All", queries()))
     updateSelectInput(session, "DASelect", label = "Protein", choices = append("All", queries()))
     updateSelectInput(session, "GCSelect", label = "Protein", choices = append("All", queries()))
-
   })
 
   observe({
@@ -129,7 +149,6 @@ server <- function(input, output, session)
 
   #### Query Heatmap ####
   output$queryHeatmap <- renderPlot({
-    req(input$fileUpload)
     req(input$queryInput)
     lineage.Query.plot(data(), queries = queries(), colname = "DomArch", cutoff = 100)
   })
@@ -162,7 +181,7 @@ server <- function(input, output, session)
   # Total Counts for DA #
   ##   #   ###    #    ##
   DA_TotalCounts <- reactive({
-    prot_tc <- total_counts(DA_Prot(), cutoff = 100, column = "DomArch")
+    prot_tc <- total_counts(DA_Prot(), cutoff = DACutoff(), column = "DomArch")
     prot_tc$Lineage = map(prot_tc$Lineage, function(x) str_replace_all(string = x,pattern = ">", replacement = "_")) %>%
       unlist()
     prot_tc
@@ -172,7 +191,7 @@ server <- function(input, output, session)
   # Total Counts for GC #
   ##   #   ###    #    ##
   GC_TotalCounts <- reactive({
-    prot_tc <- total_counts(GC_Prot(), cutoff = 100, column = "GenContext")
+    prot_tc <- total_counts(GC_Prot(), cutoff = GCCutoff(), column = "GenContext")
     prot_tc$Lineage = map(prot_tc$Lineage, function(x) str_replace_all(string = x,pattern = ">", replacement = "_")) %>%
       unlist()
     prot_tc
@@ -182,13 +201,11 @@ server <- function(input, output, session)
 
   ###### Heatmap ######
   output$DALinPlot <- renderPlot({
-    req(input$fileUpload)
-    lineage.DA.plot(DA_Prot(), colname = "DomArch", cutoff = 100, RowsCutoff = F)
+    lineage.DA.plot(DA_Prot(), colname = "DomArch", cutoff = DACutoff(), RowsCutoff = F)
   })
 
   output$GCLinPlot <- renderPlot({
-    req(input$fileUpload)
-    lineage.DA.plot(GC_Prot(), colname = "GenContext", cutoff = 30, RowsCutoff = F)
+    lineage.DA.plot(GC_Prot(), colname = "GenContext", cutoff = GCCutoff(), RowsCutoff = F)
   })
 
 
@@ -285,11 +302,11 @@ server <- function(input, output, session)
 
   #### Upset Plot ####
   output$DAUpsetP <- renderPlot({
-    upset.plot(DA_Prot(), colname = "DomArch", cutoff = 100)
+    upset.plot(DA_Prot(), colname = "DomArch", cutoff = DACutoff())
   })
 
   output$GCUpsetP <- renderPlot({
-    upset.plot(GC_Prot(), colname = "GenContext", cutoff = 30)
+    upset.plot(GC_Prot(), colname = "GenContext", cutoff = GCCutoff())
   })
 
   #### WordCloud ####
@@ -311,7 +328,7 @@ server <- function(input, output, session)
   output$DANetwork <- renderVisNetwork({
     domain_network(prot = DA_Prot(), column = "DomArch.repeats",
                    domains_of_interest = network_domain_interest(),
-                   cutoff = 100,
+                   cutoff = DACutoff(),
                    layout = input$networkLayout)
   })
 
@@ -337,14 +354,46 @@ server <- function(input, output, session)
 
 
   #### Paralogs ####
-  output$ParalogTable <- DT::renderDataTable({
+  paralog_table <- reactive({
     find_paralogs(phylogeny_prot())
+  })
+
+
+  output$ParalogTable <- DT::renderDataTable({
+    paralog_table()
   },extensions = c('FixedColumns'),
+  selection = 'single',
   options = list(pageLength = 25,
                  scrollX = TRUE,
                  paging=TRUE,
                  fixedHeader=TRUE,
                  fixedColumns = FALSE))
+
+  ## Dialog box for rows selected in the paralog table
+  observeEvent(input$ParalogTable_rows_selected,
+               {
+                 selected_paralogs = paralog_table()$AccNums[input$ParalogTable_rows_selected] %>% unlist()
+                 selected_paralogs = paste(selected_paralogs, collapse = "|")
+                 showModal(modalDialog(
+                   title = "",
+                   DT::renderDT({
+                     phylogeny_prot() %>% filter(grepl(selected_paralogs,AccNum))
+                   },
+                   options = list(pageLength = 15,
+                                  scrollX = T,
+                                  paging=TRUE,
+                                  fixedHeader=TRUE,
+                                  fixedColumns = list(leftColumns = 0, rightColumns = 0))
+                   ),
+                   size = "l",
+                   footer = modalButton(label = "Close"),
+                   easyClose = T
+                 ))
+               }
+  )
+
+
+
 
 
 }
