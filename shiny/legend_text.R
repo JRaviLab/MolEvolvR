@@ -4,9 +4,8 @@ Upset_txt <- "Distribution (blue histogram) of the constituent domains underlyin
 
 LineageHeatmap_txt <- "The phyletic spread of the various domain architectures. The color gradient in the heatmap
                   represents the number of homologs identified within each lineage (e.g., the darkest shade indicates
-                  the highest number of homologs carried by a particular lineage). Rows: Predominant PspC domain
-                  architectures. Columns: Lineages with representative sequenced genomes (… are not included due
-                  to the absence of representative genomes), listed in phyletic order (NCBI taxonomy)."
+                  the highest number of homologs carried by a particular lineage). Rows: Predominant domain
+                  architectures. Columns: Key lineages within the three kingdoms of life."
 
 AllLineageHeatmap_txt <- "Heatmap of the presence of homologs of 'known' Psp members. The color gradient represents
                       the number of homologs identified within each lineage (e.g., the darkest shade indicates
