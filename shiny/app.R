@@ -89,6 +89,18 @@ ui <- tagList(
                         transform: scale(1.3);
                       }
 
+                      .note-box {
+                        margin: auto;
+                        margin-top: 10px;
+                        margin-bottom: 10px;
+                        width: 80%;
+                        border: 4px, solid, #78adff;
+                        padding: 10px;
+                        background-color: #b7dceb;
+                        border-radius: 5px;
+                        text-align: center;
+                      }
+
                       "))
   ),
   navbarPage(
@@ -151,12 +163,12 @@ server <- function(input, output,session){
     all_reordered <- c()
     for(q in queries)
     {
-      all_reordered <- append(all_reordered, grep(q, all$DomArch))
+      all_reordered <- append(all_reordered, grep(q, prot$DomArch))
     }
 
     all_reordered <- unique(all_reordered)
 
-    all_re <- all[all_reordered,]
+    all_re <- prot[all_reordered,]
     return(all_re)
   }
 
@@ -190,7 +202,7 @@ server <- function(input, output,session){
       options = list(pageLength = 100,
                      #The below line seems to disable other pages and the search bar
                      #dom = 't',
-                     scrollX = TRUE,
+                     scrollX = "400px",
                      paging=TRUE,
                      fixedHeader= TRUE,
                      fixedColumns = list(leftColumns = 2, rightColumns = 0)))
@@ -608,13 +620,13 @@ server <- function(input, output,session){
 
 
   #### Wordcloud ####
-  output$DAwordcloud <- renderWordcloud2({
+  output$DAwordcloud <- renderPlot({
     req(credentials()$user_auth)
     wordcloud_element(query_data = plotting_prot(), colname = "DomArch",
                       cutoff = DA_cutoff_val(), UsingRowsCutoff = rows_cutoff())
   })
 
-  output$GCwordcloud <-renderWordcloud2({
+  output$GCwordcloud <-renderPlot({
     req(credentials()$user_auth)
     wordcloud_element(query_data = plotting_prot(), colname = "GenContext",
                       cutoff = GC_cutoff_val(), UsingRowsCutoff = rows_cutoff())
@@ -794,7 +806,7 @@ server <- function(input, output,session){
       showModal(modalDialog(
         title = "",
         DT::renderDT({
-          phylogeny_prot() %>% filter(grepl(selected_paralogs,AccNum))
+          phylogeny_prot() %>% select(all_of(viewing_cols)) %>% filter(grepl(selected_paralogs,AccNum))
         },
         options = list(pageLength = 15,
                        scrollX = T,

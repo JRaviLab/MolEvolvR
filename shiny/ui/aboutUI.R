@@ -29,7 +29,9 @@ tabPanel(title = "About",
 
                         a(href = "mailto:janani@msu.edu",
                           icon(name = "envelope",class = "zoom iMargin fa-3x",
-                               lib = "font-awesome"))
+                               lib = "font-awesome")),
+                        a(href = "https://twitter.com/JRaviLab",
+                          icon(name = "twitter", class = "zoom iMargin fa-3x", lib = "font-awesome"))
 
 
         ))
