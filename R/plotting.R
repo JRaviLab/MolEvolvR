@@ -13,7 +13,7 @@ library(tidyverse)
 library(UpSetR)
 library(gridExtra)
 library(wordcloud)
-library(wordcloud2)
+# library(wordcloud2)
 library(sunburstR)
 library(d3r)
 
@@ -469,16 +469,15 @@ wordcloud_element <- function(query_data="prot",
 
   # need a label column for actual frequencies, and frequencies will be the
   # normalized sizes
-  words.tc$label <- words.tc$freq
-
-  words.tc <- words.tc %>% mutate(freq = log10(freq))
-
-  words.tc <- words.tc %>% select(words, freq, label)
-
-  wordcloud3(words.tc, minSize = 0)
-
-  # wordcloud(words.tc$words, words.tc$freq, min.freq = 1,
-  #           colors=brewer.pal(8, "Spectral"),scale=c(4.5,1))
+  # words.tc$label <- words.tc$freq
+  #
+  # words.tc <- words.tc %>% mutate(freq = log10(freq))
+  #
+  # words.tc <- words.tc %>% select(words, freq, label)
+  #
+  # wordcloud3(words.tc, minSize = 0)
+  wordcloud(words.tc$words, words.tc$freq, min.freq = 1,
+            colors=brewer.pal(8, "Spectral"),scale=c(4.5,1))
 }
 
 
