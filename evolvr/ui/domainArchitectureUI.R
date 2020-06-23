@@ -35,7 +35,7 @@ tabPanel( title = "Domain Architecture",
                      tabPanel("Heatmap", value = "Heatmap",
                               plotOutput(outputId = "DALinPlot", height = '600px' )),
                      tabPanel("Table", value = "LinTable",
-                              p("Select a row to see which lineages the domain architecture is present in", style = "color:#242320; text-align:center;"),
+                              p("Select a row to see which lineages the domain architecture is present in", class = "note-box", style = "color:#242320;"),
                               DT::dataTableOutput(outputId = "DALinTable"),
                               column(downloadButton(outputId = "DAdownloadCounts", label = "Download"),radioButtons(inputId = "DAcountDownloadType", label = "Download Type:",
                                                                                                                     choices= c("tsv", "csv"), selected = "tsv" ),width = 10)),
@@ -45,6 +45,10 @@ tabPanel( title = "Domain Architecture",
                      tabPanel("Network",
                               value = "Network_WC",
                               fluidRow(
+                                tags$div(class = "note-box",
+                                         "Messy graph? Try re-arranging the vertices by
+                                  clicking and dragging the vertices! Also try zooming in and out using your scroll wheel!"
+                                ),
                                 tags$div(class = "bord",
                                          tags$div(class = "innerbox",
                                                   selectInput(inputId = "networkLayout", label = "Layout:",
@@ -54,9 +58,11 @@ tabPanel( title = "Domain Architecture",
                                          )
                                 ),
                                 tags$div( class = "bord",
-                                          #plotOutput(outputId = "DAwordcloud")
+
+
                                           tags$div(class = "innerbox",
-                                                   wordcloud2Output(outputId = "DAwordcloud")
+                                                   plotOutput(outputId = "DAwordcloud")
+                                                   # wordcloud2Output(outputId = "DAwordcloud")
                                           )
                                 )
                               )

@@ -1,13 +1,29 @@
 library(shiny)
+library(shinyjs)
 library(tidyverse)
 library(wordcloud2)
 library(sunburstR)
 library(rmarkdown)
+library(shinyBS)
+library(shinyauthr)
 setwd("..")
 source("R/cleanup.R")
 source("R/summarize.R")
 source("R/plotting.R")
 source("R/network.R")
+
+###
+#### Users ####
+###
+user_base <- data.frame(
+  user = c("pspevolution"),
+  password = c("cpathogeno2019"),
+  permissions = c("admin"),
+  name = c("User One"),
+  stringsAsFactors = FALSE,
+  row.names = NULL
+)
+
 
 
 example_data = read_tsv("data/rawdata_tsv/all_clean.txt")
@@ -16,7 +32,10 @@ example_data = read_tsv("data/rawdata_tsv/all_clean.txt")
 
 #### UI ####
 ui <- tagList(
+  shinyjs::useShinyjs(),
+  tags$head(includeScript("shiny/logout-button.js")),
   includeCSS("evolvr/styles.css"),
+  tags$head(includeScript("evolvr/splash-button.js")),
   navbarPage(
     title = actionLink(inputId = "homeButton",
                        style ="text-decoration:none; color:white;"
@@ -27,7 +46,7 @@ ui <- tagList(
       title = "Upload",
       value = "upload",
       fluidRow(
-
+        loginUI("login"),
         fileInput(inputId = "fileUpload",
                   label = "Choose --- File"
         ),
@@ -39,16 +58,20 @@ ui <- tagList(
 
         textInput(inputId = "queryInput", label = "Queries:", value = ""),
 
-        verbatimTextOutput("queryVect"),
+        tags$div( class = "textOutput-box",
+                  textOutput("queryVect")
+        ),
 
         tableOutput("uploadedContent")
-        #dataTableOutput(outputId = "uploadedContent")
       )
     ),
+
+
     source("evolvr/ui/queryDataUI.R")$value,
     source("evolvr/ui/domainArchitectureUI.R")$value,
     source("evolvr/ui/genomicContextUI.R")$value,
-    source("evolvr/ui/phylogenyUI.R")$value
+    source("evolvr/ui/phylogenyUI.R")$value,
+    bsModal(id = "splashModal", title = "Splash Page", trigger = "splashBtn", size = "large")
   )
 )
 
@@ -56,8 +79,33 @@ ui <- tagList(
 server <- function(input, output, session)
 {
 
+  # call the logout module with reactive trigger to hide/show
+  logout_init <- callModule(shinyauthr::logout,
+                            id = "logout",
+                            active = reactive(credentials()$user_auth))
+
+  # call login module supplying data frame, user and password cols
+  # and reactive trigger
+  credentials <- callModule(shinyauthr::login,
+                            id = "login",
+                            data = user_base,
+                            user_col = user,
+                            pwd_col = password,
+                            log_out = reactive(logout_init()))
+
+  # pulls out the user information returned from login module
+  user_data <- reactive({credentials()$info})
+
+  output$user_table <- renderTable({
+    # use req to only render results when credentials()$user_auth is TRUE
+    req(credentials()$user_auth)
+    user_data()
+  })
+
+
+
   ## Change title tab name (ie: chrome tab name) to EvolvR
-  shinyjs::runjs('document.title = "EvolvR;"')
+  shinyjs::runjs('document.title = "EvolvR"')
 
   ## Redirect click on the app title to the upload-data page
   observeEvent(input$homeButton, updateNavbarPage(session, "evolvrMenu" ,"upload"))
@@ -67,6 +115,7 @@ server <- function(input, output, session)
   #### Load Data ####
   observeEvent(input$fileUpload,
                {
+                 req(credentials()$user_auth)
                  print("Upload")
                  df <- switch(input$fileType,
                               "tsv" = read_tsv(input$fileUpload$datapath),
@@ -91,8 +140,13 @@ server <- function(input, output, session)
     unlist(strsplit(input$queryInput, "\\s*,\\s*|\\s+"))
   })
 
-  output$queryVect <- renderPrint({
-    queries()
+  output$queryVect <- renderText({
+    req(input$queryInput)
+    if(length(queries()) == 0){  }
+    else
+    {
+      paste(queries(), collapse = ",\t")
+    }
   })
 
   output$uploadedContent <- renderTable({
@@ -102,13 +156,12 @@ server <- function(input, output, session)
   ####  Load Example Data
   observeEvent(input$loadExample,
                {
+                 req(credentials()$user_auth)
                  updateTextInput(session, inputId = "queryInput", value =
                                    c("PspA", "Snf7", "PspB","PspC", "PspM", "PspN","DUF3046", "LiaI-LiaF-TM", "Toast-rack",
                                      "Tfu_1009","DUF1700-ahelical", "DUF1707-SHOCT"))
-                 print("Button1")
                  if(last_button_val() < input$loadExample)
                  {
-                   print("Button2")
                    data(example_data)
 
                    last_button_val(last_button_val()+1)
@@ -310,7 +363,13 @@ server <- function(input, output, session)
   })
 
   #### WordCloud ####
+  output$DAwordcloud <- renderPlot({
+    wordcloud_element(DA_Prot(), colname = "DomArch", cutoff = DACutoff(), UsingRowsCutoff = F)
+  })
 
+  output$GCwordcloud <- renderPlot({
+    wordcloud_element(GC_Prot(), colname = "GenContext", cutoff = GCCutoff(), UsingRowsCutoff = F)
+  })
 
 
   #### Reactive expression determining domain of interest for plotting domain networks

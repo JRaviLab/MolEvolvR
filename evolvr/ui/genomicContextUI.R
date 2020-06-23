@@ -28,7 +28,7 @@ tabPanel(title = "Genomic Context",
                       tabPanel("Heatmap", value = "Heatmap",
                                plotOutput(outputId = "GCLinPlot", height = '600px', width = "1440px" )),
                       tabPanel("Table", value = "LinTable",
-                               p("Select a row to see which lineages the gencomic context is present in", style = "color:#242320; text-align:center;"),
+                               p("Select a row to see which lineages the gencomic context is present in", class = "note-box",style = "color:#242320;"),
                                DT::dataTableOutput(outputId = "GCLinTable"),
                                column(downloadButton(outputId = "GCdownloadCounts", label = "Download"),radioButtons(inputId = "GCcountDownloadType", label = "Download Type:",
                                                                                                                      choices= c("tsv", "csv"), selected = "tsv" ),width = 10)),
@@ -40,8 +40,8 @@ tabPanel(title = "Genomic Context",
                                  #     plotOutput(outputId = "GCNetwork")
                                  # ),
 
-                                     #plotOutput(outputId = "GCwordcloud")
-                                     wordcloud2Output(outputId = "GCwordcloud")
+                                     plotOutput(outputId = "GCwordcloud")
+                                     # wordcloud2Output(outputId = "GCwordcloud")
 
                                )
 
