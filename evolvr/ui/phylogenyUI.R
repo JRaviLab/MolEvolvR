@@ -18,6 +18,7 @@ tabPanel( title = "Phylogeny",
                    tabPanel("MSA", value="MSA",
                             htmlOutput(outputId="msaPlot")),
                    tabPanel("Paralog Table", value="Paralog",
+                            p("Select a row for more information about those paralogs", style = "text-align:center", class = "note-box"),
                             DT::dataTableOutput(outputId = "ParalogTable")
                    )
                  )

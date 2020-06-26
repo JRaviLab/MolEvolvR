@@ -1,0 +1,77 @@
+
+
+
+
+.diagram-box {
+	/*
+	margin: auto;
+	width: 30%;
+	border: 4px solid black;
+	text-align: center;
+	padding: 10px;
+	background-color: #b7dceb;
+	border-radius: 5px;
+	*/
+	/*text-align: left;*/
+	width:100%;
+	height:100%;
+	min-height:23vh;
+	background-color:white;
+    border: 1px solid #AAAAAA;
+	margin-bottom: 5px;
+	float: left; 
+    transition: 0.5s ease; 
+	position: relative; 
+}
+
+/* Flow chart box hover effects */
+.diagram-box:hover {
+	-webkit-transform: scale(1.05); 
+	-ms-transform: scale(1.05);
+	transform: scale(1.05); 
+}
+
+.box-title {
+	box-shadow: 1px 2px 3px 1px #ccc;
+	margin: auto;
+	padding: 10px;
+	text-align: center;
+}
+
+.diagram-box-description {
+	padding: 10px;
+	margin: auto;
+}
+
+/* Style the buttons of the flow chart*/
+.diagram-button {
+	position: absolute;
+	top:0;
+	width: 100%; 
+	height: 100%;
+	opacity: 0;
+	text-align: center;
+}
+
+.arrow {
+	/*position: absolute;*/
+	width: 100%;
+	text-align: center;
+}
+.arrow-d {
+	transform: rotate(90deg);
+	-webkit-transform:
+	rotate(90deg);
+}
+
+.arrow-dl {
+	transform: rotate(135deg);
+	-webkit-transform:
+	rotate(135deg);
+}
+
+.arrow-dr {
+	transform: rotate(45deg);
+	-webkit-transform:
+	rotate(45deg);
+}

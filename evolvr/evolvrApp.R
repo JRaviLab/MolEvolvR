@@ -11,6 +11,7 @@ source("R/cleanup.R")
 source("R/summarize.R")
 source("R/plotting.R")
 source("R/network.R")
+source("evolvr/components.R")
 
 ###
 #### Users ####
@@ -33,15 +34,17 @@ example_data = read_tsv("data/rawdata_tsv/all_clean.txt")
 #### UI ####
 ui <- tagList(
   shinyjs::useShinyjs(),
-  tags$head(includeScript("shiny/logout-button.js")),
+  tags$head(includeScript("evolvr/logout-button.js")),
   includeCSS("evolvr/styles.css"),
-  tags$head(includeScript("evolvr/splash-button.js")),
+  includeCSS("evolvr/components.css"),
+  # tags$head(includeScript("evolvr/splash-button.js")),
   navbarPage(
     title = actionLink(inputId = "homeButton",
                        style ="text-decoration:none; color:white;"
                        , tags$div(class= "zoom",  "EvolvR")),
     id = 'evolvrMenu',
     inverse = T,
+    source("evolvr/ui/splashPageUI.R")$value,
     tabPanel(
       title = "Upload",
       value = "upload",
@@ -254,11 +257,13 @@ server <- function(input, output, session)
 
   ###### Heatmap ######
   output$DALinPlot <- renderPlot({
-    lineage.DA.plot(DA_Prot(), colname = "DomArch", cutoff = DACutoff(), RowsCutoff = F)
+    lineage.DA.plot(DA_Prot(), colname = "DomArch", cutoff = DACutoff(), RowsCutoff = F,
+                    color = input$DA_lin_color)
   })
 
   output$GCLinPlot <- renderPlot({
-    lineage.DA.plot(GC_Prot(), colname = "GenContext", cutoff = GCCutoff(), RowsCutoff = F)
+    lineage.DA.plot(GC_Prot(), colname = "GenContext", cutoff = GCCutoff(), RowsCutoff = F,
+                    color = input$GC_lin_color)
   })
 
 
