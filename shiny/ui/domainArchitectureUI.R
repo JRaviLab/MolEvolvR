@@ -41,6 +41,9 @@ tabPanel( title = "Domain Architecture",
                      tabsetPanel(
                        id= 'DALin_data',
                        tabPanel("Heatmap", value = "Heatmap",
+                                selectInput(inputId = "DA_lin_color", label = "Theme", choices =
+                                              c("default", "viridis", "inferno","magma", "plasma", "cividis"), selected = "default"
+                                            ),
                                 plotOutput(outputId = "DALinPlot", height = '600px' )),
                        tabPanel("Table", value = "LinTable",
                                 p("Select a row to see which lineages the domain architecture is present in", style = "color:#242320;", class = "note-box"),

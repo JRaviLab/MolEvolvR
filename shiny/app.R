@@ -94,7 +94,7 @@ ui <- tagList(
                         margin-top: 10px;
                         margin-bottom: 10px;
                         width: 80%;
-                        border: 4px, solid, #78adff;
+                        border: 4px solid #78adff;
                         padding: 10px;
                         background-color: #b7dceb;
                         border-radius: 5px;
@@ -435,13 +435,17 @@ server <- function(input, output,session){
 
   output$DALinPlot <- renderPlot({
     req(credentials()$user_auth)
-    lineage.DA.plot(plotting_prot(), colname = "DomArch", cutoff = DA_cutoff_val(), RowsCutoff = rows_cutoff())
+    lineage.DA.plot(plotting_prot(), colname = "DomArch",
+                    cutoff = DA_cutoff_val(), RowsCutoff = rows_cutoff(),
+                    color = input$DA_lin_color)
 
   })
 
   output$GCLinPlot <- renderPlot({
     req(credentials()$user_auth)
-    lineage.DA.plot(plotting_prot(), colname = "GenContext", cutoff = GC_cutoff_val(), RowsCutoff = rows_cutoff())
+    lineage.DA.plot(plotting_prot(), colname = "GenContext",
+                    cutoff = GC_cutoff_val(), RowsCutoff = rows_cutoff(),
+                    color = input$GC_lin_color)
 
   })
 
