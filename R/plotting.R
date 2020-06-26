@@ -16,6 +16,7 @@ library(wordcloud)
 # library(wordcloud2)
 library(sunburstR)
 library(d3r)
+library(viridis)
 
 
 source("R/wordcloud3.R")
@@ -153,7 +154,8 @@ upset.plot <- function(query_data="toast_rack.sub",
 lineage.DA.plot <- function(query_data="prot",
                             colname="DomArch",
                             cutoff = 90,
-                            RowsCutoff = FALSE){ # query.elements, query.words,
+                            RowsCutoff = FALSE,
+                            color = "default"){ # query.elements, query.words,
   #' Lineage Plot: Heatmap of Domains/DAs/GCs vs Lineages
   #' @author Janani Ravi
   #' @keywords Lineages, Domains, Domain Architectures, GenomicContexts
@@ -167,6 +169,8 @@ lineage.DA.plot <- function(query_data="prot",
   #' "DomArch.PFAM.norep" or "DomArch.LADB.norep". Default is "DomArch.norep".
   #' @param type Character. Default is "da2doms" for Domain Architectures.
   #' Other alternative: "gc2da" for Genomic Contexts.
+  #' @param color Color for the heatmap. One of six options: "default", "magma", "inferno",
+  #' "plasma", "viridis", or "cividis"
   #' @examples lineage.DA.plot(toast_rack_data, 10, "DomArch.norep", "da2doms")
   #' @details For "da2doms" you would need the file DA.doms.wc as well as the
   #' column query_data$DomArch.norep
@@ -199,7 +203,7 @@ lineage.DA.plot <- function(query_data="prot",
                                             levels = (pull(query.summ.byLin.ggplot, {{column}}) %>% unique()))
 
 
-
+  if(color == "default"){
   ## Tile plot
   ggplot(data=query.summ.byLin.ggplot,
          aes_string(x="Lineage", y=colname)) +
@@ -211,6 +215,20 @@ lineage.DA.plot <- function(query_data="prot",
     scale_x_discrete(position="top") +
     theme_minimal() + # coord_flip() +
     theme(axis.text.x=element_text(angle=65,hjust=0,vjust=0.5))
+  }
+  else
+  {
+    ggplot(data=query.summ.byLin.ggplot,
+           aes_string(x="Lineage", y=colname)) +
+      geom_tile(data=subset(query.summ.byLin.ggplot,
+                            !is.na(count)),
+                aes(fill=count))+
+                #colour="darkred", size=0.3) + #, width=0.7, height=0.7),
+      scale_fill_viridis(discrete = F, option = color)+
+      scale_x_discrete(position="top") +
+      theme_minimal() + # coord_flip() +
+      theme(axis.text.x=element_text(angle=65,hjust=0,vjust=0.5))
+  }
 }
 
 
