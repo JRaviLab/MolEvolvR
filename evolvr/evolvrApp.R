@@ -49,7 +49,7 @@ ui <- tagList(
       title = "Upload",
       value = "upload",
       fluidRow(
-        loginUI("login"),
+
         fileInput(inputId = "fileUpload",
                   label = "Choose File"
         ),
