@@ -1,4 +1,5 @@
 tabPanel("Home", value = "home", icon = icon("home", class = "fa-1x", lib = "font-awesome"),
+         loginUI("login"),
          fluidPage(
            fluidRow(
            div(class = "SplashText", style = "text-align:center;",
