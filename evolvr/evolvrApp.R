@@ -44,14 +44,14 @@ ui <- tagList(
                        , tags$div(class= "zoom",  "EvolvR")),
     id = 'evolvrMenu',
     inverse = T,
-    source("evolvr/ui/splashPageUI.R")$value,
+    source("evolvr/ui/StaticSplashPageUI.R")$value,
     tabPanel(
       title = "Upload",
       value = "upload",
       fluidRow(
         loginUI("login"),
         fileInput(inputId = "fileUpload",
-                  label = "Choose --- File"
+                  label = "Choose File"
         ),
         radioButtons(inputId = "fileType", label = "File Type:",
                      choices = c("tsv", "csv")),
@@ -111,7 +111,7 @@ server <- function(input, output, session)
   shinyjs::runjs('document.title = "EvolvR"')
 
   ## Redirect click on the app title to the upload-data page
-  observeEvent(input$homeButton, updateNavbarPage(session, "evolvrMenu" ,"upload"))
+  observeEvent(input$homeButton, updateNavbarPage(session, "evolvrMenu" ,"home"))
 
   last_button_val = reactiveVal(0)
 
@@ -457,7 +457,8 @@ server <- function(input, output, session)
   )
 
 
-
+  #### Static Flowchart ####
+  # output$flowchartImage <- renderImage( list(src = "data/figures/ISMB-Poster-FlowChart-evolvr.png"), deleteFile = F)
 
 
 }
