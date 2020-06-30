@@ -24,7 +24,8 @@ tabPanel( title = "Domain Architecture",
                  ),
 
                  column(width = 4,
-                        textOutput("DALegend", inline = T)
+                        # textOutput("DALegend", inline = T)
+                        htmlOutput("DALegend", inline = T)
                  )
 
             )
@@ -41,12 +42,12 @@ tabPanel( title = "Domain Architecture",
                      tabsetPanel(
                        id= 'DALin_data',
                        tabPanel("Heatmap", value = "Heatmap",
-                                selectInput(inputId = "DA_lin_color", label = "Theme", choices =
+                                selectInput(inputId = "DA_lin_color", label = "Color Scheme", choices =
                                               c("default", "viridis", "inferno","magma", "plasma", "cividis"), selected = "default"
                                             ),
                                 plotOutput(outputId = "DALinPlot", height = '600px' )),
-                       tabPanel("Table", value = "LinTable",
-                                p("Select a row to see which lineages the domain architecture is present in", style = "color:#242320;", class = "note-box"),
+                       tabPanel("Summary Table", value = "LinTable",
+                                p("Select a row to view lineage-level stats", style = "color:#242320;", class = "note-box"),
                                 DT::dataTableOutput(outputId = "DALinTable"),
                                 column(downloadButton(outputId = "DAdownloadCounts", label = "Download"),radioButtons(inputId = "DAcountDownloadType", label = "Download Type:",
                                                                                                                       choices= c("tsv", "csv"), selected = "tsv" ),width = 10)),
@@ -57,8 +58,8 @@ tabPanel( title = "Domain Architecture",
                                 value = "Network_WC",
                                 fluidRow(
                                   tags$div(class = "note-box",
-                                           "Messy graph? Try re-arranging the vertices by
-                                  clicking and dragging the vertices! Also try zooming in and out using your scroll wheel!"
+                                           "Messy graph? Try re-arranging by
+                                  clicking and dragging the vertices! Also try zooming in and out using your scrolling!"
                                   ),
                                   tags$div(class = "bord",
                                            tags$div(class = "innerbox",
