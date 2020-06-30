@@ -16,7 +16,7 @@ tabPanel(title = "Genomic Context",
                       sliderInput(inputId = "GC_Cutoff", label = "Total Count Cutoff:", min = 0, max = 100, value = 95)
            ),
            column(width = 4,
-                  textOutput("GCLegend")
+                  htmlOutput("GCLegend")
            )
 
 
@@ -29,12 +29,12 @@ tabPanel(title = "Genomic Context",
                     tabsetPanel(
                       id= 'GCLin_data',
                       tabPanel("Heatmap", value = "Heatmap",
-                               selectInput(inputId = "GC_lin_color", label = "Theme", choices =
+                               selectInput(inputId = "GC_lin_color", label = "Color Scheme", choices =
                                              c("default", "viridis", "inferno","magma", "plasma", "cividis"), selected = "default"
                                ),
                                plotOutput(outputId = "GCLinPlot", height = '600px', width = "1440px" )),
-                      tabPanel("Table", value = "LinTable",
-                               p("Select a row to see which lineages the gencomic context is present in", style = "color:#242320;", class = "note-box"),
+                      tabPanel("Summary Table", value = "LinTable",
+                               p("Select a row to view lineage-level stats", style = "color:#242320;", class = "note-box"),
                                DT::dataTableOutput(outputId = "GCLinTable"),
                                column(downloadButton(outputId = "GCdownloadCounts", label = "Download"),radioButtons(inputId = "GCcountDownloadType", label = "Download Type:",
                                                                                                                      choices= c("tsv", "csv"), selected = "tsv" ),width = 10)),

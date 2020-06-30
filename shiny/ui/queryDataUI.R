@@ -28,6 +28,12 @@ tabPanel( title = "Data/Query",
 
                       ## Heatmap by query tab
                       tabPanel("Query Heatmap",value = "queryHeatmapTab",
+                               fluidRow( tags$span(
+                                 div(class = "queryLegend", style = "margin: 20px;",
+                                 strong("The phyletic spread of query proteins."),
+                                 p(" The color gradient in the heatmap represents the number of homologs within each lineage. Rows: Query proteins/domains. Columns: Key lineages within the three kingdoms of life.")
+                                 )
+                                 )),
                                column(width = 12,
                                       plotOutput(outputId = "queryHeatmap", height = "600px")
                                )

@@ -20,10 +20,15 @@ tabPanel( title = "Phylogeny",
                                "Toast-rack PspC-Cterm"
                                )
                              , selected = "PspA Snf7")),
+          column(width = 4, offset = 6,
+                 # textOutput("DALegend", inline = T)
+                 htmlOutput("PhyloLegend", inline = T)
+          ),
           column(width = 12,
                  tabsetPanel(
                    id= "phylo",
                    tabPanel("Sunburst", value ="sunburst",
+                            p("Hover over the colored segments for expanded lineage info.", style = "text-align:center", class = "note-box"),
                             numericInput(inputId = "levels",label = "Number of Levels:" ,value = 2, min = 1, max = 5),
                             sunburstOutput(outputId = "sunburst")
                    ),
@@ -34,7 +39,7 @@ tabPanel( title = "Phylogeny",
                    tabPanel("MSA", value="MSA",
                             htmlOutput(outputId="msaPlot")),
                    tabPanel("Paralog Table", value="Paralog",
-                            p("Select a row for more information about those paralogs", style = "text-align:center", class = "note-box"),
+                            p("Select a row for more information about the paralogs", style = "text-align:center", class = "note-box"),
                             DT::dataTableOutput(outputId = "ParalogTable")
                    )
                  )

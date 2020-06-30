@@ -94,7 +94,7 @@ ui <- tagList(
                         margin-top: 10px;
                         margin-bottom: 10px;
                         width: 80%;
-                        border: 4px solid #78adff;
+                        border: 1px solid #78adff;
                         padding: 10px;
                         background-color: #b7dceb;
                         border-radius: 5px;
@@ -649,33 +649,64 @@ server <- function(input, output,session){
   #### Legends ####
 
   ### Observe changes in tabset panel to determine legend text ###
-  DA_legend_txt <- reactive({
+  # DA_legend_txt <- reactive({
+    # switch( input$DALin_data,
+    #         "Heatmap" =  DA_LineageHeatmap_txt,
+    #         "Upset" = DA_Upset_txt,
+    #         "Lintable" = DA_LinTable_txt,
+    #         "Network_WC" = paste(Network_txt, Wordcloud_txt, sep = "\n")
+    # )
+  # })
+  #
+  # GC_legend_txt <- reactive({
+  #   switch( input$GCLin_data,
+  #           "Heatmap" = ifelse(input$GClinSelec == "All", AllLineageHeatmap_txt, LineageHeatmap_txt),
+  #           "Upset" = Upset_txt,
+  #           "Lintable" = LinTable_txt,
+  #           "Network_WC" = paste(Network_txt, Wordcloud_txt, sep = "\n")
+  #   )
+  # })
+
+  output$DALegend <- renderUI({
+    req(credentials()$user_auth)
     switch( input$DALin_data,
-            "Heatmap" = ifelse(input$DAlinSelec == "All", AllLineageHeatmap_txt, LineageHeatmap_txt),
-            "Upset" = Upset_txt,
-            "Lintable" = LinTable_txt,
-            "Network_WC" = paste(Network_txt, Wordcloud_txt, sep = "\n")
+            "Heatmap" =  DA_LineageHeatmap_txt,
+            "Upset" = DA_upset_txt,
+            "LinTable" = DA_LinTable_txt,
+            "Network_WC" = tags$span(DA_Network_txt,br(), DA_Wordcloud_txt)
     )
   })
 
-  GC_legend_txt <- reactive({
+  output$GCLegend <- renderUI({
+    req(credentials()$user_auth)
     switch( input$GCLin_data,
-            "Heatmap" = ifelse(input$GClinSelec == "All", AllLineageHeatmap_txt, LineageHeatmap_txt),
-            "Upset" = Upset_txt,
-            "Lintable" = LinTable_txt,
-            "Network_WC" = paste(Network_txt, Wordcloud_txt, sep = "\n")
+            "Heatmap" =  GC_LineageHeatmap_txt,
+            "Upset" = GC_upset_txt,
+            "LinTable" = GC_LinTable_txt,
+            "Network_WC" = GC_Wordcloud_txt
     )
   })
 
-  output$DALegend <- renderText({
+  output$PhyloLegend <- renderUI({
     req(credentials()$user_auth)
-    DA_legend_txt()
+    switch( input$phylo,
+            "sunburst" =  sunburst_txt,
+            "Tree" = tree_txt,
+            "MSA" = msa_txt,
+            "Paralog" = paralog_txt
+    )
   })
 
-  output$GCLegend <- renderText({
-    req(credentials()$user_auth)
-    GC_legend_txt()
-  })
+
+  # output$DALegend <- renderText({
+  #   req(credentials()$user_auth)
+  #   DA_legend_txt()
+  # })
+  #
+  # output$GCLegend <- renderText({
+  #   req(credentials()$user_auth)
+  #   GC_legend_txt()
+  # })
 
 
   phylogeny_prot <- reactive({
