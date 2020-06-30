@@ -624,35 +624,27 @@ server <- function(input, output,session){
 
 
   #### Wordcloud ####
-  output$DAwordcloud <- renderPlot({
-    req(credentials()$user_auth)
-    wordcloud_element(query_data = plotting_prot(), colname = "DomArch",
-                      cutoff = DA_cutoff_val(), UsingRowsCutoff = rows_cutoff())
-  })
-
-  output$GCwordcloud <-renderPlot({
-    req(credentials()$user_auth)
-    wordcloud_element(query_data = plotting_prot(), colname = "GenContext",
-                      cutoff = GC_cutoff_val(), UsingRowsCutoff = rows_cutoff())
-  })
-
   # output$DAwordcloud <- renderPlot({
-  #   wordcloud_element(query_data = plotting_prot(), colname = "DomArch", cutoff = DA_cutoff_val())
+  #   req(credentials()$user_auth)
+  #   wordcloud_element(query_data = plotting_prot(), colname = "DomArch",
+  #                     cutoff = DA_cutoff_val(), UsingRowsCutoff = rows_cutoff())
   # })
   #
   # output$GCwordcloud <-renderPlot({
-  #   wordcloud_element(query_data = plotting_prot(), colname = "GenContext", cutoff = GC_cutoff_val())
+  #   req(credentials()$user_auth)
+  #   wordcloud_element(query_data = plotting_prot(), colname = "GenContext",
+  #                     cutoff = GC_cutoff_val(), UsingRowsCutoff = rows_cutoff())
   # })
 
-  # output$wordcloud <- renderWordcloud2({
-  #   req(credentials()$user_auth)
-  #   if(input$DA_GC == "Genomic Context"){
-  #     wordcloud_element(query_data = plotting_prot(), colname = "GenContext", cutoff = cutoff_val())
-  #   }
-  #   else{
-  #     wordcloud_element(query_data = plotting_prot(), colname = "DomArch", cutoff = cutoff_val())
-  #   }
-  # })
+  output$DAwordcloud <- renderWordcloud2({
+    req(credentials()$user_auth)
+    wordcloud2_element(query_data = plotting_prot(), colname = "DomArch", cutoff = DA_cutoff_val())
+  })
+
+  output$GCwordcloud <-renderWordcloud2({
+    req(credentials()$user_auth)
+    wordcloud2_element(query_data = plotting_prot(), colname = "GenContext", cutoff = GC_cutoff_val())
+  })
 
   #### Legends ####
 

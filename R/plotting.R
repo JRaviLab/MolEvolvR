@@ -13,7 +13,7 @@ library(tidyverse)
 library(UpSetR)
 library(gridExtra)
 library(wordcloud)
-# library(wordcloud2)
+library(wordcloud2)
 library(sunburstR)
 library(d3r)
 library(viridis)
@@ -144,7 +144,9 @@ upset.plot <- function(query_data="toast_rack.sub",
         show.numbers="yes", shade.alpha = 0.25,
         mainbar.y.label="Intersection counts",
         sets.x.label="Individual set counts",
-        query.legend="top")
+        query.legend="top",
+        text.scale = 1.5
+        )
 }
 
 ###################
@@ -497,6 +499,62 @@ wordcloud_element <- function(query_data="prot",
   wordcloud(words.tc$words, words.tc$freq, min.freq = 1,
             colors=brewer.pal(8, "Spectral"),scale=c(4.5,1))
 }
+
+
+wordcloud2_element <- function(query_data="prot",
+                              colname = "DomArch",
+                              cutoff = 70,
+                              UsingRowsCutoff = FALSE
+){
+  #' Wordclouds for the predominant domains, domain architectures.
+  #' @author Janani Ravi
+  #' @keywords Domains, Domain Architectures, GenomicContexts
+  #' @description Wordclouds for the predominant domains (from DAs) and DAs (from GC)
+  #' @param query_data Data frame of protein homologs with the usual 11 columns +
+  #' additional word columns (0/1 format). Default is "prot".
+  #' @param type Character. Default is "da2doms" for Domain Architectures.
+  #' Other alternative: "gc2da" for Genomic Contexts.
+  #' @examples wordcloud_element(prot, "da2doms", 10)
+  #' @details For "da2doms" you would need the file DA.doms.wc as well as the
+  #' column query_data$DomArch.norep
+  #'
+  #' For "gc2da", you would need the file GC.DA.wc as well as the column
+  #' query_data$GenContext.norep
+  #' @note Please refer to the source code if you have alternate file formats and/or
+  #' column names.
+  tc <- query_data %>% total_counts(column =  colname, cutoff = cutoff, RowsCutoff = UsingRowsCutoff, digits = 5)
+
+  column <- sym(colname)
+  query_data = query_data %>% filter({{column}} %in% pull(tc,{{colname}}))
+
+  if(grepl("DomArch|Clustname", colname))
+  {
+    type = "da2doms"
+  }
+  else if(grepl("GenContext", colname))
+  {
+    type = "gc2da"
+  }
+
+  words.tc <- query_data %>% elements2words(column = colname,
+                                            conversion_type = type) %>%
+    words2wc()
+
+  names(words.tc) <- c("words", "freq")
+
+  # need a label column for actual frequencies, and frequencies will be the
+  # normalized sizes
+  words.tc$label <- words.tc$freq
+
+  words.tc <- words.tc %>% mutate(freq = log10(freq))
+
+  words.tc <- words.tc %>% select(words, freq, label)
+
+  wordcloud3(words.tc, minSize = 0)
+}
+
+
+
 
 
 #### Sunburst #####
