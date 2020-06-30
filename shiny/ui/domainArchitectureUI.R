@@ -71,8 +71,8 @@ tabPanel( title = "Domain Architecture",
                                   ),
                                   tags$div( class = "bord",
                                             tags$div(class = "innerbox",
-                                                     plotOutput(outputId = "DAwordcloud")
-                                                     # renderWordcloud2(outputId = "DAwordcloud")
+                                                     # plotOutput(outputId = "DAwordcloud")
+                                                    wordcloud2Output(outputId = "DAwordcloud")
                                             )
                                   )
                                 )

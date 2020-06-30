@@ -46,8 +46,8 @@ tabPanel(title = "Genomic Context",
                                  #     plotOutput(outputId = "GCNetwork")
                                  # ),
                                  box(width = 12,
-                                     plotOutput(outputId = "GCwordcloud")
-                                     # wordcloud2Output(outputId = "GCwordcloud")
+                                     # plotOutput(outputId = "GCwordcloud")
+                                     wordcloud2Output(outputId = "GCwordcloud")
                                  )
                                )
 
