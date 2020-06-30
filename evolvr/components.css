@@ -14,7 +14,8 @@
 	*/
 	/*text-align: left;*/
 	width:100%;
-	height:100%;
+	/*height:100%;*/
+	height: 200px;
 	min-height:23vh;
 	background-color:white;
     border: 1px solid #AAAAAA;
@@ -53,6 +54,26 @@
 	text-align: center;
 }
 
+.diagram-image {width:100%; height:65%; min-height:5vh; background-color: white;
+                  
+ position: absolute; object-fit: scale-down;}
+
+
+.diagram-elipse {
+  margin: auto;
+  padding: 20px;
+  width: 100%; 
+  height: 200px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  text-align: center;
+  /*
+  -moz-transform: scaleY(0.4);
+  -webkit-transform: scaleY(0.4);
+  */
+}
+
+
 .arrow {
 	/*position: absolute;*/
 	width: 100%;
@@ -62,6 +83,15 @@
 	transform: rotate(90deg);
 	-webkit-transform:
 	rotate(90deg);
+}
+
+.arrow-r {
+	/*margin: auto;*/
+	line-height: 200px;
+}
+
+.arrow-l {
+	line-height: 200px;
 }
 
 .arrow-dl {
