@@ -229,6 +229,40 @@ generate_all_aln2fa <- function(aln_path=here("data/rawdata_aln/"),
        reduced=reduced)
 }
 
+
+acc2fa <- function(accNum_vec, out_path)
+{
+  #' acc2fa converts protein accession numbers to a fasta format.
+  #' Resulting fasta file is written to the out_path.
+  #' @author Samuel Chen
+  #' @keywords accnum, fasta
+  #' @param accNum_vec Character vector containing protein accession numbers to generate fasta sequences for.
+  #' @param out_path String. Location where fasta file should be written to.
+  #' @example acc2fa(accNum_vec = c("ACU53894.1", "APJ14606.1", "ABK37082.1"), out_path = "my_proteins.fasta")
+
+  system.time(
+    {
+      i = 1;
+      all_fasta <- ""
+      while(i < length(accNum_vec))
+      {
+        upper_bound = ifelse((i+299) > length(accNum_vec), length(accNum_vec), (i+299))
+
+        sub_acc_vec <- accNum_vec[i:upper_bound]
+
+        prot_gen <- entrez_fetch(id = sub_acc_vec,
+                                 db = "protein",
+                                 rettype = "fasta")
+        all_fasta <- paste0(all_fasta, prot_gen)
+        i = i + 300
+      }
+      write(all_fasta, file = out_path)
+    }
+  )
+}
+
+
+
 ################################
 ## convert_accnum2fa
 #######
