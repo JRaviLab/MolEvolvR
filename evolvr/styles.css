@@ -46,4 +46,22 @@
 	word-spacing: 25px;
 }
 
+/*Styling for the header of the upload page*/
+.upload-header {
+	margin: auto;
+	width: 100%;
+	border-bottom: 5px solid #363532;
+	border-radius: 5px;
+}
+
+/* Styling for icons to be inline with text */
+.inline-icon {
+	margin: 0px;
+	float: left;
+}
+
+.inline-text {
+	float: left;
+}
+
 

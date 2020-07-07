@@ -34,7 +34,7 @@ tabPanel( title = "Domain Architecture",
                      id= 'DALin_data',
                      type = "tabs",
                      tabPanel("Heatmap", value = "Heatmap",
-                              selectInput(inputId = "DA_lin_color", label = "Theme", choices =
+                              selectInput(inputId = "DA_lin_color", label = "Color Scheme", choices =
                                             c("default", "viridis", "inferno","magma", "plasma", "cividis"), selected = "default"
                               ),
                               plotOutput(outputId = "DALinPlot", height = '600px' )),

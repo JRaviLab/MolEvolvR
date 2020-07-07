@@ -11,7 +11,10 @@ source("R/cleanup.R")
 source("R/summarize.R")
 source("R/plotting.R")
 source("R/network.R")
+source("R/pre-msa-tree.R")
+source("R/tree.R")
 source("evolvr/components.R")
+conflicted::conflict_prefer("strsplit", "base")
 
 ###
 #### Users ####
@@ -44,32 +47,8 @@ ui <- tagList(
                        , tags$div(class= "zoom",  "EvolvR")),
     id = 'evolvrMenu',
     inverse = T,
-    source("evolvr/ui/StaticSplashPageUI.R")$value,
-    tabPanel(
-      title = "Upload",
-      value = "upload",
-      fluidRow(
-
-        fileInput(inputId = "fileUpload",
-                  label = "Choose File"
-        ),
-        radioButtons(inputId = "fileType", label = "File Type:",
-                     choices = c("tsv", "csv")),
-        actionButton(inputId = "loadExample", "Example Data"),
-
-
-
-        textInput(inputId = "queryInput", label = "Queries:", value = ""),
-
-        tags$div( class = "textOutput-box",
-                  textOutput("queryVect")
-        ),
-
-        tableOutput("uploadedContent")
-      )
-    ),
-
-
+    source("evolvr/ui/splashPageUI.R")$value,
+    source("evolvr/ui/uploadUI.R")$value,
     source("evolvr/ui/queryDataUI.R")$value,
     source("evolvr/ui/domainArchitectureUI.R")$value,
     source("evolvr/ui/genomicContextUI.R")$value,
@@ -129,6 +108,24 @@ server <- function(input, output, session)
 
   data <- reactiveVal(data.frame())
 
+  fasta_filepath <- reactiveVal("tmp.fasta")
+
+  #### Show FASTA Tab if data is not empty ####
+  observe(
+    {
+      print(nrow(data()))
+      if(nrow(data()) != 0)
+      {
+        showTab(inputId = "fullDataTabs", target = "fastaTab")
+      }
+      else
+      {
+        hideTab(inputId = "fullDataTabs", target = "fastaTab")
+      }
+    }
+  )
+
+
   DACutoff <- reactive({
     input$DA_Cutoff
   })
@@ -139,12 +136,13 @@ server <- function(input, output, session)
 
   # Convert query data into vector
   queries <- reactive({
+    req(typeof(input$queryInput) == "character")
+
     # Split input by commas or spaces
     unlist(strsplit(input$queryInput, "\\s*,\\s*|\\s+"))
   })
 
   output$queryVect <- renderText({
-    req(input$queryInput)
     if(length(queries()) == 0){  }
     else
     {
@@ -173,11 +171,133 @@ server <- function(input, output, session)
                })
 
 
+  #### UI components for Upload tab ####
+  output$uploadComponents <- renderUI({
+    switch( input$inputType,
+            "Full Data" = full_data_ui,
+            "Fasta Sequence(s)" = fasta_input_ui,
+            "Protein Accession Numbers" = accNum_input_ui,
+            "Blast Results" = blast_input_ui,
+            "Interproscan Results" = interpro_input_ui
+    )
+  })
+
+
+
+  #### AccNum to Fasta ####
+  # Generate a FASTA file from the input AccNum(s)
+
+  # Convert the AccNums to a vector
+  accnum_vect <- reactive({
+    req(typeof(input$accNumTextInput) == "character")
+    # Split input by commas or spaces
+    unlist(strsplit(input$accNumTextInput, "\\s*,\\s*|\\s+"))
+  })
+
+  # Convert vector to fasta
+  # generated_fasta <- reactive({
+  #   fasta_filepath("tmp.fasta")
+  #   acc2fa(accnum_vect(), out_path = "tmp.fasta" ,  WriteFile = TRUE)
+  # })
+
+  # Display the FASTA File
+  output$generatedFasta <- renderText({
+    fasta()
+  })
+
+
+  dataTableFastaAccNums <- reactive({
+    req(nrow(data()) > 0)
+    reduced_col <- switch(input$fastaRepresentativeType,
+                          "One per Species" = "Species",
+                          "One per Lineage" = "Lineage"
+                          )
+    s <- RepresentativeAccNums(data(), reduced = reduced_col , accnum_col = "AccNum")
+    print(s)
+    s
+
+  })
+
+  output$DF2Fasta <- renderText({
+    fasta()
+  })
+
+  # fasta <- reactiveVal("")
+
+  #### Fasta ####
+  fasta <- reactive({
+    switch(input$inputType,
+           "Full Data" = acc2fa(dataTableFastaAccNums(), out_path = "tmp.fasta"),
+           "Protein Accession Numbers" =acc2fa(accnum_vect(), out_path = "tmp.fasta" ,  WriteFile = TRUE)
+           )
+
+  })
+
+
+  ####  Load Example AccNums
+  observeEvent(input$exampleAccNums,
+               {
+                 req(credentials()$user_auth)
+                 lowerbound = sample(1:(nrow(example_data)-5), 1)
+                 updateTextInput(session, inputId = "accNumTextInput", value =
+                                   paste0(example_data$AccNum[ lowerbound: (lowerbound + 5)])  )
+                 # if(last_button_val() < input$loadExample)
+                 # {
+                 #   data(example_data)
+                 #
+                 #   last_button_val(last_button_val()+1)
+                 # }
+
+               })
+
+
+
+
+  #### Redirect buttons on splash page ####
+  # accnum button
+  observeEvent(input$dAccNumBtn,
+               {
+               updateNavbarPage(session, "evolvrMenu" ,"upload")
+               updateSelectInput(session, inputId = "inputType", label = "Input Type:",
+                                 choices = c(
+                                   "Protein Accession Numbers",
+                                   "Fasta Sequence(s)",
+                                   "Blast Results",
+                                   "Interproscan Results",
+                                   "Full Data"
+                                 ),
+                                 selected = "Protein Accession Numbers"
+                                 )
+                 })
+
+  # Fasta button
+  observeEvent(input$dFastaBtn,
+               {
+                 updateNavbarPage(session, "evolvrMenu" ,"upload")
+                 updateSelectInput(session, inputId = "inputType", label = "Input Type:",
+                                   choices = c(
+                                     "Protein Accession Numbers",
+                                     "Fasta Sequence(s)",
+                                     "Blast Results",
+                                     "Interproscan Results",
+                                     "Full Data"
+                                   ),
+                                   selected = "Fasta Sequence(s)"
+                 )
+               })
+
+
+
+
   ### Identify changes to queries and update dropdowns accordingly ###
   observe({
-    updateSelectInput(session, "mainSelect", label = "Protein", choices = append("All", queries()))
-    updateSelectInput(session, "DASelect", label = "Protein", choices = append("All", queries()))
-    updateSelectInput(session, "GCSelect", label = "Protein", choices = append("All", queries()))
+    print(input$inputType)
+    if(input$inputType == "Full Data")
+    {
+      updateSelectInput(session, "mainSelect", label = "Protein", choices = append("All", queries()))
+      updateSelectInput(session, "DASelect", label = "Protein", choices = append("All", queries()))
+      updateSelectInput(session, "GCSelect", label = "Protein", choices = append("All", queries()))
+    }
   })
 
   observe({
@@ -410,6 +530,11 @@ server <- function(input, output, session)
     }
   })
 
+  #### Tree ####
+  output$treePlot <- renderPlot({
+    seq_tree(fasta_filepath = fasta_filepath())
+  })
+
 
   #### Sunburst ####
   output$sunburst <- renderSunburst({
@@ -455,6 +580,14 @@ server <- function(input, output, session)
                  ))
                }
   )
+
+
+
+
+
+
+
+
 
 
   #### Static Flowchart ####
