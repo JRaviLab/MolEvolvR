@@ -12,6 +12,7 @@
 #################
 library(here); library(tidyverse)
 library(data.table)
+library(rentrez)
 #library(seqRFLP)
 conflicted::conflict_prefer("filter", "dplyr")
 
@@ -230,15 +231,17 @@ generate_all_aln2fa <- function(aln_path=here("data/rawdata_aln/"),
 }
 
 
-acc2fa <- function(accNum_vec, out_path)
+acc2fa <- function(accNum_vec, out_path, WriteFile = TRUE)
 {
   #' acc2fa converts protein accession numbers to a fasta format.
-  #' Resulting fasta file is written to the out_path.
+  #' Resulting fasta file is written to the out_path. A string of the fasta file
+  #' is returned
   #' @author Samuel Chen
   #' @keywords accnum, fasta
   #' @param accNum_vec Character vector containing protein accession numbers to generate fasta sequences for.
   #' @param out_path String. Location where fasta file should be written to.
-  #' @example acc2fa(accNum_vec = c("ACU53894.1", "APJ14606.1", "ABK37082.1"), out_path = "my_proteins.fasta")
+  #' @param WriteFile Logical. Should the fasta results be written to the out_path. Defaults to TRUE
+  #' @example acc2fa(accNum_vec = c("ACU53894.1", "APJ14606.1", "ABK37082.1"), out_path = "my_proteins.fasta", WriteFile = TRUE)
 
   system.time(
     {
@@ -246,7 +249,7 @@ acc2fa <- function(accNum_vec, out_path)
       all_fasta <- ""
       while(i < length(accNum_vec))
       {
-        upper_bound = ifelse((i+299) > length(accNum_vec), length(accNum_vec), (i+299))
+        upper_bound = ifelse((i+249) > length(accNum_vec), length(accNum_vec), (i+249))
 
         sub_acc_vec <- accNum_vec[i:upper_bound]
 
@@ -254,12 +257,47 @@ acc2fa <- function(accNum_vec, out_path)
                                  db = "protein",
                                  rettype = "fasta")
         all_fasta <- paste0(all_fasta, prot_gen)
-        i = i + 300
+        i = i + 250
       }
-      write(all_fasta, file = out_path)
+      if(WriteFile)
+      {
+        write(all_fasta, file = out_path)
+      }
     }
   )
+  return(all_fasta)
 }
+
+
+RepresentativeAccNums <- function(prot_data, reduced = "Lineage" , accnum_col = "AccNum")
+{
+  #' Function to generate a vector of one Accession number per distinct observation from 'reduced' column
+  #' @author Samuel Chen
+  #' @param prot_data Data frame containing Accession Numbers
+  #' @param reduced Column from prot_data from which distinct observations will be generated from.
+  #' One accession number will be assigned for each of these observations
+  #' @param accnum_col Column from prot_data that contains the Accession Numbers
+
+  # Get Unique reduced column and then bind the AccNums back to get one AccNum per reduced column
+  reduced_sym <- sym(reduced); accnum_sym = sym(accnum_col)
+
+  distinct_reduced <- prot_data %>% select({{reduced_sym}}) %>% distinct()
+
+  AccNum_vect = c()
+
+  for(i in 1:nrow(distinct_reduced))
+  {
+    r = toString(distinct_reduced[i,reduced])
+
+    AccNum = toString((prot_data %>% filter({{reduced_sym}} == r))[1,accnum_col])
+
+    AccNum_vect <- append(AccNum_vect, AccNum)
+
+
+  }
+  return(AccNum_vect)
+}
+
 
 
 
