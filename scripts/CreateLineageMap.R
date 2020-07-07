@@ -1,25 +1,18 @@
 library(tidyverse)
 library(biomartr)
 
-# stats <- getAssemblyStats(db= "genbank", organism = )
+# ##### Use these to generate assembly summary files ########
+# ## Over 680,000
+# assembly_k_genbank <- getKingdomAssemblySummary("genbank")
 #
-# is.genome.available(db = "refseq", organism = "Homo sapiens", details = TRUE)
-# getMarts()
-# g = getAttributes(mart = "ENSEMBL_MART_ENSEMBL", getDatasets(mart = "ENSEMBL_MART_ENSEMBL"))
-
-##### This is the important one ########
-## Over 680,000
-assembly_k_genbank <- getKingdomAssemblySummary("genbank")
-
-## Over 200,000
-assembly_k_refseq <- getKingdomAssemblySummary("refseq")
-
-keep = c("assembly_accession", "taxid", "species_taxid", "organism_name")
-assembly_all <- bind_rows(assembly_k_genbank,assembly_k_refseq) %>%
-                  select(all_of(keep))
-
-
-setwd("C:/Users/samue/Google_Drive/GitHub/the-approach")
+# ## Over 200,000
+# assembly_k_refseq <- getKingdomAssemblySummary("refseq")
+#
+# keep = c("assembly_accession", "taxid", "species_taxid", "organism_name")
+# assembly_all <- bind_rows(assembly_k_genbank,assembly_k_refseq) %>%
+#                   select(all_of(keep))
+#
+# write_tsv(assembly_all, "data/acc_files/assembly_summary20200706.txt")
 
 #Goal:
 lin_map <- read_tsv("data/acc_files/organisms2lineages_map_bae_20170828.txt")
