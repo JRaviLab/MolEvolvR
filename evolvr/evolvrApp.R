@@ -110,21 +110,6 @@ server <- function(input, output, session)
 
   fasta_filepath <- reactiveVal("tmp.fasta")
 
-  #### Show FASTA Tab if data is not empty ####
-  observe(
-    {
-      print(nrow(data()))
-      if(nrow(data()) != 0)
-      {
-        showTab(inputId = "fullDataTabs", target = "fastaTab")
-      }
-      else
-      {
-        hideTab(inputId = "fullDataTabs", target = "fastaTab")
-      }
-    }
-  )
-
 
   DACutoff <- reactive({
     input$DA_Cutoff
@@ -221,17 +206,36 @@ server <- function(input, output, session)
   output$DF2Fasta <- renderText({
     fasta()
   })
-
-  # fasta <- reactiveVal("")
-
-  #### Fasta ####
-  fasta <- reactive({
-    switch(input$inputType,
-           "Full Data" = acc2fa(dataTableFastaAccNums(), out_path = "tmp.fasta"),
-           "Protein Accession Numbers" =acc2fa(accnum_vect(), out_path = "tmp.fasta" ,  WriteFile = TRUE)
-           )
-
+  output$DF2AlignedFasta <- renderText({
+    aligned_fasta()
   })
+
+  fasta <- reactiveVal("")
+  aligned_fasta <- reactiveVal("")
+
+  #### Observe Input Type ####
+  observe({
+    if(input$inputType == "Full Data")
+    {
+      fasta("")
+      aligned_fasta("")
+    }
+    else if(input$inputType == "Protein Accession Numbers")
+    {
+      fasta(acc2fa(accnum_vect(), out_path = "tmp.fasta" ,  WriteFile = TRUE))
+      # aligned_fasta(fasta_filepath(), input$)
+    }
+  })
+
+  observeEvent(input$fullDF2Fasta,
+               {
+                 fasta(acc2fa(dataTableFastaAccNums(), out_path = "tmp.fasta" ,  WriteFile = TRUE))
+
+                 alignFasta("tmp.fasta", tool = input$DFAlignmentTool, outpath = "aligned_fasta.fasta")
+
+                 aligned_fasta(read_file("aligned_fasta.fasta"))
+               }
+               )
 
 
   ####  Load Example AccNums
@@ -241,13 +245,6 @@ server <- function(input, output, session)
                  lowerbound = sample(1:(nrow(example_data)-5), 1)
                  updateTextInput(session, inputId = "accNumTextInput", value =
                                    paste0(example_data$AccNum[ lowerbound: (lowerbound + 5)])  )
-                 # if(last_button_val() < input$loadExample)
-                 # {
-                 #   data(example_data)
-                 #
-                 #   last_button_val(last_button_val()+1)
-                 # }
-
                })
 
 
@@ -270,7 +267,7 @@ server <- function(input, output, session)
                                  )
                  })
 
-  # Fasta button
+  # Splash page Fasta button
   observeEvent(input$dFastaBtn,
                {
                  updateNavbarPage(session, "evolvrMenu" ,"upload")

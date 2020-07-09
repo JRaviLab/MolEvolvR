@@ -127,14 +127,32 @@ full_data_ui <- tagList(
                tabPanel(title = "FASTA", value = "fastaTab",
                         construction_box(),
                         fluidRow(
-                          selectInput("fastaRepresentativeType", label = "Choose Representative Observations:",
-                                      choices = c("One per Lineage", "One per Species")
+                          column( width = 4,
+                                  selectInput("fastaRepresentativeType", label = "Choose Representative Observations:",
+                                              choices = c("One per Lineage", "One per Species")
+                                  )
                           ),
-                          actionButton("fullDF2Fasta", "Generate FASTA"),
+                          column(width = 5,
+                                 selectInput("DFAlignmentTool", label = "Choose Tool for MSA:",
+                                             choices = c("Muscle", "ClustalOmege", "ClustalW")
+                                 )
+                          )
+                          ,
+                          column(width = 12,
+                          actionButton("fullDF2Fasta", "Generate FASTA")
+                          ),
 
                           column(width = 12, offset = 0,
+                                 strong("FASTA Sequences"),
                                  div(class = "text-area-output",
                                      verbatimTextOutput(outputId = "DF2Fasta")
+                                 )
+                          ),
+
+                          column(width = 12, offset = 0,
+                                 strong("Aligned FASTA"),
+                                 div(class = "text-area-output",
+                                     verbatimTextOutput(outputId = "DF2AlignedFasta")
                                  )
                           )
 
