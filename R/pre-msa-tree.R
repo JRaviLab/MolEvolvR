@@ -14,6 +14,7 @@ library(here); library(tidyverse)
 library(data.table)
 library(rentrez)
 library(msa)
+library(furrr)
 #library(seqRFLP)
 conflicted::conflict_prefer("filter", "dplyr")
 
@@ -232,41 +233,53 @@ generate_all_aln2fa <- function(aln_path=here("data/rawdata_aln/"),
 }
 
 
-acc2fa <- function(accNum_vec, out_path, WriteFile = TRUE)
+acc2fa <- function(accNum_vec, out_path)
 {
   #' acc2fa converts protein accession numbers to a fasta format.
-  #' Resulting fasta file is written to the out_path. A string of the fasta file
-  #' is returned
+  #' Resulting fasta file is written to the out_path.
   #' @author Samuel Chen
   #' @keywords accnum, fasta
   #' @param accNum_vec Character vector containing protein accession numbers to generate fasta sequences for.
+  #' Function may not work for vectors of length > 10,000
   #' @param out_path String. Location where fasta file should be written to.
-  #' @param WriteFile Logical. Should the fasta results be written to the out_path. Defaults to TRUE
-  #' @example acc2fa(accNum_vec = c("ACU53894.1", "APJ14606.1", "ABK37082.1"), out_path = "my_proteins.fasta", WriteFile = TRUE)
+  #' @example acc2fa(accNum_vec = c("ACU53894.1", "APJ14606.1", "ABK37082.1"), out_path = "my_proteins.fasta")
 
-  system.time(
-    {
-      i = 1;
-      all_fasta <- ""
-      while(i < length(accNum_vec))
+  if(length(accNum_vec) > 0){
+
+    partition <- function(v, groups){
+      # Partition data to limit number of queries per second for rentrez fetch:
+      # limit of 10/second w/ key
+      l <- length(v)
+
+      partitioned <- list()
+      for(i in 1:groups)
       {
-        upper_bound = ifelse((i+249) > length(accNum_vec), length(accNum_vec), (i+249))
-
-        sub_acc_vec <- accNum_vec[i:upper_bound]
-
-        prot_gen <- entrez_fetch(id = sub_acc_vec,
-                                 db = "protein",
-                                 rettype = "fasta")
-        all_fasta <- paste0(all_fasta, prot_gen)
-        i = i + 250
+        partitioned[[i]] <- v[seq.int(i,l,groups)]
       }
-      if(WriteFile)
-      {
-        write(all_fasta, file = out_path)
-      }
+
+      return(partitioned)
     }
-  )
-  return(all_fasta)
+
+    plan(strategy = "multiprocess", .skip = T)
+
+    groups <- min(15,length(accNum_vec))
+
+    partitioned_acc <- partition(accNum_vec, groups )
+    sink(out_path)
+    a <- future_map(partitioned_acc, function(x)
+    {
+      cat(
+        entrez_fetch(id = x,
+                     db = "protein",
+                     rettype = "fasta",
+                     api_key = "55120df9f5dddbec857bbb247164f86a2e09"
+        )
+      )
+    }
+    )
+
+    sink(NULL)
+  }
 }
 
 
