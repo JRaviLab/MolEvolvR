@@ -131,11 +131,6 @@ full_data_ui <- tagList(
                                   selectInput("fastaRepresentativeType", label = "Choose Representative Observations:",
                                               choices = c("One per Lineage", "One per Species")
                                   )
-                          ),
-                          column(width = 5,
-                                 selectInput("DFAlignmentTool", label = "Choose Tool for MSA:",
-                                             choices = c("Muscle", "ClustalOmege", "ClustalW")
-                                 )
                           )
                           ,
                           column(width = 12,
@@ -149,6 +144,14 @@ full_data_ui <- tagList(
                                  )
                           ),
 
+                          column(width = 5,
+                                 selectInput("DFAlignmentTool", label = "Choose Tool for MSA:",
+                                             choices = c("Muscle", "ClustalOmega", "ClustalW")
+                                 )
+                          ),
+                          column(width = 12, offset = 0,
+                                 actionButton("DF2msa", "Generate MSA")
+                                 ),
                           column(width = 12, offset = 0,
                                  strong("Aligned FASTA"),
                                  div(class = "text-area-output",
@@ -181,6 +184,23 @@ fasta_input_ui <- tagList(
     column( width = 12, offset = 0,
             textAreaInput(inputId = "fastaTextInput", label = "Enter Fasta Sequence")
     )
+  ),
+  fluidRow(
+    column(width = 3,
+           selectInput("FastaAlignmentTool", label = "Choose Tool for MSA:",
+                       choices = c("Muscle", "ClustalOmega", "ClustalW")
+           )
+    ),
+    column(width = 3, offset = 0,
+           actionButton("fasta2msaBtn", "Generate MSA")
+    )
+  ),
+  fluidRow(
+    column(width = 12, offset = 0,
+           div(class = "text-area-output",
+               verbatimTextOutput(outputId = "fasta2msa")
+               )
+           )
   )
 )
 
@@ -199,9 +219,24 @@ accNum_input_ui <- tagList(
     ),
     column(
       width = 12, offset = 0,
+      actionButton( "accnum2Fasta","Generate FASTA")
+    ),
+    column(
+      width = 12, offset = 0,
       div(class = "text-area-output",
           verbatimTextOutput(outputId = "generatedFasta")
       )
+    ),
+    column(
+      width = 12, offset = 0,
+      selectInput( "accnumAlignmentTool", label = "Choose Tool for MSA:",
+                   choices = c("Muscle", "ClustalOmega", "ClustalW")
+      ),
+      actionButton(inputId = "accnum2msa", label = "Generate MSA"),
+      div(class = "text-area-output",
+          verbatimTextOutput(outputId = "accnumMSA")
+      )
+
     )
   )
 )
