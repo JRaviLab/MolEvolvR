@@ -12,7 +12,7 @@ source("R/summarize.R")
 source("R/plotting.R")
 source("R/network.R")
 source("R/pre-msa-tree.R")
-source("R/tree.R")
+source("scripts/tree.R")
 source("evolvr/components.R")
 conflicted::conflict_prefer("strsplit", "base")
 
@@ -109,6 +109,7 @@ server <- function(input, output, session)
   data <- reactiveVal(data.frame())
 
   fasta_filepath <- reactiveVal("tmp.fasta")
+  aligned_fasta_filepath <- reactiveVal("")
 
 
   DACutoff <- reactive({
@@ -179,15 +180,13 @@ server <- function(input, output, session)
     unlist(strsplit(input$accNumTextInput, "\\s*,\\s*|\\s+"))
   })
 
-  # Convert vector to fasta
-  # generated_fasta <- reactive({
-  #   fasta_filepath("tmp.fasta")
-  #   acc2fa(accnum_vect(), out_path = "tmp.fasta" ,  WriteFile = TRUE)
-  # })
-
   # Display the FASTA File
   output$generatedFasta <- renderText({
     fasta()
+  })
+
+  output$accnumMSA <- renderText({
+    aligned_fasta()
   })
 
 
@@ -215,27 +214,96 @@ server <- function(input, output, session)
 
   #### Observe Input Type ####
   observe({
-    if(input$inputType == "Full Data")
-    {
-      fasta("")
-      aligned_fasta("")
-    }
-    else if(input$inputType == "Protein Accession Numbers")
-    {
-      fasta(acc2fa(accnum_vect(), out_path = "tmp.fasta" ,  WriteFile = TRUE))
-      # aligned_fasta(fasta_filepath(), input$)
-    }
+    aligned_fasta_filepath("")
+    fasta("")
+    aligned_fasta("")
+    # if(input$inputType == "Full Data")
+    # {
+    #   fasta("")
+    #   aligned_fasta("")
+    # }
+    # else if(input$inputType == "Protein Accession Numbers")
+    # {
+    #   fasta("")
+    #   aligned_fasta("")
+    # }
   })
 
+
+  #### FASTA input Upload ####
+  observeEvent(
+    input$fastaFileUpload,
+    {
+      req(credentials()$user_auth)
+      f <- read_file(input$fastaFileUpload$datapath)
+      fasta(f)
+
+      # write(f, "tmp.fasta")
+      # fasta_filepath("tmp.fasta")
+      updateTextAreaInput(session, inputId = "fastaTextInput", label = "Enter Fasta Sequence", value = f)
+    }
+  )
+
+
+
+  observeEvent(
+    input$fasta2msaBtn,
+    {
+      write_file(input$fastaTextInput, "tmp.fasta")
+      fasta(input$fastaTextInput)
+      fasta_filepath("tmp.fasta")
+
+      alignFasta(fasta_filepath(), tool = input$FastaAlignmentTool , outpath = "aligned_fasta.fasta")
+      aligned_fasta(read_file("aligned_fasta.fasta"))
+      aligned_fasta_filepath("aligned_fasta.fasta")
+    }
+  )
+
+  output$fasta2msa <- renderText(
+    aligned_fasta()
+  )
+
+
+
+
+  #### Fasta Buttons Full DF ####
   observeEvent(input$fullDF2Fasta,
                {
-                 fasta(acc2fa(dataTableFastaAccNums(), out_path = "tmp.fasta" ,  WriteFile = TRUE))
-
-                 alignFasta("tmp.fasta", tool = input$DFAlignmentTool, outpath = "aligned_fasta.fasta")
-
-                 aligned_fasta(read_file("aligned_fasta.fasta"))
+                 acc2fa(dataTableFastaAccNums(), out_path = "tmp.fasta")
+                 fasta(read_file("tmp.fasta"))
                }
                )
+
+  observeEvent(
+    input$DF2msa,
+      {
+        alignFasta("tmp.fasta", tool = input$DFAlignmentTool, outpath = "aligned_fasta.fasta")
+        aligned_fasta(read_file("aligned_fasta.fasta"))
+
+        aligned_fasta_filepath("")
+        aligned_fasta_filepath("aligned_fasta.fasta")
+      }
+  )
+
+  #### FASTA buttons AccNum ####
+  observeEvent(
+    input$accnum2Fasta,
+    {
+    acc2fa(accnum_vect(), out_path = "tmp.fasta")
+    fasta(read_file("tmp.fasta"))
+    }
+  )
+
+  observeEvent(
+    input$accnum2msa,
+    {
+      alignFasta("tmp.fasta", tool = input$accnumAlignmentTool, outpath = "aligned_fasta.fasta")
+      aligned_fasta(read_file("aligned_fasta.fasta"))
+      aligned_fasta_filepath("")
+      aligned_fasta_filepath("aligned_fasta.fasta")
+    }
+  )
+
 
 
   ####  Load Example AccNums
@@ -529,7 +597,7 @@ server <- function(input, output, session)
 
   #### Tree ####
   output$treePlot <- renderPlot({
-    seq_tree(fasta_filepath = fasta_filepath())
+    seq_tree(fasta_filepath = aligned_fasta_filepath())
   })
 
 

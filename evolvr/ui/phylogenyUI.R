@@ -12,7 +12,7 @@ tabPanel( title = "Phylogeny",
                             sunburstOutput(outputId = "sunburst")
                    ),
                    tabPanel("Tree", value="Tree",
-                            plotOutput(outputId = "treePlot")
+                            plotOutput(outputId = "treePlot", height = "600px")
                             # htmlOutput(outputId = "msaTree" )
                    ),
 
