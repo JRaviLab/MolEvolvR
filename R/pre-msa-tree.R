@@ -13,6 +13,7 @@
 library(here); library(tidyverse)
 library(data.table)
 library(rentrez)
+library(msa)
 #library(seqRFLP)
 conflicted::conflict_prefer("filter", "dplyr")
 
@@ -298,6 +299,51 @@ RepresentativeAccNums <- function(prot_data, reduced = "Lineage" , accnum_col = 
   return(AccNum_vect)
 }
 
+alignFasta <- function(fasta_file, tool = "Muscle", outpath = NULL)
+{
+  #' Perform a Multiple Sequence Alignment on a FASTA file.
+  #' @author Samuel Chen
+  #' @param fasta_file Path to the FASTA file to be aligned
+  #' @param tool Type of alignment tool to use. One of three options: "Muscle", "ClustalOmega", or "ClustalW"
+  #' @param outpath Path to write the resulting alignment to as a FASTA file. If NULL, no file is written
+  #' @return aligned fasta sequence as a MsaAAMultipleAlignment object
+
+  fasta <- readAAStringSet(fasta_file)
+
+  aligned <- switch(
+    tool,
+    "Muscle" = msaMuscle(fasta),
+    "ClustalOmega" = msaClustalOmega(fasta),
+    "ClustalW" = msaClustalW(fasta)
+  )
+
+  if(typeof(outpath) == "character")
+  {
+    write.MsaAAMultipleAlignment(aligned, outpath)
+  }
+  return(aligned)
+}
+
+write.MsaAAMultipleAlignment <- function(alignment, outpath)
+{
+  #' Write MsaAAMultpleAlignment Objects as algined fasta sequence
+  #' MsaAAMultipleAlignment Objects are generated from calls to msaClustalOmega
+  #' and msaMuscle from the 'msa' package
+  #' @author Samuel Chen
+  #' @param alignment MsaAAMultipleAlignment object to be written as a fasta
+  #' @param outpath Where the resulting FASTA file should be written to
+
+  l <- length(rownames(alignment))
+  fasta <- ""
+  for(i in 1:l)
+  {
+    fasta = paste0(fasta, paste(">", rownames(alignment)[i]), "\n")
+    seq <- toString(unmasked(alignment)[[i]])
+    fasta <- paste0(fasta, seq, "\n")
+  }
+  write_file(fasta, outpath)
+  return(fasta)
+}
 
 
 
