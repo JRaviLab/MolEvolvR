@@ -13,7 +13,7 @@ diagram_box <- function(title, image_name, button_name, description)
 
       #div(class = "image-border", style = "border-style: solid; border-width: 0px 1px 1px 1px; border-color: #AAAAAA;",
       div(class = "diagram-image",  style= paste0("background-image: url(", image_name, ".png);
-          background-size: auto 130%; background-position: center; background-repeat: no-repeat;")),
+          background-size: auto 100%; background-position: center; background-repeat: no-repeat;")),
       actionButton(button_name, NULL, class="diagram-button")
 
 
@@ -24,11 +24,11 @@ diagram_box <- function(title, image_name, button_name, description)
 
 basic_box <- function(title, image_name, description, height = '200px')
 {
-  div(class = "basic-box", style = paste0("height:", height, ";") ,
-      div(title, class = "box-title"),
-      div(description, class = "diagram-box-description"),
-      div(class = "diagram-image",  style= paste0("background-image: url(", image_name, ".png);
-          background-size: auto 130%; background-position: center; background-repeat: no-repeat;"))
+  div(class = "basic-box", #style = paste0("height:", height, ";") ,
+      div(title, class = "box-title")
+      #div(description, class = "diagram-box-description", style = paste0("height:", height, ";")),
+      #div(class = "diagram-image",  style= paste0("background-image: url(", image_name, ".png);
+      #    background-size: auto 100%; background-position: center; background-repeat: no-repeat;"))
   )
 
 }
@@ -134,7 +134,7 @@ full_data_ui <- tagList(
                           )
                           ,
                           column(width = 12,
-                          actionButton("fullDF2Fasta", "Generate FASTA")
+                                 actionButton("fullDF2Fasta", "Generate FASTA")
                           ),
 
                           column(width = 12, offset = 0,
@@ -151,7 +151,7 @@ full_data_ui <- tagList(
                           ),
                           column(width = 12, offset = 0,
                                  actionButton("DF2msa", "Generate MSA")
-                                 ),
+                          ),
                           column(width = 12, offset = 0,
                                  strong("Aligned FASTA"),
                                  div(class = "text-area-output",
@@ -165,81 +165,81 @@ full_data_ui <- tagList(
 )
 
 
-fasta_input_ui <- tagList(
-
-
-  column(width = 12, offset = 0,construction_box() ),
-
-  fluidRow(
-    column(width = 4, offset = 0,
-           fileInput(inputId = "fastaFileUpload", label = "Choose Fasta File")
-    )
-  ),
-  fluidRow(
-    column(width = 4, offset = 2,
-           strong("Or", style = "font-size: 20px; text-align:left;")
-    )
-  ),
-  fluidRow(
-    column( width = 12, offset = 0,
-            textAreaInput(inputId = "fastaTextInput", label = "Enter Fasta Sequence")
-    )
-  ),
-  fluidRow(
-    column(width = 3,
-           selectInput("FastaAlignmentTool", label = "Choose Tool for MSA:",
-                       choices = c("Muscle", "ClustalOmega", "ClustalW")
-           )
-    ),
-    column(width = 3, offset = 0,
-           actionButton("fasta2msaBtn", "Generate MSA")
-    )
-  ),
-  fluidRow(
-    column(width = 12, offset = 0,
-           div(class = "text-area-output",
-               verbatimTextOutput(outputId = "fasta2msa")
-               )
-           )
-  )
-)
-
-accNum_input_ui <- tagList(
-
-  construction_box(),
-
-  fluidRow(
-    column(
-      width = 12, offset = 0,
-      textAreaInput(inputId = "accNumTextInput", label = "Enter Protein Accession Number(s)"),
-    ),
-    column(
-      width = 12, offset = 0,
-      actionButton(inputId = "exampleAccNums", "Load Example"),
-    ),
-    column(
-      width = 12, offset = 0,
-      actionButton( "accnum2Fasta","Generate FASTA")
-    ),
-    column(
-      width = 12, offset = 0,
-      div(class = "text-area-output",
-          verbatimTextOutput(outputId = "generatedFasta")
-      )
-    ),
-    column(
-      width = 12, offset = 0,
-      selectInput( "accnumAlignmentTool", label = "Choose Tool for MSA:",
-                   choices = c("Muscle", "ClustalOmega", "ClustalW")
-      ),
-      actionButton(inputId = "accnum2msa", label = "Generate MSA"),
-      div(class = "text-area-output",
-          verbatimTextOutput(outputId = "accnumMSA")
-      )
-
-    )
-  )
-)
+# fasta_input_ui <- tagList(
+#
+#
+#   column(width = 12, offset = 0,construction_box() ),
+#
+#   fluidRow(
+#     column(width = 4, offset = 0,
+#            fileInput(inputId = "fastaFileUpload", label = "Choose Fasta File")
+#     )
+#   ),
+#   fluidRow(
+#     column(width = 4, offset = 2,
+#            strong("Or", style = "font-size: 20px; text-align:left;")
+#     )
+#   ),
+#   fluidRow(
+#     column( width = 12, offset = 0,
+#             textAreaInput(inputId = "fastaTextInput", label = "Enter Fasta Sequence")
+#     )
+#   ),
+#   fluidRow(
+#     column(width = 3,
+#            selectInput("FastaAlignmentTool", label = "Choose Tool for MSA:",
+#                        choices = c("Muscle", "ClustalOmega", "ClustalW")
+#            )
+#     ),
+#     column(width = 3, offset = 0,
+#            actionButton("fasta2msaBtn", "Generate MSA")
+#     )
+#   ),
+#   fluidRow(
+#     column(width = 12, offset = 0,
+#            div(class = "text-area-output",
+#                verbatimTextOutput(outputId = "fasta2msa")
+#            )
+#     )
+#   )
+# )
+#
+# accNum_input_ui <- tagList(
+#
+#   construction_box(),
+#
+#   fluidRow(
+#     column(
+#       width = 12, offset = 0,
+#       textAreaInput(inputId = "accNumTextInput", label = "Enter Protein Accession Number(s)"),
+#     ),
+#     column(
+#       width = 12, offset = 0,
+#       actionButton(inputId = "exampleAccNums", "Load Example"),
+#     ),
+#     column(
+#       width = 12, offset = 0,
+#       actionButton( "accnum2Fasta","Generate FASTA")
+#     ),
+#     column(
+#       width = 12, offset = 0,
+#       div(class = "text-area-output",
+#           verbatimTextOutput(outputId = "generatedFasta")
+#       )
+#     ),
+#     column(
+#       width = 12, offset = 0,
+#       selectInput( "accnumAlignmentTool", label = "Choose Tool for MSA:",
+#                    choices = c("Muscle", "ClustalOmega", "ClustalW")
+#       ),
+#       actionButton(inputId = "accnum2msa", label = "Generate MSA"),
+#       div(class = "text-area-output",
+#           verbatimTextOutput(outputId = "accnumMSA")
+#       )
+#
+#     )
+#   )
+# )
 
 blast_input_ui <- tagList(
   construction_box(),
@@ -256,12 +256,95 @@ interpro_input_ui <- tagList(
 
   fluidRow(
     column(width = 4, offset = 0,
-           fileInput(inputId = "interproFileUpload", label = "Choose Interproscan File")
+           fileInput(inputId = "interproFileUpload", label = "Choose Interproscan File"),
+           radioButtons(inputId = "fileTypeIPRScan", label = "File Type",choices = "tsv")
+    )
+  ),
+  fluidRow(
+    column(width = 12, offset = 0,
+           DT::dataTableOutput("IPRScanData")
     )
   )
 )
 
 
+acc_fasta_ui <- tagList(
+  bsCollapse(id = "accCollapse",
+             multiple = TRUE,
+             bsCollapsePanel(title = "Accession Numbers", value = "accnum", style = "primary",
+                             fluidRow(
+                               column( width = 4, offset = 0,
+                                       fileInput(inputId = "accNumUpload", label = "Choose AccNum File")
+                               ),
+                               column(
+                                 width = 12, offset = 0,
+                                 textAreaInput(inputId = "accNumTextInput", label = "Enter Protein Accession Number(s)",
+                                               width = "100%", height = "100%"),
+                               ),
+                               column(
+                                 width = 12, offset = 0,
+                                 actionButton(inputId = "exampleAccNums", "Load Example"),
+                               ),
+                               column(
+                                 width = 12, offset = 0,
+                                 actionButton( "accnum2Fasta","Generate FASTA")
+                               )
+                             )
+
+             ),
+             bsCollapsePanel(title = "FASTA Sequences", value = "fasta", style = "primary",
+                             fluidRow(
+                               column(width = 4, offset = 0,
+                                      fileInput(inputId = "fastaFileUpload", label = "Choose Fasta File")
+                               )
+                             ),
+                             fluidRow(
+                               column(width = 4, offset = 2,
+                                      strong("Or", style = "font-size: 20px; text-align:left;")
+                               )
+                             ),
+                             fluidRow(
+                               column( width = 12, offset = 0,
+                                       textAreaInput(inputId = "fastaTextInput", label = "Enter Fasta Sequence",
+                                                     width = "100%", height = "100%")
+                               )
+                             ),
+                             fluidRow(
+                               column(width = 3,
+                                      selectInput("FastaAlignmentTool", label = "Choose Tool for MSA:",
+                                                  choices = c("Muscle", "ClustalOmega", "ClustalW")
+                                      )
+                               ),
+                               column(width = 3, offset = 0,
+                                      actionButton("fasta2msaBtn", "Generate MSA")
+                               )
+                             )
+
+
+             ),
+             bsCollapsePanel("FASTA Sequence Alignment", value = "msa", style = "primary",
+                             fluidRow(
+                               column(width = 4, offset = 0,
+                                      fileInput(inputId = "msaFileUpload", label = "Choose MSA File")
+                               )
+                             ),
+
+                             fluidRow(
+                               column(width = 12, offset = 0,
+
+                                      textAreaInput(inputId = "msaText", label = "Paste  Aligned FASTA Sequence",
+                                                    width = "100%", height = "100%")
+
+                               )
+
+                             )
+             )
+
+
+  )
+
+
+)
 
 
 

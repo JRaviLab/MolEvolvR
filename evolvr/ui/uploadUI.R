@@ -3,6 +3,7 @@
 
 tabPanel(
   title = "Upload",
+  icon = icon("upload", lib = "font-awesome"),
   value = "upload",
   fluidPage(
     # construction_box(),
@@ -15,11 +16,12 @@ tabPanel(
            column(width = 3, offset = 0,
                   selectInput(inputId = "inputType", label = "Input Type:",
                               choices = c(
-                                "Protein Accession Numbers",
-                                "Fasta Sequence(s)",
+                                # "Protein Accession Numbers",
+                                # "Fasta Sequence(s)",
                                 "Blast Results",
                                 "Interproscan Results",
-                                "Full Data"
+                                "Full Data",
+                                "AccNum/FASTA"
                               ),
                               selected = "Full Data"
                   )

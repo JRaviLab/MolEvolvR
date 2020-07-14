@@ -7,6 +7,14 @@ tabPanel( title = "Phylogeny",
           column(width = 12,
                  tabsetPanel(
                    id= "phylo",
+
+                   ## Heatmap by query tab
+                   tabPanel("Query Heatmap",value = "queryHeatmapTab",
+                            column(width = 12,
+                                   plotOutput(outputId = "queryHeatmap", height = "600px")
+                            )
+                   ),
+
                    tabPanel("Sunburst", value ="sunburst",
                             numericInput(inputId = "levels",label = "Number of Levels:" ,value = 2, min = 1),
                             sunburstOutput(outputId = "sunburst")
