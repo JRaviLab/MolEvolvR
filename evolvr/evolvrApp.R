@@ -6,6 +6,7 @@ library(sunburstR)
 library(rmarkdown)
 library(shinyBS)
 library(shinyauthr)
+
 setwd("..")
 source("R/cleanup.R")
 source("R/summarize.R")
@@ -15,6 +16,7 @@ source("R/pre-msa-tree.R")
 source("scripts/tree.R")
 source("evolvr/components.R")
 conflicted::conflict_prefer("strsplit", "base")
+conflicted::conflict_prefer("count", "dplyr")
 
 ###
 #### Users ####
@@ -161,10 +163,11 @@ server <- function(input, output, session)
   output$uploadComponents <- renderUI({
     switch( input$inputType,
             "Full Data" = full_data_ui,
-            "Fasta Sequence(s)" = fasta_input_ui,
-            "Protein Accession Numbers" = accNum_input_ui,
+            # "Fasta Sequence(s)" = fasta_input_ui,
+            # "Protein Accession Numbers" = accNum_input_ui,
             "Blast Results" = blast_input_ui,
-            "Interproscan Results" = interpro_input_ui
+            "Interproscan Results" = interpro_input_ui,
+            "AccNum/FASTA" = acc_fasta_ui
     )
   })
 
@@ -173,11 +176,21 @@ server <- function(input, output, session)
   #### AccNum to Fasta ####
   # Generate a FASTA file from the input AccNum(s)
 
+  # Upload AccNum
+  observeEvent(input$accNumUpload,
+               {
+                 req(credentials()$user_auth)
+                 accNums <- read_file(input$accNumUpload$datapath)
+                 updateTextAreaInput(session, "accNumTextInput", label = "Enter Protein Accession Number(s)",
+                                    value = accNums)
+               })
+
+
   # Convert the AccNums to a vector
   accnum_vect <- reactive({
     req(typeof(input$accNumTextInput) == "character")
     # Split input by commas or spaces
-    unlist(strsplit(input$accNumTextInput, "\\s*,\\s*|\\s+"))
+    unlist(strsplit(input$accNumTextInput, "\\s*,\\s*|\\s+|\\n"))
   })
 
   # Display the FASTA File
@@ -195,7 +208,7 @@ server <- function(input, output, session)
     reduced_col <- switch(input$fastaRepresentativeType,
                           "One per Species" = "Species",
                           "One per Lineage" = "Lineage"
-                          )
+    )
     s <- RepresentativeAccNums(data(), reduced = reduced_col , accnum_col = "AccNum")
     print(s)
     s
@@ -256,6 +269,9 @@ server <- function(input, output, session)
       alignFasta(fasta_filepath(), tool = input$FastaAlignmentTool , outpath = "aligned_fasta.fasta")
       aligned_fasta(read_file("aligned_fasta.fasta"))
       aligned_fasta_filepath("aligned_fasta.fasta")
+
+      updateTextAreaInput(session, "msaText", label = "Paste Aligned FASTA Sequence", value = read_file("aligned_fasta.fasta"))
+      updateCollapse(session, "accCollapse", open = "msa")
     }
   )
 
@@ -263,6 +279,17 @@ server <- function(input, output, session)
     aligned_fasta()
   )
 
+
+  #### Msa Upload ####
+  observeEvent(input$msaFileUpload,
+               {
+                f = read_file(input$msaFileUpload$datapath)
+                write_file(f, "aligned_fasta.fasta")
+                aligned_fasta(f)
+                aligned_fasta_filepath("aligned_fasta.fasta")
+                updateTextInput(session, "msaText", label = "Paste  Aligned FASTA Sequence", value = f)
+               }
+               )
 
 
 
@@ -272,25 +299,30 @@ server <- function(input, output, session)
                  acc2fa(dataTableFastaAccNums(), out_path = "tmp.fasta")
                  fasta(read_file("tmp.fasta"))
                }
-               )
+  )
 
   observeEvent(
     input$DF2msa,
-      {
-        alignFasta("tmp.fasta", tool = input$DFAlignmentTool, outpath = "aligned_fasta.fasta")
-        aligned_fasta(read_file("aligned_fasta.fasta"))
+    {
+      alignFasta("tmp.fasta", tool = input$DFAlignmentTool, outpath = "aligned_fasta.fasta")
+      aligned_fasta(read_file("aligned_fasta.fasta"))
 
-        aligned_fasta_filepath("")
-        aligned_fasta_filepath("aligned_fasta.fasta")
-      }
+      aligned_fasta_filepath("")
+      aligned_fasta_filepath("aligned_fasta.fasta")
+    }
   )
 
   #### FASTA buttons AccNum ####
   observeEvent(
     input$accnum2Fasta,
     {
-    acc2fa(accnum_vect(), out_path = "tmp.fasta")
-    fasta(read_file("tmp.fasta"))
+      acc2fa(accnum_vect(), out_path = "tmp.fasta")
+      fasta(read_file("tmp.fasta"))
+
+      updateTextAreaInput(session, inputId = "fastaTextInput",
+                          label = "Enter Fasta Sequence",
+                          value = fasta())
+      updateCollapse(session, "accCollapse", open = "fasta")
     }
   )
 
@@ -322,34 +354,61 @@ server <- function(input, output, session)
   # accnum button
   observeEvent(input$dAccNumBtn,
                {
-               updateNavbarPage(session, "evolvrMenu" ,"upload")
-               updateSelectInput(session, inputId = "inputType", label = "Input Type:",
-                                 choices = c(
-                                   "Protein Accession Numbers",
-                                   "Fasta Sequence(s)",
-                                   "Blast Results",
-                                   "Interproscan Results",
-                                   "Full Data"
-                                 ),
-                                 selected = "Protein Accession Numbers"
-                                 )
-                 })
+                 updateCollapse(session, "accCollapse", open = c("accnum"), close = c("msa", "fasta"))
+                 updateNavbarPage(session, "evolvrMenu" ,"upload")
+                 updateSelectInput(session, inputId = "inputType", label = "Input Type:",
+                                   choices = c(
+                                     # "Protein Accession Numbers",
+                                     # "Fasta Sequence(s)",
+                                     "Blast Results",
+                                     "Interproscan Results",
+                                     "Full Data",
+                                     "AccNum/FASTA"
+                                   ),
+                                   selected = "AccNum/FASTA"
+                 )
+
+
+               })
 
   # Splash page Fasta button
   observeEvent(input$dFastaBtn,
                {
+                 updateCollapse(session, "accCollapse", open = c("fasta"), close = c("msa", "accnum"))
                  updateNavbarPage(session, "evolvrMenu" ,"upload")
                  updateSelectInput(session, inputId = "inputType", label = "Input Type:",
                                    choices = c(
-                                     "Protein Accession Numbers",
-                                     "Fasta Sequence(s)",
+                                     # "Protein Accession Numbers",
+                                     # "Fasta Sequence(s)",
                                      "Blast Results",
                                      "Interproscan Results",
-                                     "Full Data"
+                                     "Full Data",
+                                     "AccNum/FASTA"
                                    ),
-                                   selected = "Fasta Sequence(s)"
+                                   selected = "AccNum/FASTA"
                  )
+
                })
+
+
+
+
+
+  #### IPRScan Upload ####
+  output$IPRScanData <- DT::renderDataTable(
+    {
+      ipr_cols <- c("AccNum", "Seq_MD5_digest", "SeqLen", "Analysis",
+                    "SignAcc", "SignDesc", "StartLoc", "StopLoc", "Score",
+                    "Status", "RunDate",
+                    "IPRAcc", "IPRDesc", "GOAnn", "PathAnn")
+      iprscanresults <- switch(
+        input$fileTypeIPRScan,
+        "tsv" = read_tsv(input$interproFileUpload$datapath , col_names = ipr_cols)
+      )
+
+      head(iprscanresults)
+    }
+  )
 
 
 
