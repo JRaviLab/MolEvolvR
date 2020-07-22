@@ -135,10 +135,12 @@ sb_plots
 # install.packages("webshot")
 library(webshot)
 
-save_html(sb_plots, "sunburst_queries.html", libdir = "data/figures/")
+setwd("data/figures/")
+save_html(sb_plots, "sunburst_queries.html")#, libdir = "data/figures/")
 
+setwd("../../")
 webshot("sunburst_queries.html", "data/figures/sunburst_queries.png"
-        , zoom = 10) # zoom increases dpi
+        , zoom = 5) # zoom increases dpi
         #vwidth = 480, vheight = 900)
 
 
@@ -168,14 +170,23 @@ sun <- sunburst(
 )
 
 ## Change font to Helvetica
-htmlwidgets::onRender(
+sun2<- htmlwidgets::onRender(
   sun,
   "
     function(el, x) {
     d3.selectAll('.sunburst-legend text').attr('font-family', 'Helvetica');
+
+    // check legend
+    d3.select(el).select('.sunburst-togglelegend').property('checked',true);
+    // simulate click
+    d3.select(el).select('.sunburst-togglelegend').on('click')();
     }
+
     "
 )
 
+save_html(sun2, "sunburst_legend.html")
 
+# Cant zoom in without screwing up font size
+webshot("sunburst_legend.html", "data/figures/sunburst_query_legend.png", zoom = 2)
 ## At this point, I just took a snip of the legend

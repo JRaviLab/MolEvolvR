@@ -25,7 +25,10 @@ tabPanel(
                               ),
                               selected = "Full Data"
                   )
-           )
+           ),
+           column(width = 3, offset = 6,
+                  actionButton(inputId = "upload2RS", label = "View Results")
+                  )
       )
 
     ),

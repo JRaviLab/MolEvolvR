@@ -5,26 +5,26 @@ tabPanel( title = "Data",
           fluidPage(
             tabsetPanel(id = "QueryData",
                         tabPanel("Data Table", value = "mainData",
-                                 column(width = 2,
-                                        #Dropdown to select protein for viewing
-                                        selectInput(inputId =  "mainSelect", label = "Protein",
-                                                    choices = c("All"), selected = "All")
 
-                                 ),
+                                 uiOutput(outputId = "dataTableComponent")
 
-                                 #Buttons to select which file type to download
-                                 column( width = 3, offset= 1,
-                                         #Radiobuttons to select what to download data table as: tab separated or comma seperated
-                                         radioButtons(inputId = "downloadType", label = "Download Type:",
-                                                      choices= c("tsv", "csv"), selected = "tsv" ),
-                                         #Output download button
-                                         downloadButton(outputId = "downloadData", label = "Download")),
-                                 #Create mainpanel where dataTable is displayed
-                                 column(
-                                   DT::dataTableOutput(outputId = "mainTable"), width = 12)
+                        ),
+                        tabPanel(
+                          "FASTA",
+                          value = "fastaData",
+                          fluidRow(
+                            column(width = 12,
+                              uiOutput(outputId = "fastaDataComponent")
+                            )
+                          ),
+                          fluidRow(
+                            column(width = 12,
+                                   uiOutput(outputId = "msaDataComponent")
+
+                                   )
+                          )
 
                         )
             )
-
 
           ))
