@@ -309,6 +309,10 @@ acc_fasta_ui <- tagList(
                                                      width = "100%", height = "100%")
                                )
                              ),
+                             bsAlert(anchorId = "invalidPin"),
+                             textInput(inputId = "pinName", "Pin Name:"),
+                             actionButton("pinFasta", "Pin FASTA"),
+
                              fluidRow(
                                column(width = 3,
                                       selectInput("FastaAlignmentTool", label = "Choose Tool for MSA:",
@@ -344,6 +348,62 @@ acc_fasta_ui <- tagList(
   )
 
 
+)
+
+
+#### DATA UI Component ####
+
+
+noTableComponent <- tagList(
+  column(width = 12,
+
+         actionLink(inputId = "dataTable2Upload", label = "Upload a data table ", class = "inline-text"),
+         p(" to view your data here.", class = "inline-text")
+
+  )
+)
+
+
+tableComponent <- tagList( column(width = 2,
+                                  #Dropdown to select protein for viewing
+                                  selectInput(inputId =  "mainSelect", label = "Protein",
+                                              choices = c("All"), selected = "All")
+
+),
+
+#Buttons to select which file type to download
+column( width = 3, offset= 1,
+        #Radiobuttons to select what to download data table as: tab separated or comma seperated
+        radioButtons(inputId = "downloadType", label = "Download Type:",
+                     choices= c("tsv", "csv"), selected = "tsv" ),
+        #Output download button
+        downloadButton(outputId = "downloadData", label = "Download")),
+#Create mainpanel where dataTable is displayed
+column(
+  DT::dataTableOutput(outputId = "mainTable"), width = 12)
+)
+
+noFastaComponent <- tagList(
+  p("Upload or generate a FASTA sequence to view the sequence here")
+)
+
+noMsaComponent <- tagList(
+  p("Upload or generate an aligned fasta sequence for viewing here")
+)
+
+
+fastaComponent <- tagList(
+           strong("FASTA"),
+           div(class = "text-area-output",
+               verbatimTextOutput( outputId = "fastaDataText")
+           )
+)
+
+msaComponent <- tagList(
+  strong("FASTA Sequence Alignment"),
+  div(class = "text-area-output",
+      verbatimTextOutput(outputId = "msaDataText")
+  )
 )
 
 

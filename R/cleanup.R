@@ -344,7 +344,7 @@ cleanup_domarch <- function(prot,
 }
 
 ##########################
-cleanup_gencontext <- function(prot, domains_rename,
+cleanup_gencontext <- function(prot, domains_rename = data.frame("old" = character(0), "new" = character(0) , stringsAsFactors = F),
                                repeat2s=TRUE, remove_asterisk = TRUE){
   #'Cleanup Genomic Contexts
   #'
@@ -354,7 +354,8 @@ cleanup_gencontext <- function(prot, domains_rename,
   #'A cleaned up version of the data table is returned.
   #'
   #'@param prot A data frame that contains columns 'GenContext.orig'
-  #'@param domains_rename A data frame containing the domain names to be replaced in a column 'old' and the
+  #'@param domains_rename A data frame containing the domain names to be replaced in a column 'old' and the replacement in a column 'new'.
+  #'Defaults to an empty data frame with a new and old column such that non of the domains will be renamed
   #'@param repeat2s Boolean. If TRUE, repeated domains in 'GenContext' are condensed. Default is TRUE.
   #'@param remove_asterisk Boolean. If TRUE, asterisks in 'ClustName' are removed. Default is TRUE.
   #'@examples cleanup_gencontext(prot, domains_rename, T, F)
@@ -362,11 +363,13 @@ cleanup_gencontext <- function(prot, domains_rename,
   # Create cleaned up GenContext column
   prot$GenContext <- prot$GenContext.orig
 
-  ## Domains_rename
-  for(x in 1:length(domains_rename$old)){
-    target <- domains_rename$old[x]
-    replacement <- domains_rename$new[x]
-    prot$GenContext <- prot$GenContext %>% str_replace_all(target,replacement)
+  if(nrow(domains_rename) != 0){
+    ## Domains_rename
+    for(x in 1:length(domains_rename$old)){
+      target <- domains_rename$old[x]
+      replacement <- domains_rename$new[x]
+      prot$GenContext <- prot$GenContext %>% str_replace_all(target,replacement)
+    }
   }
 
   ## Reverse operons | Straighten them out!

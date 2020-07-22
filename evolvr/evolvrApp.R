@@ -6,6 +6,7 @@ library(sunburstR)
 library(rmarkdown)
 library(shinyBS)
 library(shinyauthr)
+library(pins)
 
 setwd("..")
 source("R/cleanup.R")
@@ -15,8 +16,16 @@ source("R/network.R")
 source("R/pre-msa-tree.R")
 source("scripts/tree.R")
 source("evolvr/components.R")
+source("evolvr/ui/resultSummaryComponents.R")
 conflicted::conflict_prefer("strsplit", "base")
 conflicted::conflict_prefer("count", "dplyr")
+
+###########
+###########
+# Hide the token before making public
+###########
+###########
+board_register_github(repo = "samuelzornchen/evolvR-Pins", token = "6b3b68bcb90353554fb7c84acfae3133abcfb7fa")
 
 ###
 #### Users ####
@@ -29,8 +38,6 @@ user_base <- data.frame(
   stringsAsFactors = FALSE,
   row.names = NULL
 )
-
-
 
 example_data = read_tsv("data/rawdata_tsv/all_clean.txt")
 
@@ -51,7 +58,9 @@ ui <- tagList(
     inverse = T,
     source("evolvr/ui/splashPageUI.R")$value,
     source("evolvr/ui/uploadUI.R")$value,
+    source("evolvr/ui/resultSummaryUI.R")$value,
     source("evolvr/ui/queryDataUI.R")$value,
+
     source("evolvr/ui/domainArchitectureUI.R")$value,
     source("evolvr/ui/genomicContextUI.R")$value,
     source("evolvr/ui/phylogenyUI.R")$value,
@@ -96,18 +105,6 @@ server <- function(input, output, session)
 
   last_button_val = reactiveVal(0)
 
-  #### Load Data ####
-  observeEvent(input$fileUpload,
-               {
-                 req(credentials()$user_auth)
-                 print("Upload")
-                 df <- switch(input$fileType,
-                              "tsv" = read_tsv(input$fileUpload$datapath),
-                              "csv" = read_csv(input$fileUpload$datapath))
-                 data(df)
-               })
-
-
   data <- reactiveVal(data.frame())
 
   fasta_filepath <- reactiveVal("tmp.fasta")
@@ -121,6 +118,110 @@ server <- function(input, output, session)
   GCCutoff <- reactive({
     input$GC_Cutoff
   })
+
+
+  #### Observe what Data is available and hide/show tabs based on that ####
+  # observe({
+  #   if(nrow(data()) == 0)
+  #   {
+  #     hideTab(inputId = "QueryData", target = "mainData", session = session)
+  #   }
+  #   else
+  #   {
+  #     showTab(inputId = "QueryData", target = "mainData", session = session)
+  #   }
+  # })
+
+
+#### Pin Fasta Data ####
+  observeEvent(input$pinFasta,
+               {
+                 pin_name = input$pinName
+                 if(length(pin_name) < 1 | nrow(pin_find(name = pin_name, board = "github") != 0 ))
+                 {
+                   createAlert(session, "invalidPin", content = p("Error: Pin already in Use"))
+                 }
+                 else
+                 {
+                   pin(fasta(), name = pin_name, board = "github")
+                 }
+               }
+               )
+
+  #### UI components for Upload tab ####
+  output$uploadComponents <- renderUI({
+    switch( input$inputType,
+            "Full Data" = full_data_ui,
+            # "Fasta Sequence(s)" = fasta_input_ui,
+            # "Protein Accession Numbers" = accNum_input_ui,
+            "Blast Results" = blast_input_ui,
+            "Interproscan Results" = interpro_input_ui,
+            "AccNum/FASTA" = acc_fasta_ui
+    )
+  })
+
+  #### UI Components for the Data tab ####
+  output$dataTableComponent <- renderUI({
+    if(nrow(data()) == 0)
+    {
+      noTableComponent
+    }
+    else
+    {
+      tableComponent
+    }
+  })
+
+  output$fastaDataComponent <- renderUI({
+    if(fasta() == "")
+    {
+      noFastaComponent
+    }
+    else
+    {
+      fastaComponent
+    }
+  })
+
+  output$msaDataComponent <- renderUI({
+    if(aligned_fasta() == "")
+    {
+      noMsaComponent
+    }
+    else
+    {
+      msaComponent
+    }
+  })
+
+  observeEvent(
+    input$dataTable2Upload,
+    {
+      updateNavbarPage(session, "evolvrMenu" ,"upload")
+      updateSelectInput(session,
+                        inputId = "inputType", label = "Input Type:",
+                        choices = c(
+                          "Blast Results",
+                          "Interproscan Results",
+                          "Full Data",
+                          "AccNum/FASTA"
+                        ),
+                        selected = "Full Data")
+    }
+
+  )
+
+
+  #### Full Data Upload ####
+  observeEvent(input$fileUpload,
+               {
+                 req(credentials()$user_auth)
+                 print("Upload")
+                 df <- switch(input$fileType,
+                              "tsv" = read_tsv(input$fileUpload$datapath),
+                              "csv" = read_csv(input$fileUpload$datapath))
+                 data(df)
+               })
 
   # Convert query data into vector
   queries <- reactive({
@@ -159,21 +260,43 @@ server <- function(input, output, session)
                })
 
 
-  #### UI components for Upload tab ####
-  output$uploadComponents <- renderUI({
-    switch( input$inputType,
-            "Full Data" = full_data_ui,
-            # "Fasta Sequence(s)" = fasta_input_ui,
-            # "Protein Accession Numbers" = accNum_input_ui,
-            "Blast Results" = blast_input_ui,
-            "Interproscan Results" = interpro_input_ui,
-            "AccNum/FASTA" = acc_fasta_ui
+  ## Observe data() to show button to redirect to result summary when available
+  observe({
+    shinyjs::hide("upload2RS")
+    if((nrow(data()) != 0 & input$inputType == "Full Data") | (aligned_fasta() != "" & input$inputType == "AccNum/FASTA") )
+    {
+      shinyjs::show("upload2RS")
+    }
+  })
+
+  observeEvent(input$upload2RS,
+               {
+                 updateNavbarPage(session, "evolvrMenu", selected = "resultSummary")
+               }
+  )
+
+
+  ###### FASTA from Data Table ######
+  dataTableFastaAccNums <- reactive({
+    req(nrow(data()) > 0)
+    reduced_col <- switch(input$fastaRepresentativeType,
+                          "One per Species" = "Species",
+                          "One per Lineage" = "Lineage"
     )
+    s <- RepresentativeAccNums(data(), reduced = reduced_col , accnum_col = "AccNum")
+    print(s)
+    s
+  })
+
+  output$DF2Fasta <- renderText({
+    fasta()
+  })
+  output$DF2AlignedFasta <- renderText({
+    aligned_fasta()
   })
 
 
-
-  #### AccNum to Fasta ####
+  #### AccNum Data Upload ####
   # Generate a FASTA file from the input AccNum(s)
 
   # Upload AccNum
@@ -182,7 +305,7 @@ server <- function(input, output, session)
                  req(credentials()$user_auth)
                  accNums <- read_file(input$accNumUpload$datapath)
                  updateTextAreaInput(session, "accNumTextInput", label = "Enter Protein Accession Number(s)",
-                                    value = accNums)
+                                     value = accNums)
                })
 
 
@@ -194,33 +317,15 @@ server <- function(input, output, session)
   })
 
   # Display the FASTA File
-  output$generatedFasta <- renderText({
-    fasta()
-  })
+  # output$generatedFasta <- renderText({
+  #   fasta()
+  # })
 
-  output$accnumMSA <- renderText({
-    aligned_fasta()
-  })
+  # output$accnumMSA <- renderText({
+  #   aligned_fasta()
+  # })
 
 
-  dataTableFastaAccNums <- reactive({
-    req(nrow(data()) > 0)
-    reduced_col <- switch(input$fastaRepresentativeType,
-                          "One per Species" = "Species",
-                          "One per Lineage" = "Lineage"
-    )
-    s <- RepresentativeAccNums(data(), reduced = reduced_col , accnum_col = "AccNum")
-    print(s)
-    s
-
-  })
-
-  output$DF2Fasta <- renderText({
-    fasta()
-  })
-  output$DF2AlignedFasta <- renderText({
-    aligned_fasta()
-  })
 
   fasta <- reactiveVal("")
   aligned_fasta <- reactiveVal("")
@@ -230,16 +335,6 @@ server <- function(input, output, session)
     aligned_fasta_filepath("")
     fasta("")
     aligned_fasta("")
-    # if(input$inputType == "Full Data")
-    # {
-    #   fasta("")
-    #   aligned_fasta("")
-    # }
-    # else if(input$inputType == "Protein Accession Numbers")
-    # {
-    #   fasta("")
-    #   aligned_fasta("")
-    # }
   })
 
 
@@ -283,13 +378,13 @@ server <- function(input, output, session)
   #### Msa Upload ####
   observeEvent(input$msaFileUpload,
                {
-                f = read_file(input$msaFileUpload$datapath)
-                write_file(f, "aligned_fasta.fasta")
-                aligned_fasta(f)
-                aligned_fasta_filepath("aligned_fasta.fasta")
-                updateTextInput(session, "msaText", label = "Paste  Aligned FASTA Sequence", value = f)
+                 f = read_file(input$msaFileUpload$datapath)
+                 write_file(f, "aligned_fasta.fasta")
+                 aligned_fasta(f)
+                 aligned_fasta_filepath("aligned_fasta.fasta")
+                 updateTextInput(session, "msaText", label = "Paste  Aligned FASTA Sequence", value = f)
                }
-               )
+  )
 
 
 
@@ -435,17 +530,116 @@ server <- function(input, output, session)
     }
   })
 
+
+  ####
+
+
+
   #### Main Table ####
   output$mainTable = DT::renderDataTable({
+    viewing_cols = c("AccNum", "DomArch", "GenContext","Lineage", "Species", "GeneName", "Length", "GCA_ID")
     if(input$mainSelect == "All")
     {
-      data()
+      data() %>% select(all_of(viewing_cols))
     }
     else
     {
-      data() %>% filter(grepl(input$mainSelect, DomArch, ignore.case = T))
+      data() %>% filter(grepl(input$mainSelect, DomArch, ignore.case = T)) %>% select(all_of(viewing_cols))
     }
   })
+
+  #### FASTA Data Output ####
+  output$fastaDataText <- renderText({
+    fasta()
+  })
+
+  output$msaDataText <- renderText({
+    aligned_fasta()
+  })
+
+
+  #### Result Summary ####
+
+  output$rs_DomArch_ui <- renderUI(
+    {
+      cols <- colnames(data())
+      if("DomArch.repeats" %in% cols)
+      {
+        rs_DomArch_component
+      }
+    }
+  )
+
+  output$rs_GenContext_ui <- renderUI(
+    {
+      cols <- colnames(data())
+      if("GenContext" %in% cols)
+      {
+        rs_GenContext_component
+      }
+    }
+  )
+
+  output$rs_Phylogeny_ui <- renderUI(
+    {
+      cols <- colnames(data())
+      if("Lineage" %in% cols)
+      {
+        rs_sunburst_component
+      }
+      else if(fasta() != "")
+      {
+        rs_tree_component
+      }
+    }
+  )
+
+
+  # DA network
+  output$rs_network <- renderVisNetwork({
+    domain_network(data(), column = "DomArch.repeats",
+                   domains_of_interest = ".*",
+                   cutoff = 95
+    )
+  })
+
+  # GC heatmap
+  ######## Change to a row cutoff
+  output$rs_gcHeatmap <- renderPlot({
+    lineage.DA.plot(data(), colname = "GenContext", cutoff = 20)
+    # RowsCutoff = T)
+  })
+
+  # sunburst
+  output$rs_sunburst <- renderSunburst({
+    lineage_sunburst(data(), "Lineage", levels = 2)
+  })
+
+  # tree
+  output$rs_tree <- renderPlot({
+    seq_tree(fasta_filepath = aligned_fasta_filepath())
+  })
+
+  #### action links Result Summary ####
+  observeEvent(input$rs2DomArch,
+               updateNavbarPage(session, "evolvrMenu" ,"domainArchitecture")
+  )
+
+  observeEvent(input$rs2GenContext,
+               updateNavbarPage(session, "evolvrMenu", "genomicContext")
+  )
+
+  observeEvent(input$rs2Phylogeny,
+               updateNavbarPage(session, "evolvrMenu", "phylogeny")
+  )
+
+  observeEvent(input$rs2PhylogenyTree,
+               {
+                 updateNavbarPage(session, "evolvrMenu", "phylogeny")
+                 updateTabsetPanel(session, inputId = "phylo", selected = "Tree")
+               }
+  )
+
 
   #### Query Heatmap ####
   output$queryHeatmap <- renderPlot({
