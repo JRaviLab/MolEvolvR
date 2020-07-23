@@ -27,6 +27,10 @@ conflicted::conflict_prefer("count", "dplyr")
 ###########
 board_register_github(repo = "samuelzornchen/evolvR-Pins", token = "YOUR_TOKEN_HERE")
 
+
+## Create Fasta Object so it can easily be pinned
+FastaSeq <- setRefClass("FastaSeq", fields = list(sequence = "character"))
+
 ###
 #### Users ####
 ###
@@ -136,14 +140,17 @@ server <- function(input, output, session)
 #### Pin Fasta Data ####
   observeEvent(input$pinFasta,
                {
-                 pin_name = input$pinName
-                 if(length(pin_name) < 1 | nrow(pin_find(name = pin_name, board = "github") != 0 ))
+
+                 pin_name = input$pinName#[1]
+                 print(pin_name)
+                 if(nchar(pin_name) < 1 || nrow(pin_find(name = pin_name, board = "github")) != 0 )
                  {
-                   createAlert(session, "invalidPin", content = p("Error: Pin already in Use"))
+                   createAlert(session, "invalidPin", content = "Error: Pin name already taken", append = FALSE)
                  }
                  else
                  {
-                   pin(fasta(), name = pin_name, board = "github")
+                   fastaObject <- FastaSeq(sequence = fasta())
+                   pin(x = fastaObject, name = pin_name, board = "github")
                  }
                }
                )
