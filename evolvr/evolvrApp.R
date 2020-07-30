@@ -16,7 +16,7 @@ source("R/network.R")
 source("R/pre-msa-tree.R")
 source("scripts/tree.R")
 source("evolvr/components.R")
-source("evolvr/ui/resultSummaryComponents.R")
+source("evolvr/ui/UIOutputComponents.R")
 conflicted::conflict_prefer("strsplit", "base")
 conflicted::conflict_prefer("count", "dplyr")
 
@@ -109,10 +109,74 @@ server <- function(input, output, session)
 
   last_button_val = reactiveVal(0)
 
-  data <- reactiveVal(data.frame())
+  # Data from the full upload dataframe
+  uFullData <- reactiveVal(data.frame())
+  # Data table generated from the blast data
+  uBlastData <- reactiveVal(data.frame())
+  # Data table generated from the accnum/fasta data
+  uAccFaData <- reactiveVal(data.frame())
+  # Data table generated from the iprscan results data
+  uIprData <- reactiveVal(data.frame())
 
-  fasta_filepath <- reactiveVal("tmp.fasta")
-  aligned_fasta_filepath <- reactiveVal("")
+  data <- reactive({
+    switch(input$inputType,
+           "Full Data" = uFullData(),
+           "Blast Results" = uBlastData(),
+           "Interproscan Results" = uAccFaData(),
+           "AccNum/FASTA" = uIprData()
+    )
+  })
+
+
+  uFullFasta <- reactiveVal("")
+  uBlastFasta <- reactiveVal("")
+  uAccFaFasta <- reactiveVal("")
+  uIprFasta <- reactiveVal("")
+
+  uFullAln <- reactiveVal("")
+  uBlastAln <- reactiveVal("")
+  uAccFaAln <- reactiveVal("")
+  uIprAln <- reactiveVal("")
+
+  fasta <- reactive({
+    switch(input$inputType,
+           "Full Data" = uFullFasta(),
+           "Blast Results" = uBlastFasta(),
+           "Interproscan Results" = uIprFasta(),
+           "AccNum/FASTA" = uAccFaFasta()
+    )
+  })
+
+  aligned_fasta <- reactive({
+    req(file.exists(aligned_fasta_filepath()))
+    read_file(aligned_fasta_filepath())
+    # switch(input$inputType,
+    #        "Full Data" = uFullAln(),
+    #        "Blast Results" = uBlastAln(),
+    #        "Interproscan Results" = uAccFaAln(),ovl
+    #        "AccNum/FASTA" = uIprAln()
+    # )
+  })
+
+  aligned_fasta_filepath <- reactive({
+    switch(input$inputType,
+           "Full Data" = "uFullAlnFile.fasta",
+           "Blast Results" = "uBlastAlnFile.fasta",
+           "Interproscan Results" = "uAccFaAlnFile.fasta",
+           "AccNum/FASTA" = "uIprAlnFile.fasta"
+    )
+  })
+
+  fasta_filepath <- reactive({
+    switch(input$inputType,
+           "Full Data" = "uFullFastaFile.fasta",
+           "Blast Results" = "uFullBlastFastaFile.fasta",
+           "Interproscan Results" = "uAccFaFastaFile.fasta",
+           "AccNum/FASTA" = "uIprFastaFile.fasta"
+    )
+  })
+
+
 
 
   DACutoff <- reactive({
@@ -124,20 +188,8 @@ server <- function(input, output, session)
   })
 
 
-  #### Observe what Data is available and hide/show tabs based on that ####
-  # observe({
-  #   if(nrow(data()) == 0)
-  #   {
-  #     hideTab(inputId = "QueryData", target = "mainData", session = session)
-  #   }
-  #   else
-  #   {
-  #     showTab(inputId = "QueryData", target = "mainData", session = session)
-  #   }
-  # })
 
-
-#### Pin Fasta Data ####
+  #### Pin Fasta Data ####
   observeEvent(input$pinFasta,
                {
 
@@ -153,7 +205,7 @@ server <- function(input, output, session)
                    pin(x = fastaObject, name = pin_name, board = "github")
                  }
                }
-               )
+  )
 
   #### UI components for Upload tab ####
   output$uploadComponents <- renderUI({
@@ -227,7 +279,7 @@ server <- function(input, output, session)
                  df <- switch(input$fileType,
                               "tsv" = read_tsv(input$fileUpload$datapath),
                               "csv" = read_csv(input$fileUpload$datapath))
-                 data(df)
+                 uFullData(df)
                })
 
   # Convert query data into vector
@@ -247,7 +299,7 @@ server <- function(input, output, session)
   })
 
   output$uploadedContent <- renderTable({
-    head(data(),n =  5)
+    head(uFullData(),n =  5)
   })
 
   ####  Load Example Data
@@ -259,7 +311,7 @@ server <- function(input, output, session)
                                      "Tfu_1009","DUF1700-ahelical", "DUF1707-SHOCT"))
                  if(last_button_val() < input$loadExample)
                  {
-                   data(example_data)
+                   uFullData(example_data)
 
                    last_button_val(last_button_val()+1)
                  }
@@ -334,15 +386,7 @@ server <- function(input, output, session)
 
 
 
-  fasta <- reactiveVal("")
-  aligned_fasta <- reactiveVal("")
 
-  #### Observe Input Type ####
-  observe({
-    aligned_fasta_filepath("")
-    fasta("")
-    aligned_fasta("")
-  })
 
 
   #### FASTA input Upload ####
@@ -351,10 +395,8 @@ server <- function(input, output, session)
     {
       req(credentials()$user_auth)
       f <- read_file(input$fastaFileUpload$datapath)
-      fasta(f)
+      uAccFaFasta(f)
 
-      # write(f, "tmp.fasta")
-      # fasta_filepath("tmp.fasta")
       updateTextAreaInput(session, inputId = "fastaTextInput", label = "Enter Fasta Sequence", value = f)
     }
   )
@@ -364,15 +406,14 @@ server <- function(input, output, session)
   observeEvent(
     input$fasta2msaBtn,
     {
-      write_file(input$fastaTextInput, "tmp.fasta")
-      fasta(input$fastaTextInput)
-      fasta_filepath("tmp.fasta")
+      write_file(input$fastaTextInput, fasta_filepath())
+      uAccFaFasta(input$fastaTextInput)
 
-      alignFasta(fasta_filepath(), tool = input$FastaAlignmentTool , outpath = "aligned_fasta.fasta")
-      aligned_fasta(read_file("aligned_fasta.fasta"))
-      aligned_fasta_filepath("aligned_fasta.fasta")
+      alignFasta(fasta_filepath(), tool = input$FastaAlignmentTool , outpath = aligned_fasta_filepath())
+      uAccFaAln(read_file(aligned_fasta_filepath()))
+      # uAccFaAlnFile("uploadAccFaAln.fasta")
 
-      updateTextAreaInput(session, "msaText", label = "Paste Aligned FASTA Sequence", value = read_file("aligned_fasta.fasta"))
+      updateTextAreaInput(session, "msaText", label = "Paste Aligned FASTA Sequence", value = read_file(aligned_fasta_filepath()))
       updateCollapse(session, "accCollapse", open = "msa")
     }
   )
@@ -382,44 +423,38 @@ server <- function(input, output, session)
   )
 
 
-  #### Msa Upload ####
-  observeEvent(input$msaFileUpload,
-               {
-                 f = read_file(input$msaFileUpload$datapath)
-                 write_file(f, "aligned_fasta.fasta")
-                 aligned_fasta(f)
-                 aligned_fasta_filepath("aligned_fasta.fasta")
-                 updateTextInput(session, "msaText", label = "Paste  Aligned FASTA Sequence", value = f)
-               }
-  )
 
 
 
+  # Full Fasta
   #### Fasta Buttons Full DF ####
   observeEvent(input$fullDF2Fasta,
                {
-                 acc2fa(dataTableFastaAccNums(), out_path = "tmp.fasta")
-                 fasta(read_file("tmp.fasta"))
+                 acc2fa(dataTableFastaAccNums(), out_path = fasta_filepath())
+                 uFullFasta(read_file(fasta_filepath()))
                }
   )
 
   observeEvent(
     input$DF2msa,
     {
-      alignFasta("tmp.fasta", tool = input$DFAlignmentTool, outpath = "aligned_fasta.fasta")
-      aligned_fasta(read_file("aligned_fasta.fasta"))
-
-      aligned_fasta_filepath("")
-      aligned_fasta_filepath("aligned_fasta.fasta")
+      alignFasta(fasta_filepath(), tool = input$DFAlignmentTool, outpath = aligned_fasta_filepath())
+      uFullDataAln(read_file(aligned_fasta_filepath()))
     }
   )
 
+
+
+  #### FASTA Accnum Upload ####
   #### FASTA buttons AccNum ####
+  # Accnum to FASTA (AccNumFasta)
   observeEvent(
     input$accnum2Fasta,
     {
-      acc2fa(accnum_vect(), out_path = "tmp.fasta")
-      fasta(read_file("tmp.fasta"))
+      acc2fa(accnum_vect(), out_path = fasta_filepath())
+      uAccFaFasta(read_file(fasta_filepath()))
+
+      print(fasta())
 
       updateTextAreaInput(session, inputId = "fastaTextInput",
                           label = "Enter Fasta Sequence",
@@ -428,13 +463,12 @@ server <- function(input, output, session)
     }
   )
 
+  # Fasta to multiple sequence alignment (AccNumFasta)
   observeEvent(
     input$accnum2msa,
     {
-      alignFasta("tmp.fasta", tool = input$accnumAlignmentTool, outpath = "aligned_fasta.fasta")
-      aligned_fasta(read_file("aligned_fasta.fasta"))
-      aligned_fasta_filepath("")
-      aligned_fasta_filepath("aligned_fasta.fasta")
+      alignFasta(fasta_filepath() , tool = input$accnumAlignmentTool, outpath = aligned_fasta_filepath())
+      uAccFaAln(read_file(aligned_fasta_filepath()))
     }
   )
 
@@ -449,6 +483,15 @@ server <- function(input, output, session)
                                    paste0(example_data$AccNum[ lowerbound: (lowerbound + 5)])  )
                })
 
+  #### Msa Upload
+  observeEvent(input$msaFileUpload,
+               {
+                 f = read_file(input$msaFileUpload$datapath)
+                 write_file(f, aligned_fasta_filepath())
+                 uAccFaAln(f)
+                 updateTextInput(session, "msaText", label = "Paste  Aligned FASTA Sequence", value = f)
+               }
+  )
 
 
 
@@ -905,20 +948,6 @@ server <- function(input, output, session)
                  ))
                }
   )
-
-
-
-
-
-
-
-
-
-
-  #### Static Flowchart ####
-  # output$flowchartImage <- renderImage( list(src = "data/figures/ISMB-Poster-FlowChart-evolvr.png"), deleteFile = F)
-
-
 }
 
 
