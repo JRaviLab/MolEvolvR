@@ -61,20 +61,20 @@ prot_data$Lineage = unlist(map(prot_data$Lineage, function(x){
 
 prot_data$DomArch <- factor(prot_data$DomArch, levels = DAorder)
 
-perc = ggplot(prot_data, aes(fill = Lineage, y = count, x = DomArch)) +
+perc <- ggplot(prot_data, aes(fill = Lineage, y = count, x = DomArch)) +
   geom_bar(position = 'fill', stat = "identity") +
   coord_flip() +
   xlab("Domain Architecture")+
   ylab("Percent") +
   theme_minimal()
   # scale_fill_viridis(discrete = T)
-stack = ggplot(prot_data, aes(fill = Lineage, y = count, x = DomArch)) +
+stack <- ggplot(prot_data, aes(fill = Lineage, y = count, x = DomArch)) +
   geom_bar(position = 'stack', stat = "identity") +
   coord_flip() +
   xlab("Domain Architecture")+
-  ylab("Count") +
+  ylab("Counts") +
   theme_minimal() + theme(legend.position = c(0.7, 0.4))
-
+## Increase axes and legend font size
 
 stack
 # perc
