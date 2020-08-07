@@ -1,8 +1,10 @@
 library(tidyverse)
+library(here)
 # library(biomartr)
 
 
-CreateLineageLookup <- function(lineage_file = "/data/rankedlineage.dmp", outfile, taxonomic_rank = "phylum")
+create_lineage_lookup <- function(lineage_file = here("data/rankedlineage.dmp"),
+                                  outfile, taxonomic_rank = "phylum")
 {
   #' Create a look up table that goes from TaxID, to Lineage
   #' @author Samuel Chen
@@ -40,9 +42,11 @@ CreateLineageLookup <- function(lineage_file = "/data/rankedlineage.dmp", outfil
   rankedlins_cols <- c("tax_id", "tax_name", "species", "genus",
                        "family", "order", "class", "phylum", "kingdom", "superkingdom", "NA")
 
-  lineage_file <- "C:/Users/samue/Google_Drive/GitHub/molevol/data/rankedlineage.dmp"
-  rankedLins <- read_file(lineage_file) %>% str_replace_all(pattern = "\\t\\|\\t|\\t\\|", "\t") %>%
-    read_tsv( col_names = rankedlins_cols) %>% select(-"NA")
+  lineage_file <- here("data/rankedlineage.dmp")
+  rankedLins <- read_file(lineage_file) %>%
+    str_replace_all(pattern = "\\t\\|\\t|\\t\\|", "\t") %>%
+    read_tsv( col_names = rankedlins_cols) %>%
+    select(-"NA")
 
   rankedlins_cols_nona <- c("tax_id", "tax_name", "species", "genus",
                             "family", "order", "class", "phylum", "kingdom", "superkingdom")
@@ -68,17 +72,20 @@ CreateLineageLookup <- function(lineage_file = "/data/rankedlineage.dmp", outfil
 
   if(tax_rank_index < length(taxonomy_ranks))
   {
-    rankedLins <- rankedLins %>% select(- all_of(taxonomy_ranks[ (tax_rank_index+1) :length(taxonomy_ranks)]), -kingdom)
+    rankedLins <- rankedLins %>%
+      select(- all_of(taxonomy_ranks[ (tax_rank_index+1) :length(taxonomy_ranks)]), -kingdom)
   }
   else
   {
-    rankedLins <- rankedLins %>% select(-kingdom)
+    rankedLins <- rankedLins %>%
+      select(-kingdom)
   }
 
 
   # Takes a while (2million rows after all)
-  rankedLinsCombined <- rankedLins %>% unite(col = 'Lineage', all_of(combined_taxonomy), sep = ">") %>%
-    mutate(Lineage = map(Lineage,shorten_NA))
+  rankedLinsCombined <- rankedLins %>%
+    unite(col = 'Lineage', all_of(combined_taxonomy), sep = ">") %>%
+    mutate(Lineage = map(Lineage, shorten_NA))
 
   write_tsv(rankedLinsCombined, outfile)
 }
