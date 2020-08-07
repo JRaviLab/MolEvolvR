@@ -1,12 +1,25 @@
 library(tidyverse)
 
-deltaBlast <- function(deltaBlast_path, db_search_path, db, query, evalue = "1e-5", out, num_alignments, num_threads = 1)
+run_deltablast <- function(deltablast_path, db_search_path,
+                           db="refseq", query, evalue = "1e-5",
+                           out, num_alignments, num_threads = 1)
 {
-  start = Sys.time()
+  #' Run DELTABLAST to find homologs for proteins of interest
+  #' @author Samuel Chen, Janani Ravi
+  #' @param path
+  #' @param db_search_path Path to the BLAST databases
+  #' @param db
+  #' @param query
+  #' @param evalue
+  #' @param out
+  #' @param num_threads
+  #' @param num_alignments
+
+  start <- Sys.time()
 
   system(paste0("export BLASTDB=/",db_search_path ))
 
-  system2(command = deltaBlast_path,
+  system2(command = deltablast_path,
           args = c("-db", db,
                    "-query", query,
                    "-evalue", evalue,
@@ -20,11 +33,22 @@ deltaBlast <- function(deltaBlast_path, db_search_path, db, query, evalue = "1e-
 }
 
 
-rpsBlast <- function(rpsBlast_path,db_search_path,  db, query, evalue = "1e-5", out, num_threads = 1)
+run_rpsblast <- function(rpsblast_path, db_search_path,
+                         db="refseq", query, evalue = "1e-5",
+                         out, num_threads = 1)
 {
-  start = Sys.time()
-  system(paste0("export BLASTDB=/",db_search_path))
-  system2(command = rpsBlast_path,
+  #' Run RPSBLAST to generate domain architectures for proteins of interest
+  #' @author Samuel Chen, Janani Ravi
+  #' @param path
+  #' @param db_search_path Path to the BLAST databases
+  #' @param db
+  #' @param query
+  #' @param evalue
+  #' @param out
+  #' @param num_threads
+  start <- Sys.time()
+  system(paste0("export BLASTDB=/", db_search_path))
+  system2(command = rpsblast_path,
           args = c("-db", db,
                    "-query", query,
                    "-evalue", evalue,
