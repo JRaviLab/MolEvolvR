@@ -142,9 +142,9 @@ acc_fasta_ui <- tagList(
                                                      width = "100%", height = "100%")
                                )
                              ),
-                             bsAlert(anchorId = "invalidPin"),
-                             textInput(inputId = "pinName", "Pin Name:"),
-                             actionButton("pinFasta", "Pin FASTA"),
+                             # bsAlert(anchorId = "invalidPin"),
+                             # textInput(inputId = "pinName", "Pin Name:"),
+                             # actionButton("pinFasta", "Pin FASTA"),
 
                              fluidRow(
                                column(width = 3,

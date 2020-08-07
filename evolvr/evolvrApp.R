@@ -17,6 +17,7 @@ source("R/pre-msa-tree.R")
 source("scripts/tree.R")
 source("evolvr/components.R")
 source("evolvr/ui/UIOutputComponents.R")
+source("evolvr/ui/splashPageComponent.R")
 conflicted::conflict_prefer("strsplit", "base")
 conflicted::conflict_prefer("count", "dplyr")
 
@@ -35,7 +36,7 @@ FastaSeq <- setRefClass("FastaSeq", fields = list(sequence = "character"))
 #### Users ####
 ###
 user_base <- data.frame(
-  user = c("pspevolution"),
+  user = c("molevolvr"),
   password = c("cpathogeno2019"),
   permissions = c("admin"),
   name = c("User One"),
@@ -60,7 +61,8 @@ ui <- tagList(
                        , tags$div(class= "zoom",  "EvolvR")),
     id = 'evolvrMenu',
     inverse = T,
-    source("evolvr/ui/splashPageUI.R")$value,
+    #source("evolvr/ui/splashPageUI.R")$value,
+    source("evolvr/ui/splashPageUI2.0.R")$value,
     source("evolvr/ui/uploadUI.R")$value,
     source("evolvr/ui/resultSummaryUI.R")$value,
     source("evolvr/ui/queryDataUI.R")$value,
@@ -206,6 +208,11 @@ server <- function(input, output, session)
                  }
                }
   )
+
+  output$splashUIComponent <- renderUI({
+    req(credentials()$user_auth)
+    splashUIComponent
+  })
 
   #### UI components for Upload tab ####
   output$uploadComponents <- renderUI({
