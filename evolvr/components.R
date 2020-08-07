@@ -7,13 +7,13 @@ diagram_box <- function(title, image_name, button_name, description)
 {
   div(class = "diagram-box",
 
-      div(title, class = "box-title"),
+      div(strong(title), class = "box-title"),
       div(description, class = "diagram-box-description"),
 
 
       #div(class = "image-border", style = "border-style: solid; border-width: 0px 1px 1px 1px; border-color: #AAAAAA;",
       div(class = "diagram-image",  style= paste0("background-image: url(", image_name, ".png);
-          background-size: auto 100%; background-position: center; background-repeat: no-repeat;")),
+          background-size: auto 80%; background-position: center; background-repeat: no-repeat;")),
       actionButton(button_name, NULL, class="diagram-button")
 
 
@@ -25,7 +25,7 @@ diagram_box <- function(title, image_name, button_name, description)
 basic_box <- function(title, image_name, description, height = '200px')
 {
   div(class = "basic-box", #style = paste0("height:", height, ";") ,
-      div(title, class = "box-title")
+      div(strong(title), class = "box-title")
       #div(description, class = "diagram-box-description", style = paste0("height:", height, ";")),
       #div(class = "diagram-image",  style= paste0("background-image: url(", image_name, ".png);
       #    background-size: auto 100%; background-position: center; background-repeat: no-repeat;"))
@@ -39,7 +39,7 @@ sub_box <- function(title, image_name, description, button_name )
       h4(title),
       p(description),
       div(class = "diagram-image",  style= paste0("background-image: url(", image_name, ".png);
-          background-size: auto 130%; background-position: center; background-repeat: no-repeat;")),
+          background-size: 80% 80%; background-position: center; background-repeat: no-repeat;")),
       actionButton(button_name, NULL, class="sub-diagram-button")
   )
 }
