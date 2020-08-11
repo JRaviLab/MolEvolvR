@@ -31,6 +31,9 @@ all <- all %>% select(AccNum, DomArch, DomArch.repeats, GenContext, GenContext.r
 
 # all requires columns Lineage and Domarch/Clustname
 
+
+
+
 prot_all <- all
 
 prot_all$Lineage = unlist(map(prot_all$Lineage, function(x){
@@ -62,17 +65,44 @@ queries = c("PspA", "Snf7", "PspB","PspC", "PspM",  "PspN", "LiaI-LiaF-TM", "Toa
 # cols %>% paste0(collapse = "','")
 
 ## Current Colors
-cols = c('F48829','#E42622','#7F9D55','#B294C7','#D49B84',
+cols = c(
+  'F48829','#ff4545','#7F9D55','#ff69e3','#D49B84',
   '#8963AD','#F6F399','#A3D77F','#AA9C6C','#6CA9CF',
-  '#E62B2C','#89BBD9','#D29F57','#88CA6B','#754AA0',
+  '#E62B2C','#1e00b3','#D29F57','#b3ff00','#754AA0',
   '#3385BB','#E2C26F','#A6CEE3','#F06161','#F58F57',
   '#EA4933','#977899','#D6CA99','#B15928','#F57C7C',
-  '#5097C5','#37A22F','#E99356','#F3E587','#52AF43',
+  '#5097C5','#37A22F','#34ebd2','#F3E587','#52AF43',
   '#A3D58E','#4693A8','#FDB660','#277DB1','#C6ADD3',
   '#D3A9B0','#65A99F','#84BF96','#FDA848','#FA9796',
   '#DE9E83','#784F99','#F06C45','#EB4647','#C17C3F',
-  '#FE9B31','#FE8D19','#9D7BBA','#B7A199','#559E3E',
-  '#FE8002','#6DBD57','#FBB268')
+  '#e28cff','#FE8D19','#9D7BBA','#B7A199','#559E3E',
+  '#0dff00','#6DBD57','#FBB268')
+
+# library(hash)
+# find_dups <- function(c_vec)
+# {
+#   h <- hash()
+#   for(i in c_vec)
+#   {
+#     if(has.key(i, h))
+#     {
+#       h[[i]] = h[[i]] +1
+#     }
+#     else
+#     {
+#       h[[i]] = 1
+#     }
+#   }
+#   for(k in keys(h))
+#   {
+#     if( (h[[k]]) == 1)
+#     {
+#       del(k, h)
+#     }
+#   }
+#   return(h)
+# }
+
 
 # df$Lineage <- str_replace_all(df$Lineage, "-", "_")
 #
@@ -80,6 +110,9 @@ cols = c('F48829','#E42622','#7F9D55','#B294C7','#D49B84',
 
 # plot each lineage
 plt_fun <- function(query){
+
+  levels_vec = c("Level1", "Level2")
+
   # filter for dt
   plt_df <- df %>%
     filter(grepl(query, DomArch, ignore.case = T))
