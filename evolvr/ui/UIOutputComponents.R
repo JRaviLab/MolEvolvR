@@ -33,7 +33,7 @@ full_data_ui <- tagList(
                         )
                ),
                tabPanel(title = "FASTA", value = "fastaTab",
-                        construction_box(),
+                        # construction_box(),
                         fluidRow(
                           column( width = 4,
                                   selectInput("fastaRepresentativeType", label = "Choose Representative Observations:",
@@ -85,7 +85,6 @@ blast_input_ui <- tagList(
 
 #### IPRScan Upload ####
 interpro_input_ui <- tagList(
-  construction_box(),
 
   fluidRow(
     column(width = 4, offset = 0,
@@ -293,7 +292,17 @@ rs_tree_component <- tagList(
 )
 
 
+rs_iprscan_component <- tagList(
+  fluidRow(
+    column(width = 12,
 
+               selectInput(inputId = "iprDatabases", label = "DataBases", choices = c(), multiple = T),
+               # selectizeInput(inputId = "iprDatabases", label = "DataBases", choices = c(), multiple = T),
+               plotOutput(outputId = "rs_IprGenes", height = '600px')
+           )
+
+  )
+)
 
 
 

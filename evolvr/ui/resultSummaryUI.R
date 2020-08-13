@@ -13,6 +13,7 @@ tabPanel(
                 #
                 # ),
 
+                uiOutput(outputId = "rs_IprScan_ui"),
                 uiOutput(outputId = "rs_DomArch_ui"),
 
                 uiOutput(outputId = "rs_GenContext_ui"),

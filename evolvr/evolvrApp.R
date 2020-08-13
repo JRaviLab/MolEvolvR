@@ -14,6 +14,7 @@ source("R/summarize.R")
 source("R/plotting.R")
 source("R/network.R")
 source("R/pre-msa-tree.R")
+source("R/Iprscan.R")
 source("scripts/tree.R")
 source("evolvr/components.R")
 source("evolvr/ui/UIOutputComponents.R")
@@ -58,7 +59,7 @@ ui <- tagList(
   navbarPage(
     title = actionLink(inputId = "homeButton",
                        style ="text-decoration:none; color:white;"
-                       , tags$div(class= "zoom",  "EvolvR")),
+                       , tags$div(class= "zoom",  "MolEvolvR")),
     id = 'evolvrMenu',
     inverse = T,
     #source("evolvr/ui/splashPageUI.R")$value,
@@ -102,6 +103,7 @@ server <- function(input, output, session)
   })
 
 
+  # updateSelectInput(session, inputId = "iprDatabases", label = "DataBases", choices = c())
 
   ## Change title tab name (ie: chrome tab name) to EvolvR
   shinyjs::runjs('document.title = "EvolvR"')
@@ -327,13 +329,18 @@ server <- function(input, output, session)
 
 
   ## Observe data() to show button to redirect to result summary when available
-  observe({
-    shinyjs::hide("upload2RS")
-    if((nrow(data()) != 0 & input$inputType == "Full Data") | (aligned_fasta() != "" & input$inputType == "AccNum/FASTA") )
-    {
-      shinyjs::show("upload2RS")
-    }
-  })
+  # observe({
+  #
+  #   if((nrow(data()) != 0 && input$inputType == "Full Data") || (aligned_fasta() != "" && input$inputType == "AccNum/FASTA") ||
+  #      (nrow(ipr_data()) != 0 && input$inputType == "Interproscan Results"))
+  #   {
+  #     shinyjs::show("upload2RS")
+  #   }
+  #   else
+  #   {
+  #     shinyjs::hide("upload2RS")
+  #   }
+  # })
 
   observeEvent(input$upload2RS,
                {
@@ -541,24 +548,103 @@ server <- function(input, output, session)
                  )
 
                })
+  # Splashpage Ipr button
+  observeEvent(input$dIprScanBtn,
+               {
+                 updateNavbarPage(session, "evolvrMenu" ,"upload")
+                 updateSelectInput(session, inputId = "inputType", label = "Input Type:",
+                                   choices = c(
+                                     # "Protein Accession Numbers",
+                                     # "Fasta Sequence(s)",
+                                     "Blast Results",
+                                     "Interproscan Results",
+                                     "Full Data",
+                                     "AccNum/FASTA"
+                                   ),
+                                   selected = "Interproscan Results"
+                 )
+               })
+  # Splashpage BLAST button
+  observeEvent(input$dBlastBtn,
+               {
+                 updateNavbarPage(session, "evolvrMenu" ,"upload")
+                 updateSelectInput(session, inputId = "inputType", label = "Input Type:",
+                                   choices = c(
+                                     # "Protein Accession Numbers",
+                                     # "Fasta Sequence(s)",
+                                     "Blast Results",
+                                     "Interproscan Results",
+                                     "Full Data",
+                                     "AccNum/FASTA"
+                                   ),
+                                   selected = "Blast Results"
+                 )
+               })
+  # Splashpage Full Data button
+  observeEvent(input$dFullBtn,
+               {
+                 updateNavbarPage(session, "evolvrMenu" ,"upload")
+                 updateSelectInput(session, inputId = "inputType", label = "Input Type:",
+                                   choices = c(
+                                     # "Protein Accession Numbers",
+                                     # "Fasta Sequence(s)",
+                                     "Blast Results",
+                                     "Interproscan Results",
+                                     "Full Data",
+                                     "AccNum/FASTA"
+                                   ),
+                                   selected = "Full Data"
+                 )
+               })
 
-
-
-
+  # Splashpage Domain Architecture button
+  observeEvent(input$dDomArchBtn,
+               {
+                 updateNavbarPage(session, "evolvrMenu" ,"domainArchitecture")
+               })
+  # Splashpage Genomic Context button
+  observeEvent(input$dGenContextBtn,
+               {
+                 updateNavbarPage(session, "evolvrMenu" ,"genomicContext")
+               })
+  # Splashpage Genomic Context button
+  observeEvent(input$dPhyloBtn,
+               {
+                 updateNavbarPage(session, "evolvrMenu" ,"phylogeny")
+               })
 
   #### IPRScan Upload ####
+
+
+  ipr_data = reactiveVal(data.frame())
+  ipr_filepath = reactiveVal("")
+
+  observe({
+    # req("Analysis" %in% colnames(ipr_data()))
+    options <- ipr_data()$Analysis %>% unique()
+    print(options)
+    # updateSelectizeInput(session, inputId = "iprDatabases", label = "DataBases", choices = options, selected = options)
+    updateSelectInput(session, inputId = "iprDatabases", label = "DataBases", choices = options, selected = options)
+  })
+
+  observeEvent(input$interproFileUpload, {
+    ipr_cols <- c("AccNum", "Seq_MD5_digest", "SeqLen", "Analysis",
+                  "SignAcc", "SignDesc", "StartLoc", "StopLoc", "Score",
+                  "Status", "RunDate",
+                  "IPRAcc", "IPRDesc", "GOAnn", "PathAnn")
+    ipr_data(switch(
+      input$fileTypeIPRScan,
+      "tsv" = read_tsv(input$interproFileUpload$datapath , col_names = ipr_cols)
+    ))
+    write_tsv(ipr_data(), "ipr_out_file.txt")
+    ipr_filepath("ipr_out_file.txt")
+  })
+
+
   output$IPRScanData <- DT::renderDataTable(
     {
-      ipr_cols <- c("AccNum", "Seq_MD5_digest", "SeqLen", "Analysis",
-                    "SignAcc", "SignDesc", "StartLoc", "StopLoc", "Score",
-                    "Status", "RunDate",
-                    "IPRAcc", "IPRDesc", "GOAnn", "PathAnn")
-      iprscanresults <- switch(
-        input$fileTypeIPRScan,
-        "tsv" = read_tsv(input$interproFileUpload$datapath , col_names = ipr_cols)
-      )
-
-      head(iprscanresults)
+      req(nrow(ipr_data()) != 0)
+      ipr_data()
     }
   )
 
@@ -651,6 +737,14 @@ server <- function(input, output, session)
     }
   )
 
+  output$rs_IprScan_ui <- renderUI(
+    {
+      if(input$inputType ==  "Interproscan Results")
+      {
+        rs_iprscan_component
+      }
+    }
+  )
 
   # DA network
   output$rs_network <- renderVisNetwork({
@@ -675,6 +769,17 @@ server <- function(input, output, session)
   # tree
   output$rs_tree <- renderPlot({
     seq_tree(fasta_filepath = aligned_fasta_filepath())
+  })
+
+
+  # IprVis
+  output$rs_IprGenes <- renderPlot({
+    req(nrow(ipr_data()) != 0)
+    ipr2domarch(infile_ipr = ipr_filepath(),
+                PfamClans_path = "evolvr/TestData/Pfam-A.clans.txt",
+                analysis = input$iprDatabases,
+                topn = 20 ##### What does this parameter do?
+    )
   })
 
   #### action links Result Summary ####
