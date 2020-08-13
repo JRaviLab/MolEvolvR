@@ -18,10 +18,10 @@ tabPanel(title = "", icon = icon("home", class = "fa-2x", lib = "font-awesome"),
                                 icon("users",class = "zoom iMargin fa-3x",lib = "font-awesome")
                          ),
 
-                         a(href = "mailto:janani@msu.edu",
+                         tags$a(href = "mailto:janani@msu.edu",
                            icon(name = "envelope",class = "zoom iMargin fa-3x",
                                 lib = "font-awesome")),
-                         a(href = "https://twitter.com/JRaviLab",
+                         tags$a(href = "https://twitter.com/JRaviLab",
                            icon(name = "twitter", class = "zoom iMargin fa-3x", lib = "font-awesome"))
 
 
