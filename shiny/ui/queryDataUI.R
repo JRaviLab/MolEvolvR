@@ -9,7 +9,7 @@ tabPanel( title = "Data/Query",
                                       selectInput(inputId =  "proSelec", label = "Protein",
                                                   choices = c("All", "PspA-Snf7", "PspB","PspC", "LiaI-LiaF-TM",
                                                                "Toast-rack", "PspM", "PspN","Tfu-1009",
-                                                               "DUF1700", "DUF1707"), selected = "All")
+                                                               "DUF1700-ahelical", "DUF1707-SHOCT"), selected = "All")
 
                                ),
 
