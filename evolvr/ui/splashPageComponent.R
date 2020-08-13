@@ -4,12 +4,17 @@ splashUIComponent <- tagList(
   fluidRow(
     column(
     width = 4, offset = 4,
-    basic_box("Query Protein", image = "none", description = "", height = '20px'),
-    sub_box("Accession Number(s)", image_name = "none", description = "", button_name = "dAccNumBtn"),
-    sub_box("FASTA", image_name = "Fasta_sequence", description  = "", button_name = 'dFastaBtn'),
-    sub_box("BLAST Results", image_name = "protein_blast_logo", description = "", button_name = "dBlastBtn"),
-    sub_box("InterproScan Results", image_name = "interproscan_logo", description = "", button_name = "dIprScanBtn"),
-    sub_box("Full Data", image_name = "none", description = "", button_name = "dFullBtn")
+    basic_box("Query", image = "none", height = '20px'),
+    # sub_box("Accession Number(s)", image_name = "none", button_name = "dAccNumBtn", color = "#9de19a"),
+    # sub_box("FASTA", image_name = "Fasta_sequence", button_name = 'dFastaBtn', color = "#a4c5ea"),
+    # sub_box("BLAST Output", image_name = "protein_blast_logo", button_name = "dBlastBtn", color = "#bca9e1"),
+    # sub_box("InterproScan Output", image_name = "interproscan_logo", button_name = "dIprScanBtn", color = "#e7eca3"),
+    sub_box("Accession Number(s)", image_name = "none", button_name = "dAccNumBtn", color = "#9de19a"),
+    sub_box("FASTA", image_name = "none", button_name = 'dFastaBtn', color = "#a4c5ea"),
+    sub_box("BLAST Output", image_name = "none", button_name = "dBlastBtn", color = "#bca9e1"),
+    sub_box("InterproScan Output", image_name = "none", button_name = "dIprScanBtn", color = "#e7eca3"),
+
+    sub_box("Full Data", image_name = "none", button_name = "dFullBtn", color = "#98a7f2")
     )
   ),
   fluidRow(
@@ -19,15 +24,15 @@ splashUIComponent <- tagList(
   ),
   fluidRow(
     column(width = 4, offset = 0,
-           diagram_box("Domain Architecture", image_name = "DA_Cartoon", button_name = "dDomArchBtn", description = "")
+           diagram_box("Domain Architecture", image_name = "DomainArchitectureCartoon", button_name = "dDomArchBtn", description = "")
            ),
     column(width = 1, offset = 0, arrow_l()),
     column(width = 2, offset = 0,
-           diagram_box("Homologs", image_name = "homolog_table", button_name = "dHomologBtn", description = "")
+           diagram_box("Homologs", image_name = "HomologyHeatmap", button_name = "dHomologBtn", description = "")
            ),
     column(width =1, offset = 0, arrow_r()),
     column(width = 4, offset = 0,
-           diagram_box("Genomic Context", image_name = "GC_Cartoon", button_name = "dGenContextBtn", description = "")
+           diagram_box("Genomic Context", image_name = "GenomicContextCartoon", button_name = "dGenContextBtn", description = "")
            )
   ),
   fluidRow(

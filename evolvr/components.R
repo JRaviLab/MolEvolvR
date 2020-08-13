@@ -33,14 +33,16 @@ basic_box <- function(title, image_name, description, height = '200px')
 
 }
 
-sub_box <- function(title, image_name, description, button_name )
+sub_box <- function(title, image_name, button_name, color = "white" )
 {
-  div(class = "sub-box",
-      h4(title),
-      p(description),
+  div(class = "sub-box", style = paste0("background-color:", color, ";"),
+
+      p(title, style = "text-align:center; font-weight:bold;"),
+
       div(class = "diagram-image",  style= paste0("background-image: url(", image_name, ".png);
-          background-size: 80% 80%; background-position: center; background-repeat: no-repeat;")),
+          background-size: auto 80%; background-position: center; background-repeat: no-repeat;")),
       actionButton(button_name, NULL, class="sub-diagram-button")
+
   )
 }
 
