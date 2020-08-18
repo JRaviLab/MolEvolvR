@@ -31,7 +31,7 @@ all <- all %>% select(AccNum, DomArch, DomArch.repeats, GenContext, GenContext.r
 
 ## data frame requires DomArch(Clustname) and Lineage
 
-prot <- all %>% filter(!grepl("PspA|Snf7", DomArch))
+prot <- toast_rack# all %>% filter(!grepl("PspA|Snf7", DomArch))
 
 
 # x = DomArch
