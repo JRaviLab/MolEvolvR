@@ -5,31 +5,8 @@ library(d3r)
 source("R/cleanup.R")
 
 # read in all and clean
-all <- read_tsv("data/rawdata_tsv/all_semiclean.txt")
+all <- read_tsv("data/rawdata_tsv/all_clean.txt")
 
-colnames(all)[which(colnames(all) == "DomArch")] = "DomArch.ind"
-colnames(all)[which(colnames(all) == "DomArch.orig")] = "DomArch.ind.orig"
-
-colnames(all)[which(colnames(all) == "ClustName")] = "DomArch"
-
-all <- all %>%
-  cleanup_clust(domains_keep = domains_keep, domains_rename = domains_rename,repeat2s = FALSE)
-colnames(all)[which(colnames(all) == "ClustName")] = "DomArch.repeats"
-
-colnames(all)[which(colnames(all) == "ClustName.orig")] = "DomArch.orig"
-
-colnames(all)[which(colnames(all) == "GenContext")] = "Temp"
-
-all <- cleanup_gencontext(all,domains_rename = domains_rename, repeat2s = FALSE)
-colnames(all)[which(colnames(all) == "GenContext")] = "GenContext.repeats"
-colnames(all)[which(colnames(all) =="Temp")] = "GenContext"
-
-
-all <- all %>% select(AccNum, DomArch, DomArch.repeats, GenContext, GenContext.repeats,
-                      Lineage, Species, GeneName, Length, GCA_ID) %>% distinct()
-
-
-# all requires columns Lineage and Domarch/Clustname
 
 
 
@@ -169,10 +146,10 @@ sb_plots
 library(webshot)
 
 setwd("data/figures/")
-save_html(sb_plots, "sunburst_queries.html")#, libdir = "data/figures/")
+save_html(sb_plots, "sunburst_queries_recolored.html")#, libdir = "data/figures/")
 
 setwd("../../")
-webshot("sunburst_queries.html", "data/figures/sunburst_queries.png"
+webshot("data/figures/sunburst_queries_recolored.html", file = "data/figures/sunburst_queries_recolored.png"
         , zoom = 5) # zoom increases dpi
         #vwidth = 480, vheight = 900)
 
@@ -181,7 +158,8 @@ webshot("sunburst_queries.html", "data/figures/sunburst_queries.png"
 ##### Get Legend #####
 
 # Take lineage column and break into the first to levels
-prot <- df %>% select(Lineage)
+prot <- all %>% select(Lineage)
+levels_vec = c("Level1", "Level2")
 protLevels <- prot %>% separate(Lineage, into = levels_vec, sep = ">")
 # Count the occurrance of each group of levels
 protLevels = protLevels %>% group_by_at(levels_vec) %>% summarise(size = n())
@@ -214,12 +192,11 @@ sun2<- htmlwidgets::onRender(
     // simulate click
     d3.select(el).select('.sunburst-togglelegend').on('click')();
     }
-
     "
 )
 
-save_html(sun2, "sunburst_legend.html")
+save_html(sun2, "sunburst_recolored_legend.html")
 
 # Cant zoom in without screwing up font size
-webshot("sunburst_legend.html", "data/figures/sunburst_query_legend.png", zoom = 2)
+webshot("sunburst_recolored_legend.html", "data/figures/sunburst_query_legend.png", zoom = 2)
 ## At this point, I just took a snip of the legend
