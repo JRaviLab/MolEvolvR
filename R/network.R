@@ -39,8 +39,8 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
 
   within_list <- prot_tc %>% select({{column_name}}) %>% distinct()
   within_list <- pull(within_list, {{column_name}})
-  #################### Why is below here?
-  ######## nvm, it's making sure that only Domains that are in the tc cutoff range are kept
+
+  # nvm, it's making sure that only Domains that are in the tc cutoff range are kept
   prot <- prot %>% filter({{column_name}} %in% within_list)
 
   ####### Below should be part of the standardized cleanup process
