@@ -16,6 +16,7 @@ source("R/network.R")
 source("R/pre-msa-tree.R")
 source("R/Iprscan.R")
 source("scripts/tree.R")
+source("evolvr/pins/PinGeneration.R")
 source("evolvr/components.R")
 source("evolvr/ui/UIOutputComponents.R")
 source("evolvr/ui/splashPageComponent.R")
@@ -27,11 +28,13 @@ conflicted::conflict_prefer("count", "dplyr")
 # Hide the token before making public
 ###########
 ###########
-board_register_github(repo = "samuelzornchen/evolvR-Pins", token = "YOUR_TOKEN_HERE")
+board_register_github(repo = "samuelzornchen/MolEvolvR-Pins", token = "YOUR_TOKEN_HERE")
 
 
 ## Create Fasta Object so it can easily be pinned
 FastaSeq <- setRefClass("FastaSeq", fields = list(sequence = "character"))
+## Create Accession Object so it can easily be pinned
+AccNum <- setRefClass("AccNum", fields = list(accessions = "ANY") )
 
 ###
 #### Users ####
@@ -65,6 +68,7 @@ ui <- tagList(
     #source("evolvr/ui/splashPageUI.R")$value,
     source("evolvr/ui/splashPageUI2.0.R")$value,
     source("evolvr/ui/uploadUI.R")$value,
+    source("evolvr/ui/analysisUI.R")$value,
     source("evolvr/ui/resultSummaryUI.R")$value,
     source("evolvr/ui/queryDataUI.R")$value,
 
@@ -192,24 +196,66 @@ server <- function(input, output, session)
   })
 
 
+  #### analysis ####
+  lastAccAnalysis <- reactiveVal(0)
 
-  #### Pin Fasta Data ####
-  observeEvent(input$pinFasta,
+  analysis_AccNums <- reactive({
+    req(typeof(input$accNumBLASTTextInput) == "character")
+    # Split input by commas or spaces
+    unlist(strsplit(input$accNumBLASTTextInput, "\\s*,\\s*|\\s+|\\n"))
+  })
+
+  #### Pin BLAST data ####
+  observeEvent(input$pinAccBlast,
                {
-
-                 pin_name = input$pinName#[1]
-                 print(pin_name)
-                 if(nchar(pin_name) < 1 || nrow(pin_find(name = pin_name, board = "github")) != 0 )
+                 # Was the last submission less than 60 seconds ago?
+                 if( as.numeric(Sys.time()) - lastAccAnalysis() < 60 )
                  {
-                   createAlert(session, "invalidPin", content = "Error: Pin name already taken", append = FALSE)
+                   time_till_available = 60- ( as.numeric(Sys.time()) - lastAccAnalysis())
+                   showNotification(
+                     paste("You can only submit once per minute.\n",
+                           time_till_available, "seconds till next available submission")
+                     , type = "error")
                  }
+
                  else
                  {
-                   fastaObject <- FastaSeq(sequence = fasta())
-                   pin(x = fastaObject, name = pin_name, board = "github")
+                   pinName = GeneratePinName(length = 6, postfix = "_AccNum2BLAST", board = "github" )
+
+                   # accNums <- AccNum(accessions = analysis_AccNums())
+                   acc2fa(analysis_AccNums(), out_path = "fastaForBlast.fasta")
+
+                   fastaBlast <- FastaSeq(sequence= read_file("fastaForBlast.fasta"))
+                   print(fastaBlast$sequence)
+                   pin(x = fastaBlast, name = pinName, board = "github")
+
+                   lastAccAnalysis( as.numeric(Sys.time()))
+
+                   createAlert(session, "successAccNumBlastAlert", NULL, title = substr(pinName, 0, 6),
+                               content = "Use the above code to receive your results when they are ready"
+                               , append = T, dismiss = T)
+
                  }
                }
   )
+
+  #### Pin Fasta Data ####
+  # observeEvent(input$pinFasta,
+  #              {
+  #
+  #                pin_name = input$pinName#[1]
+  #                print(pin_name)
+  #                if(nchar(pin_name) < 1 || nrow(pin_find(name = pin_name, board = "github")) != 0 )
+  #                {
+  #                  createAlert(session, "invalidPin", content = "Error: Pin name already taken", append = FALSE)
+  #                }
+  #                else
+  #                {
+  #                  fastaObject <- FastaSeq(sequence = fasta())
+  #                  pin(x = fastaObject, name = pin_name, board = "github")
+  #                }
+  #              }
+  # )
 
   output$splashUIComponent <- renderUI({
     req(credentials()$user_auth)
@@ -607,10 +653,15 @@ server <- function(input, output, session)
                {
                  updateNavbarPage(session, "evolvrMenu" ,"genomicContext")
                })
-  # Splashpage Genomic Context button
+  # Splashpage Phylogeny button
   observeEvent(input$dPhyloBtn,
                {
                  updateNavbarPage(session, "evolvrMenu" ,"phylogeny")
+               })
+  # Splashpage Homology button
+  observeEvent(input$dHomologBtn,
+               {
+                 updateNavbarPage(session, "evolvrMenu" ,"datatable")
                })
 
   #### IPRScan Upload ####
@@ -619,13 +670,17 @@ server <- function(input, output, session)
   ipr_data = reactiveVal(data.frame())
   ipr_filepath = reactiveVal("")
 
-  observe({
-    # req("Analysis" %in% colnames(ipr_data()))
-    options <- ipr_data()$Analysis %>% unique()
-    print(options)
-    # updateSelectizeInput(session, inputId = "iprDatabases", label = "DataBases", choices = options, selected = options)
-    updateSelectInput(session, inputId = "iprDatabases", label = "DataBases", choices = options, selected = options)
-  })
+  observe(
+    {
+      if(input$evolvrMenu == "resultSummary")
+      {
+        # req("Analysis" %in% colnames(ipr_data()))
+        options <- ipr_data()$Analysis %>% unique()
+        # updateSelectizeInput(session, inputId = "iprDatabases", label = "DataBases", choices = options, selected = options)
+        updateSelectInput(session, inputId = "iprDatabases", label = "DataBases", choices = options, selected = options)
+      }
+    }
+  )
 
   observeEvent(input$interproFileUpload, {
     ipr_cols <- c("AccNum", "Seq_MD5_digest", "SeqLen", "Analysis",

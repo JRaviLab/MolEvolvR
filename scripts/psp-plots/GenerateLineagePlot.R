@@ -151,7 +151,7 @@ LineagePlot <- function(prot, domains_of_interest, level = 3)
 
 }
 
-# LineagePlot(all, domains_of_interest ,2)
+LineagePlot(all, domains_of_interest ,2)
 # ggsave("LineagePlot_2Levels.png",
 #        width = 10.4,
 #        height = 5.84,
@@ -161,6 +161,13 @@ LineagePlot <- function(prot, domains_of_interest, level = 3)
 # LineagePlot(all, domains_of_interest ,3)
 # ggsave("LineagePlot_3Levels.png",
 #        width = 18,
+#        height = 5.84,
+#        dpi = 300
+# )
+
+# LineagePlot(all, domains_of_interest ,10)
+# ggsave("LineagePlot_FullLin.png",
+#        width = 12.3,
 #        height = 5.84,
 #        dpi = 300
 # )
