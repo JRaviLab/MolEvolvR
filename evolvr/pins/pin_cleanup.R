@@ -8,9 +8,6 @@ pin_date <- function(name, board)
   return(as_datetime(pin_recent_date))
 }
 
-
-
-
 clean_pins <- function(board, expiration_time, timetype = "hours")
 {
   #' Remove pins that have been pinned for longer than the expiration time
@@ -21,7 +18,7 @@ clean_pins <- function(board, expiration_time, timetype = "hours")
   #'"hours", "minutes", "seconds", or "days". Defaults to hours
   #'@return Integer value of the number of pins removed
 
-  # Convert expiration time to minutes
+  # Convert expiration time to seconds
   expiration_time <- switch(timetype,
                             "hours" = expiration_time*3600,
                             "minutes" = expiration_time*60,
@@ -51,4 +48,33 @@ clean_pins <- function(board, expiration_time, timetype = "hours")
 
 }
 
+AnalyzePins <- function(board, timeBound = 5, timetype = "minutes" )
+{
+  # Convert expiration time to hours
+  timeBound <- switch(timetype,
+                            "hours" = timeBound*3600,
+                            "minutes" = timeBound*60,
+                            "days" = timeBound * 24*3600,
+                            "seconds" = timeBound
+  )
+
+  timeBound <- make_difftime(timeBound, units = "hours")
+
+  pin_names <- pin_find(board = board)$name
+  # pin_get(board = "github")
+
+  current_time = as_datetime(Sys.time())
+
+  for(pin in pin_names)
+  {
+    postfix = substr(pin, 8, stop = nchar(pin))
+
+    if(postfix == "AccNum2BLAST" & current_time - pin_date(pin, board) < timeBound )
+    {
+      print(pin)
+    }
+
+  }
+
+}
 

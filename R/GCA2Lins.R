@@ -11,9 +11,15 @@ DownloadAssemblySummary <- function(outpath, keep = c("assembly_accession", "tax
   assembly_kingdom_genbank <- getKingdomAssemblySummary("genbank")
   assembly_kingdom_refseq <- getKingdomAssemblySummary("refseq")
 
-  # keep = c("assembly_accession", "taxid", "species_taxid", "organism_name")
-  assembly_all <- bind_rows(assembly_kingdom_genbank,assembly_kingdom_refseq) %>%
-                    select(all_of(keep))
+  if(keep == "all")
+  {
+    assembly_all <- bind_rows(assembly_kingdom_genbank,assembly_kingdom_refseq)
+  }
+  else
+  {
+    assembly_all <- bind_rows(assembly_kingdom_genbank,assembly_kingdom_refseq) %>%
+      select(all_of(keep))
+  }
 
   write_tsv(assembly_all, outpath)
 }
