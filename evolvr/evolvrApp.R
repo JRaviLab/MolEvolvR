@@ -1,7 +1,7 @@
 library(shiny)
 library(shinyjs)
 library(tidyverse)
-library(wordcloud2)
+# library(wordcloud2)
 library(sunburstR)
 library(rmarkdown)
 library(shinyBS)
@@ -23,12 +23,14 @@ source("evolvr/ui/splashPageComponent.R")
 conflicted::conflict_prefer("strsplit", "base")
 conflicted::conflict_prefer("count", "dplyr")
 
+conflicted::conflict_prefer("append","base")
+
 ###########
 ###########
 # Hide the token before making public
 ###########
 ###########
-board_register_github(repo = "samuelzornchen/MolEvolvR-Pins", token = "6b3b68bcb90353554fb7c84acfae3133abcfb7fa")
+board_register_github(repo = "JRaviLab/MolEvolvR-Pins", token = "6b3b68bcb90353554fb7c84acfae3133abcfb7fa")
 
 
 ## Create Fasta Object so it can easily be pinned
