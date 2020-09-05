@@ -1,5 +1,5 @@
 ---
-title: "evolvR | The Process"
+title: "MolEvolvR | The Process"
 author: "Janani Ravi, Samuel Z Chen"
 date: "`r Sys.Date()`"
 output:
