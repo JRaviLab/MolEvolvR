@@ -75,7 +75,7 @@ ui <- tagList(
     source("evolvr/ui/queryDataUI.R")$value,
 
     source("evolvr/ui/domainArchitectureUI.R")$value,
-    source("evolvr/ui/genomicContextUI.R")$value,
+    # source("evolvr/ui/genomicContextUI.R")$value,
     source("evolvr/ui/phylogenyUI.R")$value,
     bsModal(id = "splashModal", title = "Splash Page", trigger = "splashBtn", size = "large")
   )
@@ -129,11 +129,11 @@ server <- function(input, output, session)
   uIprData <- reactiveVal(data.frame())
 
   data <- reactive({
-    switch(input$inputType,
-           "Full Data" = uFullData(),
-           "Blast Results" = uBlastData(),
-           "Interproscan Results" = uAccFaData(),
-           "AccNum/FASTA" = uIprData()
+    switch(input$uploadTabs,
+           "FullDataTab" = uFullData(),
+           "BlastOutTab" = uBlastData(),
+           "IprOutTab" = uIprData(),
+           "AccFastaTab" =   uAccFaData()
     )
   })
 
@@ -149,11 +149,11 @@ server <- function(input, output, session)
   uIprAln <- reactiveVal("")
 
   fasta <- reactive({
-    switch(input$inputType,
-           "Full Data" = uFullFasta(),
-           "Blast Results" = uBlastFasta(),
-           "Interproscan Results" = uIprFasta(),
-           "AccNum/FASTA" = uAccFaFasta()
+    switch(input$uploadTabs,
+           "FullDataTab" = uFullFasta(),
+           "BlastOutTab" = uBlastFasta(),
+           "IprOutTab" = uIprFasta(),
+           "AccFastaTab" = uAccFaFasta()
     )
   })
 
@@ -169,20 +169,28 @@ server <- function(input, output, session)
   })
 
   aligned_fasta_filepath <- reactive({
-    switch(input$inputType,
-           "Full Data" = "uFullAlnFile.fasta",
-           "Blast Results" = "uBlastAlnFile.fasta",
-           "Interproscan Results" = "uAccFaAlnFile.fasta",
-           "AccNum/FASTA" = "uIprAlnFile.fasta"
+    switch(input$uploadTabs,
+           "FullDataTab" = "uFullAlnFile.fasta",
+           "BlastOutTab" = "uBlastAlnFile.fasta",
+           "IprOutTab" = "uIprAlnFile.fasta",
+           "AccFastaTab" =   "uAccFaAlnFile.fasta"
     )
+
+
+    # switch(input$inputType,
+    #        "Full Data" = "uFullAlnFile.fasta",
+    #        "Blast Results" = "uBlastAlnFile.fasta",
+    #        "Interproscan Results" = "uAccFaAlnFile.fasta",
+    #        "AccNum/FASTA" = "uIprAlnFile.fasta"
+    # )
   })
 
   fasta_filepath <- reactive({
-    switch(input$inputType,
-           "Full Data" = "uFullFastaFile.fasta",
-           "Blast Results" = "uFullBlastFastaFile.fasta",
-           "Interproscan Results" = "uAccFaFastaFile.fasta",
-           "AccNum/FASTA" = "uIprFastaFile.fasta"
+    switch(input$uploadTabs,
+           "FullDataTab" = "uFullFastaFile.fasta",
+           "BlastOutTab" = "uFullBlastFastaFile.fasta",
+           "IprOutTab" = "uIprFastaFile.fasta",
+           "AccFastaTab" =  "uAccFaFastaFile.fasta"
     )
   })
 
@@ -241,39 +249,72 @@ server <- function(input, output, session)
                }
   )
 
-  #### Pin Fasta Data ####
-  # observeEvent(input$pinFasta,
-  #              {
-  #
-  #                pin_name = input$pinName#[1]
-  #                print(pin_name)
-  #                if(nchar(pin_name) < 1 || nrow(pin_find(name = pin_name, board = "github")) != 0 )
-  #                {
-  #                  createAlert(session, "invalidPin", content = "Error: Pin name already taken", append = FALSE)
-  #                }
-  #                else
-  #                {
-  #                  fastaObject <- FastaSeq(sequence = fasta())
-  #                  pin(x = fastaObject, name = pin_name, board = "github")
-  #                }
-  #              }
-  # )
+
+  fetched_paths <- reactiveVal(c())
+  #### Fetch Pinned Output ####
+  observeEvent(input$FetchAnalysisBtn,
+               {
+                 closeAlert(session, "FetchError")
+                 pinName <- input$analysisCode
+                 if(nchar(pinName) != 6 | nrow(pin_find( paste0(pinName,"_out"), "github")) == 0 )
+                 {
+                   # Show alert
+                   createAlert(session, "FetchAlert", alertId = "FetchError", title = "Error: incorrect code",
+                               content = "Please verify that the code you input is correct"
+                               , append = F, dismiss = T, style = "danger")
+                 }
+                 else
+                 {
+                   # Set these outputs to some reactive vals
+                   fetched_paths(pin_get( paste0(pinName,"_out") ,board = "github"))
+
+
+                 }
+               }
+  )
+
+  observe(
+    {
+      if(any(grepl("nr\\.1e-5\\.txt$", fetched_paths())))
+      {
+        showTab("FetchedDataTabs", target = "FetchedBlastTab")
+      }
+      else
+      {
+        hideTab("FetchedDataTabs", "FetchedBlastTab")
+      }
+
+      if(any(grepl("iprscan\\.tsv$", fetched_paths())))
+      {
+        showTab("FetchedDataTabs", target = "FetchedIprTab")
+      }
+      else
+      {
+        hideTab("FetchedDataTabs", "FetchedIprTab")
+      }
+    }
+  )
+
+  output$fetchedBlastOut <- DT::renderDataTable(
+    {
+      req(any(grepl("nr\\.1e-5\\.txt$", fetched_paths())))
+      blastfile = fetched_paths()[grep("nr\\.1e-5\\.txt$", fetched_paths())]
+      read_tsv(blastfile, col_names = F)
+    }
+  )
+
+  output$fetchedIprOut <- DT::renderDataTable(
+    {
+      req(any(grepl("iprscan\\.tsv$", fetched_paths())))
+      iprscanfile = fetched_paths()[grep("iprscan\\.tsv$", fetched_paths())]
+      read_tsv(iprscanfile , col_names = F)
+    }
+  )
+
 
   output$splashUIComponent <- renderUI({
     req(credentials()$user_auth)
     splashUIComponent
-  })
-
-  #### UI components for Upload tab ####
-  output$uploadComponents <- renderUI({
-    switch( input$inputType,
-            "Full Data" = full_data_ui,
-            # "Fasta Sequence(s)" = fasta_input_ui,
-            # "Protein Accession Numbers" = accNum_input_ui,
-            "Blast Results" = blast_input_ui,
-            "Interproscan Results" = interpro_input_ui,
-            "AccNum/FASTA" = acc_fasta_ui
-    )
   })
 
   #### UI Components for the Data tab ####
@@ -314,15 +355,7 @@ server <- function(input, output, session)
     input$dataTable2Upload,
     {
       updateNavbarPage(session, "evolvrMenu" ,"upload")
-      updateSelectInput(session,
-                        inputId = "inputType", label = "Input Type:",
-                        choices = c(
-                          "Blast Results",
-                          "Interproscan Results",
-                          "Full Data",
-                          "AccNum/FASTA"
-                        ),
-                        selected = "Full Data")
+      updateTabsetPanel(session, "uploadTabs", "FullDataTab")
     }
 
   )
@@ -563,17 +596,18 @@ server <- function(input, output, session)
                {
                  updateCollapse(session, "accCollapse", open = c("accnum"), close = c("msa", "fasta"))
                  updateNavbarPage(session, "evolvrMenu" ,"upload")
-                 updateSelectInput(session, inputId = "inputType", label = "Input Type:",
-                                   choices = c(
-                                     # "Protein Accession Numbers",
-                                     # "Fasta Sequence(s)",
-                                     "Blast Results",
-                                     "Interproscan Results",
-                                     "Full Data",
-                                     "AccNum/FASTA"
-                                   ),
-                                   selected = "AccNum/FASTA"
-                 )
+                 updateTabsetPanel(session, "uploadTabs", selecte = "AccFastaTab")
+                 # updateSelectInput(session, inputId = "inputType", label = "Input Type:",
+                 #                   choices = c(
+                 #                     # "Protein Accession Numbers",
+                 #                     # "Fasta Sequence(s)",
+                 #                     "Blast Results",
+                 #                     "Interproscan Results",
+                 #                     "Full Data",
+                 #                     "AccNum/FASTA"
+                 #                   ),
+                 #                   selected = "AccNum/FASTA"
+                 # )
 
 
                })
@@ -583,66 +617,71 @@ server <- function(input, output, session)
                {
                  updateCollapse(session, "accCollapse", open = c("fasta"), close = c("msa", "accnum"))
                  updateNavbarPage(session, "evolvrMenu" ,"upload")
-                 updateSelectInput(session, inputId = "inputType", label = "Input Type:",
-                                   choices = c(
-                                     # "Protein Accession Numbers",
-                                     # "Fasta Sequence(s)",
-                                     "Blast Results",
-                                     "Interproscan Results",
-                                     "Full Data",
-                                     "AccNum/FASTA"
-                                   ),
-                                   selected = "AccNum/FASTA"
-                 )
+                 updateTabsetPanel(session, "uploadTabs", "AccFastaTab")
+                 # updateSelectInput(session, inputId = "inputType", label = "Input Type:",
+                 #                   choices = c(
+                 #                     # "Protein Accession Numbers",
+                 #                     # "Fasta Sequence(s)",
+                 #                     "Blast Results",
+                 #                     "Interproscan Results",
+                 #                     "Full Data",
+                 #                     "AccNum/FASTA"
+                 #                   ),
+                 #                   selected = "AccNum/FASTA"
+                 # )
 
                })
   # Splashpage Ipr button
   observeEvent(input$dIprScanBtn,
                {
                  updateNavbarPage(session, "evolvrMenu" ,"upload")
-                 updateSelectInput(session, inputId = "inputType", label = "Input Type:",
-                                   choices = c(
-                                     # "Protein Accession Numbers",
-                                     # "Fasta Sequence(s)",
-                                     "Blast Results",
-                                     "Interproscan Results",
-                                     "Full Data",
-                                     "AccNum/FASTA"
-                                   ),
-                                   selected = "Interproscan Results"
-                 )
+                 updateTabsetPanel(session, "uploadTabs", "IprOutTab")
+                 # updateSelectInput(session, inputId = "inputType", label = "Input Type:",
+                 #                   choices = c(
+                 #                     # "Protein Accession Numbers",
+                 #                     # "Fasta Sequence(s)",
+                 #                     "Blast Results",
+                 #                     "Interproscan Results",
+                 #                     "Full Data",
+                 #                     "AccNum/FASTA"
+                 #                   ),
+                 #                   selected = "Interproscan Results"
+                 # )
                })
   # Splashpage BLAST button
   observeEvent(input$dBlastBtn,
                {
                  updateNavbarPage(session, "evolvrMenu" ,"upload")
-                 updateSelectInput(session, inputId = "inputType", label = "Input Type:",
-                                   choices = c(
-                                     # "Protein Accession Numbers",
-                                     # "Fasta Sequence(s)",
-                                     "Blast Results",
-                                     "Interproscan Results",
-                                     "Full Data",
-                                     "AccNum/FASTA"
-                                   ),
-                                   selected = "Blast Results"
-                 )
+                 updateTabsetPanel(session, "uploadTabs", "BlastOutTab")
+
+                 # updateSelectInput(session, inputId = "inputType", label = "Input Type:",
+                 #                   choices = c(
+                 #                     # "Protein Accession Numbers",
+                 #                     # "Fasta Sequence(s)",
+                 #                     "Blast Results",
+                 #                     "Interproscan Results",
+                 #                     "Full Data",
+                 #                     "AccNum/FASTA"
+                 #                   ),
+                 #                   selected = "Blast Results"
+                 # )
                })
   # Splashpage Full Data button
   observeEvent(input$dFullBtn,
                {
                  updateNavbarPage(session, "evolvrMenu" ,"upload")
-                 updateSelectInput(session, inputId = "inputType", label = "Input Type:",
-                                   choices = c(
-                                     # "Protein Accession Numbers",
-                                     # "Fasta Sequence(s)",
-                                     "Blast Results",
-                                     "Interproscan Results",
-                                     "Full Data",
-                                     "AccNum/FASTA"
-                                   ),
-                                   selected = "Full Data"
-                 )
+                 updateTabsetPanel(session, "uploadTab", "FullDataTab")
+                 # updateSelectInput(session, inputId = "inputType", label = "Input Type:",
+                 #                   choices = c(
+                 #                     # "Protein Accession Numbers",
+                 #                     # "Fasta Sequence(s)",
+                 #                     "Blast Results",
+                 #                     "Interproscan Results",
+                 #                     "Full Data",
+                 #                     "AccNum/FASTA"
+                 #                   ),
+                 #                   selected = "Full Data"
+                 # )
                })
 
   # Splashpage Domain Architecture button
@@ -710,8 +749,7 @@ server <- function(input, output, session)
 
   ### Identify changes to queries and update dropdowns accordingly ###
   observe({
-    print(input$inputType)
-    if(input$inputType == "Full Data")
+    if(input$uploadTabs == "FullDataTab")
     {
       updateSelectInput(session, "mainSelect", label = "Protein", choices = append("All", queries()))
       updateSelectInput(session, "DASelect", label = "Protein", choices = append("All", queries()))
@@ -796,7 +834,7 @@ server <- function(input, output, session)
 
   output$rs_IprScan_ui <- renderUI(
     {
-      if(input$inputType ==  "Interproscan Results")
+      if(input$uploadTabs ==  "IprOutTab")
       {
         rs_iprscan_component
       }
@@ -1117,10 +1155,95 @@ server <- function(input, output, session)
                  ))
                }
   )
+
+
+  #### Handle button dependencies ####
+
+
+  # BLAST CLUST
+  observeEvent(input$Acc_blastclustCB,
+               {
+                 # Selecting blast clust requires DeltaBlast
+                 if(input$Acc_blastclustCB)
+                 {
+                   updatePrettyCheckbox(session, inputId = "Acc_deltaCB", label = "DeltaBLAST", value = T)
+                   updatePrettyCheckbox(session, inputId = "Acc_acc2faCB", label = "Acc2FASTA", value = T)
+                 }
+                 # Unselecting it means that rps blast and ipr scan can't be run
+                 else
+                 {
+                   updatePrettyCheckbox(session, inputId = "Acc_rpsblastCB", label = "RPSBLAST", value = F)
+                   updatePrettyCheckbox(session, inputId = "Acc_iprscanCB", label = "InterproScan", value = F)
+                 }
+               })
+
+  # DeltaBLAST
+  observeEvent(input$Acc_deltaCB,
+               {
+                 if(!input$Acc_deltaCB)
+                 {
+                   updatePrettyCheckbox(session, inputId = "Acc_blastclustCB", label = "BLASTClust", value = F)
+                   updatePrettyCheckbox(session, inputId = "Acc_acc2faCB", label = "Acc2FASTA", value = F)
+                 }
+
+               })
+
+
+  observeEvent(input$Acc_acc2faCB,
+               {
+                 if(input$Acc_acc2faCB)
+                 {
+                   updatePrettyCheckbox(session, inputId = "Acc_deltaCB", label = "DeltaBLAST", value = T)
+                 }
+                 else
+                 {
+                   updatePrettyCheckbox(session, inputId = "Acc_blastclustCB", label = "BLASTClust", value = F)
+                 }
+               }
+  )
+  # Iprscan
+  observeEvent(input$Acc_iprscanCB,
+               {
+                 if(input$Acc_iprscanCB){
+                   updatePrettyCheckbox(session, inputId = "Acc_blastclustCB", label = "BLASTClust", value = T)
+                 }
+                 else
+                 {
+                   updatePrettyCheckbox(session, inputId = "Acc_ipr2daCB", label = "InterproScan2DA", value = F)
+                 }
+               })
+
+  # rpsblast
+  observeEvent(input$Acc_rpsblastCB,
+               {
+                 if(input$Acc_rpsblastCB){
+                   updatePrettyCheckbox(session, inputId = "Acc_blastclustCB", label = "BLASTClust", value = T)
+                 }
+                 else
+                 {
+                   updatePrettyCheckbox(session, inputId = "Acc_rps2daCB", label = "RPSBLAST2DA", value = F)
+                 }
+               })
+  # rps2da
+  observeEvent(input$Acc_rps2daCB,
+               {
+                 if(input$Acc_rps2daCB){
+                   updatePrettyCheckbox(session, inputId = "Acc_rpsblastCB", label = "RPSBLAST", value = T)
+                 }
+               })
+
+  # ipr2da
+  observeEvent(input$Acc_ipr2daCB,
+               {
+                 if(input$Acc_ipr2daCB){
+                   updatePrettyCheckbox(session, inputId = "Acc_iprscanCB", label = "InterproScan", value = T)
+                 }
+               })
+
+
+
+
 }
 
 
 shinyApp(ui, server,options = options(shiny.maxRequestSize=100*1024^2))
-
-
-# shiny::runExample("09_upload")
