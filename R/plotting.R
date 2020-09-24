@@ -107,7 +107,17 @@ upset.plot <- function(query_data="toast_rack.sub",
     j <- str_replace_all(string=j, pattern="\\_", replacement="\\\\_")
     j <- str_replace_all(string=j, pattern="\\?", replacement="\\\\?")
 
-    j <- paste0(j,"(?!\\()")
+    # Don't pick up anything with a '(' immediatly following j
+    # Makes sure PspA doesn't pick up PspA(s)
+    if(grepl("DomArch|ClustName", colname, ignore.case = T))
+    {
+      j <- paste0(j,"(?!\\()")
+    }
+
+    else if(grepl("GenContext", colname, ignore.case = T))
+    {
+      j <- paste0("^",j,"$","|","^",j,"->","|", "->",j,"$","|", "->",j,"->" )
+    }
 
     # Grep doesn't work with string+negative lookahead?
     # Use str_detect instead
@@ -116,8 +126,17 @@ upset.plot <- function(query_data="toast_rack.sub",
 
     query_data[[i]] <- if_else(str_detect(string = as.matrix(query_data[,colname]), pattern = j),
                          true=1, false=0)
+  }
+
+
+  for(i in words.tc)
+  {
+
 
   }
+
+
+
   ## Creating UpSet data
   upset <- query_data %>%
     # filter(grepl(queryname, Query)) %>%
