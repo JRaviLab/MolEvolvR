@@ -25,9 +25,10 @@ theme_genes2 <- function() {
   )
 }
 
-ipr2domarch <- function(infile_ipr=here("evolvr/TestData/sausa300_0204.iprscan.tsv"),
+ipr2domarch <- function(infile_ipr=here("evolvr/TestData/Iprscan/sausa300_0204.iprscan.tsv"),
                         PfamClans_path = "evolvr/TestData/Pfam-A.clans.txt",
                         analysis=c("Pfam", "Phobius","TMHMM","SUPERFAMILY"),
+                        group_by = "DB",
                         topn = 20)
 {
 
@@ -76,19 +77,41 @@ ipr2domarch <- function(infile_ipr=here("evolvr/TestData/sausa300_0204.iprscan.t
 
   ## PLOTTING
   ## domains as separate arrows
-  ggplot(ipr_out_sub,
-         aes(xmin = StartLoc, xmax = StopLoc,
-             y = AccNum, fill = SignDesc, label=Name)) +
-    geom_gene_arrow(arrowhead_height = unit(3, "mm"),
-                    arrowhead_width = unit(1, "mm")) +
-    geom_gene_label(align = "left") +
-    #geom_blank(data = dummies) +
-    facet_wrap(~ Analysis, strip.position = "top", ncol = 3,
-               labeller=as_labeller(analysis_labeler)) +
-    #, ncol = 1 + #scales = "free",
-    scale_fill_brewer(palette = "Set3") +
-    theme_minimal() + theme_genes2() +
-    theme(legend.position="bottom", legend.box = "horizontal",
-          legend.key.size = unit(0.02, "npc"), legend.box.margin = margin()) +
-    ylab("")
+  if(group_by == "DB")
+  {
+    ggplot(ipr_out_sub,
+           aes(xmin = StartLoc, xmax = StopLoc,
+               y = AccNum, fill = SignDesc, label=Name)) +
+      geom_gene_arrow(arrowhead_height = unit(3, "mm"),
+                      arrowhead_width = unit(1, "mm")) +
+      geom_gene_label(align = "left") +
+      #geom_blank(data = dummies) +
+      facet_wrap(~ Analysis, strip.position = "top", ncol = 3,
+                 labeller=as_labeller(analysis_labeler)) +
+      #, ncol = 1 + #scales = "free",
+      scale_fill_brewer(palette = "Set3") +
+      theme_minimal() + theme_genes2() +
+      theme(legend.position="bottom", legend.box = "horizontal",
+            legend.key.size = unit(0.02, "npc"), legend.box.margin = margin()) +
+      ylab("")
+  }
+
+  else if(group_by == "protein"){
+    ggplot(ipr_out_sub,
+           aes(xmin = StartLoc, xmax = StopLoc,
+               y = Analysis  #y = AccNum
+               , fill = SignDesc, label=Name)) +
+      geom_gene_arrow(arrowhead_height = unit(3, "mm"),
+                      arrowhead_width = unit(1, "mm")) +
+      geom_gene_label(align = "left") +
+
+      facet_wrap(~ AccNum, strip.position = "top", ncol = 3,
+                 labeller=as_labeller(analysis_labeler)) +
+      scale_fill_brewer(palette = "Set3") +
+      theme_minimal() + theme_genes2() +
+      theme(legend.position="bottom", legend.box = "horizontal",
+            legend.key.size = unit(0.02, "npc"), legend.box.margin = margin()) +
+      ylab("")
+  }
+
 }
