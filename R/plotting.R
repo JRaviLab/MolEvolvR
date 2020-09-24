@@ -116,7 +116,9 @@ upset.plot <- function(query_data="toast_rack.sub",
 
     else if(grepl("GenContext", colname, ignore.case = T))
     {
-      j <- paste0("^",j,"$","|","^",j,"->","|", "->",j,"$","|", "->",j,"->" )
+
+      # Negative lookahead and lookbehind for +
+      j <- paste0("(?<!\\+)",j, "(?!\\+)")
     }
 
     # Grep doesn't work with string+negative lookahead?
@@ -128,20 +130,10 @@ upset.plot <- function(query_data="toast_rack.sub",
                          true=1, false=0)
   }
 
-
-  for(i in words.tc)
-  {
-
-
-  }
-
-
-
   ## Creating UpSet data
   upset <- query_data %>%
-    # filter(grepl(queryname, Query)) %>%
     select(AccNum, Lineage, GenContext, DomArch,
-           words.tc) %>% ###What is this words.gecutoff$words?
+           words.tc) %>%
     mutate_all(list(~if(is.numeric(.)) as.integer(.) else .)) %>%
     as.data.frame()
   ## Fix order of x and y variables
@@ -154,7 +146,7 @@ upset.plot <- function(query_data="toast_rack.sub",
   upset(upset.cutoff[c(3,5:ncol(upset.cutoff))],	# text.scale=1.5,
         #sets=words.tc,
         nsets = length(words.tc),
-        nintersects = NA,
+        nintersects = 50,
         sets.bar.color="turquoise3",
         main.bar.color="coral3",									#56B4E9 lightblue
         group.by="degree", order.by=c("freq"),		# "degree"
