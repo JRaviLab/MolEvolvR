@@ -83,24 +83,24 @@ tables <- all %>%
 
 # Subset PspA
 table1 <- tables %>%
-  filter(grepl(pattern="PspA", DomArch))
+  filter(grepl(pattern="PspA|Snf7", DomArch))
 
 # Subset PspA-free
 table2 <- tables %>%
-  filter(!grepl(pattern="PspA", DomArch)) #Toast|LiaI|170|PspC|PspB
+  filter(!grepl(pattern="PspA|Snf7", DomArch)) #Toast|LiaI|170|PspC|PspB
 
 #############
 ## Table 1 ##
 #############
 # Create Table 1
 create_table(df_table=table1,
-             title="Table 1: Representative PspA homologs")
+             title="Table S1: Representative PspA/Snf7 homologs")
 
 #############
 ## Table 2 ##
 #############
 create_table(df_table=table2,
-             title = "Table 2: Representative PspA-free homologs")
+             title = "Table S2: Representative PspA partner domain homologs")
 
 
 ## Simple table
