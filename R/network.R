@@ -283,7 +283,7 @@ BinaryDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, c
   vg <- vg %>%   visGroups(groupname = "Query", color = query_color) %>%
     visGroups(groupname = "Partner", color = partner_color) %>%
     visOptions(highlightNearest = TRUE) %>%
-    visLegend()
+      visLegend(position = "right",width = .1)
 
   vg <- switch(layout,
                "nice" = visIgraphLayout(vg, "layout_nicely" ),
