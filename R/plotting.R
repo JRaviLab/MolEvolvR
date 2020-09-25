@@ -146,7 +146,7 @@ upset.plot <- function(query_data="toast_rack.sub",
   upset(upset.cutoff[c(3,5:ncol(upset.cutoff))],	# text.scale=1.5,
         #sets=words.tc,
         nsets = length(words.tc),
-        nintersects = 50,
+        nintersects = NA,
         sets.bar.color="turquoise3",
         main.bar.color="coral3",									#56B4E9 lightblue
         group.by="degree", order.by=c("freq"),		# "degree"
