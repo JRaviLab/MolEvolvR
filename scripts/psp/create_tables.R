@@ -93,8 +93,17 @@ table2 <- tables %>%
 ## Table 1 ##
 #############
 # Create Table 1
-create_table(df_table=table1,
+table1gt <- create_table(df_table=table1,
              title="Table S1: Representative PspA/Snf7 homologs")
+
+table1gt
+
+#------------------------------#
+##### Saving Table 1 as PDF ####
+#------------------------------#
+# webshot::install_phantomjs()
+gtsave(table1gt, "table1.pdf", path = here(),
+       vwidth = 400,   vheight = 744,zoom =1)
 
 #############
 ## Table 2 ##
