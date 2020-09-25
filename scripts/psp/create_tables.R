@@ -98,19 +98,22 @@ table1gt <- create_table(df_table=table1,
 
 table1gt
 
-#------------------------------#
-##### Saving Table 1 as PDF ####
-#------------------------------#
-# webshot::install_phantomjs()
-gtsave(table1gt, "table1.pdf", path = here(),
-       vwidth = 400,   vheight = 744,zoom =1)
-
 #############
 ## Table 2 ##
 #############
-create_table(df_table=table2,
+table2gt <- create_table(df_table=table2,
              title = "Table S2: Representative PspA partner domain homologs")
 
+#------------------------------#
+##### Saving Tables as PDF ####
+#------------------------------#
+# webshot::install_phantomjs()
+
+gtsave(table1gt, "tables1.pdf", path = here("data/psp/tables/"),
+       vwidth = 800,   vheight = 750, zoom =1)
+
+gtsave(table2gt, "tables2.pdf", path = here("data/psp/tables/"),
+       vwidth = 800,   vheight = 1250, zoom =1)
 
 ## Simple table
 table1 %>%
