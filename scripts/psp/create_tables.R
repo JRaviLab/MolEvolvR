@@ -103,6 +103,10 @@ table1gt
 #############
 table2gt <- create_table(df_table=table2,
              title = "Table S2: Representative PspA partner domain homologs")
+table2gt
+
+gtsave(table2gt, "table2.pdf", path = here(),
+       vwidth = 400,   vheight = 744,zoom =1)
 
 #------------------------------#
 ##### Saving Tables as PDF ####
