@@ -1,0 +1,13 @@
+
+
+.inline_float_p>h4>p{
+	float: left;
+	display:inline-block;
+}
+
+
+
+.inline_float_p>h4>p>sup {
+
+	margin-left:-3px;
+}

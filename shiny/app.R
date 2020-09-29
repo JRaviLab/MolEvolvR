@@ -18,9 +18,6 @@ setwd("..")
 source("shiny/PSP_Web_Data.R")
 source("R/plotting.R")
 source("R/network.R")
-# source("R/GC_network_directed.R")
-#source("R/cleanup.R")
-#source("R/reverse_operons.R")
 source("shiny/shinyfunctions.R")
 source("shiny/initialCutoff.R")
 source("shiny/legend_text.R")
@@ -28,14 +25,6 @@ source("shiny/legend_text.R")
 ###
 #### Users ####
 ###
-user_base <- data.frame(
-  user = c("pspevolution"),
-  password = c("cpathogeno2019"),
-  permissions = c("admin"),
-  name = c("User One"),
-  stringsAsFactors = FALSE,
-  row.names = NULL
-)
 
 
 
@@ -44,9 +33,8 @@ user_base <- data.frame(
 ####
 ui <- tagList(
   shinyjs::useShinyjs(),
-  tags$head(includeScript("shiny/logout-button.js")),
   tags$head(includeScript("shiny/github-button.js")),
-  #tags$head(includeScript("shiny/navbar-title-hyperlink.js")),
+  tags$head(includeCSS("shiny/styles.css")),
   tags$head(
     tags$style(HTML("
                       .innerbox {
@@ -131,30 +119,6 @@ server <- function(input, output,session){
   ## Change title tab name (ie: chrome tab name) to Psp-Evolution
   shinyjs::runjs('document.title = "Psp-Evolution"')
 
-  # call the logout module with reactive trigger to hide/show
-  logout_init <- callModule(shinyauthr::logout,
-                            id = "logout",
-                            active = reactive(credentials()$user_auth))
-
-  # call login module supplying data frame, user and password cols
-  # and reactive trigger
-  credentials <- callModule(shinyauthr::login,
-                            id = "login",
-                            data = user_base,
-                            user_col = user,
-                            pwd_col = password,
-                            log_out = reactive(logout_init()))
-
-  # pulls out the user information returned from login module
-  user_data <- reactive({credentials()$info})
-
-  output$user_table <- renderTable({
-    # use req to only render results when credentials()$user_auth is TRUE
-    req(credentials()$user_auth)
-    user_data()
-  })
-
-
   observeEvent(input$homeButton, updateNavbarPage(session, "pspMenu" ,"appInfo"))
 
   ### Reorder all to be ordered by query
@@ -175,7 +139,7 @@ server <- function(input, output,session){
   #Reactive expression used to determine which data table should be displayed
   #based on selected input
   pspTable<- reactive({
-    req(credentials()$user_auth)
+
     switch(input$proSelec,
            "All" = all %>% select(viewing_cols) %>% distinct() %>% reorder_all(queries),
            "DUF1700-ahelical" = DUF1700%>% select(viewing_cols) %>% distinct(),
@@ -196,9 +160,10 @@ server <- function(input, output,session){
   })
   #Render the Data table for selected protein
   output$proTable <- DT::renderDT({
-    req(credentials()$user_auth)
+    pspdata = pspTable()
+    pspdata$AccNum = paste0( "<a href='https://www.ncbi.nlm.nih.gov/protein/",pspdata$AccNum, "'>", pspdata$AccNum, "</a>")
     d = DT::datatable(
-      paged_table(pspTable() ), extensions = c('FixedColumns',"FixedHeader"),
+      paged_table(pspdata), extensions = c('FixedColumns',"FixedHeader"), escape = FALSE,
       options = list(pageLength = 100,
                      #The below line seems to disable other pages and the search bar
                      #dom = 't',
@@ -210,7 +175,7 @@ server <- function(input, output,session){
 
   #### Query Heatmap ####
   output$queryHeatmap <- renderPlot({
-    req(credentials()$user_auth)
+
     lineage.Query.plot(query_data = all, queries = queries, colname = "DomArch", cutoff = 100)
   })
 
@@ -434,7 +399,7 @@ server <- function(input, output,session){
   ####
 
   output$DALinPlot <- renderPlot({
-    req(credentials()$user_auth)
+
     lineage.DA.plot(plotting_prot(), colname = "DomArch",
                     cutoff = DA_cutoff_val(), RowsCutoff = rows_cutoff(),
                     color = input$DA_lin_color)
@@ -442,7 +407,7 @@ server <- function(input, output,session){
   })
 
   output$GCLinPlot <- renderPlot({
-    req(credentials()$user_auth)
+
     lineage.DA.plot(plotting_prot(), colname = "GenContext",
                     cutoff = GC_cutoff_val(), RowsCutoff = rows_cutoff(),
                     color = input$GC_lin_color)
@@ -473,7 +438,7 @@ server <- function(input, output,session){
       arrange(-totalcount)
   })
   output$DALinTable <- DT::renderDT({
-    req(credentials()$user_auth)
+
     paged_table(
       {
         DAlin_count_table()
@@ -544,7 +509,7 @@ server <- function(input, output,session){
       arrange(-totalcount)
   })
   output$GCLinTable <- DT::renderDT({
-    req(credentials()$user_auth)
+
     paged_table(
       {
         GClin_count_table()
@@ -584,12 +549,12 @@ server <- function(input, output,session){
 
   #### Upset Plots ####
   output$DAUpsetP <-renderPlot({
-    req(credentials()$user_auth)
+
     upset.plot(plotting_prot(), cutoff = DA_cutoff_val(), colname = "DomArch", RowsCutoff = rows_cutoff())
   })
 
   output$GCUpsetP <- renderPlot({
-    req(credentials()$user_auth)
+
     upset.plot(plotting_prot(), cutoff = GC_cutoff_val(), colname = "GenContext", RowsCutoff = rows_cutoff())
   })
 
@@ -615,7 +580,7 @@ server <- function(input, output,session){
 
   #### Network Output ####
   output$DANetwork <- renderVisNetwork({
-    req(credentials()$user_auth)
+
     domain_network(prot = plotting_prot(), column = "DomArch.repeats",
                    domains_of_interest = network_domain_interest(),
                    cutoff = DA_cutoff_val(),
@@ -625,24 +590,24 @@ server <- function(input, output,session){
 
   #### Wordcloud ####
   # output$DAwordcloud <- renderPlot({
-  #   req(credentials()$user_auth)
+  #
   #   wordcloud_element(query_data = plotting_prot(), colname = "DomArch",
   #                     cutoff = DA_cutoff_val(), UsingRowsCutoff = rows_cutoff())
   # })
   #
   # output$GCwordcloud <-renderPlot({
-  #   req(credentials()$user_auth)
+  #
   #   wordcloud_element(query_data = plotting_prot(), colname = "GenContext",
   #                     cutoff = GC_cutoff_val(), UsingRowsCutoff = rows_cutoff())
   # })
 
   output$DAwordcloud <- renderWordcloud2({
-    req(credentials()$user_auth)
+
     wordcloud2_element(query_data = plotting_prot(), colname = "DomArch", cutoff = DA_cutoff_val())
   })
 
   output$GCwordcloud <-renderWordcloud2({
-    req(credentials()$user_auth)
+
     wordcloud2_element(query_data = plotting_prot(), colname = "GenContext", cutoff = GC_cutoff_val())
   })
 
@@ -668,7 +633,7 @@ server <- function(input, output,session){
   # })
 
   output$DALegend <- renderUI({
-    req(credentials()$user_auth)
+
     switch( input$DALin_data,
             "Heatmap" =  DA_LineageHeatmap_txt,
             "Upset" = DA_upset_txt,
@@ -678,7 +643,7 @@ server <- function(input, output,session){
   })
 
   output$GCLegend <- renderUI({
-    req(credentials()$user_auth)
+
     switch( input$GCLin_data,
             "Heatmap" =  GC_LineageHeatmap_txt,
             "Upset" = GC_upset_txt,
@@ -688,7 +653,7 @@ server <- function(input, output,session){
   })
 
   output$PhyloLegend <- renderUI({
-    req(credentials()$user_auth)
+
     switch( input$phylo,
             "sunburst" =  sunburst_txt,
             "Tree" = tree_txt,
@@ -699,12 +664,12 @@ server <- function(input, output,session){
 
 
   # output$DALegend <- renderText({
-  #   req(credentials()$user_auth)
+  #
   #   DA_legend_txt()
   # })
   #
   # output$GCLegend <- renderText({
-  #   req(credentials()$user_auth)
+  #
   #   GC_legend_txt()
   # })
 
@@ -764,7 +729,7 @@ server <- function(input, output,session){
   #### Tree ####
   output$msaTree <- renderUI({
     print(input$phylo)
-    req(credentials()$user_auth)
+
     switch(input$alignSelec,
            "LiaI-LiaF-TM.allfa50" = tags$iframe(style="height:600px; width:100%", src="FigTrees/LiaI-LiaF-TM.allfa50_tree.pdf", seamless=T),
            "LiaI-LiaF-TM_LiaFN.2"= tags$iframe(style="height:600px; width:100%", src="FigTrees/LiaI-LiaF-TM_LiaFN.2_tree.pdf", seamless=T),
@@ -778,7 +743,7 @@ server <- function(input, output,session){
            "Snf7 Only" = tags$iframe(style="height:600px; width:100%", src="FigTrees/snf7_only.1_tree.pdf", seamless=T),
            "Toast-rack DUF2154-LiaF" = tags$iframe(style="height:600px; width:100%", src="FigTrees/Toast-rack_DUF2154-LiaF.1_tree.pdf", seamless=T),
            "Toast-rack DUF2807" = tags$iframe(style="height:600px; width:100%", src="FigTrees/Toast-rack_DUF2807.2_tree.pdf", seamless=T),
-           "Toast-rack DUF4097" = tags$iframe(style="height:600px; width:100%", src="Toast-rack_DUF4097-LiaG.3.allfa.2nd_tree.pdf", seamless=T),
+           "Toast-rack DUF4097" = tags$iframe(style="height:600px; width:100%", src="FigTrees/Toast-rack_DUF4097-LiaG.3.allfa.2nd_tree.pdf", seamless=T),
            "Toast-rack PspC-Cterm" = tags$iframe(style="height:600px; width:100%", src="FigTrees/Toast-Rack_PspC-Cterm.4_tree.pdf", seamless=T)
     )
   })
@@ -787,19 +752,19 @@ server <- function(input, output,session){
   #### Sunburst ####
 
   # output$sund2b <- renderSund2b({
-  #   req(credentials()$user_auth)
+  #
   #   lineage_sunburst(pspa, lineage_column = "Lineage", type = "sund2b")
   # })
 
   output$sunburst <- renderSunburst({
-    req(credentials()$user_auth)
+
     req(input$levels)
     lineage_sunburst(phylogeny_prot(), lineage_column = "Lineage", type = "sunburst", levels = input$levels)
   })
 
 
   output$msaPlot <- renderUI({
-    req(credentials()$user_auth)
+
     tags$iframe(style="height:600px; width:100%", src="pspa_reduced.fasta.pdf", seamless=T)
   })
 
@@ -813,7 +778,7 @@ server <- function(input, output,session){
   })
 
   output$ParalogTable <- DT::renderDataTable({
-    req(credentials()$user_auth)
+
     paralog_table()
   },extensions = c('FixedColumns'),
   selection = 'single',
@@ -877,7 +842,7 @@ server <- function(input, output,session){
 
   #### About Text ####
   output$aboutApp <- renderUI({
-    req(credentials()$user_auth)
+
     tagList(
       h4("Background"),
       "This web app was built to provide a visual and interactive supplement for the Psp Evolution paper.",
@@ -894,20 +859,24 @@ server <- function(input, output,session){
   })
 
   output$aboutAbstract <- renderUI({
-    req(credentials()$user_auth)
+
 
     tagList(
     h1("Phage-shock-protein (Psp) Envelope Stress Response:
                            Evolutionary History & Discovery of Novel Players"),
 
-    h4("Janani Ravi", tags$sup("1,2*"),", Vivek Anantharaman", tags$sup("3")
-       , ", Samuel Zorn Chen", tags$sup("1"), ", Pratik Datta", tags$sup("2"),
-       ", L Aravind", tags$sup("3*"),", Maria Laura Gennaro", tags$sup("2*"),"."),
-    tags$sup("1"),"Pathobiology and Diagnostic Investigation, Michigan State University, East Lansing, MI;",
-    tags$sup("2"), "Public Health Research Institute, Rutgers University, Newark, NJ; ",
-    tags$sup("3"),"National Center for Biotechnology Information, National Institutes of Health, Bethesda, MD.",
-    tags$br(),
-    "*Corresponding authors. janani@msu.edu; aravind@nih.gov; marila.gennaro@rutgers.edu ",
+    div(
+      class = "inline_float_p",
+      tags$h4( tags$p("Janani Ravi",tags$sup("1,2*")) , tags$p(", Vivek Anantharaman", tags$sup("3"))
+         , tags$p(", Samuel Zorn Chen", tags$sup("1")), tags$p(", Pratik Datta", tags$sup("2")),
+         tags$p(", L Aravind"), tags$sup("3*"), tags$p(", Maria Laura Gennaro"), tags$sup("2*")),
+      tags$p(
+       tags$p(style = "display:inline;",tags$sup("1",style = "margin:0px;"),"Pathobiology and Diagnostic Investigation, Michigan State University, East Lansing, MI;"),
+       tags$p(style = "display:inline;",tags$sup("2",style = "margin:0px;"),"Public Health Research Institute, Rutgers University, Newark, NJ; "),
+     tags$p(style = "display:inline;", tags$sup("3", style = "margin:0px;"),"National Center for Biotechnology Information, National Institutes of Health, Bethesda, MD."),
+      tags$br(),
+      tags$p(style ="text-align:left;", "\n*Corresponding authors. janani@msu.edu; aravind@nih.gov; marila.gennaro@rutgers.edu ")),
+    ),
 
     h2('Abstract:'),
 
@@ -923,7 +892,7 @@ server <- function(input, output,session){
 
   ## DA lin table download
   output$DAdownloadCounts <- downloadHandler(
-    req(credentials()$user_auth),
+    ,
     filename = function(){
       extension <- "-da_lin_counts"
       if(input$DAcountDownloadType == "tsv"){
@@ -945,7 +914,7 @@ server <- function(input, output,session){
 
   ## GC lin table download
   output$GCdownloadCounts <- downloadHandler(
-    req(credentials()$user_auth),
+    ,
     filename = function(){
       extension <- "-gc_lin_counts"
       if(input$GCcountDownloadType == "tsv"){
