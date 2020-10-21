@@ -22,12 +22,6 @@ source("shiny/shinyfunctions.R")
 source("shiny/initialCutoff.R")
 source("shiny/legend_text.R")
 
-###
-#### Users ####
-###
-
-
-
 ####
 #### UI ####
 ####
@@ -142,8 +136,8 @@ server <- function(input, output,session){
 
     switch(input$proSelec,
            "All" = all %>% select(viewing_cols) %>% distinct() %>% reorder_all(queries),
-           "DUF1700-ahelical" = DUF1700%>% select(viewing_cols) %>% distinct(),
-           "DUF1707-SHOCT" = DUF1707%>% select(viewing_cols) %>% distinct(),
+           "ahelical" = DUF1700%>% select(viewing_cols) %>% distinct(),
+           "SHOCT-bihelical" = DUF1707%>% select(viewing_cols) %>% distinct(),
            "PspA-Snf7" = pspa_snf7%>% select(viewing_cols) %>% distinct(),
            "PspA" = pspa%>% select(viewing_cols) %>% distinct(),
            "Snf7" = snf7%>% select(viewing_cols) %>% distinct(),
@@ -154,7 +148,7 @@ server <- function(input, output,session){
            "PspN" = pspn%>% select(viewing_cols) %>% distinct(),
            "DUF3046" = DUF3046 %>% select(viewing_cols) %>% distinct(),
            "LiaI-LiaF-TM" = liai_liaf%>% select(viewing_cols) %>% distinct(),
-           "Toast-rack" = toast_rack%>% select(viewing_cols) %>% distinct(),
+           "Toast_rack" = toast_rack%>% select(viewing_cols) %>% distinct(),
            "Tfu-1009" = tfu_1009%>% select(viewing_cols) %>% distinct()
     )
   })
@@ -186,8 +180,9 @@ server <- function(input, output,session){
     if(input$pspMenu == "domainArchitecture"){
       switch(input$DAlinSelec,
              "All" = all,
-             "DUF1700-ahelical" = DUF1700,
-             "DUF1707-SHOCT" = DUF1707,
+             "ahelical" = DUF1700,
+             "SHOCT-bihelical" = DUF1707,
+             "DUF3046" = DUF3046,
              "PspA" = pspa,
              "Snf7" = snf7,
              "PspB" = pspb,
@@ -195,7 +190,7 @@ server <- function(input, output,session){
              "PspM" = pspm,
              "PspN" = pspn,
              "LiaI-LiaF-TM" = liai_liaf,
-             "Toast-rack" = toast_rack,
+             "Toast_rack" = toast_rack,
              "Tfu-1009" = tfu_1009)
     }
     # else if(input$mainTabs == "genomicContext")
@@ -203,8 +198,9 @@ server <- function(input, output,session){
     else{
       switch(input$GClinSelec,
              "All" = all,
-             "DUF1700-ahelical" = DUF1700,
-             "DUF1707-SHOCT" = DUF1707,
+             "ahelical" = DUF1700,
+             "SHOCT-bihelical" = DUF1707,
+             "DUF3046" = DUF3046,
              # "PspA-Snf7" = pspa,
              "PspA" = pspa,
              "Snf7" = snf7,
@@ -213,7 +209,7 @@ server <- function(input, output,session){
              "PspM" = pspm,
              "PspN" = pspn,
              "LiaI-LiaF-TM" = liai_liaf,
-             "Toast-rack" = toast_rack,
+             "Toast_rack" = toast_rack,
              "Tfu-1009" = tfu_1009)
     }
   })
@@ -562,9 +558,9 @@ server <- function(input, output,session){
   #### Reactive expression determining domain of interest for plotting domain networks
   network_domain_interest <-  reactive({
     switch(input$DAlinSelec,
-           "All" = ".*",  #c("DUF1700-ahelical","DUF1707-SHOCT","PspA", "Snf7","PspB","PspC", "PspM","PspN","LiaI-LiaF-TM","Toast-rack"),
-           "DUF1700-ahelical" = "DUF1700-ahelical",
-           "DUF1707-ahelical" = "DUF1707-SHOCT",
+           "All" = queries,  #c("DUF1700-ahelical","DUF1707-SHOCT","PspA", "Snf7","PspB","PspC", "PspM","PspN","LiaI-LiaF-TM","Toast-rack"),
+           "ahelical" = "ahelical",
+           "SHOCT-bihelical" = "SHOCT-bihelical",
            "PspA-Snf7" = c("PspA","Snf7"),
            "PspA" = "PspA",
            "Snf7" = "Snf7",
@@ -573,7 +569,7 @@ server <- function(input, output,session){
            "PspM" = "PspM",
            "PspN" = "PspN",
            "LiaI-LiaF-TM" = "LiaI-LiaF-TM",
-           "Toast-rack" = "Toast-rack",
+           "Toast_rack" = "Toast_rack",
            "Tfu-1009" = "Tfu_1009")
   })
 
@@ -613,25 +609,6 @@ server <- function(input, output,session){
 
   #### Legends ####
 
-  ### Observe changes in tabset panel to determine legend text ###
-  # DA_legend_txt <- reactive({
-    # switch( input$DALin_data,
-    #         "Heatmap" =  DA_LineageHeatmap_txt,
-    #         "Upset" = DA_Upset_txt,
-    #         "Lintable" = DA_LinTable_txt,
-    #         "Network_WC" = paste(Network_txt, Wordcloud_txt, sep = "\n")
-    # )
-  # })
-  #
-  # GC_legend_txt <- reactive({
-  #   switch( input$GCLin_data,
-  #           "Heatmap" = ifelse(input$GClinSelec == "All", AllLineageHeatmap_txt, LineageHeatmap_txt),
-  #           "Upset" = Upset_txt,
-  #           "Lintable" = LinTable_txt,
-  #           "Network_WC" = paste(Network_txt, Wordcloud_txt, sep = "\n")
-  #   )
-  # })
-
   output$DALegend <- renderUI({
 
     switch( input$DALin_data,
@@ -663,22 +640,11 @@ server <- function(input, output,session){
   })
 
 
-  # output$DALegend <- renderText({
-  #
-  #   DA_legend_txt()
-  # })
-  #
-  # output$GCLegend <- renderText({
-  #
-  #   GC_legend_txt()
-  # })
-
-
   phylogeny_prot <- reactive({
     switch(input$alignSelec,
            "All" = all,
-           "DUF1700" = DUF1700,
-           "DUF1707" = DUF1707,
+           "ahelical" = DUF1700,
+           "SHOCT-bihelical" = DUF1707,
            "PspA-Snf7" = pspa,
            "Psp-AA" = psp_aa,
            "PspB" = pspb,
@@ -686,7 +652,7 @@ server <- function(input, output,session){
            "PspM" = pspm,
            "PspN" = pspn,
            "LiaI-LiaF-TM" = liai_liaf,
-           "Toast-rack" = toast_rack,
+           "Toast_rack" = toast_rack,
            "Tfu-1009" = tfu_1009
     )
   })
@@ -695,20 +661,14 @@ server <- function(input, output,session){
     ### PspA, PspA-Snf7, PspB, PspB, PspC, Snf7, Toast-rack, LiaI-LiaF
     if(input$phylo == "Tree"){
       choices = c(
-        "LiaI-LiaF-TM.allfa50",
-        "LiaI-LiaF-TM_LiaFN.2",
-        "LiaI-LiaF-TM_LiaI.1",
-        "LiaI-LiaF-TM_PspC.3",
-        "PspA Only",
-        "PspA Snf7 Gismo",
+        "LiaI-LiaF-TM",
         "PspA Snf7",
-        "PspB Gismo",
-        "PspC Gismo",
-        "Snf7 Only",
-        "Toast-rack DUF2154-LiaF",
-        "Toast-rack DUF2807",
-        "Toast-rack DUF4097",
-        "Toast-rack PspC-Cterm"
+        "PspB",
+        "PspC",
+        "Toast_rack-DUF2154-LiaF",
+        "Toast_rack-DUF2807",
+        "Toast_rack-DUF4097",
+        "Toast_rack-PspC-Cterm"
       )
       selected = "PspA Snf7"
     }
@@ -718,7 +678,7 @@ server <- function(input, output,session){
                   "PspC",
                   "PspN",
                   "LiaI-LiaF-TM",
-                  "Toast-rack"
+                  "Toast_rack"
       )
       selected = "PspA-Snf7"
     }
@@ -731,20 +691,14 @@ server <- function(input, output,session){
     print(input$phylo)
 
     switch(input$alignSelec,
-           "LiaI-LiaF-TM.allfa50" = tags$iframe(style="height:600px; width:100%", src="FigTrees/LiaI-LiaF-TM.allfa50_tree.pdf", seamless=T),
-           "LiaI-LiaF-TM_LiaFN.2"= tags$iframe(style="height:600px; width:100%", src="FigTrees/LiaI-LiaF-TM_LiaFN.2_tree.pdf", seamless=T),
-           "LiaI-LiaF-TM_LiaI.1" = tags$iframe(style="height:600px; width:100%", src="FigTrees/LiaI-LiaF-TM_LiaI.1_tree.pdf", seamless=T),
-           "LiaI-LiaF-TM_PspC.3" = tags$iframe(style="height:600px; width:100%", src="FigTrees/LiaI-LiaF-TM_PspC.3_tree.pdf", seamless=T),
-           "PspA Only" = tags$iframe(style="height:600px; width:100%", src="FigTrees/pspa_only.1_tree.pdf", seamless=T),
-           "PspA Snf7" = tags$iframe(style="height:600px; width:100%", src="FigTrees/pspa_snf7_tree.pdf", seamless=T),
-           "PspA Snf7 Gismo" = tags$iframe(style="height:600px; width:100%", src="FigTrees/pspa_snf7.gismo_tree.pdf", seamless=T),
-           "PspB Gismo" = tags$iframe(style="height:600px; width:100%", src="FigTrees/pspb.gismo_tree.pdf", seamless=T),
-           "PspC Gismo" = tags$iframe(style="height:600px; width:100%", src="FigTrees/pspc.gismo_tree.pdf", seamless=T),
-           "Snf7 Only" = tags$iframe(style="height:600px; width:100%", src="FigTrees/snf7_only.1_tree.pdf", seamless=T),
-           "Toast-rack DUF2154-LiaF" = tags$iframe(style="height:600px; width:100%", src="FigTrees/Toast-rack_DUF2154-LiaF.1_tree.pdf", seamless=T),
-           "Toast-rack DUF2807" = tags$iframe(style="height:600px; width:100%", src="FigTrees/Toast-rack_DUF2807.2_tree.pdf", seamless=T),
-           "Toast-rack DUF4097" = tags$iframe(style="height:600px; width:100%", src="FigTrees/Toast-rack_DUF4097-LiaG.3.allfa.2nd_tree.pdf", seamless=T),
-           "Toast-rack PspC-Cterm" = tags$iframe(style="height:600px; width:100%", src="FigTrees/Toast-Rack_PspC-Cterm.4_tree.pdf", seamless=T)
+           "LiaI-LiaF-TM" = tags$iframe(style="height:600px; width:100%", src="FigTrees/LiaI-LiaF-TM.allfa50_tree.pdf", seamless=T),
+           "PspA Snf7" = tags$iframe(style="height:600px; width:100%", src="FigTrees/pspa_snf7.gismo_tree.pdf", seamless=T),
+           "PspB" = tags$iframe(style="height:600px; width:100%", src="FigTrees/pspb.gismo_tree.pdf", seamless=T),
+           "PspC" = tags$iframe(style="height:600px; width:100%", src="FigTrees/pspc.gismo_tree.pdf", seamless=T),
+           "Toast_rack-DUF2154-LiaF" = tags$iframe(style="height:600px; width:100%", src="FigTrees/Toast-rack_DUF2154-LiaF.1_tree.pdf", seamless=T),
+           "Toast_rack-DUF2807" = tags$iframe(style="height:600px; width:100%", src="FigTrees/Toast-rack_DUF2807.2_tree.pdf", seamless=T),
+           "Toast_rack-DUF4097" = tags$iframe(style="height:600px; width:100%", src="FigTrees/Toast-rack_DUF4097-LiaG.3.allfa.2nd_tree.pdf", seamless=T),
+           "Toast_rack-PspC-Cterm" = tags$iframe(style="height:600px; width:100%", src="FigTrees/Toast-Rack_PspC-Cterm.4_tree.pdf", seamless=T)
     )
   })
 
@@ -852,8 +806,7 @@ server <- function(input, output,session){
       h4("Code"),
       tags$span(
         "Code and data used to generate this Shiny app are available on ",
-        a(href = "https://github.com/JRaviLab/the-approach",
-          class ="lightblue-link", "GitHub.")
+        tags$a("GitHub.",class ="lightblue-link",href = "https://github.com/JRaviLab/the-approach")
       )
     )
   })
@@ -869,7 +822,7 @@ server <- function(input, output,session){
       class = "inline_float_p",
       tags$h4( tags$p("Janani Ravi",tags$sup("1,2*")) , tags$p(", Vivek Anantharaman", tags$sup("3"))
          , tags$p(", Samuel Zorn Chen", tags$sup("1")), tags$p(", Pratik Datta", tags$sup("2")),
-         tags$p(", L Aravind"), tags$sup("3*"), tags$p(", Maria Laura Gennaro"), tags$sup("2*")),
+         tags$p(", L Aravind", tags$sup("3*")), tags$p(", Maria Laura Gennaro"), tags$sup("2*")),
       tags$p(
        tags$p(style = "display:inline;",tags$sup("1",style = "margin:0px;"),"Pathobiology and Diagnostic Investigation, Michigan State University, East Lansing, MI;"),
        tags$p(style = "display:inline;",tags$sup("2",style = "margin:0px;"),"Public Health Research Institute, Rutgers University, Newark, NJ; "),

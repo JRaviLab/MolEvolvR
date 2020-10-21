@@ -10,7 +10,8 @@ tabPanel(title = "", icon = icon("home", class = "fa-2x", lib = "font-awesome"),
 
          )),
          fluidRow(column(10,
-                         tags$a(href = "https://github.com/jananiravi/psp-evolution",icon("github-square", class = "zoom iMargin fa-3x", lib = "font-awesome")),
+                         tags$a(href = "https://github.com/jananiravi/psp-evolution",
+                                icon("github-square",class = "zoom iMargin fa-3x", lib = "font-awesome")),
                          # Link to JRaviLab github page using cpathogeno icon
                          tags$a(href = "https://github.com/JRaviLab",
                                 icon("users",class = "zoom iMargin fa-3x",lib = "font-awesome")

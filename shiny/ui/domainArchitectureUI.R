@@ -9,9 +9,7 @@ tabPanel( title = "Domain Architecture",
                  column(width = 4,
                         #dropdown to select protein for plots
                         selectInput(inputId =  "DAlinSelec", label = "Protein",
-                                    choices = c("All", "PspA","Snf7", "PspB", "PspC", "LiaI-LiaF-TM",
-                                                "Toast-rack","PspM","PspN", "DUF1700-ahelical",
-                                                "DUF1707-SHOCT", "Tfu-1009")
+                                    choices = c("All", queries)
                                     , selected = "PspA", width = "100%")
                  ),
 
