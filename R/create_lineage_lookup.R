@@ -21,7 +21,6 @@ create_lineage_lookup <- function(lineage_file = here("data/rankedlineage.dmp"),
     if(is.na(first_NA) )
     {
       # No NAs
-      # print(Lineage)
       return(Lineage)
     }
     else
@@ -42,7 +41,6 @@ create_lineage_lookup <- function(lineage_file = here("data/rankedlineage.dmp"),
   rankedlins_cols <- c("tax_id", "tax_name", "species", "genus",
                        "family", "order", "class", "phylum", "kingdom", "superkingdom", "NA")
 
-  lineage_file <- here("data/rankedlineage.dmp")
   rankedLins <- read_file(lineage_file) %>%
     str_replace_all(pattern = "\\t\\|\\t|\\t\\|", "\t") %>%
     read_tsv( col_names = rankedlins_cols) %>%
@@ -85,9 +83,11 @@ create_lineage_lookup <- function(lineage_file = here("data/rankedlineage.dmp"),
   # Takes a while (2million rows after all)
   rankedLinsCombined <- rankedLins %>%
     unite(col = 'Lineage', all_of(combined_taxonomy), sep = ">") %>%
-    mutate(Lineage = map(Lineage, shorten_NA))
+    mutate(Lineage = unlist(map(Lineage, shorten_NA)))
 
-  write_tsv(rankedLinsCombined, outfile)
+
+
+  write_tsv(x = rankedLinsCombined, path = outfile)
 }
 
 
