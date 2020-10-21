@@ -7,9 +7,7 @@ tabPanel( title = "Data/Query",
                                column(width = 2,
                                       #Dropdown to select protein for viewing
                                       selectInput(inputId =  "proSelec", label = "Protein",
-                                                  choices = c("All", "PspA-Snf7", "PspB","PspC", "LiaI-LiaF-TM",
-                                                               "Toast-rack", "PspM", "PspN","Tfu-1009",
-                                                               "DUF1700-ahelical", "DUF1707-SHOCT"), selected = "All")
+                                                  choices = c("All", queries), selected = "All")
 
                                ),
 
