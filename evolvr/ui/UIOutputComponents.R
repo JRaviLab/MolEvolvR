@@ -295,7 +295,8 @@ rs_tree_component <- tagList(
 rs_iprscan_component <- tagList(
   fluidRow(
     column(width = 12,
-
+           radioButtons( "iprVisType", label = h3("Group By"),
+                        choices = list("Data Bases" = "DB", "Protein" = "protein")),
                selectInput(inputId = "iprDatabases", label = "DataBases", choices = c(), multiple = T),
                # selectizeInput(inputId = "iprDatabases", label = "DataBases", choices = c(), multiple = T),
                plotOutput(outputId = "rs_IprGenes", height = '600px')

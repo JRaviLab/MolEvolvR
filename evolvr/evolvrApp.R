@@ -38,6 +38,18 @@ FastaSeq <- setRefClass("FastaSeq", fields = list(sequence = "character"))
 ## Create Accession Object so it can easily be pinned
 AccNum <- setRefClass("AccNum", fields = list(accessions = "ANY") )
 
+EX_HOMOLOGOUS_ACCNUMS = c("ANY95992.1","APP15780.1","	AGZ55339.1","AGZ57835.1", "AEB64964.1")
+EX_FASTA_SEQS = "evolvr/ExampleData/fasta.fa"
+EX_MSA = "evolvr/ExampleData/msa.aln"
+EX_NON_HOMOLOGOUS_ACCNUMS = c("ANY95992.1")
+EX_IPROUTPUT = "evolvr/ExampleData/iprscan5-20201022.txt"
+
+ipr_cols <- c("AccNum", "Seq_MD5_digest", "SeqLen", "Analysis",
+              "SignAcc", "SignDesc", "StartLoc", "StopLoc", "Score",
+              "Status", "RunDate",
+              "IPRAcc", "IPRDesc", "GOAnn", "PathAnn")
+
+
 ###
 #### Users ####
 ###
@@ -70,7 +82,7 @@ ui <- tagList(
     #source("evolvr/ui/splashPageUI.R")$value,
     source("evolvr/ui/splashPageUI2.0.R")$value,
     source("evolvr/ui/uploadUI.R")$value,
-    source("evolvr/ui/analysisUI.R")$value,
+    # source("evolvr/ui/analysisUI.R")$value,
     source("evolvr/ui/resultSummaryUI.R")$value,
     source("evolvr/ui/queryDataUI.R")$value,
 
@@ -215,11 +227,28 @@ server <- function(input, output, session)
     unlist(strsplit(input$accNumBLASTTextInput, "\\s*,\\s*|\\s+|\\n"))
   })
 
+  #### Email ####
+  # emailID <- function(from, to, ID)
+  # {
+  #   from <- paste0("<", from, ">")
+  #   to <- paste0("<", from, ">")
+  #   subject <- "!Important! MolEvolvr ID"
+  #   body <- paste0("Your ID is: ", ID)
+  #   sendmail(from, to, subject, body,
+  #            control=list(smtpServer="ASPMX.L.GOOGLE.COM"))
+  # }
+
   #### Pin BLAST data ####
   observeEvent(input$pinAccBlast,
                {
+                 if(length(analysis_AccNums()) == 0)
+                 {
+                   #### Makes some type of of alert here
+                   print("Please input your Protein Accession Numbers")
+                 }
+                 # else if()
                  # Was the last submission less than 60 seconds ago?
-                 if( as.numeric(Sys.time()) - lastAccAnalysis() < 60 )
+                 else if( as.numeric(Sys.time()) - lastAccAnalysis() < 60 )
                  {
                    time_till_available = 60- ( as.numeric(Sys.time()) - lastAccAnalysis())
                    showNotification(
@@ -496,6 +525,29 @@ server <- function(input, output, session)
     }
   )
 
+  #### FASTA Load Example ####
+  observeEvent(
+    input$exampleFASTA,
+    {
+      f <- read_file(EX_FASTA_SEQS)
+      uAccFaFasta(f)
+      updateTextAreaInput(session, inputId = "fastaTextInput", label = "Enter Fasta Sequence", value = f)
+    }
+  )
+
+
+  #### MSA Load Example ####
+  ############## NEED A WAY OF CONFIRMING PASTES IN HERE
+  observeEvent(
+    input$exampleMSA,
+    {
+      f <- read_file(EX_MSA)
+      uAccFaAln(f)
+      write_file(f, aligned_fasta_filepath())
+
+      updateTextAreaInput(session, "msaText", label = "Paste Aligned FASTA Sequence", value = f)
+    }
+  )
 
 
   observeEvent(
@@ -507,6 +559,9 @@ server <- function(input, output, session)
       alignFasta(fasta_filepath(), tool = input$FastaAlignmentTool , outpath = aligned_fasta_filepath())
       uAccFaAln(read_file(aligned_fasta_filepath()))
       # uAccFaAlnFile("uploadAccFaAln.fasta")
+
+
+      print(uAccFaAln)
 
       updateTextAreaInput(session, "msaText", label = "Paste Aligned FASTA Sequence", value = read_file(aligned_fasta_filepath()))
       updateCollapse(session, "accCollapse", open = "msa")
@@ -574,8 +629,7 @@ server <- function(input, output, session)
                {
                  req(credentials()$user_auth)
                  lowerbound = sample(1:(nrow(example_data)-5), 1)
-                 updateTextInput(session, inputId = "accNumTextInput", value =
-                                   paste0(example_data$AccNum[ lowerbound: (lowerbound + 5)])  )
+                 updateTextInput(session, inputId = "accNumTextInput", value =  paste0(EX_HOMOLOGOUS_ACCNUMS, collapse =", "))
                })
 
   #### Msa Upload
@@ -720,14 +774,16 @@ server <- function(input, output, session)
         # updateSelectizeInput(session, inputId = "iprDatabases", label = "DataBases", choices = options, selected = options)
         updateSelectInput(session, inputId = "iprDatabases", label = "DataBases", choices = options, selected = options)
       }
+      else if(input$evolvrMenu == "domainArchitecture")
+      {
+        options <- ipr_data()$Analysis %>% unique()
+        # updateSelectizeInput(session, inputId = "iprDatabases", label = "DataBases", choices = options, selected = options)
+        updateSelectInput(session, inputId = "da_iprDatabases", label = "DataBases", choices = options, selected = options)
+      }
     }
   )
 
   observeEvent(input$interproFileUpload, {
-    ipr_cols <- c("AccNum", "Seq_MD5_digest", "SeqLen", "Analysis",
-                  "SignAcc", "SignDesc", "StartLoc", "StopLoc", "Score",
-                  "Status", "RunDate",
-                  "IPRAcc", "IPRDesc", "GOAnn", "PathAnn")
     ipr_data(switch(
       input$fileTypeIPRScan,
       "tsv" = read_tsv(input$interproFileUpload$datapath , col_names = ipr_cols)
@@ -735,6 +791,14 @@ server <- function(input, output, session)
     write_tsv(ipr_data(), "ipr_out_file.txt")
     ipr_filepath("ipr_out_file.txt")
   })
+
+  #### Load IPR Example Data ####
+  observeEvent(input$loadIPRExample,
+               {
+                 ipr_data(read_tsv(EX_IPROUTPUT, col_names = ipr_cols))
+                 ipr_filepath(EX_IPROUTPUT)
+               }
+               )
 
 
   output$IPRScanData <- DT::renderDataTable(
@@ -825,7 +889,7 @@ server <- function(input, output, session)
       {
         rs_sunburst_component
       }
-      else if(fasta() != "")
+      else if(aligned_fasta() != "")
       {
         rs_tree_component
       }
@@ -872,10 +936,20 @@ server <- function(input, output, session)
     req(nrow(ipr_data()) != 0)
     ipr2domarch(infile_ipr = ipr_filepath(),
                 PfamClans_path = "evolvr/TestData/Pfam-A.clans.txt",
-                analysis = input$iprDatabases,
+                analysis = input$iprDatabases, group_by = input$iprVisType,
                 topn = 20 ##### What does this parameter do?
     )
   })
+
+  output$da_IprGenes <- renderPlot({
+    req(nrow(ipr_data()) != 0)
+    ipr2domarch(ipr_filepath(),
+                PfamClans_path = "evolvr/TestData/Pfam-A.clans.txt",
+                analysis = input$da_iprDatabases, group_by = input$da_iprVisType,
+                topn = 20 ##### What does this parameter do?
+                )
+  })
+
 
   #### action links Result Summary ####
   observeEvent(input$rs2DomArch,

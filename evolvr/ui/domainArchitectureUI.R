@@ -72,7 +72,19 @@ tabPanel( title = "Domain Architecture",
                               )
 
 
-                     )
+                     ),
+                     tabPanel("Interproscan Visualization",
+                              fluidRow(
+                                column(width = 12,
+                                       radioButtons( "da_iprVisType", label = h3("Group By"),
+                                                     choices = list("Data Bases" = "DB", "Protein" = "protein")),
+                                       selectInput(inputId = "da_iprDatabases", label = "DataBases", choices = c(), multiple = T),
+                                       # selectizeInput(inputId = "iprDatabases", label = "DataBases", choices = c(), multiple = T),
+                                       plotOutput(outputId = "da_IprGenes", height = '600px')
+                                )
+
+                              )
+                              )
 
                    )
                  )

@@ -1,0 +1,32 @@
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	TMHMM	TMhelix	Region of a membrane-bound protein predicted to be embedded in the membrane.	346	365	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	Phobius	TRANSMEMBRANE	Region of a membrane-bound protein predicted to be embedded in the membrane.	346	365	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	Phobius	TRANSMEMBRANE	Region of a membrane-bound protein predicted to be embedded in the membrane.	264	284	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	Phobius	CYTOPLASMIC_DOMAIN	Region of a membrane-bound protein predicted to be outside the membrane, in the cytoplasm.	209	214	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	TMHMM	TMhelix	Region of a membrane-bound protein predicted to be embedded in the membrane.	84	106	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	Phobius	NON_CYTOPLASMIC_DOMAIN	Region of a membrane-bound protein predicted to be outside the membrane, in the extracellular region.	234	238	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	Phobius	CYTOPLASMIC_DOMAIN	Region of a membrane-bound protein predicted to be outside the membrane, in the cytoplasm.	104	122	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	TMHMM	TMhelix	Region of a membrane-bound protein predicted to be embedded in the membrane.	50	69	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	Phobius	NON_CYTOPLASMIC_DOMAIN	Region of a membrane-bound protein predicted to be outside the membrane, in the extracellular region.	142	186	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	Phobius	NON_CYTOPLASMIC_DOMAIN	Region of a membrane-bound protein predicted to be outside the membrane, in the extracellular region.	1	84	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	Phobius	TRANSMEMBRANE	Region of a membrane-bound protein predicted to be embedded in the membrane.	215	233	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	Phobius	TRANSMEMBRANE	Region of a membrane-bound protein predicted to be embedded in the membrane.	239	257	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	Pfam	PF01757	Acyltransferase family	50	360	1.4E-19	T	21-10-2020	IPR002656	Acyltransferase 3	GO:0016747	
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	Phobius	TRANSMEMBRANE	Region of a membrane-bound protein predicted to be embedded in the membrane.	187	208	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	Phobius	NON_CYTOPLASMIC_DOMAIN	Region of a membrane-bound protein predicted to be outside the membrane, in the extracellular region.	341	345	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	Phobius	CYTOPLASMIC_DOMAIN	Region of a membrane-bound protein predicted to be outside the membrane, in the cytoplasm.	366	398	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	TMHMM	TMhelix	Region of a membrane-bound protein predicted to be embedded in the membrane.	319	341	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	Phobius	TRANSMEMBRANE	Region of a membrane-bound protein predicted to be embedded in the membrane.	85	103	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	Phobius	CYTOPLASMIC_DOMAIN	Region of a membrane-bound protein predicted to be outside the membrane, in the cytoplasm.	258	263	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	Phobius	TRANSMEMBRANE	Region of a membrane-bound protein predicted to be embedded in the membrane.	290	308	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	TMHMM	TMhelix	Region of a membrane-bound protein predicted to be embedded in the membrane.	218	235	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	PANTHER	PTHR23028	ACETYLTRANSFERASE	46	379	1.2E-12	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	TMHMM	TMhelix	Region of a membrane-bound protein predicted to be embedded in the membrane.	119	141	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	Phobius	CYTOPLASMIC_DOMAIN	Region of a membrane-bound protein predicted to be outside the membrane, in the cytoplasm.	309	319	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	TMHMM	TMhelix	Region of a membrane-bound protein predicted to be embedded in the membrane.	290	307	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	Phobius	NON_CYTOPLASMIC_DOMAIN	Region of a membrane-bound protein predicted to be outside the membrane, in the extracellular region.	285	289	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	Phobius	TRANSMEMBRANE	Region of a membrane-bound protein predicted to be embedded in the membrane.	320	340	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	TMHMM	TMhelix	Region of a membrane-bound protein predicted to be embedded in the membrane.	240	257	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	MobiDBLite	mobidb-lite	consensus disorder prediction	1	21	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	Phobius	TRANSMEMBRANE	Region of a membrane-bound protein predicted to be embedded in the membrane.	123	141	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	TMHMM	TMhelix	Region of a membrane-bound protein predicted to be embedded in the membrane.	264	286	-	T	21-10-2020
+AAS03546.1	aef1f82f8e3452d09a8bf738637a79ee	398	TMHMM	TMhelix	Region of a membrane-bound protein predicted to be embedded in the membrane.	189	211	-	T	21-10-2020
