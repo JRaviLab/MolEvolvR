@@ -58,6 +58,10 @@ tabPanel(
                                                                                     column( width = 12, offset = 0,
                                                                                             textAreaInput(inputId = "fastaTextInput", label = "Enter Fasta Sequence",
                                                                                                           width = "100%", height = "100%")
+                                                                                    ),
+                                                                                    column(
+                                                                                      width = 12, offset = 0,
+                                                                                      actionButton(inputId = "exampleFASTA", "Load Example"),
                                                                                     )
                                                                                   ),
                                                                                   # bsAlert(anchorId = "invalidPin"),
@@ -90,6 +94,10 @@ tabPanel(
                                                                                            textAreaInput(inputId = "msaText", label = "Paste  Aligned FASTA Sequence",
                                                                                                          width = "100%", height = "100%")
 
+                                                                                    ),
+                                                                                    column(
+                                                                                      width = 12, offset = 0,
+                                                                                      actionButton(inputId = "exampleMSA", "Load Example"),
                                                                                     )
 
                                                                                   )
@@ -153,6 +161,9 @@ tabPanel(
                                                                               status = "primary")
                                                            )
                                                        ),
+                                                       column(width = 4, offset = 4,
+                                                              textInput("acc2blastEmail","Email")
+                                                              ),
 
                                                        column(
                                                          width = 4, offset = 4,
@@ -180,6 +191,7 @@ tabPanel(
                                 fluidRow(
                                   column(width = 4, offset = 0,
                                          fileInput(inputId = "interproFileUpload", label = "Choose Interproscan File"),
+                                         actionButton(inputId = "loadIPRExample", "Example Data"),
                                          radioButtons(inputId = "fileTypeIPRScan", label = "File Type",choices = "tsv")
                                   )
                                 ),
