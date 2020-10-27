@@ -14,6 +14,8 @@ create_lineage_lookup <- function(lineage_file = here("data/rankedlineage.dmp"),
   #'@param outfile File the resulting lineage lookup table should be written to
   #'@param taxonomic_rank The upperbound of taxonomic rank that the lineage includes. The lineaege will
   #'include superkingdom>...>taxonomic_rank.
+  #'Choices include: "supperkingdom", "phylum",   "class","order", "family",
+  #'"genus", and "species"
 
   shorten_NA <- function(Lineage)
   {

@@ -28,49 +28,30 @@ DownloadAssemblySummary <- function(outpath, keep = c("assembly_accession", "tax
 
 
 # Go from the GCA_ID column to tax IDs using the assembly file
-GCA2Lins <- function(prot_data, assembly_path = "data/acc_files/assembly_summary20200706.txt", lineage_path = "data/acc_files/rankedlineage.dmp" )
+GCA2Lins <- function(prot_data, assembly_path = "data/acc_files/assembly_summary20201018.txt",
+                       lineagelookup_path = "data/lineagelookup.txt" )
 {
   #' Function that maps GCA_ID to taxid, and that taxid to a lineage
   #' Note: currently configured to have at most kingdom and phylum
   #' @author Samuel Chen
   #' @param prot_data Dataframe containing a column `GCA_ID`
   #' @param assembly_path String of the path to the assembly_summary path
-  #' @param lineage_path String of the path to the rankedLineage dump file (taxid to lineage mapping)
+  #' This file can be generated using the "DownloadAssemblySummary()" function
+  #' @param lineagelookup_path String of the path to the lineage lookup file
+  #' (taxid to lineage mapping). This file can be generated using the
+  #' "create_lineage_lookup()" function
 
-  shorten_NA <- function(Lineage)
-  {
-    first_NA = str_locate(Lineage, "NA")[1]
-    if(is.na(first_NA) )
-    {
-      # No NAs
-      # print(Lineage)
-      return(Lineage)
-    }
-    else
-    {
-      shortened = substr(Lineage,1,(first_NA-1))
-      return(shortened)
-    }
-  }
+  assembly_summary <- fread(assembly_path ,sep = "\t")
+  assembly_summary <- setnames(assembly_summary, "assembly_accession", "GCA_ID")
 
-  assembly_summary <- read_tsv("data/acc_files/assembly_summary20200706.txt")
+  mergedTax <- merge(x = prot_data,y = assembly_summary,by = "GCA_ID", all.x = T)
 
-  assembly_summary <- rename(assembly_summary, "GCA_ID" = "assembly_accession")
+  lineage_map <- fread(lineagelookup_path, sep = "\t")
 
-  mergedTax <- prot_data %>% left_join(assembly_summary,by = "GCA_ID")
+  mergedLins <- merge(mergedTax, lineage_map, by.x = "taxid", by.y="tax_id",
+                      all.x = T)
 
-  dont_include = c("X2", "X4", "X6", "X8","X10","X12", "X14","X16","X17", "X18","X20")
-  rankedLins <- read_tsv("data/acc_files/rankedlineage.dmp", col_names = F) %>%
-    select(-all_of(dont_include)) %>% rename(taxid = X1)
-
-  merged_lins <- left_join(mergedTax, rankedLins, by = "taxid")
-
-  merged_lins <- merged_lins %>% unite(col = 'Lineage', X19,X15,#X19:X5
-                                       sep = "_") %>%
-    mutate(Lineage = map(Lineage,shorten_NA)) %>%
-    unite(Lineage, Lineage, X3 )
-
-  return(merged_lins)
+  return(mergedLins)
 }
 
 
