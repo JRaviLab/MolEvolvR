@@ -24,19 +24,28 @@ only_in_raw_df <- raw[which(raw$AccNum %in% only_in_raw),]
 only_in_raw_CNs <- only_in_raw_df %>% group_by(ClustName.orig)%>%
   summarize(count = n()) %>% arrange(-count)
 
-# Frequencies of all the domains
+# Frequencies of all the domains in previous list
 raw_wc <-only_in_raw_df %>%
   elements2words(column = "ClustName.orig", conversion_type = "da2doms") %>%
-  words2wc()
+  words2wc() %>% rename("OnlyInRawFreq"="freq")
+
+all_raw_wc <- raw %>% elements2words(column = "ClustName.orig", conversion_type = "da2doms") %>%
+  words2wc() %>% rename("AllFreq"="freq")
+
+raw_wc = merge(raw_wc, all_raw_wc, by = "words", all.x = T) %>% arrange(-OnlyInRawFreq)
 
 
 # How many rows do each of the domains appear in?
-raw_wc$Rows <-  map(frequent_raw_wc$words, function(x){
+raw_wc$MissingRows <-  map(frequent_raw_wc$words, function(x){
   only_in_raw_df %>% filter(grepl(x,ClustName.orig)) %>% nrow()
+}) %>% unlist() %>% sort( decreasing = T)
+
+raw_wc$TotalRows <-map(frequent_raw_wc$words, function(x){
+  raw %>% filter(grepl(x,ClustName.orig)) %>% nrow()
 }) %>% unlist() %>% sort( decreasing = T)
 
 view(only_in_raw_CNs)
 view(raw_wc)
 
-write_tsv(only_in_raw, "data/rawdata_tsv/DAs_only_in_raw.txt", col_names = T)
-write_tsv(raw_wc, "data/rawdata_tsv/Words_only_in_raw.txt")
+# write_tsv(only_in_raw_CNs, "data/rawdata_tsv/DAs_only_in_raw.txt", col_names = T)
+# write_tsv(raw_wc, "data/rawdata_tsv/Words_only_in_raw.txt", col_names = T)
