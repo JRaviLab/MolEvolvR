@@ -29,13 +29,14 @@ raw_wc <-only_in_raw_df %>%
   elements2words(column = "ClustName.orig", conversion_type = "da2doms") %>%
   words2wc()
 
-frequent_raw_wc <- raw_wc %>% filter(freq >= 50)
 
 # How many rows do each of the domains appear in?
-frequent_raw_wc$freq <-  map(frequent_raw_wc$words, function(x){
+raw_wc$Rows <-  map(frequent_raw_wc$words, function(x){
   only_in_raw_df %>% filter(grepl(x,ClustName.orig)) %>% nrow()
 }) %>% unlist() %>% sort( decreasing = T)
 
 view(only_in_raw_CNs)
 view(raw_wc)
-view(frequent_raw_wc)
+
+write_tsv(only_in_raw, "data/rawdata_tsv/DAs_only_in_raw.txt", col_names = T)
+write_tsv(raw_wc, "data/rawdata_tsv/Words_only_in_raw.txt")
