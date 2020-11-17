@@ -14,9 +14,29 @@ sink.reset <- function(){
 }
 
 
+add_lins <- function(df, acc_col = "AccNum", species_col, assembly_path,
+                     lineagelookup_path, ipgout_path = NULL)
+{
+  s_acc_col = sym(acc_col)
+  accessions = df %>% pull(acc_col)
+  lins = acc2lin(accessions, assembly_path, lineagelookup_path, ipgout_path)
+
+  # Drop a lot of the unimportant columns for now? will make merging much easier
+  lins <- lins[,c("Strand","Start","Stop", "Nucleotide Accession", "Source",
+                  "Id", "Strain"):= NULL]
+  lins <- unique(lins)
+
+   # dup <- lins %>% group_by(Protein) %>% summarize(count = n()) %>% filter(count > 1) %>%
+   #   pull(Protein)
+
+  merged = merge(df, lins, by.x = acc_col, by.y = "Protein", all.x = TRUE)
+  return(merged)
+}
+
+
 acc2lin <- function(accessions,  assembly_path, lineagelookup_path,ipgout_path = NULL )
 {
-  #'@author Samuel Chen
+  #'@author Samuel Chen, Janani Ravi
   #'@description This function combines 'efetch_ipg()' and 'ipg2lin()' to map a set
   #'of protein accessions to their assembly (GCA_ID), tax ID, and lineage.
   #'@param accessions Character vector of protein accessions
@@ -41,6 +61,8 @@ acc2lin <- function(accessions,  assembly_path, lineagelookup_path,ipgout_path =
     unlink(tempdir(), recursive = T)
   }
 
+
+
   return(lins)
 }
 
@@ -48,7 +70,7 @@ acc2lin <- function(accessions,  assembly_path, lineagelookup_path,ipgout_path =
 
 efetch_ipg <- function(accNum_vec, out_path)
 {
-  #'@author Samuel Chen
+  #'@author Samuel Chen, Janani Ravi
   #'@description Perform efetch on the ipg database and write the results to out_path
   #'@param accNum_vec Character vector containing the accession numbers to query on
   #'the ipg database
@@ -72,7 +94,7 @@ efetch_ipg <- function(accNum_vec, out_path)
     plan(strategy = "multiprocess", .skip = T)
 
 
-    min_groups = length(accNum_vec)/250
+    min_groups = length(accNum_vec)/200
     groups <- min(max(min_groups,15) ,length(accNum_vec))
     partitioned_acc <- partition(accNum_vec, groups )
     sink(out_path)
@@ -80,7 +102,7 @@ efetch_ipg <- function(accNum_vec, out_path)
     a <- future_map(1:length(partitioned_acc), function(x)
     {
       # Avoid hitting the rate API limit
-      if(x%%10 == 0)
+      if(x%%9 == 0)
       {
         Sys.sleep(1)
       }
@@ -98,7 +120,7 @@ efetch_ipg <- function(accNum_vec, out_path)
 
 ipg2lin <- function(accessions, ipg_file, assembly_path, lineagelookup_path)
 {
-  #'@author Samuel Chen
+  #'@author Samuel Chen, Janani Ravi
   #'@description Takes the resulting file of an efetch run on the ipg database and
   #'append lineage, and taxid columns
   #'@param accessions Character vector of protein accessions
@@ -117,6 +139,8 @@ ipg2lin <- function(accessions, ipg_file, assembly_path, lineagelookup_path)
   ipg_dt <- setnames(ipg_dt, "Assembly", "GCA_ID")
 
   lins <- GCA2Lins(prot_data = ipg_dt, assembly_path, lineagelookup_path)
+  lins <- lins[!is.na(Lineage)] %>% unique()
+
   return(lins)
 }
 

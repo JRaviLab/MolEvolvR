@@ -40,7 +40,7 @@ create_lineage_lookup <- function(lineage_file = here("data/rankedlineage.dmp"),
     }
   }
 
-  rankedlins_cols <- c("tax_id", "tax_name", "species", "genus",
+  rankedlins_cols <- c("TaxID", "tax_name", "species", "genus",
                        "family", "order", "class", "phylum", "kingdom", "superkingdom", "NA")
 
   rankedLins <- read_file(lineage_file) %>%
@@ -48,7 +48,7 @@ create_lineage_lookup <- function(lineage_file = here("data/rankedlineage.dmp"),
     read_tsv( col_names = rankedlins_cols) %>%
     select(-"NA")
 
-  rankedlins_cols_nona <- c("tax_id", "tax_name", "species", "genus",
+  rankedlins_cols_nona <- c("TaxID", "tax_name", "species", "genus",
                             "family", "order", "class", "phylum", "kingdom", "superkingdom")
 
   # kingdom column is empty?

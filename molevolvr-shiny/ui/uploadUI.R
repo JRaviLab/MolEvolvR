@@ -8,7 +8,7 @@ tabPanel(
   fluidPage(
     # construction_box(),
 
-
+    actionButton(inputId = "AddLinsBttn", label = "Add Lineage"),
 
     div( class = "upload-header",
          fluidRow(
@@ -179,13 +179,14 @@ tabPanel(
 
                        ),
                        tabPanel(title = "BLAST Output", value = "BlastOutTab",
-                                construction_box(),
-
                                 fluidRow(
                                   column(width = 4, offset = 0,
                                          fileInput(inputId = "blastFileUpload", label = "Choose Blast File")
                                   )
-                                )
+                                ),
+                                column(width = 12, offset = 0,
+                                       DT::dataTableOutput("BLASTData")
+                                       )
                        ),
                        tabPanel(title = "Interproscan Output", value = "IprOutTab",
                                 fluidRow(
