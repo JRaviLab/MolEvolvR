@@ -21,6 +21,13 @@ DownloadAssemblySummary <- function(outpath, keep = c("assembly_accession", "tax
       select(all_of(keep))
   }
 
+  assembly_all <- assembly_all %>% rename("AssemblyID"="assembly_accession",
+                                          "TaxID" = "taxid",
+                                          "RefseqCategory" = "refseq_category",
+                                          "Parent.TaxID" = "species_taxid",
+                                          "Species" = "organism_name",
+                                          "Spp.Strain" = "intraspecific_name",
+                                          "GenomeStatus" = "genome_rep")
   write_tsv(assembly_all, outpath)
 }
 
@@ -42,13 +49,13 @@ GCA2Lins <- function(prot_data, assembly_path = "data/acc_files/assembly_summary
   #' "create_lineage_lookup()" function
 
   assembly_summary <- fread(assembly_path ,sep = "\t")
-  assembly_summary <- setnames(assembly_summary, "assembly_accession", "GCA_ID")
+  assembly_summary <- setnames(assembly_summary, "AssemblyID", "GCA_ID")
 
   mergedTax <- merge(x = prot_data,y = assembly_summary,by = "GCA_ID", all.x = T)
 
   lineage_map <- fread(lineagelookup_path, sep = "\t")
 
-  mergedLins <- merge(mergedTax, lineage_map, by.x = "taxid", by.y="tax_id",
+  mergedLins <- merge(mergedTax, lineage_map, by.x = "TaxID", by.y="tax_id",
                       all.x = T)
 
   return(mergedLins)

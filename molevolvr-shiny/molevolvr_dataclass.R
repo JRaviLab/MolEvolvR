@@ -472,7 +472,7 @@ server <- function(input, output, session)
                  {
 
                    uFullData(new("MolEvolData", df = example_data, msa_path = tempfile(),
-                                 fasta_path = tempfile()
+                            fasta_path = tempfile()
                    ))
 
                    last_button_val(last_button_val()+1)
@@ -595,7 +595,7 @@ server <- function(input, output, session)
   observeEvent(input$FetchAnalysisBtn,
                {
                  d = process_wrapper_dir(
-                   "../laurensosinski/data/molevolvr_outputs/phage_defense/WP_001901328.1_Vibrio_cholerae_out")
+                 "../laurensosinski/data/molevolvr_outputs/phage_defense/WP_001901328.1_Vibrio_cholerae_out")
                  uWrapperData(d)
 
 

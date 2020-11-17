@@ -12,10 +12,10 @@ library(biomartr)
 # assembly_all <- bind_rows(assembly_k_genbank,assembly_k_refseq) %>%
 #                   select(all_of(keep))
 #
-# write_tsv(assembly_all, "data/acc_files/assembly_summary20200706.txt")
-
-#Goal:
-lin_map <- read_tsv("data/acc_files/organisms2lineages_map_bae_20170828.txt")
+# write_tsv(assembly_all, "data/acc_files/assembly_summary20201018.txt")
+#
+# #Goal:
+# lin_map <- read_tsv("data/acc_files/organisms2lineages_map_bae_20170828.txt")
 
 # Go from the GCA_ID column to tax IDs using the assembly file
 prot_data <- read_tsv("data/rawdata_tsv/all_clean.txt")

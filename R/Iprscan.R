@@ -67,8 +67,6 @@ ipr2domarch <- function(infile_ipr=here("evolvr/TestData/Iprscan/sausa300_0204.i
   analysis_labeler <- analyses %>% pivot_wider(names_from = Analysis, values_from = Analysis)
 
   queryrows <- which(is.na(ipr_out_sub$AccNum))
-  # ipr_out_sub$Leaf[queryrows] = ipr_out_sub$AccNum[queryrows]
-  #ipr_out_sub$ProtName[queryrows] #"sausa300_0204"
 
   ipr_out_sub <- left_join(ipr_out_sub, PfamClans, by = "SignAcc")
 
@@ -92,8 +90,10 @@ ipr2domarch <- function(infile_ipr=here("evolvr/TestData/Iprscan/sausa300_0204.i
       scale_fill_brewer(palette = "Set3") +
       theme_minimal() + theme_genes2() +
       theme(legend.position="bottom", legend.box = "horizontal",
-            legend.key.size = unit(0.02, "npc"), legend.box.margin = margin()) +
-      ylab("")
+            legend.key.size = unit(0.02, "npc"), legend.box.margin = margin(),
+            text = element_text(size = 20)) +
+      ylab("")+
+      guides(fill=guide_legend(nrow=3))
   }
 
   else if(group_by == "protein"){
@@ -110,8 +110,10 @@ ipr2domarch <- function(infile_ipr=here("evolvr/TestData/Iprscan/sausa300_0204.i
       scale_fill_brewer(palette = "Set3") +
       theme_minimal() + theme_genes2() +
       theme(legend.position="bottom", legend.box = "horizontal",
-            legend.key.size = unit(0.02, "npc"), legend.box.margin = margin()) +
-      ylab("")
+            legend.key.size = unit(0.02, "npc"), legend.box.margin = margin(),
+            text = element_text(size = 20)) +
+      ylab("")+
+      guides(fill=guide_legend(nrow=3))
   }
 
 }

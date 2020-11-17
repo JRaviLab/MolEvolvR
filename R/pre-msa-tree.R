@@ -115,7 +115,7 @@ add_leaves <- function(aln_file = "",
     # 3char from kingdom, 6 char from phylum, 1 char from Genus, 3 char from species
     # kingdomPhylum_GenusSpecies
     mutate(Leaf=paste(paste0(str_sub(Kingdom,
-                                     start=1, end=3),
+                                     start=1, end=1),
                              str_sub(Phylum, 1, 6)),
                       paste0(str_sub(Genus, start=1, end=1),
                              str_sub(Spp, start=1, end=3)),
@@ -262,14 +262,19 @@ acc2fa <- function(accNum_vec, out_path)
 
     plan(strategy = "multiprocess", .skip = T)
 
-    groups <- min(15,length(accNum_vec))
+    min_groups = length(accNum_vec)/200
+    groups <- min(max(min_groups,15) ,length(accNum_vec))
 
     partitioned_acc <- partition(accNum_vec, groups )
     sink(out_path)
-    a <- future_map(partitioned_acc, function(x)
+    a <- future_map(1:length(partitioned_acc), function(x)
     {
+      if(x%%9 == 0)
+      {
+        Sys.sleep(1)
+      }
       cat(
-        entrez_fetch(id = x,
+        entrez_fetch(id = partitioned_acc[[x]],
                      db = "protein",
                      rettype = "fasta",
                      api_key = "55120df9f5dddbec857bbb247164f86a2e09"
