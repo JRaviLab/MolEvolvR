@@ -1,0 +1,59 @@
+# Script to cleanup the raw BLAST script
+# adds column names; calculates PcPositive w.r.t. query
+
+library(tidyverse)
+library(data.table)
+
+# compute cvm location for acc2lin.R
+source("/data/research/jravilab/laurensosinski/scripts/acc2lin.R")
+# local location for acc2lin.R
+#source("scripts/acc2lin.R")
+
+## Read in data file path as a string
+# on the server/w/ the wrapper script
+args <- commandArgs(trailingOnly = TRUE)
+
+# locally in R
+#blastin <- "data/molevolvr_outputs/WP_001901328.1_Vibrio_cholerae_out/WP_001901328.1_Vibrio_cholerae.refseq.1e-5.txt"
+
+## clean up function
+# takes in path to blast result file as a string
+cleanup <- function(infile_blast) {
+
+  # blast input colnames
+  # qacc sacc sseqid sallseqid stitle sscinames staxids pident length mismatch gapopen qstart qend qlen sstart send slen evalue bitscore ppos
+  # column names for blast results
+  cl_blast_cols <- c("Query", "SAccNum", "AccNum", "SAllSeqID", "STitle", "Species", "TaxID",
+                     "PcIdentity", "AlnLength", "Mismatch", "Gapopen","QStart", "QEnd",
+                     "QLength", "SStart", "SEnd", "SLength", "EValue", "BitScore",
+                     "PcPosOrig")
+
+  # read in blast results from input variable, set column names to blast_cols (created above)
+  blast_out <- read_tsv(file = infile_blast, col_names = cl_blast_cols)
+
+  cleanedup_blast <- blast_out %>%
+    # remove extra characters/names from sseqid, sscinames, and staxids columns
+    mutate(AccNum = gsub('\\|', '', AccNum)) %>%
+    mutate(AccNum = gsub('.*[a-z]', '', AccNum)) %>%
+    mutate(Species = gsub(';.*$', '', Species)) %>%
+    mutate(TaxID = gsub(';.*$', '', TaxID)) %>%
+    mutate(PcIdentity = round(PcIdentity, 2)) %>%
+    # normalize percent positive by multiplying the original ppos by the length of the subject protein
+    #   length and dividing by the query protein length
+    mutate(PcPositive = round(x = (PcPosOrig * AlnLength/QLength), digits = 2))
+
+  # # TaxID to lineage
+  # cleanedup_blast$TaxID <- as.integer(cleanedup_blast$TaxID)
+  # lineage_map <- fread("/data/research/jravilab/common_data/lineagelookup.txt", sep = "\t")
+  # # get lineage path as argument, it'll be changed depending on who is running it
+  # # have default argument also for where shit is
+  # mergedLins <- merge(cleanedup_blast, lineage_map, by.x = "TaxID", by.y="tax_id", all.x = T)
+
+  # create name for new output file to be created
+  file_name <- gsub(pattern = '.txt', replacement = '', x = infile_blast) %>%
+    paste0('.cln.txt')
+  # write the cleaned up data to new file
+  write_tsv(cleanedup_blast, file_name, col_names = T)
+}
+
+cleanup(args[1])
