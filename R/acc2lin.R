@@ -14,11 +14,12 @@ sink.reset <- function(){
 }
 
 
-add_lins <- function(df, acc_col = "AccNum", species_col, assembly_path,
+add_lins <- function(df, acc_col = "AccNum", assembly_path,
                      lineagelookup_path, ipgout_path = NULL)
 {
   s_acc_col = sym(acc_col)
   accessions = df %>% pull(acc_col)
+  browser()
   lins = acc2lin(accessions, assembly_path, lineagelookup_path, ipgout_path)
 
   # Drop a lot of the unimportant columns for now? will make merging much easier
