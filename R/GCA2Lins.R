@@ -14,6 +14,7 @@ DownloadAssemblySummary <- function(outpath, keep = c("assembly_accession", "tax
   if(keep == "all")
   {
     assembly_all <- bind_rows(assembly_kingdom_genbank,assembly_kingdom_refseq)
+
   }
   else
   {
@@ -21,14 +22,21 @@ DownloadAssemblySummary <- function(outpath, keep = c("assembly_accession", "tax
       select(all_of(keep))
   }
 
-  assembly_all <- assembly_all %>% rename("AssemblyID"="assembly_accession",
-                                          "TaxID" = "taxid",
-                                          "RefseqCategory" = "refseq_category",
-                                          "Parent.TaxID" = "species_taxid",
-                                          "Species" = "organism_name",
-                                          "Spp.Strain" = "intraspecific_name",
-                                          "GenomeStatus" = "genome_rep")
-  write_tsv(assembly_all, outpath)
+  assembly_all <- assembly_all %>% data.table::setnames(
+    old = c("taxid","refseq_category","species_taxid","organism_name","infraspecific_name","genome_rep"),
+    new = c( "TaxID", "RefseqCategory","Parent.TaxID","Species","Spp.Strain","GenomeStatus"),
+    skip_absent = T)
+
+    #
+    # dplyr::rename("AssemblyID"="assembly_accession",
+    #                                              "TaxID" = "taxid",
+    #                                              "RefseqCategory" = "refseq_category",
+    #                                              "Parent.TaxID" = "species_taxid",
+    #                                              "Species" = "organism_name",
+    #                                              "Spp.Strain" = "infraspecific_name",
+    #                                              "GenomeStatus" = "genome_rep")
+
+  fwrite(assembly_all, outpath, sep = "\t")
 }
 
 
@@ -55,7 +63,8 @@ GCA2Lins <- function(prot_data, assembly_path = "data/acc_files/assembly_summary
 
   lineage_map <- fread(lineagelookup_path, sep = "\t")
 
-  mergedLins <- merge(mergedTax, lineage_map, by.x = "TaxID", by.y="tax_id",
+  browser()
+  mergedLins <- merge(mergedTax, lineage_map, by.x = "TaxID", by.y="TaxID",
                       all.x = T)
 
   return(mergedLins)
