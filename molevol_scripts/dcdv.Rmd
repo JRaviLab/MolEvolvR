@@ -1,0 +1,65 @@
+---
+title: "DcdV Evolution"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    social: menu
+    #source_code: embed
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(here)
+library(shiny); library(shinydashboard); library(DT)
+
+infile_blast=here("data/phage_defense/combnd.txt")
+blast_combnd <- read_tsv(infile_blast, col_names=T)
+
+```
+
+## Column {data-width="650"}
+
+### Data
+
+```{r}
+# selectInput("qaccnum", "Query:",
+#             c("V. cholerae"="WP_001901328.1_Vibrio_cholerae",
+#               "A. veronii"="WP_043825948.1_Aeromonas_veronii",
+#               "P. mirabilis"="WP_108717204.1_Proteus_mirabilis",
+#               "E. cloacae"="WP_129996984.1_Enterobacter_cloacae",
+#               "E. coli"="WP_096882215.1_Escherichia_coli",
+#               "V. parahaemolyticus"="WP_020839904.1_Vibrio_parahaemolyticus"))
+
+blast_combnd <- blast_combnd %>%
+  select(qacc, sacc, pident, ppos_adjusted, evalue,
+         Lineage, DomArch.Pfam) #%>%
+  #filter(qaccnum==input$qaccnum)
+  #rmarkdown::paged_table()
+
+output$blast <- DT::renderDataTable(({
+  DT::datatable(blast_combnd, filter='top',
+                options = list(orderClasses = TRUE, autoWidth=T))
+}))
+
+DT::dataTableOutput("blast")
+#renderTable({
+#  head(mtcars, n = input$rows)
+#})
+```
+
+## Column {data-width="350"}
+
+### Domain Architecture
+
+```{r}
+knitr::include_graphics(here("data/phage_defense/figs/dcdv_6queries_iprscan_sub.png"))
+```
+
+### Phylogeny
+
+```{r}
+knitr::include_graphics(here("data/phage_defense/figs/dcdv_6queries_msa-tree.png"))
+```

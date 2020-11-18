@@ -1,0 +1,120 @@
+Id	Source	Nucleotide Accession	Start	Stop	Strand	Protein	Protein Name	Organism	Strain	Assembly
+163184060	RefSeq	NZ_NVLX01000017.1	32939	35158	-	WP_097841326.1	S-layer homology domain-containing protein	Bacillus anthracis	AFS095574	GCF_002550475.1
+163184060	RefSeq	NZ_NVMH01000007.1	28015	30234	-	WP_097841326.1	S-layer homology domain-containing protein	Bacillus sp. AFS094611	AFS094611	GCF_002550645.1
+163184060	RefSeq	NZ_VEFJ01000010.1	33182	35401	-	WP_097841326.1	S-layer homology domain-containing protein	Bacillus cereus	DE0143	GCF_007678855.1
+163184060	INSDC	NVLX01000017.1	32939	35158	-	PDZ15801.1	S-layer protein	Bacillus anthracis	AFS095574	GCA_002550475.1
+163184060	INSDC	NVMH01000007.1	28015	30234	-	PDZ52440.1	S-layer protein	Bacillus sp. AFS094611	AFS094611	GCA_002550645.1
+255913387	RefSeq	NZ_NNGJ01000002.1	145400	146878	+	WP_140288356.1	N-acetylglucosamine-binding protein GbpA	Vibrio parahaemolyticus	F10_3	GCF_006371055.1
+255913387	RefSeq	NZ_NNLG01000001.1	315431	316909	-	WP_140288356.1	N-acetylglucosamine-binding protein GbpA	Vibrio parahaemolyticus	C4_6	GCF_006373635.1
+255913387	INSDC	NNGJ01000002.1	145400	146878	+	TOD67999.1	N-acetylglucosamine-binding protein GbpA	Vibrio parahaemolyticus	F10_3	GCA_006371055.1
+255913387	INSDC	NNLG01000001.1	315431	316909	-	TOJ80355.1	N-acetylglucosamine-binding protein GbpA	Vibrio parahaemolyticus	C4_6	GCA_006373635.1
+3507432	RefSeq	NC_005957.1	902781	904403	+	WP_000875343.1	N-acetylmuramoyl-L-alanine amidase	[Bacillus thuringiensis] serovar konkukian str. 97-27	97-27	GCF_000008505.1
+3507432	RefSeq	NZ_CP010088.1	1528893	1530515	-	WP_000875343.1	N-acetylmuramoyl-L-alanine amidase	Bacillus thuringiensis	97-27	GCF_000833085.1
+3507432	RefSeq	NZ_CP053938.1	104259	105881	+	WP_000875343.1	N-acetylmuramoyl-L-alanine amidase	Bacillus thuringiensis	FDAARGOS_792	GCF_013267815.1
+3507432	INSDC	AE017355.1	902781	904403	+	AAT59162.1	N-acetylmuramoyl-L-alanine amidase	[Bacillus thuringiensis] serovar konkukian str. 97-27	97-27	GCA_000008505.1
+3507432	INSDC	CP010088.1	1528893	1530515	-	AJI36098.1	N-acetylmuramoyl-L-alanine amidase family protein	Bacillus thuringiensis	97-27	GCA_000833085.1
+3507432	INSDC	CP053938.1	104259	105881	+	QKI23531.1	N-acetylmuramoyl-L-alanine amidase	Bacillus thuringiensis	FDAARGOS_792	GCA_013267815.1
+14524167	RefSeq	NC_008600.1	1119706	1120740	+	WP_000592115.1	S-layer homology domain-containing protein	Bacillus thuringiensis str. Al Hakam	Al Hakam	GCF_000015065.1
+14524167	RefSeq	NC_016779.1	1057737	1058771	+	WP_000592115.1	S-layer homology domain-containing protein	Bacillus cereus F837/76	F837/76	GCF_000239195.1
+14524167	RefSeq	NZ_CP009600.1	4114965	4115999	+	WP_000592115.1	S-layer homology domain-containing protein	Bacillus thuringiensis	HD571	GCF_000832825.1
+14524167	RefSeq	NZ_CP009641.1	5134779	5135813	+	WP_000592115.1	S-layer homology domain-containing protein	Bacillus cereus 03BB108	03BB108	GCF_000832865.1
+14524167	RefSeq	NZ_CP053965.1	4493285	4494319	-	WP_000592115.1	S-layer homology domain-containing protein	Bacillus cereus	FDAARGOS_802	GCF_013267235.1
+14524167	RefSeq	NZ_CP053981.1	1992436	1993470	+	WP_000592115.1	S-layer homology domain-containing protein	Bacillus thuringiensis	FDAARGOS_793	GCF_013267335.1
+14524167	RefSeq	NZ_CP054568.1	3537901	3538935	+	WP_000592115.1	S-layer homology domain-containing protein	Bacillus thuringiensis	FDAARGOS_791	GCF_013343075.1
+14524167	RefSeq	NZ_PHQW02000002.1	324468	325502	-	WP_000592115.1	S-layer homology domain-containing protein	Bacillus cereus	UAEU-H3K6M1	GCF_002880735.2
+14524167	RefSeq	NZ_SJQF01000002.1	335272	336306	-	WP_000592115.1	S-layer homology domain-containing protein	Bacillus cereus	MS464a	GCF_004330325.1
+14524167	RefSeq	NZ_WJDN01000004.1	31087	32121	+	WP_000592115.1	S-layer homology domain-containing protein	Bacillus thuringiensis	4B3	GCF_009647215.1
+14524167	INSDC	CP003187.1	1057737	1058771	+	AEW54227.1	S-layer protein, putative	Bacillus cereus F837/76	F837/76	GCA_000239195.1
+14524167	INSDC	CP009600.1	4114965	4115999	+	AJH68321.1	hypothetical protein	Bacillus thuringiensis	HD571	GCA_000832825.1
+14524167	INSDC	CP009641.1	5134779	5135813	+	AJI14018.1	hypothetical protein	Bacillus cereus 03BB108	03BB108	GCA_000832865.1
+14524167	INSDC	ABDM02000004.1	200332	201366	+	EDX63688.1	putative S-layer protein	Bacillus cereus 03BB108	03BB108	GCA_000181655.1
+14524167	INSDC	WJDN01000004.1	31087	32121	+	MRD06914.1	S-layer protein	Bacillus thuringiensis	4B3	GCA_009647215.1
+14524167	INSDC	PHQW02000002.1	324468	325502	-	PYE00101.1	S-layer protein	Bacillus cereus	UAEU-H3K6M1	GCA_002880735.2
+14524167	INSDC	CP053965.1	4493285	4494319	-	QKH04528.1	S-layer homology domain-containing protein	Bacillus cereus	FDAARGOS_802	GCA_013267235.1
+14524167	INSDC	CP053981.1	1992436	1993470	+	QKH33228.1	S-layer homology domain-containing protein	Bacillus thuringiensis	FDAARGOS_793	GCA_013267335.1
+14524167	INSDC	CP054568.1	3537901	3538935	+	QKQ41160.1	S-layer homology domain-containing protein	Bacillus thuringiensis	FDAARGOS_791	GCA_013343075.1
+14524167	INSDC	SJQF01000002.1	335272	336306	-	TBX63279.1	S-layer protein	Bacillus cereus	MS464a	GCA_004330325.1
+14521859	RefSeq	NC_011969.1	976531	978123	+	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus Q1	Q1	GCF_000013065.1
+14521859	RefSeq	NZ_LCYL01000027.1	2873	4465	+	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	B4086	GCF_001008585.1
+14521859	RefSeq	NZ_LQZL01000086.1	3113	4705	-	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MB.17	GCF_001566445.1
+14521859	RefSeq	NZ_NHTX01000010.1	16307	17899	+	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc56	GCF_002199695.1
+14521859	RefSeq	NZ_NHTZ01000011.1	71091	72683	+	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc58	GCF_002199705.1
+14521859	RefSeq	NZ_NHUA01000043.1	27909	29501	+	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc59	GCF_002199345.1
+14521859	RefSeq	NZ_NHUB01000019.1	16103	17695	-	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc60	GCF_002199755.1
+14521859	RefSeq	NZ_NHUC01000040.1	16149	17741	-	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc61	GCF_002199365.1
+14521859	RefSeq	NZ_NHUD01000005.1	105791	107383	-	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc62	GCF_002199405.1
+14521859	RefSeq	NZ_NHUE01000037.1	27909	29501	+	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc63	GCF_002199425.1
+14521859	RefSeq	NZ_NHUG01000031.1	27908	29500	+	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc65	GCF_002199445.1
+14521859	RefSeq	NZ_NHUI01000043.1	16502	18094	-	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc178	GCF_002199765.1
+14521859	RefSeq	NZ_NHUJ01000034.1	27909	29501	+	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc179	GCF_002199155.1
+14521859	RefSeq	NZ_NHUK01000037.1	27908	29500	+	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc180	GCF_002199485.1
+14521859	RefSeq	NZ_NHUL01000002.1	105791	107383	-	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc181	GCF_002199805.1
+14521859	RefSeq	NZ_NHUM01000003.1	27909	29501	+	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc182	GCF_002199475.1
+14521859	RefSeq	NZ_NHUN01000009.1	105791	107383	-	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc183	GCF_002199815.1
+14521859	RefSeq	NZ_NHUP01000004.1	173990	175582	-	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc185	GCF_002199165.1
+14521859	RefSeq	NZ_NHUQ01000007.1	175939	177531	-	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc186	GCF_002199845.1
+14521859	RefSeq	NZ_NHUS01000013.1	27909	29501	+	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc188	GCF_002199205.1
+14521859	RefSeq	NZ_NHUT01000008.1	174008	175600	-	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc189	GCF_002199875.1
+14521859	RefSeq	NZ_NHUV01000003.1	173823	175415	-	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc191	GCF_002199225.1
+14521859	RefSeq	NZ_NHUW01000008.1	27909	29501	+	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc192	GCF_002199275.1
+14521859	RefSeq	NZ_NHUX01000035.1	16152	17744	-	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc193	GCF_002199905.1
+14521859	RefSeq	NZ_NHUY01000032.1	27908	29500	+	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc195	GCF_002199505.1
+14521859	RefSeq	NZ_NHUZ01000009.1	27908	29500	+	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc198	GCF_002199945.1
+14521859	RefSeq	NZ_NHVA01000028.1	16463	18055	-	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc199	GCF_002199265.1
+14521859	RefSeq	NZ_NHVB01000011.1	173586	175178	-	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc200	GCF_002199525.1
+14521859	RefSeq	NZ_NHVD01000006.1	27909	29501	+	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc202	GCF_002199955.1
+14521859	RefSeq	NZ_NHVF01000016.1	29322	30914	+	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc204	GCF_002199555.1
+14521859	RefSeq	NZ_NINF01000026.1	29322	30914	+	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc194	GCF_002201605.1
+14521859	RefSeq	NZ_NING01000035.1	29322	30914	+	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc196	GCF_002201685.1
+14521859	RefSeq	NZ_NINH01000039.1	29322	30914	+	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus cereus	MOD1_Bc197	GCF_002201645.1
+14521859	RefSeq	NZ_NJQK01000004.1	453882	455474	-	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus paranthracis	18-1	GCF_010994565.1
+14521859	RefSeq	NZ_SOBJ01000014.1	174690	176282	+	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus sp. AG1163	AG1163	GCF_004365675.1
+14521859	RefSeq	NZ_VEMI01000007.1	169668	171260	+	WP_000877274.1	N-acetylmuramoyl-L-alanine amidase	Bacillus paranthracis	DE0086	GCF_007682155.1
+14521859	INSDC	CP000227.1	976531	978123	+	ACM11415.1	N-acetylmuramoyl-L-alanine amidase, family 3	Bacillus cereus Q1	Q1	GCA_000013065.1
+14521859	INSDC	ABDL02000007.1	119328	120920	-	EDZ57475.1	surface-layer N-acetylmuramoyl-L-alanine amidase	Bacillus cereus H3081.97	H3081.97	GCA_000171035.2
+14521859	INSDC	LCYL01000027.1	2873	4465	+	KLA03987.1	S-layer protein	Bacillus cereus	B4086	GCA_001008585.1
+14521859	INSDC	LQZL01000086.1	3113	4705	-	KXI69974.1	amidase	Bacillus cereus	MB.17	GCA_001566445.1
+14521859	INSDC	SOBJ01000014.1	174690	176282	+	TDT79076.1	N-acetylmuramoyl-L-alanine amidase	Bacillus sp. AG1163	AG1163	GCA_004365675.1
+18764556	RefSeq	NZ_ACZT01000025.1	262323	263780	+	WP_000744632.1	N-acetylglucosamine-binding protein GbpA	Vibrio metoecus	RC341	GCF_000176215.1
+18764556	INSDC	ACZT01000025.1	262323	263780	+	EEX65136.1	chitin binding protein	Vibrio metoecus	RC341	GCA_000176215.1
+251481955	RefSeq	NZ_CP040515.1	4383164	4385770	-	WP_138322423.1	S-layer homology domain-containing protein	Bacillus paranthracis	PR1	GCF_005848985.1
+251481955	RefSeq	NZ_VEPX01000004.1	192562	195168	-	WP_138322423.1	S-layer homology domain-containing protein	Bacillus sp. CD3-5	CD3-5	GCF_006349665.1
+251481955	INSDC	CP040515.1	4383164	4385770	-	QCU12442.1	S-layer homology domain-containing protein	Bacillus paranthracis	PR1	GCA_005848985.1
+251481955	INSDC	VEPX01000004.1	192562	195168	-	TNP25969.1	S-layer homology domain-containing protein	Bacillus sp. CD3-5	CD3-5	GCA_006349665.1
+113843127	RefSeq	NZ_MAKD01000117.1	83493	85007	-	WP_065585018.1	N-acetylglucosamine-binding protein GbpA	Vibrio sp. ZF57	ZF57	GCF_001691235.1
+113843127	INSDC	MAKD01000117.1	83493	85007	-	OCH50941.1	N-acetylglucosamine-binding protein A	Vibrio sp. ZF57	ZF57	GCA_001691235.1
+82344899	RefSeq	NZ_BBWX01000034.1	16642	17895	+	WP_059380643.1	N-acetylmuramoyl-L-alanine amidase	Bacillus anthracis	44-NIAH	GCF_001015005.1
+82344899	INSDC	BBWX01000034.1	16642	17895	+	GAO58762.1	N-acetylmuramoyl-L-alanine amidase	Bacillus anthracis	44-NIAH	GCA_001015005.1
+29924202	RefSeq	NZ_JH804672.1	2959052	2960218	+	WP_002137516.1	S-layer homology domain-containing protein	Bacillus cereus HuA2-1	HuA2-1	GCF_000293705.1
+29924202	INSDC	AHDV01000022.1	28937	30103	+	EJV82865.1	hypothetical protein	Bacillus cereus HuA2-1	HuA2-1	GCA_000293705.1
+29924202	INSDC	JH804672.1	2959052	2960218	+	EJV82865.1	hypothetical protein	Bacillus cereus HuA2-1	HuA2-1	GCA_000293705.1
+129696558	RefSeq	NZ_CP031642.1	886356	888854	+	WP_071737613.1	S-layer homology domain-containing protein	Bacillus anthracis	MCCC 1A02161	GCF_003410255.1
+129696558	RefSeq	NZ_LZQX01000091.1	144453	146951	+	WP_071737613.1	S-layer homology domain-containing protein	Bacillus anthracis	N1ZF-2	GCF_001883885.1
+129696558	INSDC	CP031642.1	886356	888854	+	AXO97033.1	S-layer homology domain-containing protein	Bacillus anthracis	MCCC 1A02161	GCA_003410255.1
+129696558	INSDC	LZQX01000091.1	144453	146951	+	OJD83294.1	S-layer protein	Bacillus anthracis	N1ZF-2	GCA_001883885.1
+36010888	RefSeq	NZ_KB976531.1	361016	362917	-	WP_016089997.1	S-layer homology domain-containing protein	Bacillus cereus BAG2O-3	BAG2O-3	GCF_000399285.1
+36010888	INSDC	AHCY01000056.1	176857	178758	-	EOP02126.1	hypothetical protein	Bacillus cereus BAG2O-3	BAG2O-3	GCA_000399285.1
+36010888	INSDC	KB976531.1	361016	362917	-	EOP02126.1	hypothetical protein	Bacillus cereus BAG2O-3	BAG2O-3	GCA_000399285.1
+129690752	RefSeq	NZ_MAOG01000028.1	37190	40081	+	WP_071770464.1	S-layer homology domain-containing protein	Bacillus sp. NH11B	NH11B	GCF_001884205.1
+129690752	INSDC	MAOG01000028.1	37190	40081	+	OJD70696.1	S-layer protein	Bacillus sp. NH11B	NH11B	GCA_001884205.1
+74026745	RefSeq	NC_014335.1	1092189	1092860	+	WP_041183894.1	S-layer homology domain-containing protein	Bacillus cereus biovar anthracis str. CI	CI	GCF_000143605.1
+190301022	RefSeq	NZ_PHQW02000002.1	516136	518667	-	WP_158318044.1	S-layer homology domain-containing protein	Bacillus cereus	UAEU-H3K6M1	GCF_002880735.2
+190301022	INSDC	PHQW02000002.1	516136	518667	-	PYE00036.1	S-layer homology domain-containing protein	Bacillus cereus	UAEU-H3K6M1	GCA_002880735.2
+95775	RefSeq	NC_004460.2	44285	45742	-	WP_011081033.1	N-acetylglucosamine-binding protein GbpA	Vibrio vulnificus CMCP6	CMCP6	GCF_000039765.1
+95775	RefSeq	NZ_CP037932.1	1130443	1131900	-	WP_011081033.1	N-acetylglucosamine-binding protein GbpA	Vibrio vulnificus	CMCP6	GCF_004355205.1
+95775	RefSeq	NZ_JZEN01000002.1	35372	36829	+	WP_011081033.1	N-acetylglucosamine-binding protein GbpA	Vibrio vulnificus	SC9794	GCF_000959845.1
+95775	RefSeq	NZ_QCYC01000014.1	96859	98316	-	WP_011081033.1	N-acetylglucosamine-binding protein GbpA	Vibrio vulnificus	Vv003	GCF_003072025.1
+95775	Swiss-Prot	N/A				Q8D7V4.1	GlcNAc-binding protein A	Vibrio vulnificus CMCP6		
+95775	INSDC	AE016796.2	44285	45742	-	AAO07021.1	Chitin binding protein	Vibrio vulnificus CMCP6	CMCP6	GCA_000039765.1
+95775	INSDC	QCYC01000014.1	96859	98316	-	PUZ97574.1	N-acetylglucosamine-binding protein GbpA	Vibrio vulnificus	Vv003	GCA_003072025.1
+95775	INSDC	CP037932.1	1130443	1131900	-	QBN16620.1	N-acetylglucosamine-binding protein GbpA	Vibrio vulnificus	CMCP6	GCA_004355205.1
+84479109	RefSeq	NZ_JYPH01000046.1	1399	2853	-	WP_048530020.1	S-layer homology domain-containing protein	Bacillus cereus	F528-94	GCF_001044565.1
+84479109	INSDC	JYPH01000046.1	1399	2853	-	KMP26441.1	cell surface protein	Bacillus cereus	F528-94	GCA_001044565.1
+37623971	RefSeq	NZ_AJYI02000025.1	13185	14666	+	WP_017019333.1	N-acetylglucosamine-binding protein GbpA	Aliivibrio fischeri ZF-211	ZF-211	GCF_000287175.2
+37623971	RefSeq	NZ_MAJR01000107.1	141434	142915	-	WP_017019333.1	N-acetylglucosamine-binding protein GbpA	Aliivibrio fischeri	5F146	GCF_001691015.1
+37623971	RefSeq	NZ_WOAX01000027.1	31393	32874	+	WP_017019333.1	N-acetylglucosamine-binding protein GbpA	Aliivibrio fischeri	lpeal.1.2	GCF_009727525.1
+37623971	RefSeq	NZ_WOAY01000003.1	140982	142463	-	WP_017019333.1	N-acetylglucosamine-binding protein GbpA	Aliivibrio fischeri	lpeal.1.1	GCF_009727585.1
+37623971	INSDC	WOAX01000027.1	31393	32874	+	MUH97719.1	N-acetylglucosamine-binding protein GbpA	Aliivibrio fischeri	lpeal.1.2	GCA_009727525.1
+37623971	INSDC	WOAY01000003.1	140982	142463	-	MUI62378.1	N-acetylglucosamine-binding protein GbpA	Aliivibrio fischeri	lpeal.1.1	GCA_009727585.1
+37623971	INSDC	MAJR01000107.1	141434	142915	-	OCH04476.1	N-acetylglucosamine-binding protein A	Aliivibrio fischeri	5F146	GCA_001691015.1
+37623971	INSDC	AJYI02000025.1	13185	14666	+	OEE29674.1	N-acetylglucosamine-binding protein A	Aliivibrio fischeri ZF-211	ZF-211	GCA_000287175.2
