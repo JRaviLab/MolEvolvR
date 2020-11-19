@@ -25,7 +25,7 @@ theme_genes2 <- function() {
   )
 }
 
-ipr2domarch <- function(infile_ipr=here("evolvr/TestData/Iprscan/sausa300_0204.iprscan.tsv"),
+ipr2viz <- function(infile_ipr=here("evolvr/TestData/Iprscan/sausa300_0204.iprscan.tsv"),
                         PfamClans_path = "evolvr/TestData/Pfam-A.clans.txt",
                         analysis=c("Pfam", "Phobius","TMHMM","SUPERFAMILY"),
                         group_by = "DB",
