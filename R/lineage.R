@@ -3,11 +3,77 @@ library(rentrez)
 library(future)
 library(furrr)
 library(data.table)
-library(tidyverse)
-library(biomartr)
 
 
-source("R/GCA2Lins.R")
+DownloadAssemblySummary <- function(outpath, keep = c("assembly_accession", "taxid", "species_taxid", "organism_name"))
+{
+  #' Download the combined assembly summaries of genbank and refseq
+  #' @author Samuel Chen
+  #' @param outpath String of path where the assembly summary file should be written
+  #' @param keep Character vector containing which columns should be retained and downloaded
+  
+  assembly_kingdom_genbank <- getKingdomAssemblySummary("genbank")
+  assembly_kingdom_refseq <- getKingdomAssemblySummary("refseq")
+  
+  if(keep == "all")
+  {
+    assembly_all <- bind_rows(assembly_kingdom_genbank,assembly_kingdom_refseq)
+    
+  }
+  else
+  {
+    assembly_all <- bind_rows(assembly_kingdom_genbank,assembly_kingdom_refseq) %>%
+      select(all_of(keep))
+  }
+  
+  assembly_all <- assembly_all %>% data.table::setnames(
+    old = c("taxid","refseq_category","species_taxid","organism_name","infraspecific_name","genome_rep"),
+    new = c( "TaxID", "RefseqCategory","Parent.TaxID","Species","Spp.Strain","GenomeStatus"),
+    skip_absent = T)
+  
+  #
+  # dplyr::rename("AssemblyID"="assembly_accession",
+  #                                              "TaxID" = "taxid",
+  #                                              "RefseqCategory" = "refseq_category",
+  #                                              "Parent.TaxID" = "species_taxid",
+  #                                              "Species" = "organism_name",
+  #                                              "Spp.Strain" = "infraspecific_name",
+  #                                              "GenomeStatus" = "genome_rep")
+  
+  fwrite(assembly_all, outpath, sep = "\t")
+}
+
+
+
+
+# Go from the GCA_ID column to tax IDs using the assembly file
+GCA2Lins <- function(prot_data, assembly_path = "data/acc_files/assembly_summary20201018.txt",
+                     lineagelookup_path = "data/lineagelookup.txt" )
+{
+  #' Function that maps GCA_ID to taxid, and that taxid to a lineage
+  #' Note: currently configured to have at most kingdom and phylum
+  #' @author Samuel Chen
+  #' @param prot_data Dataframe containing a column `GCA_ID`
+  #' @param assembly_path String of the path to the assembly_summary path
+  #' This file can be generated using the "DownloadAssemblySummary()" function
+  #' @param lineagelookup_path String of the path to the lineage lookup file
+  #' (taxid to lineage mapping). This file can be generated using the
+  #' "create_lineage_lookup()" function
+  
+  assembly_summary <- fread(assembly_path ,sep = "\t")
+  assembly_summary <- setnames(assembly_summary, "AssemblyID", "GCA_ID")
+  
+  mergedTax <- merge(x = prot_data,y = assembly_summary,by = "GCA_ID", all.x = T)
+  
+  lineage_map <- fread(lineagelookup_path, sep = "\t")
+  
+  browser()
+  mergedLins <- merge(mergedTax, lineage_map, by.x = "TaxID", by.y="TaxID",
+                      all.x = T)
+  
+  return(mergedLins)
+}
+
 
 # https://stackoverflow.com/questions/18730491/sink-does-not-release-file
 sink.reset <- function(){
@@ -24,15 +90,15 @@ add_lins <- function(df, acc_col = "AccNum", assembly_path,
   accessions = df %>% pull(acc_col)
   browser()
   lins = acc2lin(accessions, assembly_path, lineagelookup_path, ipgout_path)
-
+  
   # Drop a lot of the unimportant columns for now? will make merging much easier
   lins <- lins[,c("Strand","Start","Stop", "Nucleotide Accession", "Source",
                   "Id", "Strain"):= NULL]
   lins <- unique(lins)
-
-   # dup <- lins %>% group_by(Protein) %>% summarize(count = n()) %>% filter(count > 1) %>%
-   #   pull(Protein)
-
+  
+  # dup <- lins %>% group_by(Protein) %>% summarize(count = n()) %>% filter(count > 1) %>%
+  #   pull(Protein)
+  
   merged = merge(df, lins, by.x = acc_col, by.y = "Protein", all.x = TRUE)
   return(merged)
 }
@@ -57,16 +123,16 @@ acc2lin <- function(accessions,  assembly_path, lineagelookup_path,ipgout_path =
     ipgout_path = tempfile("ipg", fileext =".txt")
   }
   efetch_ipg(accessions, out_path= ipgout_path )
-
+  
   lins <- ipg2lin(accessions, ipgout_path, assembly_path, lineagelookup_path)
-
+  
   if(tmp_ipg)
   {
     unlink(tempdir(), recursive = T)
   }
-
-
-
+  
+  
+  
   return(lins)
 }
 
@@ -80,29 +146,29 @@ efetch_ipg <- function(accNum_vec, out_path)
   #'the ipg database
   #'@param out_path Path to write the efetch results to
   if(length(accNum_vec) > 0){
-
+    
     partition <- function(v, groups){
       # Partition data to limit number of queries per second for rentrez fetch:
       # limit of 10/second w/ key
       l <- length(v)
-
+      
       partitioned <- list()
       for(i in 1:groups)
       {
         partitioned[[i]] <- v[seq.int(i,l,groups)]
       }
-
+      
       return(partitioned)
     }
-
+    
     plan(strategy = "multiprocess", .skip = T)
-
-
+    
+    
     min_groups = length(accNum_vec)/200
     groups <- min(max(min_groups,15) ,length(accNum_vec))
     partitioned_acc <- partition(accNum_vec, groups )
     sink(out_path)
-
+    
     a <- future_map(1:length(partitioned_acc), function(x)
     {
       # Avoid hitting the rate API limit
@@ -110,13 +176,13 @@ efetch_ipg <- function(accNum_vec, out_path)
       {
         Sys.sleep(1)
       }
-        cat(
-          entrez_fetch(id = partitioned_acc[[x]],
-                       db = "ipg",
-                       rettype = "xml",
-                       api_key = "YOUR_KEY_HERE"
-          )
+      cat(
+        entrez_fetch(id = partitioned_acc[[x]],
+                     db = "ipg",
+                     rettype = "xml",
+                     api_key = "YOUR_KEY_HERE"
         )
+      )
     })
     sink(NULL)
   }
@@ -137,47 +203,13 @@ ipg2lin <- function(accessions, ipg_file, assembly_path, lineagelookup_path)
   #'(taxid to lineage mapping). This file can be generated using the
   #'"create_lineage_lookup()" function
   ipg_dt <- fread(ipg_file, sep = "\t", fill = T)
-
+  
   ipg_dt <- ipg_dt[Protein %in% accessions]
-
+  
   ipg_dt <- setnames(ipg_dt, "Assembly", "GCA_ID")
-
+  
   lins <- GCA2Lins(prot_data = ipg_dt, assembly_path, lineagelookup_path)
   lins <- lins[!is.na(Lineage)] %>% unique()
-
+  
   return(lins)
 }
-
-
-
-
-
-# efetch_ipg <- function(accNum_vec, outpath)
-# {
-#   SIZE = 250
-#   lower_bound = 1
-#   groups = ceiling(length(accNum_vec)/250)
-#   for(i in 1:groups)
-#   {
-#     upper_bound = min((lower_bound+250),length(accNum_vec))
-#
-#     sub_acc = accNum_vec[lower_bound:upper_bound]
-#
-#     lower_bound = upper_bound +1
-#
-#     # Post needs things UID's, and doesn't really take AccNums
-#     if(i == 1)
-#     {
-#       acc_webhistory <- entrez_post(db = "ipg", id =  sub_acc,api_key = "YOUR_KEY_HERE")
-#     }
-#     else
-#     {
-#       acc_webhistory <- entrez_post(db = "ipg", id =  sub_acc, web_history = acc_webhistory,
-#                                     api_key = "YOUR_KEY_HERE")
-#     }
-#   }
-#   browser()
-#   sink(outpath)
-#   cat(entrez_fetch("ipg", rettype = "xml", web_history =  acc_webhistory))
-#   sink(NULL)
-# }
