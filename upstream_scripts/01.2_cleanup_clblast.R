@@ -38,6 +38,7 @@ cleanup <- function(infile_blast) {
     mutate(Species = gsub(';.*$', '', Species)) %>%
     mutate(TaxID = gsub(';.*$', '', TaxID)) %>%
     mutate(PcIdentity = round(PcIdentity, 2)) %>%
+    mutate(DB.ID = gsub('G3DSA:', '', DB.ID)) %>%
     # normalize percent positive by multiplying the original ppos by the length of the subject protein
     #   length and dividing by the query protein length
     mutate(PcPositive = round(x = (PcPosOrig * AlnLength/QLength), digits = 2))
