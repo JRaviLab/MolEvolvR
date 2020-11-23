@@ -103,7 +103,7 @@ do
 
       ## IPR2DA ##
       ipr2da_start=$SECONDS
-      Rscript /data/research/jravilab/laurensosinski/scripts/wrapper-scripts/05a_ipr2da.R ${OUTDIR}/${SUFFIX}.iprscan.tsv ${OUTDIR}/${SUFFIX}.${DB}.${EVAL}.cln.txt
+      Rscript /data/research/jravilab/laurensosinski/scripts/wrapper-scripts/05a_ipr2da.R ${OUTDIR}/${SUFFIX}.iprscan.tsv ${OUTDIR}/${SUFFIX}.${DB}.${EVAL}.cln.txt ${SUFFIX}
       ipr2da_duration=$(( $SECONDS - $ipr2da_start ))
 
       ## RPSBLAST ## 		
