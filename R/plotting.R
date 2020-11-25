@@ -86,7 +86,8 @@ upset.plot <- function(query_data="toast_rack.sub",
   }
 
   # Get words from filter
-  words.tc <- tc %>% select({{column}}) %>% distinct() %>% elements2words(column = colname,conversion_type = type)
+  words.tc <- tc %>% select({{column}}) %>% distinct() %>%
+    elements2words(column = colname,conversion_type = type)
   # names(words.tc)[1] <- "words"
   words.tc <- words.tc %>% str_split(pattern = " ")
   words.tc = as.data.frame(words.tc, col.names = "Words", stringsAsFactors = F) %>% filter(!grepl("^X$|^X\\(s\\)$",Words)) %>% pull(Words)# remove "X" and "X(s)"
@@ -129,10 +130,13 @@ upset.plot <- function(query_data="toast_rack.sub",
 
   ## Creating UpSet data
   upset <- query_data %>%
-    select(AccNum, Lineage, GenContext, DomArch,
+    select(AccNum, Lineage, {{column}}, # GenContext, DomArch,
            words.tc) %>%
     mutate_all(list(~if(is.numeric(.)) as.integer(.) else .)) %>%
     as.data.frame()
+
+
+
   ## Fix order of x and y variables
   upset.cutoff <- upset %>%
     # filter(!grepl(paste(words.ltcutoff$words, collapse="|"), colname)) %>%
