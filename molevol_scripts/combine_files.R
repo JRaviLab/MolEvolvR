@@ -12,7 +12,7 @@ library(data.table)
 library(here)
 
 source(here("../molevol_scripts/molevol_scripts/colnames_molevol.R"))
-inpath <- c("../laurensosinski/data/molevolvr_outputs/phage_defense/")
+inpath <- c("../../laurensosinski/data/molevolvr_outputs/phage_defense/")
 
 #################################
 ## Fn to combine similar files ##
