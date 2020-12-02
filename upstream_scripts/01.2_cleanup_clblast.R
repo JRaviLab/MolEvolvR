@@ -46,11 +46,7 @@ cleanup <- function(infile_blast) {
   file_name <- gsub(pattern = '.txt', replacement = '', x = infile_blast) %>%
     paste0('.cln.txt')
   # write the cleaned up data to new file
-<<<<<<< HEAD
   write_tsv(mergedLins, file_name, col_names = T)
-=======
-  write_tsv(cleanedup_blast, file_name, col_names = T, append = F)
->>>>>>> 043496881b1dc3c646c233ab519ad4c53da759c2
 }
 
 cleanup(args[1])
