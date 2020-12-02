@@ -6,8 +6,7 @@ args <- commandArgs(trailingOnly = TRUE)
 #args <- c("data/molevolvr_outputs/cdifficile_slpa_WP_078051019.1_out/cdifficile_slpa_WP_078051019.1.rps.out",
 #          "data/molevolvr_outputs/cdifficile_slpa_WP_078051019.1_out/cdifficile_slpa_WP_078051019.1.refseq.1e-5.cln.txt")
 
-rps2da <- function(infile_rps = 'data/molevolvr_outputs/WP_020839904.1_Vibrio_parahaemolyticus_out/WP_020839904.1_Vibrio_parahaemolyticus.rps.out',
-                   infile_blast = 'data/molevolvr_outputs/WP_020839904.1_Vibrio_parahaemolyticus_out/WP_020839904.1_Vibrio_parahaemolyticus.refseq.1e-5.cln.txt') {
+rps2da <- function(infile_rps, infile_blast) {
   # analyses to filter by
   analysis <- c("COG") #, "PRK", "cd")
   # column names for rpsblast output
@@ -57,7 +56,7 @@ rps2da <- function(infile_rps = 'data/molevolvr_outputs/WP_020839904.1_Vibrio_pa
   domarch2 <- do.call(rbind.data.frame, domarch)
 
   #### SAVE RPS W/ CDD DATA TABLE ####
-  write_tsv(domarch2, file = infile_blast)
+  write_tsv(domarch2, file = infile_blast, append = F)
 
 }
 
