@@ -2,23 +2,18 @@
 ##  cluster number, and number of proteins in the cluster
 
 ## Created on 2020.05.29
-## Last edit on 2020.06.17
+## Last edit on 2020.11.30 -- updated comments
 
 # Load tidyverse library
 library('tidyverse')
 ## HPC reading in arguments
 args <- commandArgs(trailingOnly = TRUE)
 
-## Local
-# args <- c("data/molevolvr_outputs/WP_001901328.1_Vibrio_cholerae_out/WP_001901328.1_Vibrio_cholerae.bclust.L60S80.out",
-#           "data/molevolvr_outputs/WP_001901328.1_Vibrio_cholerae_out/WP_001901328.1_Vibrio_cholerae.refseq.1e-5.cln.txt")
-
 clust2tbl <- function(clust, blast) {
-  # clust <- 'data/molevolvr_outputs/phage_defense/WP_001901328.1_Vibrio_cholerae_out/WP_001901328.1_Vibrio_cholerae.bclust.L60S80.out'
-  # blast <- 'data/molevolvr_outputs/phage_defense/WP_001901328.1_Vibrio_cholerae_out/WP_001901328.1_Vibrio_cholerae.refseq.1e-5.cln.txt'
+
   clust_out <- read_tsv(file = clust, col_names = F)
   blast_out <- read_tsv(file = blast, col_names = T)
-  ## Count the number of accession numbers in a cluster\
+  ## Count the number of accession numbers in a cluster
   # Counting number of spaces between acc. no. +1
   clust_out$NumAccs <- map(.x = clust_out$X1, function(x) { (str_count(string = x, pattern = " ")+1) })
   ## Create empty vectors to store information
