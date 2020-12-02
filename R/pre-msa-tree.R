@@ -134,6 +134,37 @@ add_leaves <- function(aln_file = "",
   return(leaf_aln)
 }
 
+
+add_name = function(data, accnum_col = "AccNum",  spec_col = "Species",
+                    lin_col = "Lineage", lin_sep = ">")
+{
+  #' @author Samuel Chen, Janani Ravi
+  #' @description This function adds a new 'Name' column that is comprised of components from
+  #' Kingdom, Phylum, Genus, and species, as well as the accession
+  #' @param data Data to add name column to
+  #' @param accnum_col Column containing accession numbers
+  #' @param spec_col Column containing species
+  #' @param lin_col Column containing lineage
+  #' @param lin_sep Character separating lineage levels
+  #' @return Original data with a 'Name' column
+  split_data = data %>% separate(col = lin_col, into = c("Kingdom", "Phylum"), sep = lin_sep) %>%
+    separate(spec_col, into = c("Genus", "Spp"),sep=" ")
+  split_data = split_data %>% mutate(Kingdom = strtrim(Kingdom,1),
+                                     Phylum = strtrim(Phylum,6),
+                                     Genus = strtrim(Genus,1),
+                                     Spp = strtrim(Spp,3)) %>%
+    select(AccNum, Kingdom,Phylum,Genus,Spp)
+  split_data[is.na(split_data)] = ""
+
+  accnum_sym = sym(accnum_col)
+  Leaf = split_data %>%
+    mutate(Leaf = paste0(Kingdom, Phylum, "_", Genus, Spp, "_", {{accnum_sym}} ))%>%
+    select(-c(Kingdom,Phylum,Genus,Spp))
+
+  data$Name = Leaf$Leaf
+  return(data)
+}
+
 ################################
 ## Function to convert alignment 'aln' to fasta format for MSA + Tree
 convert_aln2fa <- function(aln_file = "",
