@@ -64,9 +64,6 @@ ipr2da <- function(infile_ipr, infile_blast, analysis=c("Pfam","SMART", "CDD", "
   })
 
   domarch2 <- do.call(rbind.data.frame, domarch)
-<<<<<<< HEAD
-  updated_blast <- merge(blast_out, domarch2)
-  write_tsv(updated_blast, file = infile_blast)
 
   ## extract accession numbers, sort by unqiue accs
   # accs <- data.frame(ipr_in$AccNum) %>% unique()
@@ -75,13 +72,12 @@ ipr2da <- function(infile_ipr, infile_blast, analysis=c("Pfam","SMART", "CDD", "
   #         "../common_data/lineagelookup.txt")
   ## create new cleanedup iprscan file
   # write_tsv(mergedLins, file = paste0(suffix, '.iprscan_lins.tsv'))
-=======
 
   # TaxID to lineage
   blast_out$TaxID <- as.integer(blast_out$TaxID)
   lineage_map <- fread("/data/research/jravilab/common_data/lineagelookup.txt", sep = "\t")
   # get lineage path as argument, it'll be changed depending on who is running it
-  # have default argument also for where shit is
+  # have default argument also for where things are
   mergedLins <- merge(blast_out, lineage_map, by.x = "TaxID", by.y="tax_id", all.x = T)
   updated_blast <- merge(mergedLins, domarch2, by = "AccNum")
 
@@ -92,7 +88,6 @@ ipr2da <- function(infile_ipr, infile_blast, analysis=c("Pfam","SMART", "CDD", "
   write_tsv(ipr_lin, paste0(suffix, 'iprscan.lins.tsv', collapse = '.'), append = FALSE)
   #write_tsv(mergedLins, file = paste0(suffix, '.iprscan_lins.tsv'))
   write_tsv(updated_blast, file = infile_blast, append = F)
->>>>>>> 043496881b1dc3c646c233ab519ad4c53da759c2
 }
 
 ipr2da(args[1],args[2])
