@@ -4,6 +4,12 @@ library(data.table)
 # read in files
 args <- commandArgs(trailingOnly = TRUE)
 
+<<<<<<< HEAD
+=======
+#args <- c("data/molevolvr_outputs/cdifficile_slpa_WP_078051019.1_out/cdifficile_slpa_WP_078051019.1.rps.out",
+#          "data/molevolvr_outputs/cdifficile_slpa_WP_078051019.1_out/cdifficile_slpa_WP_078051019.1.refseq.1e-5.cln.txt")
+
+>>>>>>> 043496881b1dc3c646c233ab519ad4c53da759c2
 rps2da <- function(infile_rps, infile_blast) {
   # analyses to filter by
   analysis <- c("COG") #, "PRK", "cd")
@@ -55,7 +61,11 @@ rps2da <- function(infile_rps, infile_blast) {
   rps_da <- merge(blast_out, domarch2)
 
   #### SAVE RPS W/ CDD DATA TABLE ####
+<<<<<<< HEAD
   write_tsv(rps_da, file = infile_blast)
+=======
+  write_tsv(domarch2, file = infile_blast, append = F)
+>>>>>>> 043496881b1dc3c646c233ab519ad4c53da759c2
 
 }
 
