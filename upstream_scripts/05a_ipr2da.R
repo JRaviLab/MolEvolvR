@@ -77,12 +77,13 @@ ipr2da <- function(infile_ipr, infile_blast, suffix, analysis=c("Pfam","SMART", 
   mergedLins <- merge(blast_out, lineage_map, by.x = "TaxID", by.y="tax_id", all.x = T)
   updated_blast <- merge(mergedLins, domarch2, by = "AccNum")
 
-  #write_tsv(mergedLins, file = paste0(suffix, '.iprscan_lins.tsv'))
-  write_tsv(updated_blast, file = infile_blast)
+  lin <- select(blast, AccNum, TaxID, Species, Lineage)
 
-  # # add DA col + localization prediction col
-  ## pfam column, COG column, TIGR, Superfam, SMART, localization
-  ## COGS in RPSBLAST
+  ipr_lin <- merge(ipr_in, mergedLins, by = 'AccNum')
+
+  write_tsv(ipr_lin, paste0(suffix, 'iprscan.lins.tsv', collapse = '.'), append = FALSE)
+  #write_tsv(mergedLins, file = paste0(suffix, '.iprscan_lins.tsv'))
+  write_tsv(updated_blast, file = infile_blast, append = F)
 }
 
 ipr2da(args[1],args[2])
