@@ -11,13 +11,15 @@ library(tidyverse)
 library(data.table)
 library(here)
 
-source(here("../molevol_scripts/molevol_scripts/colnames_molevol.R"))
-inpath <- c("../../laurensosinski/data/molevolvr_outputs/phage_defense/")
+# STARTING DIRECTORY
+# molevol_scripts
+source(here("molevol_scripts/colnames_molevol.R"))
+inpath <- c("../molevol_data/project_data/phage_defense/")
 
 #################################
 ## Fn to combine similar files ##
 #################################
-combine_files <- function(inpath=c("project_data/phage_defense/"),
+combine_files <- function(inpath=c("../molevol_data/project_data/phage_defense/"),
                           pattern="^WP_.*refseq.1e-5.txt",
                           col_names=cl_blast_colnames)
 {
@@ -43,8 +45,12 @@ combine_files <- function(inpath=c("project_data/phage_defense/"),
 cln_combnd <- combine_files(inpath,
                             pattern="^WP_.*cln.*",
                             col_names=T)
-cln_combnd_noda <- cln_combnd %>%
-  select(-starts_with("DomArch"), -tax_name, -Lineage)
+# cln_combnd_noda <- cln_combnd %>%
+#   select(-starts_with("DomArch"), -tax_name, -Lineage)
+
+write_tsv(x=cln_combnd, col_names=T,
+          path="../molevol_data/project_data/phage_defense/cln_combined.tsv")
+
 
 ## Less helpful examples!
 ## Combining BLAST files
