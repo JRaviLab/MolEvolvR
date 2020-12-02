@@ -2,33 +2,29 @@ library(tidyverse)
 library(data.table)
 library(furrr)
 
-# compute cvm location for acc2lin.R
+# source acc2lin.R
 source("/data/research/jravilab/molevol_scripts/upstream_scripts/acc2lin.R")
 
-
-## load file in
+## load files in
 args <- commandArgs(trailingOnly = TRUE)
 
 # ipr2da function
-ipr2da <- function(infile_ipr, infile_blast, suffix, analysis=c("Pfam","SMART", "CDD", "TIGRFAM",
+ipr2da <- function(infile_ipr, infile_blast, analysis=c("Pfam","SMART", "CDD", "TIGRFAM",
                                                         "Phobius", "Gene3D", "TMHMM", "SignalP_EUK",
-                                                        "SignalP_GRAM_NEGATIVE", "SignalP_GRAM_POSITIVE"))
+                                                        "SignalP_GRAM_NEGATIVE", "SignalP_GRAM_POSITIVE")) #, suffix)
   {
   # creating column names for input files and lookup tables
   ipr_colnames <- c("AccNum", "SeqMD5Digest", "SLength", "Analysis",
                     "DB.ID", "SignDesc", "StartLoc", "StopLoc", "Score",
                     "Status", "RunDate", "IPRAcc", "IPRDesc")
 
-  lookup_cath <- fread('/data/research/jravilab/common_data/cln-cath.tsv') %>%
+  lookup_tbl <- fread("/data/research/jravilab/common_data/cln-lookup_tbl.tsv", header = T, fill = T) %>%
     arrange() %>% distinct()
 
-  lookup_tbl <- fread("/data/research/jravilab/common_data/lookup_tbl.tsv", header = T, fill = T) %>%
-    arrange() %>% distinct() %>%
-    bind_rows(lookup_cath)
-
-  # read in iprscan and blast results
+  # read in blast results
   blast_out <- fread(infile_blast, header = T, keepLeadingZeros = T)
 
+  # read in iprscan results,
   ipr_in <- read_tsv(infile_ipr, col_names = ipr_colnames) %>%
     mutate(DB.ID = gsub('G3DSA:', '', DB.ID))
 
@@ -51,7 +47,7 @@ ipr2da <- function(infile_ipr, infile_blast, suffix, analysis=c("Pfam","SMART", 
       if (a == "SignalP_EUK" || a == "SignalP_GRAM_NEGATIVE" || a == "SignalP_GRAM_POSITIVE") {
         var_shortname = "DB.ID" }
       else {
-        var_shortname = "Short_Name" }
+        var_shortname = "Short.Name" }
       var_shortname_sym = sym(var_shortname)
       a_da <- a_da %>%
         ungroup() %>%
@@ -68,21 +64,16 @@ ipr2da <- function(infile_ipr, infile_blast, suffix, analysis=c("Pfam","SMART", 
   })
 
   domarch2 <- do.call(rbind.data.frame, domarch)
-
-  # TaxID to lineage
-  blast_out$TaxID <- as.integer(blast_out$TaxID)
-  lineage_map <- fread("/data/research/jravilab/common_data/lineagelookup.txt", sep = "\t")
-  # get lineage path as argument, it'll be changed depending on who is running it
-  # have default argument also for where shit is
-  mergedLins <- merge(blast_out, lineage_map, by.x = "TaxID", by.y="tax_id", all.x = T)
-  updated_blast <- merge(mergedLins, domarch2, by = "AccNum")
-
-  #write_tsv(mergedLins, file = paste0(suffix, '.iprscan_lins.tsv'))
+  updated_blast <- merge(blast_out, domarch2)
   write_tsv(updated_blast, file = infile_blast)
 
-  # # add DA col + localization prediction col
-  ## pfam column, COG column, TIGR, Superfam, SMART, localization
-  ## COGS in RPSBLAST
+  ## extract accession numbers, sort by unqiue accs
+  # accs <- data.frame(ipr_in$AccNum) %>% unique()
+  ## get lineage using Sam's acc2lin function
+  # acc2lin(accs, "../common_data/assembly_summary2020-11-02.txt",
+  #         "../common_data/lineagelookup.txt")
+  ## create new cleanedup iprscan file
+  # write_tsv(mergedLins, file = paste0(suffix, '.iprscan_lins.tsv'))
 }
 
 ipr2da(args[1],args[2])
