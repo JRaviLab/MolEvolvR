@@ -55,7 +55,7 @@ module load BLAST+ BioPerl 			## load blast+
 module load iprscan 				## load iprscan
 
 start=$SECONDS 					## get current time
-DT=$(date '+%d/%m/%Y %H:%M:%S')
+START_DT=$(date '+%d/%m/%Y-%H:%M:%S')
 
 FILES=$(cat ${INFILEPATHS_LIST})			## list of files (with paths) to be processed
 #total=$(( ((3*60)+50)*60 ))			## total time the job can take in seconds, this should match your SBATCH line above
@@ -103,7 +103,7 @@ do
 
       ## IPR2DA ##
       ipr2da_start=$SECONDS
-      Rscript /data/research/jravilab/laurensosinski/scripts/wrapper-scripts/05a_ipr2da.R ${OUTDIR}/${SUFFIX}.iprscan.tsv ${OUTDIR}/${SUFFIX}.${DB}.${EVAL}.cln.txt #${SUFFIX}
+      Rscript /data/research/jravilab/laurensosinski/scripts/wrapper-scripts/05a_ipr2da.R ${OUTDIR}/${SUFFIX}.iprscan.tsv ${OUTDIR}/${SUFFIX}.${DB}.${EVAL}.cln.clust.txt ${SUFFIX}
       ipr2da_duration=$(( $SECONDS - $ipr2da_start ))
 
       ## RPSBLAST ## 		
@@ -113,19 +113,22 @@ do
 
       ## RPS2DA ##
       rps2da_start=$SECONDS
-      Rscript /data/research/jravilab/laurensosinski/scripts/wrapper-scripts/05b_rps2da.R ${OUTDIR}/${SUFFIX}.rps.out ${OUTDIR}/${SUFFIX}.${DB}.${EVAL}.cln.txt
+      Rscript /data/research/jravilab/laurensosinski/scripts/wrapper-scripts/05b_rps2da.R ${OUTDIR}/${SUFFIX}.rps.out ${OUTDIR}/${SUFFIX}.${DB}.${EVAL}.cln.clust.ipr.txt ${SUFFIX}
       rps2da_duration=$(( $SECONDS - $rps2da_start ))
 
       ## Add benchmarking times to logfile
-      printf "\n${DT}\t${SUFFIX}\t${db_duration}\t${db_cln_duration}\t${acc2fa_duration}\t${bclust_duration}\t${c2t_duration}\t${ipr_duration}\t${ipr2da_duration}\t${rps_duration}\t${rps2da_duration}" >> molevolvr_logfile.txt
+      printf "\n${START_DT}\t${SUFFIX}\t${db_duration}\t${db_cln_duration}\t${acc2fa_duration}\t${bclust_duration}\t${c2t_duration}\t${ipr_duration}\t${ipr2da_duration}\t${rps_duration}\t${rps2da_duration}" >> /data/research/jravilab/molevol_data/molevolvr_logfile.txt
 
-      cp ${file} ${OUTDIR}	# copy fasta file to output directory
+      cp ${FILE} ${OUTDIR}	# copy fasta file to output directory
       
       chmod -R ug+wr ${OUTDIR}
 
       ## Figure out how long the entire script took to run
       duration=$(( $SECONDS - $start ))
       printf "\nTotal run time: $duration\n"
+      STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
+      ## Add benchmarking times to logfile
+      printf "\n${START_DT}\t${SUFFIX}\t${db_duration}\t${db_cln_duration}\t${acc2fa_duration}\t${bclust_duration}\t${c2t_duration}\t${ipr_duration}\t${ipr2da_duration}\t${rps_duration}\t${rps2da_duration}\t${duration}\t${STOP_DT}" >> molevolvr_logfile.txt
 
       ## And how much time is left
       timeleft=$(( $total - $duration ))

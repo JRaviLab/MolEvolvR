@@ -5,7 +5,7 @@ library(tidyverse)
 library(data.table)
 
 # compute cvm location for acc2lin.R
-source("/data/research/jravilab/molevol_scripts/upstream_scripts/acc2lin.R")
+source("/data/research/jravilab/molevol_scripts/R/lineage.R")
 
 ## Read in data file path as a string
 args <- commandArgs(trailingOnly = TRUE)
@@ -39,8 +39,8 @@ cleanup <- function(infile_blast) {
   lineage_map <- fread("/data/research/jravilab/common_data/lineagelookup.txt", sep = "\t")
   #lineage_map <- fread("../ReferenceFiles/lineagelookup.txt", sep = "\t")
   # # get lineage path as argument, it'll be changed depending on who is running it
-  # # have default argument also for where shit is
-  mergedLins <- merge(cleanedup_blast, lineage_map, by.x = "TaxID", by.y="tax_id", all.x = T)
+  # # have default argument also for where the files are located
+  mergedLins <- left_join(cleanedup_blast, lineage_map, by.x = "TaxID", by.y="tax_id", all.x = T)
 
   # create name for new output file to be created
   file_name <- gsub(pattern = '.txt', replacement = '', x = infile_blast) %>%
