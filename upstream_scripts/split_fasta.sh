@@ -3,6 +3,9 @@
 # Expected user input: full FILEPATH to multi-fasta file
 # Authors: Karn Jongnarangsin, Lauren Sosinski, Janani Ravi
 
+
+module load detox
+
 FASTA=$1
 
 cat $FASTA | awk '{
@@ -10,13 +13,16 @@ cat $FASTA | awk '{
         print $0 > filename
 }'
 
-#cat $FASTA | awk '{
+ sh ./detox01.0.2/detox -v .
+
+# cat $FASTA | awk '{
+
 #        if (substr($0, 1, 1)==">") {
-#	  s=(substr($0,2))
-#	  p=(awk '{print $1;}')
-#	  filename=(p ".fa") }
-#
-#	print $0 > filename ;
+#	  s=(substr($0,2) | cut -d " " -f1 )
+#	  filename=(s ".fa") }
+#	print p >> FASTA ".input.txt"
+#	print $0 > filename
+
 #}'
 
 # print filename > $(FASTA).input.txt ;

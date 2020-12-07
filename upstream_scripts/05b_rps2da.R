@@ -18,7 +18,7 @@ rps2da <- function(infile_rps, infile_blast, suffix) {
   # reading in blast output
   blast_out <- read_tsv(file = infile_blast, col_names = T)
   # lookup table
-  lookup <- read_tsv("/data/research/jravilab/common_data/lookup_tbl.tsv")
+  lookup <- read_tsv("/data/research/jravilab/common_data/cln_lookup_tbl.tsv")
   # clean up rpsblast cdd id number
   rpsout <- rpsout %>%
     mutate(DB.ID = gsub(pattern = "CDD:", replacement = "", x=DB.ID)) %>%
@@ -59,4 +59,4 @@ rps2da <- function(infile_rps, infile_blast, suffix) {
 
 }
 
-rps2da(args[1], args[2])
+rps2da(args[1], args[2], args[3])

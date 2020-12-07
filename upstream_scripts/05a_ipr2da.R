@@ -2,8 +2,8 @@ library(tidyverse)
 library(data.table)
 library(furrr)
 
-# source acc2lin.R
-source("/data/research/jravilab/molevol_scripts/upstream_scripts/acc2lin.R")
+# source lineage.R
+source("/data/research/jravilab/molevol_scripts/R/lineage.R")
 
 ## load files in
 args <- commandArgs(trailingOnly = TRUE)
@@ -65,7 +65,7 @@ ipr2da <- function(infile_ipr, infile_blast, suffix, analysis=c("Pfam","SMART", 
 
   domarch2 <- do.call(rbind.data.frame, domarch)
   
-  blast_names <- add_names(blast_out)
+  #blast_names <- add_names(blast_out)
   ## extract accession numbers, sort by unqiue accs
   # accs <- data.frame(ipr_in$AccNum) %>% unique()
   ## get lineage using Sam's acc2lin function
@@ -79,13 +79,13 @@ ipr2da <- function(infile_ipr, infile_blast, suffix, analysis=c("Pfam","SMART", 
  # lineage_map <- fread("/data/research/jravilab/common_data/lineagelookup.txt", sep = "\t")
   # get lineage path as argument, it'll be changed depending on who is running it
  # have default argument also for where things are
- # mergedLins <- merge(blast_out, lineage_map, by.x = "TaxID", by.y="tax_id", all.x = T)
+ #mergedLins <- merge(blast_out, lineage_map, by.x = "TaxID", by.y="tax_id", all.x = T)
   
-  updated_blast <- merge(blast_names, domarch2, by = "AccNum")
+  updated_blast <- merge(blast_out, domarch2, by = "AccNum")
 
   lin <- select(blast_out, AccNum, TaxID, Species, Lineage)
 
-  ipr_lin <- merge(ipr_in, lin, by = 'AccNum')
+  ipr_lin <- merge(ipr_in, lin, by = 'AccNum', all.x = T)
 
   write_tsv(ipr_lin, paste0(suffix, '.iprscan.lins.tsv', collapse = '.'), append = FALSE)
   #write_tsv(mergedLins, file = paste0(suffix, '.iprscan_lins.tsv'))
