@@ -6,36 +6,39 @@ library(data.table)
 library(d3heatmap) # https://github.com/rstudio/d3heatmap
 library(heatmaply) # https://github.com/talgalili/heatmaply
 
-source(here("scripts/colnames_molevol.R"))
+source(here("molevol_scripts/colnames_molevol.R"))
 
 ## FILEPATHS
-## Assuming that we are starting with "molevol.Rproj"
-blast_path <- here("data/phage_defense/")
-gen_path <- here("data/genomes/")
-ls_path <- here("../laurensosinski/data/molevolvr_outputs/slps/")
+## Assuming that we are starting with "molevol_scripts.Rproj"
+blast_path <- here("../molevol_data/project_data/slps/")
+gen_path <- here("../molevol_data/common_data/genomes/")
+inpath <- here("../molevol_data/project_data/slps/")
 
 ##############
 ## BLAST IN ##
 ##############
-## Starting with web BLAST outputs
-## READ all BLAST files (blastx + blastp)
-source_files <- list.files(paste0(blast_path, "blast", collapse=""),
-                           pattern="*.txt")
-# source_files <- dir(paste0(blast_path, "blast", collapse=""),
+# ## Starting with web BLAST outputs
+# ## READ all BLAST files (blastx + blastp)
+# source_files <- list.files(paste0(blast_path, "blast", collapse=""),
 #                            pattern="*.txt")
-source_files_path <- paste0(blast_path, "blast/", source_files)
-web_blast_combnd <- source_files_path %>% list %>%
-  pmap_dfr(fread, skip=7,
-           fill=T, na.strings=c(""), header=F) %>%
-  setnames(web_blastp_colnames) %>%
-  filter(!is.na(Query))
+# # source_files <- dir(paste0(blast_path, "blast", collapse=""),
+# #                            pattern="*.txt")
+# source_files_path <- paste0(blast_path, "blast/", source_files)
+# web_blast_combnd <- source_files_path %>% list %>%
+#   pmap_dfr(fread, skip=7,
+#            fill=T, na.strings=c(""), header=F) %>%
+#   setnames(web_blastp_colnames) %>%
+#   filter(!is.na(Query))
+#
+# ## Starting with command-line BLAST outs
+# source_files <- dir(inpath, pattern="^WP_.*cln.*", recursive=T)
+# source_files_path <- paste0(inpath, source_files)
+# cl_blast_combnd <- source_files_path %>% list %>%
+#   pmap_dfr(fread, fill=T, na.strings=c(""), header=T)
 
-## Starting with command-line BLAST outs
-source_files <- dir(ls_path, pattern="^WP_.*cln.*", recursive=T)
-source_files_path <- paste0(ls_path, source_files)
-cl_blast_combnd <- source_files_path %>% list %>%
-  pmap_dfr(fread, fill=T, na.strings=c(""), header=T)
-
+cl_blast_combnd <- read_tsv(paste0(inpath, "cln_combined.tsv",
+                                   collapse=""),
+                            col_names=T)
 ## Not needed for cleaned up scripts
 # cl_blast_combnd <- cl_blast_combnd %>%
 #   transmute(Query=qacc, AccNum=sseqid,
@@ -51,16 +54,6 @@ cl_blast_combnd <- source_files_path %>% list %>%
 ## Filter by RefRep, Pathogens ##
 #################################
 ## RESTRICTING RESULTS FOR VIZ ##
-## Restrict by VFDB Pathogen Genera
-vfdb_genera_path <- paste0(gen_path,
-                           "vfdb_pathogen_genera_list.txt")
-vfdb_genera <- read_csv(vfdb_genera_path, col_names=F)
-
-blast_sub <- cl_blast_combnd %>%
-  filter(grepl(Species,
-               pattern=paste0(vfdb_genera$X1, # Filter by VFDB pathogen genomes
-                              collapse="|")))
-
 ## Restrict by REF+REP genomes
 patric_path <- paste0(gen_path,
                       "PATRIC-firmicutes-compl_refrep_good_public_202008.csv")
@@ -72,6 +65,17 @@ ref_taxIDs <- patric_refrep$NCBI_Taxon_ID  # Subset TaxIDs to filter BLAST hits
 
 blast_sub <- cl_blast_combnd %>%
   filter(TaxID %in% ref_taxIDs) # Filter by PATRIC ref/rep genomes
+
+## Restrict by VFDB Pathogen Genera
+vfdb_genera_path <- paste0(gen_path,
+                           "vfdb_pathogen_genera_grampos.txt")
+vfdb_genera <- read_csv(vfdb_genera_path, col_names=F)
+
+blast_sub <- blast_sub %>%
+  filter(grepl(Species,
+               pattern=paste0(vfdb_genera$X1, # Filter by VFDB pathogen genomes
+                              collapse="|")))
+
 
 ##################
 ## DATA for VIZ ##
@@ -102,15 +106,15 @@ blast_sub_plot_wide <- blast_sub                   %>%
 
 blast_sub_plot_wide[is.na(blast_sub_plot_wide)] = 0
 
-blast_sub_plot_wide <- blast_sub_plot_wide %>%
-  rename_at(vars(starts_with("WP_")),
-            funs(str_replace(., pattern="WP_.*.1_", replacement="")))
-# colnames(blast_sub_plot_wide) <- c("V.cholerae", "V.parahaemolyticus",
-#                                    "A.veronii", "E.coli",
-#                                    "P.mirabilis", "E.cloacae")
-# "Vibrio.cholerae", "Vibrio.parahaemolyticus", "Aeromonas.veronii",
-# "Escherichia.coli", "Proteus.mirabilis", "Enterobacter.cloacae"
-
+# blast_sub_plot_wide <- blast_sub_plot_wide %>%
+#   rename_at(vars(starts_with("WP_")),
+#             funs(str_replace(., pattern="WP_.*.1_", replacement="")))
+# # colnames(blast_sub_plot_wide) <- c("V.cholerae", "V.parahaemolyticus",
+# #                                    "A.veronii", "E.coli",
+# #                                    "P.mirabilis", "E.cloacae")
+# # "Vibrio.cholerae", "Vibrio.parahaemolyticus", "Aeromonas.veronii",
+# # "Escherichia.coli", "Proteus.mirabilis", "Enterobacter.cloacae"
+#
 
 #############
 ## DATAVIZ ##
@@ -124,12 +128,6 @@ ggplot(blast_sub_plot, aes(y={{selected_col}}, x=Query, fill=PcPositive)) +
   theme(axis.text.x=element_text(angle=40, hjust = 1)) +
   labs(fill="% Similarity") +
   xlab("Query proteins") + ylab(as_string(selected_col))
-
-## Using d3heatmap
-d3heatmap(blast_sub_plot_wide, scale = "column", show_grid=F, dendrogram="row",
-          colors="Blues", #k_row=8, #theme="dark",
-          xaxis_font_size="8pt", yaxis_font_size="8pt",
-          height="1250", width="1000")
 
 ## Using Heatmaply
 heatmaply(blast_sub_plot_wide, #[,-c(1)],
@@ -148,3 +146,9 @@ heatmaply(blast_sub_plot_wide, #[,-c(1)],
             midpoint = 10, limits = c(0, 100)),
           branches_lwd=0.2)
 
+## Using d3heatmap
+## !! Issue: Labels getting cut !!
+d3heatmap(blast_sub_plot_wide, scale = "column", show_grid=F, dendrogram="row",
+          colors="Blues", #k_row=8, #theme="dark",
+          xaxis_font_size="8pt", yaxis_font_size="8pt",
+          height="1250", width="1000")

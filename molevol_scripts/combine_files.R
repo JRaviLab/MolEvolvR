@@ -14,7 +14,7 @@ library(here)
 # STARTING DIRECTORY
 # molevol_scripts
 source(here("molevol_scripts/colnames_molevol.R"))
-inpath <- c("../molevol_data/project_data/phage_defense/")
+inpath <- c("../molevol_data/project_data/slps/full_analysis_20201202/")
 
 #################################
 ## Fn to combine similar files ##
@@ -34,7 +34,7 @@ combine_files <- function(inpath=c("../molevol_data/project_data/phage_defense/"
   source_files_path <- paste0(inpath, source_files)
   combnd_files <- source_files_path %>% list %>%
     # pmap_dfr(fread, fill=T, na.strings=c(""), header=T)
-    pmap_dfr(read_tsv, col_names=col_names)
+    pmap_dfr(read_tsv, col_names=col_names, .id="ByFile")
   return(combnd_files)
 }
 
@@ -49,7 +49,7 @@ cln_combnd <- combine_files(inpath,
 #   select(-starts_with("DomArch"), -tax_name, -Lineage)
 
 write_tsv(x=cln_combnd, col_names=T,
-          path="../molevol_data/project_data/phage_defense/cln_combined.tsv")
+          path="../molevol_data/project_data/slps/cln_combined.tsv")
 
 
 ## Less helpful examples!
@@ -63,5 +63,8 @@ cl_blast_combnd <- combine_files(inpath,
 ## Combining IPR files
 ## Likely makes no sense since there may be repeated AccNum from indiv. files!
 ipr_combnd <- combine_files(inpath,
-                            pattern="^WP_.*iprscan.*",
+                            pattern="*iprscan.lins*",
                             col_names=ipr_colnames)
+
+write_tsv(x=ipr_combnd, col_names=T,
+          path="../molevol_data/project_data/slps/ipr_combined.tsv")
