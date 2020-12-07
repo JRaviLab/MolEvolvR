@@ -17,7 +17,7 @@
 #PBS -m abe			# email notifications for job
 #PBS -M=sosinsk7@msu.edu	# user email; RESET
 #PBS -F arguments		# allows script to accept argument input
-#PBS -t 1-3			# number of identical jobs to submit to the queue
+#PBS -t 1-10			# number of identical jobs to submit to the queue
 #PBS -N molevol_analysis	# name of job being run
 
 ## print start/stop printf in individual scripts
@@ -116,9 +116,6 @@ do
       Rscript /data/research/jravilab/laurensosinski/scripts/wrapper-scripts/05b_rps2da.R ${OUTDIR}/${SUFFIX}.rps.out ${OUTDIR}/${SUFFIX}.${DB}.${EVAL}.cln.clust.ipr.txt ${SUFFIX}
       rps2da_duration=$(( $SECONDS - $rps2da_start ))
 
-      ## Add benchmarking times to logfile
-      printf "\n${START_DT}\t${SUFFIX}\t${db_duration}\t${db_cln_duration}\t${acc2fa_duration}\t${bclust_duration}\t${c2t_duration}\t${ipr_duration}\t${ipr2da_duration}\t${rps_duration}\t${rps2da_duration}" >> /data/research/jravilab/molevol_data/molevolvr_logfile.txt
-
       cp ${FILE} ${OUTDIR}	# copy fasta file to output directory
       
       chmod -R ug+wr ${OUTDIR}
@@ -127,11 +124,12 @@ do
       duration=$(( $SECONDS - $start ))
       printf "\nTotal run time: $duration\n"
       STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
+      
       ## Add benchmarking times to logfile
-      printf "\n${START_DT}\t${SUFFIX}\t${db_duration}\t${db_cln_duration}\t${acc2fa_duration}\t${bclust_duration}\t${c2t_duration}\t${ipr_duration}\t${ipr2da_duration}\t${rps_duration}\t${rps2da_duration}\t${duration}\t${STOP_DT}" >> molevolvr_logfile.txt
+      printf "\n${START_DT}\t${STOP_DT}\t${SUFFIX}\t${db_duration}\t${db_cln_duration}\t${acc2fa_duration}\t${bclust_duration}\t${c2t_duration}\t${ipr_duration}\t${ipr2da_duration}\t${rps_duration}\t${rps2da_duration}\t${duration}" >> ${OUTPATH}/logfile.txt
 
       ## And how much time is left
-      timeleft=$(( $total - $duration ))
+      #timeleft=$(( $total - $duration ))
 
       ## If there's a chance we get a long input to process, then
       ## resubmit this job, then kill this job
