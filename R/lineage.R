@@ -47,7 +47,7 @@ DownloadAssemblySummary <- function(outpath, keep = c("assembly_accession", "tax
 
 
 # Go from the GCA_ID column to tax IDs using the assembly file
-GCA2Lins <- function(prot_data, assembly_path = "data/acc_files/assembly_summary20201018.txt",
+GCA2lin <- function(prot_data, assembly_path = "data/acc_files/assembly_summary20201018.txt",
                      lineagelookup_path = "data/lineagelookup.txt" )
 {
   #' Function that maps GCA_ID to taxid, and that taxid to a lineage
@@ -206,7 +206,7 @@ ipg2lin <- function(accessions, ipg_file, assembly_path, lineagelookup_path)
 
   ipg_dt <- setnames(ipg_dt, "Assembly", "GCA_ID")
 
-  lins <- GCA2Lins(prot_data = ipg_dt, assembly_path, lineagelookup_path)
+  lins <- GCA2lin(prot_data = ipg_dt, assembly_path, lineagelookup_path)
   lins <- lins[!is.na(Lineage)] %>% unique()
 
   return(lins)

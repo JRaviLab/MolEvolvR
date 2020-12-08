@@ -69,7 +69,14 @@ do
 
    if [ ! -d ${OUTDIR} ]; then 			## if the output directory doesn't exist
       mkdir ${OUTDIR}				## make the directory
-
+      
+      ## before running deltablast or split fasta, run iprscan on query protein(s)
+      # sh /data/research/jravilab/laurensosinski/scripts/wrapper-scripts/04a_iprscan.sh ${FILE}
+      # ipr2da for these
+      
+      ## SPLIT MULTIFASTA FILE ##
+      # sh split_fasta.sh ${FILE}
+      
       ## DELTABLAST ##
       db_start=$SECONDS
       sh /data/research/jravilab/laurensosinski/scripts/wrapper-scripts/01.1_deltablast.sh $FILE $SUFFIX $OUTDIR $DB $NHITS $EVAL

@@ -24,7 +24,7 @@ rps2da <- function(infile_rps, infile_blast, suffix) {
     mutate(DB.ID = gsub(pattern = "CDD:", replacement = "", x=DB.ID)) %>%
     mutate(DB.ID = as.character(DB.ID))
 
-  rps_cdd <- merge(rpsout, lookup, by.x="DB.ID", by.y ="ID")
+  rps_cdd <- merge(rpsout, lookup, by.x="DB.ID", by.y ="ID", all.x = T)
 
   #### filter by analysis ####
   # filter by COG

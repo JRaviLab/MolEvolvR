@@ -13,7 +13,7 @@ cat $FASTA | awk '{
         print $0 > filename
 }'
 
- sh ./detox01.0.2/detox -v .
+# sh ./detox01.0.2/detox -v .
 
 # cat $FASTA | awk '{
 
