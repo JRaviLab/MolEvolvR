@@ -16,7 +16,7 @@ library(rentrez)
 library(msa)
 library(furrr)
 #library(seqRFLP)
-conflicted::conflict_prefer("filter", "dplyr")
+#conflicted::conflict_prefer("filter", "dplyr")
 
 ##############################
 ## Pre-requisite functions ##
