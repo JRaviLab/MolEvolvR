@@ -4,14 +4,14 @@
 # Authors: Karn Jongnarangsin, Lauren Sosinski, Janani Ravi
 
 
-module load detox
-
 FASTA=$1
 
 cat $FASTA | awk '{
-        if (substr($0, 1, 1)==">") {filename=(substr($0,2) ".fa")}
+        if (substr($0, 1, 1)==">") {filename=(sed 's/^>//' | cut -d ' ' -f 1 ".fa")}
         print $0 > filename
 }'
+
+#cat ${FASTA} | sed 's/^>//' | cut -d ' ' -f 1
 
 # sh ./detox01.0.2/detox -v .
 
