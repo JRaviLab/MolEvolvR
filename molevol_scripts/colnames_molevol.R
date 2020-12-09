@@ -2,18 +2,46 @@
 ## COLUMN names ##
 ## ############ ##
 ## BLAST
+############
 ## Web-BLAST
-web_blastp_colnames <- c("Query", "AccNum",
+############
+## Downloaded as HIT-TABLE csv
+# BLASTP and related protein BLASTs
+web_blastp_hit_colnames <- c("Query", "AccNum",
                          "PcIdentity", "AlnLength", "Mismatch", "GapOpen",
                          "QStart", "QEnd", "SStart", "SEnd",
                          "EValue", "BitScore", "PcPosOrig")
-
+# BLASTX
 web_blastx_colnames <- c("Query", "AccNum",
-                        "PcIdentity", "AlnLength", "Mismatch", "GapOpen",
-                        "QStart", "QEnd", "SStart", "SEnd",
-                        "EValue", "BitScore", "PcPosOrig",
-                        "QSFrames") # specific to "blastx"
-## Commandline BLAST
+                         "PcIdentity", "AlnLength", "Mismatch", "GapOpen",
+                         "QStart", "QEnd", "SStart", "SEnd",
+                         "EValue", "BitScore", "PcPosOrig",
+                         "QSFrames") # specific to "blastx"
+
+## Downloaded as Descriptions csv
+# BLASTP and related protein BLASTs
+web_blastp_desc_colnames <- c("Description", "Species", "CommonName", "TaxID",
+                         "BitScore", "TotalScore",
+                         "PcQCover",	"EValue",	"PcIdentity",
+                         "SLen",	"AccNum")
+# Ref: https://ncbiinsights.ncbi.nlm.nih.gov/2020/11/23/blast-new-columns/
+# Description,	Scientific Name,	Common Name,	Taxid,
+# Max Score,	Total Score,
+# Query Cover,	E value,	Per. ident,
+# Acc. Len	Accession
+
+
+#####################
+## Command line BLAST
+#####################
+cl_blast_colnames <- c("Query", "SAccNum", "AccNum",
+                       "SAllSeqID", "STitle", "Species", "TaxID",
+                       "PcIdentity", "AlnLength", "Mismatch", "GapOpen",
+                       "QStart", "QEnd", "QLength",
+                       "SStart", "SEnd", "SLength",
+                       "EValue", "BitScore", "PcPosOrig",
+                       "PcPositive", "ClusterID")  # post-cleanup
+
 # cl_blast_colnames_orig <- c("qacc", "sacc", "sseqid",
 #                             "sallseqid", "stitle", "sscinames", "staxids",
 #                             "pident", "length", "mismatch", "gapopen",
@@ -27,15 +55,10 @@ web_blastx_colnames <- c("Query", "AccNum",
 #                             "evalue", "bitscore", "ppos", "slen",
 #                             "ppos_adjusted", "ClusterID")
 
-cl_blast_colnames <- c("Query", "SAccNum", "AccNum",
-                       "SAllSeqID", "STitle", "Species", "TaxID",
-                       "PcIdentity", "AlnLength", "Mismatch", "GapOpen",
-                       "QStart", "QEnd", "QLength",
-                       "SStart", "SEnd", "SLength",
-                       "EValue", "BitScore", "PcPosOrig",
-                       "PcPositive", "ClusterID")  # post-cleanup
 
+##########
 ## IPRSCAN
+##########
 # ipr_colnames_orig <- c("AccNum", "Seq_MD5_digest", "SeqLen", "Analysis",
 #                        "DB_ID", "SignDesc", "StartLoc", "StopLoc", "Score",
 #                        "Status", "RunDate", "IPRAcc", "IPRDesc")
@@ -44,7 +67,9 @@ ipr_colnames <- c("AccNum", "SeqMD5Digest", "SLength", "Analysis",
                   "DB.ID", "SignDesc", "StartLoc", "StopLoc", "Score",
                   "Status", "RunDate", "IPRAcc", "IPRDesc")
 
+###########
 ## RPSBLAST
+###########
 # rps_colnames_orig <- c("qacc", "sacc", "sseqid", "pident", "ppos",
 #                        "length", "mismatch",
 #                        "qstart", "qend", "sstart", "send",
@@ -59,21 +84,58 @@ rps_colnames <- c("AccNum", "DB.ID", "DBSeqID",
                   "SStart", "SEnd", "DStart", "DEnd",
                   "EValue", "BitScore", "TaxID") # TaxID missing (NA); remove?
 
+#######################
 ## IPG and Lineage maps
+#######################
 # ipg_colnames_orig <- c("Id", "Source", "Nucleotide Accession",
 #                        "Start", "Stop", "Strand"  ,
 #                        "Protein", "Protein Name",
 #                        "Organism", "Strain", "Assembly")
 ipg_colnames <- c("IPG.ID", "Source", "NucAccNum",
                   "NucStart", "NucStop", "Strand",
-                  "AccNum", "ProtDesc",
-                  "Species", "SppStrain", "AssemblyID")
+                  "AccNum", "Description",
+                  "Species", "Spp.Strain", "AssemblyID")
 
-## Final combined data frame that loads on the webapp
-combo_colnames <- c("Query", "AccNum", "Species", "TaxID", "Lineage",
+##################
+## Assembly files
+## Genbank, Refseq
+##################
+assembly_colnames <- c("AssemblyID",
+                       "bioproject", "biosample", "wgs_master", # not used
+                       "RefseqCategory", "TaxID", "Spp.TaxID",
+                       "Species", "Spp.Strain",
+                       "isolate", "version_status",             # not used
+                       "assembly_level", "release_type",        # not used
+                       "GenomeStatus",
+                       "seq_rel_date", "asm_name", "submitter", # not used
+                       "AssemblyID.GBRS",
+                       "paired_asm_comp", "ftp_path",           # not used
+                       "excluded_from_refseq", "relation_to_type_material")# not used
+assembly_sub_colnames <- c("TaxID", "Spp.TaxID", "Species", "Spp.Strain",
+                           "RefseqCategory", "GenomeStatus",
+                           "AssemblyID", "AssemblyID.GBRS")
+
+# assembly_colnames_orig <- c("assembly_accession", "bioproject", "biosample",
+#  "wgs_master", "refseq_category", "taxid", "species_taxid", "organism_name",
+#  "infraspecific_name", "isolate", "version_status", "assembly_level", "release_type",
+#  "genome_rep", "seq_rel_date", "asm_name", "submitter", "gbrs_paired_asm",
+#  "paired_asm_comp", "ftp_path", "excluded_from_refseq", "relation_to_type_material")
+
+#################
+## Lookup tables
+## in common_data
+#################
+lineage_lookup_colnames <- c("TaxID", "Species", "Lineage")
+domarch_lookup_colnames <- c("DB.ID", "ShortName", "Description", "ID")
+#!! SC and LS will fix other piecemeal files based on these
+
+######################
+## FINAL UPLOADED DATA
+######################
+## Combined data frame that is loaded on to the webapp
+combo_colnames <- c("Query", "UID", "AccNum", "Species", "TaxID", "Lineage",
                     "PcPositive", "ClusterID",
-                    # "Leaf", # MISSING (useful for all dataviz)
-                    # "AssemblyID", "GeneName", "ProtDesc", # MISSING NOW!?!
+                    # "AssemblyID", "GeneName", "Description", # MISSING NOW!?!
                     "DomArch.Pfam", "DomArch.COG", "DomArch.Gene3D",
                     "DomArch.TMHMM", "DomArch.Phobius", "DomArch.SignalP",
                     "DomArch.SMART", "DomArch.TIGR")
