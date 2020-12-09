@@ -1,4 +1,4 @@
-## Currently tested w/ DcdV data
+## Currently tested w/ DcdV and Slps data
 
 ## Dependencies
 library(tidyverse); library(here); library(rlang)
