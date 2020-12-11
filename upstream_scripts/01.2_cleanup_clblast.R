@@ -5,14 +5,14 @@ library(tidyverse)
 library(data.table)
 
 # compute cvm location for acc2lin.R
-source("/data/research/jravilab/molevol_scripts/upstream_scripts/acc2lin.R")
+source("/data/research/jravilab/molevol_scripts/R/pre-msa-tree.R")
 
 ## Read in data file path as a string
 args <- commandArgs(trailingOnly = TRUE)
 
 ## clean up function
 # takes in path to blast result file as a string
-cleanup <- function(infile_blast) {
+cleanup_clblast <- function(infile_blast) {
 
   # column names for blast results
   cl_blast_cols <- c("Query", "SAccNum", "AccNum", "SAllSeqID", "STitle", "Species", "TaxID",
@@ -37,16 +37,17 @@ cleanup <- function(infile_blast) {
   # # TaxID to lineage
   cleanedup_blast$TaxID <- as.integer(cleanedup_blast$TaxID)
   lineage_map <- fread("/data/research/jravilab/common_data/lineagelookup.txt", sep = "\t")
-  #lineage_map <- fread("../ReferenceFiles/lineagelookup.txt", sep = "\t")
   # # get lineage path as argument, it'll be changed depending on who is running it
-  # # have default argument also for where shit is
-  mergedLins <- merge(cleanedup_blast, lineage_map, by.x = "TaxID", by.y="tax_id", all.x = T)
+  # # have default argument also for where the files are located
+  mergedLins <- merge(cleanedup_blast, lineage_map, by.x = "TaxID", by.y="TaxID", all.x = T)
+  
+  blast_names <- add_name(mergedLins)
 
   # create name for new output file to be created
   file_name <- gsub(pattern = '.txt', replacement = '', x = infile_blast) %>%
     paste0('.cln.txt')
   # write the cleaned up data to new file
-  write_tsv(mergedLins, file_name, col_names = T)
+  write_tsv(blast_names, file_name, col_names = T)
 }
 
-cleanup(args[1])
+cleanup_clblast(args[1])

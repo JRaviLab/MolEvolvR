@@ -4,7 +4,7 @@ library(data.table)
 # read in files
 args <- commandArgs(trailingOnly = TRUE)
 
-rps2da <- function(infile_rps, infile_blast) {
+rps2da <- function(infile_rps, infile_blast, suffix) {
   # analyses to filter by
   analysis <- c("COG") #, "PRK", "cd")
   # column names for rpsblast output
@@ -18,13 +18,13 @@ rps2da <- function(infile_rps, infile_blast) {
   # reading in blast output
   blast_out <- read_tsv(file = infile_blast, col_names = T)
   # lookup table
-  lookup <- read_tsv("/data/research/jravilab/common_data/lookup_tbl.tsv")
+  lookup <- read_tsv("/data/research/jravilab/common_data/cln_lookup_tbl.tsv")
   # clean up rpsblast cdd id number
   rpsout <- rpsout %>%
     mutate(DB.ID = gsub(pattern = "CDD:", replacement = "", x=DB.ID)) %>%
     mutate(DB.ID = as.character(DB.ID))
 
-  rps_cdd <- merge(rpsout, lookup, by.x="DB.ID", by.y ="ID")
+  rps_cdd <- merge(rpsout, lookup, by.x="DB.ID", by.y ="ID", all.x = T)
 
   #### filter by analysis ####
   # filter by COG
@@ -55,8 +55,8 @@ rps2da <- function(infile_rps, infile_blast) {
   rps_da <- merge(blast_out, domarch2)
 
   #### SAVE RPS W/ CDD DATA TABLE ####
-  write_tsv(rps_da, file = infile_blast)
+  write_tsv(rps_da, file = paste0(suffix, '.full_analysis.txt'))
 
 }
 
-rps2da(args[1], args[2])
+rps2da(args[1], args[2], args[3])

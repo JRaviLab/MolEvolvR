@@ -3,20 +3,26 @@
 # Expected user input: full FILEPATH to multi-fasta file
 # Authors: Karn Jongnarangsin, Lauren Sosinski, Janani Ravi
 
+
 FASTA=$1
 
 cat $FASTA | awk '{
-        if (substr($0, 1, 1)==">") {filename=(substr($0,2) ".fa")}
+        if (substr($0, 1, 1)==">") {filename=(sed 's/^>//' | cut -d ' ' -f 1 ".fa")}
         print $0 > filename
 }'
 
-#cat $FASTA | awk '{
+#cat ${FASTA} | sed 's/^>//' | cut -d ' ' -f 1
+
+# sh ./detox01.0.2/detox -v .
+
+# cat $FASTA | awk '{
+
 #        if (substr($0, 1, 1)==">") {
-#	  s=(substr($0,2))
-#	  p=(awk '{print $1;}')
-#	  filename=(p ".fa") }
-#
-#	print $0 > filename ;
+#	  s=(substr($0,2) | cut -d " " -f1 )
+#	  filename=(s ".fa") }
+#	print p >> FASTA ".input.txt"
+#	print $0 > filename
+
 #}'
 
 # print filename > $(FASTA).input.txt ;
