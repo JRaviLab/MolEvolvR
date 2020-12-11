@@ -24,6 +24,10 @@ library(pdftools); library(latexpdf); library(tools); library(tinytex) #needed?
 #### MSA ####
 #############
 
+msa_pdf(fasta_filepath = "data/alns/pspb.gismo.fa" )#, out_filepath = "data/msapdf")
+msa_pdf("data/alns/pspc.gismo.fa")
+
+
 ####################
 msa_pdf <- function(fasta_filepath, out_filepath = NULL,
                     lowerbound=NULL, upperbound=NULL){
