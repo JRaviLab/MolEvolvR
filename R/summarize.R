@@ -168,9 +168,11 @@ total_counts <- function(prot, column = "DomArch",
   #' @examples total_counts(pspa-gc_lin_counts,0,"GC")
   #' @note Please refer to the source code if you have alternate file formats and/or
   #' column names.
+  column <- sym(column)
+
+  prot <- select(prot, {{column}}, Lineage) %>% filter(!is.na({{column}}) & !is.na(Lineage))
 
   prot <- summarize_bylin(prot, column, by = "Lineage", query = "all")
-  column <- sym(column)
   col_count <-  prot %>% group_by({{column}}) %>% summarise(totalcount = sum(count))
 
   total <- left_join(prot,col_count, by = as_string(column))
