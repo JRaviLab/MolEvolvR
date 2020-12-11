@@ -129,7 +129,8 @@ acc2lin <- function(accessions,  assembly_path, lineagelookup_path,ipgout_path =
     unlink(tempdir(), recursive = T)
   }
 
-
+  cols = c("TaxID","GCA_ID", "Protein", "Protein Name", "Species", "Lineage")
+  lins = unique(lins[,..cols])
 
   return(lins)
 }
@@ -175,9 +176,13 @@ efetch_ipg <- function(accNum_vec, out_path)
         Sys.sleep(1)
       }
       cat(
+        # entrez_fetch(id = partitioned_acc[[x]],
+        #              db = "protein",
+        #              rettype = "txt",# parsed = T,
+        #              api_key = "55120df9f5dddbec857bbb247164f86a2e09"
         entrez_fetch(id = partitioned_acc[[x]],
                      db = "ipg",
-                     rettype = "xml",
+                     rettype = "xml",# parsed = T,
                      api_key = "55120df9f5dddbec857bbb247164f86a2e09"
         )
       )
@@ -207,6 +212,13 @@ ipg2lin <- function(accessions, ipg_file, assembly_path, lineagelookup_path)
   ipg_dt <- setnames(ipg_dt, "Assembly", "GCA_ID")
 
   lins <- GCA2Lins(prot_data = ipg_dt, assembly_path, lineagelookup_path)
+
+  # # Drop all non lineage cols
+  # keep_cols = c("Protein","Protein Name", "Organism", "Strain", "Assembly")
+  # drop_cols = c("Id", "Source", "Nucleotid Accession", "Start","Stop","Strand")
+  #
+  # lins = lins[,..keep_cols]
+
   lins <- lins[!is.na(Lineage)] %>% unique()
 
   return(lins)
