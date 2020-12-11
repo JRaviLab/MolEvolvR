@@ -15,6 +15,9 @@ library(data.table)
 library(rentrez)
 library(msa)
 library(furrr)
+
+library(doParallel)
+registerDoParallel(cores=detectCores()-1)
 #library(seqRFLP)
 conflicted::conflict_prefer("filter", "dplyr")
 
@@ -136,7 +139,7 @@ add_leaves <- function(aln_file = "",
 
 
 add_name = function(data, accnum_col = "AccNum",  spec_col = "Species",
-                    lin_col = "Lineage", lin_sep = ">")
+                    lin_col = "Lineage", lin_sep = ">", out_col = "Name")
 {
   #' @author Samuel Chen, Janani Ravi
   #' @description This function adds a new 'Name' column that is comprised of components from
@@ -147,13 +150,25 @@ add_name = function(data, accnum_col = "AccNum",  spec_col = "Species",
   #' @param lin_col Column containing lineage
   #' @param lin_sep Character separating lineage levels
   #' @return Original data with a 'Name' column
+
+  cols = c(accnum_col, "Kingdom","Phylum","Genus", "Spp")
   split_data = data %>% separate(col = lin_col, into = c("Kingdom", "Phylum"), sep = lin_sep) %>%
-    separate(spec_col, into = c("Genus", "Spp"),sep=" ")
-  split_data = split_data %>% mutate(Kingdom = strtrim(Kingdom,1),
-                                     Phylum = strtrim(Phylum,6),
-                                     Genus = strtrim(Genus,1),
-                                     Spp = strtrim(Spp,3)) %>%
-    select(AccNum, Kingdom,Phylum,Genus,Spp)
+    mutate(Kingdom = strtrim(Kingdom,1),
+           Phylum = strtrim(Phylum,6))
+  if(!is.null(spec_col))
+  {
+    split_data =  split_data %>% separate(spec_col, into = c("Genus", "Spp"),sep=" ") %>%
+      mutate(Genus = strtrim(Genus,1),
+             Spp = strtrim(Spp,3))
+  }
+  else
+  {
+    split_data$Genus = ""
+    split_data$Spp = ""
+  }
+
+  split_data = split_data %>%
+    select(all_of(cols))
   split_data[is.na(split_data)] = ""
 
   accnum_sym = sym(accnum_col)
@@ -161,7 +176,8 @@ add_name = function(data, accnum_col = "AccNum",  spec_col = "Species",
     mutate(Leaf = paste0(Kingdom, Phylum, "_", Genus, Spp, "_", {{accnum_sym}} ))%>%
     select(-c(Kingdom,Phylum,Genus,Spp))
 
-  data$Name = Leaf$Leaf
+  # out_col = sym(out_col)
+  data =  mutate(data, l = Leaf$Leaf) %>% setnames(old = "l",new = out_col)
   return(data)
 }
 
@@ -298,9 +314,20 @@ acc2fa <- function(accNum_vec, out_path)
 
     partitioned_acc <- partition(accNum_vec, groups )
     sink(out_path)
+
+
+    # a <- foreach::foreach(x = 1:length(partitioned_acc), .inorder=TRUE, .packages = "rentrez") %dopar% {
+    #   cat(
+    #     entrez_fetch(id = partitioned_acc[[x]],
+    #                  db = "protein",
+    #                  rettype = "fasta",
+    #                  api_key = "YOUR_KEY_HERE"
+    #     )
+    #   )
+    # }
     a <- future_map(1:length(partitioned_acc), function(x)
     {
-      if(x%%9 == 0)
+      if(x%%5 == 0)
       {
         Sys.sleep(1)
       }
@@ -313,7 +340,6 @@ acc2fa <- function(accNum_vec, out_path)
       )
     }
     )
-
     sink(NULL)
   }
 }
