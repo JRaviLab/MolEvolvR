@@ -1,141 +1,129 @@
+## Script to generate heatmaps Var1 vs Var2 for combined full analysis DFs
 ## Currently tested w/ DcdV and Slps data
 
-## Dependencies
-library(tidyverse); library(here); library(rlang)
+##################
+## Dependencies ##
+##################
+library(here)
+library(tidyverse)
 library(data.table)
+library(rlang)
 library(d3heatmap) # https://github.com/rstudio/d3heatmap
 library(heatmaply) # https://github.com/talgalili/heatmaply
 
-source(here("molevol_scripts/colnames_molevol.R"))
+source(here("molevol_scripts/combine_files.R"))
 
-## FILEPATHS
-## Assuming that we are starting with "molevol_scripts.Rproj"
-blast_path <- here("../molevol_data/project_data/slps/")
-gen_path <- here("../molevol_data/common_data/genomes/")
-inpath <- here("../molevol_data/project_data/slps/")
+################
+## FILE INPUT ##
+################
+# inpath <- c("../molevol_data/project_data/slps/")
+# cln_combnd <- read_tsv(paste0(inpath, "full_combined.tsv",
+#                               collapse=""),
+#                        col_names=T)
 
-##############
-## BLAST IN ##
-##############
-# ## Starting with web BLAST outputs
-# ## READ all BLAST files (blastx + blastp)
-# source_files <- list.files(paste0(blast_path, "blast", collapse=""),
-#                            pattern="*.txt")
-# # source_files <- dir(paste0(blast_path, "blast", collapse=""),
-# #                            pattern="*.txt")
-# source_files_path <- paste0(blast_path, "blast/", source_files)
-# web_blast_combnd <- source_files_path %>% list %>%
-#   pmap_dfr(fread, skip=7,
-#            fill=T, na.strings=c(""), header=F) %>%
-#   setnames(web_blastp_colnames) %>%
-#   filter(!is.na(Query))
-#
-# ## Starting with command-line BLAST outs
-# source_files <- dir(inpath, pattern="^WP_.*cln.*", recursive=T)
-# source_files_path <- paste0(inpath, source_files)
-# cl_blast_combnd <- source_files_path %>% list %>%
-#   pmap_dfr(fread, fill=T, na.strings=c(""), header=T)
-
-cl_blast_combnd <- read_tsv(paste0(inpath, "cln_combined.tsv",
-                                   collapse=""),
+## If the combined file doesn't already exist ...
+## Combining full_analysis files
+inpath <- c("../molevol_data/project_data/slps/full_analysis_20201207/")
+cln_combnd <- combine_files(inpath,
+                            pattern="*full_analysis.txt", skip=0,
                             col_names=T)
-## Not needed for cleaned up scripts
-# cl_blast_combnd <- cl_blast_combnd %>%
-#   transmute(Query=qacc, AccNum=sseqid,
-#             Species=sscinames, TaxID=taxid, Lineage, ProtDesc=stitle,
-#             PcPositive=ppos_adjusted, Evalue=evalue,
-#             ClusterID, DomArch.Pfam, DomArch.Phobius) #DomArch.TMHMM
-
-# write_tsv(cl_blast_combnd,
-#           path=paste0(blast_path, "combnd.txt"),
-#           col_names=T)
 
 #################################
 ## Filter by RefRep, Pathogens ##
 #################################
-## RESTRICTING RESULTS FOR VIZ ##
-## Restrict by REF+REP genomes
-patric_path <- paste0(gen_path,
-                      "PATRIC-firmicutes-compl_refrep_good_public_202008.csv")
-patric_refrep <- read_csv(patric_path, col_names=T)
-patric_colnames <- str_replace_all(string=colnames(patric_refrep),
-                                   pattern=" ", replacement="_") # Rm space
-colnames(patric_refrep) <- patric_colnames # Replace colnames
-ref_taxIDs <- patric_refrep$NCBI_Taxon_ID  # Subset TaxIDs to filter BLAST hits
+gen_path <- here("../molevol_data/common_data/genomes/")
 
-blast_sub <- cl_blast_combnd %>%
-  filter(TaxID %in% ref_taxIDs) # Filter by PATRIC ref/rep genomes
-
-## Restrict by VFDB Pathogen Genera
-vfdb_genera_path <- paste0(gen_path,
-                           "vfdb_pathogen_genera_grampos.txt")
-vfdb_genera <- read_csv(vfdb_genera_path, col_names=F)
-
-blast_sub <- blast_sub %>%
-  filter(grepl(Species,
-               pattern=paste0(vfdb_genera$X1, # Filter by VFDB pathogen genomes
+## Lineages corresp. to Gram-positive bacteria | Firmicutes + Actinobacteria
+blast_sub <- cln_combnd %>%
+  filter(grepl(Lineage,
+               pattern=paste0(c("Actinobacteria", "Firmicutes"),
                               collapse="|")))
 
+## PATRIC bacterial genomes | compl + ref + rep + good + public + "Firmicutes"
+patric_path <- paste0(gen_path,
+
+                      "PATRIC-firmicutes-compl_refrep_good_public_202008.csv")
+## PATRIC bacterial genomes | compl + ref + rep + "human hosts"
+# patric_path <- paste0(gen_path, "PATRIC_bacteria_compl_refrep_humanhost.csv")
+
+patric_sub <- read_csv(patric_path, col_names=T)
+
+# Cleanup colnames | Rm space
+patric_colnames <- str_replace_all(string=colnames(patric_sub),
+                                   pattern=" ", replacement="_")
+colnames(patric_sub) <- patric_colnames
+
+blast_sub <- blast_sub %>%
+  filter(TaxID %in% patric_sub$NCBI_Taxon_ID)
+
+
+## VFDB Pathogen Genera
+vfdb_path <- paste0(gen_path, "vfdb_pathogen_genera_grampos.txt")
+vfdb_sub <- read_csv(vfdb_path, col_names=F)
+
+blast_sub <- blast_sub %>%
+  filter(grepl(Species, pattern=paste0(vfdb_sub$X1, collapse="|")))
 
 ##################
 ## DATA for VIZ ##
 ##################
-## Pivoting long to wide
-selected_col="Species"
-selected_col <- sym(selected_col)
+selected_col_x="Species"
+selected_col_x <- sym(selected_col_x)
 
-blast_sub_plot <- blast_sub         %>%
-  filter(!is.na({{selected_col}}))  %>%
-  group_by(Query, {{selected_col}})
+selected_col_y="DomArch.Pfam"
+selected_col_y <- sym(selected_col_y)
 
-blast_sub_plot_wide <- blast_sub                   %>%
+# Fixing Spp, Lineage cols, subsetting by PcPositive
+blast_sub_plot <- blast_sub %>%
   mutate(Lineage=str_replace_all(string=Lineage, pattern=">",
                                  replacement="_"),
          Species=str_replace_all(string=Species, pattern=" ",
-                                 replacement="."))    %>%
-  select(Query, {{selected_col}}, PcPositive)        %>%
-  # filter(PcPositive>=25)                             %>% # Filter by ppos≥25
-  filter(!is.na({{selected_col}}))                    %>%
-  group_by(Query, {{selected_col}})                   %>%
-  arrange(-PcPositive)                               %>%
-  summarise(ppos_max=max(PcPositive))                %>%
-  mutate(ppos_max=as.numeric(ppos_max))               %>%
-  pivot_wider(names_from=Query, values_from=ppos_max) %>%
-  column_to_rownames(var=as_string(selected_col))     %>%
-  as.data.frame()
+                                 replacement="."))           %>%
+  select({{selected_col_x}}, {{selected_col_y}}, PcPositive) %>%
+  filter(PcPositive>=25)                                     %>%
+  filter(grepl({{selected_col_y}}, pattern="SLH"))           %>%
+  # filter(!is.na({{selected_col_y}}))  %>%
+  group_by({{selected_col_x}}, {{selected_col_y}})           %>%
+  arrange(-PcPositive)
 
-blast_sub_plot_wide[is.na(blast_sub_plot_wide)] = 0
-
-# blast_sub_plot_wide <- blast_sub_plot_wide %>%
-#   rename_at(vars(starts_with("WP_")),
-#             funs(str_replace(., pattern="WP_.*.1_", replacement="")))
-# # colnames(blast_sub_plot_wide) <- c("V.cholerae", "V.parahaemolyticus",
-# #                                    "A.veronii", "E.coli",
-# #                                    "P.mirabilis", "E.cloacae")
-# # "Vibrio.cholerae", "Vibrio.parahaemolyticus", "Aeromonas.veronii",
-# # "Escherichia.coli", "Proteus.mirabilis", "Enterobacter.cloacae"
-#
-
-#############
-## DATAVIZ ##
-#############
-## HEATMAPS -- Query vs Select Spp/Lineages
-## Using ggplot
-ggplot(blast_sub_plot, aes(y={{selected_col}}, x=Query, fill=PcPositive)) +
+## Heatmap using ggplot | Query vs Select Spp/Lineages
+ggplot(blast_sub_plot, aes(y={{selected_col_x}},
+                           x={{selected_col_y}},
+                           fill=PcPositive)) +
   geom_tile() +
   scale_fill_gradient(low="white", high="darkgreen") +
   theme_minimal() +
   theme(axis.text.x=element_text(angle=40, hjust = 1)) +
   labs(fill="% Similarity") +
-  xlab("Query proteins") + ylab(as_string(selected_col))
+  xlab(as_string(selected_col_x)) + ylab(as_string(selected_col_y))
 
-## Using Heatmaply
+## Pivoting from LONG to WIDE for other heatmap plotting functions
+blast_sub_plot_wide <- blast_sub %>%
+  mutate(Lineage=str_replace_all(string=Lineage, pattern=">",
+                                 replacement="_"),
+         Species=str_replace_all(string=Species, pattern=" ",
+                                 replacement="."))    %>%
+  select({{selected_col_x}}, {{selected_col_y}}, PcPositive)         %>%
+  # filter(PcPositive>=50)                              %>%
+  filter(!is.na({{selected_col_y}}))                  %>%
+  group_by({{selected_col_x}}, {{selected_col_y}})    %>%
+  arrange(-PcPositive)                                %>%
+  summarise(ppos_max=max(PcPositive))                 %>%
+  mutate(ppos_max=as.numeric(ppos_max))               %>%
+  pivot_wider(names_from={{selected_col_x}}, values_from=ppos_max) %>%
+  column_to_rownames(var=as_string(selected_col_y))   %>%
+  as.data.frame()
+
+blast_sub_plot_wide[is.na(blast_sub_plot_wide)] = 0
+
+## Heatmap using heatmaply | Query vs Select Spp/Lineages
 heatmaply(blast_sub_plot_wide, #[,-c(1)],
           column_text_angle = 70, fontsize_row = 8, fontsize_col = 8,
-          label_names=c(as_string(selected_col), "query", "ppos"),
+          label_names=c(as_string(selected_col_y),
+                        as_string(selected_col_x), "ppos"),
           dendrogram="row",
           main="Homologs", key.title="% Similarity\n",
-          xlab="Query proteins", #ylab="Species",
+          xlab=as_string(selected_col_x), #ylab="Species",
           # row_side_colors = blast_sub_plot_wide[, 1],
           # row_side_palette=ggplot2::scale_fill_gradient2(low = "white",
           #                                                high = "green",
@@ -146,9 +134,10 @@ heatmaply(blast_sub_plot_wide, #[,-c(1)],
             midpoint = 10, limits = c(0, 100)),
           branches_lwd=0.2)
 
-## Using d3heatmap
+## Heatmap using d3heatmap | Query vs Select Spp/Lineages
 ## !! Issue: Labels getting cut !!
-d3heatmap(blast_sub_plot_wide, scale = "column", show_grid=F, dendrogram="row",
+d3heatmap(blast_sub_plot_wide,
+          scale = "column", show_grid=F, dendrogram="row",
           colors="Blues", #k_row=8, #theme="dark",
           xaxis_font_size="8pt", yaxis_font_size="8pt",
           height="1250", width="1000")
