@@ -19,7 +19,7 @@ library(furrr)
 library(doParallel)
 registerDoParallel(cores=detectCores()-1)
 #library(seqRFLP)
-conflicted::conflict_prefer("filter", "dplyr")
+#conflicted::conflict_prefer("filter", "dplyr")
 
 ##############################
 ## Pre-requisite functions ##
