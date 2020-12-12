@@ -7,7 +7,7 @@
 # Created: 2020.07.09
 # Last modified: 2020.11.13
 # Authors: Lauren Sosinski, Janani Ravi
-# On GitHub: currently in jravilab/laurensosinski
+# On GitHub: currently in jravilab/molevol_scripts/upstream_scripts
 
 ############
 ## TORQUE ##
@@ -74,53 +74,55 @@ do
       # sh /data/research/jravilab/laurensosinski/scripts/wrapper-scripts/04a_iprscan.sh ${FILE}
       # ipr2da for these
       
-      ## SPLIT MULTIFASTA FILE ##
+      # put original fasta file into file containing all homologs
+      cat $FILE >> ${OUTDIR}/${SUFFIX}.all_accnums.fa
+
       # sh split_fasta.sh ${FILE}
       
       ## DELTABLAST ##
       db_start=$SECONDS
-      sh /data/research/jravilab/laurensosinski/scripts/wrapper-scripts/01.1_deltablast.sh $FILE $SUFFIX $OUTDIR $DB $NHITS $EVAL
+      sh /data/research/jravilab/molevol_scripts/upstream_scripts/01.1_deltablast.sh $FILE $SUFFIX $OUTDIR $DB $NHITS $EVAL
       db_duration=$(( $SECONDS - $db_start ))
       
       ## BLAST RESULT CLEANUP ##
       db_cln_start=$SECONDS
-      Rscript /data/research/jravilab/laurensosinski/scripts/wrapper-scripts/01.2_cleanup_clblast.R ${OUTDIR}/${SUFFIX}.${DB}.${EVAL}.txt
+      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.2_cleanup_clblast.R ${OUTDIR}/${SUFFIX}.${DB}.${EVAL}.txt
       db_cln_duration=$(( $SECONDS - $db_cln_start ))
 
       ## ACC2FA -- getting fasta FILES for deltablast output(s) 
       acc2fa_start=$SECONDS
-      sh /data/research/jravilab/laurensosinski/scripts/wrapper-scripts/02_acc2fa.sh ${OUTDIR}/${SUFFIX}.${DB}.${EVAL}.txt $SUFFIX $OUTDIR
+      sh /data/research/jravilab/molevol_scripts/upstream_scripts/02_acc2fa.sh ${OUTDIR}/${SUFFIX}.${DB}.${EVAL}.txt $SUFFIX $OUTDIR
       acc2fa_duration=$(( $SECONDS - $acc2fa_start ))
 
       ## BLASTCLUST ##
       bclust_start=$SECONDS
-      sh /data/research/jravilab/laurensosinski/scripts/wrapper-scripts/03.1_blastclust.sh ${OUTDIR}/${SUFFIX}.all_accnums.fa $SUFFIX $OUTDIR
+      sh /data/research/jravilab/molevol_scripts/upstream_scripts/03.1_blastclust.sh ${OUTDIR}/${SUFFIX}.all_accnums.fa $SUFFIX $OUTDIR
       bclust_duration=$(( $SECONDS - $bclust_start ))
 
       ## CLUST2TABLE
       c2t_start=$SECONDS
-      Rscript /data/research/jravilab/laurensosinski/scripts/wrapper-scripts/03.2_clust2table.R ${OUTDIR}/${SUFFIX}.all_accnums.bclust.L60S80.out ${OUTDIR}/${SUFFIX}.${DB}.${EVAL}.cln.txt
+      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/03.2_clust2table.R ${OUTDIR}/${SUFFIX}.all_accnums.bclust.L60S80.out ${OUTDIR}/${SUFFIX}.${DB}.${EVAL}.cln.txt
       c2t_duration= $(( $SECONDS - $c2t_start ))
 
       ## INTERPROSCAN ##
       ## add second run for original protein, too
       ipr_start=$SECONDS
-      sh /data/research/jravilab/laurensosinski/scripts/wrapper-scripts/04a_iprscan.sh ${OUTDIR}/${SUFFIX}.all_accnums.fa ${SUFFIX} ${OUTDIR}
+      sh /data/research/jravilab/molevol_scripts/upstream_scripts/04a_iprscan.sh ${OUTDIR}/${SUFFIX}.all_accnums.fa ${SUFFIX} ${OUTDIR}
       ipr_duration=$(( $SECONDS - $ipr_start ))
 
       ## IPR2DA ##
       ipr2da_start=$SECONDS
-      Rscript /data/research/jravilab/laurensosinski/scripts/wrapper-scripts/05a_ipr2da.R ${OUTDIR}/${SUFFIX}.iprscan.tsv ${OUTDIR}/${SUFFIX}.${DB}.${EVAL}.cln.clust.txt ${SUFFIX}
+      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${SUFFIX}.iprscan.tsv ${OUTDIR}/${SUFFIX}.${DB}.${EVAL}.cln.clust.txt ${SUFFIX}
       ipr2da_duration=$(( $SECONDS - $ipr2da_start ))
 
       ## RPSBLAST ## 		
       rps_start=$SECONDS
-      sh /data/research/jravilab/laurensosinski/scripts/wrapper-scripts/04b_rpsblast.sh ${OUTDIR}/${SUFFIX}.all_accnums.fa ${SUFFIX} ${OUTDIR}
+      sh /data/research/jravilab/molevol_scripts/upstream_scripts/04b_rpsblast.sh ${OUTDIR}/${SUFFIX}.all_accnums.fa ${SUFFIX} ${OUTDIR}
       rps_duration=$(( $SECONDS - $rps_start))
 
       ## RPS2DA ##
       rps2da_start=$SECONDS
-      Rscript /data/research/jravilab/laurensosinski/scripts/wrapper-scripts/05b_rps2da.R ${OUTDIR}/${SUFFIX}.rps.out ${OUTDIR}/${SUFFIX}.${DB}.${EVAL}.cln.clust.ipr.txt ${SUFFIX}
+      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05b_rps2da.R ${OUTDIR}/${SUFFIX}.rps.out ${OUTDIR}/${SUFFIX}.${DB}.${EVAL}.cln.clust.ipr.txt ${SUFFIX}
       rps2da_duration=$(( $SECONDS - $rps2da_start ))
 
       cp ${FILE} ${OUTDIR}	# copy fasta file to output directory
