@@ -1,0 +1,3 @@
+/data/research/jravilab/molevol_scripts/upstream_scripts/test/Caurimucosum.fa
+/data/research/jravilab/molevol_scripts/upstream_scripts/test/Cglutamicum.fa
+/data/research/jravilab/molevol_scripts/upstream_scripts/test/Cminutissimum.fa
