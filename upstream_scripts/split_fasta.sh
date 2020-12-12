@@ -7,7 +7,7 @@
 FASTA=$1
 
 cat $FASTA | awk '{
-        if (substr($0, 1, 1)==">") {filename=(sed 's/^>//' | cut -d ' ' -f 1 ".fa")}
+        if (substr($0, 1, 1)==">") {filename=(sed -i 's/^>//' substr($0, 1) | cut -d ' ' -f 1 ".fa")}
         print $0 > filename
 }'
 
