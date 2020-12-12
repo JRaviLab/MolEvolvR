@@ -65,58 +65,59 @@ GCA2lin <- function(prot_data, assembly_path = "data/acc_files/assembly_summary2
 
   mergedTax <- merge(x = prot_data,y = assembly_summary,by = "GCA_ID", all.x = T)
 
-  # accessions = prot_data %>% pull(acc_col) %>% unique()
-  #
-  # best_rows = integer(length(accessions))
-  # for(i in 1:length(accessions))
-  # {
-  #   # browser()
-  #   acc = accessions[i]
-  #   acc_inds = which(mergedTax$Protein == acc)
-  #   if(length(acc_inds) == 1)
-  #   {
-  #     best_rows[i] = acc_inds
-  #   }
-  #   else if(length(acc_inds) > 1)
-  #   {
-  #     # refseq inds take precedence
-  #     refseq_inds = acc_inds[which(mergedTax[acc_inds,]$Source == "RefSeq")]
-  #     if(length(refseq_inds) == 1)
-  #     {
-  #       # only one refseq ind, keep that
-  #       best_rows[i] = refseq_inds[1]
-  #       next
-  #     }
-  #     else if( length(refseq_inds) > 1)
-  #     {
-  #       # more than 1 refseq ind
-  #       refseq_complete = refseq_inds[which(mergedTax[refseq_inds,]$assembly_level == "Complete Genome")]
-  #       if(length(refseq_complete) >= 1)
-  #       {
-  #         # Take the first one with refseq complete
-  #         best_rows[i] = refseq_complete[1]
-  #         next
-  #       }
-  #       # take the first refseq if no complete
-  #       best_rows[i] = refseq_inds[1]
-  #     }
-  #     else
-  #     {
-  #       # only non refseq: should I just choose the first one?
-  #       if(any(mergedTax[acc_inds]$assembly_level == "Complete Genome"))
-  #       {
-  #         best_rows[i] = acc_inds[which(mergedTax[acc_inds]$assembly_level == "Complete Genome")][1]
-  #       }
-  #       else{
-  #         best_rows[i] = acc_inds[1]
-  #       }
-  #     }
-  #   }
-  # }
+  accessions = prot_data %>% pull(acc_col) %>% unique()
 
-  # mergedTax = mergedTax[best_rows,]
+  best_rows = integer(length(accessions))
+  for(i in 1:length(accessions))
+  {
+    # browser()
+    acc = accessions[i]
+    acc_inds = which(mergedTax$Protein == acc)
+    if(length(acc_inds) == 1)
+    {
+      best_rows[i] = acc_inds
+    }
+    else if(length(acc_inds) > 1)
+    {
+      # refseq inds take precedence
+      refseq_inds = acc_inds[which(mergedTax[acc_inds,]$Source == "RefSeq")]
+      if(length(refseq_inds) == 1)
+      {
+        # only one refseq ind, keep that
+        best_rows[i] = refseq_inds[1]
+        next
+      }
+      else if( length(refseq_inds) > 1)
+      {
+        # more than 1 refseq ind
+        refseq_complete = refseq_inds[which(mergedTax[refseq_inds,]$assembly_level == "Complete Genome")]
+        if(length(refseq_complete) >= 1)
+        {
+          # Take the first one with refseq complete
+          best_rows[i] = refseq_complete[1]
+          next
+        }
+        # take the first refseq if no complete
+        best_rows[i] = refseq_inds[1]
+      }
+      else
+      {
+        # only non refseq: should I just choose the first one?
+        if(any(mergedTax[acc_inds]$assembly_level == "Complete Genome"))
+        {
+          best_rows[i] = acc_inds[which(mergedTax[acc_inds]$assembly_level == "Complete Genome")][1]
+        }
+        else{
+          best_rows[i] = acc_inds[1]
+        }
+      }
+    }
+  }
+
+  mergedTax = mergedTax[best_rows,]
 
   lineage_map <- fread(lineagelookup_path, sep = "\t")
+  lineage_map = lineage_map[,!"Species"]
 
   mergedLins <- merge(mergedTax, lineage_map, by.x = "TaxID", by.y="TaxID",
                       all.x = T)
@@ -175,10 +176,10 @@ acc2lin <- function(accessions,  assembly_path, lineagelookup_path,ipgout_path =
 
   lins <- ipg2lin(accessions, ipgout_path, assembly_path, lineagelookup_path)
 
-  if(tmp_ipg)
-  {
-    unlink(tempdir(), recursive = T)
-  }
+  # if(tmp_ipg)
+  # {
+  #   unlink(tempdir(), recursive = T)
+  # }
 
   # cols = c("TaxID","GCA_ID", "Protein", "Protein Name", "Species", "Lineage")
   # lins = unique(lins[,..cols])
