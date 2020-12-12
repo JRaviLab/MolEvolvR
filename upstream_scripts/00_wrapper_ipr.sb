@@ -1,0 +1,91 @@
+#!/bin/bash
+
+# MolEvolvR: Companion wrapper script
+# accnum –> fasta –> deltablast -> edirect -> blastclust -> iprscan/rpsblast -> cleanup w/ lineages!
+# To run on compute.cvm.msu.edu
+
+# Created: 2020.07.09
+# Last modified: 2020.11.13
+# Authors: Lauren Sosinski, Janani Ravi
+# On GitHub: currently in jravilab/molevol_scripts/upstream_scripts
+
+############
+## TORQUE ##
+############
+#PBS -l walltime=04:30:00       # time limit; RESET, if you need longer time
+#PBS -l nodes=1:ppn=10          # number of nodes requested
+#PBS -m abe                     # email notifications for job
+#PBS -M=sosinsk7@msu.edu        # user email; RESET
+#PBS -F arguments               # allows script to accept argument input
+#PBS -t 1-10                    # number of identical jobs to submit to the queue
+#PBS -N molevol_analysis        # name of job being run
+
+## print start/stop printf in individual scripts
+
+## change output directory based on user input
+OUTPATH=$PBS_O_WORKDIR
+cd ${OUTPATH}
+
+## !! NOTES FOR LS ##
+## add flags/help function after finishing script and/or gencontext
+## figure out where input list is coming from, create output folder in same directory 
+## talk to Sam about how this works with Pins package
+
+## USER INPUTS
+INFILEPATHS_LIST=$1
+DB=refseq
+NHITS=5000
+EVAL=1e-5
+
+# Location of databases/dependencies 
+export BLASTDB=/data/common_data/blastdb/v5:/data/common_data/blastdb/ncbidb:/data/common_data/blastdb:/data/common_data/blastdb/FASTA:$BLASTDB
+export BLASTMAT=/opt/software/BLAST/2.2.26/data
+export INTERPRO=/opt/software/iprscan/5.47.82.0-Python3/data:/data/common_data/iprscan:$INTERPRO
+export NCBI_API_KEY=882b28aa19ece4679d4fa5adcf3319f5df09
+
+
+#####################
+## LOADING MODULES ##
+#####################
+
+module purge                                    ## clear loaded modules
+module load R                                   ## load R
+module load edirect                             ## load edirect
+module load BLAST                               ## load blast (for blastclust)
+module load BLAST+ BioPerl                      ## load blast+
+module load iprscan                             ## load iprscan
+
+start=$SECONDS                                  ## get current time
+START_DT=$(date '+%d/%m/%Y-%H:%M:%S')
+
+FILES=$(cat ${INFILEPATHS_LIST})                        ## list of files (with paths) to be processed
+#total=$(( ((3*60)+50)*60 ))                    ## total time the job can take in seconds, this should match your SBATCH line above
+#maxtime=$(( 120*60 ))                          ## maximum time to process one input, need to do some experimenting with your inputs
+
+for FILE in $(shuf -e ${FILES[@]})
+do
+   SUFFIX=$(basename -s .fa $FILE)      ## takes SUFFIX of file
+   OUTDIR=${OUTPATH}/${SUFFIX}_out      ## variable containing output filepath based SUFFIX
+   printf "${SUFFIX}"
+
+   if [ ! -d ${OUTDIR} ]; then                  ## if the output directory doesn't exist
+      mkdir ${OUTDIR}                           ## make the directory
+
+      ## IPR2DA ##
+      ipr2da_start=$SECONDS
+      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${SUFFIX}.iprscan.tsv ${OUTDIR}/${SUFFIX}.${DB}.${EVAL}.cln.clust.txt ${SUFFIX}
+      ipr2da_duration=$(( $SECONDS - $ipr2da_start ))
+      cp ${FILE} ${OUTDIR}      # copy fasta file to output directory
+
+      chmod -R ug+wr ${OUTDIR}
+
+      ## Figure out how long the entire script took to run
+      duration=$(( $SECONDS - $start ))
+      printf "\nTotal run time: $duration\n"
+      STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
+
+      ## Add benchmarking times to logfile
+      printf "\n${START_DT}\t${STOP_DT}\t${SUFFIX}\t${db_duration}\t${db_cln_duration}\t${acc2fa_duration}\t${bclust_duration}\t${c2t_duration}\t${ipr_duration}\t${ipr2da_duration}\t${rps_duration}\t${rps2da_duration}\t${duration}" >> ${OUTPATH}/logfile.txt
+   
+   fi
+done
