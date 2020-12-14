@@ -15,6 +15,7 @@ library(data.table)
 library(rentrez)
 library(msa)
 library(furrr)
+library(future)
 
 library(doParallel)
 registerDoParallel(cores=detectCores()-1)
@@ -280,11 +281,11 @@ generate_all_aln2fa <- function(aln_path=here("data/rawdata_aln/"),
 }
 
 
-acc2fa <- function(accNum_vec, out_path)
+acc2fa <- function(accNum_vec, out_path, plan = "sequential")
 {
   #' acc2fa converts protein accession numbers to a fasta format.
   #' Resulting fasta file is written to the out_path.
-  #' @author Samuel Chen
+  #' @author Samuel Chen, Janani Ravi
   #' @keywords accnum, fasta
   #' @param accNum_vec Character vector containing protein accession numbers to generate fasta sequences for.
   #' Function may not work for vectors of length > 10,000
@@ -307,7 +308,7 @@ acc2fa <- function(accNum_vec, out_path)
       return(partitioned)
     }
 
-    plan(strategy = "multiprocess", .skip = T)
+    plan(strategy = plan, .skip = T)
 
     min_groups = length(accNum_vec)/200
     groups <- min(max(min_groups,15) ,length(accNum_vec))
@@ -325,13 +326,13 @@ acc2fa <- function(accNum_vec, out_path)
     #     )
     #   )
     # }
-    a <- future_map(1:length(partitioned_acc), function(x)
+    a = map(1:length(partitioned_acc), function(x)
     {
-      if(x%%5 == 0)
-      {
-        Sys.sleep(1)
-      }
-      cat(
+      if(x %% 9 == 0)
+	{
+	sleep(1)
+	}		
+      f = future(
         entrez_fetch(id = partitioned_acc[[x]],
                      db = "protein",
                      rettype = "fasta",
@@ -340,6 +341,26 @@ acc2fa <- function(accNum_vec, out_path)
       )
     }
     )
+  for(f in a)
+{
+cat(value(f))
+}
+
+    # a <- future_map(1:length(partitioned_acc), function(x)
+    # {
+    #   if(x%%5 == 0)
+    #   {
+    #     Sys.sleep(1)
+    #   }
+    #   cat(
+    #     entrez_fetch(id = partitioned_acc[[x]],
+    #                  db = "protein",
+    #                  rettype = "fasta",
+    #                  api_key = "55120df9f5dddbec857bbb247164f86a2e09"
+    #     )
+    #   )
+    # }
+    # )
     sink(NULL)
   }
 }

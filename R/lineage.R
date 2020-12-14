@@ -135,11 +135,11 @@ sink.reset <- function(){
 
 
 add_lins <- function(df, acc_col = "AccNum", assembly_path,
-                     lineagelookup_path, ipgout_path = NULL)
+                     lineagelookup_path, ipgout_path = NULL, plan = "multicore")
 {
   s_acc_col = sym(acc_col)
   accessions = df %>% pull(acc_col)
-  lins = acc2lin(accessions, assembly_path, lineagelookup_path, ipgout_path)
+  lins = acc2lin(accessions, assembly_path, lineagelookup_path, ipgout_path, plan = plan)
 
   # Drop a lot of the unimportant columns for now? will make merging much easier
   lins <- lins[,c("Strand","Start","Stop", "Nucleotide Accession", "Source",
@@ -154,7 +154,7 @@ add_lins <- function(df, acc_col = "AccNum", assembly_path,
 }
 
 
-acc2lin <- function(accessions,  assembly_path, lineagelookup_path,ipgout_path = NULL )
+acc2lin <- function(accessions,  assembly_path, lineagelookup_path,ipgout_path = NULL, plan = "multicore" )
 {
   #'@author Samuel Chen, Janani Ravi
   #'@description This function combines 'efetch_ipg()' and 'ipg2lin()' to map a set
@@ -172,7 +172,7 @@ acc2lin <- function(accessions,  assembly_path, lineagelookup_path,ipgout_path =
     tmp_ipg = T
     ipgout_path = tempfile("ipg", fileext =".txt")
   }
-  efetch_ipg(accessions, out_path= ipgout_path )
+  efetch_ipg(accessions, out_path= ipgout_path, plan = plan )
 
   lins <- ipg2lin(accessions, ipgout_path, assembly_path, lineagelookup_path)
 
@@ -189,7 +189,7 @@ acc2lin <- function(accessions,  assembly_path, lineagelookup_path,ipgout_path =
 
 
 
-efetch_ipg <- function(accNum_vec, out_path)
+efetch_ipg <- function(accNum_vec, out_path, plan = "multicore")
 {
   #'@author Samuel Chen, Janani Ravi
   #'@description Perform efetch on the ipg database and write the results to out_path
@@ -212,7 +212,7 @@ efetch_ipg <- function(accNum_vec, out_path)
       return(partitioned)
     }
 
-    plan(strategy = "multiprocess", .skip = T)
+    plan(strategy = plan, .skip = T)
 
 
     min_groups = length(accNum_vec)/200
@@ -220,14 +220,14 @@ efetch_ipg <- function(accNum_vec, out_path)
     partitioned_acc <- partition(accNum_vec, groups )
     sink(out_path)
 
-    a <- future_map(1:length(partitioned_acc), function(x)
+    a <- map(1:length(partitioned_acc), function(x)
     {
       # Avoid hitting the rate API limit
-      if(x%%9 == 0)
+      if(plan != "sequential" & x%%9 == 0)
       {
         Sys.sleep(1)
       }
-      cat(
+      f = future({cat(
         # entrez_fetch(id = partitioned_acc[[x]],
         #              db = "protein",
         #              rettype = "txt",# parsed = T,
@@ -238,7 +238,13 @@ efetch_ipg <- function(accNum_vec, out_path)
                      api_key = "55120df9f5dddbec857bbb247164f86a2e09"
         )
       )
-    })
+    }) 
+})
+	
+  for( f in a)
+{
+   cat(value(f))
+}  
     sink(NULL)
   }
 }
