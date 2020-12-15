@@ -72,24 +72,24 @@ acc2lin <- function(accessions,  assembly_path, lineagelookup_path,ipgout_path =
 
 
 
-efetch_ipg <- function(accNum_vec, out_path)
+efetch_ipg <- function(accnums, out_path)
 {
   #'@author Samuel Chen, Janani Ravi
   #'@description Perform efetch on the ipg database and write the results to out_path
-  #'@param accNum_vec Character vector containing the accession numbers to query on
+  #'@param accnums Character vector containing the accession numbers to query on
   #'the ipg database
   #'@param out_path Path to write the efetch results to
-  if(length(accNum_vec) > 0){
+  if(length(accnums) > 0){
 
-    partition <- function(v, groups){
+    partition <- function(in_data, groups){
       # Partition data to limit number of queries per second for rentrez fetch:
       # limit of 10/second w/ key
-      l <- length(v)
+      l <- length(in_data)
 
       partitioned <- list()
       for(i in 1:groups)
       {
-        partitioned[[i]] <- v[seq.int(i,l,groups)]
+        partitioned[[i]] <- in_data[seq.int(i,l,groups)]
       }
 
       return(partitioned)
@@ -98,9 +98,9 @@ efetch_ipg <- function(accNum_vec, out_path)
     plan(strategy = "multiprocess", .skip = T)
 
 
-    min_groups = length(accNum_vec)/200
-    groups <- min(max(min_groups,15) ,length(accNum_vec))
-    partitioned_acc <- partition(accNum_vec, groups )
+    min_groups = length(accnums)/200
+    groups <- min(max(min_groups,15) ,length(accnums))
+    partitioned_acc <- partition(accnums, groups)
     sink(out_path)
 
     a <- future_map(1:length(partitioned_acc), function(x)
@@ -152,16 +152,16 @@ ipg2lin <- function(accessions, ipg_file, assembly_path, lineagelookup_path)
 
 
 
-# efetch_ipg <- function(accNum_vec, outpath)
+# efetch_ipg <- function(accnums, outpath)
 # {
 #   SIZE = 250
 #   lower_bound = 1
-#   groups = ceiling(length(accNum_vec)/250)
+#   groups = ceiling(length(accnums)/250)
 #   for(i in 1:groups)
 #   {
-#     upper_bound = min((lower_bound+250),length(accNum_vec))
+#     upper_bound = min((lower_bound+250),length(accnums))
 #
-#     sub_acc = accNum_vec[lower_bound:upper_bound]
+#     sub_acc = accnums[lower_bound:upper_bound]
 #
 #     lower_bound = upper_bound +1
 #
