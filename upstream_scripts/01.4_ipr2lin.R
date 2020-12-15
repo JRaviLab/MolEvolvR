@@ -1,27 +1,27 @@
 library(tidyverse)
 library(data.table)
 
+# source lineage script for add_name and add_lins
+source('/data/research/jravilab/molevol_scripts/R/lineage.R')
+source('/data/research/jravilab/molevol_scripts/R/pre-msa-tree.R')
+source('/data/research/jravilab/molevol_scripts/R/colnames_molevol.R')
+
 # add lineage to iprscan results
 
-ipr2lin <- function(ipr, blast, suffix) {
+ipr2lin <- function(ipr, suffix) {
   # ipr column names
-  ipr_colnames <- c("AccNum", "SeqMD5Digest", "SLength", "Analysis",
-                    "DB.ID", "SignDesc", "StartLoc", "StopLoc", "Score",
-                    "Status", "RunDate", "IPRAcc", "IPRDesc")
-
-  # read in blast results
-  blast_out <- fread(infile_blast, header = T, keepLeadingZeros = T)
+  #ipr_colnames <- c("AccNum", "SeqMD5Digest", "SLength", "Analysis",
+  #                  "DB.ID", "SignDesc", "StartLoc", "StopLoc", "Score",
+  #                  "Status", "RunDate", "IPRAcc", "IPRDesc")
 
   # read in iprscan results,
-  ipr_in <- read_tsv(infile_ipr, col_names = ipr_colnames) %>%
+  ipr_in <- read_tsv(ipr, col_names = ipr_colnames) %>%
     mutate(DB.ID = gsub('G3DSA:', '', DB.ID))
   
-  # extract necessary columns from blast output file to add to ipr results
-  lin <- select(blast_out, AccNum, TaxID, Species, Lineage)
-  
-  # combine ipr file w/ lineage columns from blast
-  # run add_name function to add species names to ipr results via taxID
-  ipr_lin <- merge(ipr_in, lin, by = 'AccNum', all.x = T) %>%
+  # run add_lins function on ipr output
+  ipr_lin <- ipr_in %>%
+    add_lins(assembly_path = '/data/research/jravilab/common_data/assembly_summary_refseq.txt',
+             lineagelookup_path = '/data/research/jravilab/common_data/lineage_lookup.txt') %>%
     add_name()
   
   # write results to file
@@ -32,4 +32,4 @@ ipr2lin <- function(ipr, blast, suffix) {
 args <- commandArgs(trailingOnly = TRUE)
 
 ## call function 
-ipr2lin(args[1], args[2], args3[])
+ipr2lin(args[1], args[2])

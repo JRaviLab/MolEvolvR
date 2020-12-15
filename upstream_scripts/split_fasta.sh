@@ -1,38 +1,34 @@
 #!/bin/bash
-# Script to split a multi-fasta file to individual fasta files
-# Expected user input: full FILEPATH to multi-fasta file
-# Authors: Karn Jongnarangsin, Lauren Sosinski, Janani Ravi
+# Script(s) to split multifasta file into several individual fasta files named by word #1 (aka accnum)!
+
+INFILE=$1
+dir=$(dirname $INFILE)
+cd ${dir}
+
+### ADD IF AND EVERYTHING ELSE FROM 00_split ... 
+
+## OPTION 1
+# https://unix.stackexchange.com/questions/15662/splitting-text-files-based-on-a-regular-expression
+awk -F "( )|(>)" '/^>/{x=""$2".faa";}{print >x;}' $INFILE
 
 
-FASTA=$1
 
-cat $FASTA | awk '{
-        if (substr($0, 1, 1)==">") {filename=(sed -i 's/^>//' substr($0, 1) | cut -d ' ' -f 1 ".fa")}
-        print $0 > filename
-}'
+### UNUSED ###
+## OPTION 2
+# https://awesomeopensource.com/project/crazyhottommy/bioinformatics-one-liners
+#awk '/^>/{s=++d".fa"} {print > s}' $INFILE
 
-#cat ${FASTA} | sed 's/^>//' | cut -d ' ' -f 1
+## OPTION 3
+# https://awesomeopensource.com/project/crazyhottommy/bioinformatics-one-liners
+# https://www.golinuxcloud.com/csplit-split-command-examples-linux-unix/
+# https://linuxhandbook.com/csplit-command/
+#csplit -z -q -n 2 -f seq_ $INFILE /\>/ {*}  
 
-# sh ./detox01.0.2/detox -v .
-
-# cat $FASTA | awk '{
-
-#        if (substr($0, 1, 1)==">") {
-#	  s=(substr($0,2) | cut -d " " -f1 )
-#	  filename=(s ".fa") }
-#	print p >> FASTA ".input.txt"
-#	print $0 > filename
-
-#}'
-
-# print filename > $(FASTA).input.txt ;
-# pwd > ${FASTA}.input.txt
-
-## look for all files in directory that end with .fa, append them to text file
-# grep -wlf *.fa >> input.txt
-
-## for loop from https://stackoverflow.com/questions/2709458/how-to-replace-spaces-in-file-names-using-a-bash-script
-## renaming files -- replace all spaces in file names with underscores
-# for f in *\ *; do mv "$f" "${f// /_}"; done
-
-# awk '{print $1;}'
+## OPTION 4
+# https://unix.stackexchange.com/questions/350523/split-files-based-on-pattern-search-split-file-name-with-pattern-we-searched
+# This script will take 1 parameter as input: the target file path
+#targetFile="$1"        
+#targetDir=$(dirname -- "$targetFile")
+#targetFile=$(basename -- "$targetFile")
+#cd -P -- "$targetDir" || exit
+#awk '{if(gsub(/^>/,"")){name=$0;}else{print > name".txt"}}' < "$targetFile"

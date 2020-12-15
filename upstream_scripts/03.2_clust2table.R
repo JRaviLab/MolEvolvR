@@ -69,7 +69,7 @@ clust2tbl <- function(clust, blast) {
 
   write_tsv(new_clust, file = paste0(newarg, '.clustIDs'), append = F) # accnum + clusterID
   write_tsv(first_prot, file = paste0(newarg, ".clust_reps"), col_names = F, append = F) # first protein from every cluster
-  write_tsv(blast_clustnames, file = paste0(newarg, '.cln.clust.txt'), col_names = T, append = F) # cleaned up blast file + clusterIDs
+  write_tsv(blast_clustnames, file = paste0(newarg, '.cln.clust.tsv'), col_names = T, append = F) # cleaned up blast file + clusterIDs
 }
 
 clust2tbl(args[1], args[2])

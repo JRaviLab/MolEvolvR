@@ -55,7 +55,7 @@ rps2da <- function(infile_rps, infile_blast, suffix) {
   rps_da <- merge(blast_out, domarch2)
 
   #### SAVE RPS W/ CDD DATA TABLE ####
-  write_tsv(rps_da, file = paste0(suffix, '.full_analysis.txt'))
+  write_tsv(rps_da, file = paste0(suffix, '.full_analysis.tsv'))
 
 }
 
