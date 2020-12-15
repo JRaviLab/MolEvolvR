@@ -1,0 +1,152 @@
+#!/bin/bash
+
+# MolEvolvR: Companion wrapper script
+# accnum –> fasta –> deltablast -> edirect -> blastclust -> iprscan/rpsblast -> cleanup w/ lineages!
+# To run on compute.cvm.msu.edu
+
+# Created: 2020.07.09
+# Last modified: 2020.12.14
+# Authors: Lauren Sosinski, Janani Ravi
+# On GitHub: currently in jravilab/molevol_scripts/upstream_scripts
+
+# Input type: text file containing paths to individual fasta files to analyze
+
+############
+## TORQUE ##
+############
+#PBS -l walltime=04:30:00	# time limit; RESET, if you need longer time
+#PBS -l nodes=1:ppn=10		# number of nodes requested
+#PBS -m abe			# email notifications for job
+#PBS -M=sosinsk7@msu.edu	# user email; RESET
+#PBS -F arguments		# allows script to accept argument input
+#PBS -t 1-6			# number of identical jobs to submit to the queue
+#PBS -N molevol_analysis	# name of job being run
+
+## print start/stop printf in individual scripts
+
+## change output directory based on user input
+OUTPATH=$PBS_O_WORKDIR
+cd ${OUTPATH}
+
+## !! NOTES FOR LS ##
+## add flags/help function after finishing script and/or gencontext
+## talk to Sam about how this works with Pins package
+
+## USER INPUTS
+INPUTPATHS_LIST=$1
+DB=refseq
+NHITS=5000
+EVAL=1e-5
+WBLAST=T
+
+# Location of databases/dependencies 
+export BLASTDB=/data/common_data/blastdb/v5:/data/common_data/blastdb/ncbidb:/data/common_data/blastdb:/data/common_data/blastdb/FASTA:$BLASTDB
+export BLASTMAT=/opt/software/BLAST/2.2.26/data
+export INTERPRO=/opt/software/iprscan/5.47.82.0-Python3/data:/data/common_data/iprscan:$INTERPRO
+export NCBI_API_KEY=YOUR_KEY_HERE
+
+#####################
+## LOADING MODULES ##
+#####################
+
+module purge 					## clear loaded modules
+module load R		 			## load R
+module load edirect 				## load edirect
+module load BLAST				## load blast (for blastclust)
+module load BLAST+ BioPerl 			## load blast+
+module load iprscan 				## load iprscan
+
+start=$SECONDS 					## get current time
+START_DT=$(date '+%d/%m/%Y-%H:%M:%S')
+
+#total=$(( ((3*60)+50)*60 ))			## total time the job can take in seconds, this should match your SBATCH line above
+#maxtime=$(( 120*60 )) 				## maximum time to process one input, need to do some experimenting with your inputs
+
+FILES=$(cat $INPUTPATHS_LIST)
+
+for FILE in $(shuf -e ${FILES[@]})
+do
+   F=$(basename ${FILE})
+   SUFFIX=$(echo "${F%%.*}")			## takes SUFFIX of file
+   OUTDIR=${OUTPATH}/${SUFFIX}_full		## variable containing output filepath based SUFFIX
+   printf "${SUFFIX}\n"
+
+   if [ ! -d ${OUTDIR} ]; then 			## if the output directory doesn't exist
+      mkdir ${OUTDIR}				## make the directory
+      cd ${OUTDIR}
+
+      # put original fasta file into file containing all homologs
+      cat $FILE > ${OUTDIR}/${SUFFIX}.all_accnums.fa
+      
+      if ($WBLAST == "F")
+      then
+          ## DELTABLAST ##
+          db_start=$SECONDS
+          sh /data/research/jravilab/molevol_scripts/upstream_scripts/01.1_deltablast.sh $FILE $SUFFIX $OUTDIR $DB $NHITS $EVAL
+          db_duration=$(( $SECONDS - $db_start ))
+      fi
+
+      ## BLAST RESULT CLEANUP ##
+      db_cln_start=$SECONDS
+      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.2_cleanup_clblast.R ${OUTDIR}/${SUFFIX}.${DB}.${EVAL}.txt $WBLAST
+      db_cln_duration=$(( $SECONDS - $db_cln_start ))
+
+      ## ACC2FA -- getting fasta FILES for deltablast output(s) 
+      acc2fa_start=$SECONDS
+      sh /data/research/jravilab/molevol_scripts/upstream_scripts/02_acc2fa.sh ${OUTDIR}/${SUFFIX}.${DB}.${EVAL}.cln.txt $SUFFIX $OUTDIR
+      acc2fa_duration=$(( $SECONDS - $acc2fa_start ))
+
+      ## BLASTCLUST ##
+      bclust_start=$SECONDS
+      sh /data/research/jravilab/molevol_scripts/upstream_scripts/03.1_blastclust.sh ${OUTDIR}/${SUFFIX}.all_accnums.fa $SUFFIX $OUTDIR
+      bclust_duration=$(( $SECONDS - $bclust_start ))
+
+      ## CLUST2TABLE
+      c2t_start=$SECONDS
+      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/03.2_clust2table.R ${OUTDIR}/${SUFFIX}.all_accnums.bclust.L60S80.out ${OUTDIR}/${SUFFIX}.${DB}.${EVAL}.cln.txt
+      c2t_duration= $(( $SECONDS - $c2t_start ))
+
+      ## INTERPROSCAN ##
+      ## add second run for original protein, too
+      ipr_start=$SECONDS
+      sh /data/research/jravilab/molevol_scripts/upstream_scripts/04a_iprscan.sh ${OUTDIR}/${SUFFIX}.all_accnums.fa ${SUFFIX} ${OUTDIR}
+      ipr_duration=$(( $SECONDS - $ipr_start ))
+
+      ## IPR2DA ##
+      ipr2da_start=$SECONDS
+      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${SUFFIX}.iprscan.tsv ${SUFFIX} ${OUTDIR}/${SUFFIX}.${DB}.${EVAL}.cln.clust.txt
+      ipr2da_duration=$(( $SECONDS - $ipr2da_start ))
+
+      ## RPSBLAST ## 		
+      rps_start=$SECONDS
+      sh /data/research/jravilab/molevol_scripts/upstream_scripts/04b_rpsblast.sh ${OUTDIR}/${SUFFIX}.all_accnums.fa ${SUFFIX} ${OUTDIR}
+      rps_duration=$(( $SECONDS - $rps_start))
+
+      ## RPS2DA ##
+      rps2da_start=$SECONDS
+      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05b_rps2da.R ${OUTDIR}/${SUFFIX}.rps.out ${OUTDIR}/${SUFFIX}.${DB}.${EVAL}.cln.clust.ipr.txt ${SUFFIX}
+      rps2da_duration=$(( $SECONDS - $rps2da_start ))
+
+      cp ${FILE} ${OUTDIR}	# copy fasta file to output directory
+      
+      ## Figure out how long the entire script took to run
+      duration=$(( $SECONDS - $start ))
+      printf "\nTotal run time: $duration\n"
+      STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
+      
+      ## Add benchmarking times to logfile
+      printf "\n${START_DT}\t${STOP_DT}\t${SUFFIX}\t${query_run_duration}\t${splitfa_duration}\t${db_duration}\t${db_cln_duration}\t${acc2fa_duration}\t${bclust_duration}\t${c2t_duration}\t${ipr_duration}\t${ipr2da_duration}\t${rps_duration}\t${rps2da_duration}\t${duration}" >> ${OUTPATH}/logfile.txt
+
+      ## And how much time is left
+      #timeleft=$(( $total - $duration ))
+
+      ## If there's a chance we get a long input to process, then
+      ## resubmit this job, then kill this job
+ #     if [ ${timeleft} -lt ${maxtime} ]; then
+  #       sbatch --array=${SLURM_ARRAY_TASK_ID} $0
+   #      scancel ${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}
+    #  fi
+   fi
+done
+
+chmod -R ugo+wr ${OUTPATH}

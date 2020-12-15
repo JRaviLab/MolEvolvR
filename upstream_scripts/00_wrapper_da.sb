@@ -1,0 +1,110 @@
+#!/bin/bash
+
+## MolEvolvR App companion script
+## Performs only domain architecture analysis on query proteins
+
+## iprscan, ipr2da+cln, rps, rps2da+cln, lin+name
+
+# Created: 2020.12.12
+# Last modified: 2020.12.13
+# Authors: Lauren Sosinski, Janani Ravi
+# On GitHub: currently in jravilab/molevol_scripts/upstream_scripts
+
+# Input type: text file containing paths to individual fasta files to be analyzed
+
+############
+## TORQUE ##
+############
+#PBS -l walltime=04:30:00 # time limit; RESET, if you need longer time
+#PBS -l nodes=1:ppn=10    # number of nodes requested
+#PBS -m abe   # email notifications for job
+#PBS -M=sosinsk7@msu.edu  # user email; RESET
+#PBS -F arguments   # allows script to accept argument input
+#PBS -t 1-5  # number of identical jobs to submit to the queue
+#PBS -N molevol_analysis  # name of job being run
+
+## print start/stop printf in individual scripts
+
+## change output directory based on user input
+OUTPATH=$PBS_O_WORKDIR
+cd ${OUTPATH}
+
+## !! NOTES FOR LS ##
+## add flags/help function after finishing script and/or gencontext
+## talk to Sam about how this works with Pins package
+
+## USER INPUTS
+INFILEPATHS_LIST=$1
+DB=refseq
+NHITS=5000
+EVAL=1e-5
+
+# Location of databases/dependencies 
+export BLASTDB=/data/common_data/blastdb/v5:/data/common_data/blastdb/ncbidb:/data/common_data/blastdb:/data/common_data/blastdb/FASTA:$BLASTDB
+export BLASTMAT=/opt/software/BLAST/2.2.26/data
+export INTERPRO=/opt/software/iprscan/5.47.82.0-Python3/data:/data/common_data/iprscan:$INTERPRO
+export NCBI_API_KEY=YOUR_KEY_HERE
+
+#####################
+## LOADING MODULES ##
+#####################
+
+module purge			## clear loaded modules
+module load R			## load R
+module load edirect		## load edirect
+module load BLAST		## load blast (for blastclust)
+module load BLAST+ BioPerl	## load blast+
+module load iprscan		## load iprscan
+
+start=$SECONDS    		## get current time
+START_DT=$(date '+%d/%m/%Y-%H:%M:%S')
+
+FILES=$(cat ${INFILEPATHS_LIST})    ## list of files (with paths) to be processed
+
+for FILE in $(shuf -e ${FILES[@]})
+do
+   F=$(basename ${FILE})
+   SUFFIX=$(echo "${F%%.*}")                    ## takes SUFFIX of file
+   OUTDIR=${OUTPATH}/${SUFFIX}_da_out             ## variable containing output filepath based SUFFIX
+   printf "${SUFFIX}\n"
+
+   if [ ! -d ${OUTDIR} ]; then                  ## if the output directory doesn't exist
+      mkdir ${OUTDIR}                           ## make the directory
+      cd ${OUTDIR}
+
+      ## INTERPROSCAN ##
+      ipr_start=$SECONDS
+      sh /data/research/jravilab/molevol_scripts/upstream_scripts/04a_iprscan.sh ${FILE} ${SUFFIX} ${OUTPATH}
+      ipr_duration=$(( $SECONDS - $ipr_start ))
+      
+      ## IPR2DA ##
+      ipr2da_start=$SECONDS
+      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTPATH}/${SUFFIX}.iprscan.tsv ${SUFFIX}
+      ipr2da_duration=$(( $SECONDS - $ipr2da_start ))
+      
+      ## IPR2LIN ##
+      ipr2lin_start=$SECONDS
+      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.4_ipr2lin.R ${SUFFIX}.iprscan.tsv ${SUFFIX}
+      ipr2lin_duration=$(( $SECONDS -  $ipr2lin_start ))
+      
+      ## RPSBLAST ##
+      rps_start=$SECONDS
+      sh /data/research/jravilab/molevol_scripts/upstream_scripts/04b_rpsblast.sh ${OUTPATH}/${SUFFIX}.all_accnums.fa ${SUFFIX} ${OUTPATH}
+      rps_duration=$(( $SECONDS - $rps_start))
+      
+      ## RPS2DA ##
+      rps2da_start=$SECONDS
+      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05b_rps2da.R ${OUTPATH}/${SUFFIX}.rps.out ${SUFFIX}
+      rps2da_duration=$(( $SECONDS - $rps2da_start ))
+      
+      duration=$(( $SECONDS - $start ))
+      printf "\nTotal run time: $duration\n"
+      STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
+      
+      ## Add benchmarking times to logfile
+      printf "START_DT\tSTOP_DT\tSUFFIX\tipr_duration\tipr2da_duration\tipr2lin_duration\trps_duration\trps2da_duration\tduration" >> ${OUTPATH}/logfile.txt
+      printf "\n${START_DT}\t${STOP_DT}\t${SUFFIX}\t${ipr_duration}\t${ipr2da_duration}\t${ipr2lin_duration}\t${rps_duration}\t${rps2da_duration}\t${duration}" >> ${OUTPATH}/logfile.txt
+    fi
+done
+
+chmod -R ugo+wr ${OUTPATH}
