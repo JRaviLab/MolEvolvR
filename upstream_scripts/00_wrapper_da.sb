@@ -74,12 +74,12 @@ do
 
       ## INTERPROSCAN ##
       ipr_start=$SECONDS
-      sh /data/research/jravilab/molevol_scripts/upstream_scripts/04a_iprscan.sh ${FILE} ${SUFFIX} ${OUTPATH}
+      sh /data/research/jravilab/molevol_scripts/upstream_scripts/04a_iprscan.sh ${FILE} ${SUFFIX} ${OUTDIR}
       ipr_duration=$(( $SECONDS - $ipr_start ))
       
       ## IPR2DA ##
       ipr2da_start=$SECONDS
-      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTPATH}/${SUFFIX}.iprscan.tsv ${SUFFIX}
+      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${SUFFIX}.iprscan.tsv ${SUFFIX}
       ipr2da_duration=$(( $SECONDS - $ipr2da_start ))
       
       ## IPR2LIN ##
@@ -89,12 +89,12 @@ do
       
       ## RPSBLAST ##
       rps_start=$SECONDS
-      sh /data/research/jravilab/molevol_scripts/upstream_scripts/04b_rpsblast.sh ${OUTPATH}/${SUFFIX}.all_accnums.fa ${SUFFIX} ${OUTPATH}
+      sh /data/research/jravilab/molevol_scripts/upstream_scripts/04b_rpsblast.sh ${OUTDIR}/${SUFFIX}.all_accnums.fa ${SUFFIX} ${OUTDIR}
       rps_duration=$(( $SECONDS - $rps_start))
       
       ## RPS2DA ##
       rps2da_start=$SECONDS
-      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05b_rps2da.R ${OUTPATH}/${SUFFIX}.rps.out ${SUFFIX}
+      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05b_rps2da.R ${OUTDIR}/${SUFFIX}.rps.out ${SUFFIX}
       rps2da_duration=$(( $SECONDS - $rps2da_start ))
       
       duration=$(( $SECONDS - $start ))

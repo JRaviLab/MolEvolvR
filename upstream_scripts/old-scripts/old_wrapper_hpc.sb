@@ -1,0 +1,144 @@
+#!/bin/bash
+
+# Created 2020.07.09 by Lauren Sosinski
+# Last edit 2020.09.24 by Lauren Sosinski
+
+# Comprehensive wrapper script for molecular evolution workflow
+# Begins with deltablast, moving to blastclust, rpsblast, ...
+
+############
+## SBATCH ##
+############
+#SBATCH --time=03:55:00			# time limit; RESET, if you need longer time
+#SBATCH -n 1				# number of nodes requested
+#SBATCH -c 1				# number of cores
+#SBATCH --cpus-per-task=10		# number of cpus to be used per task
+#SBATCH --mem-per-cpu=4G		# memory used per cpu
+#SBATCH --mail-type=all			# email notifications for job
+#SBATCH --mail-user=sosinsk7@msu.edu	# user email; RESET
+#SBATCH --array=1-10%10			# number of identical jobs to submit to the queue %how many jobs to run at the same time
+#SBATCH --job-name molevol_analysis	# name of job being run
+#SBA
+#TCH --slurm-out ## DOUBLE CHECK rename slurm files
+
+## print start/stop printf in individual scripts
+
+## change output directory based on user input
+output_dir=$(printf "/mnt/research/cpathogeno/molevolvr_outputs")
+cd ${output_dir}
+
+## add flags/help function after finishing script and/or gencontext
+
+## figure out where input list is coming from, create output folder in same directory 
+## talk to Sam about how this works with Pins package
+input_list=$1
+## these should be inputs gotten from user
+DB=refseq
+N=5000
+EVAL=1e-5
+
+# location of databases 
+# NEEDS UPDATED AFTER TRANSFERRING TO SERVER
+export BLASTDB=/mnt/research/common-data/Bio/blastdb/v5:/mnt/research/common-data/Bio/blastdb/MoreFromJanani:/mnt/research/common-data/Bio/blastdb:/mnt/research/common-data/Bio/blastdb/FASTA:$BLASTDB
+export BLASTMAT=/opt/software/BLAST/2.2.26-Linux_x86_64/data
+export INTERPRO=/mnt/research/common-data/Bio/iprscan:/mnt/research/common-data/Bio/iprscan/data:$INTERPRO
+#export NCBI_API_KEY=YOUR_KEY_HERE
+
+#####################
+## LOADING MODULES ##
+#####################
+
+module purge 					## clear loaded modules
+module use /mnt/home/johnj/software/modulefiles ## use modulefiles from John J
+module load R/4.0.2	 			## load R module
+module load edirect 				## load edirect
+module load BLAST/2.2.26-Linux_x86_64 		## load blast
+module load BLAST+/2.9.0 BioPerl 		## load blast+
+module load iprscan 				## load iprscan
+
+start=$SECONDS 					## get current time
+dt=$(date '+%d/%m/%Y %H:%M:%S')
+
+files=$(cat ${input_list})			## list of files to be processed
+
+## test benchmarking
+#total=$(( ((3*60)+50)*60 ))			## total time the job can take in seconds, this should match your SBATCH line above
+#maxtime=$(( 120*60 )) 				## maximum time to process one input, need to do some experimenting with your inputs
+
+for file in $(shuf -e ${files[@]})
+do
+   suffix=$(basename -s .fa $file)	## takes suffix of file
+   outdir=${output_dir}/${suffix}_out	## variable containing output filepath based suffix
+   printf "${suffix}"
+
+   if [ ! -d ${outdir} ]; then 			## if the output directory doesn't exist
+      mkdir ${outdir}				## make the directory
+
+      ## DELTABLAST ##
+      db_start=$SECONDS
+      sh /mnt/research/cpathogeno/laurensosinski/scripts/wrapper-scripts/01_deltablast.sh $file $suffix $outdir $DB $N $EVAL
+      db_duration=$(( $SECONDS - $db_start ))
+      
+      ## BLAST RESULT CLEANUP ##
+      db_cln_start=$SECONDS
+      Rscript /mnt/research/cpathogeno/laurensosinski/scripts/wrapper-scripts/01.1_blastout_cleanup.R ${outdir}/${suffix}.${DB}.${EVAL}.txt
+      db_cln_duration=$(( $SECONDS - $db_cln_start ))
+
+      ## ACC2FA -- getting fasta files for deltablast output(s) 
+      acc2fa_start=$SECONDS
+      sh /mnt/research/cpathogeno/laurensosinski/scripts/wrapper-scripts/02_acc2fa.sh ${outdir}/${suffix}.${DB}.${EVAL}.txt $suffix $outdir
+      acc2fa_duration=$(( $SECONDS - $acc2fa_start ))
+
+      ## BLASTCLUST ##
+      bclust_start=$SECONDS
+      sh /mnt/research/cpathogeno/laurensosinski/scripts/wrapper-scripts/03_blastclust.sh ${outdir}/${suffix}.all_accnums.fa $suffix $outdir
+      bclust_duration=$(( $SECONDS - $bclust_start ))
+
+      ## CLUST2TABLE
+      c2t_start=$SECONDS
+      Rscript /mnt/research/cpathogeno/laurensosinski/scripts/wrapper-scripts/03.1_clust2table.R ${outdir}/${suffix}.all_accnums.bclust.L60S80.out ${outdir}/${suffix}.${DB}.${EVAL}.cln.txt
+      c2t_duration= $(( $SECONDS - $c2t_start ))
+
+      ## INTERPROSCAN ##
+      ## add second run for original protein, too
+      ipr_start=$SECONDS
+      sh /mnt/research/cpathogeno/laurensosinski/scripts/wrapper-scripts/04a_iprscan.sh ${outdir}/${suffix}.all_accnums.fa ${suffix} ${outdir}
+      ipr_duration=$(( $SECONDS - $ipr_start ))
+
+      ## IPR2DA ##
+      ipr2da_start=$SECONDS
+      Rscript /mnt/research/cpathogeno/laurensosinski/scripts/wrapper-scripts/05a_ipr2da.R ${outdir}/${suffix}.iprscan.tsv ${outdir}/${suffix}.${DB}.${EVAL}.cln.txt
+      ipr2da_duration=$(( $SECONDS - $ipr2da_start ))
+
+      ## RPSBLAST ## 		
+      rps_start=$SECONDS
+      sh /mnt/research/cpathogeno/laurensosinski/scripts/wrapper-scripts/04b_rpsblast.sh ${outdir}/${suffix}.all_accnums.fa ${suffix} ${outdir}
+      rps_duration=$(( $SECONDS - $rps_start))
+
+      ## RPS2DA ##
+      rps2da_start=$SECONDS
+      Rscript /mnt/research/cpathogeno/laurensosinski/scripts/wrapper-scripts/05b_rps2da.R ${outdir}/${suffix}.rps.out ${outdir}/${suffix}.${DB}.${EVAL}.cln.txt
+      rps2da_duration=$(( $SECONDS - $rps2da_start ))
+
+      ## Add benchmarking times to logfile
+      printf "\n${DT}\t${suffix}\t${db_duration}\t${db_cln_duration}\t${acc2fa_duration}\t${bclust_duration}\t${c2t_duration}\t${ipr_duration}\t${ipr2da_duration}\t${rps_duration}\t${rps2da_duration}" >> molevolvr_logfile.txt
+
+      cp ${file} ${outdir}	# copy fasta file to output directory
+      
+      chmod -R ug+wr ${outdir}
+
+      ## Figure out how long the entire script took to run
+      duration=$(( $SECONDS - $start ))
+      printf "\nTotal run time: $duration\n"
+
+      ## And how much time is left
+      timeleft=$(( $total - $duration ))
+
+      ## If there's a chance we get a long input to process, then
+      ## resubmit this job, then kill this job
+ #     if [ ${timeleft} -lt ${maxtime} ]; then
+  #       sbatch --array=${SLURM_ARRAY_TASK_ID} $0
+   #      scancel ${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}
+    #  fi
+   fi
+done

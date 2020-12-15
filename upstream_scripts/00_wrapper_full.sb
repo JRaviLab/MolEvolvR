@@ -37,7 +37,7 @@ INPUTPATHS_LIST=$1
 DB=refseq
 NHITS=5000
 EVAL=1e-5
-WBLAST=T
+WBLAST="F"
 
 # Location of databases/dependencies 
 export BLASTDB=/data/common_data/blastdb/v5:/data/common_data/blastdb/ncbidb:/data/common_data/blastdb:/data/common_data/blastdb/FASTA:$BLASTDB
@@ -76,7 +76,7 @@ do
       cd ${OUTDIR}
 
       # put original fasta file into file containing all homologs
-      cat $FILE > ${OUTDIR}/${SUFFIX}.all_accnums.fa
+      cat $FILE >> ${OUTDIR}/${SUFFIX}.all_accnums.fa
       
       if ($WBLAST == "F")
       then
@@ -149,4 +149,4 @@ do
    fi
 done
 
-chmod -R ugo+wr ${OUTPATH}
+chmod -R ugo+r ${OUTPATH}
