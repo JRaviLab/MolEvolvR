@@ -1,0 +1,67 @@
+---
+title: "JRaviLab"
+subtitle: "Welcome to our app home!"
+author: "Janani Ravi"
+date: "12/16/2020"
+output: html_document
+runtime: shiny
+---
+
+```{r setup, include=FALSE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(fontawesome)
+library(shiny)
+library(shinydashboard)
+```
+
+------------------------------------------------------------------------
+
+# About [us `r fa("link", fill = "grey20")`](https://jravilab.github.io)
+
+# [`r fa("users", fill = "#384CB7")`](https://jravilab.github.io) [`r fa("github", fill = "#1FA67A")`](https://github.com/jravilab) [`r fa("twitter", fill = "#1DA1F2")`](https://twitter.com/jravilab) [`r fa("paper-plane", fill = "red")`](mailto:jravilab.msu@gmail.com)
+
+## *Computational Systems Biology of Infectious Diseases*
+
+We develop computational approaches to study the molecular basis of pathogenesis and intervention of infectious diseases.
+
+Our research involves developing computational approaches that can leverage large-scale genomic data to gain actionable insights into infectious disease biology. Specifically, we focus on three key areas:
+
+i)  unraveling molecular mechanisms common between non-infectious and infectious diseases, to guide targeted drug repurposing
+ii) identifying genomic signatures, functions, and mechanisms relevant to host-pathogen interactions, to enable understanding and guide diagnosis, and
+iii) developing tools and resources for seamlessly relating sequence, structure, and function of genes/proteins in poorly characterized pathogens.
+
+### *Keywords*
+
+Computational biology \| Bioinformatics \| Molecular evolution & phylogeny \| Comparative pathogenomics \| Molecular drug/vaccine discovery \| Data analysis & visualization
+
+[**Learn more about our group here. `r fa("users", fill = "grey20")`**](https://jravilab.github.io)
+
+------------------------------------------------------------------------
+
+## Our web-apps
+
+### *MolEvolvR: A web-app for molecular evolution and phylogeny*
+
+#### [`r fa("link", fill = "#1FA67A")`](jravilab.org/molevolvr) [jravilab.org/molevolvr](jravilab.org/molevolvr)
+
+```{r molevolvr, echo=FALSE, eval=T}
+shinyAppDir(
+  system.file("examples/06_tabsets", package = "shiny"), #molevolvr
+  options = list(
+    width = "100%", height = 550
+  )
+)
+```
+
+### *Phage shock protein stress response system*
+
+#### [`r fa("link", fill = "#1FA67A")`](jravilab.shinyapps.io/psp-evolution) [jravilab.shinyapps.io/psp-evolution](jravilab.shinyapps.io/psp-evolution)
+
+```{r psp-evolution, echo=FALSE, eval=F}
+shinyAppDir(
+  system.file("examples/06_tabsets", package = "shiny"), #psp-evolution
+  options = list(
+    width = "100%", height = 550
+  )
+)
+```
