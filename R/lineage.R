@@ -31,7 +31,6 @@ DownloadAssemblySummary <- function(outpath, keep = c("assembly_accession", "tax
     new = c( "TaxID", "RefseqCategory","Parent.TaxID","Species","Spp.Strain","GenomeStatus"),
     skip_absent = T)
 
-  #
   # dplyr::rename("AssemblyID"="assembly_accession",
   #                                              "TaxID" = "taxid",
   #                                              "RefseqCategory" = "refseq_category",
@@ -48,7 +47,7 @@ DownloadAssemblySummary <- function(outpath, keep = c("assembly_accession", "tax
 
 # Go from the GCA_ID column to tax IDs using the assembly file
 GCA2lin <- function(prot_data, assembly_path = "data/acc_files/assembly_summary20201018.txt",
-                     lineagelookup_path = "data/lineagelookup.txt", acc_col = "Protein" )
+                    lineagelookup_path = "data/lineagelookup.txt", acc_col = "Protein" )
 {
   #' Function that maps GCA_ID to taxid, and that taxid to a lineage
   #' Note: currently configured to have at most kingdom and phylum
@@ -67,54 +66,26 @@ GCA2lin <- function(prot_data, assembly_path = "data/acc_files/assembly_summary2
 
   accessions = prot_data %>% pull(acc_col) %>% unique()
 
+  # Prioritize Complete Genome
   best_rows = integer(length(accessions))
   for(i in 1:length(accessions))
   {
     # browser()
     acc = accessions[i]
     acc_inds = which(mergedTax$Protein == acc)
-    if(length(acc_inds) == 1)
+    if(length(acc_inds) > 1)
     {
-      best_rows[i] = acc_inds
-    }
-    else if(length(acc_inds) > 1)
-    {
-      # refseq inds take precedence
-      refseq_inds = acc_inds[which(mergedTax[acc_inds,]$Source == "RefSeq")]
-      if(length(refseq_inds) == 1)
+      complete = acc_inds[which(mergedTax[acc_inds,]$assembly_level == "Complete Genome")]
+      if(length(complete) != 0)
       {
-        # only one refseq ind, keep that
-        best_rows[i] = refseq_inds[1]
-        next
-      }
-      else if( length(refseq_inds) > 1)
-      {
-        # more than 1 refseq ind
-        refseq_complete = refseq_inds[which(mergedTax[refseq_inds,]$assembly_level == "Complete Genome")]
-        if(length(refseq_complete) >= 1)
-        {
-          # Take the first one with refseq complete
-          best_rows[i] = refseq_complete[1]
-          next
-        }
-        # take the first refseq if no complete
-        best_rows[i] = refseq_inds[1]
+        best_rows[i] = complete[1]
       }
       else
       {
-        #browser()
-	# only non refseq: should I just choose the first one?
-        if(any(mergedTax[acc_inds,]$assembly_level == "Complete Genome", na.rm = TRUE))
-        {
-          best_rows[i] = acc_inds[which(mergedTax[acc_inds,]$assembly_level == "Complete Genome")][1]
-        }
-        else{
-          best_rows[i] = acc_inds[1]
-        }
+        best_rows[i] = acc_inds[1]
       }
     }
   }
-
   mergedTax = mergedTax[best_rows,]
 
   lineage_map <- fread(lineagelookup_path, sep = "\t")
@@ -228,29 +199,26 @@ efetch_ipg <- function(accNum_vec, out_path, plan = "multicore")
       {
         Sys.sleep(1)
       }
-      f = future({cat(
-        # entrez_fetch(id = partitioned_acc[[x]],
-        #              db = "protein",
-        #              rettype = "txt",# parsed = T,
-        #              api_key = "55120df9f5dddbec857bbb247164f86a2e09"
+      f = future({
+
         entrez_fetch(id = partitioned_acc[[x]],
                      db = "ipg",
                      rettype = "xml",# parsed = T,
-                     api_key = "55120df9f5dddbec857bbb247164f86a2e09"
-        )
-      )
-    }) 
-})
-	
-  for( f in a)
-{
-   cat(value(f))
-}  
+                     api_key = "55120df9f5dddbec857bbb247164f86a2e09")
+      })
+    })
+
+    for( f in a)
+    {
+      cat(value(f))
+    }
     sink(NULL)
   }
 }
 
-ipg2lin <- function(accessions, ipg_file, assembly_path, lineagelookup_path)
+ipg2lin <- function(accessions, ipg_file, refseq_assembly_path,
+                    genbank_assembly_path,
+                    lineagelookup_path)
 {
   #'@author Samuel Chen, Janani Ravi
   #'@description Takes the resulting file of an efetch run on the ipg database and
@@ -266,9 +234,56 @@ ipg2lin <- function(accessions, ipg_file, assembly_path, lineagelookup_path)
   #'"create_lineage_lookup()" function
   ipg_dt <- fread(ipg_file, sep = "\t", fill = T)
 
+  accessions = unique(accessions)
   ipg_dt <- ipg_dt[Protein %in% accessions]
 
   ipg_dt <- setnames(ipg_dt, "Assembly", "GCA_ID")
+
+  # Call GCA2Lins with different assembly_paths depending on refseq or not
+  # Select for Refseq rows over other DB rows
+  refseq_rows = integer(length(accessions))
+  genbank_rows = integer(length(accessions))
+  for(i in 1:length(accessions))
+  {
+    # browser()
+    acc = accessions[i]
+    acc_inds = which(mergedTax$Protein == acc)
+    if(length(acc_inds) != 0)
+    {
+      # refseq inds take precedence
+      refseq_inds = acc_inds[which(mergedTax[acc_inds,]$Source == "RefSeq")]
+      if(length(refseq_inds) != 0)
+      {
+        # Take the first first row of the refseq (smallest index)
+        refseq_rows[i] = refseq_inds[1]
+      }
+      else
+      {
+        # take the first row of whatever is left?
+        genbank_rows[i] = acc_inds[1]
+      }
+    }
+  }
+
+  # Empty values be gone
+  refseq_rows = refseq_rows[which(refseq_rows != 0)]
+  genbank_rows = genbank_rows[which(genbank_rows != 0)]
+
+  # Call GCA2lins using refseq
+  ### Possible to run these in parallel if it takes a while
+  if(length(refseq_rows) != 0)
+  {
+    refseq_ipg_dt = ipg_dt[refseq_rows,]
+    refseq_lins = GCA2lin(refseq_ipg_dt, assembly_path = refseq_assembly_path,
+                          lineagelookup_path)
+  }
+  if(length(genbank_rows) != 0)
+  {
+    genbank_ipg_dt = ipg_dt[genbank_rows,]
+    genbank_lins = GCA2lin(gca_ipg_dt, assembly_path = genbank_assembly_path,
+                           lineagelookup_path)
+  }
+
 
   lins <- GCA2lin(prot_data = ipg_dt, assembly_path, lineagelookup_path)
   lins <- lins[!is.na(Lineage)] %>% unique()
@@ -277,3 +292,69 @@ ipg2lin <- function(accessions, ipg_file, assembly_path, lineagelookup_path)
 }
 
 
+prot2tax <- function(accNum_vec, out_path, plan = "multicore")
+{
+  #'@author Samuel Chen, Janani Ravi
+  #'@description Perform elink to go from protein database to taxonomy database
+  #' and write the resulting file of taxid and lineage to out_path
+  #'@param accNum_vec Character vector containing the accession numbers to query on
+  #'the ipg database
+  #'@param out_path Path to write the efetch results to
+  if(length(accNum_vec) > 0){
+    system("module load edirect")
+
+    partition <- function(v, groups){
+      # Partition data to limit number of queries per second for rentrez fetch:
+      # limit of 10/second w/ key
+      l <- length(v)
+
+      partitioned <- list()
+      for(i in 1:groups)
+      {
+        partitioned[[i]] <- v[seq.int(i,l,groups)]
+      }
+
+      return(partitioned)
+    }
+
+    plan(strategy = plan, .skip = T)
+
+    ##! Note: LS changed it to 600 because she has 5K results and wanted x to be ≤ 9
+    min_groups = length(accNum_vec)/600
+    groups <- min(max(min_groups,15) ,length(accNum_vec))
+    partitioned_acc <- partition(accNum_vec, groups )
+    # sink(out_path)
+
+    a <- map(1:length(partitioned_acc), function(x)
+    {
+      # Avoid hitting the rate API limit
+      if(plan != "sequential" & x%%9 == 0)
+      {
+        Sys.sleep(1)
+      }
+
+      script = "./data/research/jravilab/molevol_scripts/upstream_scripts/prot2tax.sh"
+
+      accnum_in = paste(partitioned_acc[[x]], collapse = ",")
+      system(paste(script, accnum_in), wait = FALSE)
+
+
+      # f = future({
+      #   el = entrez_link(dbfrom = "protein", id = partitioned_acc[[x]],
+      #                    db = "taxonomy",
+      #                    by_id = FALSE,
+      #                    api_key = "55120df9f5dddbec857bbb247164f86a2e09")
+      #   entrez_fetch(db = "taxonomy",
+      #                id = el, rettype = "taxid",
+      #                api_key = "55120df9f5dddbec857bbb247164f86a2e09")
+      #   # Calling Janani's shell script would be easier
+      # })
+    })
+
+    for( f in a)
+    {
+      cat(value(f))
+    }
+    # sink(NULL)
+  }
+}
