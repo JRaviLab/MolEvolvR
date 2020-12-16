@@ -102,10 +102,11 @@ GCA2lin <- function(prot_data, assembly_path = "data/acc_files/assembly_summary2
       }
       else
       {
-        # only non refseq: should I just choose the first one?
-        if(any(mergedTax[acc_inds]$assembly_level == "Complete Genome"))
+        #browser()
+	# only non refseq: should I just choose the first one?
+        if(any(mergedTax[acc_inds,]$assembly_level == "Complete Genome", na.rm = TRUE))
         {
-          best_rows[i] = acc_inds[which(mergedTax[acc_inds]$assembly_level == "Complete Genome")][1]
+          best_rows[i] = acc_inds[which(mergedTax[acc_inds,]$assembly_level == "Complete Genome")][1]
         }
         else{
           best_rows[i] = acc_inds[1]
@@ -214,8 +215,8 @@ efetch_ipg <- function(accNum_vec, out_path, plan = "multicore")
 
     plan(strategy = plan, .skip = T)
 
-
-    min_groups = length(accNum_vec)/200
+    ##! Note: LS changed it to 600 because she has 5K results and wanted x to be ≤ 9
+    min_groups = length(accNum_vec)/600
     groups <- min(max(min_groups,15) ,length(accNum_vec))
     partitioned_acc <- partition(accNum_vec, groups )
     sink(out_path)
