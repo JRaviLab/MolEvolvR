@@ -19,7 +19,7 @@ args <- commandArgs(trailingOnly = TRUE)
 
 ## clean up function
 # takes in path to blast result file as a string
-cleanup_clblast <- function(infile_blast, wblast) {
+cleanup_clblast <- function(infile_blast, acc2tax, wblast) {
 
   # read in blast results from input variable, set column names to blast_cols (created above)
   if (wblast == "T") {
@@ -63,4 +63,4 @@ cleanup_clblast <- function(infile_blast, wblast) {
 }
 
 #cleanup_clblast(infile_blast, wblast)
-cleanup_clblast(args[1], args[2])
+cleanup_clblast(args[1], args[2], args[3])
