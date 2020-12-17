@@ -2,14 +2,13 @@
 title: "JRaviLab"
 subtitle: "Web-applications and Software"
 output: html_document
-runtime: shiny_prerendered
+#runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE, warning=FALSE, message=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(fontawesome)
-library(shiny)
-library(shinydashboard)
+#library(shiny); library(shinydashboard)
 ```
 
 ------------------------------------------------------------------------
@@ -34,36 +33,32 @@ We also welcome collaborations. If you are interested in studying an infectious 
 
 ### MolEvolvR: A web-app for molecular evolution and phylogeny {#molevolvr}
 
-#### [`r fa("link", fill = "#1FA67A")`](jravilab.org/molevolvr) [jravilab.org/molevolvr](jravilab.org/molevolvr)
+[`r fa("link", fill = "#1FA67A")`](http://jravilab.org/molevolvr) [jravilab.org/molevolvr](http://jravilab.org/molevolvr)
 
-Samuel Zorn Chen, Lauren Marie Sosinski, John Johnston, Janani Ravi. <br> Corresponding author: [janani\@msu.edu](mailto:janani@msu.edu){.email}
+Samuel Zorn Chen, Lauren Marie Sosinski, John Johnston, Janani Ravi. <br> Corresponding author: [janani\@msu.edu](mailto:janani@msu.edu)
 
-```{r molevolvr, echo=FALSE, eval=T}
+```{r molevolvr, echo=FALSE, eval=F}
 shinyAppDir(
-  system.file("examples/06_tabsets", package = "shiny"), #molevolvr
-  options = list(
-    width = "100%", height = 550
-  )
+  system.file("molevolvr", package = "shiny"),
+  options = list(width = "100%", height = 550)
 )
 ```
 
 ### Phage shock protein stress response system {#psp_evolution}
 
-#### [`r fa("link", fill = "#1FA67A")`](jravilab.shinyapps.io/psp-evolution) [jravilab.shinyapps.io/psp-evolution](jravilab.shinyapps.io/psp-evolution)
+[`r fa("link", fill = "#1FA67A")`](https://jravilab.shinyapps.io/psp-evolution) [jravilab.shinyapps.io/psp-evolution](https://jravilab.shinyapps.io/psp-evolution)
 
-**Phage-shock-protein (Psp) Envelope Stress Response: Evolutionary History & Discovery of Novel Players** <br> Janani Ravi\*, Vivek Anantharaman, Samuel Zorn Chen, Pratik Datta, L Aravind\*, Maria Laura Gennaro\*. \*Corresponding authors: [janani\@msu.edu](mailto:janani@msu.edu){.email}; [aravind\@nih.gov](mailto:aravind@nih.gov){.email}; [marila.gennaro\@rutgers.edu](mailto:marila.gennaro@rutgers.edu){.email}. Web-app by JR and SZC. <br> [**bioRxiv 2020**](https://doi.org/10.1101/2020.09.24.301986)
+**Phage-shock-protein (Psp) Envelope Stress Response: Evolutionary History & Discovery of Novel Players** <br> Janani Ravi\*, Vivek Anantharaman, Samuel Zorn Chen, Pratik Datta, L Aravind\*, Maria Laura Gennaro\*. \*Corresponding authors: [janani\@msu.edu](mailto:janani@msu.edu); [aravind\@nih.gov](mailto:aravind@nih.gov); [marila.gennaro\@rutgers.edu](mailto:marila.gennaro@rutgers.edu). Web-app by JR and SZC. <br> [**bioRxiv 2020**](https://doi.org/10.1101/2020.09.24.301986)
 
 ```{r psp-evolution, echo=FALSE, eval=F}
 shinyAppDir(
-  system.file("examples/06_tabsets", package = "shiny"), #psp-evolution
-  options = list(
-    width = "100%", height = 550
-  )
+  system.file("psp-evolution", package = "shiny"),
+  options = list(width = "100%", height = 550)
 )
 ```
 
 ### Connectivity Scores for Drug Repurposing {#connectivity_scores}
 
-#### [`r fa("link", fill = "#1FA67A")`](jravilab.github.io/connectivity_score_review) [jravilab.shinyapps.io/psp-evolution](jravilab.github.io/connectivity_score_review)
+[`r fa("link", fill = "#1FA67A")`](https://jravilab.github.io/connectivity_score_review) [jravilab.github.io/connectivity_score_review](https://jravilab.github.io/connectivity_score_review)
 
-**Reconciling Multiple Connectivity Scores for Drug Repurposing** <br> Kewalin Samart\*, Phoebe Tuyishime\*, Arjun Krishnan^\#^, Janani Ravi^\#^. <br> \*These authors contributed equally to this work. ^\#^Corresponding authors: [arjun\@msu.edu](mailto:arjun@msu.edu){.email}; [janani\@msu.edu](mailto:janani@msu.edu){.email} <br> [**arXiv 2020**](https://arxiv.org/abs/2009.09317)
+**Reconciling Multiple Connectivity Scores for Drug Repurposing** <br> Kewalin Samart\*, Phoebe Tuyishime\*, Arjun Krishnan^\#^, Janani Ravi^\#^. <br> \*These authors contributed equally to this work. ^\#^Corresponding authors: [arjun\@msu.edu](mailto:arjun@msu.edu); [janani\@msu.edu](mailto:janani@msu.edu) <br> [**arXiv 2020**](https://arxiv.org/abs/2009.09317)
