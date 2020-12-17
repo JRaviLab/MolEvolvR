@@ -13,23 +13,34 @@ source("/data/research/jravilab/molevol_scripts/R/colnames_molevol.R")
 ## Read in data file path as a string
 args <- commandArgs(trailingOnly = TRUE)
 
-#infile_blast = "../laurensosinski/data/molevolvr_outputs/saureus_runs/sausa300_0200_out/sausa300_0200.refseq.1e-5.txt"
-#wblast = T
+infile_blast = "../laurensosinski/data/WP_001901328_full/WP_001901328.refseq.1e-5.txt"
+acc2tax = "../laurensosinski/data/WP_001901328_full/WP_001901328.acc2tax.tsv"
+wblast = "T"
 
 
 ## clean up function
 # takes in path to blast result file as a string
-cleanup_clblast <- function(infile_blast, acc2tax, wblast) {
+cleanup_blast <- function(infile_blast, acc2tax, wblast) {
 
-  # read in blast results from input variable, set column names to blast_cols (created above)
+  # read in acc2tax file, cleanup FullAccNum column
+  a2t_out <- fread(input = acc2tax, sep = '\t', header = T) %>%
+    mutate(FullAccNum = gsub('\\|', '', FullAccNum)) %>%
+    mutate(FullAccNum = gsub('.*[a-z]', '', FullAccNum))
+
+  # read in blast results, set colnames, cleanup results, merge acc2taxlin output
   if (wblast == "T") {
      blast_out <- read_tsv(file = infile_blast, col_names = web_blastp_desc_colnames)
      cleanedup_blast <- blast_out %>%
        # remove extra characters/names from sseqid, sscinames, and staxids columns
        mutate(AccNum = gsub('\\|', '', AccNum)) %>%
        mutate(AccNum = gsub('.*[a-z]', '', AccNum)) %>%
-       mutate(TaxID = gsub(';.*$', '', TaxID)) %>%
        mutate(PcIdentity = round(PcIdentity, 2))
+
+     # merge blast out with acc2tax out
+     cleanedup_blast <- merge(cleanedup_blast, a2t_out, by.x = "AccNum", by.y = "FullAccNum") %>%
+       select(-Species.x, -TaxID.x)
+     names(cleanedup_blast)[names(cleanedup_blast) == 'Species.y'] <- 'Species'
+     names(cleanedup_blast)[names(cleanedup_blast) == 'TaxID.y'] <- 'TaxID'
   } else if (wblast == "F") {
      blast_out <- read_tsv(file = infile_blast, col_names = cl_blast_colnames)
      cleanedup_blast <- blast_out %>%
@@ -37,11 +48,16 @@ cleanup_clblast <- function(infile_blast, acc2tax, wblast) {
        mutate(AccNum = gsub('\\|', '', AccNum)) %>%
        mutate(AccNum = gsub('.*[a-z]', '', AccNum)) %>%
        mutate(Species = gsub(';.*$', '', Species)) %>%
-       mutate(TaxID = gsub(';.*$', '', TaxID)) %>%
        mutate(PcIdentity = round(PcIdentity, 2)) %>%
        # normalize percent positive by multiplying the original ppos by the length of the subject protein
        #   length and dividing by the query protein length
        mutate(PcPositive = round(x = (PcPosOrig * AlnLength/QLength), digits = 2))
+
+     # merge blast out with acc2tax out
+     cleanedup_blast <- merge(cleanedup_blast, a2t_out, by.x = "AccNum", by.y = "FullAccNum") %>%
+       select(-Species.x, -TaxID.x)
+     names(cleanedup_blast)[names(cleanedup_blast) == 'Species.y'] <- 'Species'
+     names(cleanedup_blast)[names(cleanedup_blast) == 'TaxID.y'] <- 'TaxID'
   }
 
   # # TaxID to lineage
@@ -63,4 +79,4 @@ cleanup_clblast <- function(infile_blast, acc2tax, wblast) {
 }
 
 #cleanup_clblast(infile_blast, wblast)
-cleanup_clblast(args[1], args[2], args[3])
+cleanup_blast(args[1], args[2], args[3])
