@@ -43,7 +43,7 @@ EVAL=1e-5
 export BLASTDB=/data/common_data/blastdb/v5:/data/common_data/blastdb/ncbidb:/data/common_data/blastdb:/data/common_data/blastdb/FASTA:$BLASTDB
 export BLASTMAT=/opt/software/BLAST/2.2.26/data
 export INTERPRO=/opt/software/iprscan/5.47.82.0-Python3/data:/data/common_data/iprscan:$INTERPRO
-export NCBI_API_KEY=882b28aa19ece4679d4fa5adcf3319f5df09
+export NCBI_API_KEY=17d41451acfde2b8dd3f3ebffc3b79eef60a
 
 #####################
 ## LOADING MODULES ##
@@ -64,9 +64,9 @@ FILES=$(cat ${INFILEPATHS_LIST})    ## list of files (with paths) to be processe
 for FILE in $(shuf -e ${FILES[@]})
 do
    F=$(basename ${FILE})
-   SUFFIX=$(echo "${F%%.*}")                    ## takes SUFFIX of file
-   OUTDIR=${OUTPATH}/${SUFFIX}_da_out             ## variable containing output filepath based SUFFIX
-   printf "${SUFFIX}\n"
+   PREFIX=$(echo "${F%%.*}")                    ## takes PREFIX of file
+   OUTDIR=${OUTPATH}/${PREFIX}_da_out             ## variable containing output filepath based PREFIX
+   printf "${PREFIX}\n"
 
    if [ ! -d ${OUTDIR} ]; then                  ## if the output directory doesn't exist
       mkdir ${OUTDIR}                           ## make the directory
@@ -74,27 +74,33 @@ do
 
       ## INTERPROSCAN ##
       ipr_start=$SECONDS
-      sh /data/research/jravilab/molevol_scripts/upstream_scripts/04a_iprscan.sh ${FILE} ${SUFFIX} ${OUTDIR}
+      sh /data/research/jravilab/molevol_scripts/upstream_scripts/04a_iprscan.sh ${FILE} ${PREFIX} ${OUTDIR}
       ipr_duration=$(( $SECONDS - $ipr_start ))
       
+      ## ACC2TAXLIN ##
+      acc2taxlin_start=$SECONDS
+      cat ${PREFIX}.iprscan.tsv | awk -F "\t" '{ print $1 }' | sort -u > ${OUTDIR}/${PREFIX}.all_accnums.tsv
+      sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2tax.sh ${OUTDIR}/${PREFIX}.all_accnums.tsv ${PREFIX} ${OUTDIR}
+      acc2taxlin_dur=$(( $SECONDS - $acc2taxlin_start ))
+
       ## IPR2DA ##
       ipr2da_start=$SECONDS
-      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${SUFFIX}.iprscan.tsv ${SUFFIX}
+      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${PREFIX}.iprscan.tsv ${PREFIX}
       ipr2da_duration=$(( $SECONDS - $ipr2da_start ))
       
       ## IPR2LIN ##
       ipr2lin_start=$SECONDS
-      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.4_ipr2lin.R ${SUFFIX}.iprscan.tsv ${SUFFIX}
+      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.4_ipr2lin.R ${PREFIX}.iprscan.tsv ${OUTDIR}/${PREFIX}.acc2tax.tsv ${PREFIX}
       ipr2lin_duration=$(( $SECONDS -  $ipr2lin_start ))
       
       ## RPSBLAST ##
       rps_start=$SECONDS
-      sh /data/research/jravilab/molevol_scripts/upstream_scripts/04b_rpsblast.sh ${OUTDIR}/${SUFFIX}.all_accnums.fa ${SUFFIX} ${OUTDIR}
+      sh /data/research/jravilab/molevol_scripts/upstream_scripts/04b_rpsblast.sh ${FILE} ${PREFIX} ${OUTDIR}
       rps_duration=$(( $SECONDS - $rps_start))
       
       ## RPS2DA ##
       rps2da_start=$SECONDS
-      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05b_rps2da.R ${OUTDIR}/${SUFFIX}.rps.out ${SUFFIX}
+      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05b_rps2da.R ${OUTDIR}/${PREFIX}.rps.out ${PREFIX}
       rps2da_duration=$(( $SECONDS - $rps2da_start ))
       
       duration=$(( $SECONDS - $start ))
@@ -102,9 +108,9 @@ do
       STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
       
       ## Add benchmarking times to logfile
-      printf "START_DT\tSTOP_DT\tSUFFIX\tipr_duration\tipr2da_duration\tipr2lin_duration\trps_duration\trps2da_duration\tduration" >> ${OUTPATH}/logfile.txt
-      printf "\n${START_DT}\t${STOP_DT}\t${SUFFIX}\t${ipr_duration}\t${ipr2da_duration}\t${ipr2lin_duration}\t${rps_duration}\t${rps2da_duration}\t${duration}" >> ${OUTPATH}/logfile.txt
+      printf "START_DT\tSTOP_DT\tPREFIX\tipr_duration\tipr2da_duration\tipr2lin_duration\trps_duration\trps2da_duration\tduration" >> ${OUTPATH}/logfile.txt
+      printf "\n${START_DT}\t${STOP_DT}\t${PREFIX}\t${ipr_duration}\t${ipr2da_duration}\t${ipr2lin_duration}\t${rps_duration}\t${rps2da_duration}\t${duration}" >> ${OUTPATH}/logfile.txt
     fi
 done
 
-chmod -R ugo+wr ${OUTPATH}
+#chmod -R ugo+wr ${OUTPATH}
