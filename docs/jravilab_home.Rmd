@@ -2,7 +2,7 @@
 title: "JRaviLab"
 subtitle: "Web-applications and Software"
 output: html_document
-#runtime: shiny_prerendered
+runtime: shiny
 ---
 
 ```{r setup, include=FALSE, warning=FALSE, message=FALSE}
