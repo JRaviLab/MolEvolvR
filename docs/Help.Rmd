@@ -14,29 +14,39 @@ library(tidyverse); library(knitr)
 
 # MolEvolvR Help docs & Tutorials
 
+This page will provide you with instructions on how to use the app to its fullest potential and helpful video tutorials. Videos will demonstrate how to navigate the application after retrieving your results.
+
 ## The UI: Workflow and Usage
 
 ### How can you use the app?
 
-> what is the end goal?
-similar proteins
-ancestry of proteins (where they com from, lineage specific, share features with related proteins in different kingdoms)
+Characterization of proteins is crucial to understanding the molecular basis of fundamental cellular processes. Several computational tools have been developed to characterize protein sequence, structure, function, and phylogeny, and we have created a workflow to allow for the user to analyze proteins of interest at all of these levels using these tools. It begins by accepting accession numbers or FASTA files of proteins of interest, identifies homologs, determines function, and provides phyletic spreads. These analyses provide insight into the protein's purpose within organisms as well as detail how they have evolved. This is done in order to assist with providing an overview of their importance to a particular biological process, or survival itself.
 
-> exact same da present in other lineages, what could that mean?
-  > lineage specific?
-  
-biology of homologs, what more can they learn from the app than just blast or iprscan alone
-if exact same domains are popping up across lineages, what does that say about function?
-
-phyletic spreads and lineages
-what are the questions they can answer/analyses they can do?
-what is the value?
-
+*ABSTRACT*
 A critical aspect of understanding the molecular basis of fundamental cellular processes, such as pathogenesis or energy acquisition, is a thorough characterization of the underlying proteins. Several individual computational tools have been developed to characterize proteins at the level of sequence, structure, and function, especially in the context of molecular evolution and phylogeny. However, there still lacks a comprehensive and consolidated workflow for applying all the relevant tools for a protein of interest. We present here the MolEvolvR webapp: a streamlined approach for analyzing proteins in the context of molecular evolution and phylogeny. Our workflow currently starts with one or more proteins of interest -- identifying homologs across the tree of life, followed by a detailed functional characterization in terms of their domain architectures, secondary structure elements, cellular localization -- in the context of phyletic spreads and phylogenetic analyses. This detailed workflow has been implemented in an easy-to-use web application that allows for automated and streamlined molecular evolution and phylogenetic analyses for any protein(s) of interest, including sequence-structure-function relationships as well as lineage-specific adaptations. 
+
+*LS NOTES*
+- END GOAL: Provide functional analysis & evolution of proteins, help people make new & exciting discoveries! Why? 
+- Functional analysis of proteins will lead to the discovery of its use within organisms. It can lead to a better understanding of biological pathways and provide an idea of the structure of the protein. 
+
+--> what is the end goal?
+
+- similar proteins
+- ancestry of proteins (where they com from, lineage specific, share features with related proteins in different kingdoms)
+- exact same da present in other lineages, what could that mean?
+  - lineage specific?
+- biology of homologs, what more can they learn from the app than just blast or iprscan alone
+- if exact same domains are popping up across lineages, what does that say about function?
+
+- phyletic spreads and lineages
+- what are the questions they can answer/analyses they can do?
+- what is the value?
 
 #### Use cases
 
-in broad terms of what we did?
+[Phage-shock proteins (psp)](http://jravilab.shinyapps.io/psp-evolution)
+
+in broad terms of what was done
 - sample protein(s) -- Psp accessions, homologous and non-homologous
   - tested all analyses on these proteins
   - full analysis on non-homologous proteins
@@ -48,7 +58,7 @@ MolEvolvR's functionality is comprised of 4 different types of analysis:
 (i) Analysis via Domain Architecture, which allows for exploration of domain interaction and domain propensities;
 (ii) Identification of thousands of Homologs; this allows us to see the similarities across various species
 (iii) Phylogenetic analysis, which may draw upon information obtained through the other analysis to make inferences and visualizations pertaining to the phyletic spread of the target proteins and their homologs;
-(iv) visualizing and analyzing results from other sources, *e.g.,* BLAST suite (BLASTP, BLASTCLUST, RPSBLAST), Interproscan, Multiple Sequence Alignment (MSA).
+(iv) visualizing and analyzing results from other sources, *e.g.,* BLAST suite (BLASTP, BLASTCLUST), Interproscan, Multiple Sequence Alignment (MSA).
 
 target audience, why they would use it and how to use the outputs, use cases
 
@@ -68,7 +78,7 @@ Alternatively, if the user already has a list of homologous proteins, they may e
 
 `full suite of analysis on each -- each member appears in the dropdown`
 
-A user can start at the beginning of our workflow needing only one or more accession numbers for their protein(s) of interest. Various combinations of the tools can then be selected and the accession numbers will be run through the corresponding procedures in the MolEvol workflow. For instance, the user could perform DeltaBLAST on their input, run the homology search, and then choose to generate the domain architecture using RPSBLAST, InterProScan, or both.
+A user can start at the beginning of our workflow needing only one or more accession numbers for their protein(s) of interest. Various combinations of the tools can then be selected and the accession numbers will be run through the corresponding procedures in the MolEvol workflow. For instance, the user could perform DeltaBLAST on their input, run the homology search, and then generate the domain architecture using InterProScan.
 
 #### Related accessions aka homologs
 
@@ -141,10 +151,10 @@ include_graphics()
 ------------------------------------------------------------------------
 
 ## Retrieving results from a prior run
-Once submitted
-get 8 letter code, go away for 4 hours, come back and enter code, boom results
-viz, interactive plots, play around
 
+After submitting proteins to the app, take a break! The full analysis takes around 4-5 hours to complete, domain architechture takes 1-2 hours, and just InterProScan takes about 30 minutes to complete. *UPDATE BASED ON BENCHMARKING TIMES, THIS IS JUST AN ESTIMATE BASED ON HOW LONG LAUREN HAS TO STARE AT HER COMPUTER*
+
+You will receive and 8 character alphanumeric code before you close the application, which you will enter into the designated box under the Upload tab. Your results will then populate the screen. There are summary tables, figures, and interactive plots for you to play around with. If you require assistance navigating, please watch the tutorial at the end of this help page.
 
 ------------------------------------------------------------------------
 
@@ -152,18 +162,23 @@ viz, interactive plots, play around
 
 ## Domain Architecture
 
-A protein's domain architecture (DA) refers to the order of specific functional regions of a protein. Two different tools are used by MolEvolvR to characterize the domain architecture of a protein. InterProScan _and RPS-BLAST_ can be chosen by the user to perform the characterization.
+A protein's domain architecture (DA) refers to the order of specific functional regions of a protein. Currently, InterProScan alone is used by MolEvolvR to characterize the domain architecture of a protein. 
 
-`Iprscan + rpsblast, able to choose between the two. Add benchmarking times once that’s fully implemented, add tables/figures`
+`Iprscan; Add benchmarking times once that’s fully implemented, add tables/figures`
 
 ### Summary stats
 A summary table is provided after completion of the analyses. This provides an overview of what domains are conserved across lineages. 
 
 ### Phyletic spreads
-description
+Several visualizations are provided to display the phylogeny of the proteins. Heatmaps are provided that display the occurrence of homologs within specific lineages. An interactive sunburst plot is created to show the phyletic spread of the query protein across bacteria, archaea, and eukaryota. Hovering over each section of the plot displays the lineage. 
 
 ### Upset plots
-description of what they are, what does it show/mean
+An upset plot shows the frequencies of domains and domain architectures within the homologs. This shows 
+
+Blue histogram: Distribution of the constituent domains underlying all homologs.
+Combination matrix: Various configurations of the constituent domains
+that come together in the domain architectures.
+Red histogram: Frequency of occurrences of the indicated domain architectures.
 
 ### DA visualizations
 description
@@ -175,17 +190,25 @@ description
 
 ## Phylogeny
 
+The dictionary defines phylogenisis as the evolutionary development and diversification of a species or group of organisms, or of a particular feature of an organism. Phylogenetic analysis of proteins provides key insights into their development and evolution. The conservation of certain portions through lineages or across domains of life could indicate the importance of the protein to certain biological processes.
+
 ### Phyletic spread of homologs
 
+Query Heatmap, SunBurst -- based only on lineage
+MolEvolvR creates an easy to read and 
+
 ### Multiple Sequence Alignments and Phylogenetic Trees
-
-### Paralogs
-
-## Tutorials
+Tree -- based on amino acid sequence conservation
 
 ------------------------------------------------------------------------
 
-## Contact
-Janani Ravi 
+## Tutorials
 
+We have provided video tutorials of how to run and download your own web blast or InterProScan files, load data (accession numbers, fasta files, web blast, web InterProScan) into the app. These tutorial videos also demonstrate how to run your analyses within the app, how to access your data after it has been processed, how to navigate the app, and how to download your ready-to-publish figures!
 
+------------------------------------------------------------------------
+
+## Contact -- Twitter handles??
+Janani Ravi       |   janani@msu.edu
+Samuel Chen       |   chensam2@msu.edu
+Lauren Sosinski   |   sosinsk7@msu.edu
