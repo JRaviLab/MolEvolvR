@@ -8,7 +8,7 @@ library(data.table)
 DownloadAssemblySummary <- function(outpath, keep = c("assembly_accession", "taxid", "species_taxid", "organism_name"))
 {
   #' Download the combined assembly summaries of genbank and refseq
-  #' @author Samuel Chen
+  #' @author Samuel Chen, Janani Ravi
   #' @param outpath String of path where the assembly summary file should be written
   #' @param keep Character vector containing which columns should be retained and downloaded
 
@@ -46,12 +46,14 @@ DownloadAssemblySummary <- function(outpath, keep = c("assembly_accession", "tax
 
 
 # Go from the GCA_ID column to tax IDs using the assembly file
-GCA2lin <- function(prot_data, assembly_path = "data/acc_files/assembly_summary20201018.txt",
-                    lineagelookup_path = "data/lineagelookup.txt", acc_col = "Protein" )
+GCA2lin <- function(prot_data,
+		    assembly_path = "/data/research/jravilab/common_data/assembly_summary_genbank.txt",
+                    lineagelookup_path = "/data/research/jravilab/common_data/lineage_lookup.tsv",
+		    acc_col = "Protein" )
 {
   #' Function that maps GCA_ID to taxid, and that taxid to a lineage
   #' Note: currently configured to have at most kingdom and phylum
-  #' @author Samuel Chen
+  #' @author Samuel Chen, Janani Ravi
   #' @param prot_data Dataframe containing a column `GCA_ID`
   #' @param assembly_path String of the path to the assembly_summary path
   #' This file can be generated using the "DownloadAssemblySummary()" function
@@ -292,7 +294,50 @@ ipg2lin <- function(accessions, ipg_file, refseq_assembly_path,
 }
 
 
-prot2tax <- function(accNum_vec, out_path, plan = "multicore")
+
+add_tax = function(data, acc_col = "AccNum", version = T)
+{
+ if(!is.data.table(data))
+ {
+   data = as.data.table(data)
+ }
+
+ accessions = data[[acc_col]]
+
+ if(version)
+ {
+  data = data[, AccNum.noV := substr(data[[acc_col]], 0, nchar(data[[acc_col]])-2)]
+  acc_col = "AccNum.noV"
+ }
+
+ out_dir = tempdir()
+ tax = prot2tax(accessions, 'TEMPTAX', out_dir, return_dt = TRUE)
+
+ data = merge.data.table(data, tax, by.x = acc_col, by.y = "AccNum.noV", all.x = T)
+ return(data) 
+}
+
+prot2tax = function(accnums, suffix, out_dir, return_dt = FALSE)
+{
+
+ # Write accnums to a file
+ acc_file = tempfile()
+ write(paste(accnums, collapse = "\n"), acc_file) 
+ script = "/data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh" 
+ call = paste(script, acc_file, suffix, out_dir)
+ system(call, wait = TRUE)
+ if(return_dt)
+ {
+    out_file = paste0(out_dir, "/", suffix,  ".acc2info.tsv")
+    dt = fread(out_file, sep = "\t", fill = T)
+    return(dt)
+ }
+
+}
+
+
+
+prot2tax_old <- function(accNum_vec, out_path, plan = "multicore")
 {
   #'@author Samuel Chen, Janani Ravi
   #'@description Perform elink to go from protein database to taxonomy database
@@ -323,7 +368,8 @@ prot2tax <- function(accNum_vec, out_path, plan = "multicore")
     min_groups = length(accNum_vec)/600
     groups <- min(max(min_groups,15) ,length(accNum_vec))
     partitioned_acc <- partition(accNum_vec, groups )
-    # sink(out_path)
+
+    out_dir = tempdir()
 
     a <- map(1:length(partitioned_acc), function(x)
     {
@@ -332,11 +378,16 @@ prot2tax <- function(accNum_vec, out_path, plan = "multicore")
       {
         Sys.sleep(1)
       }
+      print(x)
+      script = "/data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh"
+      # script = "/data/research/jravilab/molevol_scripts/upstream_scripts/prot2tax.sh"
 
-      script = "./data/research/jravilab/molevol_scripts/upstream_scripts/prot2tax.sh"
-
-      accnum_in = paste(partitioned_acc[[x]], collapse = ",")
-      system(paste(script, accnum_in), wait = FALSE)
+      # accnum_in = paste(partitioned_acc[[x]], collapse = ",")
+      accnum_in = tempfile()
+      write(paste(partitioned_acc[[x]], collapse = ","), accnum_in)
+      
+      system(call, wait = F)
+      # system(paste(script, accnum_in), wait = TRUE)
 
 
       # f = future({
@@ -351,10 +402,10 @@ prot2tax <- function(accNum_vec, out_path, plan = "multicore")
       # })
     })
 
-    for( f in a)
-    {
-      cat(value(f))
-    }
+    # for( f in a)
+    # {
+     # cat(value(f))
+    # }
     # sink(NULL)
   }
 }
