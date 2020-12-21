@@ -1,55 +1,31 @@
 ---
-title: "MolEvolvr Help"
-subtitle: "_MolEvolvr help docs and tutorials._"
+title: "MolEvolvR Help docs & Tutorials"
+#subtitle: "_MolEvolvr help docs and tutorials._"
 output: html_document
 #runtime: shiny
 ---
 
 ```{r setup, include=FALSE, warning=FALSE, message=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(fontawesome)
+#library(fontawesome)
 library(tidyverse); library(knitr)
 #library(shiny); library(shinydashboard)
 ```
 
-# MolEvolvR Help docs & Tutorials
 
 This page will provide you with instructions on how to use the app to its fullest potential and helpful video tutorials. Videos will demonstrate how to navigate the application after retrieving your results.
 
 ## The UI: Workflow and Usage
 
-### How can you use the app?
-
-Characterization of proteins is crucial to understanding the molecular basis of fundamental cellular processes. Several computational tools have been developed to characterize protein sequence, structure, function, and phylogeny, and we have created a workflow to allow for the user to analyze proteins of interest at all of these levels using these tools. It begins by accepting accession numbers or FASTA files of proteins of interest, identifies homologs, determines function, and provides phyletic spreads. These analyses provide insight into the protein's purpose within organisms as well as detail how they have evolved. This is done in order to assist with providing an overview of their importance to a particular biological process, or survival itself.
-
-*LS NOTES*
-- END GOAL: Provide functional analysis & evolution of proteins, help people make new & exciting discoveries! Why? 
-- Functional analysis of proteins will lead to the discovery of its use within organisms. It can lead to a better understanding of biological pathways and provide an idea of the structure of the protein. 
-
---> what is the end goal?
-- similar proteins
-- ancestry of proteins (where they com from, lineage specific, share features with related proteins in different kingdoms)
-- exact same da present in other lineages, what could that mean?
-  - lineage specific?
-- biology of homologs, what more can they learn from the app than just blast or iprscan alone
-- if exact same domains are popping up across lineages, what does that say about function?
-
-- phyletic spreads and lineages
-- what are the questions they can answer/analyses they can do?
-- what is the value?
+Characterization of proteins is crucial to understanding the molecular basis of fundamental cellular processes. Several computational tools have been developed to characterize protein sequence, structure, function, and phylogeny, and we have created a workflow to allow for the user to analyze proteins of interest at all of these levels using these tools. These analyses into the function, evolution, and phylogeny of proteins provide a better insight into the lineage, structure, and biology of homologous proteins than these standalone tools alone.
 
 #### Use cases
 
-[Phage-shock proteins (psp)](http://jravilab.shinyapps.io/psp-evolution)
+For example, the [Phage-shock proteins (psp)](http://jravilab.shinyapps.io/psp-evolution) were analyzed using the workflows present in this application. Homology, domain architecture, and phylogeny of these proteins (and more) were created, showing their prevalence in other organisms and detailing how variations or portions of this phage-shock stress response system are present across many lineages.
 
+### How can you use the app?
 
-
-in broad terms of what was done
-- sample protein(s) -- Psp accessions, homologous and non-homologous
-  - tested all analyses on these proteins
-  - full analysis on non-homologous proteins
-  - domain architecture 
-
+It begins by accepting accession numbers or FASTA files of proteins of interest, identifies homologs, determines function, and provides phyletic spreads. These analyses provide insight into the protein's purpose within organisms as well as detail how they have evolved. This is done in order to assist with providing an overview of their importance to a particular biological process, or survival itself.
 
 MolEvolvR's functionality is comprised of 4 different types of analysis:
 
@@ -58,14 +34,11 @@ MolEvolvR's functionality is comprised of 4 different types of analysis:
 (iii) Phylogenetic analysis, which may draw upon information obtained through the other analysis to make inferences and visualizations pertaining to the phyletic spread of the target proteins and their homologs;
 (iv) visualizing and analyzing results from other sources, *e.g.,* BLAST suite (BLASTP, BLASTCLUST), Interproscan, Multiple Sequence Alignment (MSA).
 
-target audience, why they would use it and how to use the outputs, use cases
-
-
 ## Entering data into the app
 
 ### Accession Numbers and Fasta (full analysis)
 
-To begin the full analysis, the accession numbers associated with your proteins of interest can be entered into the "Upload" tab. They should be given in a comma-separated list -- they may be copy/pasted or uploaded as a `.csv` file. You then click on the "Generate FASTA" button and FASTA sequences are retrieved from NCBI [link here]. Additionally, you may give FASTA sequences copy/pasted or as a `.fa` or `.fasta` file.
+To begin the full analysis, the accession numbers associated with your proteins of interest can be entered into the "Upload" tab. They should be given in a comma-separated list -- they may be copy/pasted or uploaded as a `.csv` file. You then click on the "Generate FASTA" button and FASTA sequences are retrieved from the protein database at [NCBI](https://www.ncbi.nlm.nih.gov). Additionally, you may give FASTA sequences copy/pasted or as a `.fa` or `.fasta` file from [NCBI](https://www.ncbi.nlm.nih.gov).
 
 #### Multiple accessions/FASTA of homologs
 
@@ -73,13 +46,13 @@ To begin the full analysis, the accession numbers associated with your proteins 
 
 Alternatively, if the user already has a list of homologous proteins, they may enter the workflow post-homology search. Their protein data, in the form of accession numbers or FASTA sequences, is run through our molecular characterization and phylogenetic analysis processes. Additionally, the MolEvolvr webapp can use Clustal Omega, Clustal W, or MUSCLE to perform multiple sequence alignments on the proteins. If the user prefers to use a different alignment algorithm, they may enter their aligned FASTA Sequences that have been aligned using the algorithm of their choosing.
 
-#### Unrelated accessions
+#### Non-homologous proteins
 
 `full suite of analysis on each -- each member appears in the dropdown`
 
 A user can start at the beginning of our workflow needing only one or more accession numbers for their protein(s) of interest. Various combinations of the tools can then be selected and the accession numbers will be run through the corresponding procedures in the MolEvol workflow. For instance, the user could perform DeltaBLAST on their input, run the homology search, and then generate the domain architecture using InterProScan.
 
-#### Related accessions aka homologs
+#### Homologous proteins
 
 A user can start the analysis after conducting their own blast search and obtaining homologs. Combining various tools can then produce either phyletic spreads and/or domain architecture and characterization. Beginning with homologs, MolEvolvR can then run BLASTClust and phylogenetic analyses, with the option to add on the domain architecture if desired
 
@@ -94,9 +67,11 @@ Deltablast/psiblast + parameter options To begin the homolog search, a protein's
 MolEvolvR allows for customization of the analyses on your proteins of interest. Several different approaches can be taken to fit your needs.
 
 *Fully characterize proteins of interest with* *__MolEvolvR__*
+
 The full analysis allows the user to begin with accession numbers or FASTA files for protein(s) of interest. It then compiles a comprehensive set of homologs, which can then be used to determine evolution, phylogeny, and domain architectures of all homologs. Users have the option to perform only phylogenetic analysis or domain architecture if both are not required.
 
 *Analyzing external data with __MolEvolvR__*
+
 Additionally, users may load results from NCBI BLAST or InterProScan and begin the analysis at that stage. Web BLAST results allow the user to determine homolog similarity, the domain architecture and/or phylogeny, whereas uploading InterProScan results allow for domain characterization and -- if desired -- phylogeny.
 
 **check figures Janani sent, add here** 
@@ -139,13 +114,17 @@ include_graphics()
 include_graphics()
 ```
 
+Alternatively, the user may upload [command line BLAST](https://www.ncbi.nlm.nih.gov/books/NBK279690/) results with these columns specified:
+
+`query acc.ver, subject acc.ver, % identity, alignment length, mismatches, gap opens, q. start, q. end, s. start, s. end, evalue, bit score, % positives`
+
 Check out the [BLAST tutorials](https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs) to learn more about BLAST.
 ------------------------------------------------------------------------
 
 ### InterProScan outputs from the Iprscan5 web-interface
 
 - UI has changed, but otherwise it's basically the same as before -- just screenshots
-- what databases/analyses that it does, add screenshot
+- what databases/analyses that it does, add screenshots
 
 Running InterProScan
 
@@ -171,16 +150,13 @@ Check out the [InterProScan tutorials](https://www.ebi.ac.uk/interpro/help/tutor
 
 ## Retrieving results from a prior run
 
-After submitting proteins to the app, take a break! The full analysis takes around 4-5 hours to complete, domain architechture takes 1-2 hours, homology search takes approximately 1-1.5 hours, and InterProScan takes about 30 minutes to complete. *UPDATE BASED ON BENCHMARKING TIMES, THIS IS JUST AN ESTIMATE BASED ON HOW LONG LAUREN HAS TO STARE AT HER COMPUTER*
+After submitting proteins to the app, take a break! The full analysis takes around 4-5 hours to complete, domain architechture takes 1-2 hours, homology search takes approximately 1-1.5 hours, and InterProScan takes about 30 minutes to complete.
 
 You will receive and 8 character alphanumeric code before you close the application, which you will enter into the designated box under the Upload tab. Your results will then populate the screen. There are summary tables, figures, and interactive plots for you to play around with. If you require assistance navigating, please watch the tutorial at the end of this help page.
 
 ------------------------------------------------------------------------
 
-/data/research/jravilab/molevolvr_app/scripts/ui/legendText.R <-- use as guide to explain
-
 ## Domain Architecture
-*use psp paper to describe these, materials & methods + figure legends*
 
 A protein's domain architecture (DA) refers to the order of specific functional regions of a protein. Currently, InterProScan alone is used by MolEvolvR to characterize the domain architecture of a protein. 
 
@@ -197,6 +173,7 @@ An upset plot shows the frequencies of domains and domain architectures within t
 
 ### DA visualizations
 Results from InterProScan are visualized to display which domains are present within each query protein and a selected number of homologs. Select homologs are chosen from cluster results provided by BLASTClust.
+- select homologs chosen via blast clust representatives, distinct DAs, and membership to distinct lineages/clades
 
 ### Proximity network
 A network representation of the domain architecture for the query protein is created. Each node represents a different domain which are connected pair-wise if they co-occur in the protein.
@@ -210,10 +187,10 @@ The dictionary defines phylogenisis as the evolutionary development and diversif
 ### Phyletic spread of homologs
 
 Query Heatmap, SunBurst -- based only on lineage
-MolEvolvR creates an easy to read 
+MolEvolvR creates easy to read heatmaps and sunburst plots, dedicated to displaying the phyletic spread of homologs along with their prevalence across lineages. The sunburst displays the proportion of its homologs present in kingdoms, bacteria, archaea, and eukaryota in the inner ring with the the distribution of the homologs among key plineages (phyla) in the outer ring.
 
 ### Multiple Sequence Alignments and Phylogenetic Trees
-Tree -- based on amino acid sequence conservation
+Phylogenetic trees are created based on the amino acid sequences from the multiple sequence alignment of queries and/or homologs. The multiple sequence alignment is also provided for your convenience.
 
 ------------------------------------------------------------------------
 
@@ -226,5 +203,7 @@ We will provide video tutorials of how to load data (accession numbers, fasta fi
 ## Citation & Contact Information
 
 Janani Ravi       |   janani@msu.edu
+
 Samuel Chen       |   chensam2@msu.edu
+
 Lauren Sosinski   |   sosinsk7@msu.edu
