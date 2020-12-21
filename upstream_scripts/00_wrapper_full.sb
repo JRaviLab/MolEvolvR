@@ -17,7 +17,7 @@
 #PBS -l nodes=1:ppn=10		# number of nodes requested
 #PBS -m abe			# email notifications for job
 #PBS -M=sosinsk7@msu.edu	# user email; RESET
-#PBS -t 1-6			# number of identical jobs to submit to the queue
+#PBS -t 1-100			# number of identical jobs to submit to the queue
 #PBS -N molevol_analysis	# name of job being run
 
 ## print start/stop printf in individual scripts
@@ -36,6 +36,11 @@ DB=refseq
 NHITS=5000
 EVAL=1e-5
 WBLAST=$2
+
+
+## USAGE
+## qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "input.txt F"
+## qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "example_blastp.csv T"
 
 # Location of databases/dependencies 
 export BLASTDB=/data/common_data/blastdb/v5:/data/common_data/blastdb/ncbidb:/data/common_data/blastdb:/data/common_data/blastdb/FASTA:$BLASTDB
@@ -75,22 +80,19 @@ do
 
       if [ $WBLAST = "T" ]
       then
-	 ## convert web blast input from csv to tsv for ACC2FA
-	 sed 's/,/\t/g' ${FILE} >> ${OUTDIR}/${PREFIX}.wblast.tsv
-	 
 	 ## ACC2FA ##
 	 acc2fa_start=$SECONDS
-	 sh /data/research/jravilab/molevol_scripts/upstream_scripts/02_acc2fa.sh ${OUTDIR}/${PREFIX}.wblast.tsv $PREFIX $OUTDIR
+	 sh /data/research/jravilab/molevol_scripts/upstream_scripts/02_acc2fa.sh ${OUTPATH}/${PREFIX}.wblast.tsv $PREFIX $OUTDIR
 	 acc2fa_dur=$(( $SECONDS - $acc2fa_start ))
 
 	 ## ACC2INFO ##
 	 acc2info_start=$SECONDS
-	 sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2tax.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
+	 sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
 	 acc2fa_dur=$(( $SECONDS - $acc2fa_start ))
 
 	 ## BLAST RESULT CLEANUP ##
 	 db_cln_start=$SECONDS
-	 Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.2_cleanup_clblast.R ${FILE} ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX $WBLAST
+	 Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.2_cleanup_clblast.R ${OUTPATH}/${PREFIX}.wblast.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX $WBLAST
 	 db_cln_dur=$(( $SECONDS - $db_cln_start ))
       fi
 
@@ -111,7 +113,7 @@ do
 
 	  ## ACC2INFO ##
 	  acc2info_start=$SECONDS
-	  sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2tax.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
+	  sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
 	  acc2info_dur=$(( $SECONDS - $acc2info_start ))
 	  
 	  ## BLAST RESULT CLEANUP ##
@@ -140,10 +142,10 @@ do
       ipr2lin_start=$SECONDS
       Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.4_ipr2lin.R ${OUTDIR}/${PREFIX}.iprscan.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX
       ipr2lin_dur=$(( $SECONDS - $ipr2lin_start ))
-
+      
       ## IPR2DA ##
       ipr2da_start=$SECONDS
-      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${PREFIX}.iprscan.tsv ${PREFIX} ${OUTDIR}/${PREFIX}.cln.clust.tsv
+      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${PREFIX}.iprscan.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv ${PREFIX} ${OUTDIR}/${PREFIX}.cln.clust.tsv
       ipr2da_dur=$(( $SECONDS - $ipr2da_start ))
 
       ## RPSBLAST ## 		
@@ -164,7 +166,7 @@ do
       STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
       
       ## Add benchmarking times to logfile
-      printf "\n${START_DT}\t${STOP_DT}\t${PREFIX}\t${query_run_dur}\t${splitfa_dur}\t${db_dur}\t${acc2info_dur}\t${db_cln_dur}\t${acc2fa_dur}\t${bclust_dur}\t${c2t_dur}\t${ipr_dur}\t${ipr2da_dur}\t${rps_dur}\t${rps2da_dur}\t${dur}" >> ${OUTPATH}/logfile.tsv
+      printf "\n${START_DT}\t${STOP_DT}\t${PREFIX}\t${db_dur}\t${acc2info_dur}\t${db_cln_dur}\t${acc2fa_dur}\t${bclust_dur}\t${c2t_dur}\t${ipr_dur}\t${ipr2da_dur}\t${dur}" >> ${OUTPATH}/logfile.tsv
 
       ## And how much time is left
       #timeleft=$(( $total - $dur ))
@@ -178,3 +180,4 @@ do
    fi
 done
 
+setfacl -R -m group:shiny:r-x ${OUTDIR}

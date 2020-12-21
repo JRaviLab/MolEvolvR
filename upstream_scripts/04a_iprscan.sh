@@ -6,8 +6,8 @@
 
 ## Load query files
 QUERY_FILE=$1
-suffix=$2
-outdir=$3
+PREFIX=$2
+OUTDIR=$3
 
 ## iprscan able to take multiple fasta sequences in input file
 
@@ -19,7 +19,7 @@ printf "\n######################\n"
 ## Run interproscan
 
 ## FILEPATHS: I/O
-OUTFILE=$(printf "${outdir}/${suffix}.iprscan")
+OUTFILE=$(printf "${OUTDIR}/${PREFIX}.iprscan")
 
 ## print I/O messages
 printf "\nNow processing $QUERY_FILE\n"

@@ -19,7 +19,7 @@
 #PBS -m abe                     # email notifications for job
 #PBS -M=sosinsk7@msu.edu        # user email; RESET
 #PBS -F arguments               # allows script to accept argument input
-#PBS -t 1-2                    # number of identical jobs to submit to the queue
+#PBS -t 1-100                    # number of identical jobs to submit to the queue
 #PBS -N molevol_analysis        # name of job being run
 
 ## change output directory based on user input
@@ -29,12 +29,15 @@ cd ${OUTPATH}
 ## USER INPUTS
 INFILEPATHS_LIST=$1
 
+## USAGE
+## qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb -F /path/to/input.txt
+
 # Location of databases/dependencies 
 export INTERPRO=/opt/software/iprscan/5.47.82.0-Python3/data:/data/common_data/iprscan:$INTERPRO
 export NCBI_API_KEY=17d41451acfde2b8dd3f3ebffc3b79eef60a
 
 ## Create logfile w/ column names
-printf "\nSTART\tSTOP\tquery\tacc2taxlin\tipr2da\tipr2lin\ttotal_time" >> ${OUTPATH}/logfile.txt
+printf "\nSTART\tSTOP\tquery\tacc2info\tipr2da\tipr2lin\ttotal_time" >> ${OUTPATH}/logfile.txt
 
 #####################
 ## LOADING MODULES ##
@@ -58,18 +61,18 @@ for FILE in $(shuf -e ${FILES[@]})
 do
    F=$(basename ${FILE})
    PREFIX=$(echo "${F%%.*}")                    ## takes PREFIX of file
-   OUTDIR=${OUTPATH}/${PREFIX}_ipr_out      ## variable containing output filepath based PREFIX
+   OUTDIR=${OUTPATH}/${PREFIX}_ipr      ## variable containing output filepath based PREFIX
    printf "${PREFIX}"
 
    if [ ! -d ${OUTDIR} ]; then                  ## if the output directory doesn't exist
       mkdir ${OUTDIR}                           ## make the directory
       cd ${OUTDIR}
 
-      ## ACC2TAXLIN ##
-      acc2taxlin_start=$SECONDS
+      ## ACC2INFO ##
+      acc2info_start=$SECONDS
       cat ${FILE} | awk -F "\t" '{ print $1 }' | sort -u > ${OUTDIR}/${PREFIX}.all_accnums.tsv
-      sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2tax.sh ${OUTDIR}/${PREFIX}.all_accnums.tsv ${PREFIX} ${OUTDIR}
-      acc2taxlin_dur=$(( $SECONDS - $acc2taxlin_start ))
+      sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.tsv ${PREFIX} ${OUTDIR}
+      acc2info_dur=$(( $SECONDS - $acc2info_start ))
 
       ## IPR2LIN ##
       ipr2lin_start=$SECONDS
@@ -78,7 +81,7 @@ do
       
       ## IPR2DA ##
       ipr2da_start=$SECONDS
-      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${FILE} ${PREFIX}
+      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${FILE} ${OUTDIR}/${PREFIX}.acc2info.tsv ${PREFIX}
       ipr2da_duration=$(( $SECONDS - $ipr2da_start ))
 				          
       ## Figure out how long the entire script took to run
@@ -87,9 +90,9 @@ do
       STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
 
       ## Add benchmarking times to logfile
-      printf "\n${START_DT}\t${STOP_DT}\t${PREFIX}\t${acc2taxlin_dur}\t${ipr2lin_duration}\t${ipr2da_duration}\t${duration}" >> ${OUTPATH}/logfile.txt
+      printf "\n${START_DT}\t${STOP_DT}\t${PREFIX}\t${acc2info_dur}\t${ipr2lin_duration}\t${ipr2da_duration}\t${duration}" >> ${OUTPATH}/logfile.txt
    
    fi
 done
 
-#chmod -R ug+wr ${OUTPATH}
+setfacl -R -m group:shiny:r-x ${OUTDIR}

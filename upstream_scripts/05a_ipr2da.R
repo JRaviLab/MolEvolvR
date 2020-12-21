@@ -3,6 +3,7 @@ library(data.table)
 library(furrr)
 
 # source lineage.R
+source("/data/research/jravilab/molevol_scripts/R/pre-msa-tree.R")
 source("/data/research/jravilab/molevol_scripts/R/colnames_molevol.R")
 
 ## load files in
@@ -10,22 +11,28 @@ source("/data/research/jravilab/molevol_scripts/R/colnames_molevol.R")
 ipr2da <- function(infile_ipr, acc2info, prefix, analysis=c("Pfam","SMART", "CDD", "TIGRFAM",
                                                   "Phobius", "Gene3D", "TMHMM", "SignalP_EUK",
                                                   "SignalP_GRAM_NEGATIVE", "SignalP_GRAM_POSITIVE"))
-  {
-  # read in lookup table
+{
+ 
+#infile_ipr <- 'sample5.iprscan.tsv'
+#acc2info <- 'sample.acc2info.tsv'
+#prefix <- 'sample5'
+
+ # read in lookup table
   lookup_tbl <- fread("/data/research/jravilab/common_data/cln_lookup_tbl.tsv", header = T, fill = T) %>%
     arrange() %>% distinct()
 
   # read in iprscan results
-  ipr_in <- fread(file = infile_ipr, sep = "\t", header = F, col.names = ipr_colnames, fill = T) %>%
+  ipr_in <- read_tsv(infile_ipr, col_names = ipr_colnames) %>%
     mutate(DB.ID = gsub('G3DSA:', '', DB.ID))
 
   # read in acc2info
-  acc2info_out <- fread(file = acc2info, sep = '\t', header = T, fill = T) %>%
+  acc2info_out <- read_tsv(file = acc2info, col_names = T) %>%
     mutate(FullAccNum = gsub('\\|', '', FullAccNum)) %>%
-    transmute(AccNum = gsub('.*[a-z]', '', FullAccNum))
+    mutate(AccNum = gsub('.*[a-z]', '', FullAccNum)) %>%
+    select(-AccNum.noV, -FullAccNum)
 
   prot_in_da <- ipr_in %>%
-    merge.data.table(y = lookup_tbl, by.x = "DB.ID", by.y = "DB.ID", all.x = T)
+    merge(lookup_tbl, by = "DB.ID", all.x = T)
   
   # split dataframe into unique proteins
   x <- split(x = prot_in_da, f = prot_in_da$AccNum)
@@ -63,24 +70,16 @@ ipr2da <- function(infile_ipr, acc2info, prefix, analysis=c("Pfam","SMART", "CDD
   # read in lineage mapping file
   lineage_map <- fread("/data/research/jravilab/common_data/lineage_lookup.txt", header = T, fill = T)
  
-  head(lineage_map)
-
-  head(domarch)
-
   # combine domarchs to one data frame, merge w/ acc2info
-  domarch2 <- do.call(rbind.data.frame, domarch) #%>%
-    #merge.data.table(acc2info_out, by = "AccNum")
+  domarch2 <- do.call(rbind.data.frame, domarch) %>%
+    merge(acc2info_out, by = "AccNum")
   
-  head(domarch2)
-
   # add lineage to domarch, remove extra species column
-  domarch_lins <- merge.data.table(domarch2, lineage_map, by = "TaxID", all.x = T) #%>%
-   #select(-Species.x)
-  
-  head(domarch_lins)
+  domarch_lins <- merge(domarch2, lineage_map, by = "TaxID", all.x = T) %>%
+   select(-Species.x)
   
   # change Species.y colname to Species
-  names(ipr_lin)[names(ipr_lin) == 'Species.y'] <- 'Species'
+  names(domarch_lins)[names(domarch_lins) == 'Species.y'] <- 'Species'
   # add name column to domarch+lineage dataframe
   domarch_lins <- domarch_lins %>% add_name()
 
@@ -94,11 +93,11 @@ ipr2da <- function(infile_ipr, acc2info, prefix, analysis=c("Pfam","SMART", "CDD
 ## function for adding results from ipr2da to blast results
 
 append_ipr <- function(ipr_da, blast, prefix) {
-  ipr_domarch <- fread(ipr_da, header = T, fill = T)
-  blast_out <- fread(blast, header = T, fill = T)
+  #ipr_domarch <- read_tsv(ipr_da, col_names = T)
+  blast_out <- read_tsv(blast, col_names = T)
   
-  blast_ipr <- merge (blast_out, ipr_domarch, by = 'AccNum')
-  write_tsv(blast_ipr, file = paste0(prefix, '.cln.clust.ipr.tsv'), na = 'NA')
+  blast_ipr <- merge(blast_out, ipr_da, by = 'AccNum')
+  write_tsv(blast_ipr, file = paste0(prefix, '.full_analysis.tsv'), na = 'NA')
 }
 
 # accept command line args
@@ -108,10 +107,10 @@ args <- commandArgs(trailingOnly=TRUE)
 da <- ipr2da(infile_ipr = args[1], acc2info =  args[2], prefix = args[3])
 
 ## if blast results are provided, call append_ipr
-if (is.null(args[4]) | length(args[4] == 0)) {
-  print('No blast results provided, moving on.') 
-} else if (args[4] == grep('.cln.clust.tsv', args[4])) {
-  append_ipr(da, blast=args[4], prefix=args[3]) 
+if (is.null(args[4]) | is.na(args[4])) {
+   print('No blast results provided, moving on.') 
+} else {
+   append_ipr(ipr_da=da, blast=args[4], prefix=args[3]) 
 }
 
 

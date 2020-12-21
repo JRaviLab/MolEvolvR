@@ -9,11 +9,19 @@
 ## USER INPUTS
 INFILE=$1
 
-dir=$(dirname $INFILE)
-base=$(basename $INFILE)
-cd ${dir}
+## USAGE
+## ./00_submit_da.sh multifasta.fa
 
-find $PWD -type f -name "$base" > input.txt
+DIR=$(dirname $INFILE)
+BASE=$(basename $INFILE)
+cd ${DIR}
+
+printf "START_DT\tSTOP_DT\tquery\tacc2info\tblast_clust\tclust2table\tiprscan\tipr2da\tduration\n" >> ${DIR}/logfile.txt
+
+
+find $PWD -type f -name "$BASE" > input.txt
 
 INPATHS=input.txt
 qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_da.sb -F $INPATHS
+
+setfacl -R -m group:shiny:r-x ${DIR}

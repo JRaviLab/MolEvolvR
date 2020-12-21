@@ -20,7 +20,7 @@
 #PBS -m abe   # email notifications for job
 #PBS -M=sosinsk7@msu.edu  # user email; RESET
 #PBS -F arguments   # allows script to accept argument input
-#PBS -t 1-5  # number of identical jobs to submit to the queue
+#PBS -t 1-100  # number of identical jobs to submit to the queue
 #PBS -N molevol_analysis  # name of job being run
 
 ## print start/stop printf in individual scripts
@@ -65,7 +65,7 @@ for FILE in $(shuf -e ${FILES[@]})
 do
    F=$(basename ${FILE})
    PREFIX=$(echo "${F%%.*}")                    ## takes PREFIX of file
-   OUTDIR=${OUTPATH}/${PREFIX}_da_out             ## variable containing output filepath based PREFIX
+   OUTDIR=${OUTPATH}/${PREFIX}_da             ## variable containing output filepath based PREFIX
    printf "${PREFIX}\n"
 
    if [ ! -d ${OUTDIR} ]; then                  ## if the output directory doesn't exist
@@ -77,40 +77,40 @@ do
       sh /data/research/jravilab/molevol_scripts/upstream_scripts/04a_iprscan.sh ${FILE} ${PREFIX} ${OUTDIR}
       ipr_duration=$(( $SECONDS - $ipr_start ))
       
-      ## ACC2TAXLIN ##
-      acc2taxlin_start=$SECONDS
+      ## ACC2INFO ##
+      acc2info_start=$SECONDS
       cat ${PREFIX}.iprscan.tsv | awk -F "\t" '{ print $1 }' | sort -u > ${OUTDIR}/${PREFIX}.all_accnums.tsv
-      sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2tax.sh ${OUTDIR}/${PREFIX}.all_accnums.tsv ${PREFIX} ${OUTDIR}
-      acc2taxlin_dur=$(( $SECONDS - $acc2taxlin_start ))
+      sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.tsv ${PREFIX} ${OUTDIR}
+      acc2info_dur=$(( $SECONDS - $acc2info_start ))
+
+      ## IPR2LIN ##
+      ipr2lin_start=$SECONDS
+      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.4_ipr2lin.R ${PREFIX}.iprscan.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv ${PREFIX}
+      ipr2lin_duration=$(( $SECONDS -  $ipr2lin_start ))
 
       ## IPR2DA ##
       ipr2da_start=$SECONDS
-      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${PREFIX}.iprscan.tsv ${PREFIX}
+      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${PREFIX}.iprscan.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv ${PREFIX}
       ipr2da_duration=$(( $SECONDS - $ipr2da_start ))
       
-      ## IPR2LIN ##
-      ipr2lin_start=$SECONDS
-      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.4_ipr2lin.R ${PREFIX}.iprscan.tsv ${OUTDIR}/${PREFIX}.acc2tax.tsv ${PREFIX}
-      ipr2lin_duration=$(( $SECONDS -  $ipr2lin_start ))
-      
       ## RPSBLAST ##
-      rps_start=$SECONDS
-      sh /data/research/jravilab/molevol_scripts/upstream_scripts/04b_rpsblast.sh ${FILE} ${PREFIX} ${OUTDIR}
-      rps_duration=$(( $SECONDS - $rps_start))
+      #rps_start=$SECONDS
+      #sh /data/research/jravilab/molevol_scripts/upstream_scripts/04b_rpsblast.sh ${FILE} ${PREFIX} ${OUTDIR}
+      #rps_duration=$(( $SECONDS - $rps_start))
       
       ## RPS2DA ##
-      rps2da_start=$SECONDS
-      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05b_rps2da.R ${OUTDIR}/${PREFIX}.rps.out ${PREFIX}
-      rps2da_duration=$(( $SECONDS - $rps2da_start ))
+      #rps2da_start=$SECONDS
+      #Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05b_rps2da.R ${OUTDIR}/${PREFIX}.rps.out ${PREFIX}
+      #rps2da_duration=$(( $SECONDS - $rps2da_start ))
       
       duration=$(( $SECONDS - $start ))
       printf "\nTotal run time: $duration\n"
       STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
       
       ## Add benchmarking times to logfile
-      printf "START_DT\tSTOP_DT\tPREFIX\tipr_duration\tipr2da_duration\tipr2lin_duration\trps_duration\trps2da_duration\tduration" >> ${OUTPATH}/logfile.txt
-      printf "\n${START_DT}\t${STOP_DT}\t${PREFIX}\t${ipr_duration}\t${ipr2da_duration}\t${ipr2lin_duration}\t${rps_duration}\t${rps2da_duration}\t${duration}" >> ${OUTPATH}/logfile.txt
+      printf "START_DT\tSTOP_DT\tquery\tipr\tipr2da\tipr2lin\tduration" >> ${OUTPATH}/logfile.txt
+      printf "\n${START_DT}\t${STOP_DT}\t${PREFIX}\t${ipr_duration}\t${ipr2da_duration}\t${ipr2lin_duration}\t${duration}" >> ${OUTPATH}/logfile.txt
     fi
 done
 
-#chmod -R ugo+wr ${OUTPATH}
+setfacl -R -m group:shiny:r-x ${OUTDIR}

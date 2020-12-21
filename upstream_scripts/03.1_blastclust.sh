@@ -60,7 +60,7 @@ printf "\n#####################################"
 printf "\n## Now running BLASTCLUST on file(s): $INFILE "
 printf "\n#####################################\n"
 
-OUTFILE=$(printf "${outdir}/${suffix}.bclust.L60S80.out")
+OUTFILE=$(printf "${outdir}/${suffix}.bclust.L60S80.tsv")
 
 printf "\nPerforming BLASTCLUST analysis on $INFILE\n"
 blastclust -i $INFILE -o $OUTFILE -p T -L .6 -b T -S 80 -a 8
