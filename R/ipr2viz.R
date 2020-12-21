@@ -1,4 +1,4 @@
-## To convery IPRScan files to a gggenes viz!
+## To convert IPRScan files to a gggenes viz!
 ## Janani Ravi, Lauren Sosinski, Samuel Chen
 ## Created: Apr 9, 2020
 
@@ -84,8 +84,8 @@ ipr2viz <- function(infile_ipr=here("../molevolvr_out/phage1_out/WP_001901328.1_
   top_acc <- top_acc(cln_file, DA_col = "DomArch.Pfam", lin_col = "Lineage",
                      n = topn)
   # Add the lineages from the cln file
-  lin_cols = c("AccNum", "Lineage", "Species")
-  ipr_out = merge(ipr_out, cln_file[, ..lin_cols], by = "AccNum", all.x = T)
+  # lin_cols = c("AccNum", "Lineage", "Species")
+  ipr_out = merge(ipr_out, cln_file[, c("AccNum","Lineage", "Species")], by = "AccNum", all.x = T)
 
 
   ipr_out <- subset(ipr_out, ipr_out$AccNum %in% top_acc)
