@@ -12,9 +12,9 @@ printf "BEGIN EDIRECT SEARCH\n"
 printf "####################\n"
 
 INFILE=$1
-SUFFIX=$2
+PREFIX=$2
 OUTDIR=$3
-OUTFILE=$(printf "${OUTDIR}/${SUFFIX}.all_accnums.fa")		# creating the output file name
+OUTFILE=$(printf "${OUTDIR}/${PREFIX}.all_accnums.fa")		# creating the output file name
 
 printf "$INFILE\n"
 
@@ -22,9 +22,9 @@ printf "$INFILE\n"
 printf "\nCreating temporary files\n"
 
 # taking 2nd column in blast input file and taking only 1 copy of each homolog accession,
-cat ${INFILE} | awk -F "\t" '{ print $2 }' | sort -u >> ${OUTDIR}/${SUFFIX}.all_accnums.txt
+cat ${INFILE} | awk -F "\t" '{ print $2 }' | sort -u >> ${OUTDIR}/${PREFIX}.all_accnums.txt
 
-split -l 1000 -e ${OUTDIR}/${SUFFIX}.all_accnums.txt ${OUTDIR}/acc 	# split accessions up into files of 1000 accession numbers
+split -l 1000 -e ${OUTDIR}/${PREFIX}.all_accnums.txt ${OUTDIR}/acc 	# split accessions up into files of 1000 accession numbers
 
 ## print statement for current step
 printf "\nObtaining fasta files\n"
@@ -37,7 +37,7 @@ done
 
 ## print statement for current step
 printf "\nRemoving temporary files\n"
-#rm ${OUTDIR}/acc*							# removes each file created by "split" function above
+rm ${OUTDIR}/acc*							# removes each file created by "split" function above
 
 printf "#####################\n"
 printf "END OF EDIRECT SEARCH\n"
