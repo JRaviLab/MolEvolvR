@@ -68,7 +68,7 @@ ipr2viz <- function(infile_ipr=here("../molevolvr_out/phage1_out/WP_001901328.1_
 
   analysis = paste(analysis, collapse = "|")
 
-  colm <- c("SignAcc", "ClID", "Short_Name", "Name", "Description")
+  colm <- c("SignAcc", "ClID", "Short_Name", "PFC_Name", "Description")
 
   PfamClans = read_tsv(PfamClans_path, col_names = colm)
 
@@ -110,8 +110,8 @@ ipr2viz <- function(infile_ipr=here("../molevolvr_out/phage1_out/WP_001901328.1_
 
   ipr_out_sub <- left_join(ipr_out_sub, PfamClans, by = "SignAcc")
 
-  signacc <- which(is.na(ipr_out_sub$Name))
-  ipr_out_sub$Name[signacc] = ipr_out_sub$SignAcc[signacc]
+  signacc <- which(is.na(ipr_out_sub$PFC_Name))
+  ipr_out_sub$PFC_Name[signacc] = ipr_out_sub$SignAcc[signacc]
 
   ## PLOTTING
   ## domains as separate arrows
@@ -119,7 +119,7 @@ ipr2viz <- function(infile_ipr=here("../molevolvr_out/phage1_out/WP_001901328.1_
   {
     ggplot(ipr_out_sub,
            aes_string(xmin = "StartLoc", xmax = "StopLoc",
-               y = name, fill = "SignDesc", label="Name")) +
+               y = name, fill = "SignDesc", label="PFC_Name")) +
       geom_gene_arrow(arrowhead_height = unit(3, "mm"),
                       arrowhead_width = unit(1, "mm")) +
       geom_gene_label(align = "left") +
@@ -140,7 +140,7 @@ ipr2viz <- function(infile_ipr=here("../molevolvr_out/phage1_out/WP_001901328.1_
     ggplot(ipr_out_sub,
            aes(xmin = StartLoc, xmax = StopLoc,
                y = Analysis  #y = AccNum
-               , fill = SignDesc, label=Name)) +
+               , fill = SignDesc, label=PFC_Name)) +
       geom_gene_arrow(arrowhead_height = unit(3, "mm"),
                       arrowhead_width = unit(1, "mm")) +
       geom_gene_label(align = "left") +
@@ -167,7 +167,7 @@ ipr2viz_noblast <- function(infile_ipr,
 
   analysis = paste(analysis, collapse = "|")
 
-  colm <- c("SignAcc", "ClID", "Short_Name", "Name", "Description")
+  colm <- c("SignAcc", "ClID", "Short_Name", "PFC_Name", "Description")
 
   PfamClans = read_tsv(PfamClans_path, col_names = colm)
 
@@ -205,8 +205,8 @@ ipr2viz_noblast <- function(infile_ipr,
   ipr_out_sub = dplyr::rename(ipr_out_sub,  "SignAcc" = "DB.ID")
   ipr_out_sub <- left_join(ipr_out_sub, PfamClans, by = "SignAcc")
 
-  signacc <- which(is.na(ipr_out_sub$Name))
-  ipr_out_sub$Name[signacc] = ipr_out_sub$SignAcc[signacc]
+  signacc <- which(is.na(ipr_out_sub$PFC_Name))
+  ipr_out_sub$PFC_Name[signacc] = ipr_out_sub$SignAcc[signacc]
 
   name_sym = sym(name)
   ## PLOTTING
@@ -215,7 +215,7 @@ ipr2viz_noblast <- function(infile_ipr,
   {
     ggplot(ipr_out_sub,
            aes_string(xmin = "StartLoc", xmax = "StopLoc",
-               y = name, fill = "SignDesc", label="Name")) +
+               y = name, fill = "SignDesc", label="PFC_Name")) +
       geom_gene_arrow(arrowhead_height = unit(3, "mm"),
                       arrowhead_width = unit(1, "mm")) +
       geom_gene_label(align = "left") +
@@ -236,7 +236,7 @@ ipr2viz_noblast <- function(infile_ipr,
     ggplot(ipr_out_sub,
            aes(xmin = StartLoc, xmax = StopLoc,
                y = Analysis  #y = AccNum
-               , fill = SignDesc, label=Name)) +
+               , fill = SignDesc, label=PFC_Name)) +
       geom_gene_arrow(arrowhead_height = unit(3, "mm"),
                       arrowhead_width = unit(1, "mm")) +
       geom_gene_label(align = "left") +
