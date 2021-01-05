@@ -17,7 +17,6 @@
 #PBS -l nodes=1:ppn=10		# number of nodes requested
 #PBS -m abe			# email notifications for job
 #PBS -M=sosinsk7@msu.edu	# user email; RESET
-#PBS -t 1-100			# number of identical jobs to submit to the queue
 #PBS -N molevol_analysis	# name of job being run
 
 ## print start/stop printf in individual scripts

@@ -29,11 +29,16 @@ ipr2lin <- function(ipr, acc2info, suffix) {
   # change species.y to species
   names(ipr_lin)[names(ipr_lin) == 'Species.y'] <- 'Species'
   
+  # add lookup table to iprscan file
+  lookup_tbl <- fread(input = '/data/research/jravilab/common_data/cln_lookup_tbl.tsv', sep = '\t', header = T, fill = T)
+
   # run add_name f(x) on ipr+lineage dataframe
   ipr_lin <- ipr_lin %>% add_name()
 
+  ipr_cln <- merge (ipr_lin, lookup_tbl, by = 'DB.ID', all.x = T)
+
   # write results to file
-  write_tsv(ipr_lin, file = paste0(suffix, '.iprscan_lins.tsv'))
+  write_tsv(ipr_cln, file = paste0(suffix, '.iprscan_cln.tsv'))
 }
 
 ## load files in

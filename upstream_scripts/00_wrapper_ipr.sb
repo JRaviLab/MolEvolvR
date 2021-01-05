@@ -18,8 +18,6 @@
 #PBS -l nodes=1:ppn=10          # number of nodes requested
 #PBS -m abe                     # email notifications for job
 #PBS -M=sosinsk7@msu.edu        # user email; RESET
-#PBS -F arguments               # allows script to accept argument input
-#PBS -t 1-100                    # number of identical jobs to submit to the queue
 #PBS -N molevol_analysis        # name of job being run
 
 ## change output directory based on user input
@@ -70,8 +68,8 @@ do
 
       ## ACC2INFO ##
       acc2info_start=$SECONDS
-      cat ${FILE} | awk -F "\t" '{ print $1 }' | sort -u > ${OUTDIR}/${PREFIX}.all_accnums.tsv
-      sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.tsv ${PREFIX} ${OUTDIR}
+      cat ${FILE} | awk -F "\t" '{ print $1 }' | sort -u > ${OUTDIR}/${PREFIX}.all_accnums.txt
+      sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt ${PREFIX} ${OUTDIR}
       acc2info_dur=$(( $SECONDS - $acc2info_start ))
 
       ## IPR2LIN ##
