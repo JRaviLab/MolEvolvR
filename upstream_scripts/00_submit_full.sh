@@ -54,6 +54,6 @@ if [ $WBLAST = F ]; then
 fi
 
 INPATHS=input.txt
-qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "$INPATHS $WBLAST"
+qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "$INPATHS $WBLAST" -t 1-$NFASTA
 
 setfacl -R -m group:shiny:r-x ${DIR}

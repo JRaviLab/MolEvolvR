@@ -21,6 +21,10 @@ module load iprscan
 ## QUERY PROT ONLY RUNS ##
 query_run_start=$SECONDS
 
+mkdir ${PREFIX}_quick_out
+cp ${INFILE} ${PREFIX}_quick_out
+cd ${PREFIX}_quick_out
+
 if [ $FILE_TYPE = WBLAST ]; then
    
    sed 's/,/\t/g' ${INFILE} > ${DIR}/${PREFIX}.wblast.tsv
