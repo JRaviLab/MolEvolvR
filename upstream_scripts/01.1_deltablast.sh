@@ -1,7 +1,7 @@
 #!/bin/bash
 # Script to run DELTABLAST
 # Default parameters: DB=refseq; evalue=1e-5; #hits=5000
-# User inputs: INFILE SUFFIX OUTDIR DB NHITS EVAL
+# User inputs: INFILE PREFIX OUTDIR DB NHITS EVAL
 # Authors: Lauren Sosinski, Janani Ravi
 # Created on: Apr 9, 2019
 # Last edited: Nov 13, 2020
@@ -47,12 +47,12 @@
 
 ## FILEPATHS: I/O
 INFILE=$1
-SUFFIX=$2
+PREFIX=$2
 OUTDIR=$3
 DB=$4
 NHITS=$5
 EVAL=$6
-OUTFILE=$(printf "${OUTDIR}/${SUFFIX}.${DB}.${EVAL}.tsv")
+OUTFILE=$(printf "${OUTDIR}/${PREFIX}.${DB}.${EVAL}.tsv")
 
 ## Print I/O messages
 printf "\nNow processing: $INFILE"
