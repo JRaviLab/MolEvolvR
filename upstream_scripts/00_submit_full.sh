@@ -12,9 +12,9 @@ WBLAST=$2
 
 ## USAGE ##
 # Full analysis | input | fasta file
-# ./00_submit_full.sb multifasta.fa F
+# sh /path/to/00_submit_full.sh /path/to/multifasta.fa F
 # Web-BLAST analysis | input | blastp file as csv
-# ./00_submit_full.sh web_blast.csv T
+# sh /path/to/00_submit_full.sh /path/to/web_blast.csv T
 
 DIR=$(dirname $INFILE)
 BASE=$(basename $INFILE)
