@@ -52,7 +52,7 @@ OUTDIR=$3
 DB=$4
 NHITS=$5
 EVAL=$6
-OUTFILE=$(printf "${OUTDIR}/${PREFIX}.${DB}.${EVAL}.tsv")
+OUTFILE=$(printf "${OUTDIR}/${PREFIX}.dblast.tsv")
 
 ## Print I/O messages
 printf "\nNow processing: $INFILE"
