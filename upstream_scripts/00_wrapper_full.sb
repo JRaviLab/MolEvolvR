@@ -77,106 +77,108 @@ do
       mkdir ${OUTDIR}				## make the directory
       cd ${OUTDIR}
 
+      ## WEB BLAST ANALYSIS
       if [ $WBLAST = "T" ]
       then
-	 ## ACC2FA ##
-	 acc2fa_start=$SECONDS
-	 sh /data/research/jravilab/molevol_scripts/upstream_scripts/02_acc2fa.sh ${OUTPATH}/${PREFIX}.wblast.tsv $PREFIX $OUTDIR
-	 acc2fa_dur=$(( $SECONDS - $acc2fa_start ))
+		## ACC2FA ##
+		acc2fa_start=$SECONDS
+		sh /data/research/jravilab/molevol_scripts/upstream_scripts/02_acc2fa.sh ${OUTPATH}/${PREFIX}.wblast.tsv $PREFIX $OUTDIR
+		acc2fa_dur=$(( $SECONDS - $acc2fa_start ))
 
-	 ## ACC2INFO ##
-	 acc2info_start=$SECONDS
-	 sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
-	 acc2fa_dur=$(( $SECONDS - $acc2fa_start ))
+		## ACC2INFO ##
+		acc2info_start=$SECONDS
+		sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
+		acc2fa_dur=$(( $SECONDS - $acc2fa_start ))
 
-	 ## BLAST RESULT CLEANUP ##
-	 db_cln_start=$SECONDS
-	 Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.2_cleanup_clblast.R ${OUTPATH}/${PREFIX}.wblast.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX $WBLAST
-	 db_cln_dur=$(( $SECONDS - $db_cln_start ))
+		## BLAST RESULT CLEANUP ##
+		db_cln_start=$SECONDS
+		Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.2_cleanup_clblast.R ${OUTPATH}/${PREFIX}.wblast.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX $WBLAST
+		db_cln_dur=$(( $SECONDS - $db_cln_start ))
       fi
 
-      if [ $WBLAST = "F" ]
+      ## COMMANDLINE BLAST ANALYSIS
+    if [ $WBLAST = "F" ]
       then
-          # put original fasta file into file containing all homologs
-	  cat $FILE >> ${OUTDIR}/${PREFIX}.all_accnums.fa
+		# put original fasta file into file containing all homologs
+		cat $FILE >> ${OUTDIR}/${PREFIX}.all_accnums.fa
 	  
-	  ## DELTABLAST ##
-          db_start=$SECONDS
-          sh /data/research/jravilab/molevol_scripts/upstream_scripts/01.1_deltablast.sh $FILE $PREFIX $OUTDIR $DB $NHITS $EVAL
-          db_dur=$(( $SECONDS - $db_start ))
+		## DELTABLAST ##
+		db_start=$SECONDS
+		sh /data/research/jravilab/molevol_scripts/upstream_scripts/01.1_deltablast.sh $FILE $PREFIX $OUTDIR $DB $NHITS $EVAL
+		db_dur=$(( $SECONDS - $db_start ))
 
-	  ## ACC2FA -- getting fasta FILES for deltablast output(s) 
-          acc2fa_start=$SECONDS
-          sh /data/research/jravilab/molevol_scripts/upstream_scripts/02_acc2fa.sh ${OUTDIR}/${PREFIX}.${DB}.${EVAL}.tsv $PREFIX $OUTDIR
-          acc2fa_dur=$(( $SECONDS - $acc2fa_start ))
+	    ## ACC2FA -- getting fasta FILES for deltablast output(s) 
+		acc2fa_start=$SECONDS
+		sh /data/research/jravilab/molevol_scripts/upstream_scripts/02_acc2fa.sh ${OUTDIR}/${PREFIX}.dblast.tsv $PREFIX $OUTDIR
+		acc2fa_dur=$(( $SECONDS - $acc2fa_start ))
 
-	  ## ACC2INFO ##
-	  acc2info_start=$SECONDS
-	  sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
-	  acc2info_dur=$(( $SECONDS - $acc2info_start ))
-	  
-	  ## BLAST RESULT CLEANUP ##
-	  db_cln_start=$SECONDS
-	  Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.2_cleanup_clblast.R ${OUTDIR}/${PREFIX}.${DB}.${EVAL}.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX $WBLAST
-	  db_cln_dur=$(( $SECONDS - $db_cln_start ))
-      fi
+		## ACC2INFO ##
+		acc2info_start=$SECONDS
+		sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
+		acc2info_dur=$(( $SECONDS - $acc2info_start ))
+		
+		## BLAST RESULT CLEANUP ##
+		db_cln_start=$SECONDS
+		Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.2_cleanup_clblast.R ${OUTDIR}/${PREFIX}.dblast.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX $WBLAST
+		db_cln_dur=$(( $SECONDS - $db_cln_start ))
+	fi
 
-      ## BLASTCLUST ##
-      bclust_start=$SECONDS
-      sh /data/research/jravilab/molevol_scripts/upstream_scripts/03.1_blastclust.sh ${OUTDIR}/${PREFIX}.all_accnums.fa $PREFIX $OUTDIR
-      bclust_dur=$(( $SECONDS - $bclust_start ))
+		## BLASTCLUST ##
+		bclust_start=$SECONDS
+		sh /data/research/jravilab/molevol_scripts/upstream_scripts/03.1_blastclust.sh ${OUTDIR}/${PREFIX}.all_accnums.fa $PREFIX $OUTDIR
+		bclust_dur=$(( $SECONDS - $bclust_start ))
 
-      ## CLUST2TABLE
-      c2t_start=$SECONDS
-      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/03.2_clust2table.R ${OUTDIR}/${PREFIX}.bclust.L60S80.tsv ${OUTDIR}/${PREFIX}.blast.cln.tsv
-      c2t_dur=$(( $SECONDS - $c2t_start ))
+		## CLUST2TABLE
+		c2t_start=$SECONDS
+		Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/03.2_clust2table.R ${OUTDIR}/${PREFIX}.bclust.L60S80.tsv ${OUTDIR}/${PREFIX}.blast.cln.tsv
+		c2t_dur=$(( $SECONDS - $c2t_start ))
 
-      ## INTERPROSCAN ##
-      ## add second run for original protein, too
-      ipr_start=$SECONDS
-      sh /data/research/jravilab/molevol_scripts/upstream_scripts/04a_iprscan.sh ${OUTDIR}/${PREFIX}.all_accnums.fa ${PREFIX} ${OUTDIR}
-      ipr_dur=$(( $SECONDS - $ipr_start ))
+		## INTERPROSCAN ##
+		## add second run for original protein, too
+		ipr_start=$SECONDS
+		sh /data/research/jravilab/molevol_scripts/upstream_scripts/04a_iprscan.sh ${OUTDIR}/${PREFIX}.all_accnums.fa ${PREFIX} ${OUTDIR}
+		ipr_dur=$(( $SECONDS - $ipr_start ))
 
-      ## IPR2LIN ##
-      ipr2lin_start=$SECONDS
-      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.4_ipr2lin.R ${OUTDIR}/${PREFIX}.iprscan.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX
-      ipr2lin_dur=$(( $SECONDS - $ipr2lin_start ))
-      
-      ## IPR2DA ##
-      ipr2da_start=$SECONDS
-      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${PREFIX}.iprscan.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv ${PREFIX} ${OUTDIR}/${PREFIX}.cln.clust.tsv
-      ipr2da_dur=$(( $SECONDS - $ipr2da_start ))
+		## IPR2LIN ##
+		ipr2lin_start=$SECONDS
+		Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.4_ipr2lin.R ${OUTDIR}/${PREFIX}.iprscan.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX
+		ipr2lin_dur=$(( $SECONDS - $ipr2lin_start ))
+		
+		## IPR2DA ##
+		ipr2da_start=$SECONDS
+		Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${PREFIX}.iprscan.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv ${PREFIX} ${OUTDIR}/${PREFIX}.cln.clust.tsv
+		ipr2da_dur=$(( $SECONDS - $ipr2da_start ))
 
-      ## RPSBLAST ## 		
-      rps_start=$SECONDS
-      sh /data/research/jravilab/molevol_scripts/upstream_scripts/04b_rpsblast.sh ${OUTDIR}/${PREFIX}.all_accnums.fa ${PREFIX} ${OUTDIR}
-      rps_dur=$(( $SECONDS - $rps_start))
+		## RPSBLAST ##
+		rps_start=$SECONDS
+		sh /data/research/jravilab/molevol_scripts/upstream_scripts/04b_rpsblast.sh ${OUTDIR}/${PREFIX}.all_accnums.fa ${PREFIX} ${OUTDIR}
+		rps_dur=$(( $SECONDS - $rps_start))
 
-      ## RPS2DA ##
-      rps2da_start=$SECONDS
-      #Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05b_rps2da.R ${OUTDIR}/${PREFIX}.rps.out ${OUTDIR}/${PREFIX}.cln.clust.ipr.tsv ${PREFIX}
-      rps2da_dur=$(( $SECONDS - $rps2da_start ))
+		## RPS2DA ##
+		rps2da_start=$SECONDS
+		#Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05b_rps2da.R ${OUTDIR}/${PREFIX}.rps.out ${OUTDIR}/${PREFIX}.cln.clust.ipr.tsv ${PREFIX}
+		rps2da_dur=$(( $SECONDS - $rps2da_start ))
 
-      cp ${FILE} ${OUTDIR}	# copy fasta file to output directory
-      
-      ## Figure out how long the entire script took to run
-      dur=$(( $SECONDS - $start ))
-      printf "\nTotal run time: $dur\n"
-      STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
-      
-      ## Add benchmarking times to logfile
-      printf "\n${START_DT}\t${STOP_DT}\t${PREFIX}\t${db_dur}\t${acc2info_dur}\t${db_cln_dur}\t${acc2fa_dur}\t${bclust_dur}\t${c2t_dur}\t${ipr_dur}\t${ipr2da_dur}\t${dur}" >> ${OUTPATH}/logfile.tsv
+		cp ${FILE} ${OUTDIR}	# copy fasta file to output directory
+		
+		## Figure out how long the entire script took to run
+		dur=$(( $SECONDS - $start ))
+		printf "\nTotal run time: $dur\n"
+		STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
+		
+		## Add benchmarking times to logfile
+		printf "\n${START_DT}\t${STOP_DT}\t${PREFIX}\t${db_dur}\t${acc2info_dur}\t${db_cln_dur}\t${acc2fa_dur}\t${bclust_dur}\t${c2t_dur}\t${ipr_dur}\t${ipr2da_dur}\t${dur}" >> ${OUTPATH}/logfile.tsv
 
-      ## And how much time is left
-      #timeleft=$(( $total - $dur ))
+		## And how much time is left
+		#timeleft=$(( $total - $dur ))
 
-      ## If there's a chance we get a long input to process, then
-      ## resubmit this job, then kill this job
- #     if [ ${timeleft} -lt ${maxtime} ]; then
-  #       sbatch --array=${SLURM_ARRAY_TASK_ID} $0
-   #      scancel ${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}
-    #  fi
-   fi
+        ## If there's a chance we get a long input to process, then
+        ## resubmit this job, then kill this job
+        #     if [ ${timeleft} -lt ${maxtime} ]; then
+        #       sbatch --array=${SLURM_ARRAY_TASK_ID} $0
+        #      scancel ${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}
+        #  fi
+    fi
 done
 
 setfacl -R -m group:shiny:r-x ${OUTDIR}
