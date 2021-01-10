@@ -10,9 +10,11 @@ source('/data/research/jravilab/molevol_scripts/R/colnames_molevol.R')
 
 ipr2lin <- function(ipr, acc2info, suffix) {
 
-  # read in iprscan results,
+  # read in iprscan results
+  # duplicate rows in iprscan file
   ipr_in <- read_tsv(ipr, col_names = ipr_colnames) %>%
-    mutate(DB.ID = gsub('G3DSA:', '', DB.ID))
+    mutate(DB.ID = gsub('G3DSA:', '', DB.ID)) %>%
+    unique()
 
   acc2info_out <- fread(input = acc2info, sep = '\t', header = T, fill = T) %>%
     mutate(FullAccNum = gsub('\\|', '', FullAccNum)) %>%
@@ -34,8 +36,9 @@ ipr2lin <- function(ipr, acc2info, suffix) {
   ipr_lin <- ipr_lin %>% add_name()
 
   # add domarch info to iprscan + lineage df, only keep what's in x
-  # this is where columns get added, but why??
-  ipr_cln <- merge(ipr_lin, lookup_tbl, by = 'DB.ID', all.x = T, all.y = F)
+  # this is where columns get added, but why?? -> duplicated columns in orig. iprscan file causing issues
+  ipr_cln <- merge(ipr_lin, lookup_tbl, by = 'DB.ID', all.x = T, all.y = F) %>%
+    unique()
 
   # write results to file
   write_tsv(ipr_cln, file = paste0(suffix, '.iprscan_cln.tsv'))
