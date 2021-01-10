@@ -27,8 +27,8 @@ ipr2lin <- function(ipr, acc2info, suffix) {
   ipr_tax <- merge(ipr_in, acc2info_out, by = 'AccNum.noV', all.x = T)
 
   # read in lineage map
-  #lineage_map <- fread("/data/research/jravilab/common_data/lineage_lookup.txt", header = T, fill = T)
-  lineage_map <- fread("../ReferenceFiles/lineage_lookup.txt", header = T, fill = T)
+  lineage_map <- fread("/data/research/jravilab/common_data/lineage_lookup.txt", header = T, fill = T)
+  #lineage_map <- fread("../ReferenceFiles/lineage_lookup.txt", header = T, fill = T)
 
   # merge ipr+info w/ lineage, remove extra species column
   ipr_lin <- merge(ipr_tax, lineage_map, by = "TaxID", all.x = T) %>%
@@ -36,8 +36,8 @@ ipr2lin <- function(ipr, acc2info, suffix) {
     select(-Species.x, -Species.y)
 
   # add lookup table to iprscan file
-  #lookup_tbl <- fread(input = '/data/research/jravilab/common_data/cln_lookup_tbl.tsv', sep = '\t', header = T, fill = T)
-  lookup_tbl <- fread(input = '../ReferenceFiles/cln_lookup_tbl.tsv', sep = '\t', header = T, fill = T) %>%
+  lookup_tbl <- fread(input = '/data/research/jravilab/common_data/cln_lookup_tbl.tsv', sep = '\t', header = T, fill = T) %>%
+  #lookup_tbl <- fread(input = '../ReferenceFiles/cln_lookup_tbl.tsv', sep = '\t', header = T, fill = T) %>%
     distinct()
 
   # run add_name f(x) on ipr+lineage dataframe
