@@ -3,45 +3,26 @@ library(data.table)
 library(furrr)
 
 # source lineage.R
-source("/data/research/jravilab/molevol_scripts/R/pre-msa-tree.R")
-source("/data/research/jravilab/molevol_scripts/R/colnames_molevol.R")
+source("R/pre-msa-tree.R")
+source("R/colnames_molevol.R")
 
-## load files in
 # ipr2da function
-ipr2da <- function(infile_ipr, acc2info, prefix, analysis=c("Pfam","SMART", "CDD", "TIGRFAM",
-                                                  "Phobius", "Gene3D", "TMHMM", "SignalP_EUK",
-                                                  "SignalP_GRAM_NEGATIVE", "SignalP_GRAM_POSITIVE"))
+ipr2da <- function(infile_ipr, prefix,
+                   analysis=c("Pfam","SMART","Phobius",
+                              "Gene3D", "TMHMM", "PANTHER", "ProSiteProfiles",
+                              "SUPERFAMILY", "MobiDBLite", "TIGRFAM"))
 {
- 
-#infile_ipr <- 'sample5.iprscan.tsv'
-#acc2info <- 'sample.acc2info.tsv'
-#prefix <- 'sample5'
+  # read in cleaned up iprscan results
+  ipr_in <- read_tsv(infile_ipr, col_names = T)
 
- # read in lookup table
-  lookup_tbl <- fread("/data/research/jravilab/common_data/cln_lookup_tbl.tsv", header = T, fill = T) %>%
-    arrange() %>% distinct()
-
-  # read in iprscan results
-  ipr_in <- read_tsv(infile_ipr, col_names = ipr_colnames) %>%
-    mutate(DB.ID = gsub('G3DSA:', '', DB.ID))
-
-  # read in acc2info
-  acc2info_out <- read_tsv(file = acc2info, col_names = T) %>%
-    mutate(FullAccNum = gsub('\\|', '', FullAccNum)) %>%
-    mutate(AccNum = gsub('.*[a-z]', '', FullAccNum)) %>%
-    select(-AccNum.noV, -FullAccNum)
-
-  prot_in_da <- ipr_in %>%
-    merge(lookup_tbl, by = "DB.ID", all.x = T)
-  
   # split dataframe into unique proteins
-  x <- split(x = prot_in_da, f = prot_in_da$AccNum)
+  x <- split(x = ipr_in, f = ipr_in$AccNum)
 
   plan(strategy = "multicore", .skip = T)
 
   # within each data.table
-  domarch <- map(x, function(y) {
-  #domarch <- future_map(x, function(y) {
+  #domarch <- map(x, function(y) {
+  domarch <- future_map(x, function(y) {
     acc_row <- data.frame(AccNum = y$AccNum[1],  stringsAsFactors = F)
     DAs <- data.frame(matrix(nrow = 1, ncol = length(analysis) ))
     DA <- y %>% group_by(Analysis) %>% arrange(StartLoc)
@@ -67,36 +48,28 @@ ipr2da <- function(infile_ipr, acc2info, prefix, analysis=c("Pfam","SMART", "CDD
     colnames(DAs) = paste("DomArch", analysis, sep = ".")
     return(cbind(acc_row, DAs))
   })
-  
-  # read in lineage mapping file
-  lineage_map <- fread("/data/research/jravilab/common_data/lineage_lookup.txt", header = T, fill = T)
- 
+
+  # select relevant rows from ipr input to add to domarch
+  ipr_select <- ipr_in %>%
+    select(Name, AccNum, Species, TaxID, Lineage, ProteinName, SourceDB, Completeness) %>%
+    distinct()
+
   # combine domarchs to one data frame, merge w/ acc2info
   domarch2 <- do.call(rbind.data.frame, domarch) %>%
-    merge(acc2info_out, by = "AccNum", all.x = T)
-  
-  # add lineage to domarch, remove extra species column
-  domarch_lins <- merge(domarch2, lineage_map, by = "TaxID", all.x = T) #%>%
-   # select(-Species.x)
-  
-  # change Species.y colname to Species
-  # names(domarch_lins)[names(domarch_lins) == 'Species.y'] <- 'Species'
-  # add name column to domarch+lineage dataframe
-  domarch_lins <- domarch_lins %>% add_name()
+    merge(ipr_select, by = 'AccNum', all.x = T)
 
   # save domarch_lins file
-  write_tsv(domarch_lins, file = paste0(prefix, '.ipr_domarch.tsv'), append = F, na = 'NA')
-  
+  write_tsv(domarch2, file = paste0(prefix, '.ipr_domarch.tsv'),
+            append = F, na = 'NA')
+
   # return domarch2 dataframe to append to blast results if given
   return(domarch2)
 }
 
-## function for adding results from ipr2da to blast results
-
+## function to add results from ipr2da to blast results
 append_ipr <- function(ipr_da, blast, prefix) {
-  #ipr_domarch <- read_tsv(ipr_da, col_names = T)
   blast_out <- read_tsv(blast, col_names = T)
-  
+
   blast_ipr <- merge(blast_out, ipr_da, by = 'AccNum', all.x = T)
   write_tsv(blast_ipr, file = paste0(prefix, '.full_analysis.tsv'), na = 'NA')
 }
@@ -105,13 +78,11 @@ append_ipr <- function(ipr_da, blast, prefix) {
 args <- commandArgs(trailingOnly=TRUE)
 
 ## perform ipr2da on iprscan results
-da <- ipr2da(infile_ipr = args[1], acc2info =  args[2], prefix = args[3])
+da <- ipr2da(infile_ipr = args[1], prefix = args[2])
 
 ## if blast results are provided, call append_ipr
-if (is.null(args[4]) | is.na(args[4])) {
-   print('No blast results provided, moving on.') 
+if (is.null(args[3]) | is.na(args[3])) {
+   print('No blast results provided, moving on.')
 } else {
-   append_ipr(ipr_da=da, blast=args[4], prefix=args[3]) 
+   append_ipr(ipr_da=da, blast=args[3], prefix=args[2])
 }
-
-

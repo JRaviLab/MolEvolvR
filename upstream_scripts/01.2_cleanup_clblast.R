@@ -5,8 +5,8 @@ library(tidyverse)
 library(data.table)
 
 # source scripts w/ add_name() and colnames
-source("/data/research/jravilab/molevol_scripts/R/pre-msa-tree.R")
-source("/data/research/jravilab/molevol_scripts/R/colnames_molevol.R")
+source("R/pre-msa-tree.R")
+source("R/colnames_molevol.R")
 
 ## Read in data file path as a string
 args <- commandArgs(trailingOnly=TRUE)
@@ -23,7 +23,7 @@ cleanup_blast <- function(infile_blast, acc2info, prefix, wblast) {
 
   # read in blast results, set colnames, cleanup results, merge acc2info output
   if (wblast == "T") {
-     blast_out <- fread(input = infile_blast, sep = '\t', header = F, 
+     blast_out <- fread(input = infile_blast, sep = '\t', header = F,
        col.names = web_blastp_hit_colnames, fill = T)
      cleanedup_blast <- blast_out %>%
      # remove extra characters/names from sseqid, sscinames, and staxids columns
@@ -43,7 +43,7 @@ cleanup_blast <- function(infile_blast, acc2info, prefix, wblast) {
        mutate(AlnLength = as.numeric(AlnLength)) %>%
        mutate(QLength = as.numeric(QLength)) %>%
        mutate(PcPositive = round(x = (PcPosOrig * AlnLength/QLength), digits = 2))
-  
+
   } else if (wblast == "F") {
      blast_out <- read_tsv(file = infile_blast, col_names = cl_blast_colnames)
      cleanedup_blast <- blast_out %>%
