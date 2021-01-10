@@ -18,7 +18,7 @@ ipr2lin <- function(ipr, acc2info, suffix) {
     mutate(FullAccNum = gsub('.*[a-z]', '', FullAccNum))
 
   # merge ipr file with acc2info file
-  ipr_tax <- merge(ipr_in, acc2info_out, by.x = "AccNum", by.y = "FullAccNum")
+  ipr_tax <- merge(ipr_in, acc2info_out, by.x = "AccNum", by.y = "FullAccNum", all.x = T)
   
   # read in lineage map
   lineage_map <- fread("/data/research/jravilab/common_data/lineage_lookup.txt", header = T, fill = T)

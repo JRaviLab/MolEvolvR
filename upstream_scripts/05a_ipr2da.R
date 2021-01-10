@@ -40,7 +40,8 @@ ipr2da <- function(infile_ipr, acc2info, prefix, analysis=c("Pfam","SMART", "CDD
   plan(strategy = "multicore", .skip = T)
 
   # within each data.table
-  domarch <- future_map(x, function(y) {
+  domarch <- map(x, function(y) {
+  #domarch <- future_map(x, function(y) {
     acc_row <- data.frame(AccNum = y$AccNum[1],  stringsAsFactors = F)
     DAs <- data.frame(matrix(nrow = 1, ncol = length(analysis) ))
     DA <- y %>% group_by(Analysis) %>% arrange(StartLoc)
@@ -72,14 +73,14 @@ ipr2da <- function(infile_ipr, acc2info, prefix, analysis=c("Pfam","SMART", "CDD
  
   # combine domarchs to one data frame, merge w/ acc2info
   domarch2 <- do.call(rbind.data.frame, domarch) %>%
-    merge(acc2info_out, by = "AccNum")
+    merge(acc2info_out, by = "AccNum", all.x = T)
   
   # add lineage to domarch, remove extra species column
-  domarch_lins <- merge(domarch2, lineage_map, by = "TaxID", all.x = T) %>%
-   select(-Species.x)
+  domarch_lins <- merge(domarch2, lineage_map, by = "TaxID", all.x = T) #%>%
+   # select(-Species.x)
   
   # change Species.y colname to Species
-  names(domarch_lins)[names(domarch_lins) == 'Species.y'] <- 'Species'
+  # names(domarch_lins)[names(domarch_lins) == 'Species.y'] <- 'Species'
   # add name column to domarch+lineage dataframe
   domarch_lins <- domarch_lins %>% add_name()
 
@@ -96,7 +97,7 @@ append_ipr <- function(ipr_da, blast, prefix) {
   #ipr_domarch <- read_tsv(ipr_da, col_names = T)
   blast_out <- read_tsv(blast, col_names = T)
   
-  blast_ipr <- merge(blast_out, ipr_da, by = 'AccNum')
+  blast_ipr <- merge(blast_out, ipr_da, by = 'AccNum', all.x = T)
   write_tsv(blast_ipr, file = paste0(prefix, '.full_analysis.tsv'), na = 'NA')
 }
 
