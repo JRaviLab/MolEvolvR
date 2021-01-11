@@ -44,9 +44,9 @@ ipr2lin <- function(ipr, acc2info, suffix) {
   ipr_lin <- ipr_lin %>% add_name()
 
   # add domarch info to iprscan + lineage df, only keep what's in x
-  # this is where columns get added, but why?? -> duplicated columns in orig. iprscan file causing issues
   ipr_cln <- merge(ipr_lin, lookup_tbl, by = 'DB.ID', all.x = T, all.y = F)
 
+  # populate empty description/short name columns
   for (i in 1:nrow(ipr_cln)) {
     if (is.na(ipr_cln$ShortName[i])) {
       ipr_cln$ShortName[i] = ipr_cln$SignDesc[i]
@@ -56,9 +56,11 @@ ipr2lin <- function(ipr, acc2info, suffix) {
     }
   }
 
+  # rename unclear/duplicated columns
   names(ipr_cln)[names(ipr_cln) == 'Description.x'] <- 'ProteinName'
   names(ipr_cln)[names(ipr_cln) == 'Description.y'] <- 'LookupTblDesc'
 
+  # create label column to use in ipr2viz
   ipr_cln <- ipr_cln %>%
     mutate(Label = strtrim(ShortName, 20))
 

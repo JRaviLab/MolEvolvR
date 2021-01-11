@@ -55,11 +55,13 @@ ipr2da <- function(infile_ipr, prefix,
     distinct()
 
   # combine domarchs to one data frame, merge w/ acc2info
-  domarch2 <- do.call(rbind.data.frame, domarch) %>%
+  domarch2 <- do.call(rbind.data.frame, domarch)
+
+  domarch_lins <- domarch2 %>%
     merge(ipr_select, by = 'AccNum', all.x = T)
 
   # save domarch_lins file
-  write_tsv(domarch2, file = paste0(prefix, '.ipr_domarch.tsv'),
+  write_tsv(domarch_lins, file = paste0(prefix, '.ipr_domarch.tsv'),
             append = F, na = 'NA')
 
   # return domarch2 dataframe to append to blast results if given
@@ -70,7 +72,10 @@ ipr2da <- function(infile_ipr, prefix,
 append_ipr <- function(ipr_da, blast, prefix) {
   blast_out <- read_tsv(blast, col_names = T)
 
-  blast_ipr <- merge(blast_out, ipr_da, by = 'AccNum', all.x = T)
+  blast_ipr <- merge(blast_out, ipr_da, by = 'AccNum', all.x = T) %>%
+    mutate(Species = Species.y, TaxID = TaxID.y, Name = Name.y, Lineage = Lineage.x) %>%
+    select(-Species.x, -Species.y, -TaxID.x, -TaxID.y, -Name.x, -Name.y, -Lineage.x, -Lineage.y)
+
   write_tsv(blast_ipr, file = paste0(prefix, '.full_analysis.tsv'), na = 'NA')
 }
 
