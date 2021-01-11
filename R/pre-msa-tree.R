@@ -160,7 +160,7 @@ add_name = function(data, accnum_col = "AccNum",  spec_col = "Species",
   {
     split_data =  split_data %>% separate(spec_col, into = c("Genus", "Spp"),sep=" ") %>%
       mutate(Genus = strtrim(Genus,1),
-             Spp = strtrim(Spp,3))
+             Spp = word(string = Spp, start = 1))
   }
   else
   {
@@ -173,13 +173,13 @@ add_name = function(data, accnum_col = "AccNum",  spec_col = "Species",
   split_data[is.na(split_data)] = ""
 
   accnum_sym = sym(accnum_col)
- 
+
   Leaf = split_data %>%
     mutate(Leaf = paste0(Kingdom, Phylum, "_", Genus, Spp, "_", {{accnum_sym}} ))%>%
     pull(Leaf) %>%
     stringi::stri_replace_all_regex(pattern = "^_|_$", replacement = "")%>%
     stringi::stri_replace_all_regex(pattern = "_+", replacement = "_")
- 
+
 
   # out_col = sym(out_col)
   data =  mutate(data, l = Leaf) %>% setnames(old = "l",new = out_col)
@@ -335,7 +335,7 @@ acc2fa <- function(accNum_vec, out_path, plan = "sequential")
       if(x %% 9 == 0)
 	{
 	Sys.sleep(1)
-	}		
+	}
       f = future(
         entrez_fetch(id = partitioned_acc[[x]],
                      db = "protein",
@@ -346,7 +346,7 @@ acc2fa <- function(accNum_vec, out_path, plan = "sequential")
     }
     )
  for(f in a)
-{ 
+{
 cat(value(f))
 }
 
