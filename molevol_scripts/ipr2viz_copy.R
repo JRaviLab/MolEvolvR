@@ -71,14 +71,21 @@ find_top_acc = function(infile_full,
 ## IPR + FULL files --> DomArch Visualization
 #############################################
 ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
-                    analysis=c("Pfam", "Gene3D", "PANTHER"),
+                    analysis=c("Pfam", "Gene3D", "Phobius"),
                     group_by = "Analysis",
                     topn = 20, name = "Name", text_size = 10)
 {
-  infile_ipr <- '../full_analysis_20210108/dcdv_quick_out/dcdv.iprscan_cln.tsv'
+
+  ## Populating function ARGs temporarily
+  group_by = 'Analysis' #; group_by = 'Query'
+  analysis=c("Pfam", "Gene3D",
+             "Phobius", "TMHMM",
+             "SUPERFAMILY", "PANTHER",
+             "ProSiteProfiles", "MobiDBLite")
+  topn = F; name = "Name"; text_size = 10
+
+  infile_ipr <- '../molevol_data/project_data/phage_defense/neighbor_runs/Vibrio_cholerae_N16961_neighboring_genes_nodifV_da/Vibrio_cholerae_N16961_neighboring_genes_nodifV.iprscan_cln.tsv'
   #infile_full <- '../full_analysis_20210108/WP_001901328_full/WP_001901328.full_analysis.tsv'
-  group_by = 'Query'
-  analysis=c("Pfam", "Gene3D", "PANTHER", "ProSiteProfiles", "SUPERFAMILY", "MobiDBLite")
 
   ## Read IPR file
   ipr_out <- read_tsv(infile_ipr, col_names=T)
@@ -86,27 +93,37 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
   ## To filter by Analysis
   analysis = paste(analysis, collapse = "|")
 
-  ## @SAM: This can't be set in stone since the analysis may change!
-  ## Getting top n accession numbers using find_top_acc()
-  top_acc <- find_top_acc(infile_full=infile_full,
-                          DA_col = "DomArch.Pfam",
-                          ## @SAM, you could pick by the Analysis w/ max rows!
-                          lin_col = "Lineage",
-                          n = topn)
+  ## If filtered AccNum need to be visualized
+  if((topn > 0) && (topn != F) && (topn != FALSE)){
+    ## @SAM: This can't be set in stone since the analysis may change!
+    ## Getting top n accession numbers using find_top_acc()
+    top_acc <- find_top_acc(infile_full=infile_full,
+                            DA_col = "DomArch.Pfam",
+                            ## @SAM, you could pick by the Analysis w/ max rows!
+                            lin_col = "Lineage",
+                            n = topn)
 
-  # Filter by Top Accessions per Accession per DomArch and Lineage
-  ipr_out <- subset(ipr_out,
-                    ipr_out$AccNum %in% top_acc)
+    # Filter by Top Accessions per Accession per DomArch and Lineage
+    ipr_out <- subset(ipr_out,
+                      ipr_out$AccNum %in% top_acc)
+  }
 
   ## Need to fix this eventually based on the 'real' gene orientation! :)
   ipr_out$Strand <- rep("forward", nrow(ipr_out))
 
-  ipr_out <- ipr_out %>% arrange(AccNum, StartLoc, StopLoc)
+  ## Order domains from Start -> End within a protein
+  ipr_out <- ipr_out %>%
+    arrange(AccNum, StartLoc, StopLoc) %>%
+    group_by(AccNum, Analysis, StartLoc, StopLoc) %>%
+    slice_head(1)
 
-  h <- table(ipr_out$Analysis) %>%
+  # Predominant analysis for this IPRSCAN run
+  table(ipr_out$Analysis) %>%
     sort(decreasing = T)
 
-  ipr_out_sub <- filter(ipr_out, grepl(pattern=analysis, x=Analysis))
+  # Subset by 'pre-selected analysis'
+  ipr_out_sub <- ipr_out %>%
+    filter(grepl(pattern=analysis, x=Analysis))
 
   # dynamic analysis labeller
   analyses <- ipr_out_sub %>%
@@ -115,20 +132,22 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
 
   analysis_labeler <- analyses %>%
     pivot_wider(names_from = Analysis, values_from = Analysis)
-
   print(analysis_labeler)
 
+  # Check for missing AccNum
   queryrows <- which(is.na(ipr_out_sub$AccNum))
+  # cat("Missing AccNum indices: ", queryrows)
+
 
   # create new column for shortened description to use in ggplot labels
 
+
   ## PLOTTING
   ## domains as separate arrows
-  if(group_by == "Analysis")
-  {
+  if(group_by == "Analysis"){
     ggplot(ipr_out_sub,
            aes_string(xmin = "StartLoc", xmax = "StopLoc",
-                      y = name, fill = "SignDesc", label="ShortName")) +
+                      y = name, fill = "SignDesc", label="Label")) +
       geom_gene_arrow(arrowhead_height = unit(3, "mm"),
                       arrowhead_width = unit(1, "mm")) +
       geom_gene_label(align = "left") +
