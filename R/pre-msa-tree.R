@@ -4,23 +4,19 @@
 ## generate_all_aln2fa
 ## convert_aln2tsv??, convert_accnum2fa??
 ## Created from add_leaves.R, convert_aln2fa.R, all_aln2fa.R
-## Modified: Dec 24, 2019
+## Modified: Dec 24, 2019 | Jan 2021
 ## Janani Ravi (@jananiravi) & Samuel Chen (@samuelzornchen)
 
 #################
 ## Pkgs needed ##
 #################
-library(here); library(tidyverse)
-library(data.table)
+library(here); library(tidyverse); library(data.table)
 library(rentrez)
 library(msa)
-library(furrr)
-library(future)
-
-library(doParallel)
+library(furrr); library(future); library(doParallel)
 registerDoParallel(cores=detectCores()-1)
 #library(seqRFLP)
-#conflicted::conflict_prefer("filter", "dplyr")
+conflicted::conflict_prefer("filter", "dplyr")
 
 ##############################
 ## Pre-requisite functions ##
@@ -139,8 +135,9 @@ add_leaves <- function(aln_file = "",
 }
 
 
-add_name = function(data, accnum_col = "AccNum",  spec_col = "Species",
-                    lin_col = "Lineage", lin_sep = ">", out_col = "Name")
+add_name = function(data,
+                    accnum_col="AccNum", spec_col="Species", lin_col="Lineage",
+                    lin_sep=">", out_col="Name")
 {
   #' @author Samuel Chen, Janani Ravi
   #' @description This function adds a new 'Name' column that is comprised of components from
@@ -150,6 +147,8 @@ add_name = function(data, accnum_col = "AccNum",  spec_col = "Species",
   #' @param spec_col Column containing species
   #' @param lin_col Column containing lineage
   #' @param lin_sep Character separating lineage levels
+  #' @param out_col Column that contains the new 'Name' derived from Species,
+  #'  Lineage, and AccNum info
   #' @return Original data with a 'Name' column
 
   cols = c(accnum_col, "Kingdom","Phylum","Genus", "Spp")
@@ -158,7 +157,8 @@ add_name = function(data, accnum_col = "AccNum",  spec_col = "Species",
            Phylum = strtrim(Phylum,6))
   if(!is.null(spec_col))
   {
-    split_data =  split_data %>% separate(spec_col, into = c("Genus", "Spp"),sep=" ") %>%
+    split_data =  split_data %>%
+      separate(spec_col, into = c("Genus", "Spp"),sep=" ") %>%
       mutate(Genus = strtrim(Genus,1),
              Spp = word(string = Spp, start = 1))
   }
@@ -175,14 +175,17 @@ add_name = function(data, accnum_col = "AccNum",  spec_col = "Species",
   accnum_sym = sym(accnum_col)
 
   Leaf = split_data %>%
-    mutate(Leaf = paste0(Kingdom, Phylum, "_", Genus, Spp, "_", {{accnum_sym}} ))%>%
+    mutate(Leaf = paste0(Kingdom, Phylum, "_",
+                         Genus, Spp, "_",
+                         {{accnum_sym}} ))%>%
     pull(Leaf) %>%
     stringi::stri_replace_all_regex(pattern = "^_|_$", replacement = "")%>%
     stringi::stri_replace_all_regex(pattern = "_+", replacement = "_")
 
 
   # out_col = sym(out_col)
-  data =  mutate(data, l = Leaf) %>% setnames(old = "l",new = out_col)
+  data =  mutate(data, l = Leaf) %>%
+    setnames(old = "l",new = out_col)
   return(data)
 }
 
@@ -333,9 +336,9 @@ acc2fa <- function(accNum_vec, out_path, plan = "sequential")
     a = map(1:length(partitioned_acc), function(x)
     {
       if(x %% 9 == 0)
-	{
-	Sys.sleep(1)
-	}
+      {
+        Sys.sleep(1)
+      }
       f = future(
         entrez_fetch(id = partitioned_acc[[x]],
                      db = "protein",
@@ -345,10 +348,10 @@ acc2fa <- function(accNum_vec, out_path, plan = "sequential")
       ) #%...>% cat()
     }
     )
- for(f in a)
-{
-cat(value(f))
-}
+    for(f in a)
+    {
+      cat(value(f))
+    }
 
     # a <- future_map(1:length(partitioned_acc), function(x)
     # {
@@ -370,14 +373,17 @@ cat(value(f))
 }
 
 
-RepresentativeAccNums <- function(prot_data, reduced = "Lineage" , accnum_col = "AccNum")
+RepresentativeAccNums <- function(prot_data,
+                                  reduced = "Lineage" ,
+                                  accnum_col = "AccNum")
 {
   #' Function to generate a vector of one Accession number per distinct observation from 'reduced' column
-  #' @author Samuel Chen
+  #' @author Samuel Chen, Janani Ravi
   #' @param prot_data Data frame containing Accession Numbers
-  #' @param reduced Column from prot_data from which distinct observations will be generated from.
+  #' @param reduced Column from prot_data from which distinct observations
+  #' will be generated from.
   #' One accession number will be assigned for each of these observations
-  #' @param accnum_col Column from prot_data that contains the Accession Numbers
+  #' @param accnum_col Column from prot_data that contains Accession Numbers
 
   # Get Unique reduced column and then bind the AccNums back to get one AccNum per reduced column
   reduced_sym <- sym(reduced); accnum_sym = sym(accnum_col)
@@ -390,7 +396,8 @@ RepresentativeAccNums <- function(prot_data, reduced = "Lineage" , accnum_col = 
   {
     r = toString(distinct_reduced[i,reduced])
 
-    AccNum = toString((prot_data %>% filter({{reduced_sym}} == r))[1,accnum_col])
+    AccNum = toString((prot_data %>%
+                         filter({{reduced_sym}} == r))[1,accnum_col])
 
     AccNum_vect <- append(AccNum_vect, AccNum)
 
@@ -402,7 +409,7 @@ RepresentativeAccNums <- function(prot_data, reduced = "Lineage" , accnum_col = 
 alignFasta <- function(fasta_file, tool = "Muscle", outpath = NULL)
 {
   #' Perform a Multiple Sequence Alignment on a FASTA file.
-  #' @author Samuel Chen
+  #' @author Samuel Chen, Janani Ravi
   #' @param fasta_file Path to the FASTA file to be aligned
   #' @param tool Type of alignment tool to use. One of three options: "Muscle", "ClustalOmega", or "ClustalW"
   #' @param outpath Path to write the resulting alignment to as a FASTA file. If NULL, no file is written
@@ -429,7 +436,7 @@ write.MsaAAMultipleAlignment <- function(alignment, outpath)
   #' Write MsaAAMultpleAlignment Objects as algined fasta sequence
   #' MsaAAMultipleAlignment Objects are generated from calls to msaClustalOmega
   #' and msaMuscle from the 'msa' package
-  #' @author Samuel Chen
+  #' @author Samuel Chen, Janani Ravi
   #' @param alignment MsaAAMultipleAlignment object to be written as a fasta
   #' @param outpath Where the resulting FASTA file should be written to
 

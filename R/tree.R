@@ -31,15 +31,16 @@ conflicted::conflict_prefer("filter", "dplyr")
 ## Approach 0 | FastTree2.0
 ###########################
 ##!! FastTree will only work if there are unique sequence names!!
-convert_fa2tre <- function(fa_filepath = here("data/alns/pspa_snf7.fa"),
-                           tre_filepath = here("data/alns/pspa_snf7.tre"),
+convert_fa2tre <- function(fa_path = here("data/alns/pspa_snf7.fa"),
+                           tre_path = here("data/alns/pspa_snf7.tre"),
                            fasttree_path = here("src/FastTree")){
-  # fa_filepath = here("data/alns/pspa_snf7.fa")
-  # tre_filepath = here("data/alns/pspa_snf7.tre")
+  # fa_path = here("data/alns/pspa_snf7.fa")
+  # tre_path = here("data/alns/pspa_snf7.tre")
   # fasttree_path = here("src/FastTree")
-  print(fa_filepath)
-  system2(command=fasttree_path, args=paste(c(fa_filepath, ">", tre_filepath),
-                                            sep="", collapse=" "))
+  print(fa_path)
+  system2(command=fasttree_path,
+          args=paste(c(fa_path, ">", tre_path),
+                     sep="", collapse=" "))
   ################################
   ## Compiling FastTree.c on a Mac
   ################################
@@ -52,13 +53,13 @@ convert_fa2tre <- function(fa_filepath = here("data/alns/pspa_snf7.fa"),
 generate_trees <- function(aln_path=here("data/alns/")){
   # finding all fasta alignment files
   fa_filenames <- list.files(path=aln_path, pattern="*.fa")
-  fa_filepaths <- paste0(aln_path, fa_filenames)
+  fa_paths <- paste0(aln_path, fa_filenames)
   variable <- str_replace_all(basename(fa_filenames),
                               pattern=".fa", replacement="")
 
   ## Using purrr::pmap to generate trees for each of the fa files!
-  fa2tre_args <- list(fa_filepath=fa_filepaths,
-                      tre_filepath=paste0(aln_path, variable, ".tre"))
+  fa2tre_args <- list(fa_path=fa_paths,
+                      tre_path=paste0(aln_path, variable, ".tre"))
   pmap(.l=fa2tre_args, .f=convert_fa2tre,
        fasttree_path = here("src/FastTree"))
 }
@@ -91,12 +92,12 @@ generate_fa2tre <- function(fa_file = "data/alns/pspa_snf7.fa",
   ## Approach 1
   ###########################
   ## https://a-little-book-of-r-for-bioinformatics.readthedocs.io/en/latest/src/chapter5.html
-  prot_aln <- read.alignment(fa_file, format="fasta")
+  prot_aln <- read.alignment(file=fa_file, format="fasta")
   prot_aln$seq
   prot_dist <- dist.alignment(prot_aln, matrix="similarity")
   prot_nj <- NJ(prot_dist)
   prot_nj_tree <- plot(prot_nj, main = "Neighbor Joining")
-  write.tree(prot_nj_tree, "pspa_snf7_nj.tre")
+  write.tree(phy=prot_nj_tree, file=tre_path)
 
   ###########################
   ## Approach 2

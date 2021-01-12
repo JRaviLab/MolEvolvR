@@ -11,7 +11,7 @@ install.packages(c("conflicted", "tidyverse", "here",
                  dependencies=T)
 
 install.packages(c("Rcpp", "data.table", "rlang", "glue",
-                   "future", "furrr",
+                   "future", "furrr", "doParallel",
                    "remotes", "rgl",
                    "htmlwidgets", "gh", "httr", "XML",
                    "drat", "rhub", "covr",
@@ -24,7 +24,7 @@ install.packages(c("gridExtra", "cowplot", "gganimate", "plotly", "tidytext",
                    "igraph", "ggraph", "visNetwork", #"network3D", "d3Network",
                    "heatmap3", "heatmaply", "viridis", "d3r",
                    "rentrez", "reutils", "biomartr",
-                   "ape", "phylogram", "phangorn", "seqinr",
+                   "ape", "phylogram", "phangorn", "seqinr", "seqRFLP",
                    "phylotools", "phytools", "tidytree",
                    "pdftools", "latexpdf", "tinytex"),
                  dependencies=T)
