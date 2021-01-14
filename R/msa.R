@@ -6,7 +6,7 @@
 #################
 ## Pkgs needed ##
 #################
-library(tidyverse)
+library(tidyverse); library(here)
 library(msa) # BiocManager::install("msa")
 library(Biostrings)#; library(seqinr)
 library(rMSA) # to implement kalign
@@ -22,11 +22,12 @@ library(pdftools); library(latexpdf); library(tools); library(tinytex) #needed?
 #### MSA ####
 #############
 
+## Sample Runs
 msa_pdf(fasta_path = "data/alns/pspb.gismo.fa" )#, out_path = "data/msapdf")
-msa_pdf("data/alns/pspc.gismo.fa")
 
-
-####################
+#########################################
+## Generates MSA PDF from a Fasta file ##
+#########################################
 msa_pdf <- function(fasta_path, out_path = NULL,
                     lowerbound=NULL, upperbound=NULL){
   #'Multiple Sequence Alignment
@@ -46,8 +47,9 @@ msa_pdf <- function(fasta_path, out_path = NULL,
   # #'@examples msa_pdf()
 
   ## SAMPLE ARGUMENTS to test run
-  # fasta_path=paste0(here("data/alns/"), dropdown_var, ".fasta")
-  # out_path=NULL; lowerbound=NULL; upperbound=NULL
+  fasta_path=here("../molevol_data/project_data/phage_defense/full_analysis_20210108/g3d.both_lin.gen.da_sub.fa")
+  # out_path="../molevol_data/project_data/phage_defense/full_analysis_20210108/g3d.both_lin.gen.da.pdf"
+  lowerbound=NULL; upperbound=NULL
 
   ## PATH DEFINITIONS
   # path+filename
@@ -55,14 +57,15 @@ msa_pdf <- function(fasta_path, out_path = NULL,
   # retrieving the filename without the '.fasta' extension
   # --> to prefix .tex and .pdf
   fastafile_name = fastafile_split[length(fastafile_split)] %>%
-    str_replace(pattern=".fasta", replacement="")
+    str_replace(pattern=".fasta|.fa|.faa", replacement="")
   # path to the fasta file
-  fasta_path <- paste0(fastafile_split[1:(length(fastafile_split)-1)],
+  inpath <- paste0(fastafile_split[1:(length(fastafile_split)-1)],
                        collapse="/")
   # tex & pdf file paths
-  # tex_path <- paste0(fasta_path, "/", fastafile_name, ".tex")
-  pdf_path <- paste0(fasta_path, "/", fastafile_name, ".pdf")
+  # tex_path <- paste0(inpath, "/", fastafile_name, ".tex")
+  pdf_path <- paste0(inpath, "/", fastafile_name, ".pdf")
   print(pdf_path) ## Needs initialization
+  aln_path <- paste0(inpath, "/", fastafile_name, "aln")
 
   ## MSA
   #!! don't want accession numbers, must be mapped to a species?
@@ -73,7 +76,8 @@ msa_pdf <- function(fasta_path, out_path = NULL,
   #print the whole MSA if either bound is NULL
   if(is.null(lowerbound) | is.null(upperbound)){
     msaPrettyPrint(x=my_seqs_msa, output="pdf",
-                   alFile=fasta_path, file=pdf_path,
+                   #alFile=fasta_path,
+                   file=pdf_path,
                    #aesthetic
                    showNames="left", showLogo="top",
                    # showConsensus="top",
