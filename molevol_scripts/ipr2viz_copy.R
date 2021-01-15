@@ -73,7 +73,7 @@ find_top_acc = function(infile_full,
 ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
                     analysis=c("Pfam", "Gene3D", "Phobius"),
                     group_by = "Analysis",
-                    topn = 20, name = "Name", text_size = 10)
+                    topn = 20, name = "Name", text_size = 12)
 {
 
   ## Populating function ARGs temporarily
@@ -82,9 +82,9 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
              "Phobius", "TMHMM",
              "SUPERFAMILY", "PANTHER",
              "ProSiteProfiles", "MobiDBLite")
-  topn = F; name = "Name"; text_size = 10
+  topn = F; name = "Name"; text_size = 12
 
-  infile_ipr <- '../molevol_data/project_data/phage_defense/neighbor_runs/Vibrio_cholerae_N16961_neighboring_genes_nodifV_da/Vibrio_cholerae_N16961_neighboring_genes_nodifV.iprscan_cln.tsv'
+  infile_ipr <- '../molevol_data/project_data/phage_defense/full_analysis_20210108/dcdv_quick_out/dcdv.iprscan_cln.tsv'
   #infile_full <- '../full_analysis_20210108/WP_001901328_full/WP_001901328.full_analysis.tsv'
 
   ## Read IPR file
@@ -115,7 +115,7 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
   ipr_out <- ipr_out %>%
     arrange(AccNum, StartLoc, StopLoc) %>%
     group_by(AccNum, Analysis, StartLoc, StopLoc) %>%
-    slice_head(1)
+    slice_head(n=1)
 
   # Predominant analysis for this IPRSCAN run
   table(ipr_out$Analysis) %>%
