@@ -81,17 +81,19 @@ acc <- filter_tree(cln_combined_path=paste0(inpath, "cln_combined.tsv", collapse
                    subset_col="DomArch.Gene3D", interest_col="DomArch.Gene3D",
                    ppos_cutoff=20, tail_cutoff=2)
 
-cln_sub <- filter_tree(cln_combined_path=paste0(inpath, "cln_combined.tsv", collapse=""),
-                       domains_of_interest=c("P-loop_containing_nucleotide_triphosphate_hydrolases",
-                                             "Cytidine_Deaminase_domain_2"),
-                       subset_col="DomArch.Gene3D", interest_col="DomArch.Gene3D",
-                       ppos_cutoff=20, tail_cutoff=2)
+#cln_sub <- filter_tree(cln_combined_path=paste0(inpath, "cln_combined.tsv", collapse=""),
+#                       domains_of_interest=c("P-loop_containing_nucleotide_triphosphate_hydrolases",
+#                                             "Cytidine_Deaminase_domain_2"),
+#                       subset_col="DomArch.Gene3D", interest_col="DomArch.Gene3D",
+#                       ppos_cutoff=20, tail_cutoff=2)
 
 ## Generate MSA
 source("R/pre-msa-tree.R")
 tmp_fa <- tempfile()
 acc2fa(accessions, tmp_fa)
 
+# renamed = rename_fasta(fa_path = "../molevolvr_app/TestData/test_6q.fa",
+#                    replacement_function = map_acc2name, acc2name = cln_combined)
 tmp_msa <- tempfile()
 
 alignFasta(tmp_fa, tool="ClustalO", outpath=tmp_msa)

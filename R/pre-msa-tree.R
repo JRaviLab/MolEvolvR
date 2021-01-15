@@ -245,6 +245,49 @@ convert_aln2fa <- function(aln_file = "",
   return(fasta)
 }
 
+map_acc2name = function(line, acc2name, acc_col = "AccNum", name_col = "Name"){
+  #' Default rename_fasta() replacement function. Maps an accession number to its name
+  #' @param line The line of a fasta file starting with '>'
+  #' @param acc2name Data Table containing a column of accession numbers and a name column
+  #' @param acc_col Name of the column containing Accession numbers
+  #' @param name_col Name of the column containing the names that the accession numbers
+  #' are mapped to
+
+
+  # change to be the name equivalent to an add_names column
+  # Find the first ' '
+  end_acc = str_locate(line, ' ')[[1]]
+
+  accnum = substring(line, 2, end_acc - 1)
+
+  acc_sym = sym(acc_col)
+  name_sym = sym(name_col)
+  name = as.character((filter(acc2name,{{acc_sym}}==accnum) %>% pull({{name_sym}}))[1])
+
+  return(paste0('>', name))
+}
+
+rename_fasta = function(fa_path, outpath,
+                        replacement_function = map_acc2name, ...){
+  #' Rename the labels of fasta files
+  #' @param fa_path Path to fasta file
+  #' @param outpath Path to write altered fasta file to
+  #' @param replacement_function Function to apply to lines starting with '>'
+  #' @param ... Additional arguments to pass to replacement_function
+
+  lines = read_lines(fa_path)
+  res = map(lines, function(x){
+    if(strtrim(x,1) == '>')
+      return(replacement_function(line = x, ...))
+    else
+      return(x)
+  }) %>% unlist()
+
+  write_lines(res, outpath)
+
+  return(res)
+}
+
 ################################
 ## generate_all_aln2fa
 generate_all_aln2fa <- function(aln_path=here("data/rawdata_aln/"),
