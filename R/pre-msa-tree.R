@@ -411,7 +411,7 @@ alignFasta <- function(fasta_file, tool = "Muscle", outpath = NULL)
   #' Perform a Multiple Sequence Alignment on a FASTA file.
   #' @author Samuel Chen, Janani Ravi
   #' @param fasta_file Path to the FASTA file to be aligned
-  #' @param tool Type of alignment tool to use. One of three options: "Muscle", "ClustalOmega", or "ClustalW"
+  #' @param tool Type of alignment tool to use. One of three options: "Muscle", "ClustalO", or "ClustalW"
   #' @param outpath Path to write the resulting alignment to as a FASTA file. If NULL, no file is written
   #' @return aligned fasta sequence as a MsaAAMultipleAlignment object
 
@@ -420,7 +420,7 @@ alignFasta <- function(fasta_file, tool = "Muscle", outpath = NULL)
   aligned <- switch(
     tool,
     "Muscle" = msaMuscle(fasta),
-    "ClustalOmega" = msaClustalOmega(fasta),
+    "ClustalO" = msaClustalOmega(fasta),
     "ClustalW" = msaClustalW(fasta)
   )
 
