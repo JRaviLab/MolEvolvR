@@ -16,7 +16,7 @@ accessions <- filter_tree(cln_combined_path=infile,
                           subset_col1="Lineage", subset_col2="Genus",
                           subset_col3="DomArch.Gene3D",
                           interest_col="DomArch.Gene3D",
-                          ppos_cutoff=20, tail_cutoff=1)
+                          ppos_cutoff=20, tail_cutoff=2)
 
 ## Generate Fasta file
 tmp_fa <- tempfile()
