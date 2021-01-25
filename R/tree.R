@@ -31,12 +31,12 @@ conflicted::conflict_prefer("filter", "dplyr")
 ## Approach 0 | FastTree2.0
 ###########################
 ##!! FastTree will only work if there are unique sequence names!!
-convert_fa2tre <- function(fa_path = here("data/alns/pspa_snf7.fa"),
-                           tre_path = here("data/alns/pspa_snf7.tre"),
-                           fasttree_path = here("src/FastTree")){
-  # fa_path = here("data/alns/pspa_snf7.fa")
-  # tre_path = here("data/alns/pspa_snf7.tre")
-  # fasttree_path = here("src/FastTree")
+convert_fa2tre <- function(fa_path=here("data/alns/pspa_snf7.fa"),
+                           tre_path=here("data/alns/pspa_snf7.tre"),
+                           fasttree_path=here("src/FastTree")){
+  # fa_path=here("data/alns/pspa_snf7.fa")
+  # tre_path=here("data/alns/pspa_snf7.tre")
+  # fasttree_path=here("src/FastTree")
   print(fa_path)
   system2(command=fasttree_path,
           args=paste(c(fa_path, ">", tre_path),
@@ -61,14 +61,14 @@ generate_trees <- function(aln_path=here("data/alns/")){
   fa2tre_args <- list(fa_path=fa_paths,
                       tre_path=paste0(aln_path, variable, ".tre"))
   pmap(.l=fa2tre_args, .f=convert_fa2tre,
-       fasttree_path = here("src/FastTree"))
+       fasttree_path=here("src/FastTree"))
 }
 
 ##############################
 ## REFS: 1-4
 ############
-generate_fa2tre <- function(fa_file = "data/alns/pspa_snf7.fa",
-                            out_file = "data/alns/pspa_snf7.tre") {
+generate_fa2tre <- function(fa_file="data/alns/pspa_snf7.fa",
+                            out_file="data/alns/pspa_snf7.tre") {
   #' Generating phylogenetic tree from alignment file '.fa'
   #' @author Janani Ravi, MolEcologist
   #' @keywords phylogenetic tree, alignment, fasta
@@ -85,8 +85,8 @@ generate_fa2tre <- function(fa_file = "data/alns/pspa_snf7.fa",
   #' file formats and/or column names.
 
   ## SAMPLE ARGS
-  # fa_file = "data/alns/pspa_snf7.fa"
-  # out_file = "data/alns/pspa_snf7.tre"
+  # fa_file="data/alns/pspa_snf7.fa"
+  # out_file="data/alns/pspa_snf7.tre"
 
   ###########################
   ## Approach 1
@@ -96,7 +96,7 @@ generate_fa2tre <- function(fa_file = "data/alns/pspa_snf7.fa",
   prot_aln$seq
   prot_dist <- dist.alignment(prot_aln, matrix="similarity")
   prot_nj <- NJ(prot_dist)
-  prot_nj_tree <- plot(prot_nj, main = "Neighbor Joining")
+  prot_nj_tree <- plot(prot_nj, main="Neighbor Joining")
   write.tree(phy=prot_nj_tree, file=tre_path)
 
   ###########################
@@ -105,9 +105,9 @@ generate_fa2tre <- function(fa_file = "data/alns/pspa_snf7.fa",
   ## Alignment file formats and conversion
   # read in sequence data, convert to phyDat
   prot_fa <- read.aa(fa_file, format="fasta")
-  prot_phyDat <- phyDat(prot_fa, type = "AA", levels = NULL)
+  prot_phyDat <- phyDat(prot_fa, type="AA", levels=NULL)
   prot10 <- subset(prot_phyDat, 1:10)
-  prot10_phyDat <- phyDat(prot10, type = "AA", levels = NULL)
+  prot10_phyDat <- phyDat(prot10, type="AA", levels=NULL)
 
   ## Model Testing & Distance Matrices
   ## Comparison of different nucleotide or amino acid substitution models
@@ -122,7 +122,7 @@ generate_fa2tre <- function(fa_file = "data/alns/pspa_snf7.fa",
   prot_UPGMA <- upgma(dna_dist)
   prot_NJ  <- NJ(dna_dist)
   plot(prot_UPGMA, main="UPGMA")
-  plot(prot_NJ, main = "Neighbor Joining")
+  plot(prot_NJ, main="Neighbor Joining")
 
   #parsimony searches
   prot_optim <- optim.parsimony(prot_NJ, prot)
@@ -134,20 +134,22 @@ generate_fa2tre <- function(fa_file = "data/alns/pspa_snf7.fa",
   #ml estimation w/ distance matrix
   fit <- pml(prot_NJ, prot10)
   print(fit)
-  fitJC <- optim.pml(fit, model = "JC", rearrangement = "stochastic")
+  fitJC <- optim.pml(fit, model="JC", rearrangement="stochastic")
   logLik(fitJC)
-  bs <- bootstrap.pml(fitJC, bs=100, optNni=TRUE, multicore=TRUE, control = pml.control(trace=0))
-  plotBS(midpoint(fitJC$tree), bs, p = 50, type="p")
+  bs <- bootstrap.pml(fitJC, bs=100, optNni=TRUE, multicore=TRUE,
+                      control=pml.control(trace=0))
+  plotBS(midpoint(fitJC$tree), bs, p=50, type="p")
 
   #subsetted alignment bs example
   prot10_dm <- dist.ml(prot10)
   prot10_NJ  <- NJ(prot10_dm)
   fit2 <- pml(prot10_NJ, data=prot10)
   print(fit2)
-  fitJC2 <- optim.pml(fit2, model = "JC", rearrangement = "stochastic")
+  fitJC2 <- optim.pml(fit2, model="JC", rearrangement="stochastic")
   logLik(fitJC2)
-  bs_subset <- bootstrap.pml(fitJC2, bs=100, optNni=TRUE, multicore=TRUE, control = pml.control(trace=0))
-  bs2 <- plotBS(midpoint(fitJC2$tree), bs, p = 50, type="p")
+  bs_subset <- bootstrap.pml(fitJC2, bs=100, optNni=TRUE, multicore=TRUE,
+                             control=pml.control(trace=0))
+  bs2 <- plotBS(midpoint(fitJC2$tree), bs, p=50, type="p")
 
   ## Exporting Trees
   write.tree(bs2, file="bootstrap_example.tre")
