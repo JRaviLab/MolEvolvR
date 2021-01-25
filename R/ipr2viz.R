@@ -117,7 +117,7 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
   {
     ggplot(ipr_out_sub,
            aes_string(xmin = "StartLoc", xmax = "StopLoc",
-                      y = name, fill = "SignDesc", label="ShortName")) +
+                      y = name, fill = "SignDesc", label="Short_Name")) +
       geom_gene_arrow(arrowhead_height = unit(3, "mm"),
                       arrowhead_width = unit(1, "mm")) +
       geom_gene_label(align = "left") +
@@ -140,7 +140,7 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
     ggplot(ipr_out_sub,
            aes(xmin = StartLoc, xmax = StopLoc,
                y = Analysis,  #y = AccNum
-               fill = SignDesc, label = ShortName)) +
+               fill = SignDesc, label = Short_Name)) +
       geom_gene_arrow(arrowhead_height = unit(3, "mm"),
                       arrowhead_width = unit(1, "mm")) +
       geom_gene_label(align = "left") +
@@ -199,11 +199,12 @@ ipr2viz_web <- function(infile_ipr,
   queryrows <- which(is.na(ipr_out_sub$AccNum))
 
   ## @SAM, make sure the following two work with the Lookup Tables!!
+  lookup_tbl = dplyr::rename(lookup_tbl,  "SignAcc" = "DB.ID")
   ipr_out_sub = dplyr::rename(ipr_out_sub,  "SignAcc" = "DB.ID")
   ipr_out_sub <- merge(ipr_out_sub, lookup_tbl, by = "SignAcc")
 
-  signacc <- which(is.na(ipr_out_sub$ShortName))
-  ipr_out_sub$ShortName[signacc] = ipr_out_sub$SignAcc[signacc]
+  signacc <- which(is.na(ipr_out_sub$Short_Name))
+  ipr_out_sub$Short_Name[signacc] = ipr_out_sub$SignAcc[signacc]
 
   name_sym = sym(name)
 
@@ -213,7 +214,7 @@ ipr2viz_web <- function(infile_ipr,
   {
     ggplot(ipr_out_sub,
            aes_string(xmin = "StartLoc", xmax = "StopLoc",
-                      y = name, fill = "SignDesc", label="ShortName")) +
+                      y = name, fill = "SignDesc", label="Short_Name")) +
       geom_gene_arrow(arrowhead_height = unit(3, "mm"),
                       arrowhead_width = unit(1, "mm")) +
       geom_gene_label(align = "left") +
@@ -236,7 +237,7 @@ ipr2viz_web <- function(infile_ipr,
     ggplot(ipr_out_sub,
            aes(xmin = StartLoc, xmax = StopLoc,
                y = Analysis,  #y = AccNum
-               fill = SignDesc, label=ShortName)) +
+               fill = SignDesc, label=Short_Name)) +
       geom_gene_arrow(arrowhead_height = unit(3, "mm"),
                       arrowhead_width = unit(1, "mm")) +
       geom_gene_label(align = "left") +
