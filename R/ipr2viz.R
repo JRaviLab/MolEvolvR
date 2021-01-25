@@ -111,6 +111,12 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
 
   queryrows <- which(is.na(ipr_out_sub$AccNum))
 
+  lookup_tbl_path = "/data/research/jravilab/common_data/lookup_tbl.tsv"
+  lookup_tbl = read_tsv(lookup_tbl_path, col_names = T)
+
+
+  ipr_out_sub <- merge(ipr_out_sub, lookup_tbl, by = "DB.ID")
+
   ## PLOTTING
   ## domains as separate arrows
   if(group_by == "Analysis")
