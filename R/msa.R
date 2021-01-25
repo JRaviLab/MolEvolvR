@@ -23,12 +23,12 @@ library(pdftools); library(latexpdf); library(tools); library(tinytex) #needed?
 #############
 
 ## Sample Runs
-msa_pdf(fasta_path = "data/alns/pspb.gismo.fa" )#, out_path = "data/msapdf")
+msa_pdf(fasta_path="data/alns/pspb.gismo.fa" )#, out_path="data/msapdf")
 
 #########################################
 ## Generates MSA PDF from a Fasta file ##
 #########################################
-msa_pdf <- function(fasta_path, out_path = NULL,
+msa_pdf <- function(fasta_path, out_path=NULL,
                     lowerbound=NULL, upperbound=NULL){
   #'Multiple Sequence Alignment
   #'
@@ -53,10 +53,10 @@ msa_pdf <- function(fasta_path, out_path = NULL,
 
   ## PATH DEFINITIONS
   # path+filename
-  fastafile_split = strsplit(fasta_path, "/")[[1]]
+  fastafile_split <- strsplit(fasta_path, "/")[[1]]
   # retrieving the filename without the '.fasta' extension
   # --> to prefix .tex and .pdf
-  fastafile_name = fastafile_split[length(fastafile_split)] %>%
+  fastafile_name <- fastafile_split[length(fastafile_split)] %>%
     str_replace(pattern=".fasta|.fa|.faa", replacement="")
   # path to the fasta file
   inpath <- paste0(fastafile_split[1:(length(fastafile_split)-1)],
@@ -81,7 +81,7 @@ msa_pdf <- function(fasta_path, out_path = NULL,
                    #aesthetic
                    showNames="left", showLogo="top",
                    # showConsensus="top",
-                   # showNames = "none", showLogo = "none",
+                   # showNames="none", showLogo="none",
                    logoColors="rasmol",
                    shadingMode="functional",
                    shadingModeArg="structure",
@@ -100,7 +100,7 @@ msa_pdf <- function(fasta_path, out_path = NULL,
                    #aesthetic
                    showNames="left", showLogo="top",
                    # showConsensus="top",
-                   # showNames = "none", showLogo = "none",
+                   # showNames="none", showLogo="none",
                    logoColors="rasmol",
                    shadingMode="functional",
                    shadingModeArg="structure",
@@ -129,13 +129,13 @@ msa_pdf <- function(fasta_path, out_path = NULL,
   # if(is.null(out_path)){
   #   #texi2pdf outputs files to the current working directory
   #   # make it output to directory of the fasta_file
-  #   # texi2pdf(file = paste0(fasta_path, "/", fastafile_name,".tex"), clean= TRUE)
+  #   # texi2pdf(file=paste0(fasta_path, "/", fastafile_name,".tex"), clean= TRUE)
   #   ##?? Alternative that works?
   #   tex2pdf(paste0(fasta_path, "/", fastafile_name,".tex"))
   # }
   # else{
-  #   outfile_split = strsplit(out_path, "/")[[1]]
-  #   outfile_name = outfile_split[length(outfile_split)]
+  #   outfile_split=strsplit(out_path, "/")[[1]]
+  #   outfile_name=outfile_split[length(outfile_split)]
   #
   #   ##!! I guess, we have these above now. please check if it works!
   #   # fasta_dir <- paste0(curr_dir,"/", fasta_path)
@@ -143,7 +143,7 @@ msa_pdf <- function(fasta_path, out_path = NULL,
   #
   #   #texi2pdf outputs files to the current working directory
   #   # make it output to directory of the output_path
-  #   # texi2pdf(file = paste0(fasta_path, "/", fastafile_name, ".tex"), clean= TRUE)
+  #   # texi2pdf(file=paste0(fasta_path, "/", fastafile_name, ".tex"), clean= TRUE)
   #   ##?? Alternative that works?
   #   tex2pdf(paste0(fasta_path, "/", fastafile_name,".tex"))
   #   file.rename(paste0(fastafile_name, ".pdf"), paste0(outfile_name,".pdf"))
