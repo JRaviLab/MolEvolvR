@@ -8,7 +8,7 @@ library(data.table)
 library(gggenes)
 library(ggplot2)
 #source("../the-approach/R/pre-msa-tree.R") # for "to_titlecase()"
-source("R/colnames_molevol.R")
+source("/data/research/jravilab/molevol_scripts/R/colnames_molevol.R")
 
 #################################
 ## Modified gggenes::theme_genes
