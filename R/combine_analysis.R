@@ -3,7 +3,7 @@
 # Created: Dec 19, 2020
 # Lauren Sosinski, Janani Ravi
 
-source('/data/research/jravilab/molevol_scripts/R/combine_files.R')
+source('R/combine_files.R')
 source(here('R/combine_files.R')) # to work locally
 
 combine_full <- function(inpath, ret=FALSE) {
