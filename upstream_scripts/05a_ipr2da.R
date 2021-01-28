@@ -6,6 +6,8 @@ library(furrr)
 source("R/pre-msa-tree.R")
 source("R/colnames_molevol.R")
 
+conflicted::conflict_prefer("collapse", "dplyr")
+
 # ipr2da function
 ipr2da <- function(infile_ipr, prefix,
                    analysis=c("Pfam","SMART","Phobius",
@@ -21,8 +23,8 @@ ipr2da <- function(infile_ipr, prefix,
   plan(strategy = "multicore", .skip = T)
 
   # within each data.table
-  #domarch <- map(x, function(y) {
-  domarch <- future_map(x, function(y) {
+  domarch <- map(x, function(y) {
+  #domarch <- future_map(x, function(y) {
     acc_row <- data.frame(AccNum = y$AccNum[1],  stringsAsFactors = F)
     DAs <- data.frame(matrix(nrow = 1, ncol = length(analysis) ))
     DA <- y %>% group_by(Analysis) %>% arrange(StartLoc)
@@ -72,9 +74,9 @@ ipr2da <- function(infile_ipr, prefix,
 append_ipr <- function(ipr_da, blast, prefix) {
   blast_out <- read_tsv(blast, col_names = T)
 
-  blast_ipr <- merge(blast_out, ipr_da, by = 'AccNum', all.x = T) %>%
-    mutate(Species = Species.y, TaxID = TaxID.y, Name = Name.y, Lineage = Lineage.x) %>%
-    select(-Species.x, -Species.y, -TaxID.x, -TaxID.y, -Name.x, -Name.y, -Lineage.x, -Lineage.y)
+  blast_ipr <- merge(blast_out, ipr_da, by = 'AccNum', all.x = T) # %>%
+    # mutate(Species = Species.y, TaxID = TaxID.y, Name = Name.y, Lineage = Lineage.x) %>%
+    # select(-Species.x, -Species.y, -TaxID.x, -TaxID.y, -Name.x, -Name.y, -Lineage.x, -Lineage.y)
 
   write_tsv(blast_ipr, file = paste0(prefix, '.full_analysis.tsv'), na = 'NA')
 }

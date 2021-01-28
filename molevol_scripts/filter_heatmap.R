@@ -11,7 +11,7 @@ library(rlang)
 library(d3heatmap) # https://github.com/rstudio/d3heatmap
 library(heatmaply) # https://github.com/talgalili/heatmaply
 
-source(here("molevol_scripts/combine_files.R"))
+source(here("R/combine_files.R"))
 
 ################
 ## FILE INPUT ##
@@ -23,10 +23,31 @@ source(here("molevol_scripts/combine_files.R"))
 
 ## If the combined file doesn't already exist ...
 ## Combining full_analysis files
-inpath <- c("../molevol_data/project_data/slps/full_analysis_20201207/")
+inpath <- c("~/Desktop/GitHub//molevol_data/project_data/saureus/sausa300_0200-04/")
 cln_combnd <- combine_files(inpath,
-                            pattern="*full_analysis.txt", skip=0,
+                            pattern="*.full_analysis.txt", skip=0,
                             col_names=T)
+# read in combined file locally
+cln_combnd <- read_tsv('../molevol_data/project_data/saureus/sausa300_0200-04/saureus.cln_combnd.tsv')
+
+species_sub <- cln_combnd %>%
+  select("Species", "DomArch.Pfam") %>%
+  as.data.frame()
+
+species_sub2 <- species_sub[grepl('G_glu_transpept', species_sub$DomArch.Pfam),] %>%
+  select("Species") %>% distinct()
+
+species_sub2 <- species_sub2[["Species"]]
+
+cln_combnd <- cln_combnd %>%
+  filter(Species %in% species_sub2)
+
+cln_combnd <- cln_combnd %>%
+  mutate(Query = gsub('ABD20640.1', 'gisC_ABD20640.1', Query)) %>%
+  mutate(Query = gsub('ABD21022.1', 'gisB_ABD21022.1', Query)) %>%
+  mutate(Query = gsub('ABD21741.1', 'gisA_ABD21741.1', Query)) %>%
+  mutate(Query = gsub('ABD22038.1', 'ggt_ABD22038.1', Query)) %>%
+  mutate(Query = gsub('ABD22752.1', 'gisD_ABD22752.1', Query))
 
 #################################
 ## Filter by RefRep, Pathogens ##
@@ -70,7 +91,7 @@ blast_sub <- blast_sub %>%
 selected_col_x="Species"
 selected_col_x <- sym(selected_col_x)
 
-selected_col_y="DomArch.Pfam"
+selected_col_y="Query"
 selected_col_y <- sym(selected_col_y)
 
 # Fixing Spp, Lineage cols, subsetting by PcPositive
@@ -81,10 +102,11 @@ blast_sub_plot <- blast_sub %>%
                                  replacement="."))           %>%
   select({{selected_col_x}}, {{selected_col_y}}, PcPositive) %>%
   filter(PcPositive>=25)                                     %>%
-  filter(grepl({{selected_col_y}}, pattern="SLH"))           %>%
+  #filter(grepl({{selected_col_y}}, pattern="SLH"))           %>%
   # filter(!is.na({{selected_col_y}}))  %>%
   group_by({{selected_col_x}}, {{selected_col_y}})           %>%
-  arrange(-PcPositive)
+  arrange(-PcPositive) %>%
+  distinct()
 
 ## Heatmap using ggplot | Query vs Select Spp/Lineages
 ggplot(blast_sub_plot, aes(y={{selected_col_x}},
@@ -95,7 +117,7 @@ ggplot(blast_sub_plot, aes(y={{selected_col_x}},
   theme_minimal() +
   theme(axis.text.x=element_text(angle=40, hjust = 1)) +
   labs(fill="% Similarity") +
-  xlab(as_string(selected_col_x)) + ylab(as_string(selected_col_y))
+  xlab(as_string(selected_col_y)) + ylab(as_string(selected_col_x))
 
 ## Pivoting from LONG to WIDE for other heatmap plotting functions
 blast_sub_plot_wide <- blast_sub %>%
