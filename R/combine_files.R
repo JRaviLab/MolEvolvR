@@ -14,7 +14,7 @@ library(here)
 # STARTING DIRECTORY
 # molevol_scripts
 source("R/colnames_molevol.R")
-source("R/colnames_molevol.R") # to work locally
+source(here("R/colnames_molevol.R")) # to work locally
 #inpath <- c("../molevol_data/project_data/slps/full_analysis_20201207/")
 
 #################################
