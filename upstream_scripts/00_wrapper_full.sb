@@ -32,7 +32,7 @@ cd ${OUTPATH}
 ## USER INPUTS
 INPUTPATHS_LIST=$1
 DB=refseq
-NHITS=5000
+NHITS=10000
 EVAL=1e-5
 WBLAST=$2
 
@@ -50,6 +50,10 @@ export NCBI_API_KEY=882b28aa19ece4679d4fa5adcf3319f5df09
 #####################
 ## LOADING MODULES ##
 #####################
+
+# Prevent "module: command not found"
+# Read more about it https://www.sdsc.edu/support/user_guides/tscc.html
+source /etc/profile.d/modules.sh 
 
 module purge 					## clear loaded modules
 module load R		 			## load R
@@ -146,7 +150,7 @@ do
 	
 	## IPR2DA ##
 	ipr2da_start=$SECONDS
-	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${PREFIX}.iprscan.tsv ${PREFIX} ${OUTDIR}/${PREFIX}.cln.clust.tsv
+	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${PREFIX}.iprscan_cln.tsv ${PREFIX} ${OUTDIR}/${PREFIX}.cln.clust.tsv
 	ipr2da_dur=$(( $SECONDS - $ipr2da_start ))
 
 	## RPSBLAST ##
