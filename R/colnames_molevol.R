@@ -46,19 +46,19 @@ cl_blast_colnames <- c("Query", "SAccNum", "AccNum",
 # post-cleanup
 cl_blast_postcln_cols <- c("Query", "AccNum",
                        "STitle", "Species", "TaxID", "Lineage",
-                       "PcPositive", "PcIdentity", "AlnLength", 
+                       "PcPositive", "PcIdentity", "AlnLength",
 		       "SAccNum", "SAllSeqID",
 		       "Mismatch", "GapOpen",
                        "QStart", "QEnd", "QLength",
                        "SStart", "SEnd", "SLength",
-                       "EValue", "BitScore", "PcPosOrig") 
+                       "EValue", "BitScore", "PcPosOrig")
 #cl_blast_postcln_cols <- c("Query", "SAccNum", "AccNum",
 #                       "SAllSeqID", "STitle", "Species", "TaxID",
 #                       "PcIdentity", "AlnLength", "Mismatch", "GapOpen",
 #                       "QStart", "QEnd", "QLength",
 #                       "SStart", "SEnd", "SLength",
 #                       "EValue", "BitScore", "PcPosOrig",
-#			"PcPositive", "Lineage") 
+#			"PcPositive", "Lineage")
 
 
 # cl_blast_colnames_orig <- c("qacc", "sacc", "sseqid",
@@ -85,6 +85,18 @@ cl_blast_postcln_cols <- c("Query", "AccNum",
 ipr_colnames <- c("AccNum", "SeqMD5Digest", "SLength", "Analysis",
                   "DB.ID", "SignDesc", "StartLoc", "StopLoc", "Score",
                   "Status", "RunDate", "IPRAcc", "IPRDesc")
+
+# post cleanup
+##########################
+## NEED TO BE REORDERED ##
+##########################
+ipr_cln_colnames <- c("DB.ID","TaxID","AccNum.noV","AccNum",
+                      "SeqMD5Digest","SLength","Analysis","SignDesc",
+                      "StartLoc","StopLoc","Score","Status","RunDate",
+                      "IPRAcc","IPRDesc","FullAccNum","ProteinName",
+                      "Length","SourceDB","Completeness","Lineage",
+                      "Species","Name","ShortName","LookupTblDesc",
+                      "ID","Label")
 
 ###########
 ## RPSBLAST
