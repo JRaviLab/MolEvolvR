@@ -9,7 +9,7 @@ source('/data/research/jravilab/molevol_scripts/R/colnames_molevol.R')
 
 # add lineage to iprscan results
 
-ipr2lin <- function(ipr, acc2info, suffix) {
+ipr2lin <- function(ipr, acc2info, prefix) {
 
   # read in iprscan results
   # duplicate rows in iprscan file
@@ -81,7 +81,7 @@ ipr2lin <- function(ipr, acc2info, suffix) {
                             in the cytoplasm.', 'cytoplasmic reg of mem-bound prot', ShortName))
 
   # write results to file
-  write_tsv(ipr_cln, file = paste0(suffix, '.iprscan_cln.tsv'))
+  write_tsv(ipr_cln, file = paste0(prefix, '.iprscan_cln.tsv'))
 }
 
 ## load files in
