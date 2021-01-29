@@ -5,8 +5,8 @@ library(tidyverse)
 library(data.table)
 
 # source scripts w/ add_name() and colnames
-source("R/pre-msa-tree.R")
-source("R/colnames_molevol.R")
+source("/data/research/jravilab/molevol_scripts/R/pre-msa-tree.R")
+source("/data/research/jravilab/molevol_scripts/R/colnames_molevol.R")
 
 ## Read in data file path as a string
 args <- commandArgs(trailingOnly=TRUE)

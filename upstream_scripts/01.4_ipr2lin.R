@@ -3,9 +3,9 @@ library(data.table)
 
 # source lineage script for add_name and add_lins
 # /data/research/jravilab/molevol_scripts/
-source('R/lineage.R')
-source('R/pre-msa-tree.R')
-source('R/colnames_molevol.R')
+source('/data/research/jravilab/molevol_scripts/R/lineage.R')
+source('/data/research/jravilab/molevol_scripts/R/pre-msa-tree.R')
+source('/data/research/jravilab/molevol_scripts/R/colnames_molevol.R')
 
 # add lineage to iprscan results
 
