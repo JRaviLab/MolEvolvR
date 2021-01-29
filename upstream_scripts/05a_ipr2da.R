@@ -3,8 +3,8 @@ library(data.table)
 library(furrr)
 
 # source lineage.R
-source("R/pre-msa-tree.R")
-source("R/colnames_molevol.R")
+source("/data/research/jravilab/molevol_scripts/R/pre-msa-tree.R")
+source("/data/research/jravilab/molevol_scripts/R/colnames_molevol.R")
 
 conflicted::conflict_prefer("collapse", "dplyr")
 
