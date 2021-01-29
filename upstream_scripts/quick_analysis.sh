@@ -45,7 +45,7 @@ if [ $FILE_TYPE = WBLAST ]; then
 
    ## IPR2DA ##
    printf "\nIPR2DA\n"
-   Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${DIR}/${QUERY}.iprscan.tsv ${DIR}/${QUERY}.acc2info.tsv $QUERY
+   Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${DIR}/${QUERY}.iprscan_cln.tsv $QUERY
 
    query_run_duration=$(( $SECONDS - $query_run_start ))
    printf "\nQuery run duration: $query_run_duration\n"
