@@ -11,7 +11,7 @@ conflicted::conflict_prefer("collapse", "dplyr")
 # ipr2da function
 ipr2da <- function(infile_ipr, prefix,
                    analysis=c("Pfam","SMART","Phobius",
-                              "Gene3D", "TMHMM", "PANTHER", "ProSiteProfiles",
+                              "Gene3D", "TMHMM", "SignalP_GRAM_POSITIVE",
                               "SUPERFAMILY", "MobiDBLite", "TIGRFAM"))
 {
   # read in cleaned up iprscan results
