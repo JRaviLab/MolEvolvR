@@ -18,12 +18,11 @@ sink.reset <- function(){
 
 
 add_lins <- function(df, acc_col = "AccNum", assembly_path,
-                     lineagelookup_path, ipgout_path = NULL)
+                     lineagelookup_path, ipgout_path = NULL, plan = "sequential")
 {
   s_acc_col = sym(acc_col)
   accessions = df %>% pull(acc_col)
-  browser()
-  lins = acc2lin(accessions, assembly_path, lineagelookup_path, ipgout_path)
+  lins = acc2lin(accessions, assembly_path, lineagelookup_path, ipgout_path, plan)
 
   # Drop a lot of the unimportant columns for now? will make merging much easier
   lins <- lins[,c("Strand","Start","Stop", "Nucleotide Accession", "Source",
@@ -38,7 +37,7 @@ add_lins <- function(df, acc_col = "AccNum", assembly_path,
 }
 
 
-acc2lin <- function(accessions,  assembly_path, lineagelookup_path,ipgout_path = NULL )
+acc2lin <- function(accessions,  assembly_path, lineagelookup_path,ipgout_path = NULL, plan = "sequential" )
 {
   #'@author Samuel Chen, Janani Ravi
   #'@description This function combines 'efetch_ipg()' and 'ipg2lin()' to map a set
@@ -56,7 +55,7 @@ acc2lin <- function(accessions,  assembly_path, lineagelookup_path,ipgout_path =
     tmp_ipg = T
     ipgout_path = tempfile("ipg", fileext =".txt")
   }
-  efetch_ipg(accessions, out_path= ipgout_path )
+  efetch_ipg(accessions, out_path= ipgout_path, plan )
 
   lins <- ipg2lin(accessions, ipgout_path, assembly_path, lineagelookup_path)
 
@@ -64,15 +63,12 @@ acc2lin <- function(accessions,  assembly_path, lineagelookup_path,ipgout_path =
   {
     unlink(tempdir(), recursive = T)
   }
-
-
-
   return(lins)
 }
 
 
 
-efetch_ipg <- function(accnums, out_path)
+efetch_ipg <- function(accnums, out_path, plan = "sequential")
 {
   #'@author Samuel Chen, Janani Ravi
   #'@description Perform efetch on the ipg database and write the results to out_path
@@ -95,7 +91,7 @@ efetch_ipg <- function(accnums, out_path)
       return(partitioned)
     }
 
-    plan(strategy = "multiprocess", .skip = T)
+    plan(strategy = plan, .skip = T)
 
 
     min_groups = length(accnums)/200

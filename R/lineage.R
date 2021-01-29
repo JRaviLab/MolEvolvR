@@ -73,9 +73,7 @@ GCA2lin <- function(prot_data,
 
   mergedTax <- merge(x=prot_data, y=assembly_summary,
                      by="GCA_ID", all.x=T)
-
   accessions <- prot_data %>% pull(acc_col) %>% unique()
-
   # Prioritize Complete Genome
   best_rows <- integer(length(accessions))
   for(i in 1:length(accessions))
