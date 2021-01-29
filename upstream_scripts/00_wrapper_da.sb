@@ -47,6 +47,10 @@ export NCBI_API_KEY=YOUR_KEY_HERE
 ## LOADING MODULES ##
 #####################
 
+# Prevent "module: command not found"
+# Read more about it https://www.sdsc.edu/support/user_guides/tscc.html
+source /etc/profile.d/modules.sh
+
 module purge			## clear loaded modules
 module load R			## load R
 module load edirect		## load edirect
@@ -88,7 +92,7 @@ do
 
       ## IPR2DA ##
       ipr2da_start=$SECONDS
-      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${PREFIX}.iprscan.tsv ${PREFIX}
+      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${PREFIX}.iprscan_cln.tsv ${PREFIX}
       ipr2da_duration=$(( $SECONDS - $ipr2da_start ))
       
       ## RPSBLAST ##
