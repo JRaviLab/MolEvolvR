@@ -9,7 +9,7 @@ cd ${dir}
 
 ## OPTION 1
 # https://unix.stackexchange.com/questions/15662/splitting-text-files-based-on-a-regular-expression
-awk -F "( )|(>)" '/^>/{x=""$2".faa";}{print >x;}' $INFILE
+awk -F "\\( \\)\\|\\(>\\):-" '/^>/{x=""$2".faa";}{print >x;}' $INFILE
 
 
 
