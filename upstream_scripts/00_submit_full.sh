@@ -47,23 +47,17 @@ if [ $WBLAST = F ]; then
       # https://unix.stackexchange.com/questions/15662/splitting-text-files-BASEd-on-a-regular-expression
       awk -F "( )|(>)" '/^>/{x=""$2".faa";}{print >x;}' $INFILE
       find $PWD -type f -name "*.faa" > input.txt
-
-      INPATHS=input.txt
-
-      qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "$INPATHS $WBLAST" -t 1-$NFASTA
-
    fi
 
    if [ $NFASTA = 1 ] 
    then
       printf "No. of seqs provided: $NFASTA\nSo, we are going to proceed to the analysis.\n"
       find $PWD -type f -name "$BASE" > input.txt
-
-      INPATHS=input.txt
-
-      qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "$INPATHS $WBLAST" -t 1-$NFASTA
-
    fi
+
+   INPATHS=input.txt
+
+   qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "$INPATHS $WBLAST" -t 1-$NFASTA
 
 fi
 
