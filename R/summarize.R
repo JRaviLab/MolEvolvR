@@ -10,6 +10,58 @@ library(tidyverse)
 library(rlang)
 conflicted::conflict_prefer("filter", "dplyr")
 
+filter_by_doms <- function(prot, column = "DomArch", doms_keep = c(), doms_remove = c(),
+                           ignore.case = FALSE){
+  #' @author Samuel Chen, Janani Ravi
+  #' @description filter_by_doms filters a data frame by identifying exact domain matches
+  #' and either keeping or removing rows with the identified domain
+  #' @param prot Dataframe to filter
+  #' @param column Column to search for domains in (DomArch column)
+  #' @param doms_keep Vector of domains that must be identified within column in order for
+  #' observation to be kept
+  #' @param doms_remove Vector of domains that, if found within an observation, will be removed
+  #' @param ignore.case Should the matching be non case sensitive
+  #' @return Filtered data frame
+  #' @note There is no need to make the domains 'regex safe', that will be handled by this function
+
+
+  # Only rows with a domain in doms_keep will be kept
+  # Any row containing a domain in doms_remove will be removed
+
+  # ^word$|(?<=\+)word$|(?<=\+)word(?=\+)|word(?=\+)
+
+  # Make regex safe
+  doms_keep <- str_replace_all(string=doms_keep, pattern="\\(", replacement="\\\\(")
+  doms_keep <- str_replace_all(string=doms_keep, pattern="\\)", replacement="\\\\)")
+  doms_keep <- str_replace_all(string=doms_keep, pattern="\\+", replacement="\\\\+")
+  doms_keep <- str_replace_all(string=doms_keep, pattern="\\_", replacement="\\\\_")
+  doms_keep <- str_replace_all(string=doms_keep, pattern="\\?", replacement="\\\\?")
+
+  doms_remove <- str_replace_all(string=doms_remove, pattern="\\(", replacement="\\\\(")
+  doms_remove <- str_replace_all(string=doms_remove, pattern="\\)", replacement="\\\\)")
+  doms_remove <- str_replace_all(string=doms_remove, pattern="\\+", replacement="\\\\+")
+  doms_remove <- str_replace_all(string=doms_remove, pattern="\\_", replacement="\\\\_")
+  doms_remove <- str_replace_all(string=doms_remove, pattern="\\?", replacement="\\\\?")
+
+  col = sym(column)
+
+  if(length(doms_keep) != 0)
+  {
+    keep_regex = paste0("^", doms_keep, "$|(?<=\\+)",doms_keep, "$|(?<=\\+)", doms_keep,
+                        "(?=\\+)|",doms_keep, "(?=\\+)") %>% paste0(collapse = "|")
+    prot = prot %>% filter(grepl(keep_regex, {{col}}, ignore.case = ignore.case, perl = T))
+  }
+
+  if(length(doms_remove) != 0)
+  {
+    remove_regex = paste0("^", doms_remove, "$|(?<=\\+)",doms_remove, "$|(?<=\\+)", doms_remove,
+                          "(?=\\+)|",doms_remove, "(?=\\+)") %>% paste0(collapse = "|")
+    prot = prot %>% filter(!grepl(remove_regex, {{col}}, ignore.case = ignore.case, perl = T))
+  }
+
+  return(prot)
+}
+
 ###########################
 ## COUNTS of DAs and GCs ##
 ## Before/after break up ##
