@@ -126,12 +126,16 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
     for(domain in domains_of_interest)
     {
       # domain_size = as.numeric(wc[1,domain])
-      if( (!domain %in% V(g)$name) && (domain %in% colnames(wc)) )
+      if( (!domain %in% V(g)$name) && (domain %in% colnames(wc)))
       {
         g <- g + vertex(domain)
       }
     }
 
+    # Make sure X does not appear
+    # if(g)
+    if("X" %in% V(g)$name)
+      g = delete_vertices(g, "X")
 
     V(g)$size <- as.numeric(wc[V(g)$name])
 
@@ -244,8 +248,11 @@ BinaryDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, c
     to <- unlist(lapply(domain.list, function(x) sapply(1:(length(x)-1), function(y) x[y+1]))) #list elements 2 through n
     pwise <- cbind(from,to)
     if(any(pwise=="")) {
-      pwise=pwise[-which((pwise[,1]=="") | pwise[,2]==""),]
+      pwise=pwise[-which( (pwise[,1]=="") | (pwise[,2]=="") ),]
     }
+    if(any(pwise == "X"))
+      pwise=pwise[-which( (pwise[,1]=="X") | (pwise[,2]=="X") ),]
+
     edges <- data.frame(from = pwise[,1], to = pwise[,2]) %>%
       group_by(from, to) %>% summarize(width = n())
     edges <- edges %>% mutate(width = ifelse(width==1, .3, log(width)))
