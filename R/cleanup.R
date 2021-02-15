@@ -258,6 +258,8 @@ cleanup_clust <- function(prot,
     prot <- remove_empty(prot=prot, by_column="ClustName")
   }
 
+  replaceQMs(prot, "GenContext")
+
   # !!UNFIXED ISSUE!! Currently requires manual intervention!
   # SIG+TM+TM+... kind of architectures without explicit domain names are lost.
   # Need a way to take care of true hits that don't go by the expected domain name.
@@ -339,6 +341,8 @@ cleanup_domarch <- function(prot,
   if(remove_empty){
     prot <- remove_empty(prot=prot, by_column="DomArch")
   }
+
+  replaceQMs(prot, "DomArch")
 
   return(prot)
 }

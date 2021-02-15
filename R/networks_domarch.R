@@ -56,7 +56,7 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
   domain.list <- prot %>%
     dplyr::filter(grepl(pattern=domains_of_interest_regex,
                         x=DomArch.ntwrk,
-                        ignore.case=T))
+                        ignore.case=T, perl = T))
 
   ##Separating column and converting to atomic vector prevents coercion
   domain.list <- domain.list$DomArch.ntwrk  %>% str_split(pattern="\\+")
