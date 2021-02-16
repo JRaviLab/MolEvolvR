@@ -90,11 +90,14 @@ upset.plot <- function(query_data="toast_rack.sub",
     elements2words(column = colname,conversion_type = type)
   # names(words.tc)[1] <- "words"
   words.tc <- words.tc %>% str_split(pattern = " ")
-  words.tc = as.data.frame(words.tc, col.names = "Words", stringsAsFactors = F) %>% filter(!grepl("^X$|^X\\(s\\)$",Words)) %>% pull(Words)# remove "X" and "X(s)"
+  words.tc = as.data.frame(words.tc, col.names = "Words", stringsAsFactors = F) %>%
+    filter(!grepl("^X$|^X\\(s\\)$",Words)) %>% pull(Words)# remove "X" and "X(s)"
   words.tc <- words.tc[2:(length(words.tc)-1)]
 
   # Only use the DAs/GCs that are within the total count cutoff
-  query_data <- query_data %>% filter({{column}} %in% (select(tc, {{column}}) %>% distinct() %>% pull({{column}}) ) )
+  query_data <- query_data %>% filter({{column}} %in%
+                                        (select(tc, {{column}}) %>% distinct()
+                                         %>% pull({{column}}) ) )
 
   ## Create columns for domains/DAs and fill them with 1/0
   for(i in words.tc) #$words)
@@ -144,7 +147,7 @@ upset.plot <- function(query_data="toast_rack.sub",
                                                         decreasing=TRUE))))
   ## UpSetR plot
   par(oma=c(5,5,5,5), mar=c(3,3,3,3))
-  upset(upset.cutoff[c(3,5:ncol(upset.cutoff))],	# text.scale=1.5,
+  upset(upset.cutoff[c(3,4:ncol(upset.cutoff))],	# text.scale=1.5,
         #sets=words.tc,
         nsets = length(words.tc),
         nintersects = NA,
@@ -445,6 +448,164 @@ lineage.domain_repeats.plot <- function(query_data, colname) {
     theme(axis.text.x=element_text(angle=90,hjust=0,vjust=0.5))
 }
 
+
+LineagePlot <- function(prot, domains_of_interest, level = 3)
+{
+  #' @author Samuel Chen, Janani Ravi
+  #' Generate a lineage plot
+  #' @param prot Data frame containing DomArch and Lineage Columns
+  #' @param domains_of_interest Vector of domains to check for the presence of in all the lineages
+  #' @param level The max depth of Lineage. ie) i = Kingdom, 2 = Phylum, 3 = class ...
+  #'
+  #' @example LineagePlot(psp_data, c("PspA", "Snf7","Classical-AAA","PspF","PspB",
+  #' "PspC","ClgR","PspM","Thioredoxin","PspN_N","DUF3046","LiaI-LiaF-TM",
+  #'  "Toast_rack", "REC", "HISKIN", "HAAS","SHOCT-bihelical", "SHOCT-like",
+  #'  "Tfu_1009", "PspAA", "Spermine_synth","TM-Flotillin", "Band-7","Betapropeller",
+  #'  "MacB_PCD", "FTSW_RODA_SPOVE", "Cest_Tir","SIGMA-HTH", "GNTR-HTH", "DUF2089-HTH",
+  #'   "PadR-HTH","RHH","ZnR"), level = 2)
+
+
+
+  LevelReduction <- function(lin)
+  {
+    if(level == 1)
+    {
+      gt_loc <- str_locate(lin, ">")[[1]]
+      if(is.na(gt_loc))
+      {
+        # No '>' in lineage
+        return(lin)
+      }
+      else
+      {
+        lin <- substring(lin, first = 0, last = (gt_loc-1))
+        return(lin)
+      }
+    }
+    #### Add guard here to protect from out of bounds
+    gt_loc <- str_locate_all(lin, ">")[[1]] # [(level-1),][1]
+    l <- length(gt_loc)/2
+    if( level > l)
+    {
+      # Not enough '>' in lineage
+      return(lin)
+    }
+    else
+    {
+      gt_loc <- gt_loc[level,][1] %>% as.numeric()
+      lin <- substring(lin, first = 0, last = (gt_loc-1))
+      return(lin)
+    }
+  }
+
+  all_grouped <- data.frame("Query" = character(0), "Lineage" = character(0), "count"= integer())
+  for(dom in domains_of_interest)
+  {
+    domSub <- prot %>% filter(grepl(dom, GenContext, ignore.case = T))
+
+    domSub <- domSub %>% group_by(Lineage) %>% summarize("count" = n())
+
+    domSub$Query = dom
+
+    all_grouped <- dplyr::union(all_grouped, domSub)
+  }
+
+  GetKingdom <- function(lin)
+  {
+    gt_loc <- str_locate(lin, ">")[,"start"]
+
+    if(is.na(gt_loc))
+    {
+      # No '>' in lineage
+      return(lin)
+    }
+    else
+    {
+      kingdom <- substring(lin, first = 0, last = (gt_loc-1))
+      return(kingdom)
+    }
+  }
+
+  all_grouped <- all_grouped%>%mutate(ReducedLin = unlist(purrr::map(Lineage, LevelReduction)))
+
+  all_grouped_reduced <- all_grouped %>% group_by(Query, ReducedLin) %>% summarize("count"= sum(count)) %>%
+    mutate(Kingdom = unlist(purrr::map(ReducedLin,GetKingdom)) )
+
+  lin_counts <- all_grouped_reduced %>% group_by(Kingdom, ReducedLin) %>% summarize("count" =n())
+
+  # grep("bacteria", lin_counts$Kingdom) %>% length()
+
+  bacteria_colors <- rep("#d94f25", length(grep("bacteria", lin_counts$Kingdom)))
+
+  archaea_colors <- rep("#26662d", length(grep("archaea", lin_counts$Kingdom)))
+
+  eukaryota_colors <- rep("#123d99", length(grep("eukaryota", lin_counts$Kingdom)))
+
+  virus_colors <- rep("#538073", length(grep("virus", lin_counts$Kingdom)))
+  colors <- append(archaea_colors, bacteria_colors) %>%
+    append(eukaryota_colors) %>% append(virus_colors)
+
+  all_grouped_reduced$ReducedLin <- map(all_grouped_reduced$ReducedLin,
+                                        function(lin)
+                                        {
+                                          gt_loc <- str_locate(lin, ">")[,"start"]
+
+                                          if(is.na(gt_loc))
+                                          {
+                                            # No '>' in lineage
+                                            return(lin)
+                                          }
+                                          else
+                                          {
+                                            lin <- substring(lin, first = (gt_loc+1), last = 100)
+                                            return(lin)
+                                          }
+                                        }
+  ) %>% unlist()
+
+  ordered_lin <- all_grouped_reduced %>% arrange(Kingdom)
+
+  all_grouped_reduced$Query <- factor(x = all_grouped_reduced$Query,
+                                      levels = rev(domains_of_interest))
+  all_grouped_reduced$ReducedLin <- factor(x = all_grouped_reduced$ReducedLin,
+                                           levels = unique(ordered_lin$ReducedLin)
+  )
+}
+
+stacked_lin_plot <- function(prot, column = "DomArch", cutoff,
+                             xlabel = "Domain Architecture")
+{
+  col = sym(column)
+
+  total_count =  total_counts(prot, column, cutoff)
+
+  # Order bars by descending freq
+  order = total_count %>% select({{col}}) %>% unique %>%
+    pull({{col}}) %>% rev()
+
+  prot_data = total_count
+  prot_data$Lineage = unlist(map(prot_data$Lineage, function(x){
+    gt_pos = gregexpr(pattern = ">", x)[[1]][2]
+    # If there is not a second '>' in the lineage
+    if(is.na(gt_pos))
+    {
+      x
+    }
+    else{
+      substr(x,1, (gt_pos-1) )
+    }
+  } ))
+
+  prot_data[, column] <- factor(pull(prot_data, {{col}}) , levels = order)
+
+  ggplot(prot_data, aes(fill = Lineage, y = count, x = {{col}})) +
+    geom_bar(position = 'stack', stat = "identity") +
+    coord_flip() +
+    xlab("Domain Architecture")+
+    ylab("Counts") +
+    theme_minimal() + theme(legend.position = c(0.7, 0.4))
+
+}
 
 ################
 ## Wordclouds ##
