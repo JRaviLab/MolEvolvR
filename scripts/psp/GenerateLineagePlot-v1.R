@@ -1,42 +1,12 @@
 library(tidyverse)
 source("R/plotting.R")
 
-# all <- read_tsv("data/rawdata_tsv/all_clean.txt")
-#
-# # DUF1700-ahelical -> ahelical
-# # DUF1700-like_alpha_helical_domain	 -> DUF1700-ahelical
-# # DUF1707-SHOCT-bihelical ->	SHOCT-bihelical
-# # Toast-rack -> Toast_rack
-# # PADR-HTH	PadR-HTH
-# # clgR-HTH	ClgR-HTH
-# # ZNR	ZnR
-# # DUF1700-like_alpha_helical_domain	DUF1700-ahelical
-# # Psp-AA	PspAA
-# # pspF	PspF
-# # Flot	TM-Flotillin
-# # Phageshock_PspD	PspD
-#
-# all$GenContext.repeats <- all$GenContext.repeats %>% str_replace_all("DUF1700-ahelical", "ahelical") %>%
-#                       str_replace_all("DUF1700-like_alpha_helical_domain", "DUF1700-ahelical") %>%
-#   str_replace_all("DUF1707-SHOCT-bihelical", "SHOCT-bihelical") %>%
-#   str_replace_all("Toast-rack", "Toast_rack") %>%
-#   str_replace_all("PADR-HTH", "PadR-HTH") %>%
-#   str_replace_all("clgR-HTH", "ClgR-HTH") %>%
-#   str_replace_all("ZNR", "ZnR") %>%
-#   str_replace_all("Psp-AA", "PspAA") %>%
-#   str_replace_all("pspF", "PspF") %>%
-#   str_replace_all("Flot", "TM-Flotillin") %>%
-#   str_replace_all("phageshock_PspD", "PspD")
-#
-#
-# write_tsv(all, path = "data/rawdata_tsv/all_clean0920.txt")
-
 all <- read_tsv("data/rawdata_tsv/all_clean0920.txt", col_names = T)
 
 
 domains_of_interest <- c("ZnR", "SIGMA-HTH", "GNTR-HTH", "Beta-Propeller", "DUF2089-HTH", "SHOCT-like",
                          "SHOCT−bihelical",
-                         "MacB_PCD", "FTSW_RODA_SPOVE", "PADR−HTH", "ahelical",
+                         "MacB_PCD", "FTSW_RODA_SPOVE", "PADR−HTH", "HAAS",
                          "REC", "HISKIN", "LiaI−LiaF−TM", "Toast_rack", "PspC", "PspB", "PspF",
                          "Tfu_1009", "PspAA", "Spermine_synth", "TM-Flotillin", "Band_7", "Cest_Tir",
                          "PspA", "Snf7", "Classical-AAA", "TraJ-RHH", "clgR-HTH", "Thioredoxin",
@@ -47,13 +17,14 @@ domains_of_interest <- c("ZnR", "SIGMA-HTH", "GNTR-HTH", "Beta-Propeller", "DUF2
 dom_interest_2 <- c("PspA", "Snf7","Classical-AAA",
                     "PspF","PspB","PspC","ClgR"
                     ,"PspM","Thioredoxin","PspN_N","DUF3046",
-                    "LiaI-LiaF-TM", "Toast_rack", "REC", "HISKIN", "ahelical",
+                    "LiaI-LiaF-TM", "Toast_rack", "REC", "HISKIN", "HAAS",
                     "SHOCT-bihelical", "SHOCT-like", "Tfu_1009", "PspAA", "Spermine_synth",
-                    "TM-Flotillin", "Band_7",
-                    "Beta-Propeller", "MacB_PCD", "FTSW_RODA_SPOVE", "Cest_Tir",
+                    "TM-Flotillin", "Band-7",
+                    "Betapropeller", "MacB_PCD", "FTSW_RODA_SPOVE", "Cest_Tir",
                     "SIGMA-HTH", "GNTR-HTH", "DUF2089-HTH", "PadR-HTH",
-                    "TraJ-RHH",
+                    "RHH",
                     "ZnR")
+
 
 domains_of_interest <- dom_interest_2
 
@@ -61,12 +32,18 @@ domains_of_interest <- dom_interest_2
 
 LineagePlot <- function(prot, domains_of_interest, level = 3)
 {
-  #' @author Samuel Chen
+  #' @author Samuel Chen, Janani Ravi
   #' Generate a lineage plot
-  #'
   #' @param prot Data frame containing DomArch and Lineage Columns
-  #' @param domains_of_interest Domains to check for the presence of in all the lineages
+  #' @param domains_of_interest Vector of domains to check for the presence of in all the lineages
   #' @param level The max depth of Lineage. ie) i = Kingdom, 2 = Phylum, 3 = class ...
+  #'
+  #' @example LineagePlot(psp_data, c("PspA", "Snf7","Classical-AAA","PspF","PspB",
+  #' "PspC","ClgR","PspM","Thioredoxin","PspN_N","DUF3046","LiaI-LiaF-TM",
+  #'  "Toast_rack", "REC", "HISKIN", "HAAS","SHOCT-bihelical", "SHOCT-like",
+  #'  "Tfu_1009", "PspAA", "Spermine_synth","TM-Flotillin", "Band-7","Betapropeller",
+  #'  "MacB_PCD", "FTSW_RODA_SPOVE", "Cest_Tir","SIGMA-HTH", "GNTR-HTH", "DUF2089-HTH",
+  #'   "PadR-HTH","RHH","ZnR"), level = 2)
 
 
 
