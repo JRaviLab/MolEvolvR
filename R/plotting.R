@@ -39,7 +39,8 @@ shorten_lineage <- function(data, colname = "Lineage")
 #################
 upset.plot <- function(query_data="toast_rack.sub",
                        colname = "DomArch", cutoff = 90,
-                       RowsCutoff = FALSE) {
+                       RowsCutoff = FALSE, text.scale = 1.5,
+                       point.size = 2.2) {
   #' UpSet Plot
   #' @author Janani Ravi
   #' @keywords UpSetR, Domains, Domain Architectures, GenomicContexts
@@ -51,6 +52,11 @@ upset.plot <- function(query_data="toast_rack.sub",
   #' @param type Character. Either "da2doms" for Domains vs Domain Architectures
   #' or "gc2da" for Domain Architectures (of neighbors) vs Genomic Contexts.
   #' Default is "da2doms"
+  #' @param text.scale Allows scaling of axis title, tick lables, and numbers above the intersection size bars.
+  #' text.scale can either take a universal scale in the form of an integer,
+  #' or a vector of specific scales in the format: c(intersection size title,
+  #' intersection size tick labels, set size title, set size tick labels, set names,
+  #'  numbers above bars)
   #' @examples upset.plot(pspa.sub, 10, "da2doms")
   #' @details For "da2doms" you would need the file DA.doms.wc as well as the
   #' column query_data$DomArch.norep
@@ -155,12 +161,13 @@ upset.plot <- function(query_data="toast_rack.sub",
         main.bar.color="coral3",									#56B4E9 lightblue
         group.by="degree", order.by=c("freq"),		# "degree"
         mb.ratio=c(0.3, 0.7), # nintersects=20,
-        number.angles=0, point.size=2, line.size=0.8,
+        number.angles=0, point.size=point.size, line.size=0.8,
         show.numbers="yes", shade.alpha = 0.25,
         mainbar.y.label="Intersection counts",
         sets.x.label="Individual set counts",
         query.legend="top",
-        text.scale = 1.5
+        text.scale = text.scale,
+        set_size.show = F
         )
 }
 
@@ -449,14 +456,14 @@ lineage.domain_repeats.plot <- function(query_data, colname) {
 }
 
 
-LineagePlot <- function(prot, domains_of_interest, level = 3)
+LineagePlot <- function(prot, domains_of_interest, level = 3, label.size = 8)
 {
   #' @author Samuel Chen, Janani Ravi
   #' Generate a lineage plot
   #' @param prot Data frame containing DomArch and Lineage Columns
   #' @param domains_of_interest Vector of domains to check for the presence of in all the lineages
   #' @param level The max depth of Lineage. ie) i = Kingdom, 2 = Phylum, 3 = class ...
-  #'
+  #' @param label.size Size of the text labels
   #' @example LineagePlot(psp_data, c("PspA", "Snf7","Classical-AAA","PspF","PspB",
   #' "PspC","ClgR","PspM","Thioredoxin","PspN_N","DUF3046","LiaI-LiaF-TM",
   #'  "Toast_rack", "REC", "HISKIN", "HAAS","SHOCT-bihelical", "SHOCT-like",
@@ -570,10 +577,28 @@ LineagePlot <- function(prot, domains_of_interest, level = 3)
   all_grouped_reduced$ReducedLin <- factor(x = all_grouped_reduced$ReducedLin,
                                            levels = unique(ordered_lin$ReducedLin)
   )
+  ggplot(data=all_grouped_reduced,
+         aes_string(x="ReducedLin", y="Query")) +
+    geom_tile(data=subset(all_grouped_reduced,
+                          !is.na(count)),
+              aes(fill=count),
+              colour="darkred", size=0.3) + #, width=0.7, height=0.7),
+    scale_fill_gradient(low="white", high="darkred") +
+    # scale_x_discrete(position="top") +
+    theme_minimal()+
+    theme(axis.title = element_blank() ,
+          axis.text.x=element_text(angle=90,hjust=1,vjust=0.2,
+                                   color =colors
+    ),
+    axis.text=element_text(size=label.size)
+    )
+
 }
 
 stacked_lin_plot <- function(prot, column = "DomArch", cutoff,
-                             xlabel = "Domain Architecture")
+                             xlabel = "Domain Architecture",
+                             label.size = 8,
+                             legend.position = c(0.7, 0.4))
 {
   col = sym(column)
 
@@ -603,7 +628,10 @@ stacked_lin_plot <- function(prot, column = "DomArch", cutoff,
     coord_flip() +
     xlab("Domain Architecture")+
     ylab("Counts") +
-    theme_minimal() + theme(legend.position = c(0.7, 0.4))
+    theme_minimal() +
+    theme(legend.position = legend.position,
+          axis.text=element_text(size=label.size)
+          )
 
 }
 
