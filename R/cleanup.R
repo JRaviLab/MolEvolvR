@@ -70,11 +70,17 @@ repeat2s <- function(prot, by_column="DomArch", excluded_prots = c()){
                                     pattern="\\+",
                                     replacement=" "))) %>%
     mutate_all(funs(str_replace_all(.,
+                                    pattern="-",
+                                    replacement="__"))) %>%
+    mutate_all(funs(str_replace_all(.,
                                     pattern=regex_identify_repeats,
                                     replacement="\\1(s)"))) %>%
     mutate_all(funs(str_replace_all(.,
                                     pattern=" ",
-                                    replacement="+")))
+                                    replacement="+"))) %>%
+  mutate_all(funs(str_replace_all(.,
+                                  pattern="__",
+                                  replacement="-")))
   return(prot)
 }
 
@@ -231,7 +237,7 @@ cleanup_clust <- function(prot,
     target <- domains_rename$old[x]
     replacement <- domains_rename$new[x]
     prot$ClustName <- prot$ClustName %>%
-      str_replace_all(target, replacement)
+      str_replace_all(coll(target, TRUE), replacement)
   }
 
   ## Domains_keep
@@ -258,7 +264,6 @@ cleanup_clust <- function(prot,
     prot <- remove_empty(prot=prot, by_column="ClustName")
   }
 
-  replaceQMs(prot, "GenContext")
 
   # !!UNFIXED ISSUE!! Currently requires manual intervention!
   # SIG+TM+TM+... kind of architectures without explicit domain names are lost.
@@ -303,7 +308,7 @@ cleanup_domarch <- function(prot,
   # Replace domains based on the domains_rename list
   for(j in 1:length(domains_rename$old)){
     prot$DomArch <- str_replace_all(prot$DomArch,
-                                    as.vector(domains_rename$old[j]),
+                                    coll(as.vector(domains_rename$old[j]), TRUE),
                                     as.vector(domains_rename$new[j]))
   }
 
@@ -372,7 +377,8 @@ cleanup_gencontext <- function(prot, domains_rename = data.frame("old" = charact
     for(x in 1:length(domains_rename$old)){
       target <- domains_rename$old[x]
       replacement <- domains_rename$new[x]
-      prot$GenContext <- prot$GenContext %>% str_replace_all(target,replacement)
+      prot$GenContext <- prot$GenContext %>%
+        str_replace_all(coll(target,TRUE),replacement)
     }
   }
 
@@ -391,5 +397,48 @@ cleanup_gencontext <- function(prot, domains_rename = data.frame("old" = charact
     prot <- remove_astrk(prot, colname = "GenContext")
   }
 
+  prot <- replaceQMs(prot, "GenContext")
+
   return(prot)
 }
+
+cleanup_GeneDesc <- function(prot, column){
+  #' Return trailing period that occurs in GeneDesc column
+  prot[,"GeneDesc"] <- gsub("\\.$", "", prot %>% pull(column))
+  return(prot)
+}
+
+
+pick_longer_duplicate <- function(prot, column){
+  col = sym(column)
+
+  prot$row.orig = 1:nrow(prot)
+
+  # Get list of duplicates
+  dups = prot %>% group_by(AccNum) %>% summarize("count" = n()) %>%
+    filter(count > 1) %>%
+    arrange(-count) %>% merge(prot, by = "AccNum")
+
+  dup_acc = dups$AccNum
+
+  longest_rows = c()
+  remove_rows = c()
+  for(acc in dup_acc){
+    dup_rows = dups %>% filter(AccNum == acc)
+
+    longest = dup_rows[which(nchar(pull(dup_rows,{{col}})) == max(nchar(pull(dup_rows,{{col}}))))[1], "row.orig"]
+
+    longest_rows = c(longest_rows, longest)
+
+    to_remove = dup_rows[which(dup_rows$row.orig != longest ),"row.orig"][]
+
+    # dup_rows[which(nchar(pull(dup_rows,{{col}})) == max(nchar(pull(dup_rows,{{col}}))))[2:nrow(dup_rows)], "row.orig"]
+    remove_rows = c(remove_rows, to_remove)
+  }
+
+  # grab all the longest rows
+  unique_dups = prot[-remove_rows,] %>% select(-row.orig)
+
+  return(unique_dups)
+}
+
