@@ -47,15 +47,23 @@ filter_by_doms <- function(prot, column = "DomArch", doms_keep = c(), doms_remov
 
   if(length(doms_keep) != 0)
   {
-    keep_regex = paste0("^", doms_keep, "$|(?<=\\+)",doms_keep, "$|(?<=\\+)", doms_keep,
-                        "(?=\\+)|",doms_keep, "(?=\\+)") %>% paste0(collapse = "|")
+    keep_regex = paste0("^", doms_keep,
+                        "$|(?<=\\+)",doms_keep,
+                        "$|(?<=\\+)", doms_keep,
+                        "(?=\\+)|^", doms_keep,
+                        "(?=\\+)") %>%
+      paste0(collapse = "|")
     prot = prot %>% filter(grepl(keep_regex, {{col}}, ignore.case = ignore.case, perl = T))
   }
 
   if(length(doms_remove) != 0)
   {
-    remove_regex = paste0("^", doms_remove, "$|(?<=\\+)",doms_remove, "$|(?<=\\+)", doms_remove,
-                          "(?=\\+)|",doms_remove, "(?=\\+)") %>% paste0(collapse = "|")
+    remove_regex = paste0("^", doms_remove,
+                          "$|(?<=\\+)",doms_remove,
+                          "$|(?<=\\+)", doms_remove,
+                          "(?=\\+)|^",doms_remove,
+                          "(?=\\+)") %>%
+      paste0(collapse = "|")
     prot = prot %>% filter(!grepl(remove_regex, {{col}}, ignore.case = ignore.case, perl = T))
   }
 
