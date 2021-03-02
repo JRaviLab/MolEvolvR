@@ -9,14 +9,14 @@ source("scripts/tree.R")
 
 ## Filter homologs by Analysis | Domains of interest | PcPositive | Tail cutoffs
 inpath <- "../molevol_data/project_data/phage_defense/full_analysis_20210108/"
-infile <- paste0(inpath, "cln_combined.tsv", collapse="")
+infile <- paste0(inpath, "cln_combined_uniq.tsv", collapse="")
 accessions <- filter_tree(cln_combined_path=infile,
                           domains_of_interest=c("P-loop_containing_nucleotide_triphosphate_hydrolases",
                                                 "Cytidine_Deaminase_domain_2"),
                           subset_col1="Lineage", subset_col2="Genus",
                           subset_col3="DomArch.Gene3D",
                           interest_col="DomArch.Gene3D",
-                          ppos_cutoff=20, tail_cutoff=2)
+                          ppos_cutoff=20, tail_cutoff=1)
 
 ## Generate Fasta file
 tmp_fa <- tempfile()

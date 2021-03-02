@@ -10,13 +10,13 @@ conflicted::conflict_prefer("filter", "dplyr")
 
 ## Example ARGS for filter_tree
 inpath <- "../molevol_data/project_data/phage_defense/full_analysis_20210108/"
-infile <- paste0(inpath, "cln_combined.tsv", collapse="")
-cln_combined_path=paste0(inpath, "cln_combined.tsv", collapse="")
+infile <- paste0(inpath, "cln_combined_uniq.tsv", collapse="")
+cln_combined_path=paste0(inpath, "cln_combined_uniq.tsv", collapse="")
 domains_of_interest=c("P-loop_containing_nucleotide_triphosphate_hydrolases",
                       "Cytidine_Deaminase_domain_2")
 subset_col1="Lineage"; subset_col2="Genus"; subset_col3="DomArch.Gene3D"
 interest_col="DomArch.Gene3D"
-ppos_cutoff=20; tail_cutoff=2
+ppos_cutoff=20; tail_cutoff=1
 
 filter_tree <- function(cln_combined_path, domains_of_interest=c(),
                         subset_col1="Lineage", subset_col2="Genus",
@@ -41,7 +41,10 @@ filter_tree <- function(cln_combined_path, domains_of_interest=c(),
            starts_with("DomArch")) %>%
     group_by(AccNum) %>%
     arrange(-PcPositive) %>%
-    slice_head(n=2)
+    slice_head(n=1)
+
+  # write_tsv(cln_combnd, col_names=T,
+  #           file=paste0(inpath, "cln_combined_uniq.tsv", collapse=""))
 
   # Do PPos thresholding before or after grouping?
   cln_combnd <- cln_combnd %>% filter(PcPositive>=ppos_cutoff)
@@ -89,3 +92,4 @@ filter_tree <- function(cln_combined_path, domains_of_interest=c(),
 
   return(accessions)
 }
+
