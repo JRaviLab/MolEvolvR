@@ -16,7 +16,7 @@ accessions <- filter_tree(cln_combined_path=infile,
                           subset_col1="Lineage", subset_col2="Genus",
                           subset_col3="DomArch.Gene3D",
                           interest_col="DomArch.Gene3D",
-                          ppos_cutoff=20, tail_cutoff=1)
+                          ppos_cutoff=20, num_reps=10) #, tail_cutoff=1
 
 ## Generate Fasta file
 tmp_fa <- tempfile()
@@ -28,9 +28,9 @@ cln_combined <- fread(infile, sep="\t", fill=T)
 renamed <- rename_fasta(fa_path=tmp_fa,
                         outpath=tmp_fa, replacement_function=map_acc2name,
                         acc2name=cln_combined)
-view(renamed)
+# view(renamed)
 
-# out_fa <- gsub(x=infile, pattern="cln_combined.tsv", replacement="cln_sub.fa")
+# out_fa <- gsub(x=infile, pattern="cln_combined_uniq.tsv", replacement="cln_sub.fa")
 # write(x=read_file(tmp_fa), file=out_fa)
 
 ## Generate MSA
@@ -46,3 +46,7 @@ alignFasta(tmp_fa, tool="ClustalO", outpath=tmp_msa)
 tree <- seq_tree(tmp_msa)
 tree
 
+
+# FastTree
+convert_fa2tre(fa_path="../molevol_data/project_data/phage_defense/full_analysis_20210108/cln_sub.aln",
+               tre_path="../molevol_data/project_data/phage_defense/full_analysis_20210108/cln_sub.tre")
