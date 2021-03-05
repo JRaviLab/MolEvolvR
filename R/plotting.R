@@ -18,15 +18,17 @@ library(sunburstR)
 library(d3r)
 library(viridis)
 
-shorten_lineage <- function(data, colname = "Lineage")
+shorten_lineage <- function(data, colname = "Lineage", abr_len = 1)
 {
   abbrv <- function(x){
     pos_gt = str_locate(x,">")
     pos_gt = pos_gt[1]
     if(is.na(pos_gt)){
-      return(toupper(substr(x,1,1)))
+      return(paste0(toupper(substr(x,1,1)), substring(x,2)))
     }
-    return(paste0(toupper(substr(x,1,1)),substr(x,pos_gt, nchar(as.character(x)))))
+    if(abr_len > 1)
+      return(paste0(toupper(substr(x,1,1)), substr(x, 2, abr_len),substr(x,pos_gt, nchar(as.character(x)))))
+    return(paste0(toupper(substr(x,1,1)) ,substr(x,pos_gt, nchar(as.character(x)))))
   }
   # Shorten lineages to include only the first letter of kingdom
   data$Lineage <- unlist((pmap(list(data$Lineage), function(x) abbrv(x) )))
@@ -40,7 +42,7 @@ shorten_lineage <- function(data, colname = "Lineage")
 upset.plot <- function(query_data="toast_rack.sub",
                        colname = "DomArch", cutoff = 90,
                        RowsCutoff = FALSE, text.scale = 1.5,
-                       point.size = 2.2) {
+                       point.size = 2.2, line.size=0.8) {
   #' UpSet Plot
   #' @author Janani Ravi
   #' @keywords UpSetR, Domains, Domain Architectures, GenomicContexts
@@ -161,10 +163,10 @@ upset.plot <- function(query_data="toast_rack.sub",
         main.bar.color="coral3",									#56B4E9 lightblue
         group.by="degree", order.by=c("freq"),		# "degree"
         mb.ratio=c(0.3, 0.7), # nintersects=20,
-        number.angles=0, point.size=point.size, line.size=0.8,
+        number.angles=0, point.size=point.size, line.size= line.size,
         show.numbers="yes", shade.alpha = 0.25,
-        mainbar.y.label="Intersection counts",
-        sets.x.label="Individual set counts",
+        mainbar.y.label= "",  # "Intersection counts",
+        sets.x.label= "", # "Individual set counts",
         query.legend="top",
         text.scale = text.scale,
         set_size.show = F
@@ -205,7 +207,7 @@ lineage.DA.plot <- function(query_data="prot",
   #' column names.
 
 
-  query_data <- shorten_lineage(query_data, "Lineage")
+  query_data <- shorten_lineage(query_data, "Lineage", abr_len = 1)
 
   query.summ.byLin <- query_data %>% total_counts(cutoff = cutoff, column = colname, RowsCutoff = RowsCutoff)
 
@@ -304,7 +306,7 @@ lineage.Query.plot <- function(query_data=all,
   # query_data contains all rows that possess a lineage
   query_data <- query_data %>% filter(grepl("a", Lineage))
 
-  query_data <- shorten_lineage(query_data, "Lineage")
+  query_data <- shorten_lineage(query_data, "Lineage", abr_len = 1)
 
   query_lin_counts = data.frame("Query" = character(0), "Lineage" = character(0), "count"= integer())
   for(q in queries){
@@ -546,9 +548,9 @@ LineagePlot <- function(prot, domains_of_interest, level = 3, label.size = 8)
 
   archaea_colors <- rep("#26662d", length(grep("archaea", lin_counts$Kingdom)))
 
-  eukaryota_colors <- rep("#123d99", length(grep("eukaryota", lin_counts$Kingdom)))
+  eukaryota_colors <- rep("#0000ff", length(grep("eukaryota", lin_counts$Kingdom)))
 
-  virus_colors <- rep("#538073", length(grep("virus", lin_counts$Kingdom)))
+  virus_colors <- rep("#4f4f4f", length(grep("virus", lin_counts$Kingdom)))
   colors <- append(archaea_colors, bacteria_colors) %>%
     append(eukaryota_colors) %>% append(virus_colors)
 
@@ -586,7 +588,8 @@ LineagePlot <- function(prot, domains_of_interest, level = 3, label.size = 8)
     scale_fill_gradient(low="white", high="darkred") +
     # scale_x_discrete(position="top") +
     theme_minimal()+
-    theme(axis.title = element_blank() ,
+    theme(
+      axis.title = element_blank() ,
           axis.text.x=element_text(angle=90,hjust=1,vjust=0.2,
                                    color =colors
     ),
@@ -597,16 +600,27 @@ LineagePlot <- function(prot, domains_of_interest, level = 3, label.size = 8)
 
 stacked_lin_plot <- function(prot, column = "DomArch", cutoff,
                              xlabel = "Domain Architecture",
+                             reduce_lineage = TRUE,
                              label.size = 8,
-                             legend.position = c(0.7, 0.4))
+                             legend.position = c(0.7, 0.4),
+                             legend.text.size = 10,
+                             legend.cols = 2,
+                             coord_flip = TRUE)
 {
   col = sym(column)
 
+  if(reduce_lineage)
+    prot = shorten_lineage(prot, "Lineage", abr_len = 3)
+
   total_count =  total_counts(prot, column, cutoff)
+  # total_count = prot
 
   # Order bars by descending freq
-  order = total_count %>% select({{col}}) %>% unique %>%
-    pull({{col}}) %>% rev()
+  order = total_count %>% select({{col}}) %>% unique() %>%
+      pull({{col}})
+  if(coord_flip)
+    order = order %>% rev()
+
 
   prot_data = total_count
   prot_data$Lineage = unlist(map(prot_data$Lineage, function(x){
@@ -623,15 +637,46 @@ stacked_lin_plot <- function(prot, column = "DomArch", cutoff,
 
   prot_data[, column] <- factor(pull(prot_data, {{col}}) , levels = order)
 
-  ggplot(prot_data, aes(fill = Lineage, y = count, x = {{col}})) +
-    geom_bar(position = 'stack', stat = "identity") +
-    coord_flip() +
-    xlab("Domain Architecture")+
-    ylab("Counts") +
-    theme_minimal() +
-    theme(legend.position = legend.position,
-          axis.text=element_text(size=label.size)
-          )
+  # prot_data <- prot_data %>% arrange(-Lineage)
+
+  if(coord_flip)
+  {
+    ggplot(prot_data, aes(fill = Lineage, y = count, x = {{col}})) +
+      geom_bar(position = 'stack', stat = "identity") +
+      coord_flip() +
+      xlab("")+
+      ylab("") +
+      theme_minimal() +
+      theme(legend.position = legend.position,
+            legend.background = element_rect(fill = "white", color = "white"),
+            legend.text = element_text(size = legend.text.size),
+            legend.title = element_text(size = legend.text.size+2),
+            legend.key.size = unit(0.7, "cm"),
+            axis.text=element_text(size=label.size)
+            # axis.text.x = ele
+            ) +
+      guides(fill=guide_legend(ncol=2, reverse = TRUE))
+  }
+  else
+  {
+    ggplot(prot_data, aes(fill = Lineage, y = count, x = {{col}})) +
+      geom_bar(position = 'stack', stat = "identity") +
+      xlab("")+
+      ylab("") +
+      theme_minimal() +
+      theme(legend.position = legend.position,
+            legend.background = element_rect(fill = "white", color = "white"),
+            legend.text = element_text(size = legend.text.size),
+            legend.title = element_text(size = legend.text.size+2),
+            legend.key.size = unit(0.8, "cm"),
+            axis.text=element_text(size=label.size),
+            axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)
+            # axis.text.x = ele
+      ) +
+      guides(fill=guide_legend(
+        ncol=legend.cols, reverse = TRUE))
+  }
+
 
 }
 
