@@ -63,7 +63,6 @@ repeat2s <- function(prot, by_column="DomArch", excluded_prots = c()){
   regex_exclude <- paste0("(?!", collapsed_prots, "\\s)")
   regex_identify_repeats = paste0("(?i)",regex_exclude, "\\b([a-z0-9_-]+)\\b(?:\\s+\\1\\b)+")
 
-
   #!! FUNS is soft-deprecated. FIX!!!
   prot[,by_column] <- prot[,by_column] %>%
     mutate_all(funs(str_replace_all(.,
@@ -71,16 +70,18 @@ repeat2s <- function(prot, by_column="DomArch", excluded_prots = c()){
                                     replacement=" "))) %>%
     mutate_all(funs(str_replace_all(.,
                                     pattern="-",
-                                    replacement="__"))) %>%
+                                    replacement=" __"))) %>%
     mutate_all(funs(str_replace_all(.,
                                     pattern=regex_identify_repeats,
                                     replacement="\\1(s)"))) %>%
     mutate_all(funs(str_replace_all(.,
+                                    pattern=" __",
+                                    replacement="-"))) %>%
+    mutate_all(funs(str_replace_all(.,
                                     pattern=" ",
-                                    replacement="+"))) %>%
-  mutate_all(funs(str_replace_all(.,
-                                  pattern="__",
-                                  replacement="-")))
+                                    replacement="+")))
+
+
   return(prot)
 }
 
@@ -385,6 +386,7 @@ cleanup_gencontext <- function(prot, domains_rename = data.frame("old" = charact
   ## Reverse operons | Straighten them out!
   prot <- reverse_operon(prot)
 
+  prot <- replaceQMs(prot, "GenContext")
   ## Optional parameters
   # Condense repeats
   if(repeat2s){
@@ -397,14 +399,13 @@ cleanup_gencontext <- function(prot, domains_rename = data.frame("old" = charact
     prot <- remove_astrk(prot, colname = "GenContext")
   }
 
-  prot <- replaceQMs(prot, "GenContext")
-
   return(prot)
 }
 
 cleanup_GeneDesc <- function(prot, column){
   #' Return trailing period that occurs in GeneDesc column
   prot[,"GeneDesc"] <- gsub("\\.$", "", prot %>% pull(column))
+  prot[,"GeneDesc"] <- gsub("%2C", ",", prot %>% pull(column))
   return(prot)
 }
 
@@ -440,5 +441,19 @@ pick_longer_duplicate <- function(prot, column){
   unique_dups = prot[-remove_rows,] %>% select(-row.orig)
 
   return(unique_dups)
+}
+
+cleanup_lineage <- function(prot, lins_rename){
+
+  for(i in 1:nrow(lins_rename)){
+    prot$Lineage = gsub(lins_rename$old[i], lins_rename$new[i],
+                              x = prot$Lineage,
+                              ignore.case = T)
+    # prot$Lineage = gsub(">REMOVE", "",
+    #                           x = prot$Lineage,
+    #                           ignore.case = T)
+  }
+
+  return(prot)
 }
 
