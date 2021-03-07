@@ -591,7 +591,7 @@ LineagePlot <- function(prot, domains_of_interest, level = 3, label.size = 8)
     theme(
       axis.title = element_blank() ,
           axis.text.x=element_text(angle=90,hjust=1,vjust=0.2,
-                                   color =colors
+                                   color =colors, size = label.size+5
     ),
     axis.text=element_text(size=label.size)
     )
@@ -605,6 +605,7 @@ stacked_lin_plot <- function(prot, column = "DomArch", cutoff,
                              legend.position = c(0.7, 0.4),
                              legend.text.size = 10,
                              legend.cols = 2,
+                             legend.size = 0.7,
                              coord_flip = TRUE)
 {
   col = sym(column)
@@ -613,7 +614,7 @@ stacked_lin_plot <- function(prot, column = "DomArch", cutoff,
     prot = shorten_lineage(prot, "Lineage", abr_len = 3)
 
   total_count =  total_counts(prot, column, cutoff)
-  # total_count = prot
+  #total_count = prot
 
   # Order bars by descending freq
   order = total_count %>% select({{col}}) %>% unique() %>%
@@ -651,11 +652,15 @@ stacked_lin_plot <- function(prot, column = "DomArch", cutoff,
             legend.background = element_rect(fill = "white", color = "white"),
             legend.text = element_text(size = legend.text.size),
             legend.title = element_text(size = legend.text.size+2),
-            legend.key.size = unit(0.7, "cm"),
-            axis.text=element_text(size=label.size)
+            legend.key.size = unit(legend.size, "cm"),
+            # legend.key.height = unit(2, "cm"),
+            # legend.key.width = unit(0.9, "cm"),
+            legend.spacing = unit(0.4, "cm"),
+            axis.text=element_text(size=label.size),
+            panel.grid.major = element_blank(), panel.grid.minor = element_blank()
             # axis.text.x = ele
             ) +
-      guides(fill=guide_legend(ncol=2, reverse = TRUE))
+      guides(fill=guide_legend(ncol=legend.cols, reverse = TRUE))
   }
   else
   {
@@ -668,9 +673,10 @@ stacked_lin_plot <- function(prot, column = "DomArch", cutoff,
             legend.background = element_rect(fill = "white", color = "white"),
             legend.text = element_text(size = legend.text.size),
             legend.title = element_text(size = legend.text.size+2),
-            legend.key.size = unit(0.8, "cm"),
+            legend.key.size = unit(legend.size, "cm"),
             axis.text=element_text(size=label.size),
-            axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)
+            axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),
+            panel.grid.major = element_blank(), panel.grid.minor = element_blank()
             # axis.text.x = ele
       ) +
       guides(fill=guide_legend(
