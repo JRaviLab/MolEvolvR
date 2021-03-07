@@ -7,6 +7,7 @@ library(here)
 library(tidyverse)
 library(paletteer)
 
+source("../molevol_scripts/R/cleanup.R")
 ##############
 ## Table Fn ##
 ##############
@@ -70,9 +71,14 @@ create_table <- function(df_table=table_sub,
 #############
 ## Table 1 ##
 #############
-all <- read_csv("data/rawdata_tsv/all_clean.csv")
-query_acc <- read_tsv("data/psp/tables/acc_list_table.txt",
-                      col_names="AccNum")
+# all <- read_csv("data/rawdata_tsv/all_clean_20200616.csv")
+# query_acc <- read_tsv("data/psp/tables/acc_list_table.txt",
+#                       col_names="AccNum")
+all <- read_tsv("data/rawdata_tsv/all_clean_combined_20210304.txt")
+query_acc = read_tsv("figures/tables/acc_list_table.txt", col_names = "AccNum") %>%
+    distinct()
+
+# query_in_all = query_acc$AccNum[which(query_acc$AccNum %in% all$AccNum)]
 
 ## Filter by Spreadsheet list of AccNum
 tables <- all %>%
@@ -82,12 +88,16 @@ tables <- all %>%
   arrange(DomArch, GenContext)
 
 # Subset PspA
-table1 <- tables %>%
-  filter(grepl(pattern="PspA|Snf7", DomArch))
+pspa_doms = c("PspA", "PspA(s)", "Snf7", "Snf7(s)",
+              "Vps4-AAA-ATPase", "Vps4-AAA-ATPase(s)",
+              "PspAA", "PspAA(s)", "PspAB", "PspAB(s)")
+
+table1 <- tables %>% filter_by_doms(doms_keep = pspa_doms,
+                                    column = "DomArch", ignore.case = T)
 
 # Subset PspA-free
-table2 <- tables %>%
-  filter(!grepl(pattern="PspA|Snf7", DomArch)) #Toast|LiaI|170|PspC|PspB
+table2 <- tables %>% filter_by_doms(doms_remove = pspa_doms,
+                                    column = "DomArch", ignore.case = T)
 
 #############
 ## Table 1 ##
@@ -113,11 +123,16 @@ gtsave(table2gt, "table2.pdf", path = here(),
 #------------------------------#
 # webshot::install_phantomjs()
 
-gtsave(table1gt, "tables1.pdf", path = here("data/psp/tables/"),
+gtsave(table1gt, "tables1.pdf", path = here("figures/tables/"),
        vwidth = 800,   vheight = 750, zoom =1)
 
-gtsave(table2gt, "tables2.pdf", path = here("data/psp/tables/"),
+gtsave(table2gt, "tables2.pdf", path = here("figures/tables/"),
        vwidth = 800,   vheight = 1250, zoom =1)
+
+library(pdftools)
+
+pdf_convert("./figures/tables/tables1.pdf", dpi = 600)
+pdf_convert("./figures/tables/tables2.pdf", dpi = 600)
 
 ## Simple table
 table1 %>%
