@@ -273,7 +273,7 @@ cleanup_clust <- function(prot,
 }
 
 ##############################
-cleanup_domarch <- function(prot,
+cleanup_domarch <- function(prot, old = "DomArch.orig", new = "DomArch",
                             domains_keep, domains_rename,
                             repeat2s=TRUE, remove_tails = FALSE,
                             remove_empty=F,
@@ -296,19 +296,23 @@ cleanup_domarch <- function(prot,
   #'@param domains_ignore A data frame containing the domain names to be removed in a column called 'domains'
   #'@examples cleanup_domarch(prot, TRUE, FALSE, domains_keep, domains_rename, domains_ignore=NULL)
 
+  old_sym = sym(old)
+  new_sym = sym(new)
+
   # Create cleaned up DomArch column
-  prot$DomArch <- prot$DomArch.orig
+  # prot$DomArch <- prot$DomArch.orig
+  prot[,new] = prot[,old]
 
   ## Basic Cleanup
   # Remove '+' at the start and end, as well as consecuative '+'
-  prot$DomArch <- gsub("\\++\\+","\\+", prot$DomArch)
-  prot$DomArch <- gsub("^\\+","", prot$DomArch)
-  prot$DomArch <- gsub("\\+$","", prot$DomArch)
+  prot[,new] <- gsub("\\++\\+","\\+", pull(prot, {{new_sym}}) )
+  prot[,new] <- gsub("^\\+","", pull(prot, {{new_sym}}))
+  prot[,new] <- gsub("\\+$","", pull(prot, {{new_sym}}))
 
   ## Domains_rename
   # Replace domains based on the domains_rename list
   for(j in 1:length(domains_rename$old)){
-    prot$DomArch <- str_replace_all(prot$DomArch,
+    prot[,new] <- str_replace_all(pull(prot, {{new_sym}}),
                                     coll(as.vector(domains_rename$old[j]), TRUE),
                                     as.vector(domains_rename$new[j]))
   }
@@ -316,9 +320,10 @@ cleanup_domarch <- function(prot,
   ## Domains_keep
   # Character for greping for rows with domains_keep
   # Contains all domains separated by "|"
-  domains_for_grep <- paste(domains_keep$domains, collapse = "|")
+  # domains_for_grep <- paste(domains_keep$domains, collapse = "|")
   # Remove rows with no domains contained within domains_keep
-  prot <- prot %>% filter(grepl(domains_for_grep, DomArch))
+  # filter(grepl(domains_for_grep, DomArch))
+  prot <- prot %>% filter_by_doms(column = new, doms_keep =domains_keep$domains)
 
   # ##!! NOT RUN !!
   # ## Domains_ignore
@@ -334,21 +339,21 @@ cleanup_domarch <- function(prot,
   ## Optional parameters
   # Remove singletons
   if(remove_tails){
-    prot <- remove_tails(prot=prot, by_column="DomArch")
+    prot <- remove_tails(prot=prot, by_column=new)
   }
   # Condense repeats
   if(repeat2s){
     ## Error in UseMethod("tbl_vars") : no applicable method for 'tbl_vars' applied to an object of class "character"
-    prot <- repeat2s(prot=prot, by_column="DomArch")
+    prot <- repeat2s(prot=prot, by_column=new)
   }
   # Remove empty rows
   #! FUNCTIONS CALLED HERE, if else might be better since only two options, T and F
   #! Make a separate function of out of this?
   if(remove_empty){
-    prot <- remove_empty(prot=prot, by_column="DomArch")
+    prot <- remove_empty(prot=prot, by_column=new)
   }
 
-  replaceQMs(prot, "DomArch")
+  prot = replaceQMs(prot, new)
 
   return(prot)
 }
