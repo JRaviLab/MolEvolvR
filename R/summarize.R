@@ -230,7 +230,8 @@ total_counts <- function(prot, column = "DomArch",
   #' column names.
   column <- sym(column)
 
-  prot <- select(prot, {{column}}, Lineage) %>% filter(!is.na({{column}}) & !is.na(Lineage))
+  prot <- select(prot, {{column}}, Lineage) %>% filter(!is.na({{column}}) & !is.na(Lineage)) %>%
+    filter({{column}} != "")
 
   prot <- summarize_bylin(prot, column, by = "Lineage", query = "all")
   col_count <-  prot %>% group_by({{column}}) %>% summarise(totalcount = sum(count))
