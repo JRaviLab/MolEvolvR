@@ -82,27 +82,36 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
   group_by='Analysis' #; group_by='Query'
   # analysis="ProSiteProfiles"; analysis="Pfam"; analysis="PANTHER"
   analysis <- c("Pfam", "Gene3D", "PANTHER",
-                "Phobius", "TMHMM", "SignalP_GRAM_POSITIVE",
+                "Phobius", "TMHMM", #"SignalP_GRAM_POSITIVE",
                 "SUPERFAMILY",
                 "ProSiteProfiles", "MobiDBLite")
-  topn=F; name="Name"; text_size=10
-  prefix = 'Saureus_gisC_ABD20640.1'
+  topn=F; name="Name"; text_size=14
+
+  ##!! @LAUREN's special case for Staph
+  # prefix = 'Saureus_gisC_ABD20640.1'
+
+  ## EXAMPLE DATASETS for plotting ##
+  ## SLPS
   # inpath <- "../molevol_data/project_data/slps/da_analysis_20210116/"
   # infile_ipr <- paste0(inpath, 'ipr_combined.tsv', collapse="")
+  ## PHAGE DEFENSE
   # inpath <- "../molevol_data/project_data/phage_defense/full_analysis_20210108/"
   # infile_ipr <- paste0(inpath, 'dcdv_quick_out/dcdv.iprscan_cln.tsv',
   #                      collapse="")
   # infile_full <- '../full_analysis_20210108/WP_001901328_full/WP_001901328.full_analysis.tsv'
-  infile_ipr <- '../molevol_data/project_data/saureus/sausa300_0200-04/ABD20640_full/ABD20640.iprscan_cln.tsv'
-  infile_full <- '../molevol_data/project_data/saureus/sausa300_0200-04/ABD20640_full/ABD20640.full_analysis.tsv'
+  ## STAPH INPUTS
+  # infile_ipr <- '../molevol_data/project_data/saureus/sausa300_0200-04/ABD20640_full/ABD20640.iprscan_cln.tsv'
+  # infile_full <- '../molevol_data/project_data/saureus/sausa300_0200-04/ABD20640_full/ABD20640.full_analysis.tsv'
 
   ## Read IPR file
   ipr_out <- read_tsv(infile_ipr, col_names=T)
 
-  query <- ipr_out %>%
-    filter(AccNum == 'ABD20640.1')
+  ##!! @LAUREN's special case for Staph
+  # query <- ipr_out %>%
+  #   filter(AccNum == 'ABD20640.1')
+  # ipr_out <- ipr_out %>%
+  #   filter(grepl(pattern="BFirmi|BActi", Name))
 
-  ipr_out <- ipr_out %>% filter(grepl(pattern="BFirmi|BActi", Name))
   ## To filter by Analysis
   analysis <- paste(analysis, collapse="|")
 
@@ -123,7 +132,8 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
 
   ## Need to fix this eventually based on the 'real' gene orientation! :)
   ipr_out$Strand <- rep("forward", nrow(ipr_out))
-  query$Strand <- rep("forward", nrow(query))
+  ##!! @LAUREN's special case for Staph
+  # query$Strand <- rep("forward", nrow(query))
 
   ## Order domains from Start -> End within a protein
   ipr_out <- ipr_out %>%
@@ -135,8 +145,9 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
   table(ipr_out$Analysis) %>%
     sort(decreasing=T)
 
-  ipr_out_sub <- query %>%
-    bind_rows(ipr_out)
+  ##!! @LAUREN's special case for Staph
+  # ipr_out_sub <- query %>%
+    # bind_rows(ipr_out)
 
   # Subset by 'pre-selected analysis'
   ipr_out_sub <- ipr_out %>%
@@ -158,13 +169,13 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
   ## Custom color palette
   CPCOLS <- c('#AFEEEE', '#DDA0DD', '#EE2C2C', '#CDBE70', '#B0B099',
               '#8B2323', '#EE7600', '#EEC900', 'chartreuse3', '#0000FF',
-              '#FFD900', '#32CD32', 'maroon4', 'cornflowerblue', 'darkslateblue',
+              '#FFD900', '#32CD32', 'maroon4', 'cornflowerblue', #'darkslateblue',
               '#AB82FF', '#CD6889', '#FFA07A', '#FFFF00', '#228B22',
               '#FFFFE0', '#FFEC8B', 'peru', '#668B8B', 'honeydew',
               '#A020F0', 'grey', '#8B4513', '#191970', '#00FF7F',
               'lemonchiffon','#66CDAA', '#5F9EA0', '#A2CD5A', '#556B2F',
               '#EEAEEE', 'thistle4', '#473C8B', '#FFB6C1', '#8B1C62',
-              '#FF69B4', '#FFE4B5', '#836FFF', 'black', '#FF7F50', '#FFB90F',
+              '#FFE4B5', 'black', '#FF7F50', '#FFB90F', '#FF69B4', '#836FFF',
               '#757575','#CD3333', '#EE7600', '#CDAD00', '#556B2F', '#7AC5CD')
 
   ## PLOTTING
@@ -172,21 +183,23 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
   if(group_by == "Analysis"){
     ggplot(ipr_out_sub,
            aes_string(xmin = "StartLoc", xmax = "StopLoc",
-                      y = name, fill = "SignDesc", label="Label")) +
+                      y = name, fill = "SignDesc")) +
       geom_gene_arrow(arrowhead_height = unit(3, "mm"),
-                      arrowhead_width = unit(1, "mm")) +
-      geom_gene_label(align = "left") +
+                      arrowhead_width = unit(1, "mm"),
+                      arrow_body_height = unit(3, "mm")) +
+      #geom_gene_label(align = "left", min.size=6, grow=T, reflow=T) +
       #geom_blank(data = dummies) +
       facet_wrap(~ Analysis, strip.position = "top", ncol = 3,
                  labeller=as_labeller(analysis_labeler)) +
       #, ncol = 1 + #scales = "free",
-      scale_color_manual(values = CPCOLS) +
+      # scale_color_manual(values = CPCOLS) +
+      scale_fill_brewer(palette="Set2") +
       theme_minimal() + theme_genes2() +
       theme(legend.position="bottom",
             legend.box = "horizontal",
             legend.key.size = unit(0.02, "npc"),
             legend.box.margin = margin(),
-            text = element_text(size = 12)) +
+            text = element_text(size = 13)) +
       ylab("")+
       guides(fill=guide_legend(nrow=4))
   }

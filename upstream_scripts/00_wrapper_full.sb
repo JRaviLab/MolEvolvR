@@ -96,7 +96,7 @@ do
 
 		## BLAST RESULT CLEANUP ##
 		db_cln_start=$SECONDS
-		Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.2_cleanup_clblast.R ${OUTPATH}/${PREFIX}.wblast.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX $WBLAST
+		Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.2_cleanup_blast.R ${OUTPATH}/${PREFIX}.wblast.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX $WBLAST
 		db_cln_dur=$(( $SECONDS - $db_cln_start ))
       fi
 
@@ -123,7 +123,7 @@ do
 		
 		## BLAST RESULT CLEANUP ##
 		db_cln_start=$SECONDS
-		Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.2_cleanup_clblast.R ${OUTDIR}/${PREFIX}.dblast.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX $WBLAST
+		Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.2_cleanup_blast.R ${OUTDIR}/${PREFIX}.dblast.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX $WBLAST
 		db_cln_dur=$(( $SECONDS - $db_cln_start ))
 	fi
 

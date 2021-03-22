@@ -29,7 +29,7 @@ cleanup_blast <- function(infile_blast, acc2info, prefix, wblast) {
      # remove extra characters/names from sseqid, sscinames, and staxids columns
        mutate(AccNum = gsub('\\|', '', AccNum)) %>%
        mutate(AccNum = gsub('.*[a-z]', '', AccNum)) %>%
-       mutate(PcIdentity = round(PcIdentity, 2))
+       mutate(PcIdentity = round(as.double(PcIdentity), 2))
      # merge blast out with acc2info out
      cleanedup_blast <- merge(cleanedup_blast, acc2info_out, by.x = "AccNum", by.y = "FullAccNum")
      # find query in acc2info, extract & set Length as QLength
