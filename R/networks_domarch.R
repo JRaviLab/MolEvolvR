@@ -13,6 +13,9 @@ conflicted::conflict_prefer("filter", "dplyr")
 ###########################
 #### Network FUNCTIONS ####
 ###########################
+
+##### !!!!! CHANGE TO MAKE OUR OWN !!!!!!
+
 domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff = 70, layout = "nice", query_color = adjustcolor("green", alpha.f = .5)){
   #'Domain Network
   #'
@@ -218,10 +221,11 @@ BinaryDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, c
     str_replace_all(coll(pattern="\\?", ignore_case=T), "X")
 
   domains_of_interest_regex = paste(domains_of_interest, collapse = "|")
-  domain.list <- prot %>%
-    dplyr::filter(grepl(pattern=domains_of_interest_regex,
-                        x=DomArch.ntwrk,
-                        ignore.case=T))
+  # domain.list <- prot %>%
+  #   dplyr::filter(grepl(pattern=domains_of_interest_regex,
+  #                       x=DomArch.ntwrk,
+  #                       ignore.case=T))
+  domain.list = prot
 
   ##Separating column and converting to atomic vector prevents coercion
   domain.list <- domain.list$DomArch.ntwrk  %>% str_split(pattern="\\+")
