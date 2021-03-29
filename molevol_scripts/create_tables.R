@@ -29,7 +29,7 @@ create_table <- function(df_table=table_sub,
     # with header and footer
     tab_header(
       title=md(title),
-      subtitle="Gene, Lineage info and Genomic Contexts grouped by Domain Architectures"
+      subtitle="Gene, Lineage information and Genomic Contexts grouped by Domain Architectures"
     ) %>%
     tab_source_note(md("More information available on our [webapp](https://jravilab.shinyapps.io/psp-evolution).")) %>%
     cols_align(align="right", columns=TRUE) %>%
@@ -77,7 +77,7 @@ table1 %>%
   gt() %>%
   tab_header(
     title=md("Table 1: Representative PspA homologs"),
-    subtitle="Gene, Lineage info, and Genomic Contexts grouped by Domain Architectures"
+    subtitle="Gene, Lineage information, and Genomic Contexts grouped by Domain Architectures"
   ) %>%
   tab_source_note(md("More information available on our [webapp](https://jravilab.shinyapps.io/psp-evolution).")) %>%
   cols_align(align="right", columns=TRUE)

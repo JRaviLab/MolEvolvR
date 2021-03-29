@@ -11,7 +11,7 @@ source("molevol_scripts/create_tables.R")
 # all <- read_csv("data/rawdata_tsv/all_clean_20200616.csv")
 # query_acc <- read_tsv("data/psp/tables/acc_list_table.txt",
 #                       col_names="AccNum")
-all <- read_tsv("../psp_app/data/rawdata_tsv/all_clean_combined_20210304.txt")
+all <- read_tsv("../psp_app/data/rawdata_tsv/all_clean_combined_20210329.txt")
 ## Doesn't exist
 query_acc <- read_tsv("../psp_app/figures/tables/acc_list_table.txt",
                       col_names="AccNum") %>%
@@ -50,7 +50,7 @@ tables3_gt
 ## Non-PspA/Snf7 Table ##
 #########################
 tables4_gt <- create_table(df_table=tables4,
-                           title="Table S4: Representative PspA partner domain homologs")
+                           title="Table S4: Representative homologs of Psp cognate partner domains")
 tables4_gt
 
 # gtsave(tables4, "tables4.pdf", path=here(),
@@ -77,7 +77,7 @@ tables3 %>%
   gt() %>%
   tab_header(
     title=md("Table S3: Representative PspA homologs"),
-    subtitle="Gene, Lineage info, and Genomic Contexts grouped by Domain Architectures"
+    subtitle="Gene, Lineage information, and Genomic Contexts grouped by Domain Architectures"
   ) %>%
   tab_source_note(md("More information available on our [webapp](https://jravilab.shinyapps.io/psp-evolution).")) %>%
   cols_align(align="right", columns=TRUE)
