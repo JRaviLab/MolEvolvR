@@ -111,19 +111,23 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
 
   queryrows <- which(is.na(ipr_out_sub$AccNum))
 
-  lookup_tbl_path = "/data/research/jravilab/common_data/lookup_tbl.tsv"
+  lookup_tbl_path = "/data/research/jravilab/common_data/cln_lookup_tbl.tsv"
   lookup_tbl = read_tsv(lookup_tbl_path, col_names = T)
 
-
+  print(colnames(ipr_out_sub))
+  print(colnames(lookup_tbl))
+  lookup_tbl = lookup_tbl %>% select(-ShortName) # Already has ShortName -- Just needs SignDesc 
+  # ipr_out_sub = ipr_out_sub %>% select(-ShortName)
   ipr_out_sub <- merge(ipr_out_sub, lookup_tbl, by = "DB.ID")
 
+  print(colnames(ipr_out_sub))
   ## PLOTTING
   ## domains as separate arrows
   if(group_by == "Analysis")
   {
     ggplot(ipr_out_sub,
            aes_string(xmin = "StartLoc", xmax = "StopLoc",
-                      y = name, fill = "SignDesc", label="Short_Name")) +
+                      y = name, fill = "SignDesc", label="ShortName")) +
       geom_gene_arrow(arrowhead_height = unit(3, "mm"),
                       arrowhead_width = unit(1, "mm")) +
       geom_gene_label(align = "left") +
@@ -146,7 +150,7 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
     ggplot(ipr_out_sub,
            aes(xmin = StartLoc, xmax = StopLoc,
                y = Analysis,  #y = AccNum
-               fill = SignDesc, label = Short_Name)) +
+               fill = SignDesc, label = ShortName)) +
       geom_gene_arrow(arrowhead_height = unit(3, "mm"),
                       arrowhead_width = unit(1, "mm")) +
       geom_gene_label(align = "left") +
@@ -177,7 +181,7 @@ ipr2viz_web <- function(infile_ipr,
 
   ## @SAM, colnames, merges, everything neeeds to be done now based on the
   ## combined lookup table from "common_data"
-  lookup_tbl_path = "/data/research/jravilab/common_data/lookup_tbl.tsv"
+  lookup_tbl_path = "/data/research/jravilab/common_data/cln_lookup_tbl.tsv"
   lookup_tbl = read_tsv(lookup_tbl_path, col_names = T)
 
   ## Read IPR file and subset by Accessions
@@ -209,8 +213,8 @@ ipr2viz_web <- function(infile_ipr,
   ipr_out_sub = dplyr::rename(ipr_out_sub,  "SignAcc" = "DB.ID")
   ipr_out_sub <- merge(ipr_out_sub, lookup_tbl, by = "SignAcc")
 
-  signacc <- which(is.na(ipr_out_sub$Short_Name))
-  ipr_out_sub$Short_Name[signacc] = ipr_out_sub$SignAcc[signacc]
+  signacc <- which(is.na(ipr_out_sub$ShortName))
+  ipr_out_sub$ShortName[signacc] = ipr_out_sub$SignAcc[signacc]
 
   name_sym = sym(name)
 
@@ -220,7 +224,7 @@ ipr2viz_web <- function(infile_ipr,
   {
     ggplot(ipr_out_sub,
            aes_string(xmin = "StartLoc", xmax = "StopLoc",
-                      y = name, fill = "SignDesc", label="Short_Name")) +
+                      y = name, fill = "SignDesc", label="ShortName")) +
       geom_gene_arrow(arrowhead_height = unit(3, "mm"),
                       arrowhead_width = unit(1, "mm")) +
       geom_gene_label(align = "left") +
@@ -243,7 +247,7 @@ ipr2viz_web <- function(infile_ipr,
     ggplot(ipr_out_sub,
            aes(xmin = StartLoc, xmax = StopLoc,
                y = Analysis,  #y = AccNum
-               fill = SignDesc, label=Short_Name)) +
+               fill = SignDesc, label=ShortName)) +
       geom_gene_arrow(arrowhead_height = unit(3, "mm"),
                       arrowhead_width = unit(1, "mm")) +
       geom_gene_label(align = "left") +
