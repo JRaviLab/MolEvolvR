@@ -1,0 +1,131 @@
+#!/bin/bash
+
+# MolEvolvR: Companion wrapper script
+# accnum –> fasta –> deltablast -> edirect -> blastclust -> iprscan/rpsblast -> cleanup w/ lineages!
+# To run on compute.cvm.msu.edu
+
+# Created: 2020.07.09
+# Last modified: 2020.12.14
+# Authors: Lauren Sosinski, Janani Ravi
+# On GitHub: currently in jravilab/molevol_scripts/upstream_scripts
+
+# Input type: text file containing paths to individual fasta files to analyze
+
+############
+## TORQUE ##
+############
+#PBS -l nodes=1:ppn=10		# number of nodes requested
+#PBS -m abe			# email notifications for job
+#PBS -M=sosinsk7@msu.edu	# user email; RESET
+#PBS -N molevol_analysis	# name of job being run
+
+## print start/stop printf in individual scripts
+
+## change output directory based on user input
+OUTPATH=$PBS_O_WORKDIR
+cd ${OUTPATH}
+
+## !! NOTES FOR LS ##
+## add flags/help function after finishing script and/or gencontext
+## talk to Sam about how this works with Pins package
+
+## USER INPUTS
+INPUTPATHS_LIST=$1
+DB=refseq
+NHITS=10000
+EVAL=1e-5
+
+
+## USAGE
+## qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "input.txt F"
+## qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "example_blastp.csv T"
+
+# Location of databases/dependencies 
+export BLASTDB=/data/common_data/blastdb/v5:/data/common_data/blastdb/ncbidb:/data/common_data/blastdb:/data/common_data/blastdb/FASTA:$BLASTDB
+export BLASTMAT=/opt/software/BLAST/2.2.26/data
+export INTERPRO=/opt/software/iprscan/5.47.82.0-Python3/data:/data/common_data/iprscan:$INTERPRO
+export NCBI_API_KEY=YOUR_KEY_HERE
+
+#####################
+## LOADING MODULES ##
+#####################
+
+# Prevent "module: command not found"
+# Read more about it https://www.sdsc.edu/support/user_guides/tscc.html
+source /etc/profile.d/modules.sh 
+
+module purge 					## clear loaded modules
+module load R		 			## load R
+module load edirect 				## load edirect
+module load BLAST				## load blast (for blastclust)
+module load BLAST+ BioPerl 			## load blast+
+module load iprscan 				## load iprscan
+
+start=$SECONDS 					## get current time
+START_DT=$(date '+%d/%m/%Y-%H:%M:%S')
+
+#total=$(( ((3*60)+50)*60 ))			## total time the job can take in seconds, this should match your SBATCH line above
+#maxtime=$(( 120*60 )) 				## maximum time to process one input, need to do some experimenting with your inputs
+
+FILES=$(cat $INPUTPATHS_LIST)
+
+for FILE in $(shuf -e ${FILES[@]})
+do
+   F=$(basename ${FILE})
+   PREFIX=$(echo "${F%%.*}")			## takes PREFIX of file
+   OUTDIR=${OUTPATH}/${PREFIX}_blast		## variable containing output filepath based PREFIX
+   printf "${PREFIX}\n"
+
+   if [ ! -d ${OUTDIR} ]; then 			## if the output directory doesn't exist
+      mkdir ${OUTDIR}				## make the directory
+      cd ${OUTDIR}
+
+    ## COMMANDLINE BLAST ANALYSIS
+	# put original fasta file into file containing all homologs
+	cat $FILE >> ${OUTDIR}/${PREFIX}.all_accnums.fa
+  
+	## DELTABLAST ##
+	db_start=$SECONDS
+	sh /data/research/jravilab/molevol_scripts/upstream_scripts/01.1_deltablast.sh $FILE $PREFIX $OUTDIR $DB $NHITS $EVAL
+	db_dur=$(( $SECONDS - $db_start ))
+
+		## ACC2FA -- getting fasta FILES for deltablast output(s) 
+	acc2fa_start=$SECONDS
+	sh /data/research/jravilab/molevol_scripts/upstream_scripts/02_acc2fa.sh ${OUTDIR}/${PREFIX}.dblast.tsv $PREFIX $OUTDIR
+	acc2fa_dur=$(( $SECONDS - $acc2fa_start ))
+
+	## ACC2INFO ##
+	acc2info_start=$SECONDS
+	sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
+	acc2info_dur=$(( $SECONDS - $acc2info_start ))
+	
+	
+	## BLAST RESULT CLEANUP ##
+	db_cln_start=$SECONDS
+	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.2_cleanup_blast.R ${OUTDIR}/${PREFIX}.dblast.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX F
+	db_cln_dur=$(( $SECONDS - $db_cln_start ))
+
+	## BLASTCLUST ##
+	bclust_start=$SECONDS
+	sh /data/research/jravilab/molevol_scripts/upstream_scripts/03.1_blastclust.sh ${OUTDIR}/${PREFIX}.all_accnums.fa $PREFIX $OUTDIR
+	bclust_dur=$(( $SECONDS - $bclust_start ))
+
+	## CLUST2TABLE
+	c2t_start=$SECONDS
+	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/03.2_clust2table.R ${OUTDIR}/${PREFIX}.bclust.L60S80.tsv ${OUTDIR}/${PREFIX}.blast.cln.tsv
+	c2t_dur=$(( $SECONDS - $c2t_start ))
+
+	cp ${FILE} ${OUTDIR}	# copy fasta file to output directory
+	
+	## Figure out how long the entire script took to run
+	dur=$(( $SECONDS - $start ))
+	printf "\nTotal run time: $dur\n"
+	STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
+	
+	## Add benchmarking times to logfile
+	printf "\n${START_DT}\t${STOP_DT}\t${PREFIX}\t${db_dur}\t${acc2info_dur}\t${db_cln_dur}\t${acc2fa_dur}\t${bclust_dur}\t${c2t_dur}\t" >> ${OUTPATH}/logfile.tsv
+
+    fi
+done
+
+setfacl -R -m group:shiny:r-x ${OUTDIR}

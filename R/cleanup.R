@@ -64,22 +64,27 @@ repeat2s <- function(prot, by_column="DomArch", excluded_prots = c()){
   regex_identify_repeats = paste0("(?i)",regex_exclude, "\\b([a-z0-9_-]+)\\b(?:\\s+\\1\\b)+")
 
   #!! FUNS is soft-deprecated. FIX!!!
-  prot[,by_column] <- prot[,by_column] %>%
-    mutate_all(funs(str_replace_all(.,
+  prot[,by_column] <- prot %>% pull(by_column) %>%
+   str_replace_all(., pattern = "\\.", replacement = "_d_") %>% 
+   #  str_replace_all(., pattern = " ", replacement = "_s_") %>%
+   str_replace_all(., pattern = " ", replacement = "_") %>% 
+    str_replace_all(.,
                                     pattern="\\+",
-                                    replacement=" "))) %>%
-    mutate_all(funs(str_replace_all(.,
+                                    replacement=" ") %>%  #Use a different placeholder other than space
+    str_replace_all(.,
                                     pattern="-",
-                                    replacement=" __"))) %>%
-    mutate_all(funs(str_replace_all(.,
+                                    replacement="__") %>%
+    str_replace_all(.,
                                     pattern=regex_identify_repeats,
-                                    replacement="\\1(s)"))) %>%
-    mutate_all(funs(str_replace_all(.,
-                                    pattern=" __",
-                                    replacement="-"))) %>%
-    mutate_all(funs(str_replace_all(.,
+                                    replacement="\\1(s)") %>%
+   str_replace_all(.,
+                                    pattern="__",
+                                    replacement="-") %>%
+    str_replace_all(.,
                                     pattern=" ",
-                                    replacement="+")))
+                                    replacement="+") %>% 
+#			    str_replace_all(., pattern = "_s_", replacement = " ") %>%
+    str_replace_all(., pattern = "_d_", replacement = ".")
 
 
   return(prot)
@@ -311,19 +316,22 @@ cleanup_domarch <- function(prot, old = "DomArch.orig", new = "DomArch",
 
   ## Domains_rename
   # Replace domains based on the domains_rename list
+
+  if(!is.null(domains_rename) && length(domains_rename$old) != 0){
   for(j in 1:length(domains_rename$old)){
     prot[,new] <- str_replace_all(pull(prot, {{new_sym}}),
                                     coll(as.vector(domains_rename$old[j]), TRUE),
                                     as.vector(domains_rename$new[j]))
   }
-
+  }
   ## Domains_keep
   # Character for greping for rows with domains_keep
   # Contains all domains separated by "|"
   # domains_for_grep <- paste(domains_keep$domains, collapse = "|")
   # Remove rows with no domains contained within domains_keep
   # filter(grepl(domains_for_grep, DomArch))
-  prot <- prot %>% filter_by_doms(column = new, doms_keep =domains_keep$domains)
+  if(!is.null(domains_keep))
+     prot <- prot %>% filter_by_doms(column = new, doms_keep =domains_keep$domains)
 
   # ##!! NOT RUN !!
   # ## Domains_ignore

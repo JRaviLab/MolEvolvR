@@ -433,18 +433,19 @@ RepresentativeAccNums <- function(prot_data,
   # Get Unique reduced column and then bind the AccNums back to get one AccNum per reduced column
   reduced_sym <- sym(reduced); accnum_sym <- sym(accnum_col)
 
-  distinct_reduced <- prot_data %>% select({{reduced_sym}}) %>% distinct()
+  distinct_reduced <- prot_data %>% pull(reduced) %>% unique()
 
   accessions <- c()
 
-  for(i in 1:nrow(distinct_reduced))
+  for(r in distinct_reduced)
   {
-    r <- toString(distinct_reduced[i,reduced])
+	  if(is.na(r)) 
+		  next
+    # r <- toString(distinct_reduced[i,reduced])
 
-    AccNum <- toString((prot_data %>%
-                          filter({{reduced_sym}} == r))[1,accnum_col])
+    AccNum <- prot_data %>% filter({{reduced_sym}} == r) %>% pull(accnum_col)
 
-    accessions <- append(accessions, AccNum)
+    accessions <- append(accessions, AccNum[1])
 
 
   }
