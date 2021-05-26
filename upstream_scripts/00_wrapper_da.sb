@@ -34,7 +34,7 @@ cd ${OUTPATH}
 ## USER INPUTS
 INFILEPATHS_LIST=$1
 DB=refseq
-NHITS=5000
+NHITS=1000
 EVAL=1e-5
 
 # Location of databases/dependencies 
