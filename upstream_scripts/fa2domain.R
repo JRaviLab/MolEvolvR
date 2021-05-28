@@ -1,8 +1,8 @@
 library("Biostrings")
-in_fa = readAAStringSet("~/Downloads/example2.fa")
-in_ipr = read.csv('~/Desktop/iprscan5-R20210528-185016-0482-14245416-p1m.tsv', sep="\t",
-                  header=FALSE)
-out_file = "~/Downloads/sep_fa.fa"
+args = commandArgs(trailingOnly = TRUE)
+in_fa = readAAStringSet(args[1])
+in_ipr = read.csv(ars[2], sep="\t", header=FALSE)
+out_file = args[3]
 for (item in names(in_fa)){
   for (i in 1:nrow(in_ipr)){
     if (in_ipr[i, 1] == item){
@@ -15,4 +15,3 @@ for (item in names(in_fa)){
     }
   }
 }
-
