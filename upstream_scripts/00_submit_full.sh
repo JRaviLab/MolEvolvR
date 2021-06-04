@@ -45,14 +45,24 @@ if [ $WBLAST = F ]; then
    then
       printf "No. of seqs provided: $NFASTA>1\nSo, we are going to split it up for you prior to the analysis.\n"
       # https://unix.stackexchange.com/questions/15662/splitting-text-files-BASEd-on-a-regular-expression
+      if [ `grep "|" $INFILE` ]
+      then
+        awk -F "(|)|(>)" '/^>/{x=""$3".faa";}{print >x;}' $INFILE
+        find $PWD -type f -name "*.faa" > input.txt
+    else
       awk -F "( )|(>)" '/^>/{x=""$2".faa";}{print >x;}' $INFILE
       find $PWD -type f -name "*.faa" > input.txt
+    fi
    fi
 
-   if [ $NFASTA = 1 ] 
+   if [ $NFASTA = 1 ]
    then
       printf "No. of seqs provided: $NFASTA\nSo, we are going to proceed to the analysis.\n"
-      find $PWD -type f -name "$BASE" > input.txt
+      if [ `grep "|" $INFILE` ]
+      then
+        awk -F "(|)|(>)" '/^>/{x=""$3".faa";}{print >x;}' $INFILE
+      fi
+      find $PWD -type f -name "*.faa" > input.txt
    fi
 
    INPATHS=input.txt
