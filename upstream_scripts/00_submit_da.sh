@@ -21,7 +21,7 @@ printf "START_DT\tSTOP_DT\tquery\tacc2info\tblast_clust\tclust2table\tiprscan\ti
 # grep "|" handles files that are not in ncbi format
 # split each word in the header by "|" and use the second element as the accNum
 grep "|" $INFILE
-if [ $? ]
+if [ $? = 0 ]
 then
 awk -F '|' '/^>/{x=""$2".faa";}{print >x;}' $INFILE
   find $PWD -type f -name "*.faa" > input.txt

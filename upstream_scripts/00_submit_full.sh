@@ -48,10 +48,10 @@ if [ $WBLAST = F ]; then
       # grep "|" handles files that are not in ncbi format
       # split each word in the header by "|" and use the second element as the accNum
       grep "|" $INFILE
-      if [ $? ]
+      if [ $? = 0 ]
       then
-	awk -F '|' '/^>/{x=""$2".faa";}{print >x;}' $INFILE
-        find $PWD -type f -name "*.faa" > input.txt
+	       awk -F '|' '/^>/{x=""$2".faa";}{print >x;}' $INFILE
+         find $PWD -type f -name "*.faa" > input.txt
     else
       awk -F "( )|(>)" '/^>/{x=""$2".faa";}{print >x;}' $INFILE
       find $PWD -type f -name "*.faa" > input.txt
@@ -62,7 +62,7 @@ if [ $WBLAST = F ]; then
    then
       printf "No. of seqs provided: $NFASTA\nSo, we are going to proceed to the analysis.\n"
       grep "|" $INFILE
-      if [ $? ]
+      if [ $? = 0 ]
       then
 	awk -F '|' '/^>/{x=""$2".faa";}{print >x;}' $INFILE
       fi
