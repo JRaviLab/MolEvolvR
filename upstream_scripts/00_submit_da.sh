@@ -18,10 +18,21 @@ cd ${DIR}
 
 printf "START_DT\tSTOP_DT\tquery\tacc2info\tblast_clust\tclust2table\tiprscan\tipr2da\tduration\n" >> ${DIR}/logfile.txt
 
+# grep "|" handles files that are not in ncbi format
+# split each word in the header by "|" and use the second element as the accNum
+grep "|" $INFILE
+if [ $? ]
+then
+awk -F '|' '/^>/{x=""$2".faa";}{print >x;}' $INFILE
+  find $PWD -type f -name "*.faa" > input.txt
+else
+awk -F "( )|(>)" '/^>/{x=""$2".faa";}{print >x;}' $INFILE
+find $PWD -type f -name "*.faa" > input.txt
+fi
 
-find $PWD -type f -name "$BASE" > input.txt
+
 
 INPATHS=input.txt
-qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_da.sb -F $INPATHS 
+qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_da.sb -F $INPATHS
 
 setfacl -R -m group:shiny:r-x ${DIR}
