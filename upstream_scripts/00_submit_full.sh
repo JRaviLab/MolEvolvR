@@ -61,12 +61,7 @@ if [ $WBLAST = F ]; then
    if [ $NFASTA = 1 ]
    then
       printf "No. of seqs provided: $NFASTA\nSo, we are going to proceed to the analysis.\n"
-      grep "|" $INFILE
-      if [ $? = 0 ]
-      then
-	awk -F '|' '/^>/{x=""$2".faa";}{print >x;}' $INFILE
-      fi
-      find $PWD -type f -name "*.faa" > input.txt
+      find $PWD -type f -name $BASE > input.txt
    fi
 
    INPATHS=input.txt

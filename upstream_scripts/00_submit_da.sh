@@ -26,8 +26,7 @@ then
 awk -F '|' '/^>/{x=""$2".faa";}{print >x;}' $INFILE
   find $PWD -type f -name "*.faa" > input.txt
 else
-awk -F "( )|(>)" '/^>/{x=""$2".faa";}{print >x;}' $INFILE
-find $PWD -type f -name "*.faa" > input.txt
+find $PWD -type f -name $BASE > input.txt
 fi
 
 
