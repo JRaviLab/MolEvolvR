@@ -48,12 +48,7 @@ fi
 
 if [ $NFASTA = 1 ]
 then
-  grep "|" $INFILE
-  if [ $? = 0 ]
-  then
-awk -F '|' '/^>/{x=""$2".faa";}{print >x;}' $INFILE
-  fi
-  find $PWD -type f -name "*.faa" > input.txt
+  find $PWD -type f -name $BASE > input.txt
 fi
 
 INPATHS=input.txt
