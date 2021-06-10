@@ -73,7 +73,7 @@ FILES=$(cat $INPUTPATHS_LIST)
 for FILE in $(shuf -e ${FILES[@]})
 do
    F=$(basename ${FILE})
-   PREFIX=$(echo "${F%%.*}")			## takes PREFIX of file
+   PREFIX=$(echo "${F%%.faa}")			## takes PREFIX of file
    OUTDIR=${OUTPATH}/${PREFIX}_full		## variable containing output filepath based PREFIX
    printf "${PREFIX}\n"
 
