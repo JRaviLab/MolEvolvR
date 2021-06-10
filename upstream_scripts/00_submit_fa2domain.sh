@@ -16,7 +16,7 @@ module load iprscan
 module load R
 
 sh /data/research/jravilab/molevol_scripts/upstream_scripts/04a_iprscan.sh $INFILE ${PREFIX} $DIR
-
-Rscript --vanilla /data/research/jravilab/molevol_scripts/upstream_scripts/fa2domain.R $INFILE ${PREFIX}.iprscan ${DIR}/domains.fa
+touch ${DIR}/${PREFIX}.domains.fa
+Rscript --vanilla /data/research/jravilab/molevol_scripts/upstream_scripts/fa2domain.R $INFILE ${DIR}/${PREFIX}.iprscan.tsv ${DIR}/${PREFIX}.domains.fa
 
 sh ${SCRIPT} domains.fa ${OTHERARGS}
