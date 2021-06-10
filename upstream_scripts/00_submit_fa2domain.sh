@@ -5,7 +5,8 @@
 
 ## USER INPUTS
 INFILE=$1
-
+SCRIPT=$2
+OTHERARGS=$3
 DIR=$(dirname $INFILE)
 BASE=$(basename $INFILE)
 PREFIX=$(echo "${BASE%%.*}")
@@ -15,4 +16,4 @@ sh /data/research/jravilab/molevol_scripts/upstream_scripts/04a_iprscan.sh $INFI
 
 Rscript --vanilla fa2domain.R $INFILE ${PREFIX}.iprscan domains.fa
 
-qsub 00_submit_full.sh domains.fa F
+qsub ${SCRIPT} domains.fa ${OTHERARGS}
