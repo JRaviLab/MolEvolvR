@@ -1,22 +1,6 @@
 #!/bin/bash
-#PBS -N submit_fa2domain
-#PBS -l nodes=1 :ppn 8
-## COMPANION SCRIPT TO MOLEVOLVR APP ##
-## Authors: Joe Burke
+INFILE=$1
+SCRIPT=$2
+OTHERARGS=$3
 
-## USER INPUTS
-echo $INFILE
-echo $SCRIPT
-echo $OTHERARGS
-DIR=$(dirname $INFILE)
-BASE=$(basename $INFILE)
-PREFIX=$(echo "${BASE%%.*}")
-cd ${DIR}
-module load iprscan
-module load R
-
-sh /data/research/jravilab/molevol_scripts/upstream_scripts/04a_iprscan.sh $INFILE ${PREFIX} $DIR
-touch ${DIR}/${PREFIX}.domains.fa
-Rscript --vanilla /data/research/jravilab/molevol_scripts/upstream_scripts/fa2domain.R $INFILE ${DIR}/${PREFIX}.iprscan.tsv ${DIR}/${PREFIX}.domains.fa
-
-sh ${SCRIPT} ${DIR}/${PREFIX}.domains.fa ${OTHERARGS}
+qsub -v SCRIPT=${SCRIPT},INFILE=${INFILE},OTHERARGS=${OTHERARGS} /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_fa2domain.sh
