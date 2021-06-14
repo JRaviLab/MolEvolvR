@@ -41,7 +41,7 @@ WBLAST=$2
 ## qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "input.txt F"
 ## qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "example_blastp.csv T"
 
-# Location of databases/dependencies 
+# Location of databases/dependencies
 export BLASTDB=/data/common_data/blastdb/v5:/data/common_data/blastdb/ncbidb:/data/common_data/blastdb:/data/common_data/blastdb/FASTA:$BLASTDB
 export BLASTMAT=/opt/software/BLAST/2.2.26/data
 export INTERPRO=/opt/software/iprscan/5.47.82.0-Python3/data:/data/common_data/iprscan:$INTERPRO
@@ -53,7 +53,7 @@ export NCBI_API_KEY=YOUR_KEY_HERE
 
 # Prevent "module: command not found"
 # Read more about it https://www.sdsc.edu/support/user_guides/tscc.html
-source /etc/profile.d/modules.sh 
+source /etc/profile.d/modules.sh
 
 module purge 					## clear loaded modules
 module load R		 			## load R
@@ -105,13 +105,13 @@ do
       then
 		# put original fasta file into file containing all homologs
 		cat $FILE >> ${OUTDIR}/${PREFIX}.all_accnums.fa
-	  
+
 		## DELTABLAST ##
 		db_start=$SECONDS
 		sh /data/research/jravilab/molevol_scripts/upstream_scripts/01.1_deltablast.sh $FILE $PREFIX $OUTDIR $DB $NHITS $EVAL
 		db_dur=$(( $SECONDS - $db_start ))
 
-         	## ACC2FA -- getting fasta FILES for deltablast output(s) 
+    ## ACC2FA -- getting fasta FILES for deltablast output(s) 
 		acc2fa_start=$SECONDS
 		sh /data/research/jravilab/molevol_scripts/upstream_scripts/02_acc2fa.sh ${OUTDIR}/${PREFIX}.dblast.tsv $PREFIX $OUTDIR
 		acc2fa_dur=$(( $SECONDS - $acc2fa_start ))
@@ -120,7 +120,7 @@ do
 		acc2info_start=$SECONDS
 		sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
 		acc2info_dur=$(( $SECONDS - $acc2info_start ))
-		
+
 		## BLAST RESULT CLEANUP ##
 		db_cln_start=$SECONDS
 		Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.2_cleanup_blast.R ${OUTDIR}/${PREFIX}.dblast.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX $WBLAST
@@ -147,7 +147,7 @@ do
 	ipr2lin_start=$SECONDS
 	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.4_ipr2lin.R ${OUTDIR}/${PREFIX}.iprscan.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX
 	ipr2lin_dur=$(( $SECONDS - $ipr2lin_start ))
-	
+
 	## IPR2DA ##
 	ipr2da_start=$SECONDS
 	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${PREFIX}.iprscan_cln.tsv ${PREFIX} ${OUTDIR}/${PREFIX}.cln.clust.tsv
@@ -164,12 +164,12 @@ do
 	rps2da_dur=$(( $SECONDS - $rps2da_start ))
 
 	cp ${FILE} ${OUTDIR}	# copy fasta file to output directory
-	
+
 	## Figure out how long the entire script took to run
 	dur=$(( $SECONDS - $start ))
 	printf "\nTotal run time: $dur\n"
 	STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
-	
+
 	## Add benchmarking times to logfile
 	printf "\n${START_DT}\t${STOP_DT}\t${PREFIX}\t${db_dur}\t${acc2info_dur}\t${db_cln_dur}\t${acc2fa_dur}\t${bclust_dur}\t${c2t_dur}\t${ipr_dur}\t${ipr2da_dur}\t${dur}" >> ${OUTPATH}/logfile.tsv
 
