@@ -12,6 +12,9 @@ DIR=$(dirname $INFILE)
 BASE=$(basename $INFILE)
 PREFIX=$(echo "${BASE%%.*}")
 cd ${DIR}
+export INTERPRO=/opt/software/iprscan/5.47.82.0-Python3/data:/data/common_data/iprscan:$INTERPRO
+source /etc/profile.d/modules.sh
+module purge
 module load iprscan
 module load R
 setfacl -R -m group:shiny:r-x ${DIR}
