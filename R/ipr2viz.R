@@ -130,12 +130,11 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
                       y = name, fill = "SignDesc", label="ShortName")) +
       geom_gene_arrow(arrowhead_height = unit(3, "mm"),
                       arrowhead_width = unit(1, "mm")) +
-      geom_gene_label(align = "left") +
       #geom_blank(data = dummies) +
       facet_wrap(~ Analysis, strip.position = "top", ncol = 3,
                  labeller=as_labeller(analysis_labeler)) +
       #, ncol = 1 + #scales = "free",
-      scale_fill_brewer(palette = "Set3") +
+      scale_fill_brewer(palette = "Set1") +
       theme_minimal() + theme_genes2() +
       theme(legend.position="bottom",
             legend.box = "horizontal",
@@ -153,11 +152,9 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
                fill = SignDesc, label = ShortName)) +
       geom_gene_arrow(arrowhead_height = unit(3, "mm"),
                       arrowhead_width = unit(1, "mm")) +
-      geom_gene_label(align = "left") +
-
       facet_wrap(as.formula(paste("~", name)), strip.position = "top", ncol = 3,
                  labeller=as_labeller(analysis_labeler)) +
-      scale_fill_brewer(palette = "Set3") +
+      scale_fill_brewer(palette = "Set1") +
       theme_minimal() + theme_genes2() +
       theme(legend.position="bottom",
             legend.box = "horizontal",
