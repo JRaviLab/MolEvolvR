@@ -9,8 +9,8 @@
 library(tidyverse); library(here)
 library(msa) # BiocManager::install("msa")
 library(Biostrings)#; library(seqinr)
-library(rMSA) # to implement kalign
-library(pdftools); library(latexpdf); library(tools); library(tinytex) #needed?
+# library(rMSA) # to implement kalign
+# library(pdftools); library(latexpdf); library(tools); library(tinytex) #needed?
 
 ##!! FEATURES, BUGS, NOTES thus far!!
 # output generated before hand:ideally
@@ -23,7 +23,7 @@ library(pdftools); library(latexpdf); library(tools); library(tinytex) #needed?
 #############
 
 ## Sample Runs
-msa_pdf(fasta_path="data/alns/pspb.gismo.fa" )#, out_path="data/msapdf")
+# msa_pdf(fasta_path="data/alns/pspb.gismo.fa" )#, out_path="data/msapdf")
 
 #########################################
 ## Generates MSA PDF from a Fasta file ##
@@ -47,7 +47,7 @@ msa_pdf <- function(fasta_path, out_path=NULL,
   # #'@examples msa_pdf()
 
   ## SAMPLE ARGUMENTS to test run
-  fasta_path=here("../molevol_data/project_data/phage_defense/full_analysis_20210108/g3d.both_lin.gen.da_sub.fa")
+  # fasta_path=here("../molevol_data/project_data/phage_defense/full_analysis_20210108/g3d.both_lin.gen.da_sub.fa")
   # out_path="../molevol_data/project_data/phage_defense/full_analysis_20210108/g3d.both_lin.gen.da.pdf"
   lowerbound=NULL; upperbound=NULL
 
@@ -110,9 +110,17 @@ msa_pdf <- function(fasta_path, out_path=NULL,
                    furtherCode=c("\\defconsensus{.}{lower}{upper}",
                                  "\\showruler{1}{top}"))
   }
+<<<<<<< HEAD
   system(paste("chmod g+r", fastafile_name))
   file.rename(paste0(fastafile_name, ".pdf"), pdf_path)
   system(paste("chmod g+r", pdf_path))
+=======
+
+  # file.rename(paste0(fastafile_name, ".pdf"), pdf_path)
+
+  file.rename(paste0(fastafile_name, ".pdf"), out_path)
+
+>>>>>>> e796142cbafe921fe71cd03a4e827cfd8251d19c
   ############
   ## REMOVE ##
   ############
