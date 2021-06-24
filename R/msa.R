@@ -110,9 +110,9 @@ msa_pdf <- function(fasta_path, out_path=NULL,
                    furtherCode=c("\\defconsensus{.}{lower}{upper}",
                                  "\\showruler{1}{top}"))
   }
-
+  system(paste("chmod g+r", fastafile_name))
   file.rename(paste0(fastafile_name, ".pdf"), pdf_path)
-
+  system(paste("chmod g+r", pdf_path))
   ############
   ## REMOVE ##
   ############
@@ -186,4 +186,3 @@ generate_msa <- function(fa_file="", outfile=""){
 #fasta_path <- "C:/Users/samue/Desktop/pspn.31seq.aln.txt"
 #my_seqs <- readAAStringSet(fasta_path) #, format="fasta", seek.first.rec=T)
 #my_seqs_msa <- msa(my_seqs)
-
