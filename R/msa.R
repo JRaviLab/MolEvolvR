@@ -110,9 +110,11 @@ msa_pdf <- function(fasta_path, out_path=NULL,
                    furtherCode=c("\\defconsensus{.}{lower}{upper}",
                                  "\\showruler{1}{top}"))
   }
-  system(paste("chmod g+r", fastafile_name))
+  if(!is.null(out_path))
+  file.rename(paste0(fastafile_name, ".pdf"), out_path)
+ 
+  else 
   file.rename(paste0(fastafile_name, ".pdf"), pdf_path)
-  system(paste("chmod g+r", pdf_path))
   ############
   ## REMOVE ##
   ############
