@@ -29,7 +29,7 @@ seq_tree <- function(fasta_filepath){
   #   geom_tiplab(size=1, aes(angle=angle))
 
   offs <- 0
-  msaplot(ggtree(seqTree), fasta=fasta_filepath, offset=1) +
+  msaplot(ggtree(seqTree), fasta=fasta_filepath, offset=0.9) +
     geom_tiplab(align=TRUE, linesize=0.5, size=2)
 
 }
