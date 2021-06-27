@@ -498,6 +498,11 @@ write.MsaAAMultipleAlignment <- function(alignment, outpath)
   return(fasta)
 }
 
+get_accnums_from_fasta_file <- function(fasta_file){
+	txt = read_file(fasta_file)
+	accnums = stringi::stri_extract_all_regex(fasta_file, "(?<=>)[\\w,.]+")[[1]]
+	return(accnums)
+}
 
 
 ################################
