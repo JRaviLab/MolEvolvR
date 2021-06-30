@@ -134,7 +134,7 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
       facet_wrap(~ Analysis, strip.position = "top", ncol = 3,
                  labeller=as_labeller(analysis_labeler)) +
       #, ncol = 1 + #scales = "free",
-      scale_fill_brewer(palette = "Set1") +
+      scale_fill_brewer(palette = "Paired") +
       theme_minimal() + theme_genes2() +
       theme(legend.position="bottom",
             legend.box = "horizontal",
@@ -154,7 +154,7 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
                       arrowhead_width = unit(1, "mm")) +
       facet_wrap(as.formula(paste("~", name)), strip.position = "top", ncol = 3,
                  labeller=as_labeller(analysis_labeler)) +
-      scale_fill_brewer(palette = "Set1") +
+      scale_fill_brewer(palette = "Paired") +
       theme_minimal() + theme_genes2() +
       theme(legend.position="bottom",
             legend.box = "horizontal",
