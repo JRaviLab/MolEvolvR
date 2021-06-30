@@ -177,8 +177,9 @@ tryCatch({
   )
   vis_g <- vis_g %>%
     visOptions(highlightNearest = TRUE)
-  vis_g },
-   error = {"error"}
+  return(vis_g) 
+                                        },
+   error = {return("error")}
                                         )
        
 }
