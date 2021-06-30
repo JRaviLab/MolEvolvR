@@ -177,7 +177,10 @@ tryCatch({
   )
   vis_g <- vis_g %>%
     visOptions(highlightNearest = TRUE)
-  vis_g
+  vis_g },
+   error = {"error"}
+                                        )
+       
 }
 
 BinaryDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, cutoff = 70,
@@ -303,10 +306,7 @@ BinaryDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, c
                "circle" = visIgraphLayout(vg, "layout.circle"),
                "auto" =  visIgraphLayout(vg, "layout.auto")
   )
-  vg
-  },
-    error = {"error"}
- )                                                  
+  vg                                               
 }
 
 
