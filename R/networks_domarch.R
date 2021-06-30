@@ -179,7 +179,8 @@ tryCatch({
     visOptions(highlightNearest = TRUE)
   return(vis_g) 
                                         },
-   error = {return("error")}
+   error = {q <-"error"
+           return(q)}
                                         )
        
 }
