@@ -173,8 +173,8 @@ upset.plot <- function(query_data="toast_rack.sub",
         set_size.show = F
         )},
                     error = {final_plot <- "error"},
-                    finally = {return(final_plot)}
-              
+                    finally = {return(final_plot)})
+
 }
 
 ###################
