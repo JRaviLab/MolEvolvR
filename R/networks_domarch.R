@@ -35,7 +35,7 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
   #'@examples domain_network(pspa)
   # by domain networks or all, as required.
   print(domains_of_interest)
-
+tryCatch({
   column_name <- sym(column)
 
   prot_tc <- prot %>% total_counts(column =  column, cutoff = cutoff, RowsCutoff = F, digits = 5)
@@ -56,19 +56,12 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
   #ye=grep(pattern = dom,x = prot.list,value = T)
   #ye=unlist(strsplit(ye,"\\+"))
   domains_of_interest_regex = paste(domains_of_interest, collapse = "|")
-  domain.list <- tryCatch({
-     test_list <- prot %>%
+  domain.list <- prot %>%
     dplyr::filter(grepl(pattern=domains_of_interest_regex,
                         x=DomArch.ntwrk,
                         ignore.case=T, perl = T))
-    test_list
-},
-   error = {"error"}
-)
- if (domain.list == "error"){
-   p <- "error"
-   p
-   }
+
+ 
   ##Separating column and converting to atomic vector prevents coercion
   domain.list <- domain.list$DomArch.ntwrk  %>% str_split(pattern="\\+")
   # Get domain counts before eliminating domarchs with no edges
@@ -311,6 +304,9 @@ BinaryDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, c
                "auto" =  visIgraphLayout(vg, "layout.auto")
   )
   vg
+  },
+    error = {"error"}
+ )                                                  
 }
 
 
