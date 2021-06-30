@@ -63,7 +63,10 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
 
   ##Separating column and converting to atomic vector prevents coercion
   domain.list <- domain.list$DomArch.ntwrk  %>% str_split(pattern="\\+")
-
+  if (length(domain.list) == 0){
+    exit_msg <- "error"
+    exit_msg
+    }
   # Get domain counts before eliminating domarchs with no edges
   wc = elements2words(prot = prot, column =  column, conversion_type = "da2doms") %>% words2wc()
   wc = pivot_wider(wc, names_from = words, values_from = freq)
