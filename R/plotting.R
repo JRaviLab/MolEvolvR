@@ -70,6 +70,7 @@ upset.plot <- function(query_data="toast_rack.sub",
 
   # Get Total Counts
   # colname = string(colname)
+  tryCatch({
   tc <- query_data %>% total_counts(column =  colname, cutoff = cutoff, RowsCutoff = RowsCutoff, digits = 5)
 
 
@@ -155,7 +156,7 @@ upset.plot <- function(query_data="toast_rack.sub",
                                                         decreasing=TRUE))))
   ## UpSetR plot
   par(oma=c(5,5,5,5), mar=c(3,3,3,3))
-  upset(upset.cutoff[c(3,4:ncol(upset.cutoff))],	# text.scale=1.5,
+  final_plot <- upset(upset.cutoff[c(3,4:ncol(upset.cutoff))],	# text.scale=1.5,
         #sets=words.tc,
         nsets = length(words.tc),
         nintersects = NA,
@@ -170,7 +171,10 @@ upset.plot <- function(query_data="toast_rack.sub",
         query.legend="top",
         text.scale = text.scale,
         set_size.show = F
-        )
+        )},
+                    error = {final_plot <- "error"},
+                    finally = {return(final_plot)}
+              
 }
 
 ###################
