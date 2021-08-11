@@ -57,7 +57,7 @@ cleanup_blast <- function(infile_blast, acc2info, prefix, wblast) {
        mutate(PcPositive = round(x = (PcPosOrig * AlnLength/QLength), digits = 2))
 
      # merge blast out with acc2info out
-     cleanedup_blast <- merge(cleanedup_blast, acc2info_out, by.x = "AccNum", by.y = "FullAccNum") %>%
+     cleanedup_blast <- merge(cleanedup_blast, acc2info_out, by.x = "AccNum", by.y = "FullAccNum", all.y = TRUE) %>%
        select(-Species.x, -TaxID.x)
      names(cleanedup_blast)[names(cleanedup_blast) == 'Species.y'] <- 'Species'
   }
