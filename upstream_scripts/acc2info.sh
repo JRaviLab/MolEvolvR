@@ -10,7 +10,7 @@ INFILE=$1	# list of accession numbers (one per line)
 PREFIX=$2	# prefix to files/runs
 OUTDIR=$3	# location of output files
 OUTFILE=$(printf "${OUTDIR}/${PREFIX}.acc2info.tsv")
-echo ${PREFIX} >> "${OUTDIR}/${PREFIX}.query.tsv}"
+echo ${PREFIX} >> ${INFILE}
 acc2info()
 {
 	# print colnames
@@ -23,9 +23,6 @@ acc2info()
 
 acc2info $INFILE $PREFIX $OUTDIR
 
-INFILE="${OUTDIR}/${PREFIX}.query.tsv}"
-OUTFILE="${OUTDIR}/${PREFIX}.query2info.tsv}"
-acc2info $INFILE $PREFIX $OUTDIR
 # Unused XML alternative | parts of this could be slighly buggy
 #epost -input $INFILE -db protein | \
 #efetch -format xml | \
