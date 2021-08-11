@@ -72,6 +72,11 @@ cleanup_blast <- function(infile_blast, acc2info, prefix, wblast) {
     select(any_of(cl_blast_postcln_cols))
 
   blast_names <- add_name(mergedLins)
+  # begin query name addition
+  query_row <- subset(blast_names, AccNum==prefix)
+  query_name <- query_row$Name
+  blast_names$QueryName <- query_name
+  blast_names <- subset(blast_names, Query!="NA")
 
   # create name for new output file to be created
   file_name <- paste0(prefix, '.blast.cln.tsv')

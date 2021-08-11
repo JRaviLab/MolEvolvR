@@ -51,7 +51,7 @@ cl_blast_postcln_cols <- c("Query", "AccNum",
 		       "Mismatch", "GapOpen",
                        "QStart", "QEnd", "QLength",
                        "SStart", "SEnd", "SLength",
-                       "EValue", "BitScore", "PcPosOrig")
+                       "EValue", "BitScore", "PcPosOrig", "QueryName")
 #cl_blast_postcln_cols <- c("Query", "SAccNum", "AccNum",
 #                       "SAllSeqID", "STitle", "Species", "TaxID",
 #                       "PcIdentity", "AlnLength", "Mismatch", "GapOpen",
@@ -165,7 +165,7 @@ domarch_lookup_colnames <- c("DB.ID", "ShortName", "Description", "ID")
 ######################
 ## Combined data frame that is loaded on to the webapp
 combo_colnames <- c("Query", "UID", "AccNum", "Species", "TaxID", "Lineage",
-                    "PcPositive", "ClusterID",
+                    "PcPositive", "ClusterID","QueryName",
                     # "AssemblyID", "GeneName", "Description", # MISSING NOW!?!
                     "DomArch.Pfam", "DomArch.COG", "DomArch.Gene3D",
                     "DomArch.TMHMM", "DomArch.Phobius", "DomArch.SignalP",
