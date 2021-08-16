@@ -223,6 +223,7 @@ lineage.DA.plot <- function(query_data="prot",
   column <- sym(colname)
 
   query.summ.byLin.ggplot <-  drop_na(query.summ.byLin) %>%
+                                filter(Lineage!="NANA") %>%
                                 filter(count>1) %>%# count or total count?
                                 arrange(totalcount)
 
