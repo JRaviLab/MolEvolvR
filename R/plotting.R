@@ -333,7 +333,7 @@ lineage.Query.plot <- function(query_data=all,
   ## Tile plot
   ggplot(data=query.summ.byLin.ggplot,
          aes_string(x="Lineage", y="Query")) +
-    geom_tile(data=query.summ.byLin.ggplot),
+    geom_tile(data=query.summ.byLin.ggplot,
               aes(fill=count),
               colour="darkred", size=0.3) + #, width=0.7, height=0.7),
     scale_fill_gradient(low="white", high="darkred") +
