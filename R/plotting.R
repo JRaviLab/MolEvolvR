@@ -321,7 +321,7 @@ lineage.Query.plot <- function(query_data=all,
   query_lin_counts$Lineage <- map(query_lin_counts$Lineage, function(x) str_replace_all(string = x,pattern = ">", replacement = "_")) %>%
     unlist()
 
-  query.summ.byLin.ggplot <- drop_na(query_lin_counts) %>%
+  query.summ.byLin.ggplot <- query_lin_counts %>%
   filter(Lineage=="NANA") %>%
     filter(count>1) %>%  # count or total count?
     within(Lineage <- factor(Lineage,
