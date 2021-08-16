@@ -322,7 +322,6 @@ lineage.Query.plot <- function(query_data=all,
     unlist()
 
   query.summ.byLin.ggplot <- drop_na(query_lin_counts) %>%
-  filter(Lineage!="NANA") %>%
     filter(count>1) %>%  # count or total count?
     within(Lineage <- factor(Lineage,
                              levels= sort(names(sort(table(Lineage),
@@ -333,7 +332,8 @@ lineage.Query.plot <- function(query_data=all,
   ## Tile plot
   ggplot(data=query.summ.byLin.ggplot,
          aes_string(x="Lineage", y="Query")) +
-    geom_tile(data=query.summ.byLin.ggplot,
+    geom_tile(data=subset(query.summ.byLin.ggplot,
+                          !is.na(count)),
               aes(fill=count),
               colour="darkred", size=0.3) + #, width=0.7, height=0.7),
     scale_fill_gradient(low="white", high="darkred") +
