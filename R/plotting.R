@@ -322,7 +322,7 @@ lineage.Query.plot <- function(query_data=all,
     unlist()
 
   query.summ.byLin.ggplot <- drop_na(query_lin_counts) %>%
-  filter(Lineage!="NANA") %>%
+  filter(Lineage=="NANA") %>%
     filter(count>1) %>%  # count or total count?
     within(Lineage <- factor(Lineage,
                              levels= sort(names(sort(table(Lineage),
