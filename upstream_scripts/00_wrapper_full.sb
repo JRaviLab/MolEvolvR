@@ -70,7 +70,7 @@ START_DT=$(date '+%d/%m/%Y-%H:%M:%S')
 
 FILES=$(cat $INPUTPATHS_LIST)
 
-for FILE in $(shuf -e ${FILES[@]})
+for FILE in $(shuf -e "${FILES[@]}")
 do
    F=$(basename ${FILE})
    PREFIX=$(echo "${F%%.faa}")			## takes PREFIX of file
@@ -186,9 +186,9 @@ do
 done
 NUM_RUNS=`wc -l ${OUTPATH}/logfile.tsv | grep -Eo "^[[:digit:]]+"`
 ((NUM_RUNS-=1))
-if [ `wc -l ${OUTPATH}/logfile.tsv | grep -Eo "^[[:digit:]]+"` -eq $NUM_RUNS ]
+if [ `wc -l ${OUTPATH}/input.txt | grep -Eo "^[[:digit:]]+"` -eq $NUM_RUNS ]
 then
-  touch done.text
+  touch done.txt
 fi
 
 
