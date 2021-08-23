@@ -5,9 +5,9 @@
 ## Authors: Joe Burke
 
 ## USER INPUTS
-echo $INFILE>> log.new
-echo $SCRIPT>> log.new
-echo $OTHERARGS >> log.new
+echo $INFILE
+echo $SCRIPT
+echo $OTHERARGS
 DIR=$(dirname $INFILE)
 BASE=$(basename $INFILE)
 PREFIX=$(echo "${BASE%%.*}")
