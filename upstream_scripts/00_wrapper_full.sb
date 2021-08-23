@@ -111,7 +111,7 @@ do
 		sh /data/research/jravilab/molevol_scripts/upstream_scripts/01.1_deltablast.sh $FILE $PREFIX $OUTDIR $DB $NHITS $EVAL
 		db_dur=$(( $SECONDS - $db_start ))
 
-    ## ACC2FA -- getting fasta FILES for deltablast output(s) 
+    ## ACC2FA -- getting fasta FILES for deltablast output(s)
 		acc2fa_start=$SECONDS
 		sh /data/research/jravilab/molevol_scripts/upstream_scripts/02_acc2fa.sh ${OUTDIR}/${PREFIX}.dblast.tsv $PREFIX $OUTDIR
 		acc2fa_dur=$(( $SECONDS - $acc2fa_start ))
@@ -184,5 +184,12 @@ do
         #  fi
     fi
 done
+NUM_RUNS=`wc -l ${OUTPATH}/logfile.tsv | grep -Eo "^[[:digit:]]+"`
+((NUM_RUNS-=1))
+if [ `wc -l ${OUTPATH}/logfile.tsv | grep -Eo "^[[:digit:]]+"` -eq $NUM_RUNS ]
+then
+  touch done.text
+fi
+
 
 setfacl -R -m group:shiny:r-x ${OUTDIR}
