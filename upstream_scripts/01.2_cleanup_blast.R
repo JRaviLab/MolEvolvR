@@ -32,7 +32,7 @@ cleanup_blast <- function(infile_blast, acc2info, prefix, wblast) {
        mutate(AccNum = gsub('.*[a-z]', '', AccNum)) %>%
        mutate(PcIdentity = round(as.double(PcIdentity), 2))
      # merge blast out with acc2info out
-     cleanedup_blast <- merge(cleanedup_blast, acc2info_out, by.x = "AccNum", by.y = "FullAccNum")
+     cleanedup_blast <- merge(cleanedup_blast, acc2info_out, by.x = "AccNum", by.y = "FullAccNum", all.y = TRUE)
      # find query in acc2info, extract & set Length as QLength
      query_prot <- as.character(cleanedup_blast[1,2])
      q_row <- acc2info_out[ grepl(query_prot, FullAccNum) ]
@@ -59,7 +59,7 @@ cleanup_blast <- function(infile_blast, acc2info, prefix, wblast) {
        mutate(PcPositive = round(x = (PcPosOrig * AlnLength/QLength), digits = 2))
 
      # merge blast out with acc2info out
-     cleanedup_blast <- merge(cleanedup_blast, acc2info_out, by.x = "AccNum", by.y = "FullAccNum", all = TRUE) %>%
+     cleanedup_blast <- merge(cleanedup_blast, acc2info_out, by.x = "AccNum", by.y = "FullAccNum", all.y = TRUE) %>%
        select(-Species.x, -TaxID.x)
      names(cleanedup_blast)[names(cleanedup_blast) == 'Species.y'] <- 'Species'
   }
