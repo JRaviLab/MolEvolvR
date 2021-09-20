@@ -78,7 +78,7 @@ cleanup_blast <- function(infile_blast, acc2info, prefix, wblast) {
   # begin query name addition
   query_row <- subset(blast_names, AccNum==prefix)
   query_name <- query_row$Name
-  if(!is.null(query_name)){
+  if(is.null(query_name)){
     query_name <- query
   }
   blast_names$QueryName <- query_name
