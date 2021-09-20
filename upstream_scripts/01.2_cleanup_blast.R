@@ -74,7 +74,6 @@ cleanup_blast <- function(infile_blast, acc2info, prefix, wblast) {
     select(any_of(cl_blast_postcln_cols))
 
   blast_names <- add_name(mergedLins)
-  print(blast_names)
   # begin query name addition
   query_row <- subset(blast_names, AccNum==prefix)
   query_name <- query_row$Name
