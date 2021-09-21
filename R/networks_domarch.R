@@ -178,7 +178,9 @@ tryCatch({
   vis_g <- vis_g %>%
     visOptions(highlightNearest = TRUE)
                                         },
-   error = {vis_g <-"error"},
+   error = {
+     print("error making network")
+     vis_g <-"error"},
    finally = { return(vis_g) }
                                         )
        
