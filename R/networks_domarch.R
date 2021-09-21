@@ -181,7 +181,8 @@ tryCatch({
    error = {
      print("error making network")
      vis_g <-"error"},
-   finally = { return(vis_g) }
+   finally = { print(typeof(vis_g))
+     return(vis_g) }
                                         )
        
 }
