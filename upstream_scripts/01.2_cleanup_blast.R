@@ -25,7 +25,7 @@ cleanup_blast <- function(infile_blast, acc2info, prefix, wblast) {
   if (wblast == "T") {
      blast_out <- fread(input = infile_blast, sep = '\t', header = F,
        col.names = web_blastp_hit_colnames, fill = T)
-            query <- blast_out[1,]$Query
+        query <- blast_out[1,]$Query
      cleanedup_blast <- blast_out %>%
      # remove extra characters/names from sseqid, sscinames, and staxids columns
        mutate(AccNum = gsub('\\|', '', AccNum)) %>%
@@ -76,9 +76,14 @@ cleanup_blast <- function(infile_blast, acc2info, prefix, wblast) {
   blast_names <- add_name(mergedLins)
   # begin query name addition
   query_row <- subset(blast_names, AccNum==prefix)
-  query_name <- query_row$Name
-  if(is.null(query_name)){
+  if (dim(query_row)[1] == 0){
     query_name <- query
+  }
+  else if(is.null(query_name)){
+    query_name <- query
+  }
+  else{
+    query_name <- query_row$Name
   }
   blast_names$QueryName <- query_name
   blast_names <- subset(blast_names, Query!="NA")
