@@ -179,7 +179,7 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
 ipr2viz_web <- function(infile_ipr,
                         accessions,
                         analysis=c("Pfam", "Phobius","TMHMM","Gene3D"),
-                        group_by = "Analysis", name = "AccNum",
+                        group_by = "Query", name = "Name",
                         text_size = 10)
 {
   ## To filter by Analysis
@@ -191,8 +191,8 @@ ipr2viz_web <- function(infile_ipr,
   lookup_tbl = read_tsv(lookup_tbl_path, col_names = T)
 
   ## Read IPR file and subset by Accessions
-  ipr_out <- read_tsv(infile_ipr, col_names=ipr_colnames)
-  ipr_out <- subset(ipr_out, ipr_out$AccNum %in% accessions)
+  ipr_out <- read_tsv(infile_ipr, col_names=T)
+  #ipr_out <- subset(ipr_out, ipr_out$AccNum %in% accessions)
 
   ## Need to fix eventually based on 'real' gene orientation!
   ipr_out$Strand <- rep("forward", nrow(ipr_out))
@@ -202,27 +202,19 @@ ipr2viz_web <- function(infile_ipr,
                         grepl(pattern=analysis, x=Analysis))
 
   # dynamic analysis labeller
-  analyses <- ipr_out_sub %>% select(Analysis) %>%
+   analyses <- ipr_out_sub %>%
+    select(Analysis) %>%
     distinct()
-  analysis_labeler <- analyses %>% mutate(id = 1) %>%
-    pivot_wider(names_from = Analysis,
-                values_from = Analysis) %>%
-    select(-id)
+  analysis_labeler <- analyses %>%
+    pivot_wider(names_from = Analysis, values_from = Analysis)
   # analysis_labeler[1,] = colnames(analysis_labeler)
 
   print(analysis_labeler)
 
   queryrows <- which(is.na(ipr_out_sub$AccNum))
-
+  lookup_tbl = lookup_tbl %>% select(-ShortName)
   ## @SAM, make sure the following two work with the Lookup Tables!!
-  lookup_tbl = dplyr::rename(lookup_tbl,  "SignAcc" = "DB.ID")
-  ipr_out_sub = dplyr::rename(ipr_out_sub,  "SignAcc" = "DB.ID")
-  ipr_out_sub <- merge(ipr_out_sub, lookup_tbl, by = "SignAcc")
-
-  signacc <- which(is.na(ipr_out_sub$ShortName))
-  ipr_out_sub$ShortName[signacc] = ipr_out_sub$SignAcc[signacc]
-
-  name_sym = sym(name)
+  ipr_out_sub <- merge(ipr_out_sub, lookup_tbl, by = "DB.ID")
 
   ## PLOTTING
   ## domains as separate arrows
@@ -234,7 +226,6 @@ ipr2viz_web <- function(infile_ipr,
                       y = name, fill = "SignDesc", label="ShortName")) +
       geom_gene_arrow(arrowhead_height = unit(3, "mm"),
                       arrowhead_width = unit(1, "mm")) +
-      geom_gene_label(align = "left") +
       #geom_blank(data = dummies) +
       facet_wrap(~ Analysis, strip.position = "top", ncol = 3,
                  labeller=as_labeller(analysis_labeler)) +
@@ -257,8 +248,6 @@ ipr2viz_web <- function(infile_ipr,
                fill = SignDesc, label=ShortName)) +
       geom_gene_arrow(arrowhead_height = unit(3, "mm"),
                       arrowhead_width = unit(1, "mm")) +
-      geom_gene_label(align = "left") +
-
       facet_wrap(as.formula(paste("~", name)),
                  strip.position = "top", ncol = 3,
                  labeller=as_labeller(analysis_labeler)) +
