@@ -29,7 +29,16 @@ theme_genes2 <- function() {
     #strip.text = ggplot2::element_blank()
   )
 }
-
+CPCOLS <- c('#AFEEEE', '#DDA0DD', '#EE2C2C', '#CDBE70', '#B0B099',
+             '#8B2323', '#EE7600', '#EEC900', 'chartreuse3', '#0000FF',
+             '#FFD900', '#32CD32', 'maroon4', 'cornflowerblue', 'darkslateblue',
+             '#AB82FF', '#CD6889', '#FFA07A', '#FFFF00', '#228B22',
+             '#FFFFE0', '#FFEC8B', 'peru', '#668B8B', 'honeydew',
+             '#A020F0', 'grey', '#8B4513', '#191970', '#00FF7F',
+             'lemonchiffon','#66CDAA', '#5F9EA0', '#A2CD5A', '#556B2F',
+             '#EEAEEE', 'thistle4', '#473C8B', '#FFB6C1', '#8B1C62',
+             '#FFE4B5', 'black', '#FF7F50', '#FFB90F', '#FF69B4', '#836FFF',
+             '#757575','#CD3333', '#EE7600', '#CDAD00', '#556B2F', '#7AC5CD')
 ##################################
 ## Get Top N AccNum by Lin+DomArch
 ##################################
@@ -123,16 +132,6 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
   print(colnames(ipr_out_sub))
   ## PLOTTING
   ## domains as separate arrows
-  CPCOLS <- c('#AFEEEE', '#DDA0DD', '#EE2C2C', '#CDBE70', '#B0B099',
-             '#8B2323', '#EE7600', '#EEC900', 'chartreuse3', '#0000FF',
-             '#FFD900', '#32CD32', 'maroon4', 'cornflowerblue', 'darkslateblue',
-             '#AB82FF', '#CD6889', '#FFA07A', '#FFFF00', '#228B22',
-             '#FFFFE0', '#FFEC8B', 'peru', '#668B8B', 'honeydew',
-             '#A020F0', 'grey', '#8B4513', '#191970', '#00FF7F',
-             'lemonchiffon','#66CDAA', '#5F9EA0', '#A2CD5A', '#556B2F',
-             '#EEAEEE', 'thistle4', '#473C8B', '#FFB6C1', '#8B1C62',
-             '#FFE4B5', 'black', '#FF7F50', '#FFB90F', '#FF69B4', '#836FFF',
-             '#757575','#CD3333', '#EE7600', '#CDAD00', '#556B2F', '#7AC5CD')
   if(group_by == "Analysis")
   {
     ggplot(ipr_out_sub,
@@ -227,6 +226,7 @@ ipr2viz_web <- function(infile_ipr,
 
   ## PLOTTING
   ## domains as separate arrows
+  
   if(group_by == "Analysis")
   {
     ggplot(ipr_out_sub,
@@ -239,7 +239,7 @@ ipr2viz_web <- function(infile_ipr,
       facet_wrap(~ Analysis, strip.position = "top", ncol = 3,
                  labeller=as_labeller(analysis_labeler)) +
       #, ncol = 1 + #scales = "free",
-      scale_fill_brewer(palette = "Set3") +
+      scale_color_manual(values = CPCOLS) +
       theme_minimal() + theme_genes2() +
       theme(legend.position="bottom",
             legend.box = "horizontal",
@@ -262,7 +262,7 @@ ipr2viz_web <- function(infile_ipr,
       facet_wrap(as.formula(paste("~", name)),
                  strip.position = "top", ncol = 3,
                  labeller=as_labeller(analysis_labeler)) +
-      scale_fill_brewer(palette = "Set3") +
+      scale_color_manual(values = CPCOLS) +
       theme_minimal() + theme_genes2() +
       theme(legend.position="bottom",
             legend.box = "horizontal",
