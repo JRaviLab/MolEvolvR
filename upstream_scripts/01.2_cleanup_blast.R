@@ -76,6 +76,7 @@ cleanup_blast <- function(infile_blast, acc2info, prefix, wblast) {
   blast_names <- add_name(mergedLins)
   # begin query name addition
   query_row <- subset(blast_names, AccNum==prefix)
+  query_name <- NULL
   if (dim(query_row)[1] == 0){
     query_name <- query
   }
@@ -84,6 +85,9 @@ cleanup_blast <- function(infile_blast, acc2info, prefix, wblast) {
   }
   else{
     query_name <- query_row$Name
+  }
+  if (is.null(query_name)){
+    print(query_row$Name)
   }
   blast_names$QueryName <- query_name
   blast_names <- subset(blast_names, Query!="NA")
