@@ -170,3 +170,32 @@ combo_colnames <- c("Query", "UID", "AccNum", "Species", "TaxID", "Lineage",
                     "DomArch.Pfam", "DomArch.COG", "DomArch.Gene3D",
                     "DomArch.TMHMM", "DomArch.Phobius", "DomArch.SignalP",
                     "DomArch.SMART", "DomArch.TIGR")
+
+
+################
+## read tsv colnames
+################
+lookup_table_cols <- cols(
+  DB.ID = col_character(),
+  ShortName = col_character(),
+  Description = col_character(),
+  ID = col_character()
+)
+
+iprscan_cols <- cols(
+  .default = col_character(),
+  TaxID = col_double(),
+  SLength = col_double(),
+  SignDesc = col_character(),
+  StartLoc = col_double(),
+  StopLoc = col_double(),
+  Score = col_double(),
+  Status = col_logical(),
+  IPRAcc = col_character(),
+  IPRDesc = col_character(),
+  Length = col_double(),
+  ShortName = col_character(),
+  LookupTblDesc = col_character(),
+  ID = col_character(),
+  Label = col_character()
+)

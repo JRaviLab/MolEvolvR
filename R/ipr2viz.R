@@ -29,16 +29,7 @@ theme_genes2 <- function() {
     #strip.text = ggplot2::element_blank()
   )
 }
-CPCOLS <- c('#AFEEEE', '#DDA0DD', '#EE2C2C', '#CDBE70', '#B0B099',
-             '#8B2323', '#EE7600', '#EEC900', 'chartreuse3', '#0000FF',
-             '#FFD900', '#32CD32', 'maroon4', 'cornflowerblue', 'darkslateblue',
-             '#AB82FF', '#CD6889', '#FFA07A', '#FFFF00', '#228B22',
-             '#FFFFE0', '#FFEC8B', 'peru', '#668B8B', 'honeydew',
-             '#A020F0', 'grey', '#8B4513', '#191970', '#00FF7F',
-             'lemonchiffon','#66CDAA', '#5F9EA0', '#A2CD5A', '#556B2F',
-             '#EEAEEE', 'thistle4', '#473C8B', '#FFB6C1', '#8B1C62',
-             '#FFE4B5', 'black', '#FF7F50', '#FFB90F', '#FF69B4', '#836FFF',
-             '#757575','#CD3333', '#EE7600', '#CDAD00', '#556B2F', '#7AC5CD')
+
 ##################################
 ## Get Top N AccNum by Lin+DomArch
 ##################################
@@ -85,9 +76,18 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
                     group_by = "Query", #"Analysis"
                     topn = 20, name = "Name", text_size = 10)
 {
+  CPCOLS <- c('#AFEEEE', '#DDA0DD', '#EE2C2C', '#CDBE70', '#B0B099',
+             '#8B2323', '#EE7600', '#EEC900', 'chartreuse3', '#0000FF',
+             '#FFD900', '#32CD32', 'maroon4', 'cornflowerblue', 'darkslateblue',
+             '#AB82FF', '#CD6889', '#FFA07A', '#FFFF00', '#228B22',
+             '#FFFFE0', '#FFEC8B', 'peru', '#668B8B', 'honeydew',
+             '#A020F0', 'grey', '#8B4513', '#191970', '#00FF7F',
+             'lemonchiffon','#66CDAA', '#5F9EA0', '#A2CD5A', '#556B2F',
+             '#EEAEEE', 'thistle4', '#473C8B', '#FFB6C1', '#8B1C62',
+             '#FFE4B5', 'black', '#FF7F50', '#FFB90F', '#FF69B4', '#836FFF',
+             '#757575','#CD3333', '#EE7600', '#CDAD00', '#556B2F', '#7AC5CD')
   ## Read IPR file
-  ipr_out <- read_tsv(infile_ipr, col_names=T)
-
+  ipr_out <- read_tsv(infile_ipr, col_names=T, col_types = iprscan_cols)
   ## To filter by Analysis
   analysis = paste(analysis, collapse = "|")
 
@@ -98,18 +98,15 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
                           ## @SAM, you could pick by the Analysis w/ max rows!
                           lin_col = "Lineage",
                           n = topn)
-
   # Filter by Top Accessions per Accession per DomArch and Lineage
   ipr_out <- subset(ipr_out,
                     ipr_out$AccNum %in% top_acc)
-
   ## Need to fix this eventually based on the 'real' gene orientation! :)
   ipr_out$Strand <- rep("forward", nrow(ipr_out))
 
   ipr_out <- ipr_out %>% arrange(AccNum, StartLoc, StopLoc)
   ipr_out_sub <- filter(ipr_out,
                         grepl(pattern=analysis, x=Analysis))
-
   # dynamic analysis labeller
   analyses <- ipr_out_sub %>%
     select(Analysis) %>%
@@ -119,15 +116,14 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
   print(analysis_labeler)
 
   queryrows <- which(is.na(ipr_out_sub$AccNum))
-
   lookup_tbl_path = "/data/research/jravilab/common_data/cln_lookup_tbl.tsv"
-  lookup_tbl = read_tsv(lookup_tbl_path, col_names = T)
+  lookup_tbl = read_tsv(lookup_tbl_path, col_names = T, col_types = lookup_table_cols)
 
   print(colnames(ipr_out_sub))
   print(colnames(lookup_tbl))
   lookup_tbl = lookup_tbl %>% select(-ShortName) # Already has ShortName -- Just needs SignDesc
-  # ipr_out_sub = ipr_out_sub %>% select(-ShortName)
-  ipr_out_sub <- merge(ipr_out_sub, lookup_tbl, by = "DB.ID")
+  # ipr_out_sub = ipr_out_sub %>% select(-ShortName) 
+  ipr_out_sub <- merge(ipr_out_sub, lookup_tbl, by.x = "DB.ID", by.y = "DB.ID")
 
   print(colnames(ipr_out_sub))
   ## PLOTTING
@@ -182,6 +178,16 @@ ipr2viz_web <- function(infile_ipr,
                         group_by = "Query", name = "Name",
                         text_size = 10)
 {
+  CPCOLS <- c('#AFEEEE', '#DDA0DD', '#EE2C2C', '#CDBE70', '#B0B099',
+             '#8B2323', '#EE7600', '#EEC900', 'chartreuse3', '#0000FF',
+             '#FFD900', '#32CD32', 'maroon4', 'cornflowerblue', 'darkslateblue',
+             '#AB82FF', '#CD6889', '#FFA07A', '#FFFF00', '#228B22',
+             '#FFFFE0', '#FFEC8B', 'peru', '#668B8B', 'honeydew',
+             '#A020F0', 'grey', '#8B4513', '#191970', '#00FF7F',
+             'lemonchiffon','#66CDAA', '#5F9EA0', '#A2CD5A', '#556B2F',
+             '#EEAEEE', 'thistle4', '#473C8B', '#FFB6C1', '#8B1C62',
+             '#FFE4B5', 'black', '#FF7F50', '#FFB90F', '#FF69B4', '#836FFF',
+             '#757575','#CD3333', '#EE7600', '#CDAD00', '#556B2F', '#7AC5CD')
   ## To filter by Analysis
   analysis = paste(analysis, collapse = "|")
 
