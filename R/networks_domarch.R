@@ -35,7 +35,7 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
   #'@examples domain_network(pspa)
   # by domain networks or all, as required.
   print(domains_of_interest)
-tryCatch({
+  tryCatch({
   column_name <- sym(column)
 
   prot_tc <- prot %>% total_counts(column =  column, cutoff = cutoff, RowsCutoff = F, digits = 5)
@@ -69,18 +69,17 @@ tryCatch({
   wc = pivot_wider(wc, names_from = words, values_from = freq)
 
   # Remove all isolated domarchs, such that an adjacency list can easily be constructed
+  singletons <- domain.list[which(lengths(domain.list)==1)] %>% unique()
   domain.list = domain.list[-which(lengths(domain.list)==1)]
-
   # This is where we know if the adjacency list is empty
   if(length(domain.list) == 0)
   {
     g <- make_empty_graph()
     # Add nodes included in domains of interest
-    g <- g  + vertices(domains_of_interest)
+    g <- g + vertices(singletons)
+    V(g)$size <- length(singletons)
 
-    V(g)$size <- as.numeric(wc[V(g)$name])
-
-    if(length(V(g)$size) == 1 | min(V(g)$size) == max(V(g)$size)  )
+    if(length(V(g)$size) == 1 || min(V(g)$size) == max(V(g)$size)  )
     {
       V(g)$size <- 25
       V(g)$color <- rainbow(1, alpha = .5)
@@ -126,20 +125,16 @@ tryCatch({
 
 
     # # Add query domains if not already present b/c they have not adjacency add them to the graph if not already present
-    for(domain in domains_of_interest)
+    for(domain in singletons)
     {
-      # domain_size = as.numeric(wc[1,domain])
-      if( (!domain %in% V(g)$name) && (domain %in% colnames(wc)))
-      {
-        g <- g + vertex(domain)
-      }
+      g <- g + vertex(domain)
     }
 
     # Make sure X does not appear
     # if(g)
-    if("X" %in% V(g)$name)
+    if("X" %in% V(g)$name){
       g = delete_vertices(g, "X")
-
+    }
     V(g)$size <- as.numeric(wc[V(g)$name])
 
     V(g)$size <- (V(g)$size-min(V(g)$size))/(max(V(g)$size)-min(V(g)$size))*20+10 # scaled by degree
@@ -161,7 +156,6 @@ tryCatch({
   #   # V(g)[which(V(g)$name %in% domains_of_interest)]$size <- as.numeric(wc[domains_of_interest])
   V(g)[which(V(g)$name %in% domains_of_interest)]$color = query_color
 
-
   vis_g = visIgraph(g, type ="full")
 
   max_font_size = 43
@@ -177,14 +171,14 @@ tryCatch({
   )
   vis_g <- vis_g %>%
     visOptions(highlightNearest = TRUE)
-                                        },
-   error = {
-     print("error making network")
-     vis_g <-"error"},
-   finally = { print(typeof(vis_g))
-     return(vis_g) }
-                                        )
-       
+  },
+  error = {
+    vis_g <- "error"
+  },
+  finally = {
+    return(vis_g)
+  })
+                                        
 }
 
 BinaryDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, cutoff = 70,
