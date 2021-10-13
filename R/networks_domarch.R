@@ -127,7 +127,9 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
     # # Add query domains if not already present b/c they have not adjacency add them to the graph if not already present
     for(domain in singletons)
     {
-      g <- g + vertex(domain)
+      if (! domain %in% V(g)$name){
+        g <- g + vertex(domain)
+      }
     }
 
     # Make sure X does not appear
