@@ -199,3 +199,19 @@ iprscan_cols <- cols(
   ID = col_character(),
   Label = col_character()
 )
+
+ipr_cln_cols <- cols(.default = col_character(), 
+                    TaxID = col_double(), 
+                    SLength = col_double(), 
+                    StartLoc = col_double(),
+                    StopLoc = col_double(),
+                    Score = col_double(),
+                    Status = col_logical(),
+                    IPRAcc = col_logical(),
+                    IPRDesc = col_logical(),
+                    Length = col_double(),
+                    ID = col_logical()) 
+
+lineage_map_cols <- c("dobule",
+                        "character",
+                        "character")

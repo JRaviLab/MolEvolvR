@@ -66,7 +66,7 @@ cleanup_blast <- function(infile_blast, acc2info, prefix, wblast) {
 
   # # TaxID to lineage
   cleanedup_blast$TaxID <- as.integer(cleanedup_blast$TaxID)
-  lineage_map <- fread("/data/research/jravilab/common_data/lineage_lookup.txt", header = T, fill = T)
+  lineage_map <- fread("/data/research/jravilab/common_data/lineage_lookup.txt", header = T, fill = T, colClasses = lineage_map_cols)
   # # get lineage path as argument, it'll be changed depending on who is running it
   # # have default argument also for where the files are located
   mergedLins <- merge(cleanedup_blast, lineage_map, by = "TaxID", all.x = T) %>%
@@ -80,14 +80,11 @@ cleanup_blast <- function(infile_blast, acc2info, prefix, wblast) {
   if (dim(query_row)[1] == 0){
     query_name <- query
   }
-  else if(is.null(query_name)){
-    query_name <- query
-  }
   else{
     query_name <- query_row$Name
   }
-  if (is.null(query_name)){
-    print(query_row$Name)
+  if(is.null(query_name)){
+    query_name <- query
   }
   blast_names$QueryName <- query_name
   blast_names <- subset(blast_names, Query!="NA")

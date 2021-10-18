@@ -15,7 +15,7 @@ ipr2da <- function(infile_ipr, prefix,
                               "SUPERFAMILY", "MobiDBLite", "TIGRFAM"))
 {
   # read in cleaned up iprscan results
-  ipr_in <- read_tsv(infile_ipr, col_names = T)
+  ipr_in <- read_tsv(infile_ipr, col_names = T,col_types = ipr_cln_cols)
 
   # split dataframe into unique proteins
   x <- split(x = ipr_in, f = ipr_in$AccNum)
