@@ -5,8 +5,8 @@ in_ipr = read.csv(args[2], sep="\t", header=FALSE)
 out_file = args[3]
 for (item in names(in_fa)){
   accession = unlist(strsplit(item, " "))[1]
-  pfam_count = 0
-  gene3d_count =0
+  pfam_count = 1
+  gene3d_count =1
   for (i in 1:nrow(in_ipr)){
     if (in_ipr[i, 1] == accession && (in_ipr[i,4] == "Pfam")){
       sequence = toString(subseq(in_fa[item], in_ipr[i, 7], in_ipr[i, 8]))

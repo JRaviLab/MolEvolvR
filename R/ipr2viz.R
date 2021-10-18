@@ -136,7 +136,7 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
       geom_gene_arrow(arrowhead_height = unit(3, "mm"),
                       arrowhead_width = unit(1, "mm")) +
       #geom_blank(data = dummies) +
-      facet_wrap(~ Analysis, strip.position = "top", ncol = 3,
+      facet_wrap(~ Analysis, strip.position = "top", ncol = 5,
                  labeller=as_labeller(analysis_labeler)) +
       #, ncol = 1 + #scales = "free",
       scale_color_manual(values = CPCOLS) +
@@ -147,7 +147,7 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
             legend.box.margin = margin(),
             text = element_text(size = text_size)) +
       ylab("")+
-      guides(fill=guide_legend(nrow=3))
+      guides(fill=guide_legend(nrow=10))
   }
 
   else if(group_by == "Query"){
@@ -174,9 +174,9 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
 
 ipr2viz_web <- function(infile_ipr,
                         accessions,
-                        analysis=c("Pfam", "Phobius","TMHMM","Gene3D"),
+                        analysis= c("Pfam", "Phobius", "TMHMM", "Gene3D"),
                         group_by = "Query", name = "Name",
-                        text_size = 10)
+                        text_size = 10, legend_name = "ShortName")
 {
   CPCOLS <- c('#AFEEEE', '#DDA0DD', '#EE2C2C', '#CDBE70', '#B0B099',
              '#8B2323', '#EE7600', '#EEC900', 'chartreuse3', '#0000FF',
@@ -194,10 +194,10 @@ ipr2viz_web <- function(infile_ipr,
   ## @SAM, colnames, merges, everything neeeds to be done now based on the
   ## combined lookup table from "common_data"
   lookup_tbl_path = "/data/research/jravilab/common_data/cln_lookup_tbl.tsv"
-  lookup_tbl = read_tsv(lookup_tbl_path, col_names = T)
+  lookup_tbl = read_tsv(lookup_tbl_path, col_names = T, col_types = lookup_table_cols)
 
   ## Read IPR file and subset by Accessions
-  ipr_out <- read_tsv(infile_ipr, col_names=T)
+  ipr_out <- read_tsv(infile_ipr, col_names=ipr_colnames, col_types = iprscan_cols)
   #ipr_out <- subset(ipr_out, ipr_out$AccNum %in% accessions)
 
   ## Need to fix eventually based on 'real' gene orientation!
@@ -229,7 +229,7 @@ ipr2viz_web <- function(infile_ipr,
   {
     ggplot(ipr_out_sub,
            aes_string(xmin = "StartLoc", xmax = "StopLoc",
-                      y = name, fill = "SignDesc", label="ShortName")) +
+                      y = name, fill = "SignDesc", label=legend_name)) +
       geom_gene_arrow(arrowhead_height = unit(3, "mm"),
                       arrowhead_width = unit(1, "mm")) +
       #geom_blank(data = dummies) +
