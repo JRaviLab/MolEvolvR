@@ -65,7 +65,7 @@ if [ $WBLAST = F ]; then
    fi
 
    INPATHS=input.txt
-
+   echo "0/${NFASTA} analyses completed" > status.txt 
    qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "$INPATHS $WBLAST" -t 1-$NFASTA
 
 fi
