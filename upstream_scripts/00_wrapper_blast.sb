@@ -128,4 +128,11 @@ do
     fi
 done
 
+NUM_RUNS=`wc -l ${OUTPATH}/logfile.tsv | grep -Eo "^[[:digit:]]+"`
+((NUM_RUNS-=1))
+if [ `wc -l ${OUTPATH}/input.txt | grep -Eo "^[[:digit:]]+"` -eq $NUM_RUNS ]
+then
+  touch ../done.txt
+fi
+
 setfacl -R -m group:shiny:r-x ${OUTDIR}
