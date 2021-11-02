@@ -12,6 +12,7 @@ DIR=$(dirname $INFILE)
 BASE=$(basename $INFILE)
 PREFIX=$(echo "${BASE%%.*}")
 cd ${DIR}
+echo "Splitting queries into domains, please wait" > status.txt
 export INTERPRO=/opt/software/iprscan/5.47.82.0-Python3/data:/data/common_data/iprscan:$INTERPRO
 source /etc/profile.d/modules.sh
 module purge
