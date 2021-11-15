@@ -7,7 +7,6 @@
 ## Output type: IPR file with DomArch added + protein metadata such as TaxID, Species, Lineage, Name & such
 
 ## USER INPUTS
-INFILE=$1
 
 ## USAGE
 ## ./00_submit_ipr.sh accnum_iprscan.tsv
