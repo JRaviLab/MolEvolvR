@@ -1,5 +1,11 @@
 #!/bin/bash
-
+############
+## TORQUE ##
+############
+#PBS -l nodes=1:ppn=1		# number of nodes requested
+#PBS -m abe			# email notifications for job
+#PBS -M=jravilab.msu@gmail.com	# user email;
+#PBS -N molevol_analysis	# name of job being run
 ## COMPANION SCRIPT TO MOLEVOLVR APP ##
 ## Authors: Janani Ravi, Lauren Sosinski
 
@@ -33,7 +39,7 @@ if [ $WBLAST = T ]; then
 
    INPATHS=input.txt
 
-   qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "$INPATHS $WBLAST"
+   ID=`qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "$INPATHS $WBLAST"`
 fi
 
 if [ $WBLAST = F ]; then
@@ -66,8 +72,24 @@ if [ $WBLAST = F ]; then
 
    INPATHS=input.txt
    echo "0/${NFASTA} analyses completed" > status.txt 
-   qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "$INPATHS $WBLAST" -t 1-$NFASTA
+   ID=`qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "$INPATHS $WBLAST" -t 1-$NFASTA`
 
 fi
 
 setfacl -R -m group:shiny:r-x ${DIR}
+#NUM_ID=`echo ${ID} | grep -Eo "^[[:digit:]]+"`
+#run_start=0
+#qstat | grep ${NUM_ID}
+#while [ $? -ne 1 ] && [ $run_start -lt 86400 ];
+#do
+#  sleep 3600
+#  ((run_start+=3600))
+#  qstat | grep ${NUM_ID}
+#done
+#if [ $run_start -gt 86400 ];
+#   then
+#   qdel ${ID}
+#   touch "kill.txt"
+#   exit 1
+#fi
+#exit 0
