@@ -1,14 +1,13 @@
 #!/bin/bash
-
+#PBS -N submit_full
+#PBS -l nodes=1 :ppn 2
 ## COMPANION SCRIPT TO MOLEVOLVR APP ##
 ## Authors: Janani Ravi, Lauren Sosinski
 
 ## USER INPUTS
-INFILE=$1
 DB=refseq
 NHITS=5000
 EVAL=1e-5
-WBLAST=$2
 
 ## USAGE ##
 # Full analysis | input | fasta file

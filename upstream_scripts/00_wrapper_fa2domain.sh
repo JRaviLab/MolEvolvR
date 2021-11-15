@@ -23,4 +23,4 @@ sh /data/research/jravilab/molevol_scripts/upstream_scripts/04a_iprscan.sh ${INF
 touch ${DIR}/${PREFIX}.domains.fa
 Rscript --vanilla /data/research/jravilab/molevol_scripts/upstream_scripts/fa2domain.R $INFILE ${DIR}/${PREFIX}.iprscan.tsv ${DIR}/${PREFIX}.domains.fa
 
-sh ${SCRIPT} ${DIR}/${PREFIX}.domains.fa ${OTHERARGS}
+qsub ${SCRIPT} -v INFILE=${DIR}/${PREFIX}.domains.fa, WBLAST=${OTHERARGS}
