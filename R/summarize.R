@@ -153,7 +153,7 @@ filter_freq <- function(x, min.freq){ x %>%
 ## SUMMARY FUNCTIONS ####
 #########################
 summarize_bylin <- function(prot="prot", column="DomArch", by="Lineage",
-                            query="PspA"){
+                            query){
   column <- sym(column); by <- sym(by)
   if(query== "all"){
     prot <- prot
