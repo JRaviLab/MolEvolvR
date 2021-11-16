@@ -75,9 +75,10 @@ do
       ## WEB BLAST ANALYSIS
       if [ $WBLAST = "T" ]
       then
-	     F=$(basename ${FILE})
+	    F=$(basename ${FILE})
    		PREFIX=$(echo "${F%%.wblast.tsv}")			## takes PREFIX of file
    		OUTDIR=${OUTPATH}/${PREFIX}_full		## variable containing output filepath based PREFIX
+		cd ${OUTDIR}
    		printf "${PREFIX}\n"
 		## ACC2FA ##
 		acc2fa_start=$SECONDS

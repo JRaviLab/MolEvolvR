@@ -27,7 +27,6 @@ printf "START_DT\tSTOP_DT\tquery\tdblast\tacc2info\tdblast_cleanup\tacc2fa\tblas
 query_run_start=$SECONDS
 
 if [ $WBLAST = T ]; then
-   mv "wblast.tsv" "${PREFIX}.wblast.tsv"
    find $PWD -type f -name "${PREFIX}.wblast.tsv" > input.txt
    INPATHS=input.txt
    echo "qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F '$INPATHS $WBLAST'" >> cmd.txt
