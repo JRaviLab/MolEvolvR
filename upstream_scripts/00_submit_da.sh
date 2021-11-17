@@ -1,5 +1,6 @@
 #!/bin/bash
-
+#PBS -N submit_da
+#PBS -l nodes=1 :ppn 2
 ## COMPANION SCRIPT TO MOLEVOLVR APP ##
 ## Authors: Janani Ravi, Lauren Sosinski
 
@@ -7,7 +8,6 @@
 ## Output type: text file containing paths to individual fasta files
 
 ## USER INPUTS
-INFILE=$1
 
 ## USAGE
 ## ./00_submit_da.sh multifasta.fa

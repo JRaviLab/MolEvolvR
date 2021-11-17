@@ -1,20 +1,13 @@
 #!/bin/bash
-############
-## TORQUE ##
-############
-#PBS -l nodes=1:ppn=1		# number of nodes requested
-#PBS -m abe			# email notifications for job
-#PBS -M=jravilab.msu@gmail.com	# user email;
-#PBS -N molevol_analysis	# name of job being run
+#PBS -N submit_full
+#PBS -l nodes=1 :ppn 2
 ## COMPANION SCRIPT TO MOLEVOLVR APP ##
 ## Authors: Janani Ravi, Lauren Sosinski
 
 ## USER INPUTS
-INFILE=$1
 DB=refseq
 NHITS=5000
 EVAL=1e-5
-WBLAST=$2
 
 ## USAGE ##
 # Full analysis | input | fasta file
@@ -34,11 +27,9 @@ printf "START_DT\tSTOP_DT\tquery\tdblast\tacc2info\tdblast_cleanup\tacc2fa\tblas
 query_run_start=$SECONDS
 
 if [ $WBLAST = T ]; then
-   sed 's/,/\t/g' ${INFILE} > ${DIR}/${PREFIX}.wblast.tsv
    find $PWD -type f -name "${PREFIX}.wblast.tsv" > input.txt
-
    INPATHS=input.txt
-
+   echo "qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F '$INPATHS $WBLAST'" >> cmd.txt
    ID=`qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "$INPATHS $WBLAST"`
 fi
 

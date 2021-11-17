@@ -72,18 +72,15 @@ FILES=$(cat $INPUTPATHS_LIST)
 
 for FILE in $(shuf -e "${FILES[@]}")
 do
-   F=$(basename ${FILE})
-   PREFIX=$(echo "${F%%.faa}")			## takes PREFIX of file
-   OUTDIR=${OUTPATH}/${PREFIX}_full		## variable containing output filepath based PREFIX
-   printf "${PREFIX}\n"
-
-   if [ ! -d ${OUTDIR} ]; then 			## if the output directory doesn't exist
-      mkdir ${OUTDIR}				## make the directory
-      cd ${OUTDIR}
-
       ## WEB BLAST ANALYSIS
       if [ $WBLAST = "T" ]
       then
+	    F=$(basename ${FILE})
+   		PREFIX=$(echo "${F%%.wblast.tsv}")			## takes PREFIX of file
+   		OUTDIR=${OUTPATH}/${PREFIX}_full
+		mkdir ${OUTDIR}		## variable containing output filepath based PREFIX
+		cd ${OUTDIR}
+   		printf "${PREFIX}\n"
 		## ACC2FA ##
 		acc2fa_start=$SECONDS
 		sh /data/research/jravilab/molevol_scripts/upstream_scripts/02_acc2fa.sh ${OUTPATH}/${PREFIX}.wblast.tsv $PREFIX $OUTDIR
@@ -103,6 +100,12 @@ do
       ## COMMANDLINE BLAST ANALYSIS
     if [ $WBLAST = "F" ]
       then
+	  	F=$(basename ${FILE})
+   		PREFIX=$(echo "${F%%.faa}")			## takes PREFIX of file
+   		OUTDIR=${OUTPATH}/${PREFIX}_full		## variable containing output filepath based PREFIX
+   		printf "${PREFIX}\n"
+		mkdir ${OUTDIR}				## make the directory
+      	cd ${OUTDIR}
 		# put original fasta file into file containing all homologs
 		cat $FILE >> ${OUTDIR}/${PREFIX}.all_accnums.fa
 
@@ -182,7 +185,6 @@ do
         #       sbatch --array=${SLURM_ARRAY_TASK_ID} $0
         #      scancel ${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}
         #  fi
-    fi
 done
 NUM_RUNS=`wc -l ${OUTPATH}/logfile.tsv | grep -Eo "^[[:digit:]]+"`
 ((NUM_RUNS-=1))
