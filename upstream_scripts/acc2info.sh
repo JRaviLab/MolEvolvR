@@ -9,10 +9,11 @@ module load edirect
 INFILE=$1	# list of accession numbers (one per line)
 PREFIX=$2	# prefix to files/runs
 OUTDIR=$3	# location of output files
-OUTFILE=$(printf "${OUTDIR}/${PREFIX}.acc2info.tsv")
-echo ${PREFIX} >> ${INFILE}
 acc2info()
 {
+	OUTFILE=$(printf "${OUTDIR}/${PREFIX}.acc2info.tsv")
+	# Get info for the query too
+	echo ${PREFIX} >> ${INFILE}
 	# print colnames
 	printf "AccNum.noV\tFullAccNum\tDescription\tLength\tTaxID\tSpecies\tSourceDB\tCompleteness\n" > $OUTFILE
 	# Batch input of accession numbers --> Document Summaries --> Pull necessary columns --> Output
@@ -21,7 +22,20 @@ acc2info()
 	-element Caption,Extra,Title,Slen,TaxId,Organism,SourceDb,Completeness >> $OUTFILE
 }
 
-acc2info $INFILE $PREFIX $OUTDIR
+acc2info_phylo()
+{
+	OUTFILE=$(printf "${OUTDIR}/acc2info.tsv")
+	epost -input $INFILE -db protein | \
+	efetch -format docsum | xtract -pattern DocumentSummary -def "NA" \
+	-element Caption,Extra,Title,Slen,TaxId,Organism,SourceDb,Completeness >> $OUTFILE
+}
+
+if [ $PREFIX = "NA" ];
+then
+	acc2info_phylo $INFILE $PREFIX $OUTDIR
+else
+	acc2info $INFILE $PREFIX $OUTDIR
+fi
 
 # Unused XML alternative | parts of this could be slighly buggy
 #epost -input $INFILE -db protein | \

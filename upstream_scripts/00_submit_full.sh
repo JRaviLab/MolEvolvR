@@ -31,9 +31,8 @@ if [ $WBLAST = T ]; then
    INPATHS=input.txt
    echo "qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F '$INPATHS $WBLAST'" >> cmd.txt
    ID=`qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "$INPATHS $WBLAST"`
-fi
 
-if [ $WBLAST = F ]; then
+else
 
    ## COUNT NUMBER OF FASTA SEQUENCES ##
    NFASTA=$(grep -o "^>" $INFILE | wc -l)
@@ -48,9 +47,11 @@ if [ $WBLAST = F ]; then
       if [ $? = 0 ]
       then
 	       awk -F '|' '/^>/{x=""$2".faa";}{print >x;}' $INFILE
+          awk -F '|' '/^>/{printf $2"\n"}' $INFILE > accs.txt
          find $PWD -type f -name "*.faa" > input.txt
     else
       awk -F "( )|(>)" '/^>/{x=""$2".faa";}{print >x;}' $INFILE
+      awk -F "( )|(>)" '/^>/{printf $2"\n";}' $INFILE > accs.txt
       find $PWD -type f -name "*.faa" > input.txt
     fi
    fi
@@ -63,8 +64,15 @@ if [ $WBLAST = F ]; then
 
    INPATHS=input.txt
    echo "0/${NFASTA} analyses completed" > status.txt 
+   if [ "$WBLAST" = phylo ];
+   then
+   source /etc/profile.d/modules.sh
+   module load edirect
+   sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh "${DIR}/accs.txt" "NA" "${DIR}"
+   ID=`qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_phylo.sh -F "$INPATHS $WBLAST" -t 1-$NFASTA`
+   else
    ID=`qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "$INPATHS $WBLAST" -t 1-$NFASTA`
-
+   fi
 fi
 
 setfacl -R -m group:shiny:r-x ${DIR}
