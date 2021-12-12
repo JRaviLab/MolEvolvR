@@ -73,7 +73,9 @@ ipr2da <- function(infile_ipr, prefix,
 ## function to add results from ipr2da to blast results
 append_ipr <- function(ipr_da, blast, prefix) {
   blast_out <- read_tsv(blast, col_names = T)
-
+  if ("AccNum.noV" %in% colnames(blast_out)){
+    blast_out <- blast_out %>% rename(AccNum.noV = AccNum)
+  }
   blast_ipr <- merge(blast_out, ipr_da, by = 'AccNum', all.x = T) # %>%
     # mutate(Species = Species.y, TaxID = TaxID.y, Name = Name.y, Lineage = Lineage.x) %>%
     # select(-Species.x, -Species.y, -TaxID.x, -TaxID.y, -Name.x, -Name.y, -Lineage.x, -Lineage.y)

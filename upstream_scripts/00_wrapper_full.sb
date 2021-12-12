@@ -68,18 +68,16 @@ START_DT=$(date '+%d/%m/%Y-%H:%M:%S')
 #total=$(( ((3*60)+50)*60 ))			## total time the job can take in seconds, this should match your SBATCH line above
 #maxtime=$(( 120*60 )) 				## maximum time to process one input, need to do some experimenting with your inputs
 
-FILES=$(cat $INPUTPATHS_LIST)
+FILE=$(sed -n "${PBS_ARRAYID}"p "${INPUTPATHS_LIST}")
 
-for FILE in $(shuf -e "${FILES[@]}")
-do
       ## WEB BLAST ANALYSIS
-      if [ $WBLAST = "T" ]
+      if [ "$WBLAST" = "T" ]
       then
-	    F=$(basename ${FILE})
-   		PREFIX=$(echo "${F%%.wblast.tsv}")			## takes PREFIX of file
+	    F=$(basename "${FILE}")
+   		PREFIX="${F%%.wblast.tsv}"		## takes PREFIX of file
    		OUTDIR=${OUTPATH}/${PREFIX}_full
 		mkdir ${OUTDIR}		## variable containing output filepath based PREFIX
-		cd ${OUTDIR}
+		cd "${OUTDIR}" || exit
    		printf "${PREFIX}\n"
 		## ACC2FA ##
 		acc2fa_start=$SECONDS
@@ -114,7 +112,7 @@ do
 		sh /data/research/jravilab/molevol_scripts/upstream_scripts/01.1_deltablast.sh $FILE $PREFIX $OUTDIR $DB $NHITS $EVAL
 		db_dur=$(( $SECONDS - $db_start ))
 
-    ## ACC2FA -- getting fasta FILES for deltablast output(s)
+    	## ACC2FA -- getting fasta FILES for deltablast output(s)
 		acc2fa_start=$SECONDS
 		sh /data/research/jravilab/molevol_scripts/upstream_scripts/02_acc2fa.sh ${OUTDIR}/${PREFIX}.dblast.tsv $PREFIX $OUTDIR
 		acc2fa_dur=$(( $SECONDS - $acc2fa_start ))
@@ -185,10 +183,9 @@ do
         #       sbatch --array=${SLURM_ARRAY_TASK_ID} $0
         #      scancel ${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}
         #  fi
-done
-NUM_RUNS=`wc -l ${OUTPATH}/logfile.tsv | grep -Eo "^[[:digit:]]+"`
+NUM_RUNS=$(wc -l "${OUTPATH}"/logfile.tsv | grep -Eo "^[[:digit:]]+")
 ((NUM_RUNS-=1))
-TOTAL_RUNS=`wc -l ${OUTPATH}/input.txt | grep -Eo "^[[:digit:]]+"`
+TOTAL_RUNS=$(wc -l "${OUTPATH}"/input.txt | grep -Eo "^[[:digit:]]+")
 if [ $TOTAL_RUNS -eq $NUM_RUNS ]
 then
   touch ../done.txt
