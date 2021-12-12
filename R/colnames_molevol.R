@@ -212,6 +212,6 @@ ipr_cln_cols <- cols(.default = col_character(),
                     Length = col_double(),
                     ID = col_logical()) 
 
-lineage_map_cols <- c("dobule",
+lineage_map_cols <- c("double",
                         "character",
                         "character")
