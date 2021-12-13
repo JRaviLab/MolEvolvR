@@ -197,7 +197,7 @@ ipr2viz_web <- function(infile_ipr,
   lookup_tbl = read_tsv(lookup_tbl_path, col_names = T, col_types = lookup_table_cols)
 
   ## Read IPR file and subset by Accessions
-  ipr_out <- read_tsv(infile_ipr, col_names=ipr_colnames, col_types = iprscan_cols)
+  ipr_out <- read_tsv(infile_ipr, col_names = T)
   #ipr_out <- subset(ipr_out, ipr_out$AccNum %in% accessions)
 
   ## Need to fix eventually based on 'real' gene orientation!
@@ -217,7 +217,6 @@ ipr2viz_web <- function(infile_ipr,
 
   print(analysis_labeler)
 
-  queryrows <- which(is.na(ipr_out_sub$AccNum))
   lookup_tbl = lookup_tbl %>% select(-ShortName)
   ## @SAM, make sure the following two work with the Lookup Tables!!
   ipr_out_sub <- merge(ipr_out_sub, lookup_tbl, by = "DB.ID")
