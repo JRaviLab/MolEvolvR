@@ -53,7 +53,7 @@ ipr2da <- function(infile_ipr, prefix,
 
   # select relevant rows from ipr input to add to domarch
   ipr_select <- ipr_in %>%
-    select(Name, AccNum, Species, TaxID, Lineage, ProteinName, SourceDB, Completeness) %>%
+    select(Name, AccNum, Species, TaxID, Lineage, ProteinName, SourceDB, Completeness, AccNum.noV) %>%
     distinct()
 
   # combine domarchs to one data frame, merge w/ acc2info
@@ -74,9 +74,13 @@ ipr2da <- function(infile_ipr, prefix,
 append_ipr <- function(ipr_da, blast, prefix) {
   blast_out <- read_tsv(blast, col_names = T)
   if ("AccNum.noV" %in% colnames(blast_out)){
-    blast_out <- blast_out %>% rename(AccNum.noV = AccNum)
+    ipr_da <- read_tsv(paste0(prefix, '.ipr_domarch.tsv'), col_names = T)
+    blast_ipr <- merge(blast_out, ipr_da, by = "AccNum.noV", all.x = T)
   }
-  blast_ipr <- merge(blast_out, ipr_da, by = 'AccNum', all.x = T) # %>%
+  else{
+    blast_ipr <- merge(blast_out, ipr_da, by = 'AccNum', all.x = T)
+  }
+   # %>%
     # mutate(Species = Species.y, TaxID = TaxID.y, Name = Name.y, Lineage = Lineage.x) %>%
     # select(-Species.x, -Species.y, -TaxID.x, -TaxID.y, -Name.x, -Name.y, -Lineage.x, -Lineage.y)
 
