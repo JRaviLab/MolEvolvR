@@ -37,20 +37,21 @@ theme_genes2 <- function() {
 find_top_acc = function(infile_full,
                         DA_col = "DomArch.Pfam", ## @SAM, you could pick by the Analysis w/ max rows!
                         lin_col = "Lineage",
-                        n = 20)
+                        n = 20,
+                        query)
 {
   lin_sym = sym(lin_col)
   DA_sym = sym(DA_col)
-
   cln = fread(infile_full, sep ="\t", fill = T)
-
+  if (query != "All"){
+    cln <- cln %>% filter(cln$QueryName == query)
+  }
   ## Group by Lineage, DomArch and reverse sort by group counts
   grouped = cln %>%
     group_by({{lin_sym}}, {{DA_sym}}) %>%
     summarise(count = n()) %>%
     arrange(-count) %>%
     filter(!is.na({{lin_sym}}) & !is.na({{DA_sym}}))
-
   top_acc = character(n)
   for(r in 1:min(nrow(grouped), n))
   {
@@ -63,6 +64,9 @@ find_top_acc = function(infile_full,
 
     top_acc[r] = top$AccNum
   }
+  if (query != "All"){
+    top_acc[n+1] = unique(cln$Query)
+  }
   top_acc = top_acc[which(top_acc != "")]
   return(top_acc)
 }
@@ -73,8 +77,8 @@ find_top_acc = function(infile_full,
 #############################################
 ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
                     analysis=c("Pfam", "Phobius", "TMHMM", "Gene3D"),
-                    group_by = "Query", #"Analysis"
-                    topn = 20, name = "Name", text_size = 10)
+                    group_by = "Analysis", #"Analysis"
+                    topn = 20, name = "Name", text_size = 10, query = "All")
 {
   CPCOLS <- c('#AFEEEE', '#DDA0DD', '#EE2C2C', '#CDBE70', '#B0B099',
              '#8B2323', '#EE7600', '#EEC900', 'chartreuse3', '#0000FF',
@@ -97,7 +101,7 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
                           DA_col = "DomArch.Pfam",
                           ## @SAM, you could pick by the Analysis w/ max rows!
                           lin_col = "Lineage",
-                          n = topn)
+                          n = topn, query = query)
   # Filter by Top Accessions per Accession per DomArch and Lineage
   ipr_out <- subset(ipr_out,
                     ipr_out$AccNum %in% top_acc)
@@ -113,24 +117,23 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
     distinct()
   analysis_labeler <- analyses %>%
     pivot_wider(names_from = Analysis, values_from = Analysis)
-  print(analysis_labeler)
 
   queryrows <- which(is.na(ipr_out_sub$AccNum))
   lookup_tbl_path = "/data/research/jravilab/common_data/cln_lookup_tbl.tsv"
   lookup_tbl = read_tsv(lookup_tbl_path, col_names = T, col_types = lookup_table_cols)
 
-  print(colnames(ipr_out_sub))
-  print(colnames(lookup_tbl))
   lookup_tbl = lookup_tbl %>% select(-ShortName) # Already has ShortName -- Just needs SignDesc
   # ipr_out_sub = ipr_out_sub %>% select(-ShortName) 
-  ipr_out_sub <- merge(ipr_out_sub, lookup_tbl, by.x = "DB.ID", by.y = "DB.ID")
+  # TODO: Fix lookup table and uncomment below
+  #ipr_out_sub <- merge(ipr_out_sub, lookup_tbl, by.x = "DB.ID", by.y = "DB.ID")
 
-  print(colnames(ipr_out_sub))
   ## PLOTTING
   ## domains as separate arrows
+  # For odering with tree
+  #ipr_out_sub$label <- paste0(" ", ipr_out_sub$Name)
   if(group_by == "Analysis")
   {
-    ggplot(ipr_out_sub,
+    plot <- ggplot(ipr_out_sub,
            aes_string(xmin = "StartLoc", xmax = "StopLoc",
                       y = name, fill = "SignDesc", label="ShortName")) +
       geom_gene_arrow(arrowhead_height = unit(3, "mm"),
@@ -151,13 +154,13 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
   }
 
   else if(group_by == "Query"){
-    ggplot(ipr_out_sub,
+    plot <- ggplot(ipr_out_sub,
            aes(xmin = StartLoc, xmax = StopLoc,
                y = Analysis,  #y = AccNum
                fill = SignDesc, label = ShortName)) +
       geom_gene_arrow(arrowhead_height = unit(3, "mm"),
                       arrowhead_width = unit(1, "mm")) +
-      facet_wrap(as.formula(paste("~", name)), strip.position = "top", ncol = 3,
+      facet_wrap(as.formula(paste("~", name)), strip.position = "top", ncol = 5,
                  labeller=as_labeller(analysis_labeler)) +
       scale_color_manual(values = CPCOLS)  +
       theme_minimal() + theme_genes2() +
@@ -167,16 +170,16 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
             legend.box.margin = margin(),
             text = element_text(size = text_size)) +
       ylab("")+
-      guides(fill=guide_legend(nrow=3))
+      guides(fill=guide_legend(nrow=10))
   }
-
+  return(plot)
 }
 
 ipr2viz_web <- function(infile_ipr,
                         accessions,
                         analysis= c("Pfam", "Phobius", "TMHMM", "Gene3D"),
-                        group_by = "Query", name = "Name",
-                        text_size = 10, legend_name = "ShortName")
+                        group_by = "Analysis", name = "Name",
+                        text_size = 8, legend_name = "ShortName")
 {
   CPCOLS <- c('#AFEEEE', '#DDA0DD', '#EE2C2C', '#CDBE70', '#B0B099',
              '#8B2323', '#EE7600', '#EEC900', 'chartreuse3', '#0000FF',
@@ -189,7 +192,7 @@ ipr2viz_web <- function(infile_ipr,
              '#FFE4B5', 'black', '#FF7F50', '#FFB90F', '#FF69B4', '#836FFF',
              '#757575','#CD3333', '#EE7600', '#CDAD00', '#556B2F', '#7AC5CD')
   ## To filter by Analysis
-  analysis = paste(analysis, collapse = "|")
+  analysis = paste0(analysis, collapse = "|")
 
   ## @SAM, colnames, merges, everything neeeds to be done now based on the
   ## combined lookup table from "common_data"
@@ -198,15 +201,12 @@ ipr2viz_web <- function(infile_ipr,
 
   ## Read IPR file and subset by Accessions
   ipr_out <- read_tsv(infile_ipr, col_names = T)
-  #ipr_out <- subset(ipr_out, ipr_out$AccNum %in% accessions)
-
   ## Need to fix eventually based on 'real' gene orientation!
   ipr_out$Strand <- rep("forward", nrow(ipr_out))
 
   ipr_out <- ipr_out %>% arrange(AccNum, StartLoc, StopLoc)
   ipr_out_sub <- filter(ipr_out,
                         grepl(pattern=analysis, x=Analysis))
-
   # dynamic analysis labeller
    analyses <- ipr_out_sub %>%
     select(Analysis) %>%
@@ -215,24 +215,23 @@ ipr2viz_web <- function(infile_ipr,
     pivot_wider(names_from = Analysis, values_from = Analysis)
   # analysis_labeler[1,] = colnames(analysis_labeler)
 
-  print(analysis_labeler)
-
+  #ipr_out_sub$label <- paste0(" ", ipr_out_sub$Name)
   lookup_tbl = lookup_tbl %>% select(-ShortName)
   ## @SAM, make sure the following two work with the Lookup Tables!!
-  ipr_out_sub <- merge(ipr_out_sub, lookup_tbl, by = "DB.ID")
-
+  #ipr_out_sub <- merge(ipr_out_sub, lookup_tbl, by = "DB.ID")
   ## PLOTTING
   ## domains as separate arrows
-  
   if(group_by == "Analysis")
   {
-    ggplot(ipr_out_sub,
-           aes_string(xmin = "StartLoc", xmax = "StopLoc",
-                      y = name, fill = "SignDesc", label=legend_name)) +
-      geom_gene_arrow(arrowhead_height = unit(3, "mm"),
-                      arrowhead_width = unit(1, "mm")) +
+    plot <- ggplot(ipr_out_sub,
+           aes(xmin = StartLoc, xmax = StopLoc,
+                      y = Name, fill = SignDesc, label=ShortName)) +
+      geom_gene_arrow(arrowhead_height = unit(2, "mm"),
+                      arrowhead_width = unit(1, "mm"),
+                      arrow_body_height =unit(2, "mm")
+                      ) +
       #geom_blank(data = dummies) +
-      facet_wrap(~ Analysis, strip.position = "top", ncol = 3,
+      facet_wrap(~ Analysis, strip.position = "top", ncol = 5,
                  labeller=as_labeller(analysis_labeler)) +
       #, ncol = 1 + #scales = "free",
       scale_color_manual(values = CPCOLS) +
@@ -243,11 +242,12 @@ ipr2viz_web <- function(infile_ipr,
             legend.box.margin = margin(),
             text = element_text(size = text_size)) +
       ylab("")+
-      guides(fill=guide_legend(nrow=3))
+      guides(fill=guide_legend(nrow=10))
+      #ggsave("/data/research/jravilab/inlp_listeria/figures/da.png", dpi = 400, height = 15, width = 14)
   }
 
   else if(group_by == "Query"){
-    ggplot(ipr_out_sub,
+    plot <- ggplot(ipr_out_sub,
            aes(xmin = StartLoc, xmax = StopLoc,
                y = Analysis,  #y = AccNum
                fill = SignDesc, label=ShortName)) +
@@ -264,7 +264,7 @@ ipr2viz_web <- function(infile_ipr,
             legend.box.margin = margin(),
             text = element_text(size = text_size)) +
       ylab("")+
-      guides(fill=guide_legend(nrow=3))
+      guides(fill=guide_legend(nrow=10))
   }
-
+  return(plot)
 }
