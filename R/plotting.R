@@ -224,7 +224,7 @@ lineage.DA.plot <- function(query_data="prot",
 
   query.summ.byLin.ggplot <-  drop_na(query.summ.byLin) %>%
                                 filter(Lineage!="NANA") %>%
-                                filter(count>1) %>%# count or total count?
+                                filter(count>=1) %>%# count or total count?
                                 arrange(totalcount)
 
   query.summ.byLin.ggplot$Lineage <- factor(query.summ.byLin.ggplot$Lineage,
@@ -267,7 +267,7 @@ lineage.DA.plot <- function(query_data="prot",
 lineage.Query.plot <- function(query_data=all,
                                queries,
                                colname = "ClustName",
-                               cutoff){
+                               cutoff, color = "default"){
   #' Lineage Plot: Heatmap of Queries vs Lineages
   #' @authors Janani Ravi, Samuel Chen
   #' @keywords Lineages, Domains, Domain Architectures, GenomicContexts
@@ -279,7 +279,6 @@ lineage.Query.plot <- function(query_data=all,
   #' @examples lineage.Query.plot(prot, c("PspA","PspB","PspC","PspM","PspN"), 95)
   #' @note Please refer to the source code if you have alternate file formats and/or
   #' column names.
-
   query_by_lineage <- function(data, query, column, by){
     column <- sym(column); by <- sym(by)
 
@@ -303,16 +302,13 @@ lineage.Query.plot <- function(query_data=all,
     return(data)
 
   }
-
   col <- sym(colname)
 
   query_data <- query_data %>% total_counts(column = colname, cutoff = cutoff)
-
   # query_data contains all rows that possess a lineage
   query_data <- query_data %>% filter(grepl("a", Lineage))
 
   query_data <- shorten_lineage(query_data, "Lineage", abr_len = 1)
-
   query_lin_counts = data.frame("Query" = character(0), "Lineage" = character(0), "count"= integer())
   for(q in queries){
     query_lin <- query_by_lineage(data = query_data, query = q, column = {{col}}, by = "Lineage")
@@ -323,13 +319,14 @@ lineage.Query.plot <- function(query_data=all,
     unlist()
 
   query.summ.byLin.ggplot <- drop_na(query_lin_counts) %>%
-    filter(count>1) %>%  # count or total count?
+    filter(count>=1) %>%  # count or total count?
     within(Lineage <- factor(Lineage,
                              levels= sort(names(sort(table(Lineage),
                                                decreasing=TRUE))))) %>%
     within(Query <- factor(Query,
                            levels=names(sort(table(Query),
                                              decreasing=F))))
+  if (color == "default"){
   ## Tile plot
   ggplot(data=query.summ.byLin.ggplot,
          aes_string(x="Lineage", y="Query")) +
@@ -341,9 +338,24 @@ lineage.Query.plot <- function(query_data=all,
     scale_x_discrete(position="top") +
     theme_minimal() +
     theme(axis.text.x=element_text(angle=65,hjust=0,vjust=0.5))
+  #ggsave("/data/scratch/janani/molevolvr_out/GZKL61_full/plot.png", dpi = 400, device = "png", height = 12, width = 14)
   # scale_y_discrete(position = "bottom") +
   # scale_x_discrete(position = "bottom") +
   # coord_flip()
+  }
+  else{
+      ## Tile plot
+  ggplot(data=query.summ.byLin.ggplot,
+         aes_string(x="Lineage", y="Query")) +
+    geom_tile(data=subset(query.summ.byLin.ggplot,
+                          !is.na(count)),
+              aes(fill=count),
+              colour="darkred", size=0.3) + #, width=0.7, height=0.7),
+    scale_fill_viridis(discrete = F, option = color)+
+      scale_x_discrete(position="top") +
+    theme_minimal() +
+    theme(axis.text.x=element_text(angle=65,hjust=0,vjust=0.5))
+  }
 }
 
 
@@ -877,7 +889,6 @@ lineage_sunburst <- function(prot, lineage_column = "Lineage",
   #' then the legend will be in the descending order of the top level hierarchy.
   #'will be rendered. If the type is sund2b, a sund2b plot will be rendered.
 
-
   lin_col <- sym(lineage_column)
 
   levels_vec = c()
@@ -891,7 +902,6 @@ lineage_sunburst <- function(prot, lineage_column = "Lineage",
   protLevels <- prot %>% separate({{lin_col}}, into = levels_vec, sep = ">")
   # Count the occurrance of each group of levels
   protLevels = protLevels %>% group_by_at(levels_vec) %>% summarise(size = n())
-
   tree <- d3_nest(protLevels, value_cols = "size")
 
   # Plot sunburst
