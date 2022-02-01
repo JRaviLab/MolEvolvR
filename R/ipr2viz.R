@@ -64,10 +64,8 @@ find_top_acc = function(infile_full,
 
     top_acc[r] = top$AccNum
   }
-  if (query != "All"){
-    top_acc[n+1] = unique(cln$Query)
-  }
   top_acc = top_acc[which(top_acc != "")]
+  top_acc = na.omit(top_acc)
   return(top_acc)
 }
 
