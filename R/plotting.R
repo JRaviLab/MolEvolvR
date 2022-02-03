@@ -318,14 +318,13 @@ lineage.Query.plot <- function(query_data=all,
   query_lin_counts$Lineage <- map(query_lin_counts$Lineage, function(x) str_replace_all(string = x,pattern = ">", replacement = "_")) %>%
     unlist()
 
+  query_lin_counts <- query_lin_counts %>% arrange(dplyr::desc(Query))
   query.summ.byLin.ggplot <- drop_na(query_lin_counts) %>%
     filter(count>=1) %>%  # count or total count?
     within(Lineage <- factor(Lineage,
-                             levels= sort(names(sort(table(Lineage),
-                                               decreasing=TRUE))))) %>%
+                             levels= unique(Lineage))) %>%
     within(Query <- factor(Query,
-                           levels=names(sort(table(Query),
-                                             decreasing=F))))
+                           levels=unique(Query)))
   if (color == "default"){
   ## Tile plot
   ggplot(data=query.summ.byLin.ggplot,
