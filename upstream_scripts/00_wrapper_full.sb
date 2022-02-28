@@ -14,7 +14,7 @@
 ############
 ## TORQUE ##
 ############
-#PBS -l nodes=1:ppn=10,walltime=10:00:00		# number of nodes requested, specify wall time
+#PBS -l nodes=1:ppn=10		# number of nodes requested, specify wall time
 #PBS -m abe			# email notifications for job
 #PBS -M=jravilab.msu@gmail.com	# user email;
 #PBS -N molevol_analysis	# name of job being run
@@ -42,7 +42,7 @@ WBLAST=$2
 ## qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "example_blastp.csv T"
 
 # Location of databases/dependencies
-export BLASTDB=/data/common_data/blastdb/v6:/data/common_data/blastdb/ncbidb:/data/common_data/blastdb:/data/common_data/blastdb/FASTA:$BLASTDB
+export BLASTDB=/data/common_data/blastdb/v6
 export BLASTMAT=/opt/software/BLAST/2.2.26/data
 export INTERPRO=/opt/software/iprscan/5.47.82.0-Python3/data:/data/common_data/iprscan:$INTERPRO
 export NCBI_API_KEY=882b28aa19ece4679d4fa5adcf3319f5df09
