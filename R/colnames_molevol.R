@@ -45,7 +45,7 @@ cl_blast_colnames <- c("Query", "SAccNum", "AccNum",
 
 # post-cleanup
 cl_blast_postcln_cols <- c("Query", "AccNum",
-                       "STitle", "Species", "TaxID", "Lineage",
+                       "STitle", "Species", "TaxID", "Lineage", "Lineage_long",
                        "PcPositive", "PcIdentity", "AlnLength",
 		       "SAccNum", "SAllSeqID",
 		       "Mismatch", "GapOpen",
@@ -156,7 +156,7 @@ assembly_sub_colnames <- c("TaxID", "Spp.TaxID", "Species", "Spp.Strain",
 ## Lookup tables
 ## in common_data
 #################
-lineage_lookup_colnames <- c("TaxID", "Species", "Lineage")
+lineage_lookup_colnames <- c("TaxID", "Species", "Lineage", "Lineage_long")
 domarch_lookup_colnames <- c("DB.ID", "ShortName", "Description", "ID")
 #!! SC and LS will fix other piecemeal files based on these
 
@@ -214,4 +214,4 @@ ipr_cln_cols <- cols(.default = col_character(),
 
 lineage_map_cols <- c("double",
                         "character",
-                        "character")
+                        "character", "character")
