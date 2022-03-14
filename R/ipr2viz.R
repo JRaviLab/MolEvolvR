@@ -18,7 +18,7 @@ source("/data/research/jravilab/molevol_scripts/R/colnames_molevol.R")
 theme_genes2 <- function() {
   ggplot2::theme_grey() + ggplot2::theme(
     panel.background = ggplot2::element_blank(),
-    panel.grid.major.y = ggplot2::element_line(colour = "grey", size = 1),
+    panel.grid.major.y = ggplot2::element_line(colour = "grey80", size = 0.2),
     panel.grid.minor.y = ggplot2::element_blank(),
     panel.grid.minor.x = ggplot2::element_blank(),
     panel.grid.major.x = ggplot2::element_blank(),
@@ -128,19 +128,20 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
   ## PLOTTING
   ## domains as separate arrows
   # For odering with tree
-  #ipr_out_sub$label <- paste0(" ", ipr_out_sub$Name)
+  #ipr_out_sub$Name <- paste0(" ", ipr_out_sub$Name)
   if(group_by == "Analysis")
   {
     plot <- ggplot(ipr_out_sub,
-           aes_string(xmin = "StartLoc", xmax = "StopLoc",
-                      y = name, fill = "SignDesc", label="ShortName")) +
-      geom_gene_arrow(arrowhead_height = unit(3, "mm"),
-                      arrowhead_width = unit(1, "mm")) +
+           aes_string(xmin = 1, xmax = "SLength",
+                      y = name, label="ShortName"), color = NA, fill = NA) +
+      geom_subgene_arrow(data = ipr_out_sub, aes_string(xmin = 1, xmax = "SLength", y = name, fill = "SignDesc",
+      xsubmin = "StartLoc", xsubmax = "StopLoc"), color = "white") +
+      geom_gene_arrow(fill = NA, color = "grey") +
       #geom_blank(data = dummies) +
       facet_wrap(~ Analysis, strip.position = "top", ncol = 5,
                  labeller=as_labeller(analysis_labeler)) +
       #, ncol = 1 + #scales = "free",
-      scale_color_manual(values = CPCOLS) +
+      scale_fill_manual(values = CPCOLS, na.value = "#A9A9A9") +
       theme_minimal() + theme_genes2() +
       theme(legend.position="bottom",
             legend.box = "horizontal",
@@ -153,14 +154,16 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
 
   else if(group_by == "Query"){
     plot <- ggplot(ipr_out_sub,
-           aes(xmin = StartLoc, xmax = StopLoc,
+           aes(xmin = 1, xmax = SLength,
                y = Analysis,  #y = AccNum
-               fill = SignDesc, label = ShortName)) +
-      geom_gene_arrow(arrowhead_height = unit(3, "mm"),
-                      arrowhead_width = unit(1, "mm")) +
+               label = ShortName)) +
+      geom_subgene_arrow(data = ipr_out_sub, aes_string(xmin = 1, xmax = "SLength", y = "Analysis", fill = "SignDesc",
+      xsubmin = "StartLoc", xsubmax = "StopLoc"), color = "white") +
+      geom_gene_arrow(fill = NA, color = "grey") +
       facet_wrap(as.formula(paste("~", name)), strip.position = "top", ncol = 5,
                  labeller=as_labeller(analysis_labeler)) +
-      scale_color_manual(values = CPCOLS)  +
+      
+      scale_fill_manual(values = CPCOLS, na.value = "#A9A9A9")  +
       theme_minimal() + theme_genes2() +
       theme(legend.position="bottom",
             legend.box = "horizontal",
@@ -219,20 +222,20 @@ ipr2viz_web <- function(infile_ipr,
   #ipr_out_sub <- merge(ipr_out_sub, lookup_tbl, by = "DB.ID")
   ## PLOTTING
   ## domains as separate arrows
+  #ipr_out_sub$label <- paste0(" ", ipr_out_sub$Name)
   if(group_by == "Analysis")
   {
     plot <- ggplot(ipr_out_sub,
-           aes(xmin = StartLoc, xmax = StopLoc,
-                      y = Name, fill = SignDesc, label=ShortName)) +
-      geom_gene_arrow(arrowhead_height = unit(2, "mm"),
-                      arrowhead_width = unit(1, "mm"),
-                      arrow_body_height =unit(2, "mm")
-                      ) +
+           aes_string(xmin = 1, xmax = "SLength",
+                      y = name, label="ShortName")) +
+      geom_gene_arrow(fill = "white", color = "grey") +
+      geom_subgene_arrow(data = ipr_out_sub, aes_string(xmin = 1, xmax = "SLength", y = name, fill = "SignDesc",
+      xsubmin = "StartLoc", xsubmax = "StopLoc"), color = "NA") +
       #geom_blank(data = dummies) +
       facet_wrap(~ Analysis, strip.position = "top", ncol = 5,
                  labeller=as_labeller(analysis_labeler)) +
       #, ncol = 1 + #scales = "free",
-      scale_color_manual(values = CPCOLS) +
+      scale_fill_manual(values = CPCOLS, na.value = "#A9A9A9") +
       theme_minimal() + theme_genes2() +
       theme(legend.position="bottom",
             legend.box = "horizontal",
@@ -241,20 +244,20 @@ ipr2viz_web <- function(infile_ipr,
             text = element_text(size = text_size)) +
       ylab("")+
       guides(fill=guide_legend(nrow=10))
-      #ggsave("/data/research/jravilab/inlp_listeria/figures/da.png", dpi = 400, height = 15, width = 14)
   }
 
   else if(group_by == "Query"){
     plot <- ggplot(ipr_out_sub,
-           aes(xmin = StartLoc, xmax = StopLoc,
-               y = Analysis,  #y = AccNum
-               fill = SignDesc, label=ShortName)) +
-      geom_gene_arrow(arrowhead_height = unit(3, "mm"),
-                      arrowhead_width = unit(1, "mm")) +
+           aes(xmin = 1, xmax = SLength,
+              y = Analysis,  #y = AccNum
+              label=ShortName)) +
+      geom_subgene_arrow(data = ipr_out_sub, aes_string(xmin = 1, xmax = "SLength", y = "Analysis", fill = "SignDesc",
+      xsubmin = "StartLoc", xsubmax = "StopLoc"), color = "white") +
+      geom_gene_arrow(fill = NA, color = "grey") +
       facet_wrap(as.formula(paste("~", name)),
                  strip.position = "top", ncol = 3,
                  labeller=as_labeller(analysis_labeler)) +
-      scale_color_manual(values = CPCOLS) +
+      scale_fill_manual(values = CPCOLS, na.value = "#A9A9A9") +
       theme_minimal() + theme_genes2() +
       theme(legend.position="bottom",
             legend.box = "horizontal",

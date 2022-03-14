@@ -17,6 +17,16 @@ library(wordcloud2)
 library(sunburstR)
 library(d3r)
 library(viridis)
+CPCOLS <- c('#AFEEEE', '#DDA0DD', '#EE2C2C', '#CDBE70', '#B0B099',
+             '#8B2323', '#EE7600', '#EEC900', 'chartreuse3', '#0000FF',
+             '#FFD900', '#32CD32', 'maroon4', 'cornflowerblue', 'darkslateblue',
+             '#AB82FF', '#CD6889', '#FFA07A', '#FFFF00', '#228B22',
+             '#FFFFE0', '#FFEC8B', 'peru', '#668B8B', 'honeydew',
+             '#A020F0', 'grey', '#8B4513', '#191970', '#00FF7F',
+             'lemonchiffon','#66CDAA', '#5F9EA0', '#A2CD5A', '#556B2F',
+             '#EEAEEE', 'thistle4', '#473C8B', '#FFB6C1', '#8B1C62',
+             '#FFE4B5', 'black', '#FF7F50', '#FFB90F', '#FF69B4', '#836FFF',
+             '#757575','#CD3333', '#EE7600', '#CDAD00', '#556B2F', '#7AC5CD')
 
 shorten_lineage <- function(data, colname = "Lineage", abr_len = 1)
 {
@@ -906,7 +916,7 @@ lineage_sunburst <- function(prot, lineage_column = "Lineage",
   # Plot sunburst
   if(type == "sunburst")
   {
-    sunburst(tree, legend = list(w = 150, h = 15, r = 3, s = 3), colors = colors, legendOrder = legendOrder)
+    sunburst(tree, legend = list(w = 150, h = 15, r = 3, s = 3), colors = CPCOLS, legendOrder = legendOrder, width = "100%", height = "100%")
   }
   else if(type == "sund2b")
   {
