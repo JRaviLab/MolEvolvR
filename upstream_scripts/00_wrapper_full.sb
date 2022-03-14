@@ -77,13 +77,14 @@ FILE=$(sed -n "${PBS_ARRAYID}"p "${INPUTPATHS_LIST}")
    		PREFIX="${F%%.wblast.tsv}"		## takes PREFIX of file
    		OUTDIR=${OUTPATH}/${PREFIX}_full
 		mkdir ${OUTDIR}		## variable containing output filepath based PREFIX
-		cd "${OUTDIR}" || exit
+		cd ${OUTDIR} || exit
    		printf "${PREFIX}\n"
 		## ACC2FA ##
 		acc2fa_start=$SECONDS
 		sh /data/research/jravilab/molevol_scripts/upstream_scripts/02_acc2fa.sh ${OUTPATH}/${PREFIX}.wblast.tsv $PREFIX $OUTDIR
 		acc2fa_dur=$(( $SECONDS - $acc2fa_start ))
 
+		cat ../accs.txt >> ${OUTDIR}/${PREFIX}.all_accnums.txt
 		## ACC2INFO ##
 		acc2info_start=$SECONDS
 		sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
@@ -103,7 +104,7 @@ FILE=$(sed -n "${PBS_ARRAYID}"p "${INPUTPATHS_LIST}")
    		OUTDIR=${OUTPATH}/${PREFIX}_full		## variable containing output filepath based PREFIX
    		printf "${PREFIX}\n"
 		mkdir ${OUTDIR}				## make the directory
-      	cd ${OUTDIR}
+      	cd ${OUTDIR} || exit
 		# put original fasta file into file containing all homologs
 		cat $FILE >> ${OUTDIR}/${PREFIX}.all_accnums.fa
 
