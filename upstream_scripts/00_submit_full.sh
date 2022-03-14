@@ -29,6 +29,7 @@ query_run_start=$SECONDS
 if [ $WBLAST = T ]; then
    find $PWD -type f -name "${PREFIX}.wblast.tsv" > input.txt
    INPATHS=input.txt
+   echo "0/1 analyses completed" > status.txt 
    echo "qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F '$INPATHS $WBLAST'" >> cmd.txt
    ID=`qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "$INPATHS $WBLAST"`
 
