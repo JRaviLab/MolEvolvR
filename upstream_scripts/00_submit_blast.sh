@@ -4,11 +4,10 @@
 ## Authors: Janani Ravi, Lauren Sosinski
 
 ## USER INPUTS
-INFILE=$1
 DB=refseq
 NHITS=5000
 EVAL=1e-5
-
+WBLAST=""
 ## USAGE ##
 # Full analysis | input | fasta file
 # sh /path/to/00_submit_full.sh /path/to/multifasta.fa F
@@ -38,10 +37,12 @@ then
   grep "|" $INFILE
   if [ $? = 0 ]
   then
-awk -F '|' '/^>/{x=""$2".faa";}{print >x;}' $INFILE
+    awk -F '|' '/^>/{x=""$2".faa";}{print >x;}' $INFILE
+    awk -F '|' '/^>/{printf $2"\n"}' $INFILE > accs.txt
     find $PWD -type f -name "*.faa" > input.txt
 else
   awk -F "( )|(>)" '/^>/{x=""$2".faa";}{print >x;}' $INFILE
+  awk -F "( )|(>)" '/^>/{printf $2"\n";}' $INFILE > accs.txt
   find $PWD -type f -name "*.faa" > input.txt
 fi
 fi
