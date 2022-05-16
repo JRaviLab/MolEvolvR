@@ -41,6 +41,10 @@ printf "\nSTART\tSTOP\tquery\tacc2info\tipr2da\tipr2lin\ttotal_time" >> ${OUTPAT
 ## LOADING MODULES ##
 #####################
 
+# Prevent "module: command not found"
+# Read more about it https://www.sdsc.edu/support/user_guides/tscc.html
+source /etc/profile.d/modules.sh
+
 module purge                                    ## clear loaded modules
 module load R                                   ## load R
 module load edirect                             ## load edirect
@@ -55,7 +59,7 @@ FILES=$(cat ${INFILEPATHS_LIST})                        ## list of files (with p
 #total=$(( ((3*60)+50)*60 ))                    ## total time the job can take in seconds, this should match your SBATCH line above
 #maxtime=$(( 120*60 ))                          ## maximum time to process one input, need to do some experimenting with your inputs
 
-for FILE in $(shuf -e "${FILES[@]}")
+for FILE in $(shuf -e ${FILES[@]})
 do
    F=$(basename ${FILE})
    PREFIX=$(echo "${F%%.*}")                    ## takes PREFIX of file
@@ -92,15 +96,5 @@ do
    
    fi
 done
-
-NUM_RUNS=`wc -l ${OUTPATH}/logfile.tsv | grep -Eo "^[[:digit:]]+"`
-((NUM_RUNS-=1))
-TOTAL_RUNS=`wc -l ${OUTPATH}/input.txt | grep -Eo "^[[:digit:]]+"`
-if [ $TOTAL_RUNS -eq $NUM_RUNS ]
-then
-  touch ../done.txt
-else
-  echo "${NUM_RUNS} / ${TOTAL_RUNS} jobs completed" > ../status.txt
-fi
 
 setfacl -R -m group:shiny:r-x ${OUTDIR}

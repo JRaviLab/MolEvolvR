@@ -44,17 +44,10 @@ else
       # https://unix.stackexchange.com/questions/15662/splitting-text-files-BASEd-on-a-regular-expression
       # grep "|" handles files that are not in ncbi format
       # split each word in the header by "|" and use the second element as the accNum
-      grep "|" $INFILE
-      if [ $? = 0 ]
-      then
-	       awk -F '|' '/^>/{x=""$2".faa";}{print >x;}' $INFILE
-          awk -F '|' '/^>/{printf $2"\n"}' $INFILE > accs.txt
-         find $PWD -type f -name "*.faa" > input.txt
-    else
+
       awk -F "( )|(>)" '/^>/{x=""$2".faa";}{print >x;}' $INFILE
       awk -F "( )|(>)" '/^>/{printf $2"\n";}' $INFILE > accs.txt
       find $PWD -type f -name "*.faa" > input.txt
-    fi
    fi
 
    if [ $NFASTA = 1 ]

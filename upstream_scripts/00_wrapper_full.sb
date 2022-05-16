@@ -31,7 +31,7 @@ cd ${OUTPATH}
 
 ## USER INPUTS
 INPUTPATHS_LIST=$1
-DB=refseq
+DB=nr
 NHITS=5000
 EVAL=1e-5
 WBLAST=$2
@@ -146,6 +146,8 @@ FILE=$(sed -n "${PBS_ARRAYID}"p "${INPUTPATHS_LIST}")
 	ipr_dur=$(( $SECONDS - $ipr_start ))
 
 	## IPR2LIN ##
+	#Append colnames to beginning of ipr file
+	sed -i '1s/^/AccNum\tSeqMD5Digest\tSLength\tAnalysis\tDB.ID\tSignDesc\tStartLoc\tStopLoc\tScore\tStatus\tRunDate\tIPRAcc\tIPRDesc\n/' ${OUTDIR}/${PREFIX}.iprscan.tsv
 	ipr2lin_start=$SECONDS
 	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.4_ipr2lin.R ${OUTDIR}/${PREFIX}.iprscan.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX
 	ipr2lin_dur=$(( $SECONDS - $ipr2lin_start ))
