@@ -41,7 +41,7 @@ shorten_lineage <- function(data, colname = "Lineage", abr_len = 1)
     return(paste0(toupper(substr(x,1,1)) ,substr(x,pos_gt, nchar(as.character(x)))))
   }
   # Shorten lineages to include only the first letter of kingdom
-  data$Lineage <- unlist((pmap(list(data$Lineage), function(x) abbrv(x) )))
+  data[[colname]] <- unlist((pmap(list(data[[colname]]), function(x) abbrv(x) )))
   return(data)
 }
 
@@ -346,7 +346,7 @@ lineage.Query.plot <- function(query_data=all,
     scale_fill_gradient(low="white", high="darkred") +
     scale_x_discrete(position="top") +
     theme_minimal() +
-    theme(axis.text.x=element_text(angle=65,hjust=0,vjust=0.5))
+    theme(axis.text.x=element_text(angle=65,hjust=0,vjust=0.5), plot.background = element_rect(fill ="white"), text = element_text(size = 12))
   #ggsave("/data/scratch/janani/molevolvr_out/GZKL61_full/plot.png", dpi = 400, device = "png", height = 12, width = 14)
   # scale_y_discrete(position = "bottom") +
   # scale_x_discrete(position = "bottom") +
@@ -624,7 +624,7 @@ LineagePlot <- function(prot, domains_of_interest, level = 3, label.size = 8)
 
 }
 
-stacked_lin_plot <- function(prot, column = "DomArch", cutoff,
+stacked_lin_plot <- function(prot, column = "DomArch", cutoff, Lineage_col = "Lineage",
                              xlabel = "Domain Architecture",
                              reduce_lineage = TRUE,
                              label.size = 8,
@@ -632,14 +632,24 @@ stacked_lin_plot <- function(prot, column = "DomArch", cutoff,
                              legend.text.size = 10,
                              legend.cols = 2,
                              legend.size = 0.7,
-                             coord_flip = TRUE)
+                             coord_flip = TRUE, legend = TRUE)
 {
+  CPCOLS <- c('#AFEEEE', '#DDA0DD', '#EE2C2C', '#CDBE70', '#B0B099',
+             '#8B2323', '#EE7600', '#EEC900', 'chartreuse3', '#0000FF',
+             '#FFD900', '#32CD32', 'maroon4', 'cornflowerblue', 'darkslateblue',
+             '#AB82FF', '#CD6889', '#FFA07A', '#FFFF00', '#228B22',
+             '#FFFFE0', '#FFEC8B', 'peru', '#668B8B', 'honeydew',
+             '#A020F0', 'grey', '#8B4513', '#191970', '#00FF7F',
+             'lemonchiffon','#66CDAA', '#5F9EA0', '#A2CD5A', '#556B2F',
+             '#EEAEEE', 'thistle4', '#473C8B', '#FFB6C1', '#8B1C62',
+             '#FFE4B5', 'black', '#FF7F50', '#FFB90F', '#FF69B4', '#836FFF',
+             '#757575','#CD3333', '#EE7600', '#CDAD00', '#556B2F', '#7AC5CD')
   col = sym(column)
 
   if(reduce_lineage)
-    prot = shorten_lineage(prot, "Lineage", abr_len = 3)
+    prot = shorten_lineage(prot, Lineage_col, abr_len = 3)
 
-  total_count =  total_counts(prot, column, cutoff)
+  total_count =  total_counts(prot, column, cutoff, lineage_col = Lineage_col)
   #total_count = prot
 
   # Order bars by descending freq
@@ -650,7 +660,7 @@ stacked_lin_plot <- function(prot, column = "DomArch", cutoff,
 
 
   prot_data = total_count
-  prot_data$Lineage = unlist(map(prot_data$Lineage, function(x){
+  prot_data[[Lineage_col]] = unlist(map(prot_data[[Lineage_col]], function(x){
     gt_pos = gregexpr(pattern = ">", x)[[1]][2]
     # If there is not a second '>' in the lineage
     if(is.na(gt_pos))
@@ -658,22 +668,25 @@ stacked_lin_plot <- function(prot, column = "DomArch", cutoff,
       x
     }
     else{
-      substr(x,1, (gt_pos-1) )
+      x
+      #substr(x,1, (gt_pos-1) )
     }
   } ))
 
-  prot_data[, column] <- factor(pull(prot_data, {{col}}) , levels = order)
+  prot_data[, column] <- factor(pull(prot_data, {{col}}))
 
   # prot_data <- prot_data %>% arrange(-Lineage)
 
   if(coord_flip)
   {
-    ggplot(prot_data, aes(fill = Lineage, y = count, x = {{col}})) +
-      geom_bar(position = 'stack', stat = "identity") +
+    if (legend){
+    ggplot(prot_data, aes_string(fill = Lineage_col, y = "count", x = column)) +
+      geom_bar(position = 'stack', stat = "identity", color = "white") +
       coord_flip() +
-      xlab("")+
-      ylab("") +
+      xlab("Group")+
+      ylab("Number of proteins") +
       theme_minimal() +
+      scale_fill_manual(values = CPCOLS, na.value = "#A9A9A9")+
       theme(legend.position = legend.position,
             legend.background = element_rect(fill = "white", color = "white"),
             legend.text = element_text(size = legend.text.size),
@@ -683,14 +696,38 @@ stacked_lin_plot <- function(prot, column = "DomArch", cutoff,
             # legend.key.width = unit(0.9, "cm"),
             legend.spacing = unit(0.4, "cm"),
             axis.text=element_text(size=label.size),
-            panel.grid.major = element_blank(), panel.grid.minor = element_blank()
+            panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(),
+            axis.line = element_line(colour = "black"),
+            plot.background = element_rect("white", size = 0),
+            panel.border = element_blank()
             # axis.text.x = ele
             ) +
       guides(fill=guide_legend(ncol=legend.cols, reverse = TRUE))
   }
+  else{
+    ggplot(prot_data, aes_string(fill = Lineage_col, y = "count", x = column)) +
+      geom_bar(position = 'stack', stat = "identity", color = "white") +
+      coord_flip() +
+      xlab("Group")+
+      ylab("Number of proteins") +
+      theme_minimal() +
+      scale_fill_manual(values = CPCOLS, na.value = "#A9A9A9")+
+      theme(legend.position = "none", 
+            legend.spacing = unit(0.4, "cm"),
+            axis.text=element_text(size=label.size),
+            panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(),
+            axis.line = element_line(colour = "black"),
+            plot.background = element_rect("white", size = 0),
+            panel.border = element_blank()
+            # axis.text.x = ele
+            )
+  }
+  }
   else
   {
-    ggplot(prot_data, aes(fill = Lineage, y = count, x = {{col}})) +
+    ggplot(prot_data, aes(fill = {{Lineage_col}}, y = count, x = {{col}})) +
       geom_bar(position = 'stack', stat = "identity") +
       xlab("")+
       ylab("") +
@@ -907,16 +944,17 @@ lineage_sunburst <- function(prot, lineage_column = "Lineage",
   }
 
   # Take lineage column and break into the first to levels
-  prot <- prot %>% select({{lin_col}})
+  prot <- prot %>% select({{lin_col}}) %>% arrange(desc({{lin_col}})) %>% drop_na({{lin_col}})
   protLevels <- prot %>% separate({{lin_col}}, into = levels_vec, sep = ">")
   # Count the occurrance of each group of levels
   protLevels = protLevels %>% group_by_at(levels_vec) %>% summarise(size = n())
+  protLevels <- protLevels %>% arrange()
   tree <- d3_nest(protLevels, value_cols = "size")
 
   # Plot sunburst
   if(type == "sunburst")
   {
-    sunburst(tree, legend = list(w = 150, h = 15, r = 3, s = 3), colors = CPCOLS, legendOrder = legendOrder, width = "100%", height = "100%")
+    sunburst(tree, legend = list(w = 225, h = 15, r = 5, s = 5), colors = CPCOLS, legendOrder = legendOrder, width = "100%", height = "100%")
   }
   else if(type == "sund2b")
   {

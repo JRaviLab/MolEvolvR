@@ -48,7 +48,7 @@ find_top_acc = function(infile_full,
   }
   ## Group by Lineage, DomArch and reverse sort by group counts
   grouped = cln %>%
-    group_by({{lin_sym}}, {{DA_sym}}) %>%
+    group_by({{DA_sym}}, {{lin_sym}}) %>%
     summarise(count = n()) %>%
     arrange(-count) %>%
     filter(!is.na({{lin_sym}}) & !is.na({{DA_sym}}))
@@ -180,7 +180,7 @@ ipr2viz_web <- function(infile_ipr,
                         accessions,
                         analysis= c("Pfam", "Phobius", "TMHMM", "Gene3D"),
                         group_by = "Analysis", name = "Name",
-                        text_size = 8, legend_name = "ShortName")
+                        text_size = 8, legend_name = "ShortName", cols = 5, rows = 10)
 {
   CPCOLS <- c('#AFEEEE', '#DDA0DD', '#EE2C2C', '#CDBE70', '#B0B099',
              '#8B2323', '#EE7600', '#EEC900', 'chartreuse3', '#0000FF',
@@ -202,6 +202,7 @@ ipr2viz_web <- function(infile_ipr,
 
   ## Read IPR file and subset by Accessions
   ipr_out <- read_tsv(infile_ipr, col_names = T)
+  #ipr_out <- ipr_out %>% filter(Name %in% accessions)
   ## Need to fix eventually based on 'real' gene orientation!
   ipr_out$Strand <- rep("forward", nrow(ipr_out))
 
@@ -232,7 +233,7 @@ ipr2viz_web <- function(infile_ipr,
       geom_subgene_arrow(data = ipr_out_sub, aes_string(xmin = 1, xmax = "SLength", y = name, fill = "SignDesc",
       xsubmin = "StartLoc", xsubmax = "StopLoc"), color = "NA") +
       #geom_blank(data = dummies) +
-      facet_wrap(~ Analysis, strip.position = "top", ncol = 5,
+      facet_wrap(~ Analysis, strip.position = "top", ncol = cols,
                  labeller=as_labeller(analysis_labeler)) +
       #, ncol = 1 + #scales = "free",
       scale_fill_manual(values = CPCOLS, na.value = "#A9A9A9") +
@@ -243,7 +244,7 @@ ipr2viz_web <- function(infile_ipr,
             legend.box.margin = margin(),
             text = element_text(size = text_size)) +
       ylab("")+
-      guides(fill=guide_legend(nrow=10))
+      guides(fill=guide_legend(nrow=rows))
   }
 
   else if(group_by == "Query"){
@@ -255,7 +256,7 @@ ipr2viz_web <- function(infile_ipr,
       xsubmin = "StartLoc", xsubmax = "StopLoc"), color = "white") +
       geom_gene_arrow(fill = NA, color = "grey") +
       facet_wrap(as.formula(paste("~", name)),
-                 strip.position = "top", ncol = 3,
+                 strip.position = "top", ncol = cols,
                  labeller=as_labeller(analysis_labeler)) +
       scale_fill_manual(values = CPCOLS, na.value = "#A9A9A9") +
       theme_minimal() + theme_genes2() +
@@ -265,7 +266,7 @@ ipr2viz_web <- function(infile_ipr,
             legend.box.margin = margin(),
             text = element_text(size = text_size)) +
       ylab("")+
-      guides(fill=guide_legend(nrow=10))
+      guides(fill=guide_legend(nrow=rows))
   }
   return(plot)
 }

@@ -41,7 +41,7 @@ EVAL=1e-5
 ## qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "example_blastp.csv T"
 
 # Location of databases/dependencies 
-export BLASTDB=/data/common_data/blastdb/v5:/data/common_data/blastdb/ncbidb:/data/common_data/blastdb:/data/common_data/blastdb/FASTA:$BLASTDB
+export BLASTDB=/data/common_data/blastdb/v6
 export BLASTMAT=/opt/software/BLAST/2.2.26/data
 export INTERPRO=/opt/software/iprscan/5.47.82.0-Python3/data:/data/common_data/iprscan:$INTERPRO
 export NCBI_API_KEY=882b28aa19ece4679d4fa5adcf3319f5df09
@@ -67,10 +67,9 @@ START_DT=$(date '+%d/%m/%Y-%H:%M:%S')
 #total=$(( ((3*60)+50)*60 ))			## total time the job can take in seconds, this should match your SBATCH line above
 #maxtime=$(( 120*60 )) 				## maximum time to process one input, need to do some experimenting with your inputs
 
-FILES=$(cat $INPUTPATHS_LIST)
+FILE=$(sed -n "${PBS_ARRAYID}"p "${INPUTPATHS_LIST}")
 
-for FILE in $(shuf -e ${FILES[@]})
-do
+
    F=$(basename ${FILE})
    PREFIX=$(echo "${F%%.*}")			## takes PREFIX of file
    OUTDIR=${OUTPATH}/${PREFIX}_blast		## variable containing output filepath based PREFIX
@@ -78,7 +77,8 @@ do
 
    if [ ! -d ${OUTDIR} ]; then 			## if the output directory doesn't exist
       mkdir ${OUTDIR}				## make the directory
-      cd ${OUTDIR}
+    fi
+	cd ${OUTDIR}
 
     ## COMMANDLINE BLAST ANALYSIS
 	# put original fasta file into file containing all homologs
@@ -125,8 +125,6 @@ do
 	## Add benchmarking times to logfile
 	printf "\n${START_DT}\t${STOP_DT}\t${PREFIX}\t${db_dur}\t${acc2info_dur}\t${db_cln_dur}\t${acc2fa_dur}\t${bclust_dur}\t${c2t_dur}\t" >> ${OUTPATH}/logfile.tsv
 
-    fi
-done
 
 NUM_RUNS=`wc -l ${OUTPATH}/logfile.tsv | grep -Eo "^[[:digit:]]+"`
 ((NUM_RUNS-=1))

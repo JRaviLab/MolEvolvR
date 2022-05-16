@@ -211,7 +211,7 @@ summ.GC <- function(x) { x %>%
 
 
 ##################
-total_counts <- function(prot, column = "DomArch",
+total_counts <- function(prot, column = "DomArch", lineage_col = "Lineage",
                          cutoff = 90, RowsCutoff = FALSE, digits = 2
                          #type = "GC"
 ){
@@ -230,10 +230,10 @@ total_counts <- function(prot, column = "DomArch",
   #' column names.
   column <- sym(column)
 
-  prot <- select(prot, {{column}}, Lineage) %>% filter(!is.na({{column}}) & !is.na(Lineage)) %>%
+  prot <- select(prot, {{column}}, {{lineage_col}}) %>% filter(!is.na({{column}}) & !is.na({{lineage_col}})) %>%
     filter({{column}} != "")
 
-  prot <- summarize_bylin(prot, column, by = "Lineage", query = "all")
+  prot <- summarize_bylin(prot, column, by =  lineage_col, query = "all")
   col_count <-  prot %>% group_by({{column}}) %>% summarise(totalcount = sum(count))
 
   total <- left_join(prot,col_count, by = as_string(column))
