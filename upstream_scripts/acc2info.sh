@@ -12,6 +12,9 @@ OUTDIR=$3	# location of output files
 acc2info()
 {
 	OUTFILE=$(printf "${OUTDIR}/${PREFIX}.acc2info.tsv")
+	# so we don't overload edirect, adds maximum 10 seconds
+	RAND=$(shuf -i 1-10 -n1)
+	sleep "$RAND"
 	# Get info for the query too
 	#echo ${PREFIX} >> ${INFILE}
 	# print colnames

@@ -25,6 +25,8 @@ if [ $cols -gt 1 ]
 then
 # taking 2nd column in blast input file and taking only 1 copy of each homolog accession,
 cat ${INFILE} | awk -F "\t" '{ print $2 }' | sort -u >> ${OUTDIR}/${PREFIX}.all_accnums.txt
+else
+cat ${INFILE} | awk -F "\t" '{ print $1 }' | sort -u >> ${OUTDIR}/${PREFIX}.all_accnums.txt
 fi
 split -l 1000 -e ${OUTDIR}/${PREFIX}.all_accnums.txt ${OUTDIR}/acc 	# split accessions up into files of 1000 accession numbers
 

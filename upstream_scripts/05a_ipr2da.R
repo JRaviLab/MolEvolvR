@@ -12,7 +12,7 @@ conflicted::conflict_prefer("collapse", "dplyr")
 ipr2da <- function(infile_ipr, prefix,
                    analysis=c("Pfam","SMART","Phobius",
                               "Gene3D", "TMHMM", "SignalP_GRAM_POSITIVE",
-                              "SUPERFAMILY", "MobiDBLite", "TIGRFAM"))
+                              "SUPERFAMILY", "MobiDBLite", "TIGRFAM", "PANTHER", "Coils"))
 {
   # read in cleaned up iprscan results
   ipr_in <- read_tsv(infile_ipr, col_names = T,col_types = ipr_cln_cols)

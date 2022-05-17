@@ -13,7 +13,7 @@ ipr2lin <- function(ipr, acc2info, prefix) {
 
   # read in iprscan results
   # duplicate rows in iprscan file
-  ipr_in <- read_tsv(ipr, col_names = ipr_colnames) %>%
+  ipr_in <- read_tsv(ipr, col_names = TRUE) %>%
     mutate(DB.ID = gsub('G3DSA:', '', DB.ID))
 
   acc2info_out <- fread(input = acc2info, sep = '\t', header = T, fill = T) %>%
