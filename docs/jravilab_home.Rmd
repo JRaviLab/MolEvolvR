@@ -1,8 +1,8 @@
 ---
 title: "JRaviLab"
-subtitle: "Web-applications and Software"
+subtitle: "Software and Data"
 output: html_document
-runtime: shiny
+#runtime: shiny
 ---
 
 ```{r setup, include=FALSE, warning=FALSE, message=FALSE}
@@ -17,25 +17,24 @@ library(fontawesome)
 
 ## *Computational Systems Biology of Infectious Diseases*
 
-We are always working on developing discovery platforms that enable experimentalists and other computational scientists use our approaches to study the molecular basis of pathogenesis and intervention of infectious diseases.
+We develop discovery platforms that enable experimental and computational biologists use our approaches to study the molecular basis of pathogenesis and intervention of infectious diseases.
 
-We also welcome collaborations. If you are interested in studying an infectious disease/pathogen using our platforms or if you would like to see your computational tool incorporated into our platforms, do [get in touch](mailto:janani@msu.edu).
+We welcome collaborations: if you are interested in studying an infectious disease/pathogen using our platforms or if you would like to see your computational tool incorporated into our platforms, do [get in touch](mailto:janani@msu.edu).
 
 [**Learn more about our group here. `r fa("users", fill = "grey20")`**](https://jravilab.github.io)
 
 ------------------------------------------------------------------------
 
-## Web-apps \| Software \| Code \| Methods
-
--   [MolEvolvR](#molevolvr)
--   [Psp Evolution](#psp_evolution)
--   [Connectivity Scores](#connectivity_scores)
+## Software & Methods
+[MolEvolvR](#molevolvr) | [Connectivity Scores](#connectivity_scores)
 
 ### MolEvolvR: A web-app for molecular evolution and phylogeny {#molevolvr}
 
-[`r fa("link", fill = "#1FA67A")`](http://jravilab.org/molevolvr) [jravilab.org/molevolvr](http://jravilab.org/molevolvr)
-
-Samuel Zorn Chen, Lauren Marie Sosinski, John Johnston, Janani Ravi. <br> Corresponding author: [janani\@msu.edu](mailto:janani@msu.edu)
+**MolEvolvR: A web-app for characterizing proteins using molecular evolution and phylogeny** <br>
+*bioRxiv* 2022. doi: https://doi.org/10.1101/2022.02.18.461833. <br>
+Joseph T Burke\*, Samuel Z Chen\*, Lo M Sosinski\*, John B Johnson, Janani Ravi^\#^.
+<br> \*Co-primary authors. ^\#^Corresponding author: [janani\@msu.edu](mailto:janani@msu.edu) <br>
+[`r fa("link", fill = "#1FA67A")`](http://jravilab.org/molevolvr) **Web-app:** [jravilab.org/molevolvr](http://jravilab.org/molevolvr)
 
 ```{r molevolvr, echo=FALSE, eval=F}
 shinyAppDir(
@@ -44,11 +43,47 @@ shinyAppDir(
 )
 ```
 
+### Connectivity Scores for Drug Repurposing {#connectivity_scores}
+
+**Reconciling Multiple Connectivity Scores for Drug Repurposing** <br>
+*Brief Bioinform.* 2021 Nov 5;22(6):bbab161. doi: http://doi.org/10.1093/bib/bbab161. PMID: 34013329; PMCID: PMC8597919. <br> Kewalin Samart\*, Phoebe Tuyishime\*, Arjun Krishnan^\#^, Janani Ravi^\#^. <br>
+\*Co-primary authors. ^\#^Corresponding authors: [arjun\@msu.edu](mailto:arjun@msu.edu); [janani\@msu.edu](mailto:janani@msu.edu) <br>
+[`r fa("link", fill = "#1FA67A")`](https://jravilab.github.io/connectivity_score_review) **Live doc:** [jravilab.github.io/connectivity_score_review](https://jravilab.github.io/connectivity_score_review)
+
+***
+
+## Data repos & Web-apps
+
+[Bacterial DciA](#dcia_evolution) | [Listeria Internalins](#inlp_evolution) | [Bacterial phage defense](#avcd_evolution) | [Phage shock stress response](#psp_evolution) 
+
+### Bacterial DciA
+DciA helicase operators exhibit diversity across bacterial phyla <br>
+*bioRxiv* 2022.01.24.477630; doi: https://doi.org/10.1101/2022.01.24.477630 <br>
+Helen C. Blaine\*, Joseph T. Burke\*, Janani Ravi^\#^, Christina L. Stallings^\#^ <br>
+\*Co-primary authors. ^\#^Corresponding authors: [stallings\@wustl.edu](mailto:stallings@wustl.edu); [janani\@msu.edu](mailto:janani@msu.edu) <br>
+[`r fa("link", fill = "#1FA67A")`](https://github.com/JRaviLab/dcia_evolution) **Data:** https://github.com/JRaviLab/dcia_evolution
+
+### Internalins in Listeria {#inlp_evolution}
+Novel Internalin P homologs in Listeria ivanovii londoniensis and Listeria seeligeri. <br>
+*bioRxiv* 2022.01.19.476994; doi: https://doi.org/10.1101/2022.01.19.476994 (accepted at *Microbial Genomics*) <br>
+Kayla N Conner\*, Joseph T Burke\*, Janani Ravi^\#^, Jonathan W Hardy^\#^ <br>
+\*Co-primary authors. ^\#^Corresponding authors: [hardyjon\@msu.edu](mailto:hardyjon@msu.edu); [janani\@msu.edu](mailto:janani@msu.edu) <br>
+[`r fa("link", fill = "#1FA67A")`](https://github.com/JRaviLab/inlp_listeria) **Data:** https://github.com/JRaviLab/inlp_listeria
+
+### Bacterial phage defense {#avcd_evolution}
+**A Broadly Conserved Deoxycytidine Deaminase Protects Bacteria from Phage Infection** <br>
+*bioRxiv* 2021.03.31.437871; doi: https://doi.org/10.1101/2021.03.31.437871 (accepted at *Nature Microbiology*) <br>
+Hsueh BY\*, Severin GB\*, Elg CA, Waldron EJ, Kant A, Wessel AJ, Dover JA, Rhoades CR, Ridenhour BJ, Parent KN, Neiditch MB, Ravi J, Top EM, and Waters CM. <br>
+\*Co-primary authors. Corresponding author: watersc3@msu.edu <br>
+[`r fa("link", fill = "#1FA67A")`](https://github.com/JRaviLab/phage_defense_avcd) **Data:** https://github.com/JRaviLab/phage_defense_avcd
+
 ### Phage shock protein stress response system {#psp_evolution}
 
-[`r fa("link", fill = "#1FA67A")`](https://jravilab.shinyapps.io/psp-evolution) [jravilab.shinyapps.io/psp-evolution](https://jravilab.shinyapps.io/psp-evolution)
-
-**Phage-shock-protein (Psp) Envelope Stress Response: Evolutionary History & Discovery of Novel Players** <br> Janani Ravi\*, Vivek Anantharaman, Samuel Zorn Chen, Pratik Datta, L Aravind\*, Maria Laura Gennaro\*. \*Corresponding authors: [janani\@msu.edu](mailto:janani@msu.edu); [aravind\@nih.gov](mailto:aravind@nih.gov); [marila.gennaro\@rutgers.edu](mailto:marila.gennaro@rutgers.edu). Web-app by JR and SZC. <br> [**bioRxiv 2020**](https://doi.org/10.1101/2020.09.24.301986)
+**Phage-shock-protein (Psp) Envelope Stress Response: Evolutionary History & Discovery of Novel Players** <br>
+*bioRxiv* 2020. doi: <https://doi.org/10.1101/2020.09.24.301986> <br>
+Janani Ravi^\#^, Vivek Anantharaman, Samuel Zorn Chen, Pratik Datta, L Aravind^\#^, Maria Laura Gennaro^\#^. <br>
+^\#^Corresponding authors: [janani\@msu.edu](mailto:janani@msu.edu); [aravind\@nih.gov](mailto:aravind@nih.gov); [marila.gennaro\@rutgers.edu](mailto:marila.gennaro@rutgers.edu). <br>
+[`r fa("link", fill = "#1FA67A")`](https://jravilab.shinyapps.io/psp-evolution) **Web-app:** [jravilab.shinyapps.io/psp-evolution](https://jravilab.shinyapps.io/psp-evolution). Web-app by JR and SZC.
 
 ```{r psp-evolution, echo=FALSE, eval=F}
 shinyAppDir(
@@ -56,9 +91,10 @@ shinyAppDir(
   options = list(width = "100%", height = 550)
 )
 ```
-
-### Connectivity Scores for Drug Repurposing {#connectivity_scores}
-
-[`r fa("link", fill = "#1FA67A")`](https://jravilab.github.io/connectivity_score_review) [jravilab.github.io/connectivity_score_review](https://jravilab.github.io/connectivity_score_review)
-
-**Reconciling Multiple Connectivity Scores for Drug Repurposing** <br> Kewalin Samart\*, Phoebe Tuyishime\*, Arjun Krishnan^\#^, Janani Ravi^\#^. <br> \*These authors contributed equally to this work. ^\#^Corresponding authors: [arjun\@msu.edu](mailto:arjun@msu.edu); [janani\@msu.edu](mailto:janani@msu.edu) <br> [**arXiv 2020**](https://arxiv.org/abs/2009.09317)
+***
+## Other
+**Ten simple rules to host an inclusive conference.** <br>
+2022 (accepted at *PLoS Computational Biology*) <br>
+Rocío Joo\*^\#^, Andrea Sánchez-Tapia\*, Sara Mortara, Yanina B Saibene, Heather Turner, Dorothea H Peter, Natalia S Morandeira, Matthias Bannert, Batool Almazrouq, Elizabeth Hare, Laura Ación, Juan P Narváez-Gómez, Marcela A Córdoba, Federico Marini, Rita Giordano, Silvia Canelón, Anicet Ebou, Adithi Upadhya, Joselyn Chávez, Janani Ravi^\#^. <br>
+\*Co-primary authors. ^\#^Corresponding authors: [rocio.joo\@globalfishingwatch.org](mailto:rocio.joo@globalfishingwatch.org); [janani\@msu.edu](mailto:janani@msu.edu) <br>
+[`r fa("link", fill = "#1FA67A")`](https://github.com/rociojoo/Ten-simple-rules-inclusive-conference) **Repo:** [github.com/rociojoo/Ten-simple-rules-inclusive-conference](https://github.com/rociojoo/Ten-simple-rules-inclusive-conference).
