@@ -9,98 +9,169 @@
 # Authors: Lauren Sosinski, Janani Ravi
 # On GitHub: currently in jravilab/molevol_scripts/upstream_scripts
 
-# Input type: text file containing paths to iprscan files to analyze
+# Input type: text file containing paths to individual fasta files to analyze
 
 ############
 ## TORQUE ##
 ############
-#PBS -l walltime=04:30:00       # time limit; RESET, if you need longer time
-#PBS -l nodes=1:ppn=10          # number of nodes requested
-#PBS -m abe                     # email notifications for job
-#PBS -M=sosinsk7@msu.edu        # user email; RESET
-#PBS -N molevol_analysis        # name of job being run
+#PBS -l nodes=1:ppn=10		# number of nodes requested
+#PBS -m abe			# email notifications for job
+#PBS -M=sosinsk7@msu.edu	# user email; RESET
+#PBS -N molevol_analysis	# name of job being run
+
+## print start/stop printf in individual scripts
 
 ## change output directory based on user input
 OUTPATH=$PBS_O_WORKDIR
 cd ${OUTPATH}
 
+## !! NOTES FOR LS ##
+## add flags/help function after finishing script and/or gencontext
+## talk to Sam about how this works with Pins package
+
 ## USER INPUTS
-INFILEPATHS_LIST=$1
+
 
 ## USAGE
-## qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb -F /path/to/input.txt
+## qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "input.txt F"
+## qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "example_blastp.csv T"
 
 # Location of databases/dependencies 
+export BLASTDB=/data/common_data/blastdb/v6
+export BLASTMAT=/opt/software/BLAST/2.2.26/data
 export INTERPRO=/opt/software/iprscan/5.47.82.0-Python3/data:/data/common_data/iprscan:$INTERPRO
-export NCBI_API_KEY=17d41451acfde2b8dd3f3ebffc3b79eef60a
-
-## Create logfile w/ column names
-printf "\nSTART\tSTOP\tquery\tacc2info\tipr2da\tipr2lin\ttotal_time" >> ${OUTPATH}/logfile.txt
+export NCBI_API_KEY=882b28aa19ece4679d4fa5adcf3319f5df09
 
 #####################
 ## LOADING MODULES ##
 #####################
 
-module purge                                    ## clear loaded modules
-module load R                                   ## load R
-module load edirect                             ## load edirect
-module load BLAST                               ## load blast (for blastclust)
-module load BLAST+ BioPerl                      ## load blast+
-module load iprscan                             ## load iprscan
+# Prevent "module: command not found"
+# Read more about it https://www.sdsc.edu/support/user_guides/tscc.html
+source /etc/profile.d/modules.sh 
 
-start=$SECONDS                                  ## get current time
+module purge 					## clear loaded modules
+module load R		 			## load R
+module load edirect 				## load edirect
+module load BLAST				## load blast (for blastclust)
+module load BLAST+ BioPerl 			## load blast+
+module load iprscan 				## load iprscanq
+
+start=$SECONDS 					## get current time
 START_DT=$(date '+%d/%m/%Y-%H:%M:%S')
 
-FILES=$(cat ${INFILEPATHS_LIST})                        ## list of files (with paths) to be processed
-#total=$(( ((3*60)+50)*60 ))                    ## total time the job can take in seconds, this should match your SBATCH line above
-#maxtime=$(( 120*60 ))                          ## maximum time to process one input, need to do some experimenting with your inputs
+#total=$(( ((3*60)+50)*60 ))			## total time the job can take in seconds, this should match your SBATCH line above
+#maxtime=$(( 120*60 )) 				## maximum time to process one input, need to do some experimenting with your inputs
+INPUTPATHS_LIST=$1
+IS_QUERY=$2
+DO_BLAST=$3
+DB=$4
+NHITS=$5
+EVAL=$6
+if [ "$IS_QUERY" = "T" ]
+# Handle the query data
+then
+PREFIX="query_data"
+OUTDIR=${OUTPATH}/${PREFIX}
+mkdir ${OUTDIR}				## make the directory
+cp ${INPUTPATHS_LIST} ${OUTDIR}/${PREFIX}.iprscan.tsv
+cd ${OUTDIR} || exit
+cp ../seqs.fa ${OUTDIR}/${PREFIX}.all_accnums.fa
+cp ../accs.txt ${OUTDIR}/${PREFIX}.all_accnums.txt
+	## ACC2INFO ##
+	acc2info_start=$SECONDS
+	sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
+	acc2info_dur=$(( $SECONDS - $acc2info_start ))
+  ## IPR2LIN ##
+	ipr2lin_start=$SECONDS
+	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.4_ipr2lin.R ${OUTDIR}/${PREFIX}.iprscan.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX
+	ipr2lin_dur=$(( $SECONDS - $ipr2lin_start ))
+  ## IPR2DA ##
+	ipr2da_start=$SECONDS
+	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${PREFIX}.iprscan_cln.tsv ${PREFIX} ${OUTDIR}/${PREFIX}.acc2info.tsv
+	ipr2da_dur=$(( $SECONDS - $ipr2da_start ))
+fi
+if [ "$DO_BLAST" = "T" ] && [ "$IS_QUERY" = "F" ]
+then
+# Handle homolog data
+		FILE=$(sed -n "${PBS_ARRAYID}"p "${INPUTPATHS_LIST}")
+	  F=$(basename ${FILE})
+   	PREFIX=$(echo "${F%%.faa}")	## takes PREFIX of file
+   	OUTDIR=${OUTPATH}/${PREFIX}_ipr	## variable containing output filepath based PREFIX
+     printf "${PREFIX}\n"			## make the directory
+    mkdir ${OUTDIR}
+    cp ${PREFIX}.faa ${OUTDIR}
+    cd ${OUTDIR} || exit
+    	## DELTABLAST ##
+	db_start=$SECONDS
+	sh /data/research/jravilab/molevol_scripts/upstream_scripts/01.1_deltablast.sh  ${PREFIX}.faa $PREFIX $OUTDIR $DB $NHITS $EVAL
+	db_dur=$(( $SECONDS - $db_start ))
 
-for FILE in $(shuf -e "${FILES[@]}")
-do
-   F=$(basename ${FILE})
-   PREFIX=$(echo "${F%%.*}")                    ## takes PREFIX of file
-   OUTDIR=${OUTPATH}/${PREFIX}_ipr      ## variable containing output filepath based PREFIX
-   printf "${PREFIX}"
+    ## ACC2FA -- getting fasta FILES for deltablast output(s)
+	acc2fa_start=$SECONDS
+	sh /data/research/jravilab/molevol_scripts/upstream_scripts/02_acc2fa.sh ${OUTDIR}/${PREFIX}.dblast.tsv $PREFIX $OUTDIR
+	acc2fa_dur=$(( $SECONDS - $acc2fa_start ))
 
-   if [ ! -d ${OUTDIR} ]; then                  ## if the output directory doesn't exist
-      mkdir ${OUTDIR}                           ## make the directory
-      cd ${OUTDIR}
+	## ACC2INFO ##
+	acc2info_start=$SECONDS
+	sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
+	acc2info_dur=$(( $SECONDS - $acc2info_start ))
 
-      ## ACC2INFO ##
-      acc2info_start=$SECONDS
-      cat ${FILE} | awk -F "\t" '{ print $1 }' | sort -u > ${OUTDIR}/${PREFIX}.all_accnums.txt
-      sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt ${PREFIX} ${OUTDIR}
-      acc2info_dur=$(( $SECONDS - $acc2info_start ))
+	## BLAST RESULT CLEANUP ##
+	db_cln_start=$SECONDS
+	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.2_cleanup_blast.R ${OUTDIR}/${PREFIX}.dblast.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX F
+	db_cln_dur=$(( $SECONDS - $db_cln_start ))
+  ## BLASTCLUST ##
+	bclust_start=$SECONDS
+	sh /data/research/jravilab/molevol_scripts/upstream_scripts/03.1_blastclust.sh ${OUTDIR}/${PREFIX}.all_accnums.fa $PREFIX $OUTDIR
+	bclust_dur=$(( $SECONDS - $bclust_start ))
 
-      ## IPR2LIN ##
-      ipr2lin_start=$SECONDS
-      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.4_ipr2lin.R ${FILE} ${OUTDIR}/${PREFIX}.acc2info.tsv ${PREFIX}
-      ipr2lin_duration=$(( $SECONDS -  $ipr2lin_start ))
-      
-      ## IPR2DA ##
-      ipr2da_start=$SECONDS
-      Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${FILE} ${OUTDIR}/${PREFIX}.acc2info.tsv ${PREFIX}
-      ipr2da_duration=$(( $SECONDS - $ipr2da_start ))
-				          
-      ## Figure out how long the entire script took to run
-      duration=$(( $SECONDS - $start ))
-      printf "\nTotal run time: $duration\n"
-      STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
+	## CLUST2TABLE
+	c2t_start=$SECONDS
+	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/03.2_clust2table.R ${OUTDIR}/${PREFIX}.bclust.L60S80.tsv ${OUTDIR}/${PREFIX}.blast.cln.tsv
+	c2t_dur=$(( $SECONDS - $c2t_start ))
 
-      ## Add benchmarking times to logfile
-      printf "\n${START_DT}\t${STOP_DT}\t${PREFIX}\t${acc2info_dur}\t${ipr2lin_duration}\t${ipr2da_duration}\t${duration}" >> ${OUTPATH}/logfile.txt
-   
-   fi
-done
+	## INTERPROSCAN ##
+	## add second run for original protein, too
+	ipr_start=$SECONDS
+	sh /data/research/jravilab/molevol_scripts/upstream_scripts/04a_iprscan.sh ${OUTDIR}/${PREFIX}.all_accnums.fa ${PREFIX} ${OUTDIR}
+	ipr_dur=$(( $SECONDS - $ipr_start ))
+  ## IPR2LIN ##
+	#Append colnames to beginning of ipr file
+	sed -i '1s/^/AccNum\tSeqMD5Digest\tSLength\tAnalysis\tDB.ID\tSignDesc\tStartLoc\tStopLoc\tScore\tStatus\tRunDate\tIPRAcc\tIPRDesc\n/' ${OUTDIR}/${PREFIX}.iprscan.tsv
+	ipr2lin_start=$SECONDS
+	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.4_ipr2lin.R ${OUTDIR}/${PREFIX}.iprscan.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX
+	ipr2lin_dur=$(( $SECONDS - $ipr2lin_start ))
 
-NUM_RUNS=`wc -l ${OUTPATH}/logfile.tsv | grep -Eo "^[[:digit:]]+"`
+	## IPR2DA ##
+	ipr2da_start=$SECONDS
+	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${PREFIX}.iprscan_cln.tsv ${PREFIX} ${OUTDIR}/${PREFIX}.cln.clust.tsv
+	ipr2da_dur=$(( $SECONDS - $ipr2da_start ))
+fi
+
+	## Figure out how long the entire script took to run
+	dur=$(( $SECONDS - $start ))
+	printf "\nTotal run time: $dur\n"
+	STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
+
+	## Add benchmarking times to logfile
+	printf "\n${START_DT}\t${STOP_DT}\t${PREFIX}\t${db_dur}\t${acc2info_dur}\t${db_cln_dur}\t${acc2fa_dur}\t${bclust_dur}\t${c2t_dur}\t${ipr_dur}\t${ipr2da_dur}\t${dur}" >> ${OUTPATH}/logfile.tsv
+
+	## And how much time is left
+	#timeleft=$(( $total - $dur ))
+
+        ## If there's a chance we get a long input to process, then
+        ## resubmit this job, then kill this job
+        #     if [ ${timeleft} -lt ${maxtime} ]; then
+        #       sbatch --array=${SLURM_ARRAY_TASK_ID} $0
+        #      scancel ${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}
+        #  fi
+NUM_RUNS=$(wc -l "${OUTPATH}"/logfile.tsv | grep -Eo "^[[:digit:]]+")
 ((NUM_RUNS-=1))
-TOTAL_RUNS=`wc -l ${OUTPATH}/input.txt | grep -Eo "^[[:digit:]]+"`
+TOTAL_RUNS=$(wc -l "${OUTPATH}"/input.txt | grep -Eo "^[[:digit:]]+")
 if [ $TOTAL_RUNS -eq $NUM_RUNS ]
 then
   touch ../done.txt
 else
   echo "${NUM_RUNS} / ${TOTAL_RUNS} jobs completed" > ../status.txt
 fi
-
-setfacl -R -m group:shiny:r-x ${OUTDIR}
