@@ -25,31 +25,27 @@ cleanup_blast <- function(infile_blast, acc2info, prefix, wblast) {
   if (wblast == "T") {
      blast_out <- fread(input = infile_blast, sep = '\t', header = F,
        col.names = web_blastp_hit_colnames, fill = T)
-      query <- blast_out$Query[1]
      cleanedup_blast <- blast_out %>%
      # remove extra characters/names from sseqid, sscinames, and staxids columns
        mutate(AccNum = gsub('\\|', '', AccNum)) %>%
        mutate(AccNum = gsub('.*[a-z]', '', AccNum)) %>%
        mutate(PcIdentity = round(as.double(PcIdentity), 2))
      # merge blast out with acc2info out
-     cleanedup_blast <- merge(cleanedup_blast, acc2info_out, by.x = "AccNum", by.y = "FullAccNum", all.y = TRUE)%>%
-       select(-Species.x, -TaxID.x)
+     cleanedup_blast <- merge(cleanedup_blast, acc2info_out, by.x = "AccNum", by.y = "FullAccNum", all.x = TRUE)
      names(cleanedup_blast)[names(cleanedup_blast) == 'Species.y'] <- 'Species'
      # find query in acc2info, extract & set Length as QLength
-     query_prot <- as.character(cleanedup_blast[1,2])
-     q_row <- acc2info_out[ grepl(query_prot, FullAccNum) ]
-     qlen <- as.character(q_row[1,Length])
+     #q_row <- acc2info_out[ grepl(query_prot, FullAccNum) ]
+     #qlen <- as.character(q_row[1,Length])
      # if row in acc2info contains query_prot, extract Length value & populate column with it
-     cleanedup_blast$QLength <- qlen
+     #cleanedup_blast$QLength <- qlen
      cleanedup_blast <- cleanedup_blast %>%
        mutate(PcPosOrig = as.numeric(PcPosOrig)) %>%
-       mutate(AlnLength = as.numeric(AlnLength)) %>%
-       mutate(QLength = as.numeric(QLength)) %>%
-     mutate(PcPositive = round(x = (PcPosOrig * AlnLength/QLength), digits = 2))
+       mutate(AlnLength = as.numeric(AlnLength))
+       #mutate(QLength = as.numeric(QLength)) %>%
+     #mutate(PcPositive = round(x = (PcPosOrig * AlnLength/QLength), digits = 2))
 
   } else if (wblast == "F") {
      blast_out <- read_tsv(file = infile_blast, col_names = cl_blast_colnames)
-     query <- blast_out$Query[1]
      cleanedup_blast <- blast_out %>%
        # remove extra characters/names from sseqid, sscinames, and staxids columns
        mutate(AccNum = gsub('\\|', '', AccNum)) %>%
@@ -61,7 +57,7 @@ cleanup_blast <- function(infile_blast, acc2info, prefix, wblast) {
        mutate(PcPositive = round(x = (PcPosOrig * AlnLength/QLength), digits = 2))
 
      # merge blast out with acc2info out
-     cleanedup_blast <- merge(cleanedup_blast, acc2info_out, by.x = "AccNum", by.y = "FullAccNum", all.y = TRUE) %>%
+     cleanedup_blast <- merge(cleanedup_blast, acc2info_out, by.x = "AccNum", by.y = "FullAccNum", all.x = TRUE) %>%
        select(-Species.x, -TaxID.x)
      names(cleanedup_blast)[names(cleanedup_blast) == 'Species.y'] <- 'Species'
   }
@@ -76,20 +72,6 @@ cleanup_blast <- function(infile_blast, acc2info, prefix, wblast) {
     select(any_of(cl_blast_postcln_cols))
 
   blast_names <- add_name(mergedLins)
-  # begin query name addition
-  query_row <- subset(blast_names, AccNum==prefix)
-  query_name <- NULL
-  if (dim(query_row)[1] == 0){
-    query_name <- query
-  }
-  else{
-    query_name <- query_row$Name
-  }
-  if(is.null(query_name)){
-    query_name <- query
-  }
-  blast_names$QueryName <- query_name
-  blast_names <- subset(blast_names, Query!="NA")
 
   # create name for new output file to be created
   file_name <- paste0(prefix, '.blast.cln.tsv')

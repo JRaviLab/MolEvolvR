@@ -13,7 +13,7 @@ acc2info()
 {
 	OUTFILE=$(printf "${OUTDIR}/${PREFIX}.acc2info.tsv")
 	# Get info for the query too
-	echo ${PREFIX} >> ${INFILE}
+	#echo ${PREFIX} >> ${INFILE}
 	# print colnames
 	printf "AccNum.noV\tFullAccNum\tDescription\tLength\tTaxID\tSpecies\tSourceDB\tCompleteness\n" > $OUTFILE
 	# Batch input of accession numbers --> Document Summaries --> Pull necessary columns --> Output

@@ -31,10 +31,10 @@ cd ${OUTPATH}
 
 ## USER INPUTS
 INPUTPATHS_LIST=$1
-DB=nr
-NHITS=5000
-EVAL=1e-5
-WBLAST=$2
+DB=$2
+NHITS=$3
+EVAL=$4
+IS_QUERY=$5
 
 
 ## USAGE
@@ -67,68 +67,52 @@ START_DT=$(date '+%d/%m/%Y-%H:%M:%S')
 
 #total=$(( ((3*60)+50)*60 ))			## total time the job can take in seconds, this should match your SBATCH line above
 #maxtime=$(( 120*60 )) 				## maximum time to process one input, need to do some experimenting with your inputs
+if [ "$IS_QUERY" = "T" ]
+# Handle the query data
+then
+FILE="$INPUTPATHS_LIST"
+F=$(basename ${FILE})
+PREFIX="query_data"
+OUTDIR=${OUTPATH}/${PREFIX}
+mkdir ${OUTDIR}				## make the directory
+cat $FILE >> ${OUTDIR}/${PREFIX}.all_accnums.fa
+cp accs.txt ${OUTDIR}/${PREFIX}.all_accnums.txt
+cd ${OUTDIR} || exit
+#Acc2info
+sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
+mv ${OUTDIR}/${PREFIX}.acc2info.tsv ${OUTDIR}/${PREFIX}.blast.cln.tsv
+else
+# Handle homolog data
+	FILE=$(sed -n "${PBS_ARRAYID}"p "${INPUTPATHS_LIST}")
+	F=$(basename ${FILE})
+   	PREFIX=$(echo "${F%%.faa}")	## takes PREFIX of file
+   	OUTDIR=${OUTPATH}/${PREFIX}_full	## variable containing output filepath based PREFIX
+   	printf "${PREFIX}\n"
+	mkdir ${OUTDIR}				## make the directory
+    cd ${OUTDIR} || exit
+	# put original fasta file into file containing all homologs
+	cat $FILE >> ${OUTDIR}/${PREFIX}.all_accnums.fa
 
-FILE=$(sed -n "${PBS_ARRAYID}"p "${INPUTPATHS_LIST}")
+	## DELTABLAST ##
+	db_start=$SECONDS
+	sh /data/research/jravilab/molevol_scripts/upstream_scripts/01.1_deltablast.sh $FILE $PREFIX $OUTDIR $DB $NHITS $EVAL
+	db_dur=$(( $SECONDS - $db_start ))
 
-      ## WEB BLAST ANALYSIS
-      if [ "$WBLAST" = "T" ]
-      then
-	    F=$(basename "${FILE}")
-   		PREFIX="${F%%.wblast.tsv}"		## takes PREFIX of file
-   		OUTDIR=${OUTPATH}/${PREFIX}_full
-		mkdir ${OUTDIR}		## variable containing output filepath based PREFIX
-		cd ${OUTDIR} || exit
-   		printf "${PREFIX}\n"
-		## ACC2FA ##
-		acc2fa_start=$SECONDS
-		sh /data/research/jravilab/molevol_scripts/upstream_scripts/02_acc2fa.sh ${OUTPATH}/${PREFIX}.wblast.tsv $PREFIX $OUTDIR
-		acc2fa_dur=$(( $SECONDS - $acc2fa_start ))
+    ## ACC2FA -- getting fasta FILES for deltablast output(s)
+	acc2fa_start=$SECONDS
+	sh /data/research/jravilab/molevol_scripts/upstream_scripts/02_acc2fa.sh ${OUTDIR}/${PREFIX}.dblast.tsv $PREFIX $OUTDIR
+	acc2fa_dur=$(( $SECONDS - $acc2fa_start ))
 
-		cat ../accs.txt >> ${OUTDIR}/${PREFIX}.all_accnums.txt
-		## ACC2INFO ##
-		acc2info_start=$SECONDS
-		sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
-		acc2fa_dur=$(( $SECONDS - $acc2fa_start ))
+	## ACC2INFO ##
+	acc2info_start=$SECONDS
+	sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
+	acc2info_dur=$(( $SECONDS - $acc2info_start ))
 
-		## BLAST RESULT CLEANUP ##
-		db_cln_start=$SECONDS
-		Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.2_cleanup_blast.R ${OUTPATH}/${PREFIX}.wblast.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX $WBLAST
-		db_cln_dur=$(( $SECONDS - $db_cln_start ))
-      fi
-
-      ## COMMANDLINE BLAST ANALYSIS
-    if [ $WBLAST = "F" ]
-      then
-	  	F=$(basename ${FILE})
-   		PREFIX=$(echo "${F%%.faa}")			## takes PREFIX of file
-   		OUTDIR=${OUTPATH}/${PREFIX}_full		## variable containing output filepath based PREFIX
-   		printf "${PREFIX}\n"
-		mkdir ${OUTDIR}				## make the directory
-      	cd ${OUTDIR} || exit
-		# put original fasta file into file containing all homologs
-		cat $FILE >> ${OUTDIR}/${PREFIX}.all_accnums.fa
-
-		## DELTABLAST ##
-		db_start=$SECONDS
-		sh /data/research/jravilab/molevol_scripts/upstream_scripts/01.1_deltablast.sh $FILE $PREFIX $OUTDIR $DB $NHITS $EVAL
-		db_dur=$(( $SECONDS - $db_start ))
-
-    	## ACC2FA -- getting fasta FILES for deltablast output(s)
-		acc2fa_start=$SECONDS
-		sh /data/research/jravilab/molevol_scripts/upstream_scripts/02_acc2fa.sh ${OUTDIR}/${PREFIX}.dblast.tsv $PREFIX $OUTDIR
-		acc2fa_dur=$(( $SECONDS - $acc2fa_start ))
-
-		## ACC2INFO ##
-		acc2info_start=$SECONDS
-		sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
-		acc2info_dur=$(( $SECONDS - $acc2info_start ))
-
-		## BLAST RESULT CLEANUP ##
-		db_cln_start=$SECONDS
-		Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.2_cleanup_blast.R ${OUTDIR}/${PREFIX}.dblast.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX $WBLAST
-		db_cln_dur=$(( $SECONDS - $db_cln_start ))
-	fi
-
+	## BLAST RESULT CLEANUP ##
+	db_cln_start=$SECONDS
+	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.2_cleanup_blast.R ${OUTDIR}/${PREFIX}.dblast.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX $WBLAST
+	db_cln_dur=$(( $SECONDS - $db_cln_start ))
+fi 
 	## BLASTCLUST ##
 	bclust_start=$SECONDS
 	sh /data/research/jravilab/molevol_scripts/upstream_scripts/03.1_blastclust.sh ${OUTDIR}/${PREFIX}.all_accnums.fa $PREFIX $OUTDIR
