@@ -20,10 +20,12 @@ printf "$INFILE\n"
 
 ## print statement for current step
 printf "\nCreating temporary files\n"
-
+cols=$(head -n 1 $INFILE | awk '{print NF}')
+if [ $cols -gt 1 ]
+then
 # taking 2nd column in blast input file and taking only 1 copy of each homolog accession,
 cat ${INFILE} | awk -F "\t" '{ print $2 }' | sort -u >> ${OUTDIR}/${PREFIX}.all_accnums.txt
-
+fi
 split -l 1000 -e ${OUTDIR}/${PREFIX}.all_accnums.txt ${OUTDIR}/acc 	# split accessions up into files of 1000 accession numbers
 
 ## print statement for current step
