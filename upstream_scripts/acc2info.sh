@@ -2,7 +2,7 @@
 # Script to retrieve the TaxID for each protein
 # Created: Dec 16, 2020 | Janani Ravi
 # Ref: https://ncbi-hackathons.github.io/EDirectCookbook/
-
+source /etc/profile.d/modules.sh
 module load edirect
 # NOTE: this takes NCBI API key from the wrapper scripts
 

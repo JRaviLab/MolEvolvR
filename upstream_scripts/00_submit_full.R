@@ -1,5 +1,5 @@
-#library(tidyverse)
-#library(Biostrings)
+library(tidyverse)
+library(Biostrings)
 
 separate_sequences <- function(sequences, acc_file_path = "accs.txt", dir_path = "~"){
     seqs <- readAAStringSet(sequences)
@@ -18,18 +18,23 @@ separate_sequences <- function(sequences, acc_file_path = "accs.txt", dir_path =
     return(length(seqs))
 }
 
-submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL= 0.0005, sequences = "~/test.fa", phylo = FALSE){
+submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL= 0.0005, sequences = "~/test.fa", phylo = FALSE, by_domain = "FALSE", domain_starting = "~/domain_seqs.fa"){
     setwd(dir)
     num_runs <- 0
     write("START_DT\tSTOP_DT\tquery\tdblast\tacc2info\tdblast_cleanup\tacc2fa\tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2da\tduration\n", "logfile.tsv")
-    if (!phylo){
+    if (phylo == "FALSE"){
         # If not phylogenetic analysis, split up the sequences, run blast and full analysis
         num_seqs <- separate_sequences(sequences, dir_path = dir)
         system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F 'input.txt ", DB, " ", NHITS, " ", EVAL, " F", "' -t 1-", num_seqs))
         num_runs <- num_runs + num_seqs
     }
     # do analysis on query regardless of selected analysis
-    system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F '", sequences, " ", DB, " ", NHITS, " ", EVAL," T'"))
+    if (by_domain == "TRUE"){
+        system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F '", domain_starting, " ", DB, " ", NHITS, " ", EVAL," T'"))
+    }
+    else{
+        system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F '", sequences, " ", DB, " ", NHITS, " ", EVAL," T'"))
+    }
     num_runs <- num_runs + 1
     write(paste0("0/", num_runs, " analyses completed"), "status.txt")
 }
