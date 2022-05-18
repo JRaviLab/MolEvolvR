@@ -76,7 +76,12 @@ PREFIX="query_data"
 OUTDIR=${OUTPATH}/${PREFIX}
 mkdir ${OUTDIR}				## make the directory
 cat $FILE >> ${OUTDIR}/${PREFIX}.all_accnums.fa
+if [ -e starting_accs.txt ]
+then
+cp starting_accs.txt ${OUTDIR}/${PREFIX}.all_accnums.txt
+else
 cp accs.txt ${OUTDIR}/${PREFIX}.all_accnums.txt
+fi
 cd ${OUTDIR} || exit
 #Acc2info
 sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
@@ -90,8 +95,6 @@ else
    	printf "${PREFIX}\n"
 	mkdir ${OUTDIR}				## make the directory
     cd ${OUTDIR} || exit
-	# put original fasta file into file containing all homologs
-	cat $FILE >> ${OUTDIR}/${PREFIX}.all_accnums.fa
 
 	## DELTABLAST ##
 	db_start=$SECONDS
