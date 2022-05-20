@@ -34,12 +34,14 @@ ipr2lin <- function(ipr, acc2info, prefix) {
   ipr_lin <- merge(ipr_tax, lineage_map, by = "TaxID", all.x = T) %>%
     mutate(Species = Species.y) %>%
     select(-Species.x, -Species.y)
-
+  
   # add lookup table to iprscan file
   lookup_tbl <- fread(input = '/data/research/jravilab/common_data/cln_lookup_tbl.tsv', sep = '\t', header = T, fill = T) %>%
   #lookup_tbl <- fread(input = '../ReferenceFiles/cln_lookup_tbl.tsv', sep = '\t', header = T, fill = T) %>%
     distinct()
-
+  if ("AccNum.x" %in% names(ipr_lin)){
+    ipr_lin <- ipr_lin %>% mutate(AccNum = AccNum.x)  %>% select(-AccNum.x, -AccNum.y)
+  }
   # run add_name f(x) on ipr+lineage dataframe
   ipr_lin <- ipr_lin %>% add_name() %>%
     mutate(Name = gsub('^_', '', Name))
@@ -78,9 +80,7 @@ ipr2lin <- function(ipr, acc2info, prefix) {
     mutate(Label = gsub('Region of a membrane-bound pro', 'cytoplasmic reg of mem-bound prot', Label)) %>%
     mutate(ShortName = gsub('Region of a membrane-bound protein predicted to be outside the membrane,
                             in the cytoplasm.', 'cytoplasmic reg of mem-bound prot', ShortName))
-  print(unique(ipr_cln$ShortName))
-  print(unique(ipr_cln$Label))
-  print(unique(ipr_cln$LookupTblDesc))
+
   # write results to file
   write_tsv(ipr_cln, file = paste0(prefix, '.iprscan_cln.tsv'))
 }

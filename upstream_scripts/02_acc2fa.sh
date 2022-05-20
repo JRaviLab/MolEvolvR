@@ -38,7 +38,15 @@ do
    accnum=$(cat $x | tr '\n' ',')				# separate each accession by comma instead of newline, required for edirect search
    efetch -db protein -format fasta -id "$accnum" >> $OUTFILE	# fetch each accession's fasta file from NCBI database
 done
-
+num_seqs=$(grep ">" ${OUTFILE} | wc -l | grep -Eo "^[[:digit:]]+")
+if [ "$num_seqs" -lt 1 ]
+then
+for x in ${OUTDIR}/acc*
+do
+accnum=$(cat $x | tr '\n' ',')
+curl -X GET --header 'Accept:text/x-fasta' 'https://www.ebi.ac.uk/proteins/api/proteins?accession='"${accnum}" >>$OUTFILE 
+done
+fi
 ## print statement for current step
 printf "\nRemoving temporary files\n"
 rm ${OUTDIR}/acc*							# removes each file created by "split" function above

@@ -168,10 +168,14 @@ fi
         #  fi
 NUM_RUNS=$(wc -l "${OUTPATH}"/logfile.tsv | grep -Eo "^[[:digit:]]+")
 ((NUM_RUNS-=1))
-TOTAL_RUNS=$(wc -l "${OUTPATH}"/input.txt | grep -Eo "^[[:digit:]]+")
-if [ $TOTAL_RUNS -eq $NUM_RUNS ]
+if [ -e "${OUTPATH}"/accs.txt ]
+then
+TOTAL_RUNS=$(wc -l "${OUTPATH}"/accs.txt | grep -Eo "^[[:digit:]]+")
+else
+TOTAL_RUNS=1
+fi
+if [ $TOTAL_RUNS = $NUM_RUNS ]
 then
   touch ../done.txt
-else
-  echo "${NUM_RUNS} / ${TOTAL_RUNS} jobs completed" > ../status.txt
 fi
+  echo "${NUM_RUNS} / ${TOTAL_RUNS} jobs completed" > ../status.txt
