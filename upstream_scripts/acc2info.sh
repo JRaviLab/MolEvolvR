@@ -18,11 +18,25 @@ acc2info()
 	# Get info for the query too
 	#echo ${PREFIX} >> ${INFILE}
 	# print colnames
-	printf "AccNum.noV\tFullAccNum\tDescription\tLength\tTaxID\tSpecies\tSourceDB\tCompleteness\n" > $OUTFILE
+	printf "AccNum\tAccNum.noV\tFullAccNum\tDescription\tLength\tTaxID\tSpecies\tSourceDB\tCompleteness\n" > $OUTFILE
 	# Batch input of accession numbers --> Document Summaries --> Pull necessary columns --> Output
 	epost -input $INFILE -db protein | \
 	efetch -format docsum | xtract -pattern DocumentSummary -def "NA" \
-	-element Caption,Extra,Title,Slen,TaxId,Organism,SourceDb,Completeness >> $OUTFILE
+	-element OSLT,Caption,Extra,Title,Slen,TaxId,Organism,SourceDb,Completeness >> $OUTFILE
+	# If acc2info doesn't find anything, try UniProt
+	num_acc=$(wc -l "${OUTFILE}" | grep -Eo "^[[:digit:]]+")
+	if [ "${num_acc}" = 1 ]
+	then
+	split -l 100 -e ${OUTDIR}/${PREFIX}.all_accnums.txt ${OUTDIR}/acc
+	for x in ${OUTDIR}/acc*						# looping through each file following the pattern
+	do
+   	#sleep 1
+   	accnum=$(cat $x | tr '\n' ',')				# separate each accession by comma instead of newline, required for edirect search
+   	curl -X GET --header 'Accept:application/xml' 'https://www.ebi.ac.uk/proteins/api/proteins?accession='"${accnum}" \
+	| xtract -pattern entry -def "NA" -element -first accession, accession, fullName, fullName, sequence@length, dbReference@id, entry@dataset, name >>$OUTFILE 
+	done
+	rm ${OUTDIR}/acc*		
+	fi
 }
 
 acc2info_phylo()

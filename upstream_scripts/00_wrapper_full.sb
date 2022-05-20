@@ -35,7 +35,7 @@ DB=$2
 NHITS=$3
 EVAL=$4
 IS_QUERY=$5
-
+TYPE=$6
 
 ## USAGE
 ## qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "input.txt F"
@@ -85,13 +85,13 @@ fi
 cd ${OUTDIR} || exit
 #Acc2info
 sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
-mv ${OUTDIR}/${PREFIX}.acc2info.tsv ${OUTDIR}/${PREFIX}.blast.cln.tsv
+cp ${OUTDIR}/${PREFIX}.acc2info.tsv ${OUTDIR}/${PREFIX}.blast.cln.tsv
 else
 # Handle homolog data
 	FILE=$(sed -n "${PBS_ARRAYID}"p "${INPUTPATHS_LIST}")
 	F=$(basename ${FILE})
    	PREFIX=$(echo "${F%%.faa}")	## takes PREFIX of file
-   	OUTDIR=${OUTPATH}/${PREFIX}_full	## variable containing output filepath based PREFIX
+   	OUTDIR=${OUTPATH}/${PREFIX}_${TYPE}	## variable containing output filepath based PREFIX
    	printf "${PREFIX}\n"
 	mkdir ${OUTDIR}				## make the directory
     cd ${OUTDIR} || exit
@@ -113,7 +113,7 @@ else
 
 	## BLAST RESULT CLEANUP ##
 	db_cln_start=$SECONDS
-	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.2_cleanup_blast.R ${OUTDIR}/${PREFIX}.dblast.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX $F
+	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.2_cleanup_blast.R ${OUTDIR}/${PREFIX}.dblast.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX F
 	db_cln_dur=$(( $SECONDS - $db_cln_start ))
 fi 
 	## BLASTCLUST ##
@@ -125,7 +125,8 @@ fi
 	c2t_start=$SECONDS
 	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/03.2_clust2table.R ${OUTDIR}/${PREFIX}.bclust.L60S80.tsv ${OUTDIR}/${PREFIX}.blast.cln.tsv
 	c2t_dur=$(( $SECONDS - $c2t_start ))
-
+if [ "$TYPE" != "dblast" ]
+then
 	## INTERPROSCAN ##
 	## add second run for original protein, too
 	ipr_start=$SECONDS
@@ -138,12 +139,19 @@ fi
 	ipr2lin_start=$SECONDS
 	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.4_ipr2lin.R ${OUTDIR}/${PREFIX}.iprscan.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX
 	ipr2lin_dur=$(( $SECONDS - $ipr2lin_start ))
-
+	if [ "$IS_QUERY" = "T" ]
+	then
+	## IPR2DA ##
+	ipr2da_start=$SECONDS
+	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${PREFIX}.iprscan_cln.tsv ${PREFIX} NA
+	ipr2da_dur=$(( $SECONDS - $ipr2da_start ))
+	cp ${OUTDIR}/${PREFIX}.ipr_domarch.tsv ${OUTDIR}/${PREFIX}.full_analysis.tsv
+	else
 	## IPR2DA ##
 	ipr2da_start=$SECONDS
 	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${PREFIX}.iprscan_cln.tsv ${PREFIX} ${OUTDIR}/${PREFIX}.cln.clust.tsv
 	ipr2da_dur=$(( $SECONDS - $ipr2da_start ))
-
+	fi
 	## RPSBLAST ##
 	rps_start=$SECONDS
 	#sh /data/research/jravilab/molevol_scripts/upstream_scripts/04b_rpsblast.sh ${OUTDIR}/${PREFIX}.all_accnums.fa ${PREFIX} ${OUTDIR}
@@ -153,7 +161,7 @@ fi
 	rps2da_start=$SECONDS
 	#Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05b_rps2da.R ${OUTDIR}/${PREFIX}.rps.out ${OUTDIR}/${PREFIX}.cln.clust.ipr.tsv ${PREFIX}
 	rps2da_dur=$(( $SECONDS - $rps2da_start ))
-
+fi
 	cp ${FILE} ${OUTDIR}	# copy fasta file to output directory
 
 	## Figure out how long the entire script took to run
@@ -175,13 +183,17 @@ fi
         #  fi
 NUM_RUNS=$(wc -l "${OUTPATH}"/logfile.tsv | grep -Eo "^[[:digit:]]+")
 ((NUM_RUNS-=1))
-TOTAL_RUNS=$(wc -l "${OUTPATH}"/input.txt | grep -Eo "^[[:digit:]]+")
-if [ $TOTAL_RUNS -eq $NUM_RUNS ]
+if [ -e "${OUTPATH}"/accs.txt ]
+then
+TOTAL_RUNS=$(wc -l "${OUTPATH}"/accs.txt | grep -Eo "^[[:digit:]]+")
+else
+TOTAL_RUNS=1
+fi
+if [ $TOTAL_RUNS = $NUM_RUNS ]
 then
   touch ../done.txt
-else
-  echo "${NUM_RUNS} / ${TOTAL_RUNS} jobs completed" > ../status.txt
 fi
+  echo "${NUM_RUNS} / ${TOTAL_RUNS} jobs completed" > ../status.txt
 
 
 setfacl -R -m group:shiny:r-x ${OUTDIR}

@@ -53,7 +53,7 @@ ipr2da <- function(infile_ipr, prefix,
 
   # select relevant rows from ipr input to add to domarch
   ipr_select <- ipr_in %>%
-    select(Name, AccNum, Species, TaxID, Lineage, ProteinName, SourceDB, Completeness, AccNum.noV) %>%
+    select(Name, AccNum, Species, TaxID, Lineage, Lineage_long_na, Lineage_long, Lineage_med, Lineage_short, ProteinName, SourceDB, Completeness, AccNum.noV) %>%
     distinct()
 
   # combine domarchs to one data frame, merge w/ acc2info
@@ -94,7 +94,7 @@ args <- commandArgs(trailingOnly=TRUE)
 da <- ipr2da(infile_ipr = args[1], prefix = args[2])
 
 ## if blast results are provided, call append_ipr
-if (is.null(args[3]) | is.na(args[3])) {
+if (is.null(args[3]) | is.na(args[3]) | args[3] == "NA") {
    print('No blast results provided, moving on.')
 } else {
    append_ipr(ipr_da=da, blast=args[3], prefix=args[2])

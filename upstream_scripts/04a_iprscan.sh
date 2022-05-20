@@ -24,7 +24,7 @@ OUTFILE=$(printf "${OUTDIR}/${PREFIX}.iprscan")
 ## print I/O messages
 printf "\nNow processing $QUERY_FILE\n"
 
-iprscan -i ${QUERY_FILE} -b ${OUTFILE} -f TSV --cpu 8
+iprscan -i ${QUERY_FILE} -b ${OUTFILE} -f TSV --cpu 10
 
 printf "##################\n"
 printf "END OF IPRSCAN RUN\n"

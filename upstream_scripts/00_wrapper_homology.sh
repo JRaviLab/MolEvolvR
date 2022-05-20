@@ -14,9 +14,9 @@
 ############
 ## TORQUE ##
 ############
-#PBS -l nodes=1:ppn=10		# number of nodes requested
+#PBS -l nodes=1:ppn=10		# number of nodes requested, specify wall time
 #PBS -m abe			# email notifications for job
-#PBS -M=sosinsk7@msu.edu	# user email; RESET
+#PBS -M=jravilab.msu@gmail.com	# user email;
 #PBS -N molevol_analysis	# name of job being run
 
 ## print start/stop printf in individual scripts
@@ -30,13 +30,18 @@ cd ${OUTPATH}
 ## talk to Sam about how this works with Pins package
 
 ## USER INPUTS
+INPUTPATHS_LIST=$1
+DB=$2
+NHITS=$3
+EVAL=$4
+IS_QUERY=$5
 
 
 ## USAGE
 ## qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "input.txt F"
 ## qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "example_blastp.csv T"
 
-# Location of databases/dependencies 
+# Location of databases/dependencies
 export BLASTDB=/data/common_data/blastdb/v6
 export BLASTMAT=/opt/software/BLAST/2.2.26/data
 export INTERPRO=/opt/software/iprscan/5.47.82.0-Python3/data:/data/common_data/iprscan:$INTERPRO
@@ -48,12 +53,13 @@ export NCBI_API_KEY=YOUR_KEY_HERE
 
 # Prevent "module: command not found"
 # Read more about it https://www.sdsc.edu/support/user_guides/tscc.html
-source /etc/profile.d/modules.sh 
+source /etc/profile.d/modules.sh
 
 module purge 					## clear loaded modules
 module load R		 			## load R
-module load edirect 
-module load BLAST				## load blast (for blastclust				## load edirect
+module load edirect 				## load edirect
+module load BLAST				## load blast (for blastclust)
+module load BLAST+ BioPerl 			## load blast+
 module load iprscan 				## load iprscan
 
 start=$SECONDS 					## get current time
@@ -61,49 +67,55 @@ START_DT=$(date '+%d/%m/%Y-%H:%M:%S')
 
 #total=$(( ((3*60)+50)*60 ))			## total time the job can take in seconds, this should match your SBATCH line above
 #maxtime=$(( 120*60 )) 				## maximum time to process one input, need to do some experimenting with your inputs
-INPUTPATHS_LIST=$1
-IS_QUERY=$2
-HAS_SEQUENCES=$3
 if [ "$IS_QUERY" = "T" ]
 # Handle the query data
 then
-F=$(basename ${INPUTPATHS_LIST})
+FILE="$INPUTPATHS_LIST"
+F=$(basename ${FILE})
 PREFIX="query_data"
 OUTDIR=${OUTPATH}/${PREFIX}
 mkdir ${OUTDIR}				## make the directory
-cp ${INPUTPATHS_LIST} ${OUTDIR}/${PREFIX}.dblast.tsv
-cd ${OUTDIR} || exit
-if [ "$HAS_SEQUENCES" = "F" ]
+cat $FILE >> ${OUTDIR}/${PREFIX}.all_accnums.fa
+if [ -e starting_accs.txt ]
 then
-acc2fa_start=$SECONDS
-sh /data/research/jravilab/molevol_scripts/upstream_scripts/02_acc2fa.sh ${OUTDIR}/${PREFIX}.dblast.tsv $PREFIX $OUTDIR
-acc2fa_dur=$(( $SECONDS - $acc2fa_start ))
+cp starting_accs.txt ${OUTDIR}/${PREFIX}.all_accnums.txt
 else
-cp ../seqs.fa ${OUTDIR}/${PREFIX}.all_accnums.fa
-cp ../accs.txt ${OUTDIR}/${PREFIX}.all_accnums.txt
+cp accs.txt ${OUTDIR}/${PREFIX}.all_accnums.txt
 fi
+cd ${OUTDIR} || exit
+#Acc2info
+sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
+mv ${OUTDIR}/${PREFIX}.acc2info.tsv ${OUTDIR}/${PREFIX}.blast.cln.tsv
 else
 # Handle homolog data
 	FILE=$(sed -n "${PBS_ARRAYID}"p "${INPUTPATHS_LIST}")
-   	PREFIX=${FILE}	## takes PREFIX of file
-   	OUTDIR=${OUTPATH}/${FILE}_blast	## variable containing output filepath based PREFIX
-   	printf "${PREFIX}\n"			## make the directory
+	F=$(basename ${FILE})
+   	PREFIX=$(echo "${F%%.faa}")	## takes PREFIX of file
+   	OUTDIR=${OUTPATH}/${PREFIX}_full	## variable containing output filepath based PREFIX
+   	printf "${PREFIX}\n"
+	mkdir ${OUTDIR}				## make the directory
     cd ${OUTDIR} || exit
+
+	## DELTABLAST ##
+	db_start=$SECONDS
+	sh /data/research/jravilab/molevol_scripts/upstream_scripts/01.1_deltablast.sh $FILE $PREFIX $OUTDIR $DB $NHITS $EVAL
+	db_dur=$(( $SECONDS - $db_start ))
 
     ## ACC2FA -- getting fasta FILES for deltablast output(s)
 	acc2fa_start=$SECONDS
 	sh /data/research/jravilab/molevol_scripts/upstream_scripts/02_acc2fa.sh ${OUTDIR}/${PREFIX}.dblast.tsv $PREFIX $OUTDIR
 	acc2fa_dur=$(( $SECONDS - $acc2fa_start ))
 
-fi
 	## ACC2INFO ##
 	acc2info_start=$SECONDS
 	sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
 	acc2info_dur=$(( $SECONDS - $acc2info_start ))
+
 	## BLAST RESULT CLEANUP ##
 	db_cln_start=$SECONDS
-	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.2_cleanup_blast.R ${OUTDIR}/${PREFIX}.dblast.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX T
+	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.2_cleanup_blast.R ${OUTDIR}/${PREFIX}.dblast.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX $F
 	db_cln_dur=$(( $SECONDS - $db_cln_start ))
+fi 
 	## BLASTCLUST ##
 	bclust_start=$SECONDS
 	sh /data/research/jravilab/molevol_scripts/upstream_scripts/03.1_blastclust.sh ${OUTDIR}/${PREFIX}.all_accnums.fa $PREFIX $OUTDIR
@@ -142,6 +154,8 @@ fi
 	#Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05b_rps2da.R ${OUTDIR}/${PREFIX}.rps.out ${OUTDIR}/${PREFIX}.cln.clust.ipr.tsv ${PREFIX}
 	rps2da_dur=$(( $SECONDS - $rps2da_start ))
 
+	cp ${FILE} ${OUTDIR}	# copy fasta file to output directory
+
 	## Figure out how long the entire script took to run
 	dur=$(( $SECONDS - $start ))
 	printf "\nTotal run time: $dur\n"
@@ -160,15 +174,14 @@ fi
         #      scancel ${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}
         #  fi
 NUM_RUNS=$(wc -l "${OUTPATH}"/logfile.tsv | grep -Eo "^[[:digit:]]+")
-if [ -e "${OUTPATH}"/accs.txt ]
-then
-TOTAL_RUNS=$(wc -l "${OUTPATH}"/accs.txt | grep -Eo "^[[:digit:]]+")
-else
-TOTAL_RUNS=1
-fi
-if [ $TOTAL_RUNS = $NUM_RUNS ]
+((NUM_RUNS-=1))
+TOTAL_RUNS=$(wc -l "${OUTPATH}"/input.txt | grep -Eo "^[[:digit:]]+")
+if [ $TOTAL_RUNS -eq $NUM_RUNS ]
 then
   touch ../done.txt
+else
+  echo "${NUM_RUNS} / ${TOTAL_RUNS} jobs completed" > ../status.txt
 fi
- echo "${NUM_RUNS} / ${TOTAL_RUNS} jobs completed" > ../status.txt
 
+
+setfacl -R -m group:shiny:r-x ${OUTDIR}

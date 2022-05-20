@@ -1,12 +1,12 @@
 library("Biostrings")
 source("/data/research/jravilab/molevol_scripts/upstream_scripts/00_submit_full.R")
 args = commandArgs(trailingOnly = TRUE)
+get_sequences(args[1], dir = args[4], separate = FALSE, acc_file_path = "starting_accs.txt")
 in_fa = readAAStringSet(args[1])
 in_ipr = read.csv(args[2], sep="\t", header=FALSE)
 out_file = args[3]
 for (item in names(in_fa)){
   accession = unlist(strsplit(item, " "))[1]
-  write(accession, "starting_accs.txt", append = TRUE)
   pfam_count = 1
   gene3d_count =1
   for (i in 1:nrow(in_ipr)){
@@ -29,4 +29,4 @@ for (item in names(in_fa)){
   }
 }
 
-submit_full(dir = args[4], sequences = out_file, phylo = args[5], by_domain = TRUE, domain_starting = args[1])
+submit_full(dir = args[4], sequences = out_file, phylo = args[5], by_domain = "TRUE", domain_starting = args[1], type = args[6])

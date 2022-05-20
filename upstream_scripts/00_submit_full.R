@@ -1,39 +1,48 @@
 library(tidyverse)
 library(Biostrings)
 
-separate_sequences <- function(sequences, acc_file_path = "accs.txt", dir_path = "~"){
+get_sequences <- function(sequences, acc_file_path = "accs.txt", dir_path = "~", separate = TRUE){
     seqs <- readAAStringSet(sequences)
+    cln_names <- c()
     for (accnum in names(seqs)){
-        if ("\\|" %in% accnum){
-            accnum_cln <- strsplit(accnum, "\\|")[[1]][3]
+        if (grepl("\\|", accnum)){
+            accnum_cln <- strsplit(accnum, "\\|")[[1]][2]
         }
         else{
             accnum_cln <- strsplit(accnum, " ")[[1]][1]
         }
+        cln_names <- append(cln_names, accnum_cln)
         write(accnum_cln, file = acc_file_path, append = TRUE)
+        if (separate){
         write(paste0(dir_path, "/", accnum_cln, ".faa"), file = "input.txt", append = TRUE)
         write(paste0(">", accnum_cln), file = paste0(accnum_cln, ".faa"), append = TRUE)
         write(toString(seqs[accnum]), file = paste0(accnum_cln, ".faa"), append = TRUE)
+        }
     }
+    names(seqs) <- cln_names
+    writeXStringSet(seqs, sequences, format="fasta")
     return(length(seqs))
 }
 
-submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL= 0.0005, sequences = "~/test.fa", phylo = FALSE, by_domain = "FALSE", domain_starting = "~/domain_seqs.fa"){
+submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL= 0.0005, sequences = "~/test.fa", phylo = "FALSE", by_domain = "FALSE", domain_starting = "~/domain_seqs.fa", type = "full"){
     setwd(dir)
     num_runs <- 0
     write("START_DT\tSTOP_DT\tquery\tdblast\tacc2info\tdblast_cleanup\tacc2fa\tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2da\tduration\n", "logfile.tsv")
     if (phylo == "FALSE"){
         # If not phylogenetic analysis, split up the sequences, run blast and full analysis
-        num_seqs <- separate_sequences(sequences, dir_path = dir)
-        system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F 'input.txt ", DB, " ", NHITS, " ", EVAL, " F", "' -t 1-", num_seqs))
+        num_seqs <- get_sequences(sequences, dir_path = dir, separate = TRUE)
+        system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F 'input.txt ", DB, " ", NHITS, " ", EVAL, " F ", type, "'", " -t 1-", num_seqs))
         num_runs <- num_runs + num_seqs
+    }
+    else{
+        get_sequences(sequences, dir_path = dir, separate = FALSE)
     }
     # do analysis on query regardless of selected analysis
     if (by_domain == "TRUE"){
-        system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F '", domain_starting, " ", DB, " ", NHITS, " ", EVAL," T'"))
+        system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F '", domain_starting, " ", DB, " ", NHITS, " ", EVAL," T ", type, "'"))
     }
     else{
-        system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F '", sequences, " ", DB, " ", NHITS, " ", EVAL," T'"))
+        system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F '", sequences, " ", DB, " ", NHITS, " ", EVAL," T ",type, "'"))
     }
     num_runs <- num_runs + 1
     write(paste0("0/", num_runs, " analyses completed"), "status.txt")
@@ -47,6 +56,7 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
     df_query <- df %>% distinct(Query, .keep_all = TRUE)
     df_query$AccNum <- df_query$Query
     write_tsv(df_query, "blast_query.tsv", col_names = FALSE)
+    write(df_query$AccNum, "accs.txt")
     write("START_DT\tSTOP_DT\tquery\tacc2info\tacc2fa\tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2da\tduration\n", "logfile.tsv")
     # do analysis on the queries
     if (ncbi){
@@ -70,6 +80,7 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
 submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa", ncbi = FALSE, blast = FALSE, DB = "refseq", NHITS = 5000, EVAL= 0.0005){
     setwd(dir)
     num_runs <- 0
+    write("START_DT\tSTOP_DT\tquery\tacc2info\tacc2fa\tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2da\tduration\n", "logfile.tsv")
     ipr_in <- read_tsv(ipr, col_names = TRUE)
     queries <- unique(ipr_in$AccNum)
     if (ncbi){
@@ -77,12 +88,12 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
     }
     if (blast){
         # if blast separate the query sequences and do blast+full analysis
-        seq_count <- separate_sequences(seqs, dir_path = dir)
+        seq_count <- get_sequences(seqs, dir_path = dir, separate = TRUE)
         num_runs <- num_runs + seq_count
         system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb -F 'accs.txt ", "F T ", DB , " ", NHITS, " ", EVAL, "'", " -t 1-", seq_count))
     }
     else{
-        writeLines(queries, "accs.txt")
+        write(queries, "accs.txt")
     }
     num_runs <- num_runs + 1
     write(paste0("0/", num_runs, " analyses completed"), "status.txt")
