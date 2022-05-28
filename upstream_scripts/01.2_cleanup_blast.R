@@ -42,7 +42,7 @@ cleanup_blast <- function(infile_blast, acc2info, prefix, wblast) {
        mutate(PcPosOrig = as.numeric(PcPosOrig)) %>%
        mutate(AlnLength = as.numeric(AlnLength))
        #mutate(QLength = as.numeric(QLength)) %>%
-     #mutate(PcPositive = round(x = (PcPosOrig * AlnLength/QLength), digits = 2))
+       mutate(PcPositive = PcPositiveOrig)
 
   } else if (wblast == "F") {
      blast_out <- read_tsv(file = infile_blast, col_names = cl_blast_colnames)
