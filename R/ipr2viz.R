@@ -35,37 +35,30 @@ theme_genes2 <- function() {
 ##################################
 # Group by lineage + DA then take top 20
 find_top_acc = function(infile_full,
-                        DA_col = "DomArch.Pfam", ## @SAM, you could pick by the Analysis w/ max rows!
+                        DA_col = "DomArch.Pfam",
                         lin_col = "Lineage",
                         n = 20,
                         query)
 {
   lin_sym = sym(lin_col)
-  DA_sym = sym(DA_col)
-  cln = fread(infile_full, sep ="\t", fill = T)
+  #cln = fread(infile_full, sep ="\t", fill = T)
+  cln <- infile_full
   if (query != "All"){
     cln <- cln %>% filter(cln$QueryName == query)
   }
+  cols <- colnames(cln)
+  domarch_cols = cols[which(grepl("^DomArch",cols) & !grepl("repeats$", cols) )]
+  cln_domarch <- cln %>% select(domarch_cols)
+  col_counts <- colSums(is.na(cln_domarch))
+  DA_sym <- sym(names(which.min(col_counts)))
   ## Group by Lineage, DomArch and reverse sort by group counts
   grouped = cln %>%
     group_by({{DA_sym}}, {{lin_sym}}) %>%
-    summarise(count = n()) %>%
+    arrange(desc(PcPositive)) %>%
+    summarise(count = n(), AccNum = dplyr::first(AccNum)) %>%
     arrange(-count) %>%
     filter(!is.na({{lin_sym}}) & !is.na({{DA_sym}}))
-  top_acc = character(n)
-  for(r in 1:min(nrow(grouped), n))
-  {
-    l = (grouped %>% pull({{lin_sym}}))[r]
-    DA = (grouped %>% pull({{DA_sym}}))[r]
-
-    filt = cln %>% filter({{lin_sym}} == l & {{DA_sym}} == DA)
-
-    top = filt[which(filt$PcPositive == max(filt$PcPositive))[1] , ]
-
-    top_acc[r] = top$AccNum
-  }
-  top_acc = top_acc[which(top_acc != "")]
-  top_acc = na.omit(top_acc)
+  top_acc <- grouped$AccNum[1:n]
   return(top_acc)
 }
 
@@ -73,7 +66,7 @@ find_top_acc = function(infile_full,
 #############################################
 ## IPR + FULL files --> DomArch Visualization
 #############################################
-ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
+ipr2viz <- function(infile_ipr=NULL, infile_full=NULL, accessions = c(),
                     analysis=c("Pfam", "Phobius", "TMHMM", "Gene3D"),
                     group_by = "Analysis", #"Analysis"
                     topn = 20, name = "Name", text_size = 10, query = "All")
@@ -90,9 +83,9 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL,
              '#757575','#CD3333', '#EE7600', '#CDAD00', '#556B2F', '#7AC5CD')
   ## Read IPR file
   ipr_out <- read_tsv(infile_ipr, col_names=T, col_types = iprscan_cols)
+  ipr_out <- ipr_out %>% filter(Name %in% accessions)
   ## To filter by Analysis
   analysis = paste(analysis, collapse = "|")
-
   ## @SAM: This can't be set in stone since the analysis may change!
   ## Getting top n accession numbers using find_top_acc()
   top_acc <- find_top_acc(infile_full=infile_full,
@@ -202,7 +195,7 @@ ipr2viz_web <- function(infile_ipr,
 
   ## Read IPR file and subset by Accessions
   ipr_out <- read_tsv(infile_ipr, col_names = T)
-  #ipr_out <- ipr_out %>% filter(Name %in% accessions)
+  ipr_out <- ipr_out %>% filter(Name %in% accessions)
   ## Need to fix eventually based on 'real' gene orientation!
   ipr_out$Strand <- rep("forward", nrow(ipr_out))
 
