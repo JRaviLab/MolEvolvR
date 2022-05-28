@@ -51,6 +51,7 @@ find_top_acc = function(infile_full,
   cln_domarch <- cln %>% select(domarch_cols)
   col_counts <- colSums(is.na(cln_domarch))
   DA_sym <- sym(names(which.min(col_counts)))
+  showNotification(DA_sym)
   ## Group by Lineage, DomArch and reverse sort by group counts
   grouped = cln %>%
     group_by({{DA_sym}}, {{lin_sym}}) %>%
@@ -84,6 +85,8 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL, accessions = c(),
   ## Read IPR file
   ipr_out <- read_tsv(infile_ipr, col_names=T, col_types = iprscan_cols)
   ipr_out <- ipr_out %>% filter(Name %in% accessions)
+  analysis_cols <- paste0("DomArch.", analysis)
+  infile_full <- infile_full %>% select(analysis_cols, Lineage, QueryName, PcPositive, AccNum)
   ## To filter by Analysis
   analysis = paste(analysis, collapse = "|")
   ## @SAM: This can't be set in stone since the analysis may change!
