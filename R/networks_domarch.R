@@ -34,7 +34,6 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
   #'\itemize{\item "grid" \item "circle" \item "random" \item "auto"}
   #'@examples domain_network(pspa)
   # by domain networks or all, as required.
-  print(domains_of_interest)
   tryCatch({
   column_name <- sym(column)
 
