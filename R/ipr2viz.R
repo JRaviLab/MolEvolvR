@@ -36,7 +36,7 @@ theme_genes2 <- function() {
 # Group by lineage + DA then take top 20
 find_top_acc = function(infile_full,
                         DA_col = "DomArch.Pfam",
-                        lin_col = "Lineage",
+                        lin_col = "Lineage_short",
                         n = 20,
                         query)
 {
@@ -86,7 +86,7 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL, accessions = c(),
   ipr_out <- read_tsv(infile_ipr, col_names=T, col_types = iprscan_cols)
   ipr_out <- ipr_out %>% filter(Name %in% accessions)
   analysis_cols <- paste0("DomArch.", analysis)
-  infile_full <- infile_full %>% select(analysis_cols, Lineage, QueryName, PcPositive, AccNum)
+  infile_full <- infile_full %>% select(analysis_cols, Lineage_short, QueryName, PcPositive, AccNum)
   ## To filter by Analysis
   analysis = paste(analysis, collapse = "|")
   ## @SAM: This can't be set in stone since the analysis may change!
@@ -94,7 +94,7 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL, accessions = c(),
   top_acc <- find_top_acc(infile_full=infile_full,
                           DA_col = "DomArch.Pfam",
                           ## @SAM, you could pick by the Analysis w/ max rows!
-                          lin_col = "Lineage",
+                          lin_col = "Lineage_short",
                           n = topn, query = query)
   # Filter by Top Accessions per Accession per DomArch and Lineage
   ipr_out <- subset(ipr_out,
