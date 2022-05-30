@@ -125,7 +125,7 @@ fi
 	c2t_start=$SECONDS
 	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/03.2_clust2table.R ${OUTDIR}/${PREFIX}.bclust.L60S80.tsv ${OUTDIR}/${PREFIX}.blast.cln.tsv
 	c2t_dur=$(( $SECONDS - $c2t_start ))
-if [ "$TYPE" != "dblast" ]
+if [ "$TYPE" != "dblast" ] || [ "$IS_QUERY" = "T" ]
 then
 	## INTERPROSCAN ##
 	## add second run for original protein, too
