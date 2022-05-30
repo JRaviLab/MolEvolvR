@@ -51,15 +51,16 @@ find_top_acc = function(infile_full,
   cln_domarch <- cln %>% select(domarch_cols)
   col_counts <- colSums(is.na(cln_domarch))
   DA_sym <- sym(names(which.min(col_counts)))
-  showNotification(DA_sym)
+  showNotification(paste0("Selecting representatives by unique ",DA_sym, " and lineage combinations"))
   ## Group by Lineage, DomArch and reverse sort by group counts
   grouped = cln %>%
     group_by({{DA_sym}}, {{lin_sym}}) %>%
     arrange(desc(PcPositive)) %>%
     summarise(count = n(), AccNum = dplyr::first(AccNum)) %>%
     arrange(-count) %>%
-    filter(!is.na({{lin_sym}}) & !is.na({{DA_sym}}))
+    filter({{lin_sym}} != "" && {{DA_sym}} != "")
   top_acc <- grouped$AccNum[1:n]
+  top_acc <- na.omit(top_acc)
   return(top_acc)
 }
 
@@ -112,7 +113,6 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL, accessions = c(),
   analysis_labeler <- analyses %>%
     pivot_wider(names_from = Analysis, values_from = Analysis)
 
-  queryrows <- which(is.na(ipr_out_sub$AccNum))
   lookup_tbl_path = "/data/research/jravilab/common_data/cln_lookup_tbl.tsv"
   lookup_tbl = read_tsv(lookup_tbl_path, col_names = T, col_types = lookup_table_cols)
 
