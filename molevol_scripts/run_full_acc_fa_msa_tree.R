@@ -6,6 +6,7 @@
 source("./R/pre-msa-tree.R")
 source("./molevol_scripts/filter_tree.R")
 source("scripts/tree.R")
+source("./R/tree.R")
 
 ## Filter homologs by Analysis | Domains of interest | PcPositive | Tail cutoffs
 inpath <- "../molevol_data/project_data/phage_defense/full_analysis_20210108/"

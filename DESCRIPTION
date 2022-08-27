@@ -1,15 +1,23 @@
-Package: evolvr
-Title: Molecular Evolution
+Type: Package
+Package: MolEvolvR
 Version: 0.0.0.9000
-Authors@R: person("Janani", "Ravi", email = "janani@msu.edu", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
-Depends: R (>= 3.5.1)
-License: MIT License
-Encoding: UTF-8
+Title: Molecular Evolution and Phylogeny
+Description: This R package provides a system for characterizing proteins using molecular evolution and phylogeny.
+Authors@R:
+    c(person("Janani", "Ravi", email = "janani@msu.edu", role = c("aut", "cre"),
+        comment=c(ORCID="0000-0001-7443-925X")),
+    person("Samuel", "Chen", role = "aut",
+        comment = c(ORCID = "")),
+    person("Lauren", "Sosinski", role = "aut",
+        comment = c(ORCID = "")),
+    person("Joseph", "Burke", role = "aut",
+        comment = c(ORCID = "")))
+Depends:
+    R (>= 3.5.1)
+License: MIT + file License
 LazyData: true
-URL: https://github.com/cpathogeno/the-approach
-BugReports: https://github.com/cpathogeno/the-approach/issues
-biocViews:
+URL: https://github.com/jravilab/molevolvr
+BugReports: https://github.com/jravilab/molevolvr/issues
 Imports:
     tidyverse,
     conflicted,
@@ -29,10 +37,10 @@ Imports:
     tidytree,
     Rcpp,
     tidytext
-
-Remotes: github::...
-Remotes: bioc::...
-
-RoxygenNote: 6.1.1
-LinkingTo: 
-    Rcpp
+VignetteBuilder: knitr
+RoxygenNote: 7.1.1
+Roxygen: list(markdown = TRUE)
+NeedsCompilation: yes
+Encoding: UTF-8
+LinkingTo: Rcpp
+Maintainer: Janani Ravi <janani@msu.edu>
