@@ -69,34 +69,41 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
 
   # Remove all isolated domarchs, such that an adjacency list can easily be constructed
   singletons <- domain.list[which(lengths(domain.list)==1)] %>% unique()
-  domain.list = domain.list[-which(lengths(domain.list)==1)]
+  domain.list <- domain.list[-which(lengths(domain.list)==1)]
   # This is where we know if the adjacency list is empty
   if(length(domain.list) == 0)
   {
-    g <- make_empty_graph()
+    vertex_df <- data.frame(id=double(), label=character())
     # Add nodes included in domains of interest
-    g <- g + vertices(singletons)
-    V(g)$size <- length(singletons)
-
-    if(length(V(g)$size) == 1 || min(V(g)$size) == max(V(g)$size)  )
+    num=1
+    for(domain in singletons)
     {
-      V(g)$size <- 25
-      V(g)$color <- rainbow(1, alpha = .5)
-      V(g)$frame.color <- V(g)$color
+     vertex_df <- vertex_df %>% add_row(id=num, label=domain)
+     num <- num + 1
     }
+    #V(g)$size <- length(singletons)
+
+    #if(length(V(g)$size) == 1 || min(V(g)$size) == max(V(g)$size)  )
+    #{
+    #  showNotification("HERE")
+    #  V(g)$size <- 25
+    #  V(g)$color <- rainbow(1, alpha = .5)
+    #  V(g)$frame.color <- V(g)$color
+    #}
 
     # Resize based on difference between sizes of max and size of min
     # (length(V(g)$size) >1)
-    else{
+    #else{
       ## Below scaling will not work if only one vertex
-      V(g)$size <- (V(g)$size-min( V(g)$size) )/(max(V(g)$size)-min(V(g)$size))*20+10 # scaled by degree
+    #  V(g)$size <- (V(g)$size-min( V(g)$size) )/(max(V(g)$size)-min(V(g)$size))*20+10 # scaled by degree
 
-      v_size <-(V(g)$size)
+    #  v_size <-(V(g)$size)
       # setting vertex color by size
-      V(g)$color <- rainbow(5,alpha = .5)[round( (v_size-min(v_size))/(max(v_size)-min(v_size)*4+1))]
-      V(g)$frame.color <- V(g)$color
-    }
-
+     # V(g)$color <- rainbow(5,alpha = .5)[round( (v_size-min(v_size))/(max(v_size)-min(v_size)*4+1))]
+      #V(g)$frame.color <- V(g)$color
+    vis_g <- visNetwork(vertex_df)
+    return(vis_g)
+    #}
 
 
   }
@@ -151,14 +158,12 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
     ew <- c(2.7,4.5)
     E(g)$color <- sapply(E(g)$width,
                          function(x) if(x>=ew[1] && x<=ew[2]) E(g)$color=adjustcolor("cadetblue", alpha.f = .7) else if(x>ew[2]) E(g)$color=adjustcolor("maroon", alpha.f = .5) else E(g)$color="gray55")
+    vis_g = visIgraph(g, type ="full")
   }
 
 
   #   # V(g)[which(V(g)$name %in% domains_of_interest)]$size <- as.numeric(wc[domains_of_interest])
-  V(g)[which(V(g)$name %in% domains_of_interest)]$color = query_color
-
-  vis_g = visIgraph(g, type ="full")
-
+  #V(g)[which(V(g)$name %in% domains_of_interest)]$color = query_color
   max_font_size = 43
 
   vis_g$x$nodes$font.size <- purrr::map(vis_g$x$nodes$size, function(x) min(x*2 , max_font_size))
@@ -173,7 +178,8 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
   vis_g <- vis_g %>%
     visOptions(highlightNearest = TRUE)
   },
-  error = {
+  error = function(e){
+    showNotification(toString(e))
     vis_g <- "error"
   },
   finally = {
