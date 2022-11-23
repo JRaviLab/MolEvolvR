@@ -1,9 +1,15 @@
-#####Add Missing data Samuel Chen #####
+## Fill in missing data by TaxID, GCA_ID, AccNum
+## Old starting repo: `the_approach`
+## Tested with PSP data
+## Need to generalize, convert to function
 
-setwd("C:/Users/samue/Google_Drive/GitHub/the-approach")
+## Created: Oct 2019
+## Author: Samuel Chen, Janani Ravi
+
 source("R/cleanup.R")
 # source("R/cleanup_domarch.R")
 source("R/clean_clust_file.R")
+
 # Initialize dataframe for the combined dataset; Will serve for even 1.
 all <- data.frame(matrix(ncol=11, nrow=0))
 colnames(all) <- colnames.op_ins_cls

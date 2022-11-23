@@ -1,4 +1,10 @@
-#setwd("C:/Users/samue/Google_Drive/GitHub/the-approach")
+## Script to compare 'find_paralogs' functions
+## Tested with PSP data
+## Old starting repo: `the_approach`
+
+## Created: Oct 2019
+## Modified: Nov 2022 | list functions | find_paralogs_new, find_paralogs_old (compare w/ summarize.R/find_paralogs)
+## Authors: Samuel Chen, Janani Ravi
 
 # Also, get some numbers for eukaryotes!
 

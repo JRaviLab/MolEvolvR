@@ -1,4 +1,10 @@
-setwd("C:/Users/samue/Google_Drive/GitHub/the-approach")
+## Script to compare reverter functions for genomic contexts (GenContext)
+## Old starting repo: `the_approach`
+## Tested with PSP data
+
+## Created: Oct 2019
+## Authors: Samuel Chen, Janani Ravi
+
 source("R/reverse_operons.R")
 source("scripts/reverse_operons.v1.R")
 source("R/clean_clust_file.R")
@@ -39,5 +45,3 @@ anti_rev2 <- anti_join(rev2,rev1, "GenContext.norep")
 
 all_na_spec <- all %>% filter(is.na(Species.q))# & is.na(Species.orig))
 all_na_spec <- all %>% filter(is.na(Species.orig))
-
-

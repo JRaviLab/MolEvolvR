@@ -1,10 +1,12 @@
-## Modified: Apr 8, 2019
-## Created: Sep 5, 2017
-## Janani Ravi (@jananiravi)
 ## Generic form for XXX | for now, it works with search/replace "XXX" w/ protein/domain of interest
 ## Adapted from https://github.com/jananiravi/psp-evolution/blob/master/scripts/201709to10-scripts/figx-xxx-analysis-plots.R
 ## Parsing new cleaned up op_ins_cls file
-## Tested with: PspMN (2017-09), toast-rack (2017-08), https://github.com/jananiravi/psp-evolution/blob/master/scripts/201709to10-scripts/
+## Tested with PSP data
+## PspMN (2017-09), toast-rack (2017-08), https://github.com/jananiravi/psp-evolution/blob/master/scripts/201709to10-scripts/
+
+## Created: Sep 5, 2017
+## Modified: Apr 8, 2019
+## Authors: Janani Ravi (@jananiravi)
 
 ## LIBRARIES USED
 library(tidyverse)

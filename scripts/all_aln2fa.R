@@ -1,9 +1,9 @@
 ## To generate fasta files from aln files
 ## Pre-requisites to generate MSA and Phylogenetic Tree
-## Includes the following functions: generate_all_aln2fa
-## Part of pre-msa-tree.R
+## List of functions: generate_all_aln2fa | part of pre-msa-tree.R
+
 ## Modified: Dec 24, 2019
-## Janani Ravi (@jananiravi)
+## Authors: Janani Ravi (@jananiravi)
 
 #################
 ## Pkgs needed ##
