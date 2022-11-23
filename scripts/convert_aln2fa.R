@@ -1,7 +1,9 @@
 ## Functions to convert alignment 'aln' to fasta format for MSA + Tree
+## List of functions: convert_aln2fa (unused: aln2tsv, convert_to_fasta)
+
 ## Created: April 19, 2019
 ## Modified: Dec 12, 2019 (moved to pre-msa-tree.R)
-## Janani Ravi (@jananiravi) & Samuel Chen (@samuelzornchen)
+## Authors: Janani Ravi (@jananiravi) & Samuel Chen (@samuelzornchen)
 
 #################
 ## Pkgs needed ##

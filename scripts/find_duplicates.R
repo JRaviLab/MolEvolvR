@@ -1,7 +1,16 @@
-setwd("C:/Users/samue/Google_Drive/GitHub/the-approach")
+## Script to find and remove duplicate entries to get accurate counts
+## Old starting repo: `the_approach`
+## Tested with PSP data
+## Need to generalize a bit more & convert to a function
+
+## Created: Oct 2019
+## Modified: Nov 2022 | Move copy from molevol_scripts to psp_app
+## Authors: Samuel Chen, Janani Ravi
+
 source("R/cleanup.R")
 # source("R/cleanup_domarch.R")
 source("R/clean_clust_file.R")
+
 # Initialize dataframe for the combined dataset; Will serve for even 1.
 all <- data.frame(matrix(ncol=11, nrow=0))
 colnames(all) <- colnames.op_ins_cls
@@ -21,8 +30,8 @@ all <- filter(all, AccNum!="-")
 
 
 #####Summarise All, Get the duplicates and the counts
-all_summarise <- all %>%group_by(AccNum)
-all_count <- all_summarise%>% count() %>% arrange(-n)
+all_summarise <- all %>% group_by(AccNum)
+all_count <- all_summarise %>% count() %>% arrange(-n)
 
 all_dup <- all_count %>% filter(n>=2)
 all_count_vec <- data.frame(c("Count_4"=length(filter(all_dup,n==4)$n),
@@ -39,7 +48,8 @@ all_tax <- all %>%
 
 ##Merge an all without duplicates with alltax: result in 21797 obs
 #all_wo_dup <- select(all,AccNum) %>% distinct()
-#all_wo_dup <- mutate(all_wo_dup,ColumnHolder = row.names(all_wo_dup)) %>% left_join(all_taxid,by="AccNum")
+#all_wo_dup <- mutate(all_wo_dup,ColumnHolder = row.names(all_wo_dup)) %>%
+  left_join(all_taxid,by="AccNum")
 
 ##Merge an alltax without duplicates with all: result in 21797 obs
 #alltax_wo_dup <- select(all_taxid,AccNum) %>% distinct()
@@ -49,7 +59,8 @@ all_tax <- all %>%
 #alltax_wo_dup <- select(all_taxid,AccNum) %>% distinct()
 #alltax_wo_dup <- mutate(alltax_wo_dup,ColumnHolderTax = paste0(row.names(alltax_wo_dup),"tax"))
 #all_wo_dup <- select(all,AccNum) %>% distinct()
-#all_wo_dup <- mutate(all_wo_dup,ColumnHolder = paste0(row.names(all_wo_dup),"All")) %>% left_join(alltax_wo_dup,by="AccNum")
+#all_wo_dup <- mutate(all_wo_dup,ColumnHolder = paste0(row.names(all_wo_dup),"All")) %>%
+  left_join(alltax_wo_dup,by="AccNum")
 
 ######Remove one of each quad, triple, and double and see how rows react ######
 # #Remove a 4 count and test how tax reacts
@@ -111,4 +122,3 @@ obs_and_na <- No_NA[grep(matches, No_NA$AccNum),]
 ##No NA's, use "-"
 #gca_na <- all_gca[which(is.na(all_gca$GCA_ID)| is.na(all_gca$AccNum)),]
 gca_na <- all_gca %>% filter(grepl("^-$",all_gca$GCA_ID))
-
