@@ -1,7 +1,7 @@
 ## Multiple Sequence alignment & Phylogenetic trees
 ## Created: Apr 08, 2019
 ## Janani Ravi (@jananiravi)
-## testing with PspN-DUF3046 fasta files
+## Tested with PSP data | PspN-DUF3046 fasta files
 
 ## msa package: https://bioconductor.org/packages/release/bioc/vignettes/msa/inst/doc/msa.pdf
 ## ggtree: https://www.molecularecologist.com/2017/02/phylogenetic-trees-in-r-using-ggtree/
