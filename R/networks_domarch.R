@@ -59,8 +59,6 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
     dplyr::filter(grepl(pattern=domains_of_interest_regex,
                         x=DomArch.ntwrk,
                         ignore.case=T, perl = T))
-
- 
   ##Separating column and converting to atomic vector prevents coercion
   domain.list <- domain.list$DomArch.ntwrk  %>% str_split(pattern="\\+")
   # Get domain counts before eliminating domarchs with no edges
@@ -69,7 +67,9 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
 
   # Remove all isolated domarchs, such that an adjacency list can easily be constructed
   singletons <- domain.list[which(lengths(domain.list)==1)] %>% unique()
-  domain.list <- domain.list[-which(lengths(domain.list)==1)]
+  if (length(singletons) > 0){
+     domain.list <- domain.list[-which(lengths(domain.list)==1)]
+  }
   # This is where we know if the adjacency list is empty
   if(length(domain.list) == 0)
   {
