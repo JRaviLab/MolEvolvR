@@ -860,7 +860,7 @@ wordcloud_element <- function(query_data="prot",
   #
   # wordcloud3(words.tc, minSize = 0)
   wordcloud(words.tc$words, words.tc$freq, min.freq = 1,
-            colors=brewer.pal(8, "Spectral"),scale=c(4.5,1))
+            colors=brewer.pal(8, "Spectral"),scale=c(2,1))
 }
 
 
