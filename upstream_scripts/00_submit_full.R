@@ -2,7 +2,55 @@ library(tidyverse)
 library(Biostrings)
 
 get_sequences <- function(sequences, acc_file_path = "accs.txt", dir_path = "~", separate = TRUE){
+
+    test_valid_accession <- function(header) {
+        # checks FASTA input for valid accession
+        # accession number prefix format guide
+        # https://www.ncbi.nlm.nih.gov/genbank/acc_prefix/
+        # https://academic.oup.com/nar/article/33/suppl_1/D501/2505241?login=false
+        # patterns: 
+        # 1 GenBank
+        # 2 Swiss-Prot/UniProtKB
+        # 3 RefSeq
+        pattern <- paste("[A-Z]{3}[0-9]{5}|[A-Z]{3}[0-9]{7}",
+                         "[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}",
+                         "[A-Z][A-Z]_[0-9]{6}|[A-Z][A-Z]_[0-9]{8}|[A-Z][A-Z]_[0-9]{9}|[A-Z][A-Z]_[A-Za-z]{4}",
+                         sep="|")
+        result <- grepl(pattern, header)
+        if (result == FALSE) {
+            print(paste('No valid accession found!', header))
+        }
+        return(result)
+    }
+
     seqs <- readAAStringSet(sequences)
+    for (seq_num in 1:length(seqs)) {
+        header <- names(seqs[seq_num])
+        # clean header
+        header <- gsub("\\$|\\||\\s+|\\?|\\^|\\&|;|[\\]", "", header)
+        if (test_valid_accession(header) == FALSE) {
+            system('mkdir seq2acc_data')
+            # use tempfile to prevent duplicate headers overwriting the same file
+            single_fa_path <- tempfile(header,
+                                       tmpdir=paste0(getwd(), '/', 'fa2acc_data'),
+                                       fileext = '.fa')
+            writeXStringSet(seqs[seq_num], single_fa_path)
+            # run BLAST
+            system(paste('sh',
+                         '/data/research/jravilab/molevol_scripts/upstream_scripts/seq2acc.sh',
+                         single_fa_path)
+            )
+             # accessing blast output
+                # blast output is saved as single_fa_path.csv
+            blast_output_file <- paste0(strsplit(single_fa_path, '.fa'), '.csv')
+            df <- read.csv(blast_output_file, header=FALSE)
+            # if an entry has 100% seq similarity (col3), get the accnum in col2
+            accnum <- df[df[,3] == 100][2]
+            # change the header to the accnum found from blast
+            names(seqs)[seq_num] <- accnum
+        }
+    }
+
     cln_names <- c()
     for (accnum in names(seqs)){
         if (grepl("\\|", accnum)){
