@@ -17,9 +17,6 @@ get_sequences <- function(sequences, acc_file_path = "accs.txt", dir_path = "~",
                          "[A-Z][A-Z]_[0-9]{6}|[A-Z][A-Z]_[0-9]{8}|[A-Z][A-Z]_[0-9]{9}|[A-Z][A-Z]_[A-Za-z]{4}",
                          sep="|")
         result <- grepl(pattern, header)
-        if (result == FALSE) {
-            print(paste('No valid accession found!', header))
-        }
         return(result)
     }
 
@@ -27,7 +24,7 @@ get_sequences <- function(sequences, acc_file_path = "accs.txt", dir_path = "~",
     for (seq_num in 1:length(seqs)) {
         header <- names(seqs[seq_num])
         # clean header
-        header <- gsub("\\$|\\||\\s+|\\?|\\^|\\&|;|[\\]", "", header)
+        header <- gsub("[^A-Za-z]", "", header)
         if (test_valid_accession(header) == FALSE) {
             system('mkdir seq2acc_data')
             # use tempfile to prevent duplicate headers overwriting the same file
@@ -41,7 +38,7 @@ get_sequences <- function(sequences, acc_file_path = "accs.txt", dir_path = "~",
                          single_fa_path)
             )
              # accessing blast output
-                # blast output is saved as single_fa_path.csv
+                # blast output is saved at PATH=single_fa_path
             blast_output_file <- paste0(strsplit(single_fa_path, '.fa'), '.csv')
             df <- read.csv(blast_output_file, header=FALSE)
             # if an entry has 100% seq similarity (col3), get the accnum in col2
