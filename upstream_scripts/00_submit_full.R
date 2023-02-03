@@ -24,8 +24,9 @@ get_sequences <- function(sequences, acc_file_path = "accs.txt", dir_path = "~",
     for (seq_num in 1:length(seqs)) {
         header <- names(seqs[seq_num])
         # clean header
-        header <- gsub("[^A-Za-z]", "", header)
         if (test_valid_accession(header) == FALSE) {
+            header <- gsub(" ", "_", header)
+            header <- gsub("[^A-Za-z0-9]", "", header)
             system('mkdir seq2acc_data')
             # use tempfile to prevent duplicate headers overwriting the same file
             single_fa_path <- tempfile(header,
