@@ -1,4 +1,4 @@
-# List of functions in `the_process` package
+# List of functions in `molevol_scripts/R`
 
 ## Import and combining input files
 - [ ] `scripts/convert_opinscls_tsv.R` using
