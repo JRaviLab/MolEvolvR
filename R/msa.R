@@ -169,7 +169,7 @@ generate_msa <- function(fa_file="", outfile=""){
   ## Messed up! Reimplement from kalign.R
   ## https://github.com/mhahsler/rMSA/blob/master/R/kalign.R
 
-  source("scripts/c2r.R")
+  #source("scripts/c2r.R")
 
   ## align the sequences
   al <- kalign(prot_aa) #!! won't work!
