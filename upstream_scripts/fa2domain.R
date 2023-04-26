@@ -1,4 +1,4 @@
-library("Biostrings")
+suppressPackageStartupMessages(library("Biostrings"))
 source("/data/research/jravilab/molevol_scripts/upstream_scripts/00_submit_full.R")
 args = commandArgs(trailingOnly = TRUE)
 get_sequences(args[1], dir = args[4], separate = FALSE, acc_file_path = "starting_accs.txt")

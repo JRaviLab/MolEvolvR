@@ -18,7 +18,7 @@ v.sz=sort(table(pwise),decreasing = T)
 pwise=strsplit(names(e.sz), "\\->")
 pwise=cbind(unlist(lapply(pwise, function(x) x[1])),unlist(lapply(pwise, function(x) x[2])))
  
-library("igraph")
+suppressPackageStartupMessages(library("igraph"))
 g = graph_from_edgelist(pwise, directed=TRUE)
 #scaling vertex size
 V(g)$size=v.sz[V(g)$name]

@@ -1,5 +1,5 @@
-library(tidyverse)
-library(data.table)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(data.table))
 
 # read in files
 args <- commandArgs(trailingOnly = TRUE)

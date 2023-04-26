@@ -1,5 +1,5 @@
-library(tidyverse)
-library(data.table)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(data.table))
 
 # source lineage script for add_name and add_lins
 # /data/research/jravilab/molevol_scripts/

@@ -1,5 +1,5 @@
-library(RColorBrewer)
-library(tidyverse)
+suppressPackageStartupMessages(library(RColorBrewer))
+suppressPackageStartupMessages(library(tidyverse))
 
 ## REFS
 ## https://sashamaps.net/docs/resources/20-colors/

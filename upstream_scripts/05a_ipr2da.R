@@ -1,6 +1,6 @@
-library(tidyverse)
-library(data.table)
-library(furrr)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(data.table))
+suppressPackageStartupMessages(library(furrr))
 
 # source lineage.R
 source("/data/research/jravilab/molevol_scripts/R/pre-msa-tree.R")

@@ -1,4 +1,4 @@
-library(here)
+suppressPackageStartupMessages(library(here))
 source(here('upstream_scripts/01.4_ipr2lin.R'))
 source(here('upstream_scripts/05a_ipr2da.R'))
 

@@ -9,7 +9,7 @@
 #################
 ## Pkgs needed ##
 #################
-library(tidyverse)
+suppressPackageStartupMessages(library(tidyverse))
 conflicted::conflict_prefer("filter", "dplyr")
 
 ###################

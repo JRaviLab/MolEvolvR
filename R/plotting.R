@@ -9,14 +9,14 @@
 #################
 ## Pkgs needed ##
 #################
-library(tidyverse)
-library(UpSetR)
-library(gridExtra)
-library(wordcloud)
-library(wordcloud2)
-library(sunburstR)
-library(d3r)
-library(viridis)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(UpSetR))
+suppressPackageStartupMessages(library(gridExtra))
+suppressPackageStartupMessages(library(wordcloud))
+suppressPackageStartupMessages(library(wordcloud2))
+suppressPackageStartupMessages(library(sunburstR))
+suppressPackageStartupMessages(library(d3r))
+suppressPackageStartupMessages(library(viridis))
 CPCOLS <- c('#AFEEEE', '#DDA0DD', '#EE2C2C', '#CDBE70', '#B0B099',
              '#8B2323', '#EE7600', '#EEC900', 'chartreuse3', '#0000FF',
              '#FFD900', '#32CD32', 'maroon4', 'cornflowerblue', 'darkslateblue',

@@ -3,15 +3,15 @@
 ## Last Edited: May 14
 
 ###################
-library(here)
-library(tidyverse)
+suppressPackageStartupMessages(library(here))
+suppressPackageStartupMessages(library(tidyverse))
 
-library(ape)
-library(seqinr)
-library(msa)
-library(Biostrings)
-library(ggtree)
-library(tidytree)
+suppressPackageStartupMessages(library(ape))
+suppressPackageStartupMessages(library(seqinr))
+suppressPackageStartupMessages(library(msa))
+suppressPackageStartupMessages(library(Biostrings))
+suppressPackageStartupMessages(library(ggtree))
+suppressPackageStartupMessages(library(tidytree))
 ##################
 
 sessionInfo()

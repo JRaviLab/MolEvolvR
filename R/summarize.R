@@ -6,8 +6,8 @@
 #################
 ## Pkgs needed ##
 #################
-library(tidyverse)
-library(rlang)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(rlang))
 conflicted::conflict_prefer("filter", "dplyr")
 
 filter_by_doms <- function(prot, column = "DomArch", doms_keep = c(), doms_remove = c(),

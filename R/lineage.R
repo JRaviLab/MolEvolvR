@@ -1,8 +1,8 @@
-library(tidyverse)
-library(rentrez)
-library(future)
-library(furrr)
-library(data.table)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(rentrez))
+suppressPackageStartupMessages(library(future))
+suppressPackageStartupMessages(library(furrr))
+suppressPackageStartupMessages(library(data.table))
 
 #####################################
 ## Download Assembly Summary Files ##

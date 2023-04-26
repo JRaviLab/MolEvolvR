@@ -1,8 +1,8 @@
 # Script to cleanup the raw web BLAST output
 # adds column names; calculates PcPositive w.r.t. query
 
-library(tidyverse)
-library(data.table)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(data.table))
 
 # compute cvm location for acc2lin.R
 source("/data/research/jravilab/molevol_scripts/R/lineage.R")

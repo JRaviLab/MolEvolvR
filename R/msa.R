@@ -6,9 +6,9 @@
 #################
 ## Pkgs needed ##
 #################
-library(tidyverse); library(here)
-library(msa) # BiocManager::install("msa")
-library(Biostrings)#; library(seqinr)
+suppressPackageStartupMessages({ library(tidyverse); library(here) })
+suppressPackageStartupMessages(library(msa)) # BiocManager::install("msa"))
+suppressPackageStartupMessages(library(Biostrings)) #; library(seqinr))
 # library(rMSA) # to implement kalign
 # library(pdftools); library(latexpdf); library(tools); library(tinytex) #needed?
 

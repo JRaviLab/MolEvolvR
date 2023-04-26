@@ -5,7 +5,7 @@
 #################
 ## Pkgs needed ##
 #################
-library(tidyverse)
+suppressPackageStartupMessages(library(tidyverse))
 
 ## Reading domains.rename
 # Can just use psp again

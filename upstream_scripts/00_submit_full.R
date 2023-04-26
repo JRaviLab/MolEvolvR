@@ -1,5 +1,5 @@
-library(tidyverse)
-library(Biostrings)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(Biostrings))
 library(yaml)
 
 get_sequences <- function(sequences, acc_file_path = "accs.txt", dir_path = "~", separate = TRUE) {

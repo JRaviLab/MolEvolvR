@@ -1,5 +1,5 @@
-library(tidyverse)
-library(tidytext)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(tidytext))
 
 prot <- read_tsv("data/rawdata_tsv/all_raw.txt")
 

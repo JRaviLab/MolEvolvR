@@ -3,7 +3,7 @@
 ## issue: input file hasn't been merged with missing_* files before checking!!
 ## everything would have to be rerun soon!
 
-library(tidyverse)
+suppressPackageStartupMessages(library(tidyverse))
 source("R/reverse_operons.R")
 source("R/summarize.R")
 source("R/cleanup.R")

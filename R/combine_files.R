@@ -7,9 +7,9 @@
 ##################
 ## Libs & Paths ##
 ##################
-library(tidyverse)
-library(data.table)
-library(here)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(data.table))
+suppressPackageStartupMessages(library(here))
 
 # STARTING DIRECTORY
 # molevol_scripts

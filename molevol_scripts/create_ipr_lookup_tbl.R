@@ -2,8 +2,8 @@
 # Last edit on 2021.03.22
 # Script used to create the lookup table used by MolEvolvR in ipr2da
 
-library(tidyverse)
-library(data.table)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(data.table))
 
 # read in data tables w/o column names
 cdd_cols <- c('ID', 'DB.ID', 'ShortName', 'Description', 'Misc.')

@@ -10,10 +10,10 @@ runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
-library(flexdashboard)
-library(tidyverse)
-library(here)
-library(shiny); library(shinydashboard); library(DT)
+suppressPackageStartupMessages(library(flexdashboard))
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(here))
+suppressPackageStartupMessages(library(shiny); library(shinydashboard); library(DT))
 
 infile_blast=here("data/phage_defense/combnd.txt")
 blast_combnd <- read_tsv(infile_blast, col_names=T)
