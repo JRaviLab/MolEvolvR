@@ -21,4 +21,5 @@ INPATHS=input.txt
 echo "0/1 analyses completed" > status.txt
 qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb -F $INPATHS
 
-setfacl -R -m group:shiny:r-x ${DIR}
+# FA: disabled b/c docker's handling perms
+# setfacl -R -m group:shiny:r-x ${DIR}
