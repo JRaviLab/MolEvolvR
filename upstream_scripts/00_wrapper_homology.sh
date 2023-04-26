@@ -184,4 +184,5 @@ else
 fi
 
 
-setfacl -R -m group:shiny:r-x ${OUTDIR}
+# FA: disabled b/c docker's handling perms
+# setfacl -R -m group:shiny:r-x ${OUTDIR}

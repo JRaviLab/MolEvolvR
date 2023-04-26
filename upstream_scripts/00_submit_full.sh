@@ -69,7 +69,9 @@ else
    fi
 fi
 
-setfacl -R -m group:shiny:r-x ${DIR}
+# FA: disabled b/c docker's handling perms
+# setfacl -R -m group:shiny:r-x ${DIR}
+
 #NUM_ID=`echo ${ID} | grep -Eo "^[[:digit:]]+"`
 #run_start=0
 #qstat | grep ${NUM_ID}

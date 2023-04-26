@@ -78,4 +78,5 @@ if [ $FILE_TYPE = FASTA ]; then
    
 fi
 
-setfacl -R -m group:shiny:r-x ${DIR}
+# FA: disabled b/c docker's handling perms
+# setfacl -R -m group:shiny:r-x ${DIR}

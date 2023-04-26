@@ -204,5 +204,5 @@ then
 fi
   echo "${NUM_RUNS} / ${TOTAL_RUNS} jobs completed" > ../status.txt
 
-
-setfacl -R -m group:shiny:r-x ${OUTDIR}
+# FA: disabled b/c docker's handling perms
+# setfacl -R -m group:shiny:r-x ${OUTDIR}

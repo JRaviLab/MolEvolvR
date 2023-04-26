@@ -56,4 +56,5 @@ INPATHS=input.txt
 echo "0/${NFASTA} analyses completed" > status.txt 
 qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb -F "$INPATHS" -t 1-$NFASTA
 
-setfacl -R -m group:shiny:r-x ${DIR}
+# FA: disabled b/c docker's handling perms
+# setfacl -R -m group:shiny:r-x ${DIR}
