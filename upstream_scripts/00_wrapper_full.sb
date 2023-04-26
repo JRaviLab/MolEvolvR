@@ -22,7 +22,7 @@
 ## print start/stop printf in individual scripts
 
 ## change output directory based on user input
-OUTPATH=$PBS_O_WORKDIR
+OUTPATH=$SLURM_SUBMIT_DIR
 cd ${OUTPATH}
 
 ## !! NOTES FOR LS ##
@@ -89,7 +89,7 @@ sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR
 cp ${OUTDIR}/${PREFIX}.acc2info.tsv ${OUTDIR}/${PREFIX}.blast.cln.tsv
 else
 # Handle homolog data
-	FILE=$(sed -n "${PBS_ARRAYID}"p "${INPUTPATHS_LIST}")
+	FILE=$(sed -n "${SLURM_ARRAY_TASK_ID:-1}"p "${INPUTPATHS_LIST}")
 	F=$(basename ${FILE})
    	PREFIX=$(echo "${F%%.faa}")	## takes PREFIX of file
    	OUTDIR=${OUTPATH}/${PREFIX}_${TYPE}	## variable containing output filepath based PREFIX
