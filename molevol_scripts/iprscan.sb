@@ -23,7 +23,8 @@
 ###########
 ## SETUP ##
 ###########
-export INTERPRO=/mnt/research/common-data/Bio/iprscan:/mnt/research/common-data/Bio/iprscan/data:$INTERPRO
+export INTERPRO=/mnt/research/common-data/Bio/iprscan:/mnt/research/common-data/Bio/iprscan/data:/opt/software/iprscan/5.47.82.0-Python3/data:/data/common_data/iprscan:/var/interproscan/data:$INTERPRO
+export SIGNALP=/var/interproscan/bin/signalp/4.1
 
 # Loading Modules and Checking Java (needs to be updated)
 module purge
