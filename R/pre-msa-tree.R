@@ -10,10 +10,10 @@
 #################
 ## Pkgs needed ##
 #################
-library(here); library(tidyverse); library(data.table)
-library(rentrez)
-library(msa)
-library(furrr); library(future); library(doParallel)
+suppressPackageStartupMessages({ library(here); library(tidyverse); library(data.table) })
+suppressPackageStartupMessages(library(rentrez))
+suppressPackageStartupMessages(library(msa))
+suppressPackageStartupMessages({ library(furrr); library(future); library(doParallel) })
 registerDoParallel(cores=detectCores()-1)
 #library(seqRFLP)
 conflicted::conflict_prefer("filter", "dplyr")

@@ -2,11 +2,11 @@
 ## Janani Ravi, Lauren Sosinski, Samuel Chen
 ## Created: Apr 9, 2020
 
-library(here)
-library(tidyverse)
-library(data.table)
-library(gggenes)
-library(ggplot2)
+suppressPackageStartupMessages(library(here))
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(data.table))
+suppressPackageStartupMessages(library(gggenes))
+suppressPackageStartupMessages(library(ggplot2))
 #source("../the-approach/R/pre-msa-tree.R") # for "to_titlecase()"
 source("/data/research/jravilab/molevol_scripts/R/colnames_molevol.R")
 

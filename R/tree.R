@@ -7,9 +7,9 @@
 #################
 ## Pkgs needed ##
 #################
-library(here); library(tidyverse) # Only these two are needed for FastTree
-library(data.table)
-library(ape); library(phangorn); library(seqinr)
+suppressPackageStartupMessages({ library(here); library(tidyverse) }) # Only these two are needed for FastTree
+suppressPackageStartupMessages(library(data.table))
+suppressPackageStartupMessages({ library(ape); library(phangorn); library(seqinr) })
 conflicted::conflict_prefer("filter", "dplyr")
 
 ###############

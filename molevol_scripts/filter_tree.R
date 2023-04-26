@@ -1,7 +1,7 @@
 # Script/functions to filter homologs to generate MSA and Tree
 
-library(here)
-library(tidyverse)
+suppressPackageStartupMessages(library(here))
+suppressPackageStartupMessages(library(tidyverse))
 conflicted::conflict_prefer("filter", "dplyr")
 
 ####################################################

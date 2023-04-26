@@ -8,8 +8,8 @@
 #################
 ## Pkgs needed ##
 #################
-library(here); library(tidyverse)
-library(data.table)
+suppressPackageStartupMessages({ library(here); library(tidyverse) })
+suppressPackageStartupMessages(library(data.table))
 #library(seqRFLP)
 conflicted::conflict_prefer("filter", "dplyr")
 

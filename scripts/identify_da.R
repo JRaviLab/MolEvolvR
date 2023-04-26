@@ -1,5 +1,5 @@
 ## Identifying domains and clusternames
-library(tidyverse); library(wordcloud)
+suppressPackageStartupMessages(library(tidyverse); library(wordcloud))
 source("R/cleanup.R")
 
 # Read master file

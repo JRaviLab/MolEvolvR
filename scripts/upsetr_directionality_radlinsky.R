@@ -1,4 +1,4 @@
-library(UpSetR)
+suppressPackageStartupMessages(library(UpSetR))
 test <- as.data.frame(matrix(rnorm(1:12), nrow = 4))
 colnames(test) <- c("A", "B", "C")
 test_up <- test

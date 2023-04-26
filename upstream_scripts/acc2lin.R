@@ -1,9 +1,9 @@
-library(tidyverse)
-library(rentrez)
-library(future)
-library(furrr)
-library(data.table)
-library(biomartr)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(rentrez))
+suppressPackageStartupMessages(library(future))
+suppressPackageStartupMessages(library(furrr))
+suppressPackageStartupMessages(library(data.table))
+suppressPackageStartupMessages(library(biomartr))
 
 DownloadAssemblySummary <- function(outpath, keep = c("assembly_accession", "taxid", "species_taxid", "organism_name"))
 {
@@ -46,11 +46,11 @@ all.x = T)
 return(mergedLins)
 }
 
-library(tidyverse)
-library(rentrez)
-library(future)
-library(furrr)
-library(data.table)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(rentrez))
+suppressPackageStartupMessages(library(future))
+suppressPackageStartupMessages(library(furrr))
+suppressPackageStartupMessages(library(data.table))
 # https://stackoverflow.com/questions/18730491/sink-does-not-release-file
 sink.reset <- function(){
 for(i in seq_len(sink.number())){
@@ -146,9 +146,9 @@ lins <- GCA2Lins(prot_data = ipg_dt, assembly_path, lineagelookup_path)
 return(lins)
 }
 
-library(tidyverse)
-#library(here)
-# library(biomartr)
+suppressPackageStartupMessages(library(tidyverse))
+#suppressPackageStartupMessages(library(here))
+# suppressPackageStartupMessages(library(biomartr))
 
 
 create_lineage_lookup <- function(lineage_file = "data/rankedlineage.dmp",

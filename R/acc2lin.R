@@ -1,10 +1,10 @@
-library(tidyverse)
-library(rentrez)
-library(future)
-library(furrr)
-library(data.table)
-library(tidyverse)
-library(biomartr)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(rentrez))
+suppressPackageStartupMessages(library(future))
+suppressPackageStartupMessages(library(furrr))
+suppressPackageStartupMessages(library(data.table))
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(biomartr))
 
 
 source("R/GCA2Lins.R")

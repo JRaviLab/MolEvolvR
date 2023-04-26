@@ -1,7 +1,7 @@
-library(tidyverse)
-library(rlang)
-library(igraph)
-library(visNetwork)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(rlang))
+suppressPackageStartupMessages(library(igraph))
+suppressPackageStartupMessages(library(visNetwork))
 conflicted::conflict_prefer("filter", "dplyr")
 
 ###########################

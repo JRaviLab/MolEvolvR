@@ -3,10 +3,10 @@
 # Modified: Mar 24, 2021
 # JR, SC
 
-library(gt)
-library(here)
-library(tidyverse)
-library(paletteer)
+suppressPackageStartupMessages(library(gt))
+suppressPackageStartupMessages(library(here))
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(paletteer))
 
 ## Run from molevol_scripts.Rproj
 ## Set relative paths accordingly

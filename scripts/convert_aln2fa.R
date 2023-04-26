@@ -9,8 +9,8 @@
 ## Pkgs needed ##
 #################
 
-library(tidyverse)
-library(data.table)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(data.table))
 #library(seqRFLP)
 source("R/add_leaves.R")
 

@@ -4,12 +4,12 @@
 ##################
 ## Dependencies ##
 ##################
-library(here)
-library(tidyverse)
-library(data.table)
-library(rlang)
-library(d3heatmap) # https://github.com/rstudio/d3heatmap
-library(heatmaply) # https://github.com/talgalili/heatmaply
+suppressPackageStartupMessages(library(here))
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(data.table))
+suppressPackageStartupMessages(library(rlang))
+suppressPackageStartupMessages(library(d3heatmap)) # https://github.com/rstudio/d3heatmap
+suppressPackageStartupMessages(library(heatmaply)) # https://github.com/talgalili/heatmaply
 
 source(here("R/combine_files.R"))
 

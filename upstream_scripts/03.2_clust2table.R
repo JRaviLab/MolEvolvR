@@ -5,7 +5,7 @@
 ## Last edit on 2020.11.30 -- updated comments
 
 # Load tidyverse library
-library('tidyverse')
+suppressPackageStartupMessages(library('tidyverse'))
 ## HPC reading in arguments
 args <- commandArgs(trailingOnly = TRUE)
 

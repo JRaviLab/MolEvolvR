@@ -24,15 +24,15 @@
 
 
 ## Loading packages
-library(tidyverse)
-library(msa)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(msa))
 # library(seqinr)
-library(Biostrings)
+suppressPackageStartupMessages(library(Biostrings))
 # library(phylogram)
 # library(phytools) # depends on phangorn which depends on quadprog. so!!!
-library(ape)
-library(ggtree)
-library(tidytree)
+suppressPackageStartupMessages(library(ape))
+suppressPackageStartupMessages(library(ggtree))
+suppressPackageStartupMessages(library(tidytree))
 
 ## Input files: Fasta format
 # my_seqs_file <- read_tsv("data/alignments/pspn-duf3046-aln/pspn.31seq.aln.txt")

@@ -1,5 +1,5 @@
-library(tidyverse)
-library(biomartr)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(biomartr))
 
 DownloadAssemblySummary <- function(outpath, keep = c("assembly_accession", "taxid", "species_taxid", "organism_name"))
 {

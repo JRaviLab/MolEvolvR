@@ -1,4 +1,4 @@
-library(tidyverse)
+suppressPackageStartupMessages(library(tidyverse))
 
 run_deltablast <- function(deltablast_path, db_search_path,
                            db="refseq", query, evalue = "1e-5",

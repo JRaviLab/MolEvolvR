@@ -1,8 +1,8 @@
 # Script to cleanup the raw BLAST script
 # adds column names; calculates PcPositive w.r.t. query
 
-library(tidyverse)
-library(data.table)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(data.table))
 
 # source scripts w/ add_name() and colnames
 source("/data/research/jravilab/molevol_scripts/R/pre-msa-tree.R")

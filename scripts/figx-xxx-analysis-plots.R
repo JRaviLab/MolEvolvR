@@ -9,9 +9,9 @@
 ## Authors: Janani Ravi (@jananiravi)
 
 ## LIBRARIES USED
-library(tidyverse)
-library(UpSetR)
-library(gridExtra)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(UpSetR))
+suppressPackageStartupMessages(library(gridExtra))
 # source("functions-op_ins_cls.R")
 # source("functions-plotting.R")
 source("R/plotting.R")

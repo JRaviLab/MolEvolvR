@@ -1,8 +1,8 @@
-library(ape)
-library(ggtree)
-library(tidytree)
-library(seqinr)
-library(msa)
+suppressPackageStartupMessages(library(ape))
+suppressPackageStartupMessages(library(ggtree))
+suppressPackageStartupMessages(library(tidytree))
+suppressPackageStartupMessages(library(seqinr))
+suppressPackageStartupMessages(library(msa))
 
 #take in a file, generate trees from that
 seq_tree <- function(fasta_filepath){

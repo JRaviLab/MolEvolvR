@@ -2,9 +2,9 @@
 ## Janani Ravi
 ## Created: Apr 9, 2020
 
-library(here)
-library(tidyverse)
-library(gggenes)
+suppressPackageStartupMessages(library(here))
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(gggenes))
 source("../the-approach/R/pre-msa-tree.R") # for "to_titlecase()"
 
 ipr2domarch <- function(infile_ipr=here("data/saureus/sausa300_0204.1stprotclust89.iprscan.tsv"),
