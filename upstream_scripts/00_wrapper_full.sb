@@ -68,21 +68,21 @@ START_DT=$(date '+%d/%m/%Y-%H:%M:%S')
 
 #total=$(( ((3*60)+50)*60 ))			## total time the job can take in seconds, this should match your SBATCH line above
 #maxtime=$(( 120*60 )) 				## maximum time to process one input, need to do some experimenting with your inputs
-if [ "$IS_QUERY" = "T" ]
+if [ "$IS_QUERY" = "T" ]; then
 # Handle the query data
-then
 FILE="$INPUTPATHS_LIST"
 F=$(basename ${FILE})
 PREFIX="query_data"
 OUTDIR=${OUTPATH}/${PREFIX}
 mkdir ${OUTDIR}				## make the directory
 cat $FILE >> ${OUTDIR}/${PREFIX}.all_accnums.fa
-if [ -e starting_accs.txt ]
-then
+
+	if [ -e starting_accs.txt ]; then
 cp starting_accs.txt ${OUTDIR}/${PREFIX}.all_accnums.txt
 else
 cp accs.txt ${OUTDIR}/${PREFIX}.all_accnums.txt
 fi
+
 cd ${OUTDIR} || exit
 #Acc2info
 sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
@@ -117,6 +117,7 @@ else
 	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.2_cleanup_blast.R ${OUTDIR}/${PREFIX}.dblast.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX F
 	db_cln_dur=$(( $SECONDS - $db_cln_start ))
 fi 
+
 	## BLASTCLUST ##
 	bclust_start=$SECONDS
 	sh /data/research/jravilab/molevol_scripts/upstream_scripts/03.1_blastclust.sh ${OUTDIR}/${PREFIX}.all_accnums.fa $PREFIX $OUTDIR
@@ -126,8 +127,8 @@ fi
 	c2t_start=$SECONDS
 	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/03.2_clust2table.R ${OUTDIR}/${PREFIX}.bclust.L60S80.tsv ${OUTDIR}/${PREFIX}.blast.cln.tsv
 	c2t_dur=$(( $SECONDS - $c2t_start ))
-if [ "$TYPE" != "dblast" ] || [ "$IS_QUERY" = "T" ]
-then
+
+if [ "$TYPE" != "dblast" ] || [ "$IS_QUERY" = "T" ]; then
 	## INTERPROSCAN ##
 	## add second run for original protein, too
 	ipr_start=$SECONDS
@@ -146,8 +147,7 @@ then
 	ipr2lin_start=$SECONDS
 	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.4_ipr2lin.R ${OUTDIR}/${PREFIX}.iprscan.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX
 	ipr2lin_dur=$(( $SECONDS - $ipr2lin_start ))
-	if [ "$IS_QUERY" = "T" ]
-	then
+	if [ "$IS_QUERY" = "T" ]; then
 	## IPR2DA ##
 	ipr2da_start=$SECONDS
 	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${PREFIX}.iprscan_cln.tsv ${PREFIX} NA
@@ -159,6 +159,7 @@ then
 	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${PREFIX}.iprscan_cln.tsv ${PREFIX} ${OUTDIR}/${PREFIX}.cln.clust.tsv
 	ipr2da_dur=$(( $SECONDS - $ipr2da_start ))
 	fi
+
 	## RPSBLAST ##
 	rps_start=$SECONDS
 	#sh /data/research/jravilab/molevol_scripts/upstream_scripts/04b_rpsblast.sh ${OUTDIR}/${PREFIX}.all_accnums.fa ${PREFIX} ${OUTDIR}
@@ -169,6 +170,7 @@ then
 	#Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05b_rps2da.R ${OUTDIR}/${PREFIX}.rps.out ${OUTDIR}/${PREFIX}.cln.clust.ipr.tsv ${PREFIX}
 	rps2da_dur=$(( $SECONDS - $rps2da_start ))
 fi
+
 	cp ${FILE} ${OUTDIR}	# copy fasta file to output directory
 
 	## Figure out how long the entire script took to run
@@ -186,23 +188,23 @@ fi
 
         ## If there's a chance we get a long input to process, then
         ## resubmit this job, then kill this job
-        #     if [ ${timeleft} -lt ${maxtime} ]; then
-        #       sbatch --array=${SLURM_ARRAY_TASK_ID} $0
-        #      scancel ${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}
+#  if [ ${timeleft} -lt ${maxtime} ]; then
+#  	sbatch --array=${SLURM_ARRAY_TASK_ID} $0
+#  	scancel ${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}
         #  fi
 NUM_RUNS=$(wc -l "${OUTPATH}"/logfile.tsv | grep -Eo "^[[:digit:]]+")
 ((NUM_RUNS-=1))
-if [ -e "${OUTPATH}"/accs.txt ]
-then
+if [ -e "${OUTPATH}"/accs.txt ]; then
 TOTAL_RUNS=$(wc -l "${OUTPATH}"/accs.txt | grep -Eo "^[[:digit:]]+")
 ((TOTAL_RUNS+=1))
 else
 TOTAL_RUNS=1
 fi
-if [ $TOTAL_RUNS = $NUM_RUNS ]
-then
+
+if [ $TOTAL_RUNS = $NUM_RUNS ]; then
   touch ../done.txt
 fi
+
   echo "${NUM_RUNS} / ${TOTAL_RUNS} jobs completed" > ../status.txt
 
 # FA: disabled b/c docker's handling perms
