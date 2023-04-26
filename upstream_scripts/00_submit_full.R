@@ -42,16 +42,16 @@ submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL
   if (phylo == "FALSE") {
     # If not phylogenetic analysis, split up the sequences, run blast and full analysis
     num_seqs <- get_sequences(sequences, dir_path = dir, separate = TRUE)
-    system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F 'input.txt ", DB, " ", NHITS, " ", EVAL, " F ", type, "'", " -t 1-", num_seqs))
+    system(paste0("qsub -t 1-", num_seqs, " /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb 'input.txt ", DB, " ", NHITS, " ", EVAL, " F ", type, "'"))
     num_runs <- num_runs + num_seqs
   } else {
     get_sequences(sequences, dir_path = dir, separate = FALSE)
   }
   # do analysis on query regardless of selected analysis
   if (by_domain == "TRUE") {
-    system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F '", domain_starting, " ", DB, " ", NHITS, " ", EVAL, " T ", type, "'"))
+    system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb '", domain_starting, " ", DB, " ", NHITS, " ", EVAL," T ", type, "'"))
   } else {
-    system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F '", sequences, " ", DB, " ", NHITS, " ", EVAL, " T ", type, "'"))
+    system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb '", sequences, " ", DB, " ", NHITS, " ", EVAL," T ",type, "'"))
   }
   num_runs <- num_runs + 1
   write(paste0("0/", num_runs, " analyses completed"), "status.txt")
@@ -78,9 +78,9 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
   write("START_DT\tSTOP_DT\tquery\tacc2info\tacc2fa\tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2da\tduration", "logfile.tsv")
   # do analysis on the queries
   if (ncbi) {
-    system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb -F 'blast_query.tsv ", " T F'"))
+    system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb 'blast_query.tsv ", " T F'"))
   } else {
-    system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb -F 'blast_query.tsv ", " T T'"))
+    system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb 'blast_query.tsv ", " T T'"))
   }
   num_runs <- num_runs + 1
   for (query in unique(df$Query)) {
@@ -91,7 +91,7 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
   num_runs <- num_runs + length(unique(df$Query))
   write(paste0("0/", num_runs, " analyses completed"), "status.txt")
   # do analysis on the homologs
-  system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb -F 'accs.txt ", " F F'", " -t 1-", length(unique(df$Query))))
+  system(paste0("qsub -t 1-", length(unique(df$Query), "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb 'accs.txt ", " F F'")))
 }
 
 submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa", ncbi = FALSE, blast = FALSE, DB = "refseq", NHITS = 5000, EVAL = 0.0005) {
@@ -119,7 +119,7 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
     # if blast separate the query sequences and do blast+full analysis
     seq_count <- get_sequences(seqs, dir_path = dir, separate = TRUE)
     num_runs <- num_runs + seq_count
-    system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb -F 'accs.txt ", "F T ", DB, " ", NHITS, " ", EVAL, "'", " -t 1-", seq_count))
+    system(paste0("qsub -t 1-", seq_count, "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb 'accs.txt ", "F T ", DB, " ", NHITS, " ", EVAL, "'"))
     write("running . . .", "blast_progress.txt")
   } else {
     write(queries, "accs.txt")
@@ -127,7 +127,7 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
   num_runs <- num_runs + 1
   write(paste0("0/", num_runs, " analyses completed"), "status.txt")
   # always do analysis on interpro file
-  system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb -F '", ipr, " T F'"))
+  system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb '", ipr, " T F'"))
 }
 
 # args <- commandArgs(trailingOnly = TRUE)
