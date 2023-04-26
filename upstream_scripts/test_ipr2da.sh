@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#PBS -l nodes=1:ppn=10          # number of nodes requested
+#PBS -l nodes=1:ppn=1          # number of nodes requested (FA: originally 10)
 #PBS -m abe                     # email notifications for job
 #PBS -M=sosinsk7@msu.edu        # user email; RESET
 
