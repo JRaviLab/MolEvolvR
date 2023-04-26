@@ -1,6 +1,6 @@
 #!/bin/bash
 #PBS -N submit_fa2domain
-#PBS -l nodes=1:ppn=8
+#PBS -l nodes=1:ppn=1 (FA: originally 8)
 ## COMPANION SCRIPT TO MOLEVOLVR APP ##
 ## Authors: Joe Burke
 OUTPATH=$PBS_O_WORKDIR
