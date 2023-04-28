@@ -167,10 +167,10 @@ fi
         #      scancel ${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}
         #  fi
 NUM_RUNS=$(wc -l "${OUTPATH}"/logfile.tsv | grep -Eo "^[[:digit:]]+")
-((NUM_RUNS-=1))
 if [ -e "${OUTPATH}"/accs.txt ]
 then
 TOTAL_RUNS=$(wc -l "${OUTPATH}"/accs.txt | grep -Eo "^[[:digit:]]+")
+# plus one for the column headers in counting lines for logfile.tsv
 ((TOTAL_RUNS+=1))
 else
 TOTAL_RUNS=1
