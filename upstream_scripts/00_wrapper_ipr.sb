@@ -180,3 +180,4 @@ then
   touch ../done.txt
 fi
   echo "${NUM_RUNS} / ${TOTAL_RUNS} jobs completed" > ../status.txt
+
