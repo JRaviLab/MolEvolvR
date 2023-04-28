@@ -167,6 +167,11 @@ fi
         #      scancel ${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}
         #  fi
 NUM_RUNS=$(wc -l "${OUTPATH}"/logfile.tsv | grep -Eo "^[[:digit:]]+")
+# Subtract one job count for DO_BLAST (homology search selected ipr runs)
+if [ $DO_BLAST = "T" ]
+then 
+    ((NUM_RUNS-=1))
+fi
 if [ -e "${OUTPATH}"/accs.txt ]
 then
 TOTAL_RUNS=$(wc -l "${OUTPATH}"/accs.txt | grep -Eo "^[[:digit:]]+")
