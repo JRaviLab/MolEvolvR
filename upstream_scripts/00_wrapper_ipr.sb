@@ -170,7 +170,7 @@ NUM_RUNS=$(wc -l "${OUTPATH}"/logfile.tsv | grep -Eo "^[[:digit:]]+")
 if [ -e "${OUTPATH}"/accs.txt ]
 then
 TOTAL_RUNS=$(wc -l "${OUTPATH}"/accs.txt | grep -Eo "^[[:digit:]]+")
-# plus one for the column headers in counting lines for logfile.tsv
+# plus one for the column headers for line count comparison with logfile.tsv
 ((TOTAL_RUNS+=1))
 else
 TOTAL_RUNS=1
