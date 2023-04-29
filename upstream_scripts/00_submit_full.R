@@ -106,6 +106,7 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
         seq_count <- get_sequences(seqs, dir_path = dir, separate = TRUE)
         num_runs <- num_runs + seq_count
         system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb -F 'accs.txt ", "F T ", DB , " ", NHITS, " ", EVAL, "'", " -t 1-", seq_count))
+        write("running . . .", "blast_progress.txt")
     }
     else{
         write(queries, "accs.txt")
