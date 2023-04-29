@@ -26,6 +26,11 @@ get_sequences <- function(sequences, acc_file_path = "accs.txt", dir_path = "~",
 
 submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL= 0.0005, sequences = "~/test.fa", phylo = "FALSE", by_domain = "FALSE", domain_starting = "~/domain_seqs.fa", type = "full"){
     setwd(dir)
+
+    # write this func call plus args to a log file
+    call <- match.call()
+    write(paste0(deparse(call), "\n"), "submit_func.log")
+
     num_runs <- 0
     write("START_DT\tSTOP_DT\tquery\tdblast\tacc2info\tdblast_cleanup\tacc2fa\tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2da\tduration", "logfile.tsv")
     if (phylo == "FALSE"){
@@ -51,6 +56,11 @@ submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL
 submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/seqs.fa", ncbi = FALSE){ 
     #Accepts sequence file, if none given then download the ncbi sequences
     setwd(dir)
+
+    # write this func call plus args to a log file
+    call <- match.call()
+    write(paste0(deparse(call), "\n"), "submit_func.log")
+
     num_runs <- 0
     df <- read_tsv(blast, col_names = web_blastp_hit_colnames)
     df_query <- df %>% distinct(Query, .keep_all = TRUE)
@@ -78,7 +88,12 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
 }
 
 submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa", ncbi = FALSE, blast = FALSE, DB = "refseq", NHITS = 5000, EVAL= 0.0005){
+
     setwd(dir)
+    # write this func call plus args to a log file
+    call <- match.call()
+    write(paste0(deparse(call), "\n"), "submit_func.log")
+
     num_runs <- 0
     write("START_DT\tSTOP_DT\tquery\tacc2info\tacc2fa\tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2da\tduration\n", "logfile.tsv")
     ipr_in <- read_tsv(ipr, col_names = TRUE)
