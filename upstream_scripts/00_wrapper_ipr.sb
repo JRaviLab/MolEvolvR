@@ -94,11 +94,11 @@ fi
 if [ "$DO_BLAST" = "T" ] && [ "$IS_QUERY" = "F" ]
 then
 # Handle homolog data
-		FILE=$(sed -n "${PBS_ARRAYID}"p "${INPUTPATHS_LIST}")
-	  F=$(basename ${FILE})
+	FILE=$(sed -n "${PBS_ARRAYID}"p "${INPUTPATHS_LIST}")
+	F=$(basename ${FILE})
    	PREFIX=$(echo "${F%%.faa}")	## takes PREFIX of file
    	OUTDIR=${OUTPATH}/${PREFIX}_ipr	## variable containing output filepath based PREFIX
-     printf "${PREFIX}\n"			## make the directory
+    printf "${PREFIX}\n"			## make the directory
     mkdir ${OUTDIR}
     cp ${PREFIX}.faa ${OUTDIR}
     cd ${OUTDIR} || exit
@@ -155,7 +155,7 @@ fi
 	STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
 
 	## Add benchmarking times to logfile
-	printf "\n${START_DT}\t${STOP_DT}\t${PREFIX}\t${db_dur}\t${acc2info_dur}\t${db_cln_dur}\t${acc2fa_dur}\t${bclust_dur}\t${c2t_dur}\t${ipr_dur}\t${ipr2da_dur}\t${dur}" >> ${OUTPATH}/logfile.tsv
+	printf "${START_DT}\t${STOP_DT}\t${PREFIX}\t${db_dur}\t${acc2info_dur}\t${db_cln_dur}\t${acc2fa_dur}\t${bclust_dur}\t${c2t_dur}\t${ipr_dur}\t${ipr2da_dur}\t${dur}\n" >> ${OUTPATH}/logfile.tsv
 
 	## And how much time is left
 	#timeleft=$(( $total - $dur ))
@@ -166,17 +166,63 @@ fi
         #       sbatch --array=${SLURM_ARRAY_TASK_ID} $0
         #      scancel ${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}
         #  fi
-NUM_RUNS=$(wc -l "${OUTPATH}"/logfile.tsv | grep -Eo "^[[:digit:]]+")
-((NUM_RUNS-=1))
-if [ -e "${OUTPATH}"/accs.txt ]
+        #
+        
+#NUM_RUNS=$(wc -l "${OUTPATH}"/logfile.tsv | grep -Eo "^[[:digit:]]+")
+## Subtract one job count for DO_BLAST (homology search selected ipr runs)
+#if [ $DO_BLAST = "T" ]
+#then 
+#    ((NUM_RUNS-=1))
+#fi
+#if [ -e "${OUTPATH}"/accs.txt ]
+#then
+#TOTAL_RUNS=$(wc -l "${OUTPATH}"/accs.txt | grep -Eo "^[[:digit:]]+")
+## plus one accounting for column headers in line count of logfile.tsv
+#((TOTAL_RUNS+=1))
+#else
+#TOTAL_RUNS=1
+#fi
+
+# hacky workaround for ipr submissions with Homology Search selected
+#   utilizes the fact that the DO_BLAST call to this wrapper will take much 
+#   longer. 
+#   When DO_BLAST = F (t_duration = short) while DO_BLAST = T (t_duration = long)
+
+# if Homology search is selected, we expect the DO_BLAST run to be the 
+#   rate limiting step; make done.txt after DO_BLAST finishes
+if [ -f "../blast_progress.txt" ]
 then
-TOTAL_RUNS=$(wc -l "${OUTPATH}"/accs.txt | grep -Eo "^[[:digit:]]+")
-((TOTAL_RUNS+=1))
-else
-TOTAL_RUNS=1
-fi
-if [ $TOTAL_RUNS = $NUM_RUNS ]
+    # if this is just the ipr query run, not the blast run
+    if [ ${DO_BLAST} = "F" ]
+    then
+        printf "Query analysis complete.\nRunning homology search and full analysis \
+            . . ." > ../status.txt
+        exit 0
+    # if blast run is done 
+    elif [ ${DO_BLAST} = "T" ]
+    then
+        printf "Query analysis & homology search + full analysis complete.\n" \
+            > ../status.txt
+        printf "Finished\n" > ../blast_progress.txt
+        # testing how status file looks
+        echo "${NUM_RUNS} / ${TOTAL_RUNS} jobs completed" > ../status.txt
+        touch ../done.txt
+        exit 0
+    fi
+# for ipr submits with NO homology search
+elif [ ! -f "../blast_progress.txt" ]
 then
-  touch ../done.txt
+    printf "1/1 jobs completed\n" > ../status.txt
+    touch ../done.txt
 fi
-  echo "${NUM_RUNS} / ${TOTAL_RUNS} jobs completed" > ../status.txt
+
+#
+#if [ $TOTAL_RUNS = $NUM_RUNS ]
+#then
+#  touch ../done.txt
+#fi
+#  echo "${NUM_RUNS} / ${TOTAL_RUNS} jobs completed" > ../status.txt
+
+
+
+

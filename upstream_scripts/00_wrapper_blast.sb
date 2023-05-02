@@ -148,7 +148,9 @@ fi
 	STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
 
 	## Add benchmarking times to logfile
-	printf "\n${START_DT}\t${STOP_DT}\t${PREFIX}\t${db_dur}\t${acc2info_dur}\t${db_cln_dur}\t${acc2fa_dur}\t${bclust_dur}\t${c2t_dur}\t${ipr_dur}\t${ipr2da_dur}\t${dur}" >> ${OUTPATH}/logfile.tsv
+	printf "\n${START_DT}\t${STOP_DT}\t${PREFIX}\t${db_dur}\t${acc2info_dur}\t"\
+        "${db_cln_dur}\t${acc2fa_dur}\t${bclust_dur}\t${c2t_dur}\t${ipr_dur}\t"\
+        "${ipr2da_dur}\t${dur}\n" >> ${OUTPATH}/logfile.tsv
 
 	## And how much time is left
 	#timeleft=$(( $total - $dur ))
