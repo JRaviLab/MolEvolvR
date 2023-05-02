@@ -93,7 +93,7 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
     setwd(dir)
 
     # write job submission params to file
-    tf <- tempefile("job_args", tmpdir=".", fileext="yml")
+    tf <- tempfile("job_args", tmpdir=".", fileext="yml")
     job_args <- list(input_type = "ipr", 
                      homology_search = blast,
                      database = ifelse(blast == FALSE, NA, DB), # only include evalue, DB, & NHITS for blast jobs
