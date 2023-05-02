@@ -1,6 +1,6 @@
 library(here)
-source(here('upstream_scripts/01.4_ipr2lin.R'))
-source(here('upstream_scripts/05a_ipr2da.R'))
+source(here("upstream_scripts/01.4_ipr2lin.R"))
+source(here("upstream_scripts/05a_ipr2da.R"))
 
 ## WP_020839904_full/WP_020839904
 # ipr2lin
@@ -132,7 +132,8 @@ source(here('upstream_scripts/05a_ipr2da.R'))
 #                  prefix = '../molevol_data/project_data/saureus/sausa300_0200-04/ABD22752_full/ABD22752')
 #
 
-lin <- ipr2lin(ipr = '../molevol_data/project_data/saureus/sausa300_0200-04/saureus_0204_quick_out/saureus_0204.iprscan.tsv',
-               acc2info = '../molevol_data/project_data/saureus/sausa300_0200-04/saureus_0204_quick_out/saureus_0204.acc2info.tsv',
-               suffix = '../molevol_data/project_data/saureus/sausa300_0200-04/saureus_0204_quick_out/saureus_0204')
-
+lin <- ipr2lin(
+  ipr = "../molevol_data/project_data/saureus/sausa300_0200-04/saureus_0204_quick_out/saureus_0204.iprscan.tsv",
+  acc2info = "../molevol_data/project_data/saureus/sausa300_0200-04/saureus_0204_quick_out/saureus_0204.acc2info.tsv",
+  suffix = "../molevol_data/project_data/saureus/sausa300_0200-04/saureus_0204_quick_out/saureus_0204"
+)
