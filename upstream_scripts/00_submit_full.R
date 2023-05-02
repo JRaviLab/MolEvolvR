@@ -1,5 +1,6 @@
 library(tidyverse)
 library(Biostrings)
+library(yaml)
 
 get_sequences <- function(sequences, acc_file_path = "accs.txt", dir_path = "~", separate = TRUE){
     seqs <- readAAStringSet(sequences)
@@ -90,9 +91,16 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
 submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa", ncbi = FALSE, blast = FALSE, DB = "refseq", NHITS = 5000, EVAL= 0.0005){
 
     setwd(dir)
-    # write this func call plus args to a log file
-    call <- match.call()
-    write(paste0(deparse(call), "\n"), "submit_func.log")
+
+    # write job submission params to file
+    tf <- tempefile("job_args", tmpdir=".", fileext="yml")
+    job_args <- list(input_type = "ipr", 
+                     homology_search = blast,
+                     database = ifelse(blast == FALSE, NA, DB), # only include evalue, DB, & NHITS for blast jobs
+                     nhits = ifelse(blast == FALSE, NA, NHITS)
+                     )
+    yml <- yaml::as_yaml(job_args)
+    write(yml, tf)
 
     num_runs <- 0
     write("START_DT\tSTOP_DT\tquery\tacc2info\tacc2fa\tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2da\tduration\n", "logfile.tsv")
