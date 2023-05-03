@@ -32,9 +32,7 @@ submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL
     submission_type = type,
     database = ifelse(phylo == FALSE, DB, NA),
     nhits = ifelse(phylo == FALSE, NHITS, NA),
-    evalue = ifelse(phylo == FALSE, EVAL, NA),
-    phylogeny = phylo,
-    split_by_domain = by_domain
+    evalue = ifelse(phylo == FALSE, EVAL, NA)
   )
   yml <- yaml::as.yaml(job_args)
   write(yml, "job_args.yml")
