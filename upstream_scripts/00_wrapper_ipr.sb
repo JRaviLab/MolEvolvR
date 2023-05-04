@@ -227,7 +227,8 @@ then
 # for ipr submits with NO homology search
 elif [ ! -f "../blast_progress.txt" ]
 then
-    update_status "1/1: query data\ndone (no homology search selected)"
+    update_status "1/1: query data"
+    update_status "done (no homology search selected)"
     touch ../done.txt
 fi
 

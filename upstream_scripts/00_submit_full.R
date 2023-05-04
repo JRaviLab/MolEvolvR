@@ -123,8 +123,7 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
   } else {
     write(queries, "accs.txt")
   }
-  num_runs <- num_runs + 1
-  write(paste0("1: Analyzing query data"), "status.txt")
+  write(paste0("1: Analyzing query data"), "status.txt", append=TRUE) # append prevents adding newline to file; this creates the file
   # always do analysis on interpro file
   system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb -F '", ipr, " T F'"))
 }
