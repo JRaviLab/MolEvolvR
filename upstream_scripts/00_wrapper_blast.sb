@@ -66,10 +66,9 @@ INPUTPATHS_LIST=$1
 IS_QUERY=$2
 HAS_SEQUENCES=$3
 #===============================================================================
+# Func to update status during the non-query run
 update_status () {
-    # append status.txt with a message
-    printf "%s\n" "$1" >> ../status.txt
-}
+    printf "$1\n" >> ../status.txt
 #===============================================================================
 if [ "$IS_QUERY" = "T" ]
 # Handle the query data
@@ -98,61 +97,83 @@ else
     cd ${OUTDIR} || exit
 
     ## ACC2FA -- getting fasta FILES for deltablast output(s)
+    MESSAGE="1/10: accession2fasta"
+    [ "${IS_QUERY}" = "T" ] && update_status "${MESSAGE}"
 	acc2fa_start=$SECONDS
 	sh /data/research/jravilab/molevol_scripts/upstream_scripts/02_acc2fa.sh ${OUTDIR}/${PREFIX}.dblast.tsv $PREFIX $OUTDIR
 	acc2fa_dur=$(( $SECONDS - $acc2fa_start ))
 
 fi
 ## ACC2INFO ##
+MESSAGE="2/10: accession2info"
+[ "${IS_QUERY}" = "T" ] && update_status "${MESSAGE}"
 acc2info_start=$SECONDS
 sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
 acc2info_dur=$(( $SECONDS - $acc2info_start ))
 ## BLAST RESULT CLEANUP ##
+MESSAGE="3/10: blast_results_cleanup"
+[ "${IS_QUERY}" = "T" ] && update_status "${MESSAGE}"
 blast_cln_start=$SECONDS
 Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.2_cleanup_blast.R ${OUTDIR}/${PREFIX}.dblast.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX T
 blast_cln_dur=$(( $SECONDS - $blast_cln_start ))
 ## BLASTCLUST ##
+MESSAGE="4/10: blast_results_cleanup"
+[ "${IS_QUERY}" = "T" ] && update_status "${MESSAGE}"
 bclust_start=$SECONDS
 sh /data/research/jravilab/molevol_scripts/upstream_scripts/03.1_blastclust.sh ${OUTDIR}/${PREFIX}.all_accnums.fa $PREFIX $OUTDIR
 bclust_dur=$(( $SECONDS - $bclust_start ))
 
 ## CLUST2TABLE
+MESSAGE="5/10: clust2table"
+[ "${IS_QUERY}" = "T" ] && update_status "${MESSAGE}"
 c2t_start=$SECONDS
 Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/03.2_clust2table.R ${OUTDIR}/${PREFIX}.bclust.L60S80.tsv ${OUTDIR}/${PREFIX}.blast.cln.tsv
 c2t_dur=$(( $SECONDS - $c2t_start ))
 
 ## INTERPROSCAN ##
 ## add second run for original protein, too
+MESSAGE="6/10: interproscan (this could take awhile)"
+[ "${IS_QUERY}" = "T" ] && update_status "${MESSAGE}"
 ipr_start=$SECONDS
 sh /data/research/jravilab/molevol_scripts/upstream_scripts/04a_iprscan.sh ${OUTDIR}/${PREFIX}.all_accnums.fa ${PREFIX} ${OUTDIR}
 ipr_dur=$(( $SECONDS - $ipr_start ))
 
 ## IPR2LIN ##
 #Append colnames to beginning of ipr file
+MESSAGE="7/10: interproscan2lineage"
+[ "${IS_QUERY}" = "T" ] && update_status "${MESSAGE}"
 sed -i '1s/^/AccNum\tSeqMD5Digest\tSLength\tAnalysis\tDB.ID\tSignDesc\tStartLoc\tStopLoc\tScore\tStatus\tRunDate\tIPRAcc\tIPRDesc\n/' ${OUTDIR}/${PREFIX}.iprscan.tsv
 ipr2lin_start=$SECONDS
 Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.4_ipr2lin.R ${OUTDIR}/${PREFIX}.iprscan.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX
 ipr2lin_dur=$(( $SECONDS - $ipr2lin_start ))
 
 ## IPR2DA ##
+MESSAGE="8/10: interproscan2domain_architecture"
+[ "${IS_QUERY}" = "T" ] && update_status "${MESSAGE}"
 ipr2da_start=$SECONDS
 Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${PREFIX}.iprscan_cln.tsv ${PREFIX} ${OUTDIR}/${PREFIX}.cln.clust.tsv
 ipr2da_dur=$(( $SECONDS - $ipr2da_start ))
 
 ## RPSBLAST ##
+MESSAGE="9/10: rpsblast"
+[ "${IS_QUERY}" = "T" ] && update_status "${MESSAGE}"
 rps_start=$SECONDS
 #sh /data/research/jravilab/molevol_scripts/upstream_scripts/04b_rpsblast.sh ${OUTDIR}/${PREFIX}.all_accnums.fa ${PREFIX} ${OUTDIR}
 rps_dur=$(( $SECONDS - $rps_start))
 
 ## RPS2DA ##
+MESSAGE="10/10: rps2domain_architecture"
+[ "${IS_QUERY}" = "T" ] && update_status "${MESSAGE}"
 rps2da_start=$SECONDS
 #Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05b_rps2da.R ${OUTDIR}/${PREFIX}.rps.out ${OUTDIR}/${PREFIX}.cln.clust.ipr.tsv ${PREFIX}
 rps2da_dur=$(( $SECONDS - $rps2da_start ))
 
 ## Figure out how long the entire script took to run
+[ "${IS_QUERY}" = "T" ] && update_status "done\n"
 dur=$(( $SECONDS - $start ))
 printf "\nTotal run time: $dur\n"
 STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
+
 
 ## Add process times to logfile
 printf "${START_DT}\t${STOP_DT}\t${acc2fa_dur}\t${acc2info_dur}\t${blast_cln_dur}\t${bclust_dur}\t${c2t_dur}\t${ipr_dur}\t${ipr2lin_dur}\t${ipr2da_dur}\t${rps_dur}\t${rps2da_dur}\t${dur}\n" >> ${OUTPATH}/logfile.tsv
