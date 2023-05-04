@@ -110,7 +110,8 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
   write(yml, "job_args.yml")
 
   num_runs <- 0
-  write("START_DT\tSTOP_DT\tquery\tdeltablast\tacc2fa\tacc2info\tdeltablast_cln\tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2da\tduration", "logfile.tsv")
+  write("START_DT\tSTOP_DT\tquery\tdeltablast\tacc2fa\tacc2info\tdeltablast_cln\tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2da\tduration", "logfile.tsv", append=TRUE) # append prevents adding newline to file; this creates the file
+
   ipr_in <- read_tsv(ipr, col_names = TRUE)
   queries <- unique(ipr_in$AccNum)
   if (ncbi) {
@@ -123,8 +124,7 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
   } else {
     write(queries, "accs.txt")
   }
-  write(paste0("1: Analyzing query data"), "status.txt", append=TRUE) # append prevents adding newline to file; this creates the file
-  # always do analysis on interpro file
+  write(paste0("1: Analyzing query data"), "status.txt")   # always do analysis on interpro file
   system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb -F '", ipr, " T F'"))
 }
 
