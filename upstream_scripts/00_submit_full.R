@@ -119,6 +119,7 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
   }
   if (blast) {
     # if blast separate the query sequences and do blast+full analysis
+    get_sequences(seqs, dir_path = dir, separate = TRUE)
     system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb -F 'accs.txt ", "F T ", DB, " ", NHITS, " ", EVAL, "'"))
     write("running . . .", "blast_progress.txt")
   } else {
