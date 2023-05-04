@@ -38,7 +38,8 @@ submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL
   write(yml, "job_args.yml")
 
   num_runs <- 0
-  write("START_DT\tSTOP_DT\tquery\tdblast\tacc2info\tdblast_cleanup\tacc2fa\tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2da\tduration", "logfile.tsv")
+  write("START_DT\tSTOP_DT\tquery\tdeltablast\tacc2fa\tacc2info\tdeltablast_cln\tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2da\tduration", "logfile.tsv", append=TRUE, ncolumns=2000) 
+  #write("START_DT\tSTOP_DT\tquery\tdblast\tacc2info\tdblast_cleanup\tacc2fa\tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2da\tduration", "logfile.tsv", append=TRUE, ncolumns=1000)
   if (phylo == "FALSE") {
     # If not phylogenetic analysis, split up the sequences, run blast and full analysis
     num_seqs <- get_sequences(sequences, dir_path = dir, separate = TRUE)
@@ -75,7 +76,7 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
   df_query$AccNum <- df_query$Query
   write_tsv(df_query, "blast_query.tsv", col_names = FALSE)
   write(df_query$AccNum, "accs.txt")
-  write("START_DT\tSTOP_DT\tquery\tacc2info\tacc2fa\tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2da\tduration", "logfile.tsv")
+  write("START_DT\tSTOP_DT\tquery\tdeltablast\tacc2fa\tacc2info\tdeltablast_cln\tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2da\tduration", "logfile.tsv", append=TRUE, ncolumns=2000) 
   # do analysis on the queries
   if (ncbi) {
     system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb -F 'blast_query.tsv ", " T F'"))
@@ -109,6 +110,8 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
   yml <- yaml::as.yaml(job_args)
   write(yml, "job_args.yml")
 
+# append prevents adding newline to file; also ncolumns prevents the automatic newlines for text with a certain character width
+  write("START_DT\tSTOP_DT\tquery\tdeltablast\tacc2fa\tacc2info\tdeltablast_cln\tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2da\tduration", "logfile.tsv", append=TRUE, ncolumns=2000) 
   ipr_in <- read_tsv(ipr, col_names = TRUE)
   queries <- unique(ipr_in$AccNum)
   if (ncbi) {
