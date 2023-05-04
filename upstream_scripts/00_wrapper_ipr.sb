@@ -77,9 +77,9 @@ update_status () {
 #===============================================================================
 # STEP 1 handle query data
 if [ "$IS_QUERY" = "T" ]
-# Handle the query data
 then
 
+    # Handle the query data
     PREFIX="query_data"
     OUTDIR=${OUTPATH}/${PREFIX}
     mkdir ${OUTDIR}				## make the directory
@@ -87,6 +87,9 @@ then
     cd ${OUTDIR} || exit
     cp ../seqs.fa ${OUTDIR}/${PREFIX}.all_accnums.fa
     cp ../accs.txt ${OUTDIR}/${PREFIX}.all_accnums.txt
+
+    # setup logfile
+    printf "START_DT\tSTOP_DT\tquery\tdeltablast\tacc2fa\tacc2info\tdeltablast_cln\tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2da\tduration\n" ../logfile.tsv
 
 	## ACC2INFO ##
 	acc2info_start=$SECONDS

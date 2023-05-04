@@ -109,9 +109,6 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
   yml <- yaml::as.yaml(job_args)
   write(yml, "job_args.yml")
 
-  num_runs <- 0
-# append prevents adding newline to file; this still creates the file; also ncolumns prevents the automatic newlines for text with a certain character width
-  write("START_DT\tSTOP_DT\tquery\tdeltablast\tacc2fa\tacc2info\tdeltablast_cln\tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2da\tduration", "logfile.tsv", append=TRUE, ncolumns=200) 
   ipr_in <- read_tsv(ipr, col_names = TRUE)
   queries <- unique(ipr_in$AccNum)
   if (ncbi) {
