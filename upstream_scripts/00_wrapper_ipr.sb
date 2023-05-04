@@ -62,35 +62,50 @@ START_DT=$(date '+%d/%m/%Y-%H:%M:%S')
 
 #total=$(( ((3*60)+50)*60 ))			## total time the job can take in seconds, this should match your SBATCH line above
 #maxtime=$(( 120*60 )) 				## maximum time to process one input, need to do some experimenting with your inputs
+#===============================================================================
 INPUTPATHS_LIST=$1
 IS_QUERY=$2
 DO_BLAST=$3
 DB=$4
 NHITS=$5
 EVAL=$6
+#===============================================================================
+update_status () {
+    # append status.txt with a message
+    printf "%s\n" "$1" >> ../status.txt
+}
+#===============================================================================
+# STEP 1 handle query data
 if [ "$IS_QUERY" = "T" ]
 # Handle the query data
 then
-PREFIX="query_data"
-OUTDIR=${OUTPATH}/${PREFIX}
-mkdir ${OUTDIR}				## make the directory
-cp ${INPUTPATHS_LIST} ${OUTDIR}/${PREFIX}.iprscan.tsv
-cd ${OUTDIR} || exit
-cp ../seqs.fa ${OUTDIR}/${PREFIX}.all_accnums.fa
-cp ../accs.txt ${OUTDIR}/${PREFIX}.all_accnums.txt
+
+    PREFIX="query_data"
+    OUTDIR=${OUTPATH}/${PREFIX}
+    mkdir ${OUTDIR}				## make the directory
+    cp ${INPUTPATHS_LIST} ${OUTDIR}/${PREFIX}.iprscan.tsv
+    cd ${OUTDIR} || exit
+    cp ../seqs.fa ${OUTDIR}/${PREFIX}.all_accnums.fa
+    cp ../accs.txt ${OUTDIR}/${PREFIX}.all_accnums.txt
+
 	## ACC2INFO ##
 	acc2info_start=$SECONDS
 	sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
 	acc2info_dur=$(( $SECONDS - $acc2info_start ))
-  ## IPR2LIN ##
+
+    ## IPR2LIN ##
 	ipr2lin_start=$SECONDS
 	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.4_ipr2lin.R ${OUTDIR}/${PREFIX}.iprscan.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX
 	ipr2lin_dur=$(( $SECONDS - $ipr2lin_start ))
-  ## IPR2DA ##
+
+    ## IPR2DA ##
 	ipr2da_start=$SECONDS
 	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${PREFIX}.iprscan_cln.tsv ${PREFIX} ${OUTDIR}/${PREFIX}.acc2info.tsv
 	ipr2da_dur=$(( $SECONDS - $ipr2da_start ))
 fi
+#===============================================================================
+# NEXT STEPs (only executes if homology search is selected) do full analysis on homologs
+#
 if [ "$DO_BLAST" = "T" ] && [ "$IS_QUERY" = "F" ]
 then
 # Handle homolog data
@@ -102,86 +117,89 @@ then
     mkdir ${OUTDIR}
     cp ${PREFIX}.faa ${OUTDIR}
     cd ${OUTDIR} || exit
-    	## DELTABLAST ##
+
+    ## DELTABLAST ##
+    MESSAGE="2/10: deltablast (this could take a while [nhits: ${NHITS}])"
+    update_status ${MESSAGE}
 	db_start=$SECONDS
 	sh /data/research/jravilab/molevol_scripts/upstream_scripts/01.1_deltablast.sh  ${PREFIX}.faa $PREFIX $OUTDIR $DB $NHITS $EVAL
 	db_dur=$(( $SECONDS - $db_start ))
 
     ## ACC2FA -- getting fasta FILES for deltablast output(s)
+    MESSAGE="3/10: accession2fasta"
+    update_status ${MESSAGE}
 	acc2fa_start=$SECONDS
 	sh /data/research/jravilab/molevol_scripts/upstream_scripts/02_acc2fa.sh ${OUTDIR}/${PREFIX}.dblast.tsv $PREFIX $OUTDIR
 	acc2fa_dur=$(( $SECONDS - $acc2fa_start ))
 
 	## ACC2INFO ##
+    MESSAGE="4/10: accession2info"
+    update_status ${MESSAGE}
 	acc2info_start=$SECONDS
 	sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
 	acc2info_dur=$(( $SECONDS - $acc2info_start ))
 
 	## BLAST RESULT CLEANUP ##
+    MESSAGE="5/10: deltablast_cleaning"
+    update_status ${MESSAGE}
 	db_cln_start=$SECONDS
 	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.2_cleanup_blast.R ${OUTDIR}/${PREFIX}.dblast.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX F
 	db_cln_dur=$(( $SECONDS - $db_cln_start ))
-  ## BLASTCLUST ##
+
+    ## BLASTCLUST ##
+    MESSAGE="6/10: blastclust"
+    update_status ${MESSAGE}
 	bclust_start=$SECONDS
 	sh /data/research/jravilab/molevol_scripts/upstream_scripts/03.1_blastclust.sh ${OUTDIR}/${PREFIX}.all_accnums.fa $PREFIX $OUTDIR
 	bclust_dur=$(( $SECONDS - $bclust_start ))
 
 	## CLUST2TABLE
+    MESSAGE="7/10: clust2table"
+    update_status ${MESSAGE}
 	c2t_start=$SECONDS
 	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/03.2_clust2table.R ${OUTDIR}/${PREFIX}.bclust.L60S80.tsv ${OUTDIR}/${PREFIX}.blast.cln.tsv
 	c2t_dur=$(( $SECONDS - $c2t_start ))
 
 	## INTERPROSCAN ##
 	## add second run for original protein, too
+    MESSAGE="8/10: interproscan"
+    update_status ${MESSAGE}
 	ipr_start=$SECONDS
 	sh /data/research/jravilab/molevol_scripts/upstream_scripts/04a_iprscan.sh ${OUTDIR}/${PREFIX}.all_accnums.fa ${PREFIX} ${OUTDIR}
 	ipr_dur=$(( $SECONDS - $ipr_start ))
-  ## IPR2LIN ##
+
+    ## IPR2LIN ##
 	#Append colnames to beginning of ipr file
+    MESSAGE="9/10: interproscan2lineage"
+    update_status ${MESSAGE}
 	sed -i '1s/^/AccNum\tSeqMD5Digest\tSLength\tAnalysis\tDB.ID\tSignDesc\tStartLoc\tStopLoc\tScore\tStatus\tRunDate\tIPRAcc\tIPRDesc\n/' ${OUTDIR}/${PREFIX}.iprscan.tsv
 	ipr2lin_start=$SECONDS
 	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.4_ipr2lin.R ${OUTDIR}/${PREFIX}.iprscan.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX
 	ipr2lin_dur=$(( $SECONDS - $ipr2lin_start ))
 
 	## IPR2DA ##
+    MESSAGE="10/10: interproscan2domain_architecture"
+    update_status ${MESSAGE}
 	ipr2da_start=$SECONDS
 	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${PREFIX}.iprscan_cln.tsv ${PREFIX} ${OUTDIR}/${PREFIX}.cln.clust.tsv
 	ipr2da_dur=$(( $SECONDS - $ipr2da_start ))
 fi
 
-	## Figure out how long the entire script took to run
-	dur=$(( $SECONDS - $start ))
-	printf "\nTotal run time: $dur\n"
-	STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
+## Figure out how long the entire script took to run
+dur=$(( $SECONDS - $start ))
+printf "\nTotal run time: $dur\n"
+STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
 
-	## Add benchmarking times to logfile
-	printf "${START_DT}\t${STOP_DT}\t${PREFIX}\t${db_dur}\t${acc2info_dur}\t${db_cln_dur}\t${acc2fa_dur}\t${bclust_dur}\t${c2t_dur}\t${ipr_dur}\t${ipr2da_dur}\t${dur}\n" >> ${OUTPATH}/logfile.tsv
-
-	## And how much time is left
-	#timeleft=$(( $total - $dur ))
-
-        ## If there's a chance we get a long input to process, then
-        ## resubmit this job, then kill this job
-        #     if [ ${timeleft} -lt ${maxtime} ]; then
-        #       sbatch --array=${SLURM_ARRAY_TASK_ID} $0
-        #      scancel ${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}
-        #  fi
-        #
-        
-#NUM_RUNS=$(wc -l "${OUTPATH}"/logfile.tsv | grep -Eo "^[[:digit:]]+")
-## Subtract one job count for DO_BLAST (homology search selected ipr runs)
-#if [ $DO_BLAST = "T" ]
-#then 
-#    ((NUM_RUNS-=1))
-#fi
-#if [ -e "${OUTPATH}"/accs.txt ]
-#then
-#TOTAL_RUNS=$(wc -l "${OUTPATH}"/accs.txt | grep -Eo "^[[:digit:]]+")
-## plus one accounting for column headers in line count of logfile.tsv
-#((TOTAL_RUNS+=1))
-#else
-#TOTAL_RUNS=1
-#fi
+## Add benchmarking times to logfile
+if [ ${DO_BLAST} = "T" ]
+then
+    # blast runs have values for all fields
+    printf "${START_DT}\t${STOP_DT}\t${PREFIX}\t${db_dur}\t${acc2fa_dur}\t${acc2info_dur}\t${db_cln_dur}\t${bclust_dur}\t${c2t_dur}\t${ipr_dur}\t${ipr2lin_dur}\t${ipr2da_dur}\t${dur}\n" >> ${OUTPATH}/logfile.tsv
+else 
+    # query data or non-homology search runs will fill w/ NA for operations not performed
+    # keeps the same order as above
+    printf "${START_DT}\t${STOP_DT}\t${PREFIX}\tNA\tNA\t${acc2info_dur}\tNA\tNA\tNA\tNA\t${ipr2lin_dur}\t${ipr2da_dur}\t${dur}\n" >> ${OUTPATH}/logfile.tsv
+fi 
 
 # hacky workaround for ipr submissions with Homology Search selected
 #   utilizes the fact that the DO_BLAST call to this wrapper will take much 
@@ -195,24 +213,21 @@ then
     # if this is just the ipr query run, not the blast run
     if [ ${DO_BLAST} = "F" ]
     then
-        printf "Query analysis complete.\nRunning homology search and full analysis \
-            . . ." > ../status.txt
+        # exit and let the do_blast call on this script update status.txt, 
+            # logfile.tsv, and done.txt
         exit 0
     # if blast run is done 
     elif [ ${DO_BLAST} = "T" ]
     then
-        printf "Query analysis & homology search + full analysis complete.\n" \
-            > ../status.txt
         printf "Finished\n" > ../blast_progress.txt
-        # testing how status file looks
-        echo "${NUM_RUNS} / ${TOTAL_RUNS} jobs completed" > ../status.txt
+        update_status "done"
         touch ../done.txt
         exit 0
     fi
 # for ipr submits with NO homology search
 elif [ ! -f "../blast_progress.txt" ]
 then
-    printf "1/1 jobs completed\n" > ../status.txt
+    update_status "1/1: query data\ndone (no homology search selected)"
     touch ../done.txt
 fi
 

@@ -103,13 +103,14 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
     homology_search = blast,
     database = ifelse(blast == FALSE, NA, DB), # only include evalue, DB, & NHITS for blast jobs
     nhits = ifelse(blast == FALSE, NA, NHITS),
+    evalue = ifelse(blast == FALSE, NA, EVAL),
     includes_ncbi_acc = ncbi
   )
   yml <- yaml::as.yaml(job_args)
   write(yml, "job_args.yml")
 
   num_runs <- 0
-  write("START_DT\tSTOP_DT\tquery\tacc2info\tacc2fa\tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2da\tduration\n", "logfile.tsv")
+  write("START_DT\tSTOP_DT\tquery\tdeltablast\tacc2fa\tacc2info\tdeltablast_cln\tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2da\tduration", "logfile.tsv")
   ipr_in <- read_tsv(ipr, col_names = TRUE)
   queries <- unique(ipr_in$AccNum)
   if (ncbi) {
@@ -117,15 +118,13 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
   }
   if (blast) {
     # if blast separate the query sequences and do blast+full analysis
-    seq_count <- get_sequences(seqs, dir_path = dir, separate = TRUE)
-    num_runs <- num_runs + seq_count
-    system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb -F 'accs.txt ", "F T ", DB, " ", NHITS, " ", EVAL, "'", " -t 1-", seq_count))
+    system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb -F 'accs.txt ", "F T ", DB, " ", NHITS, " ", EVAL, "'"))
     write("running . . .", "blast_progress.txt")
   } else {
     write(queries, "accs.txt")
   }
   num_runs <- num_runs + 1
-  write(paste0("0/", num_runs, " analyses completed"), "status.txt")
+  write(paste0("1: Analyzing query data"), "status.txt")
   # always do analysis on interpro file
   system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb -F '", ipr, " T F'"))
 }
