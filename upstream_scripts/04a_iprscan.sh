@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# created by Phil Calhoun on May 8th, 2019
-# edited by Lauren Sosinski on 2020.09.03
-# standard outformat
+# Author(s): PC, LS, JK
+# Last modified: 2023_05
 
 ## Load query files
 QUERY_FILE=$1
@@ -24,7 +23,8 @@ OUTFILE=$(printf "${OUTDIR}/${PREFIX}.iprscan")
 ## print I/O messages
 printf "\nNow processing $QUERY_FILE\n"
 
-iprscan -i ${QUERY_FILE} -b ${OUTFILE} -f TSV --cpu 10
+iprscan -i ${QUERY_FILE} -b ${OUTFILE} -f TSV --cpu 10 \
+    --appl Pfam,MobiDBlite,Phobius,Coils,SignalP_GRAM_POSITIVE,SignalP_GRAM_NEGATIVE 
 
 printf "##################\n"
 printf "END OF IPRSCAN RUN\n"
