@@ -6,13 +6,14 @@
 #################
 ## Pkgs needed ##
 #################
-suppressPackageStartupMessages({ library(tidyverse); library(here) })
-suppressPackageStartupMessages(library(msa)) # BiocManager::install("msa"))
-suppressPackageStartupMessages(library(Biostrings)) #; library(seqinr))
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(here))
+suppressPackageStartupMessages(library(msa)) # BiocManager::install("msa")
+suppressPackageStartupMessages(library(Biostrings)) # ; library(seqinr)
 # library(rMSA) # to implement kalign
 # library(pdftools); library(latexpdf); library(tools); library(tinytex) #needed?
 
-##!! FEATURES, BUGS, NOTES thus far!!
+## !! FEATURES, BUGS, NOTES thus far!!
 # output generated before hand:ideally
 # is determined by sliders?
 # could find an output that is an image?
@@ -28,28 +29,29 @@ suppressPackageStartupMessages(library(Biostrings)) #; library(seqinr))
 #########################################
 ## Generates MSA PDF from a Fasta file ##
 #########################################
-msa_pdf <- function(fasta_path, out_path=NULL,
-                    lowerbound=NULL, upperbound=NULL){
-  #'Multiple Sequence Alignment
+msa_pdf <- function(fasta_path, out_path = NULL,
+                    lowerbound = NULL, upperbound = NULL) {
+  #' Multiple Sequence Alignment
   #'
-  #'Generates a multiple sequence alignment from a fasta file
+  #' Generates a multiple sequence alignment from a fasta file
   #'
-  #'msa_pdf is a function that reads a fasta file and generates a multiple sequence alignment as
-  #'a pdf
+  #' msa_pdf is a function that reads a fasta file and generates a multiple sequence alignment as
+  #' a pdf
   #'
-  #'@param fasta_path Character. The path location of the fasta file to be read.
-  #'@param out_path Character. The path location of the output pdf to write.
-  #'Default is NULL. If value is NULL, the pdf is written to the same directory as the fasta file.
-  #'@param lowerbound Numeric. The column that determines the starting location of the MSA.
-  #'Default is NULL. If value is NULL, the entire multiple sequence alignment is printed.
-  #'@param upperbound Numeric. The column that determines the ending location of the MSA.
-  #'Default is NULL. If value is NULL, the entire multiple sequence alignment is printed.
+  #' @param fasta_path Character. The path location of the fasta file to be read.
+  #' @param out_path Character. The path location of the output pdf to write.
+  #' Default is NULL. If value is NULL, the pdf is written to the same directory as the fasta file.
+  #' @param lowerbound Numeric. The column that determines the starting location of the MSA.
+  #' Default is NULL. If value is NULL, the entire multiple sequence alignment is printed.
+  #' @param upperbound Numeric. The column that determines the ending location of the MSA.
+  #' Default is NULL. If value is NULL, the entire multiple sequence alignment is printed.
   # #'@examples msa_pdf()
 
   ## SAMPLE ARGUMENTS to test run
   # fasta_path=here("../molevol_data/project_data/phage_defense/full_analysis_20210108/g3d.both_lin.gen.da_sub.fa")
   # out_path="../molevol_data/project_data/phage_defense/full_analysis_20210108/g3d.both_lin.gen.da.pdf"
-  lowerbound=NULL; upperbound=NULL
+  lowerbound <- NULL
+  upperbound <- NULL
 
   ## PATH DEFINITIONS
   # path+filename
@@ -57,10 +59,11 @@ msa_pdf <- function(fasta_path, out_path=NULL,
   # retrieving the filename without the '.fasta' extension
   # --> to prefix .tex and .pdf
   fastafile_name <- fastafile_split[length(fastafile_split)] %>%
-    str_replace(pattern=".fasta|.fa|.faa", replacement="")
+    str_replace(pattern = ".fasta|.fa|.faa", replacement = "")
   # path to the fasta file
-  inpath <- paste0(fastafile_split[1:(length(fastafile_split)-1)],
-                       collapse="/")
+  inpath <- paste0(fastafile_split[1:(length(fastafile_split) - 1)],
+    collapse = "/"
+  )
   # tex & pdf file paths
   # tex_path <- paste0(inpath, "/", fastafile_name, ".tex")
   pdf_path <- paste0(inpath, "/", fastafile_name, ".pdf")
@@ -68,53 +71,61 @@ msa_pdf <- function(fasta_path, out_path=NULL,
   aln_path <- paste0(inpath, "/", fastafile_name, "aln")
 
   ## MSA
-  #!! don't want accession numbers, must be mapped to a species?
+  # !! don't want accession numbers, must be mapped to a species?
   my_seqs <- readAAStringSet(fasta_path)
   my_seqs_msa <- msa(my_seqs)
 
   ## Printing MSA to TeX
-  #print the whole MSA if either bound is NULL
-  if(is.null(lowerbound) | is.null(upperbound)){
-    msaPrettyPrint(x=my_seqs_msa, output="pdf",
-                   #alFile=fasta_path,
-                   file=pdf_path,
-                   #aesthetic
-                   showNames="left", showLogo="top",
-                   # showConsensus="top",
-                   # showNames="none", showLogo="none",
-                   logoColors="rasmol",
-                   shadingMode="functional",
-                   shadingModeArg="structure",
-                   shadingColors="blues",
-                   consensusColors="ColdHot",
-                   askForOverwrite=FALSE, verbose=FALSE,
-                   furtherCode=c("\\defconsensus{.}{lower}{upper}",
-                                 "\\showruler{1}{top}"))
-  } else{ #If bounds are not NULL
-    msaPrettyPrint(my_seqs_msa, output="pdf",
-                   alFile=fasta_path, file=pdf_path,
-                   #if user doesn't input either lowerbound or upperbound,
-                   #default to either length, or 0
-                   #!!how do I get the length?
-                   y=c(lowerbound,upperbound),
-                   #aesthetic
-                   showNames="left", showLogo="top",
-                   # showConsensus="top",
-                   # showNames="none", showLogo="none",
-                   logoColors="rasmol",
-                   shadingMode="functional",
-                   shadingModeArg="structure",
-                   shadingColors="blues",
-                   consensusColors="ColdHot",
-                   askForOverwrite=FALSE, verbose=FALSE,
-                   furtherCode=c("\\defconsensus{.}{lower}{upper}",
-                                 "\\showruler{1}{top}"))
+  # print the whole MSA if either bound is NULL
+  if (is.null(lowerbound) | is.null(upperbound)) {
+    msaPrettyPrint(
+      x = my_seqs_msa, output = "pdf",
+      # alFile=fasta_path,
+      file = pdf_path,
+      # aesthetic
+      showNames = "left", showLogo = "top",
+      # showConsensus="top",
+      # showNames="none", showLogo="none",
+      logoColors = "rasmol",
+      shadingMode = "functional",
+      shadingModeArg = "structure",
+      shadingColors = "blues",
+      consensusColors = "ColdHot",
+      askForOverwrite = FALSE, verbose = FALSE,
+      furtherCode = c(
+        "\\defconsensus{.}{lower}{upper}",
+        "\\showruler{1}{top}"
+      )
+    )
+  } else { # If bounds are not NULL
+    msaPrettyPrint(my_seqs_msa,
+      output = "pdf",
+      alFile = fasta_path, file = pdf_path,
+      # if user doesn't input either lowerbound or upperbound,
+      # default to either length, or 0
+      # !!how do I get the length?
+      y = c(lowerbound, upperbound),
+      # aesthetic
+      showNames = "left", showLogo = "top",
+      # showConsensus="top",
+      # showNames="none", showLogo="none",
+      logoColors = "rasmol",
+      shadingMode = "functional",
+      shadingModeArg = "structure",
+      shadingColors = "blues",
+      consensusColors = "ColdHot",
+      askForOverwrite = FALSE, verbose = FALSE,
+      furtherCode = c(
+        "\\defconsensus{.}{lower}{upper}",
+        "\\showruler{1}{top}"
+      )
+    )
   }
-  if(!is.null(out_path))
-  file.rename(paste0(fastafile_name, ".pdf"), out_path)
- 
-  else 
-  file.rename(paste0(fastafile_name, ".pdf"), pdf_path)
+  if (!is.null(out_path)) {
+    file.rename(paste0(fastafile_name, ".pdf"), out_path)
+  } else {
+    file.rename(paste0(fastafile_name, ".pdf"), pdf_path)
+  }
   ############
   ## REMOVE ##
   ############
@@ -127,7 +138,7 @@ msa_pdf <- function(fasta_path, out_path=NULL,
   ### BELOW not working: maybe use function to move file after texi2pdf called?
   # curr_dir <- here("data/alns")
 
-  ##??
+  ## ??
   # if(is.null(out_path)){
   #   #texi2pdf outputs files to the current working directory
   #   # make it output to directory of the fasta_file
@@ -160,31 +171,33 @@ msa_pdf <- function(fasta_path, out_path=NULL,
 ## Function to generate MSA using kalign
 ## ref: https://rdrr.io/github/mhahsler/rMSA/man/kalign.html
 ## https://github.com/mhahsler/rMSA
-generate_msa <- function(fa_file="", outfile=""){
-  prot_aa <- readAAStringSet(path=fa_file,
-                             format="fasta")
+generate_msa <- function(fa_file = "", outfile = "") {
+  prot_aa <- readAAStringSet(
+    path = fa_file,
+    format = "fasta"
+  )
   prot_aa
 
   ## Install kalign ?rMSA_INSTALL
   ## Messed up! Reimplement from kalign.R
   ## https://github.com/mhahsler/rMSA/blob/master/R/kalign.R
 
-  source("scripts/c2r.R")
+  # source("scripts/c2r.R")
 
   ## align the sequences
-  al <- kalign(prot_aa) #!! won't work!
+  al <- kalign(prot_aa) # !! won't work!
   al
 }
 
 ############################
 ## Input files: Fasta format
-#my_seqs_file <- read_tsv("data/alignments/pspn-duf3046-aln/pspn.31seq.aln.txt")
+# my_seqs_file <- read_tsv("data/alignments/pspn-duf3046-aln/pspn.31seq.aln.txt")
 # colnames(my_seqs_file) <- c("name", "sequence")
 # my_alignment <- as(my_seqs_file, "BStringSet")
 
-#for functions, take in a file path? or maybe a "StringSet"
-#Parameters: filepath? Upperbound, Lowerbound, pdfortex?
+# for functions, take in a file path? or maybe a "StringSet"
+# Parameters: filepath? Upperbound, Lowerbound, pdfortex?
 
-#fasta_path <- "C:/Users/samue/Desktop/pspn.31seq.aln.txt"
-#my_seqs <- readAAStringSet(fasta_path) #, format="fasta", seek.first.rec=T)
-#my_seqs_msa <- msa(my_seqs)
+# fasta_path <- "C:/Users/samue/Desktop/pspn.31seq.aln.txt"
+# my_seqs <- readAAStringSet(fasta_path) #, format="fasta", seek.first.rec=T)
+# my_seqs_msa <- msa(my_seqs)

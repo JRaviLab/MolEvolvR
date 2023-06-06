@@ -15,16 +15,15 @@ suppressPackageStartupMessages(library(here))
 # molevol_scripts
 source("R/colnames_molevol.R")
 source(here("R/colnames_molevol.R")) # to work locally
-#inpath <- c("../molevol_data/project_data/slps/full_analysis_20201207/")
+# inpath <- c("../molevol_data/project_data/slps/full_analysis_20201207/")
 
 #################################
 ## Fn to combine similar files ##
 #################################
-combine_files <- function(inpath=c("../molevol_data/project_data/phage_defense/"),
-                          pattern="*full_analysis.tsv",
-                          delim="\t", skip=0,
-                          col_names=T)
-{
+combine_files <- function(inpath = c("../molevol_data/project_data/phage_defense/"),
+                          pattern = "*full_analysis.tsv",
+                          delim = "\t", skip = 0,
+                          col_names = T) {
   #' Download the combined assembly summaries of genbank and refseq
   #' @author Janani Ravi
   #' @param inpath String of 'master' path where the files reside (recursive=T)
@@ -32,21 +31,26 @@ combine_files <- function(inpath=c("../molevol_data/project_data/phage_defense/"
   #' @param col_names Takes logical T/F arguments OR column names vector;
   #' usage similar to col_names parameter in `readr::read_delim`
 
-  source_files <- dir(path=inpath, pattern=pattern,
-                      recursive=T)
+  source_files <- dir(
+    path = inpath, pattern = pattern,
+    recursive = T
+  )
   source_files_path <- paste0(inpath, source_files)
-  combnd_files <- source_files_path %>% list %>%
-    pmap_dfr(read_delim, delim=delim,
-             col_names=col_names,
-             col_types=cols(Score=col_character()), # to avoid datatype error
-             skip=skip,
-             .id="ByFile")
+  combnd_files <- source_files_path %>%
+    list() %>%
+    pmap_dfr(read_delim,
+      delim = delim,
+      col_names = col_names,
+      col_types = cols(Score = col_character()), # to avoid datatype error
+      skip = skip,
+      .id = "ByFile"
+    )
 
-    return(combnd_files)
+  return(combnd_files)
 }
 
-    # pmap_dfr(fread, fill=T, na.strings=c(""), header=T) %>%
-    # rbindlist(., use.names=T, fill=T, idcol=NULL)
+# pmap_dfr(fread, fill=T, na.strings=c(""), header=T) %>%
+# rbindlist(., use.names=T, fill=T, idcol=NULL)
 
 #################
 ## Sample Runs ##
