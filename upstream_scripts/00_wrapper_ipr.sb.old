@@ -21,7 +21,7 @@
 #PBS -N molevol_analysis        # name of job being run
 
 ## change output directory based on user input
-OUTPATH=$PBS_O_WORKDIR
+OUTPATH=$SLURM_SUBMIT_DIR
 cd ${OUTPATH}
 
 ## USER INPUTS

@@ -3,7 +3,7 @@
 #PBS -l nodes=1:ppn=1 (FA: originally 8)
 ## COMPANION SCRIPT TO MOLEVOLVR APP ##
 ## Authors: Joe Burke
-OUTPATH=$PBS_O_WORKDIR
+OUTPATH=$SLURM_SUBMIT_DIR
 cd ${OUTPATH}
 ## USER INPUTS
 INFILE=$1
