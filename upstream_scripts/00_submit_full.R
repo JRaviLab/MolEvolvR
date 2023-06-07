@@ -49,9 +49,9 @@ submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL
   }
   # do analysis on query regardless of selected analysis
   if (by_domain == "TRUE") {
-    system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb '", domain_starting, " ", DB, " ", NHITS, " ", EVAL," T ", type, "'"))
+    system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb '", domain_starting, " ", DB, " ", NHITS, " ", EVAL, " T ", type, "'"))
   } else {
-    system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb '", sequences, " ", DB, " ", NHITS, " ", EVAL," T ",type, "'"))
+    system(paste0("qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb '", sequences, " ", DB, " ", NHITS, " ", EVAL, " T ", type, "'"))
   }
   num_runs <- num_runs + 1
   write(paste0("0/", num_runs, " analyses completed"), "status.txt")
