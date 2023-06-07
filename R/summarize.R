@@ -11,7 +11,7 @@ suppressPackageStartupMessages(library(rlang))
 conflicted::conflict_prefer("filter", "dplyr")
 
 filter_by_doms <- function(prot, column = "DomArch", doms_keep = c(), doms_remove = c(),
-                           ignore.case = FALSE){
+                           ignore.case = FALSE) {
   #' @author Samuel Chen, Janani Ravi
   #' @description filter_by_doms filters a data frame by identifying exact domain matches
   #' and either keeping or removing rows with the identified domain
@@ -31,40 +31,42 @@ filter_by_doms <- function(prot, column = "DomArch", doms_keep = c(), doms_remov
   # ^word$|(?<=\+)word$|(?<=\+)word(?=\+)|word(?=\+)
 
   # Make regex safe
-  doms_keep <- str_replace_all(string=doms_keep, pattern="\\(", replacement="\\\\(")
-  doms_keep <- str_replace_all(string=doms_keep, pattern="\\)", replacement="\\\\)")
-  doms_keep <- str_replace_all(string=doms_keep, pattern="\\+", replacement="\\\\+")
-  doms_keep <- str_replace_all(string=doms_keep, pattern="\\_", replacement="\\\\_")
-  doms_keep <- str_replace_all(string=doms_keep, pattern="\\?", replacement="\\\\?")
+  doms_keep <- str_replace_all(string = doms_keep, pattern = "\\(", replacement = "\\\\(")
+  doms_keep <- str_replace_all(string = doms_keep, pattern = "\\)", replacement = "\\\\)")
+  doms_keep <- str_replace_all(string = doms_keep, pattern = "\\+", replacement = "\\\\+")
+  doms_keep <- str_replace_all(string = doms_keep, pattern = "\\_", replacement = "\\\\_")
+  doms_keep <- str_replace_all(string = doms_keep, pattern = "\\?", replacement = "\\\\?")
 
-  doms_remove <- str_replace_all(string=doms_remove, pattern="\\(", replacement="\\\\(")
-  doms_remove <- str_replace_all(string=doms_remove, pattern="\\)", replacement="\\\\)")
-  doms_remove <- str_replace_all(string=doms_remove, pattern="\\+", replacement="\\\\+")
-  doms_remove <- str_replace_all(string=doms_remove, pattern="\\_", replacement="\\\\_")
-  doms_remove <- str_replace_all(string=doms_remove, pattern="\\?", replacement="\\\\?")
+  doms_remove <- str_replace_all(string = doms_remove, pattern = "\\(", replacement = "\\\\(")
+  doms_remove <- str_replace_all(string = doms_remove, pattern = "\\)", replacement = "\\\\)")
+  doms_remove <- str_replace_all(string = doms_remove, pattern = "\\+", replacement = "\\\\+")
+  doms_remove <- str_replace_all(string = doms_remove, pattern = "\\_", replacement = "\\\\_")
+  doms_remove <- str_replace_all(string = doms_remove, pattern = "\\?", replacement = "\\\\?")
 
-  col = sym(column)
+  col <- sym(column)
 
-  if(length(doms_keep) != 0)
-  {
-    keep_regex = paste0("^", doms_keep,
-                        "$|(?<=\\+)",doms_keep,
-                        "$|(?<=\\+)", doms_keep,
-                        "(?=\\+)|^", doms_keep,
-                        "(?=\\+)") %>%
+  if (length(doms_keep) != 0) {
+    keep_regex <- paste0(
+      "^", doms_keep,
+      "$|(?<=\\+)", doms_keep,
+      "$|(?<=\\+)", doms_keep,
+      "(?=\\+)|^", doms_keep,
+      "(?=\\+)"
+    ) %>%
       paste0(collapse = "|")
-    prot = prot %>% filter(grepl(keep_regex, {{col}}, ignore.case = ignore.case, perl = T))
+    prot <- prot %>% filter(grepl(keep_regex, {{ col }}, ignore.case = ignore.case, perl = T))
   }
 
-  if(length(doms_remove) != 0)
-  {
-    remove_regex = paste0("^", doms_remove,
-                          "$|(?<=\\+)",doms_remove,
-                          "$|(?<=\\+)", doms_remove,
-                          "(?=\\+)|^",doms_remove,
-                          "(?=\\+)") %>%
+  if (length(doms_remove) != 0) {
+    remove_regex <- paste0(
+      "^", doms_remove,
+      "$|(?<=\\+)", doms_remove,
+      "$|(?<=\\+)", doms_remove,
+      "(?=\\+)|^", doms_remove,
+      "(?=\\+)"
+    ) %>%
       paste0(collapse = "|")
-    prot = prot %>% filter(!grepl(remove_regex, {{col}}, ignore.case = ignore.case, perl = T))
+    prot <- prot %>% filter(!grepl(remove_regex, {{ col }}, ignore.case = ignore.case, perl = T))
   }
 
   return(prot)
@@ -75,137 +77,161 @@ filter_by_doms <- function(prot, column = "DomArch", doms_keep = c(), doms_remov
 ## Before/after break up ##
 ###########################
 ## Function to obtain element counts (DA, GC)
-count_bycol <- function(prot=prot, column="DomArch", min.freq=1) {
+count_bycol <- function(prot = prot, column = "DomArch", min.freq = 1) {
   counts <- prot %>%
     select(column) %>%
     table() %>%
     as_tibble() %>%
     `colnames<-`(c(column, "freq")) %>%
-    filter(!grepl("^-$", column)) %>%		# remove "-"
+    filter(!grepl("^-$", column)) %>% # remove "-"
     filter(!is.na(column)) %>%
-    arrange(-freq) %>% filter(freq>=min.freq)
+    arrange(-freq) %>%
+    filter(freq >= min.freq)
   return(counts)
 }
 
 ## Function to break up ELEMENTS to WORDS for DA and GC
-elements2words <- function(prot, column= "DomArch",conversion_type="da2doms") {
+elements2words <- function(prot, column = "DomArch", conversion_type = "da2doms") {
   z1 <- prot %>%
     select(column) %>%
-    str_replace_all("\\,"," ") %>%
-    str_replace_all("\""," ")
+    str_replace_all("\\,", " ") %>%
+    str_replace_all("\"", " ")
   switch(conversion_type,
-         da2doms = { z2 <- z1 %>%
-           str_replace_all("\\+"," ")},
-         gc2da = { z2 <- z1 %>%
-           str_replace_all("\\<-"," ") %>%
-           str_replace_all("-\\>"," ") %>%
-           str_replace_all("\\|"," ")})
+    da2doms = {
+      z2 <- z1 %>%
+        str_replace_all("\\+", " ")
+    },
+    gc2da = {
+      z2 <- z1 %>%
+        str_replace_all("\\<-", " ") %>%
+        str_replace_all("-\\>", " ") %>%
+        str_replace_all("\\|", " ")
+    }
+  )
   # str_replace_all("^c\\($", " ") %>%		# remove "c("
   # str_replace_all("\\)$", " ") %>%			# remove ")"
   # str_replace_all("\\(s\\)"," ") %>%		# Ignoring repeats
   # str_replace_all("-"," ") %>%
   ## replace \n, \r, \t
   z3 <- z2 %>%
-    str_replace_all("\n"," ") %>%
-    str_replace_all("\r"," ") %>%
-    str_replace_all("\t"," ") %>%
+    str_replace_all("\n", " ") %>%
+    str_replace_all("\r", " ") %>%
+    str_replace_all("\t", " ") %>%
     ## replace multiple spaces ...
-    str_replace_all("    "," ") %>%
-    str_replace_all("   "," ") %>%
-    str_replace_all("  "," ") %>%
-    str_replace_all("  "," ")
+    str_replace_all("    ", " ") %>%
+    str_replace_all("   ", " ") %>%
+    str_replace_all("  ", " ") %>%
+    str_replace_all("  ", " ")
   return(z3)
 }
 
 ## Function to get WORD COUNTS [DOMAINS (DA) or DOMAIN ARCHITECTURES (GC)]
 ## to be used after elements2words
-words2wc <- function(x){ x %>%
-    str_replace_all("   "," ") %>%
-    str_replace_all("  "," ") %>% str_replace_all("  "," ") %>%
-    paste(collapse=" ") %>%
+words2wc <- function(x) {
+  x %>%
+    str_replace_all("   ", " ") %>%
+    str_replace_all("  ", " ") %>%
+    str_replace_all("  ", " ") %>%
+    paste(collapse = " ") %>%
     strsplit(" ") %>%
     # filter(grepl(query.list[j], Query)) %>% # Create separate WCs for each Query
     # select(DA.wc) %>%
-    table() %>% as_tibble() %>%
+    table() %>%
+    as_tibble() %>%
     `colnames<-`(c("words", "freq")) %>%
     ## filter out 'spurious-looking' domains
     filter(!grepl(" \\{n\\}", words)) %>%
-    filter(!grepl("^c\\($", words)) %>%		# remove "c("
-    filter(!grepl("^\\)$", words)) %>%		# remove ")"
-    filter(!grepl("^-$", words)) %>%			# remove "-"
-    filter(!grepl("^$", words)) %>%				# remove empty rows
-    filter(!grepl("^\\?$", words)) %>%		# remove "?"
-    filter(!grepl("^\\?\\*$", words)) %>%	# remove "?*"
-    filter(!grepl("^tRNA$", words)) %>%		# remove "tRNA"
-    filter(!grepl("^ncRNA$", words)) %>%	# remove "ncRNA"
-    filter(!grepl("^rRNA$", words)) %>%		# remove "rRNA"
+    filter(!grepl("^c\\($", words)) %>% # remove "c("
+    filter(!grepl("^\\)$", words)) %>% # remove ")"
+    filter(!grepl("^-$", words)) %>% # remove "-"
+    filter(!grepl("^$", words)) %>% # remove empty rows
+    filter(!grepl("^\\?$", words)) %>% # remove "?"
+    filter(!grepl("^\\?\\*$", words)) %>% # remove "?*"
+    filter(!grepl("^tRNA$", words)) %>% # remove "tRNA"
+    filter(!grepl("^ncRNA$", words)) %>% # remove "ncRNA"
+    filter(!grepl("^rRNA$", words)) %>% # remove "rRNA"
     filter(!grepl("^X$|^X\\(s\\)$", words)) %>% # remove "X" and "X(s)"
 
     # filter(!grepl("\\*", words)) %>%			# Remove/Keep only Query
     arrange(-freq)
 }
 ## Function to filter based on frequencies
-filter_freq <- function(x, min.freq){ x %>%
-    filter(freq>=min.freq)
+filter_freq <- function(x, min.freq) {
+  x %>%
+    filter(freq >= min.freq)
 }
 
 #########################
 ## SUMMARY FUNCTIONS ####
 #########################
-summarize_bylin <- function(prot="prot", column="DomArch", by="Lineage",
-                            query){
-  column <- sym(column); by <- sym(by)
-  if(query== "all"){
+summarize_bylin <- function(prot = "prot", column = "DomArch", by = "Lineage",
+                            query) {
+  column <- sym(column)
+  by <- sym(by)
+  if (query == "all") {
     prot <- prot
-  } else { prot <- prot %>% filter(grepl(pattern=query, x={{column}},
-                                         ignore.case=T))}
+  } else {
+    prot <- prot %>% filter(grepl(
+      pattern = query, x = {{ column }},
+      ignore.case = T
+    ))
+  }
   prot %>%
-    filter(!grepl("^-$", {{column}})) %>%
-    group_by({{column}}, {{by}}) %>%
-    summarise(count=n()) %>% # , bin=as.numeric(as.logical(n()))
+    filter(!grepl("^-$", {{ column }})) %>%
+    group_by({{ column }}, {{ by }}) %>%
+    summarise(count = n()) %>% # , bin=as.numeric(as.logical(n()))
     arrange(desc(count))
 }
 
 
 ## Function to summarize and retrieve counts by Domains & Domains+Lineage
-summ.DA.byLin <- function(x) { x %>%
+summ.DA.byLin <- function(x) {
+  x %>%
     filter(!grepl("^-$", DomArch)) %>%
     group_by(DomArch, Lineage) %>%
-    summarise(count=n()) %>% # , bin=as.numeric(as.logical(n()))
+    summarise(count = n()) %>% # , bin=as.numeric(as.logical(n()))
     arrange(desc(count))
 }
 
 ## Function to retrieve counts of how many lineages a DomArch appears in
-summ.DA <- function(x){ x %>%
+summ.DA <- function(x) {
+  x %>%
     group_by(DomArch) %>%
-    summarise(totalcount=sum(count), totallin=n()) %>% # totallin=n_distinct(Lineage),
+    summarise(totalcount = sum(count), totallin = n()) %>% # totallin=n_distinct(Lineage),
     arrange(desc(totallin), desc(totalcount)) %>%
-    filter(!grepl(" \\{n\\}",DomArch)) %>%
+    filter(!grepl(" \\{n\\}", DomArch)) %>%
     filter(!grepl("^-$", DomArch))
 }
-summ.GC.byDALin <- function(x) { x %>%
+summ.GC.byDALin <- function(x) {
+  x %>%
     filter(!grepl("^-$", GenContext)) %>%
     filter(!grepl("^-$", DomArch)) %>%
-    filter(!grepl("^-$", Lineage)) %>% filter(!grepl("^NA$", DomArch)) %>%
+    filter(!grepl("^-$", Lineage)) %>%
+    filter(!grepl("^NA$", DomArch)) %>%
     group_by(GenContext, DomArch, Lineage) %>%
-    summarise(count=n()) %>% # , bin=as.numeric(as.logical(n()))
+    summarise(count = n()) %>% # , bin=as.numeric(as.logical(n()))
     arrange(desc(count))
 }
-summ.GC.byLin <- function(x) { x %>%
+summ.GC.byLin <- function(x) {
+  x %>%
     filter(!grepl("^-$", GenContext)) %>%
     filter(!grepl("^-$", DomArch)) %>%
-    filter(!grepl("^-$", Lineage)) %>% filter(!grepl("^NA$", DomArch)) %>%
+    filter(!grepl("^-$", Lineage)) %>%
+    filter(!grepl("^NA$", DomArch)) %>%
     group_by(GenContext, Lineage) %>% # DomArch.norep,
-    summarise(count=n()) %>% # , bin=as.numeric(as.logical(n()))
+    summarise(count = n()) %>% # , bin=as.numeric(as.logical(n()))
     arrange(desc(count))
 }
-summ.GC <- function(x) { x %>%
+summ.GC <- function(x) {
+  x %>%
     group_by(GenContext) %>%
-    summarise(totalcount=sum(count),
-              totalDA=n_distinct(DomArch),
-              totallin=n_distinct(Lineage)) %>% # totallin=n_distinct(Lineage),
+    summarise(
+      totalcount = sum(count),
+      totalDA = n_distinct(DomArch),
+      totallin = n_distinct(Lineage)
+    ) %>% # totallin=n_distinct(Lineage),
     arrange(desc(totalcount), desc(totalDA), desc(totallin)) %>%
-    filter(!grepl(" \\{n\\}",GenContext)) %>%
+    filter(!grepl(" \\{n\\}", GenContext)) %>%
     filter(!grepl("^-$", GenContext))
 }
 
@@ -213,13 +239,13 @@ summ.GC <- function(x) { x %>%
 ##################
 total_counts <- function(prot, column = "DomArch", lineage_col = "Lineage",
                          cutoff = 90, RowsCutoff = FALSE, digits = 2
-                         #type = "GC"
-){
-  #'Total Counts
+                         # type = "GC"
+) {
+  #' Total Counts
   #'
-  #'Creates a data frame with a totalcount column
+  #' Creates a data frame with a totalcount column
   #'
-  #'This function is designed to sum the counts column by either Genomic Context or Domain Architecture and creates a totalcount column from those sums.
+  #' This function is designed to sum the counts column by either Genomic Context or Domain Architecture and creates a totalcount column from those sums.
   #'
   #' @param prot A data frame that must contain columns:
   #' \itemize{\item Either 'GenContext' or 'DomArch.norep' \item count}
@@ -230,25 +256,33 @@ total_counts <- function(prot, column = "DomArch", lineage_col = "Lineage",
   #' column names.
   column <- sym(column)
 
-  prot <- select(prot, {{column}}, {{lineage_col}}) %>% filter(!is.na({{column}}) & !is.na({{lineage_col}})) %>%
-    filter({{column}} != "")
+  prot <- select(prot, {{ column }}, {{ lineage_col }}) %>%
+    filter(!is.na({{ column }}) & !is.na({{ lineage_col }})) %>%
+    filter({{ column }} != "")
 
-  prot <- summarize_bylin(prot, column, by =  lineage_col, query = "all")
-  col_count <-  prot %>% group_by({{column}}) %>% summarise(totalcount = sum(count))
+  prot <- summarize_bylin(prot, column, by = lineage_col, query = "all")
+  col_count <- prot %>%
+    group_by({{ column }}) %>%
+    summarise(totalcount = sum(count))
 
-  total <- left_join(prot,col_count, by = as_string(column))
+  total <- left_join(prot, col_count, by = as_string(column))
 
   sum_count <- sum(total$count)
-  total <- total %>% mutate("IndividualCountPercent" = totalcount/sum_count*100) %>%  arrange(-totalcount,-count)
+  total <- total %>%
+    mutate("IndividualCountPercent" = totalcount / sum_count * 100) %>%
+    arrange(-totalcount, -count)
 
-  cumm_percent <- total %>% select({{column}}, totalcount) %>% distinct() %>% mutate("CumulativePercent"=0)
-  total_counter = 0
-  for(x in length(cumm_percent$totalcount):1){
-    total_counter = total_counter + cumm_percent$totalcount[x]
-    cumm_percent$CumulativePercent[x] = total_counter/sum_count * 100
+  cumm_percent <- total %>%
+    select({{ column }}, totalcount) %>%
+    distinct() %>%
+    mutate("CumulativePercent" = 0)
+  total_counter <- 0
+  for (x in length(cumm_percent$totalcount):1) {
+    total_counter <- total_counter + cumm_percent$totalcount[x]
+    cumm_percent$CumulativePercent[x] <- total_counter / sum_count * 100
   }
 
-  cumm_percent <- cumm_percent %>% select( CumulativePercent, {{column}})
+  cumm_percent <- cumm_percent %>% select(CumulativePercent, {{ column }})
 
   total <- total %>% left_join(cumm_percent, by = as_string(column))
 
@@ -256,26 +290,26 @@ total_counts <- function(prot, column = "DomArch", lineage_col = "Lineage",
   total$CumulativePercent <- total$CumulativePercent %>% round(digits = digits)
   total$IndividualCountPercent <- total$IndividualCountPercent %>% round(digits = digits)
 
-  if(RowsCutoff)
-  {
+  if (RowsCutoff) {
     # If total counts is being used for plotting based on number of rows,
     # don't include other observations that fall below the cummulative percent cutoff
-    #, but that have the same 'totalcount' number as the cutoff observation
-    total <- total %>% filter(CumulativePercent >= 100-cutoff-.0001)
+    # , but that have the same 'totalcount' number as the cutoff observation
+    total <- total %>% filter(CumulativePercent >= 100 - cutoff - .0001)
     return(total)
   }
 
   # Include observations that fall below the cummulative percent cutoff,
   # but that have the same 'totalcount' as the cutoff observation
-  t <- total %>% filter(CumulativePercent >= 100-cutoff)
-  if(length(t) == 0){
-    cutoff_count = 0
-  }
-  else{
-    cutoff_count = t$totalcount[nrow(t)]
+  t <- total %>% filter(CumulativePercent >= 100 - cutoff)
+  if (length(t) == 0) {
+    cutoff_count <- 0
+  } else {
+    cutoff_count <- t$totalcount[nrow(t)]
   }
 
-  total <- total %>% filter(totalcount >= cutoff_count) %>% ungroup()
+  total <- total %>%
+    filter(totalcount >= cutoff_count) %>%
+    ungroup()
 
   return(total)
 }
@@ -358,31 +392,38 @@ total_counts <- function(prot, column = "DomArch", lineage_col = "Lineage",
 
 
 
-find_paralogs <- function(prot){
-  #'Find Paralogs
+find_paralogs <- function(prot) {
+  #' Find Paralogs
   #'
-  #'Creates a data frame of paralogs.
+  #' Creates a data frame of paralogs.
   #'
-  #'This function returns a dataframe containing paralogs and the counts.
+  #' This function returns a dataframe containing paralogs and the counts.
   #'
-  #'@param prot A data frame filtered by a Query, containing columns Species and Lineage
-  #'@example find_paralogs(pspa)
-  #'@note Please refer to the source code if you have alternate file formats and/or
-  #'column names.
+  #' @param prot A data frame filtered by a Query, containing columns Species and Lineage
+  #' @example find_paralogs(pspa)
+  #' @note Please refer to the source code if you have alternate file formats and/or
+  #' column names.
 
 
-  #Remove eukaryotes
-  prot <- prot %>% filter(!grepl("^eukaryota",Lineage))
-  paralogTable <- prot %>% group_by(GCA_ID) %>%
-    count(DomArch)%>%
-    filter(n>1 & GCA_ID != "-") %>% arrange(-n) %>% distinct()
-    #%>% ccNums" = filter(prot, grepl(GCA_ID, prot))$AccNum)
-  paralogTable$AccNums <- map(paralogTable$GCA_ID, function(x) filter(prot,grepl(x,GCA_ID))$AccNum)
-  colnames(paralogTable)[colnames(paralogTable)=="n"] = "Count"
-  ###Merge with columns: AccNum,TaxID, and GCA/ Species?
-  paralogTable <- prot %>% select(Species , GCA_ID, Lineage) %>%
-    right_join(paralogTable, by= c("GCA_ID")) %>%
-    filter(!is.na(Count)) %>% arrange(-Count) %>% select(-GCA_ID) %>% distinct()
+  # Remove eukaryotes
+  prot <- prot %>% filter(!grepl("^eukaryota", Lineage))
+  paralogTable <- prot %>%
+    group_by(GCA_ID) %>%
+    count(DomArch) %>%
+    filter(n > 1 & GCA_ID != "-") %>%
+    arrange(-n) %>%
+    distinct()
+  # %>% ccNums" = filter(prot, grepl(GCA_ID, prot))$AccNum)
+  paralogTable$AccNums <- map(paralogTable$GCA_ID, function(x) filter(prot, grepl(x, GCA_ID))$AccNum)
+  colnames(paralogTable)[colnames(paralogTable) == "n"] <- "Count"
+  ### Merge with columns: AccNum,TaxID, and GCA/ Species?
+  paralogTable <- prot %>%
+    select(Species, GCA_ID, Lineage) %>%
+    right_join(paralogTable, by = c("GCA_ID")) %>%
+    filter(!is.na(Count)) %>%
+    arrange(-Count) %>%
+    select(-GCA_ID) %>%
+    distinct()
   return(paralogTable)
 }
 
