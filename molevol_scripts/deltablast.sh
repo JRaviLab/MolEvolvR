@@ -7,20 +7,6 @@
 ###########
 export BLASTDB=/mnt/research/common-data/Bio/blastdb/v5:/mnt/research/common-data/Bio/blastdb/MoreFromJanani:/mnt/research/common-data/Bio/blastdb:/mnt/research/common-data/Bio/blastdb/FASTA:$BLASTDB
 
-## LOAD MODULES
-# OPTION 1
-# Loading HPC BLAST and BLAST+
-#module purge
-#module load BLAST/2.2.26-Linux_x86_64
-#module load icc/2017.4.196-GCC-6.4.0-2.28  impi/2017.3.196 BLAST+/2.8.1-Python-2.7.14
-
-## OPTION 2
-# Loading Bioinformatics modules from JJ
-# BLAST and BLAST+ are currently installed on the HPCC under 
-# /mnt/home/johnj/software and /mnt/home/johnj/software/BLAST+
-module use /mnt/home/johnj/software/modulefiles
-module load BLAST+ BioPerl
-
 #########
 ## I/O ##
 #########

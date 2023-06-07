@@ -43,20 +43,6 @@ export INTERPRO=/opt/software/iprscan/5.47.82.0-Python3/data:/data/common_data/i
 export SIGNALP=/var/interproscan/bin/signalp/4.1
 export NCBI_API_KEY=YOUR_KEY_HERE
 
-#####################
-## LOADING MODULES ##
-#####################
-
-# Prevent "module: command not found"
-# Read more about it https://www.sdsc.edu/support/user_guides/tscc.html
-source /etc/profile.d/modules.sh 
-
-module purge 					## clear loaded modules
-module load R		 			## load R
-module load edirect 
-module load BLAST				## load blast (for blastclust				## load edirect
-module load iprscan 				## load iprscan
-
 start=$SECONDS 					## get current time
 START_DT=$(date '+%d/%m/%Y-%H:%M:%S')
 

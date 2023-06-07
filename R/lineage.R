@@ -374,7 +374,6 @@ prot2tax_old <- function(accessions, out_path, plan = "multicore") {
   #' the ipg database
   #' @param out_path Path to write the efetch results to
   if (length(accessions) > 0) {
-    system("module load edirect")
 
     partition <- function(v, groups) {
       # Partition data to limit number of queries per second for rentrez fetch:
