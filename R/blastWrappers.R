@@ -1,9 +1,8 @@
 suppressPackageStartupMessages(library(tidyverse))
 
 run_deltablast <- function(deltablast_path, db_search_path,
-                           db="refseq", query, evalue = "1e-5",
-                           out, num_alignments, num_threads = 1)
-{
+                           db = "refseq", query, evalue = "1e-5",
+                           out, num_alignments, num_threads = 1) {
   #' Run DELTABLAST to find homologs for proteins of interest
   #' @author Samuel Chen, Janani Ravi
   #' @param path
@@ -17,26 +16,27 @@ run_deltablast <- function(deltablast_path, db_search_path,
 
   start <- Sys.time()
 
-  system(paste0("export BLASTDB=/",db_search_path ))
+  system(paste0("export BLASTDB=/", db_search_path))
 
-  system2(command = deltablast_path,
-          args = c("-db", db,
-                   "-query", query,
-                   "-evalue", evalue,
-                   "-out", out,
-                   "-num_threads", num_threads,
-                   "-num_alignments", num_alignments
-                   #   ,"-outfmt", outfmt
-          )
+  system2(
+    command = deltablast_path,
+    args = c(
+      "-db", db,
+      "-query", query,
+      "-evalue", evalue,
+      "-out", out,
+      "-num_threads", num_threads,
+      "-num_alignments", num_alignments
+      #   ,"-outfmt", outfmt
+    )
   )
-  print(Sys.time()-start)
+  print(Sys.time() - start)
 }
 
 
 run_rpsblast <- function(rpsblast_path, db_search_path,
-                         db="refseq", query, evalue = "1e-5",
-                         out, num_threads = 1)
-{
+                         db = "refseq", query, evalue = "1e-5",
+                         out, num_threads = 1) {
   #' Run RPSBLAST to generate domain architectures for proteins of interest
   #' @author Samuel Chen, Janani Ravi
   #' @param path
@@ -48,14 +48,16 @@ run_rpsblast <- function(rpsblast_path, db_search_path,
   #' @param num_threads
   start <- Sys.time()
   system(paste0("export BLASTDB=/", db_search_path))
-  system2(command = rpsblast_path,
-          args = c("-db", db,
-                   "-query", query,
-                   "-evalue", evalue,
-                   "-out", out,
-                   "-num_threads", num_threads
-                   #                  , "-outfmt", outfmt
-          )
+  system2(
+    command = rpsblast_path,
+    args = c(
+      "-db", db,
+      "-query", query,
+      "-evalue", evalue,
+      "-out", out,
+      "-num_threads", num_threads
+      #                  , "-outfmt", outfmt
+    )
   )
-  print(Sys.time()-start)
+  print(Sys.time() - start)
 }
