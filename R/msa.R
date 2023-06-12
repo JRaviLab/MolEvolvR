@@ -122,9 +122,11 @@ msa_pdf <- function(fasta_path, out_path = NULL,
     )
   }
   if (!is.null(out_path)) {
-    file.rename(paste0(fastafile_name, ".pdf"), out_path)
+    file.copy(paste0(fastafile_name, ".pdf"), out_path)
+    unlink(fastafile_name)
   } else {
-    file.rename(paste0(fastafile_name, ".pdf"), pdf_path)
+    file.copy(paste0(fastafile_name, ".pdf"), pdf_path)
+    unlink(fastafile_name)
   }
   ############
   ## REMOVE ##
