@@ -24,7 +24,7 @@ get_sequences <- function(sequences, acc_file_path = "accs.txt", dir_path = "~",
   return(length(seqs))
 }
 
-submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL = 0.0005, sequences = "~/test.fa", phylo = "FALSE", by_domain = "FALSE", domain_starting = "~/domain_seqs.fa", type = "full") {
+submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 100, EVAL = 0.0005, sequences = "~/test.fa", phylo = "FALSE", by_domain = "FALSE", domain_starting = "~/domain_seqs.fa", type = "full") {
   setwd(dir)
 
   # write job submission params to file
@@ -94,7 +94,7 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
   system(paste0("qsub -t 1-", length(unique(df$Query), "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb 'accs.txt ", " F F'")))
 }
 
-submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa", ncbi = FALSE, blast = FALSE, DB = "refseq", NHITS = 5000, EVAL = 0.0005) {
+submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa", ncbi = FALSE, blast = FALSE, DB = "refseq", NHITS = 100, EVAL = 0.0005) {
   setwd(dir)
 
   # write job submission params to file
