@@ -8,7 +8,7 @@ library(data.table)
 library(gggenes)
 library(ggplot2)
 #source("../the-approach/R/pre-msa-tree.R") # for "to_titlecase()"
-source("/data/research/jravilab/molevol_scripts/R/colnames_molevol.R")
+source("C:/Users/ethan/OneDrive/molevol_testing/molevol_scripts/R/colnames_molevol.R")
 
 #################################
 ## Modified gggenes::theme_genes
@@ -41,17 +41,16 @@ find_top_acc = function(infile_full,
                         query)
 {
   lin_sym = sym(lin_col)
-  #cln = fread(infile_full, sep ="\t", fill = T)
   cln <- infile_full
   if (query != "All"){
-    cln <- cln %>% filter(cln$QueryName == query)
+    cln <- read_tsv(cln) %>% filter(Query == query)
   }
   cols <- colnames(cln)
   domarch_cols = cols[which(grepl("^DomArch",cols) & !grepl("repeats$", cols) )]
   cln_domarch <- cln %>% select(domarch_cols)
   col_counts <- colSums(is.na(cln_domarch))
   DA_sym <- sym(names(which.min(col_counts)))
-  showNotification(paste0("Selecting representatives by unique ",DA_sym, " and lineage combinations"))
+  #showNotification(paste0("Selecting representatives by unique ",DA_sym, " and lineage combinations"))
   ## Group by Lineage, DomArch and reverse sort by group counts
   grouped = cln %>%
     group_by({{DA_sym}}, {{lin_sym}}) %>%
@@ -59,9 +58,9 @@ find_top_acc = function(infile_full,
     summarise(count = n(), AccNum = dplyr::first(AccNum)) %>%
     arrange(-count) %>%
     filter({{lin_sym}} != "" && {{DA_sym}} != "")
-  top_acc <- grouped$AccNum[1:n]
-  top_acc <- na.omit(top_acc)
-  return(top_acc)
+  top_accnum <- grouped$AccNum[1:n]
+  top_accnum <- na.omit(top_accnum)
+  return(top_accnum)
 }
 
 
@@ -84,13 +83,14 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL, accessions = c(),
              '#FFE4B5', 'black', '#FF7F50', '#FFB90F', '#FF69B4', '#836FFF',
              '#757575','#CD3333', '#EE7600', '#CDAD00', '#556B2F', '#7AC5CD')
   ## Read IPR file
+  '
   ipr_out <- read_tsv(infile_ipr, col_names=T, col_types = iprscan_cols)
   ipr_out <- ipr_out %>% filter(Name %in% accessions)
   analysis_cols <- paste0("DomArch.", analysis)
   infile_full <- infile_full %>% select(analysis_cols, Lineage_short, QueryName, PcPositive, AccNum)
   ## To filter by Analysis
   analysis = paste(analysis, collapse = "|")
-  ## @SAM: This can't be set in stone since the analysis may change!
+  ## @SAM: This cannot be set in stone since the analysis may change!
   ## Getting top n accession numbers using find_top_acc()
   top_acc <- find_top_acc(infile_full=infile_full,
                           DA_col = "DomArch.Pfam",
@@ -170,6 +170,7 @@ ipr2viz <- function(infile_ipr=NULL, infile_full=NULL, accessions = c(),
       guides(fill=guide_legend(nrow=10))
   }
   return(plot)
+  '
 }
 
 ipr2viz_web <- function(infile_ipr,

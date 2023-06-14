@@ -332,8 +332,7 @@ generate_all_aln2fa <- function(aln_path=here("data/rawdata_aln/"),
        reduced=reduced)
 }
 
-
-acc2fa <- function(accessions, outpath, plan="sequential")
+acc2fa <- function(accessions, outpath)
 {
   #' acc2fa converts protein accession numbers to a fasta format.
   #' Resulting fasta file is written to the outpath.
@@ -343,9 +342,12 @@ acc2fa <- function(accessions, outpath, plan="sequential")
   #' Function may not work for vectors of length > 10,000
   #' @param outpath String. Location where fasta file should be written to.
   #' @example acc2fa(accessions=c("ACU53894.1", "APJ14606.1", "ABK37082.1"), outpath="my_proteins.fasta")
-
+  sequences <- entrez_fetch(db = 'protein', id = accessions, rettype = 'fasta', retmode = 'text')
+  writeLines(sequences, outpath)
+  '
+  print(length(accessions))
   if(length(accessions) > 0){
-
+    print("Test1")
     partition <- function(v, groups){
       # Partition data to limit number of queries per second for rentrez fetch:
       # limit of 10/second w/ key
@@ -364,11 +366,10 @@ acc2fa <- function(accessions, outpath, plan="sequential")
 
     min_groups <- length(accessions)/200
     groups <- min(max(min_groups,15) ,length(accessions))
-
-    partitioned_acc <- partition(accessions, groups )
+    
+    partitioned_acc <- partition(accessions, groups)
     sink(outpath)
-
-
+  
     # a <- foreach::foreach(x=1:length(partitioned_acc), .inorder=TRUE, .packages="rentrez") %dopar% {
     #   cat(
     #     entrez_fetch(id=partitioned_acc[[x]],
@@ -378,6 +379,8 @@ acc2fa <- function(accessions, outpath, plan="sequential")
     #     )
     #   )
     # }
+    print(length(partitioned_acc))
+    
     a <- map(1:length(partitioned_acc), function(x)
     {
       if(x %% 9 == 0)
@@ -393,6 +396,7 @@ acc2fa <- function(accessions, outpath, plan="sequential")
       ) #%...>% cat()
     }
     )
+    
     for(f in a)
     {
       cat(value(f))
@@ -415,6 +419,7 @@ acc2fa <- function(accessions, outpath, plan="sequential")
     # )
     sink(NULL)
   }
+  '
 }
 
 
