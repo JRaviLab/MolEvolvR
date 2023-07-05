@@ -4,13 +4,15 @@ Version: 0.0.0.9000
 Title: Molecular Evolution and Phylogeny
 Description: This R package provides a system for characterizing proteins using molecular evolution and phylogeny.
 Authors@R:
-    c(person("Janani", "Ravi", email = "janani@msu.edu", role = c("aut", "cre"),
+    c(person("Janani", "Ravi", email = "janani.ravi@cuanschutz.edu", role = c("aut", "cre"),
         comment=c(ORCID="0000-0001-7443-925X")),
     person("Samuel", "Chen", role = "aut",
         comment = c(ORCID = "")),
-    person("Lauren", "Sosinski", role = "aut",
+    person("Lo", "Sosinski", role = "aut",
         comment = c(ORCID = "")),
     person("Joseph", "Burke", role = "aut",
+        comment = c(ORCID = "")),
+    person("Jacob", "Krol", role = "aut",
         comment = c(ORCID = "")))
 Depends:
     R (>= 3.5.1)
@@ -19,7 +21,9 @@ LazyData: true
 URL: https://github.com/jravilab/molevolvr
 BugReports: https://github.com/jravilab/molevolvr/issues
 Imports:
-    tidyverse,
+    tidyr,
+    dplyr,
+    ggplot2,
     conflicted,
     here,
     UpSetR,
@@ -43,4 +47,4 @@ Roxygen: list(markdown = TRUE)
 NeedsCompilation: yes
 Encoding: UTF-8
 LinkingTo: Rcpp
-Maintainer: Janani Ravi <janani@msu.edu>
+Maintainer: Janani Ravi <janani.ravi@cuanschutz.edu>
