@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## COMPANION SCRIPT TO MOLEVOLVR APP ##
-## Authors: Janani Ravi, Lauren Sosinski
+## Authors: Janani Ravi, Lo Sosinski
 
 ## Input type: web or command-line IPRSCAN runs | expects iprscan.tsv files
 ## Output type: IPR file with DomArch added + protein metadata such as TaxID, Species, Lineage, Name & such

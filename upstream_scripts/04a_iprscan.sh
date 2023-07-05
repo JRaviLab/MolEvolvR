@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # created by Phil Calhoun on May 8th, 2019
-# edited by Lauren Sosinski on 2020.09.03
+# edited by Lo Sosinski on 2020.09.03
 # standard outformat
 
 ## Load query files
