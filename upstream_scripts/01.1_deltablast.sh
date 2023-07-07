@@ -46,12 +46,12 @@
 ################
 
 ## FILEPATHS: I/O
-INFILE=$1
-PREFIX=$2
-OUTDIR=$3
-DB=$4
-NHITS=$5
-EVAL=$6
+INFILE="$1"
+PREFIX="$2"
+OUTDIR="$3"
+DB="$4"
+NHITS="$5"
+EVAL="$6"
 OUTFILE=$(printf "${OUTDIR}/${PREFIX}.dblast.tsv")
 
 ## Print I/O messages
@@ -61,10 +61,12 @@ printf "\nOutput filepath: ${OUTFILE}\n"
 
 ## Designating different outfiles/parameters based on $DB
 case "$DB" in
-  nr ) dblast_db="nr" ;;
-  refseq ) dblast_db="refseq_protein" ;;
+    nr ) dblast_db="nr" ;;
+    refseq ) dblast_db="refseq_protein" ;;
 esac
 
 ## core script
-deltablast -query $INFILE -db $dblast_db -evalue $EVAL -num_alignments $NHITS -out "$OUTFILE" -num_threads 10 -outfmt '6 qacc sacc sseqid sallseqid stitle sscinames staxids pident length mismatch gapopen qstart qend qlen sstart send slen evalue bitscore ppos'
+deltablast -query ${INFILE} -db ${dblast_db} -evalue ${EVAL} \
+    -num_alignments ${NHITS} -out ${OUTFILE} -num_threads 10 \
+    -outfmt '6 qacc sacc sseqid sallseqid stitle sscinames staxids pident length mismatch gapopen qstart qend qlen sstart send slen evalue bitscore ppos'
 
