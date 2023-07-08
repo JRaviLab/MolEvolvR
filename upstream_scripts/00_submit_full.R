@@ -100,47 +100,21 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
   write(yml, "job_args.yml")
 
   df_blast <- read_tsv(blast, col_names = web_blastp_hit_colnames)
-  # get the accesion numbers (accnums) for homologs only
-  homolog_accnums <- df_blast %>% filter(AccNum != Query) %>% select(AccNum) %>% distinct()
-  n_homologs <- nrow(homolog_accnums)
-  write_tsv(homolog_accnums, "accs.txt", col_names = FALSE)
-  # make a folder for each homologous protein and write the the filtered rows
-  for (homolog in base::unique(df_blast$AccNum)) {
-    folder <- paste0(homolog, "_blast")
-    file <- paste0(homolog, ".dblast.tsv")
-    df_homolog <- df_blast %>% filter(AccNum == homolog)
-    dir.create(folder)
-    write_tsv(df_homolog, file.path(folder, file), col_names = FALSE)
-  }
-  cmd_blast_homologs <- paste0(
-    "qsub -N ", make_job_name(job_code, "blast_homologs"), 
-    " -t 1-", n_homologs, 
-    " /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb 'accs.txt", " F F'"
-  )
-  submit_and_log(cmd_blast_homologs)
 
-  # select rows for blast query proteins (note: this is atypical, most submissions will only have a single query protein)
-  # using 2 methods
-  # 1. if the accnums match between query and hit, then use that
-  df_query <- df_blast %>% 
-    filter(Query == AccNum) %>% 
-    distinct(Query, .keep_all = TRUE) # ensure no duplicates w/ distinct()
-  # 2. if there's no match, then use the highest PcIdentity record 
-    # first, find which queries did not have a hit w/ a matching accnum
-  remaining_queries <- setdiff(df_blast$Query, df_query$Query)
-    # second, sort by PcIdentity and use these records as the closest match 
-    # to the query
-  remaining_query_rows <- df_blast %>%
-    filter(Query %in% remaining_queries) %>%
-    arrange(desc(PcIdentity)) %>%
-    distinct(Query, .keep_all = TRUE)
-  # resulting table containing only rows w/ unique query accnums
-  df_query <- bind_rows(df_query, remaining_query_rows)
+  # get a df of only the unique query protein(s)
+  df_query <- df_blast %>% distinct(Query, .keep_all = TRUE)
+  # JK: for some reason we've been overwriting the AccNum 
+  # of the input tsv to be the same as the Query col.
+  # i'm not sure why, but i'm leaving it here for now
+  df_query$AccNum <- df_blast$Query
   write_tsv(df_query, "blast_query.tsv", col_names = FALSE)
+  # write the col of unique accession numbers of queries to a file
+  write(df_query$Query, "accs.txt")
 
   # setup logfile table
   write("START_DT\tSTOP_DT\tquery\tacc2info\tacc2fa\tcln_blast\tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2da\trps_blast\trps2da\tduration", "logfile.tsv")
-  # do analysis on the queries
+
+  # submit job for query proteins only
   if (ncbi) {
     cmd_blast_query_ncbi <- paste0("qsub -N ", make_job_name(job_code, "blast_query_ncbi"), 
       " /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb 'blast_query.tsv ",
@@ -154,8 +128,35 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
     )
     submit_and_log(cmd_blast_query)
   }
-  # n homologs + query
-  num_runs <- 1 + n_homologs 
+
+  # split dataframes by query and write them to their 
+  # own output sub-directory
+  for (df_split in split(df_blast, f = ~ Query)) {
+    folder <-  paste0(unique(df_split$Query), "_blast")
+    file <- paste0(unique(df_split$Query), ".dblast.tsv")
+    dir.create(folder)
+    write_tsv(df, file.path(folder, file) col_names = FALSE)
+  }
+
+  # submit job array that is batched by the number of queries
+  # for undergoing analysis on each table that was
+  # split by the unique protein queries
+  # for example, 
+  #   a blast table that only had one query protein will
+  #   just be one job, but 2 queries protein would be split into 2 jobs, etc.
+  # notably, the analysis on the query protein itself is still 
+  # done in the first submission above
+  n_queries <- length(distinct(df_blast$Query))
+  cmd_blast_homologs <- paste0(
+    "qsub -N ", make_job_name(job_code, "blast"), 
+    " -t 1-", n_queries, 
+    " /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb 'accs.txt", " F F'"
+  )
+  submit_and_log(cmd_blast_homologs)
+
+  # 1 is from the initial job on just the query proteins themselves
+  # n_queries represents the total number of unique query proteins
+  num_runs <- 1 + n_queries 
   write(paste0("0/", num_runs, " analyses completed"), "status.txt")
 }
 
