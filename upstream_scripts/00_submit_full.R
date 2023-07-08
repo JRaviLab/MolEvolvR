@@ -88,7 +88,7 @@ submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL
 submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/seqs.fa", ncbi = FALSE, job_code=NULL) {
   # starts jobs for BLAST output app submissions
   # a query sequence(s) file can be provided,
-  # or the sequences can be parsed from the AccNum column of input blast table
+  # or the sequences can be parsed from the Query column of input blast table
   setwd(dir)
 
   # write job submission params to file
