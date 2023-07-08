@@ -69,7 +69,7 @@ else
 	ACC_NUM=$(sed -n "${SLURM_ARRAY_TASK_ID}"p "${INPUTPATHS_LIST}")
 	# set name/prefix for output files/directories
    	PREFIX=${ACC_NUM}	
-	# outdir was created in submit_blast() func
+	# outdir was created in submit_blast() func of submit_full.R
    	OUTDIR=${OUTPATH}/${ACC_NUM}_blast
     cd ${OUTDIR} || exit
 
@@ -131,9 +131,7 @@ printf "\nTotal run time: $dur\n"
 STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
 
 ## Add benchmarking times to logfile
-printf "${START_DT}\t${STOP_DT}\t${PREFIX}\t${acc2info_dur}\t${acc2fa_dur}\t${blast_cln_dur}\t"\
-	"${bclust_dur}\t${c2t_dur}\t${ipr_dur}\t${ipr2lin_dur}\t${ipr2da_dur}\t"\
-	"${rps_dur}\t${rps2da_dur}\t${dur}\n" >> ${OUTPATH}/logfile.tsv
+printf "${START_DT}\t${STOP_DT}\t${PREFIX}\t${acc2info_dur}\t${acc2fa_dur}\t${blast_cln_dur}\t${bclust_dur}\t${c2t_dur}\t${ipr_dur}\t${ipr2lin_dur}\t${ipr2da_dur}\t${rps_dur}\t${rps2da_dur}\t${dur}\n" >> ${OUTPATH}/logfile.tsv
 
 	## And how much time is left
 	#timeleft=$(( $total - $dur ))
@@ -147,13 +145,9 @@ printf "${START_DT}\t${STOP_DT}\t${PREFIX}\t${acc2info_dur}\t${acc2fa_dur}\t${bl
 NUM_RUNS=$(wc -l "${OUTPATH}"/logfile.tsv | grep -Eo "^[[:digit:]]+")
 # minus one for column headers
 ((NUM_RUNS-=1))
-#if [ -e "${OUTPATH}"/accs.txt ]
-#then
 TOTAL_RUNS=$(wc -l "${OUTPATH}"/accs.txt | grep -Eo "^[[:digit:]]+")
-#((TOTAL_RUNS+=1))
-#else
-#TOTAL_RUNS=1
-#fi
+# plus one for query_only run
+((TOTAL_RUNS+=1))
 if [ $TOTAL_RUNS = $NUM_RUNS ]
 then
   touch ../done.txt

@@ -106,13 +106,19 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
   # JK: for some reason we've been overwriting the AccNum 
   # of the input tsv to be the same as the Query col.
   # i'm not sure why, but i'm leaving it here for now
-  df_query$AccNum <- df_blast$Query
+  df_query$AccNum <- df_query$Query
   write_tsv(df_query, "blast_query.tsv", col_names = FALSE)
   # write the col of unique accession numbers of queries to a file
   write(df_query$Query, "accs.txt")
 
   # setup logfile table
-  write("START_DT\tSTOP_DT\tquery\tacc2info\tacc2fa\tcln_blast\tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2da\trps_blast\trps2da\tduration", "logfile.tsv")
+  write(
+    paste0(
+      "START_DT\tSTOP_DT\tquery\tacc2info\tacc2fa\tcln_blast\tblast_clust\t",
+      "clust2table\tiprscan\tipr2lineage\tipr2da\trps_blast\trps2da\tduration"
+    ),
+    file = "logfile.tsv"
+  )
 
   # submit job for query proteins only
   if (ncbi) {
@@ -135,7 +141,7 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
     folder <-  paste0(unique(df_split$Query), "_blast")
     file <- paste0(unique(df_split$Query), ".dblast.tsv")
     dir.create(folder)
-    write_tsv(df, file.path(folder, file) col_names = FALSE)
+    write_tsv(df_split, file.path(folder, file), col_names = FALSE)
   }
 
   # submit job array that is batched by the number of queries
@@ -146,7 +152,7 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
   #   just be one job, but 2 queries protein would be split into 2 jobs, etc.
   # notably, the analysis on the query protein itself is still 
   # done in the first submission above
-  n_queries <- length(distinct(df_blast$Query))
+  n_queries <- length(base::unique(df_blast$Query))
   cmd_blast_homologs <- paste0(
     "qsub -N ", make_job_name(job_code, "blast"), 
     " -t 1-", n_queries, 
