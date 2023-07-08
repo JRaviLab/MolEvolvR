@@ -181,7 +181,6 @@ NUM_RUNS=$(wc -l ${OUTPATH}/logfile.tsv | awk -F " " '{print $1}')
 if [ ! -e "${OUT_PATH}"/accs.txt ]; then
 	TOTAL_RUNS=$(wc -l ${OUTPATH}/accs.txt | awk -F " " '{print $1}')
 	((TOTAL_RUNS+=1))
-# i.e., for non homology search submissions
 else
 	TOTAL_RUNS=1
 fi
