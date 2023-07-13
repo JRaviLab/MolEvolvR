@@ -105,6 +105,13 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
   # !!! 
   # the AccNum column here is overwritten for downstream joining between ipr-da columns and 
   # blast data ipr2da.R's append_ipr()
+  # AccNum is overwritten by Query only for quick analyses on query proteins. 
+  # this is to populate the Query data tab and not the Homolog data tab.
+  # the intermediate query file currently, wrongly, carries the homology information as well
+  # but this is fixed downstream in the app in molevolvr_app/scripts/MolEvolData_class.R 
+  # where the spurious columns are removed before displaying in the web-app. 
+  # These cols need to be removed upstream (before intermediate files are written) at a later time. 
+  # #NextMilestone
   # !!!
   df_query$AccNum <- df_query$Query
   write_tsv(df_query, "blast_query.tsv", col_names = FALSE)
