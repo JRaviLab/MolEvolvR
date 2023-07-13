@@ -29,17 +29,16 @@ make_job_name <- function(job_code, suffix = "molevol_analysis") {
   if (!is.null(job_code)) paste(job_code, suffix, sep="_") else suffix
 }
 
- #####     FA: i've left my debugging code here as an example of how to write messages
- #####     to the docker container log and actually be able to see them
- #####     (without flush.console(), you have to wait until the output buffer is full,
- #####     which in my recent experience didn't happen until i restarted the container)
-submit_and_log <- function(cmd) {
+# print info on slurm submission errors
+submit_and_log <- function(cmd, exit = FALSE) {
   submit_result <- system(cmd)
+  if (submit_result != 0L && exit == TRUE) stop(paste0("failed to submit job; error code: ", submit_result, "\n", "cmd=", cmd))
   cat(file=stderr(), paste0("Ran command ", cmd, ", result: ", submit_result))
   flush.console()
 }
 
 submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL = 0.0005, sequences = "~/test.fa", phylo = "FALSE", by_domain = "FALSE", domain_starting = "~/domain_seqs.fa", type = "full", job_code=NULL) {
+  # submits jobs for fasta, MSA, or accession number type submissions
   setwd(dir)
   # write job submission params to file
   job_args <- list(
@@ -86,7 +85,7 @@ submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL
 }
 
 submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/seqs.fa", ncbi = FALSE, job_code=NULL) {
-  # starts jobs for BLAST output app submissions
+  # starts analysis for an input blast tsv
   # a query sequence(s) file can be provided,
   # or the sequences can be parsed from the Query column of input blast table
   setwd(dir)
@@ -103,9 +102,10 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
 
   # get a df of only the unique query protein(s)
   df_query <- df_blast %>% distinct(Query, .keep_all = TRUE)
-  # JK: for some reason we've been overwriting the AccNum 
-  # of the input tsv to be the same as the Query col.
-  # i'm not sure why, but i'm leaving it here for now
+  # !!! 
+  # the AccNum column here is overwritten for downstream joining between ipr-da columns and 
+  # blast data ipr2da.R's append_ipr()
+  # !!!
   df_query$AccNum <- df_query$Query
   write_tsv(df_query, "blast_query.tsv", col_names = FALSE)
   # write the col of unique accession numbers of queries to a file

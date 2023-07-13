@@ -78,6 +78,7 @@ ipr2da <- function(infile_ipr, prefix,
 
 ## function to add results from ipr2da to blast results
 append_ipr <- function(ipr_da, blast, prefix) {
+  # ! an 'AccNum' or 'AccNum.noV' column is required in blast table for joining !
   blast_out <- read_tsv(blast, col_names = T)
   if ("AccNum.noV" %in% colnames(blast_out)) {
     ipr_da <- read_tsv(paste0(prefix, ".ipr_domarch.tsv"), col_names = T)

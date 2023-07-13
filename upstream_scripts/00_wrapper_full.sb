@@ -5,7 +5,7 @@
 
 # Created: 2020.07.09
 # Last modified: 2023.07.06
-# Authors: Lauren Sosinski, Janani Ravi, Joe Burke, Jake Krol
+# Authors: Lo Sosinski, Janani Ravi, Joe Burke, Jake Krol
 # On GitHub: currently in jravilab/molevol_scripts/upstream_scripts
 
 # Input type: text file containing paths to individual fasta files to analyze
@@ -28,34 +28,17 @@
 # for homologs
 #  	qsub -N "<job_code>_<type>" -t 1-<num_seqs> /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb 'input.txt <blast_database> <blast_hits> <blast_evalue> F <type>''
 
-# helper functions
-function exit_w_msg () {
-    echo -e "*** error: $1"
-    exit ${2:-1} # exit code default is 1, can be overwridden by $2
-}
-function print_header () {
-    # use to organize stdout
-    printf "\n"
-    echo "$1"
-    for i in {1..80}; do
-        printf "="
-    done
-    printf "\n"
-}
-
-print_header "BEGIN $0 for job: ${SLURM_JOB_ID}"
-
 ## change output directory based on user input
 OUTPATH=$SLURM_SUBMIT_DIR
 cd ${OUTPATH}
 
 ## USER INPUTS
-INPUTPATHS_LIST=$1
-DB=$2
-NHITS=$3
-EVAL=$4
-IS_QUERY=$5
-TYPE=$6
+INPUTPATHS_LIST="${1?'ERROR parameter INPUTPATHS_LIST [str] unspecified'}"
+DB="${2?'ERROR parameter DB [str] unspecified'}" 
+NHITS="${3?'ERROR parameter NHITS [int] unspecified'}"
+EVAL="${4?'ERROR parameter EVAL [float] unspecified'}"
+IS_QUERY="${5?'ERROR parameter IS_QUERY [T/F] unspecified'}"
+TYPE="${6?'ERROR parameter TYPE [str] unspecified'}"
 
 # Location of databases/dependencies
 export BLASTDB=/data/common_data/blastdb/v6
@@ -85,8 +68,10 @@ if [ "$IS_QUERY" = "T" ]; then
 	fi
 
 	cd ${OUTDIR} || exit
-	#Acc2info
+	## ACC2INFO ##
+	acc2info_start=$SECONDS
 	sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
+	acc2info_dur=$(( $SECONDS - $acc2info_start ))
 	cp ${OUTDIR}/${PREFIX}.acc2info.tsv ${OUTDIR}/${PREFIX}.blast.cln.tsv
 else
 	# Handle homolog data
@@ -169,17 +154,18 @@ if [ "$TYPE" != "dblast" ] || [ "$IS_QUERY" = "T" ]; then
 	#Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05b_rps2da.R ${OUTDIR}/${PREFIX}.rps.out ${OUTDIR}/${PREFIX}.cln.clust.ipr.tsv ${PREFIX}
 	rps2da_dur=$(( $SECONDS - $rps2da_start ))
 fi
-	cp ${FILE} ${OUTDIR}	# copy fasta file to output directory
+cp ${FILE} ${OUTDIR}	# copy fasta file to output directory
 
-	## Figure out how long the entire script took to run
-	dur=$(( $SECONDS - $start ))
-	printf "\nTotal run time: $dur\n"
-	STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
+## Figure out how long the entire script took to run
+dur=$(( $SECONDS - $start ))
+printf "\nTotal run time: $dur\n"
+STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
 
-	## Add benchmarking times to logfile
-	printf "${START_DT}\t${STOP_DT}\t${PREFIX}\t${db_dur}\t${acc2info_dur}\t\
-        ${db_cln_dur}\t${acc2fa_dur}\t${bclust_dur}\t${c2t_dur}\t\
-        ${ipr_dur}\t${ipr2lin_dur}\t${ipr2da_dur}\t${dur}\n" >> ${OUTPATH}/logfile.tsv
+## Add benchmarking times to logfile
+RUNTIMES_ROW="${START_DT:-NA}\t${STOP_DT:-NA}\t${PREFIX:-NA}\t${db_dur:-NA}\t${acc2info_dur:-NA}\t"
+RUNTIMES_ROW+="${db_cln_dur:-NA}\t${acc2fa_dur:-NA}\t${bclust_dur:-NA}\t${c2t_dur:-NA}\t"
+RUNTIMES_ROW+="${ipr_dur:-NA}\t${ipr2lin_dur:-NA}\t${ipr2da_dur:-NA}\t${dur:-NA}\n"
+printf "${RUNTIMES_ROW}" >> ${OUTPATH}/logfile.tsv
 
 	## And how much time is left
 	#timeleft=$(( $total - $dur ))
@@ -199,13 +185,17 @@ else
 TOTAL_RUNS=1
 fi
 
+# handling phylogenetic analysis where input.txt is never created
+if [ ! -e "${OUTPATH}"/input.txt ]; then
+TOTAL_RUNS=1
+fi
+
 if [ $TOTAL_RUNS = $NUM_RUNS ]; then
   touch ../done.txt
 fi
 
 echo "${NUM_RUNS} / ${TOTAL_RUNS} jobs completed" > ../status.txt
 
-print_header "END $0 for job: ${SLURM_JOB_ID}"
 
 # FA: disabled b/c docker's handling perms
 # setfacl -R -m group:shiny:r-x ${OUTDIR}

@@ -5,10 +5,7 @@
 
 # Created: 2020.07.09
 # Last modified: 2023.07.09
-# Authors: Lauren Sosinski, Janani Ravi, Jake Krol
-
-# Input type: text file containing paths to individual fasta files to analyze (DO_BLAST=T)
-# 	OR the interproscan query TSV file (DO_BLAST=F)
+# Authors: Lo Sosinski, Janani Ravi, Jake Krol
 
 ############
 ## TORQUE ##
@@ -22,32 +19,20 @@
 ## add flags/help function after finishing script and/or gencontext
 ## talk to Sam about how this works with Pins package
 
-## USER INPUTS
+# inputs
+# 	text file containing paths to individual fasta files, commonly called 'input.txt',
+# 		to analyze (DO_BLAST=T)
+# 	OR the interproscan query TSV file (DO_BLAST=F && IS_QUERY=T)
 
-## USAGE
-## qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "input.txt F"
-## qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "example_blastp.csv T"
+# usage
+# option 1: homology search analysis
+# 	qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F 'input.txt F T <blast_database> <blast_hits> <blast_evalue>'
+# option 2: ipr query tsv analysis only
+# 	qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F 'xxxxxx_ipr_query.tsv T F'
 
-# helper functions
-function exit_w_msg () {
-    echo -e "*** error: $1"
-    exit ${2:-1} # exit code default is 1, can be overwridden by $2
-}
-function print_header () {
-    # use to organize stdout
-    printf "\n"
-    echo "$1"
-    for i in {1..80}; do
-        printf "="
-    done
-    printf "\n"
-}
-
-print_header "BEGIN $0 for job: ${SLURM_JOB_ID}"
 ## change output directory based on user input
 OUTPATH="${SLURM_SUBMIT_DIR}"
 cd ${OUTPATH}
-
 
 # Location of databases/dependencies 
 export BLASTDB=/data/common_data/blastdb/v6
@@ -56,21 +41,25 @@ export INTERPRO=/opt/software/iprscan/5.47.82.0-Python3/data:/data/common_data/i
 export SIGNALP=/var/interproscan/bin/signalp/4.1
 export NCBI_API_KEY=YOUR_KEY_HERE
 
-start=$SECONDS 					## get current time
+start=$SECONDS
 START_DT=$(date '+%d/%m/%Y-%H:%M:%S')
 
 #total=$(( ((3*60)+50)*60 ))			## total time the job can take in seconds, this should match your SBATCH line above
 #maxtime=$(( 120*60 )) 				## maximum time to process one input, need to do some experimenting with your inputs
-INPUTPATHS_LIST=$1 # this argument passed here is either accs.txt when DO_BLAST = T; else: query_data/query_data.iprscan.tsv
-IS_QUERY=$2
-DO_BLAST=$3
-DB=$4
-NHITS=$5
-EVAL=$6
+### args
+# required
+# $1 should be either accs.txt when DO_BLAST=T and IS_QUERY=F; else: query_data/query_data.iprscan.tsv
+INPUTPATHS_LIST="${1?'ERROR parameter INPUTPATHS_LIST [str] unspecified'}" 
+IS_QUERY="${2?'ERROR parameter IS_QUERY [T/F] unspecified'}"
+DO_BLAST="${3?'ERROR parameter DO_BLAST [T/F] unspecified'}"
+# optional
+DB="${4}" 
+NHITS="${5}"
+EVAL="${6}"
 if [ "$IS_QUERY" = "T" ]; then
 	PREFIX="query_data"
 	OUTDIR=${OUTPATH}/${PREFIX}
-	mkdir ${OUTDIR}				## make the directory
+	mkdir ${OUTDIR}
 	cp ${INPUTPATHS_LIST} ${OUTDIR}/${PREFIX}.iprscan.tsv
 	cd ${OUTDIR} || exit
 	cp ../seqs.fa ${OUTDIR}/${PREFIX}.all_accnums.fa
@@ -95,7 +84,6 @@ then
 	FASTA_PATH=$(sed -n "${SLURM_ARRAY_TASK_ID}"p "${INPUTPATHS_LIST}")
 	# rm full path, get just the seq filename
 	FASTA=$(basename ${FASTA_PATH})
-	print_header "homology search for ${FASTA}; SLURM_ID=${SLURM_ARRAY_TASK_ID} starting at ${START_DT}"
 	# rm suffix and set var for output paths
    	PREFIX=$(echo "${FASTA%%.faa}")
 	# create output subdir for this seq
@@ -157,7 +145,11 @@ printf "\nTotal run time: $dur\n"
 STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
 
 ## Add benchmarking times to logfile
-printf "${START_DT}\t${STOP_DT}\t${PREFIX}\t${db_dur}\t${acc2info_dur}\t${db_cln_dur}\t${acc2fa_dur}\t${bclust_dur}\t${c2t_dur}\t${ipr_dur}\t${ipr2lin_dur}\t${ipr2da_dur}\t${dur}\n" >> ${OUTPATH}/logfile.tsv
+RUNTIMES_ROW="${START_DT:-NA}\t${STOP_DT:-NA}\t${PREFIX:-NA}\t${db_dur:-NA}\t"
+RUNTIMES_ROW+="${acc2info_dur:-NA}\t${db_cln_dur:-NA}\t${acc2fa_dur:-NA}\t"
+RUNTIMES_ROW+="${bclust_dur:-NA}\t${c2t_dur:-NA}\t${ipr_dur:-NA}\t${ipr2lin_dur:-NA}\t"
+RUNTIMES_ROW+="${ipr2da_dur:-NA}\t${dur:-NA}\n"
+printf "${RUNTIMES_ROW}" >> ${OUTPATH}/logfile.tsv
 
 ## And how much time is left
 #timeleft=$(( $total - $dur ))
@@ -175,13 +167,17 @@ NUM_RUNS=$(wc -l ${OUTPATH}/logfile.tsv | awk -F " " '{print $1}')
 # minus 1 for the tsv column header line
 ((NUM_RUNS-=1))
 
-# accs.txt file means that the job sumbmission does NOT 
+# input.txt file means that the job sumbmission does
 # include homology search and we have to treat the job 
 # progress tracking accordingly; see submit_ipr() from 00_submit_full.R
-if [ ! -e "${OUT_PATH}"/accs.txt ]; then
-	TOTAL_RUNS=$(wc -l ${OUTPATH}/accs.txt | awk -F " " '{print $1}')
+if [ -e "${OUTPATH}"/input.txt ]; then
+	# count number of sequences that will undergo homology search
+	# and full analysis
+	TOTAL_RUNS=$(wc -l ${OUTPATH}/input.txt | awk -F " " '{print $1}')
+	# add one for the query job
 	((TOTAL_RUNS+=1))
 else
+	# for no homology search, only a single query job will run
 	TOTAL_RUNS=1
 fi
 # test if all jobs have been completed
@@ -190,4 +186,3 @@ if [ "${TOTAL_RUNS}" = "${NUM_RUNS}" ]; then
 fi
 
 echo "${NUM_RUNS} / ${TOTAL_RUNS} jobs completed" > ../status.txt
-print_header "END $0 for job: ${SLURM_JOB_ID}"
