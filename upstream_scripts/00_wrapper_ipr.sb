@@ -2,39 +2,37 @@
 
 # MolEvolvR: Companion wrapper script
 # accnum –> fasta –> deltablast -> edirect -> blastclust -> iprscan/rpsblast -> cleanup w/ lineages!
-# To run on compute.cvm.msu.edu
 
 # Created: 2020.07.09
-# Last modified: 2020.12.14
-# Authors: Lauren Sosinski, Janani Ravi
-# On GitHub: currently in jravilab/molevol_scripts/upstream_scripts
-
-# Input type: text file containing paths to individual fasta files to analyze
+# Last modified: 2023.07.09
+# Authors: Lo Sosinski, Janani Ravi, Jake Krol
 
 ############
 ## TORQUE ##
 ############
-#PBS -l nodes=1:ppn=1		# number of nodes requested (FA: originally 10)
+#PBS -l nodes=1:ppn=1		# number of nodes requested, specify wall time (FA: originally 10)
 #PBS -m abe			# email notifications for job
-#PBS -M=sosinsk7@msu.edu	# user email; RESET
+#PBS -M=falquaddoomi@gmail.com	# user email; (FA: originally jravilab.msu@gmail.com)
 #PBS -N molevol_analysis	# name of job being run
-
-## print start/stop printf in individual scripts
-
-## change output directory based on user input
-OUTPATH=$SLURM_SUBMIT_DIR
-cd ${OUTPATH}
 
 ## !! NOTES FOR LS ##
 ## add flags/help function after finishing script and/or gencontext
 ## talk to Sam about how this works with Pins package
 
-## USER INPUTS
+# inputs
+# 	text file containing paths to individual fasta files, commonly called 'input.txt',
+# 		to analyze (DO_BLAST=T)
+# 	OR the interproscan query TSV file (DO_BLAST=F && IS_QUERY=T)
 
+# usage
+# option 1: homology search analysis
+# 	qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F 'input.txt F T <blast_database> <blast_hits> <blast_evalue>'
+# option 2: ipr query tsv analysis only
+# 	qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F 'xxxxxx_ipr_query.tsv T F'
 
-## USAGE
-## qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "input.txt F"
-## qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "example_blastp.csv T"
+## change output directory based on user input
+OUTPATH="${SLURM_SUBMIT_DIR}"
+cd ${OUTPATH}
 
 # Location of databases/dependencies 
 export BLASTDB=/data/common_data/blastdb/v6
@@ -43,36 +41,38 @@ export INTERPRO=/opt/software/iprscan/5.47.82.0-Python3/data:/data/common_data/i
 export SIGNALP=/var/interproscan/bin/signalp/4.1
 export NCBI_API_KEY=YOUR_KEY_HERE
 
-start=$SECONDS 					## get current time
+start=$SECONDS
 START_DT=$(date '+%d/%m/%Y-%H:%M:%S')
 
 #total=$(( ((3*60)+50)*60 ))			## total time the job can take in seconds, this should match your SBATCH line above
 #maxtime=$(( 120*60 )) 				## maximum time to process one input, need to do some experimenting with your inputs
-INPUTPATHS_LIST=$1
-IS_QUERY=$2
-DO_BLAST=$3
-DB=$4
-NHITS=$5
-EVAL=$6
-if [ "$IS_QUERY" = "T" ]
-# Handle the query data
-then
-PREFIX="query_data"
-OUTDIR=${OUTPATH}/${PREFIX}
-mkdir ${OUTDIR}				## make the directory
-cp ${INPUTPATHS_LIST} ${OUTDIR}/${PREFIX}.iprscan.tsv
-cd ${OUTDIR} || exit
-cp ../seqs.fa ${OUTDIR}/${PREFIX}.all_accnums.fa
-cp ../accs.txt ${OUTDIR}/${PREFIX}.all_accnums.txt
+### args
+# required
+# $1 should be either input.txt when DO_BLAST=T and IS_QUERY=F; else: query_data/query_data.iprscan.tsv
+INPUTPATHS_LIST="${1?'ERROR parameter INPUTPATHS_LIST [str] unspecified'}" 
+IS_QUERY="${2?'ERROR parameter IS_QUERY [T/F] unspecified'}"
+DO_BLAST="${3?'ERROR parameter DO_BLAST [T/F] unspecified'}"
+# optional
+DB="${4}" 
+NHITS="${5}"
+EVAL="${6}"
+if [ "$IS_QUERY" = "T" ]; then
+	PREFIX="query_data"
+	OUTDIR=${OUTPATH}/${PREFIX}
+	mkdir ${OUTDIR}
+	cp ${INPUTPATHS_LIST} ${OUTDIR}/${PREFIX}.iprscan.tsv
+	cd ${OUTDIR} || exit
+	cp ../seqs.fa ${OUTDIR}/${PREFIX}.all_accnums.fa
+	cp ../accs.txt ${OUTDIR}/${PREFIX}.all_accnums.txt
 	## ACC2INFO ##
 	acc2info_start=$SECONDS
 	sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
 	acc2info_dur=$(( $SECONDS - $acc2info_start ))
-  ## IPR2LIN ##
+  	## IPR2LIN ##
 	ipr2lin_start=$SECONDS
 	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.4_ipr2lin.R ${OUTDIR}/${PREFIX}.iprscan.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX
 	ipr2lin_dur=$(( $SECONDS - $ipr2lin_start ))
-  ## IPR2DA ##
+  	## IPR2DA ##
 	ipr2da_start=$SECONDS
 	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${PREFIX}.iprscan_cln.tsv ${PREFIX} ${OUTDIR}/${PREFIX}.acc2info.tsv
 	ipr2da_dur=$(( $SECONDS - $ipr2da_start ))
@@ -80,17 +80,21 @@ fi
 if [ "$DO_BLAST" = "T" ] && [ "$IS_QUERY" = "F" ]
 then
 # Handle homolog data
-	FILE=$(sed -n "${SLURM_ARRAY_TASK_ID}"p "${INPUTPATHS_LIST}")
-	F=$(basename ${FILE})
-   	PREFIX=$(echo "${F%%.faa}")	## takes PREFIX of file
-   	OUTDIR=${OUTPATH}/${PREFIX}_ipr	## variable containing output filepath based PREFIX
-    printf "${PREFIX}\n"			## make the directory
+	# get the sequence path for this batch iteration
+	FASTA_PATH=$(sed -n "${SLURM_ARRAY_TASK_ID}"p "${INPUTPATHS_LIST}")
+	# rm full path, get just the seq filename
+	FASTA=$(basename ${FASTA_PATH})
+	# rm suffix and set var for output paths
+   	PREFIX=$(echo "${FASTA%%.faa}")
+	# create output subdir for this seq
+   	OUTDIR=${OUTPATH}/${PREFIX}_ipr
     mkdir ${OUTDIR}
-    cp ${PREFIX}.faa ${OUTDIR}
+	# cp seq to output subdir
+    cp ${FASTA} ${OUTDIR}
     cd ${OUTDIR} || exit
-    	## DELTABLAST ##
+    ## DELTABLAST ##
 	db_start=$SECONDS
-	sh /data/research/jravilab/molevol_scripts/upstream_scripts/01.1_deltablast.sh  ${PREFIX}.faa $PREFIX $OUTDIR $DB $NHITS $EVAL
+	sh /data/research/jravilab/molevol_scripts/upstream_scripts/01.1_deltablast.sh  ${FASTA} $PREFIX $OUTDIR $DB $NHITS $EVAL
 	db_dur=$(( $SECONDS - $db_start ))
 
     ## ACC2FA -- getting fasta FILES for deltablast output(s)
@@ -107,7 +111,7 @@ then
 	db_cln_start=$SECONDS
 	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.2_cleanup_blast.R ${OUTDIR}/${PREFIX}.dblast.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX F
 	db_cln_dur=$(( $SECONDS - $db_cln_start ))
-  ## BLASTCLUST ##
+    ## BLASTCLUST ##
 	bclust_start=$SECONDS
 	sh /data/research/jravilab/molevol_scripts/upstream_scripts/03.1_blastclust.sh ${OUTDIR}/${PREFIX}.all_accnums.fa $PREFIX $OUTDIR
 	bclust_dur=$(( $SECONDS - $bclust_start ))
@@ -122,7 +126,7 @@ then
 	ipr_start=$SECONDS
 	sh /data/research/jravilab/molevol_scripts/upstream_scripts/04a_iprscan.sh ${OUTDIR}/${PREFIX}.all_accnums.fa ${PREFIX} ${OUTDIR}
 	ipr_dur=$(( $SECONDS - $ipr_start ))
-  ## IPR2LIN ##
+  	## IPR2LIN ##
 	#Append colnames to beginning of ipr file
 	sed -i '1s/^/AccNum\tSeqMD5Digest\tSLength\tAnalysis\tDB.ID\tSignDesc\tStartLoc\tStopLoc\tScore\tStatus\tRunDate\tIPRAcc\tIPRDesc\n/' ${OUTDIR}/${PREFIX}.iprscan.tsv
 	ipr2lin_start=$SECONDS
@@ -135,80 +139,50 @@ then
 	ipr2da_dur=$(( $SECONDS - $ipr2da_start ))
 fi
 
-	## Figure out how long the entire script took to run
-	dur=$(( $SECONDS - $start ))
-	printf "\nTotal run time: $dur\n"
-	STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
+## Figure out how long the entire script took to run
+dur=$(( $SECONDS - $start ))
+printf "\nTotal run time: $dur\n"
+STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
 
-	## Add benchmarking times to logfile
-	printf "${START_DT}\t${STOP_DT}\t${PREFIX}\t${db_dur}\t${acc2info_dur}\t${db_cln_dur}\t${acc2fa_dur}\t${bclust_dur}\t${c2t_dur}\t${ipr_dur}\t${ipr2da_dur}\t${dur}\n" >> ${OUTPATH}/logfile.tsv
+## Add benchmarking times to logfile
+RUNTIMES_ROW="${START_DT:-NA}\t${STOP_DT:-NA}\t${PREFIX:-NA}\t${db_dur:-NA}\t"
+RUNTIMES_ROW+="${acc2info_dur:-NA}\t${db_cln_dur:-NA}\t${acc2fa_dur:-NA}\t"
+RUNTIMES_ROW+="${bclust_dur:-NA}\t${c2t_dur:-NA}\t${ipr_dur:-NA}\t${ipr2lin_dur:-NA}\t"
+RUNTIMES_ROW+="${ipr2da_dur:-NA}\t${dur:-NA}\n"
+printf "${RUNTIMES_ROW}" >> ${OUTPATH}/logfile.tsv
 
-	## And how much time is left
-	#timeleft=$(( $total - $dur ))
+## And how much time is left
+#timeleft=$(( $total - $dur ))
 
-        ## If there's a chance we get a long input to process, then
-        ## resubmit this job, then kill this job
-        #     if [ ${timeleft} -lt ${maxtime} ]; then
-        #       sbatch --array=${SLURM_ARRAY_TASK_ID} $0
-        #      scancel ${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}
-        #  fi
-        #
+	## If there's a chance we get a long input to process, then
+	## resubmit this job, then kill this job
+	#     if [ ${timeleft} -lt ${maxtime} ]; then
+	#       sbatch --array=${SLURM_ARRAY_TASK_ID} $0
+	#      scancel ${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}
+	#  fi
+	#
         
-#NUM_RUNS=$(wc -l "${OUTPATH}"/logfile.tsv | grep -Eo "^[[:digit:]]+")
-## Subtract one job count for DO_BLAST (homology search selected ipr runs)
-#if [ $DO_BLAST = "T" ]
-#then 
-#    ((NUM_RUNS-=1))
-#fi
-#if [ -e "${OUTPATH}"/accs.txt ]
-#then
-#TOTAL_RUNS=$(wc -l "${OUTPATH}"/accs.txt | grep -Eo "^[[:digit:]]+")
-## plus one accounting for column headers in line count of logfile.tsv
-#((TOTAL_RUNS+=1))
-#else
-#TOTAL_RUNS=1
-#fi
+# use logfile records to count how many jobs there are
+NUM_RUNS=$(wc -l ${OUTPATH}/logfile.tsv | awk -F " " '{print $1}')
+# minus 1 for the tsv column header line
+((NUM_RUNS-=1))
 
-# hacky workaround for ipr submissions with Homology Search selected
-#   utilizes the fact that the DO_BLAST call to this wrapper will take much 
-#   longer. 
-#   When DO_BLAST = F (t_duration = short) while DO_BLAST = T (t_duration = long)
-
-# if Homology search is selected, we expect the DO_BLAST run to be the 
-#   rate limiting step; make done.txt after DO_BLAST finishes
-if [ -f "../blast_progress.txt" ]
-then
-    # if this is just the ipr query run, not the blast run
-    if [ ${DO_BLAST} = "F" ]
-    then
-        printf "Query analysis complete.\nRunning homology search and full analysis \
-            . . ." > ../status.txt
-        exit 0
-    # if blast run is done 
-    elif [ ${DO_BLAST} = "T" ]
-    then
-        printf "Query analysis & homology search + full analysis complete.\n" \
-            > ../status.txt
-        printf "Finished\n" > ../blast_progress.txt
-        # testing how status file looks
-        echo "${NUM_RUNS} / ${TOTAL_RUNS} jobs completed" > ../status.txt
-        touch ../done.txt
-        exit 0
-    fi
-# for ipr submits with NO homology search
-elif [ ! -f "../blast_progress.txt" ]
-then
-    printf "1/1 jobs completed\n" > ../status.txt
-    touch ../done.txt
+# input.txt file means that the job sumbmission does
+# include homology search and we have to treat the job 
+# progress tracking accordingly; see submit_ipr() from 00_submit_full.R
+if [ -e "${OUTPATH}"/input.txt ]; then
+	# count number of sequences that will undergo homology search
+	# and full analysis
+	TOTAL_RUNS=$(wc -l ${OUTPATH}/input.txt | awk -F " " '{print $1}')
+	# add one for the query job
+	((TOTAL_RUNS+=1))
+else
+	# for no homology search, only a single query job will run
+	TOTAL_RUNS=1
+fi
+# test if all jobs have been completed
+if [ "${TOTAL_RUNS}" = "${NUM_RUNS}" ]; then
+	touch ../done.txt # working dir is one level below main job output dir
 fi
 
-#
-#if [ $TOTAL_RUNS = $NUM_RUNS ]
-#then
-#  touch ../done.txt
-#fi
-#  echo "${NUM_RUNS} / ${TOTAL_RUNS} jobs completed" > ../status.txt
-
-
-
-
+echo "${NUM_RUNS} / ${TOTAL_RUNS} jobs completed" > ../status.txt
