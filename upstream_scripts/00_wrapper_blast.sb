@@ -5,7 +5,7 @@
 
 # Created: 2020.07.09
 # Last modified: 2023.07.06
-# Authors: Lauren Sosinski, Janani Ravi, Joe Burke, Jake Krol
+# Authors: Lo Sosinski, Janani Ravi, Joe Burke, Jake Krol
 
 # input
 # 	option 1: a web blast tsv (the query)
@@ -44,9 +44,9 @@ START_DT=$(date '+%d/%m/%Y-%H:%M:%S')
 
 #total=$(( ((3*60)+50)*60 ))			## total time the job can take in seconds, this should match your SBATCH line above
 #maxtime=$(( 120*60 )) 				## maximum time to process one input, need to do some experimenting with your inputs
-INPUTPATHS_LIST=$1
-IS_QUERY=$2
-HAS_SEQUENCES=$3
+INPUTPATHS_LIST="${1?'ERROR parameter INPUTPATHS_LIST; requires accs.txt (IS_QUERY=F) or blast_query.tsv (IS_QUERY=T)'}"
+IS_QUERY="${2?'ERROR parameter IS_QUERY [T/F] unspecified'}"
+HAS_SEQUENCES="${3?'ERROR parameter HAS_SEQUENCES [T/F] unspecified'}"
 if [ "$IS_QUERY" = "T" ]; then
 	# set name for output files/directories
 	PREFIX="query_data"
