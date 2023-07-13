@@ -2,11 +2,10 @@
 
 # MolEvolvR: Companion wrapper script
 # accnum –> fasta –> deltablast -> edirect -> blastclust -> iprscan/rpsblast -> cleanup w/ lineages!
-# To run on compute.cvm.msu.edu
 
 # Created: 2020.07.09
-# Last modified: 2020.12.14
-# Authors: Lauren Sosinski, Janani Ravi
+# Last modified: 2023.07.06
+# Authors: Lo Sosinski, Janani Ravi, Joe Burke, Jake Krol
 # On GitHub: currently in jravilab/molevol_scripts/upstream_scripts
 
 # Input type: text file containing paths to individual fasta files to analyze
@@ -19,27 +18,27 @@
 #PBS -M=falquaddoomi@gmail.com	# user email; (FA: originally jravilab.msu@gmail.com)
 #PBS -N molevol_analysis	# name of job being run
 
-## print start/stop printf in individual scripts
+## !! NOTES FOR LS ##
+## add flags/help function after finishing script and/or gencontext
+## talk to Sam about how this works with Pins package
+
+## USAGE
+# for query
+# 	qsub -N "<job_code>_<type>" /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb '<seqs.fa> <database> <blast_hits> <blast_evalue> T <type>'
+# for homologs
+#  	qsub -N "<job_code>_<type>" -t 1-<num_seqs> /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb 'input.txt <blast_database> <blast_hits> <blast_evalue> F <type>''
 
 ## change output directory based on user input
 OUTPATH=$SLURM_SUBMIT_DIR
 cd ${OUTPATH}
 
-## !! NOTES FOR LS ##
-## add flags/help function after finishing script and/or gencontext
-## talk to Sam about how this works with Pins package
-
 ## USER INPUTS
-INPUTPATHS_LIST=$1
-DB=$2
-NHITS=$3
-EVAL=$4
-IS_QUERY=$5
-TYPE=$6
-
-## USAGE
-## qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "input.txt F"
-## qsub /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb -F "example_blastp.csv T"
+INPUTPATHS_LIST="${1?'ERROR parameter INPUTPATHS_LIST [str] unspecified'}"
+DB="${2?'ERROR parameter DB [str] unspecified'}" 
+NHITS="${3?'ERROR parameter NHITS [int] unspecified'}"
+EVAL="${4?'ERROR parameter EVAL [float] unspecified'}"
+IS_QUERY="${5?'ERROR parameter IS_QUERY [T/F] unspecified'}"
+TYPE="${6?'ERROR parameter TYPE [str] unspecified'}"
 
 # Location of databases/dependencies
 export BLASTDB=/data/common_data/blastdb/v6
@@ -54,26 +53,28 @@ START_DT=$(date '+%d/%m/%Y-%H:%M:%S')
 #total=$(( ((3*60)+50)*60 ))			## total time the job can take in seconds, this should match your SBATCH line above
 #maxtime=$(( 120*60 )) 				## maximum time to process one input, need to do some experimenting with your inputs
 if [ "$IS_QUERY" = "T" ]; then
-# Handle the query data
-FILE="$INPUTPATHS_LIST"
-F=$(basename ${FILE})
-PREFIX="query_data"
-OUTDIR=${OUTPATH}/${PREFIX}
-mkdir ${OUTDIR}				## make the directory
-cat $FILE >> ${OUTDIR}/${PREFIX}.all_accnums.fa
+	# Handle the query data
+	FILE="$INPUTPATHS_LIST"
+	F=$(basename ${FILE})
+	PREFIX="query_data"
+	OUTDIR=${OUTPATH}/${PREFIX}
+	mkdir ${OUTDIR}				## make the directory
+	cat $FILE >> ${OUTDIR}/${PREFIX}.all_accnums.fa
 
 	if [ -e starting_accs.txt ]; then
-cp starting_accs.txt ${OUTDIR}/${PREFIX}.all_accnums.txt
-else
-cp accs.txt ${OUTDIR}/${PREFIX}.all_accnums.txt
-fi
+		cp starting_accs.txt ${OUTDIR}/${PREFIX}.all_accnums.txt
+	else
+		cp accs.txt ${OUTDIR}/${PREFIX}.all_accnums.txt
+	fi
 
-cd ${OUTDIR} || exit
-#Acc2info
-sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
-cp ${OUTDIR}/${PREFIX}.acc2info.tsv ${OUTDIR}/${PREFIX}.blast.cln.tsv
+	cd ${OUTDIR} || exit
+	## ACC2INFO ##
+	acc2info_start=$SECONDS
+	sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
+	acc2info_dur=$(( $SECONDS - $acc2info_start ))
+	cp ${OUTDIR}/${PREFIX}.acc2info.tsv ${OUTDIR}/${PREFIX}.blast.cln.tsv
 else
-# Handle homolog data
+	# Handle homolog data
 	FILE=$(sed -n "${SLURM_ARRAY_TASK_ID:-1}"p "${INPUTPATHS_LIST}")
 	F=$(basename ${FILE})
    	PREFIX=$(echo "${F%%.faa}")	## takes PREFIX of file
@@ -103,15 +104,15 @@ else
 	db_cln_dur=$(( $SECONDS - $db_cln_start ))
 fi 
 
-	## BLASTCLUST ##
-	bclust_start=$SECONDS
-	sh /data/research/jravilab/molevol_scripts/upstream_scripts/03.1_blastclust.sh ${OUTDIR}/${PREFIX}.all_accnums.fa $PREFIX $OUTDIR
-	bclust_dur=$(( $SECONDS - $bclust_start ))
+## BLASTCLUST ##
+bclust_start=$SECONDS
+sh /data/research/jravilab/molevol_scripts/upstream_scripts/03.1_blastclust.sh ${OUTDIR}/${PREFIX}.all_accnums.fa $PREFIX $OUTDIR
+bclust_dur=$(( $SECONDS - $bclust_start ))
 
-	## CLUST2TABLE
-	c2t_start=$SECONDS
-	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/03.2_clust2table.R ${OUTDIR}/${PREFIX}.bclust.L60S80.tsv ${OUTDIR}/${PREFIX}.blast.cln.tsv
-	c2t_dur=$(( $SECONDS - $c2t_start ))
+## CLUST2TABLE
+c2t_start=$SECONDS
+Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/03.2_clust2table.R ${OUTDIR}/${PREFIX}.bclust.L60S80.tsv ${OUTDIR}/${PREFIX}.blast.cln.tsv
+c2t_dur=$(( $SECONDS - $c2t_start ))
 
 if [ "$TYPE" != "dblast" ] || [ "$IS_QUERY" = "T" ]; then
 	## INTERPROSCAN ##
@@ -123,28 +124,26 @@ if [ "$TYPE" != "dblast" ] || [ "$IS_QUERY" = "T" ]; then
 	## IPR2LIN ##
 	#Append colnames to beginning of ipr file
 	LINE_COUNT=$(wc -l ${OUTDIR}/${PREFIX}.iprscan.tsv | grep -Eo "^[[:digit:]]+")
-	if [ $LINE_COUNT -eq 0 ];
-	then
-	printf "AccNum\tSeqMD5Digest\tSLength\tAnalysis\tDB.ID\tSignDesc\tStartLoc\tStopLoc\tScore\tStatus\tRunDate\tIPRAcc\tIPRDesc\n" > ${OUTDIR}/${PREFIX}.iprscan.tsv
+	if [ $LINE_COUNT -eq 0 ]; then
+		printf "AccNum\tSeqMD5Digest\tSLength\tAnalysis\tDB.ID\tSignDesc\tStartLoc\tStopLoc\tScore\tStatus\tRunDate\tIPRAcc\tIPRDesc\n" > ${OUTDIR}/${PREFIX}.iprscan.tsv
 	else
-	sed -i '1s/^/AccNum\tSeqMD5Digest\tSLength\tAnalysis\tDB.ID\tSignDesc\tStartLoc\tStopLoc\tScore\tStatus\tRunDate\tIPRAcc\tIPRDesc\n/' ${OUTDIR}/${PREFIX}.iprscan.tsv
+		sed -i '1s/^/AccNum\tSeqMD5Digest\tSLength\tAnalysis\tDB.ID\tSignDesc\tStartLoc\tStopLoc\tScore\tStatus\tRunDate\tIPRAcc\tIPRDesc\n/' ${OUTDIR}/${PREFIX}.iprscan.tsv
 	fi
 	ipr2lin_start=$SECONDS
 	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.4_ipr2lin.R ${OUTDIR}/${PREFIX}.iprscan.tsv ${OUTDIR}/${PREFIX}.acc2info.tsv $PREFIX
 	ipr2lin_dur=$(( $SECONDS - $ipr2lin_start ))
 	if [ "$IS_QUERY" = "T" ]; then
-	## IPR2DA ##
-	ipr2da_start=$SECONDS
-	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${PREFIX}.iprscan_cln.tsv ${PREFIX} NA
-	ipr2da_dur=$(( $SECONDS - $ipr2da_start ))
-	cp ${OUTDIR}/${PREFIX}.ipr_domarch.tsv ${OUTDIR}/${PREFIX}.full_analysis.tsv
+		## IPR2DA ##
+		ipr2da_start=$SECONDS
+		Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${PREFIX}.iprscan_cln.tsv ${PREFIX} NA
+		ipr2da_dur=$(( $SECONDS - $ipr2da_start ))
+		cp ${OUTDIR}/${PREFIX}.ipr_domarch.tsv ${OUTDIR}/${PREFIX}.full_analysis.tsv
 	else
-	## IPR2DA ##
-	ipr2da_start=$SECONDS
-	Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${PREFIX}.iprscan_cln.tsv ${PREFIX} ${OUTDIR}/${PREFIX}.cln.clust.tsv
-	ipr2da_dur=$(( $SECONDS - $ipr2da_start ))
+		## IPR2DA ##
+		ipr2da_start=$SECONDS
+		Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05a_ipr2da.R ${OUTDIR}/${PREFIX}.iprscan_cln.tsv ${PREFIX} ${OUTDIR}/${PREFIX}.cln.clust.tsv
+		ipr2da_dur=$(( $SECONDS - $ipr2da_start ))
 	fi
-
 	## RPSBLAST ##
 	rps_start=$SECONDS
 	#sh /data/research/jravilab/molevol_scripts/upstream_scripts/04b_rpsblast.sh ${OUTDIR}/${PREFIX}.all_accnums.fa ${PREFIX} ${OUTDIR}
@@ -155,18 +154,18 @@ if [ "$TYPE" != "dblast" ] || [ "$IS_QUERY" = "T" ]; then
 	#Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/05b_rps2da.R ${OUTDIR}/${PREFIX}.rps.out ${OUTDIR}/${PREFIX}.cln.clust.ipr.tsv ${PREFIX}
 	rps2da_dur=$(( $SECONDS - $rps2da_start ))
 fi
+cp ${FILE} ${OUTDIR}	# copy fasta file to output directory
 
-	cp ${FILE} ${OUTDIR}	# copy fasta file to output directory
+## Figure out how long the entire script took to run
+dur=$(( $SECONDS - $start ))
+printf "\nTotal run time: $dur\n"
+STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
 
-	## Figure out how long the entire script took to run
-	dur=$(( $SECONDS - $start ))
-	printf "\nTotal run time: $dur\n"
-	STOP_DT=$(date '+%d/%m/%Y-%H:%M:%S')
-
-	## Add benchmarking times to logfile
-	printf "${START_DT}\t${STOP_DT}\t${PREFIX}\t${db_dur}\t${acc2info_dur}\t\
-        ${db_cln_dur}\t${acc2fa_dur}\t${bclust_dur}\t${c2t_dur}\t\
-        ${ipr_dur}\t${ipr2lin_dur}\t${ipr2da_dur}\t${dur}\n" >> ${OUTPATH}/logfile.tsv
+## Add benchmarking times to logfile
+RUNTIMES_ROW="${START_DT:-NA}\t${STOP_DT:-NA}\t${PREFIX:-NA}\t${db_dur:-NA}\t${acc2info_dur:-NA}\t"
+RUNTIMES_ROW+="${db_cln_dur:-NA}\t${acc2fa_dur:-NA}\t${bclust_dur:-NA}\t${c2t_dur:-NA}\t"
+RUNTIMES_ROW+="${ipr_dur:-NA}\t${ipr2lin_dur:-NA}\t${ipr2da_dur:-NA}\t${dur:-NA}\n"
+printf "${RUNTIMES_ROW}" >> ${OUTPATH}/logfile.tsv
 
 	## And how much time is left
 	#timeleft=$(( $total - $dur ))
@@ -186,11 +185,17 @@ else
 TOTAL_RUNS=1
 fi
 
+# handling phylogenetic analysis where input.txt is never created
+if [ ! -e "${OUTPATH}"/input.txt ]; then
+TOTAL_RUNS=1
+fi
+
 if [ $TOTAL_RUNS = $NUM_RUNS ]; then
   touch ../done.txt
 fi
 
-  echo "${NUM_RUNS} / ${TOTAL_RUNS} jobs completed" > ../status.txt
+echo "${NUM_RUNS} / ${TOTAL_RUNS} jobs completed" > ../status.txt
+
 
 # FA: disabled b/c docker's handling perms
 # setfacl -R -m group:shiny:r-x ${OUTDIR}

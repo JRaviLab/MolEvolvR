@@ -1,5 +1,6 @@
 suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(Biostrings))
+options(readr.show_col_types = FALSE) # silence read tsv col types
 library(yaml)
 
 get_sequences <- function(sequences, acc_file_path = "accs.txt", dir_path = "~", separate = TRUE) {
@@ -24,13 +25,21 @@ get_sequences <- function(sequences, acc_file_path = "accs.txt", dir_path = "~",
   return(length(seqs))
 }
 
-make_job_name <- function(job_code) {
-  if (!is.null(job_code)) paste(job_code, "molevol_analysis", sep="_") else "molevol_analysis"
+make_job_name <- function(job_code, suffix = "molevol_analysis") {
+  if (!is.null(job_code)) paste(job_code, suffix, sep="_") else suffix
+}
+
+# print info on slurm submission errors
+submit_and_log <- function(cmd, exit = FALSE) {
+  submit_result <- system(cmd)
+  if (submit_result != 0L && exit == TRUE) stop(paste0("failed to submit job; error code: ", submit_result, "\n", "cmd=", cmd))
+  cat(file=stderr(), paste0("Ran command ", cmd, ", result: ", submit_result))
+  flush.console()
 }
 
 submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL = 0.0005, sequences = "~/test.fa", phylo = "FALSE", by_domain = "FALSE", domain_starting = "~/domain_seqs.fa", type = "full", job_code=NULL) {
+  # submits jobs for fasta, MSA, or accession number type submissions
   setwd(dir)
-
   # write job submission params to file
   job_args <- list(
     submission_type = type,
@@ -46,23 +55,39 @@ submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL
   if (phylo == "FALSE") {
     # If not phylogenetic analysis, split up the sequences, run blast and full analysis
     num_seqs <- get_sequences(sequences, dir_path = dir, separate = TRUE)
-    system(paste0("qsub -N ", make_job_name(job_code), " -t 1-", num_seqs, " /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb 'input.txt ", DB, " ", NHITS, " ", EVAL, " F ", type, "'"))
+    cmd_full<- paste0("qsub -N ",
+      make_job_name(job_code, type), " -t 1-", num_seqs,
+      " /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb 'input.txt ",
+      DB, " ", NHITS, " ", EVAL, " F ", type, "'"
+    )
+    submit_and_log(cmd_full)
     num_runs <- num_runs + num_seqs
   } else {
     get_sequences(sequences, dir_path = dir, separate = FALSE)
   }
   # do analysis on query regardless of selected analysis
   if (by_domain == "TRUE") {
-    system(paste0("qsub -N ", make_job_name(job_code), " /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb '", domain_starting, " ", DB, " ", NHITS, " ", EVAL," T ", type, "'"))
+    submit_cmd_full_by_domain <- paste0("qsub -N ", 
+      make_job_name(job_code, type),
+      " /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb '",
+      domain_starting, " ", DB, " ", NHITS, " ", EVAL," T ", type, "'"
+    )
+    submit_and_log(submit_cmd_full_by_domain)
   } else {
-    system(paste0("qsub -N ", make_job_name(job_code), " /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb '", sequences, " ", DB, " ", NHITS, " ", EVAL," T ",type, "'"))
+    cmd_full <- paste0("qsub -N ", make_job_name(job_code, type), 
+      " /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb '", 
+      sequences, " ", DB, " ", NHITS, " ", EVAL," T ", type, "'"
+    )
+    submit_and_log(cmd_full)
   }
   num_runs <- num_runs + 1
   write(paste0("0/", num_runs, " analyses completed"), "status.txt")
 }
 
 submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/seqs.fa", ncbi = FALSE, job_code=NULL) {
-  # Accepts sequence file, if none given then download the ncbi sequences
+  # starts analysis for an input blast tsv
+  # a query sequence(s) file can be provided,
+  # or the sequences can be parsed from the Query column of input blast table
   setwd(dir)
 
   # write job submission params to file
@@ -73,29 +98,77 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
   yml <- yaml::as.yaml(job_args)
   write(yml, "job_args.yml")
 
-  num_runs <- 0
-  df <- read_tsv(blast, col_names = web_blastp_hit_colnames)
-  df_query <- df %>% distinct(Query, .keep_all = TRUE)
+  df_blast <- read_tsv(blast, col_names = web_blastp_hit_colnames)
+
+  # get a df of only the unique query protein(s)
+  df_query <- df_blast %>% distinct(Query, .keep_all = TRUE)
+  # !!! 
+  # the AccNum column here is overwritten for downstream joining between ipr-da columns and 
+  # blast data ipr2da.R's append_ipr()
+  # AccNum is overwritten by Query only for quick analyses on query proteins. 
+  # this is to populate the Query data tab and not the Homolog data tab.
+  # the intermediate query file currently, wrongly, carries the homology information as well
+  # but this is fixed downstream in the app in molevolvr_app/scripts/MolEvolData_class.R 
+  # where the spurious columns are removed before displaying in the web-app. 
+  # These cols need to be removed upstream (before intermediate files are written) at a later time. 
+  # #NextMilestone
+  # !!!
   df_query$AccNum <- df_query$Query
   write_tsv(df_query, "blast_query.tsv", col_names = FALSE)
-  write(df_query$AccNum, "accs.txt")
-  write("START_DT\tSTOP_DT\tquery\tacc2info\tacc2fa\tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2da\tduration", "logfile.tsv")
-  # do analysis on the queries
+  # write the col of unique accession numbers of queries to a file
+  write(df_query$Query, "accs.txt")
+
+  # setup logfile table
+  write(
+    paste0(
+      "START_DT\tSTOP_DT\tquery\tacc2info\tacc2fa\tcln_blast\tblast_clust\t",
+      "clust2table\tiprscan\tipr2lineage\tipr2da\trps_blast\trps2da\tduration"
+    ),
+    file = "logfile.tsv"
+  )
+
+  # submit job for query proteins only
   if (ncbi) {
-    system(paste0("qsub -N ", make_job_name(job_code), " /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb 'blast_query.tsv ", " T F'"))
+    cmd_blast_query_ncbi <- paste0("qsub -N ", make_job_name(job_code, "blast_query_ncbi"), 
+      " /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb 'blast_query.tsv ",
+      " T F'"
+    )
+    submit_and_log(cmd_blast_query_ncbi)
   } else {
-    system(paste0("qsub -N ", make_job_name(job_code), " /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb 'blast_query.tsv ", " T T'"))
+    cmd_blast_query <- paste0("qsub -N ", make_job_name(job_code, "blast_query"),
+      " /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb 'blast_query.tsv ",
+      " T T'"  
+    )
+    submit_and_log(cmd_blast_query)
   }
-  num_runs <- num_runs + 1
-  for (query in unique(df$Query)) {
-    system(paste0("mkdir ", query, "_blast"))
-    df_filter <- df %>% filter(query == Query)
-    write_tsv(df_filter, paste0(query, "_blast/", query, ".dblast.tsv"), col_names = FALSE)
+
+  # split dataframes by query and write them to their 
+  # own output sub-directory
+  for (df_split in split(df_blast, f = ~ Query)) {
+    folder <-  paste0(unique(df_split$Query), "_blast")
+    file <- paste0(unique(df_split$Query), ".dblast.tsv")
+    dir.create(folder)
+    write_tsv(df_split, file.path(folder, file), col_names = FALSE)
   }
-  num_runs <- num_runs + length(unique(df$Query))
+
+  # submit job array that is batched by the number of queries
+  # for example, 
+  #   a blast table that only had one query protein will
+  #   just be one job, but 2 queries protein would be split into 2 jobs, etc.
+  # notably, the analysis on the query protein itself is still 
+  # done in the first submission above; a separate job
+  n_queries <- df_blast %>% select(Query) %>% distinct() %>% nrow()
+  cmd_blast_homologs <- paste0(
+    "qsub -N ", make_job_name(job_code, "blast"), 
+    " -t 1-", n_queries, 
+    " /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb 'accs.txt", " F F'"
+  )
+  submit_and_log(cmd_blast_homologs)
+
+  # 1 is from the initial job on just the query proteins themselves
+  # n_queries represents the total number of unique query proteins
+  num_runs <- 1 + n_queries 
   write(paste0("0/", num_runs, " analyses completed"), "status.txt")
-  # do analysis on the homologs
-  system(paste0("qsub -N ", make_job_name(job_code), " -t 1-", length(unique(df$Query), "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb 'accs.txt ", " F F'")))
 }
 
 submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa", ncbi = FALSE, blast = FALSE, DB = "refseq", NHITS = 5000, EVAL = 0.0005, job_code=NULL) {
@@ -103,7 +176,7 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
 
   # write job submission params to file
   job_args <- list(
-    submission_type = "ipr",
+    submission_type = "interproscan",
     homology_search = blast,
     database = ifelse(blast == FALSE, NA, DB), # only include evalue, DB, & NHITS for blast jobs
     nhits = ifelse(blast == FALSE, NA, NHITS),
@@ -112,29 +185,45 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
   yml <- yaml::as.yaml(job_args)
   write(yml, "job_args.yml")
 
+  # initialize counter for job progress
   num_runs <- 0
-  write("START_DT\tSTOP_DT\tquery\tacc2info\tacc2fa\tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2da\tduration\n", "logfile.tsv")
+  # setup log file column headers
+  write(
+    paste0(
+      "START_DT\tSTOP_DT\tquery\tdblast\tacc2info\t",
+      "dblast_cleanup\tacc2fa\tblast_clust\tclust2table\t",
+      "iprscan\tipr2lineage\tipr2da\tduration"
+    ), 
+    file = "logfile.tsv"
+  )
+
   ipr_in <- read_tsv(ipr, col_names = TRUE)
   queries <- unique(ipr_in$AccNum)
   if (ncbi) {
+    # get seqs from accession number column
     acc2fa(queries, outpath = "seqs.fa")
   }
   if (blast) {
     # if blast separate the query sequences and do blast+full analysis
     seq_count <- get_sequences(seqs, dir_path = dir, separate = TRUE)
     num_runs <- num_runs + seq_count
-    system(paste0("qsub -N ", make_job_name(job_code), " -t 1-", seq_count, "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb 'accs.txt ", "F T ", DB, " ", NHITS, " ", EVAL, "'"))
-    write("running . . .", "blast_progress.txt")
+    cmd_ipr_homology <- paste0(
+      "qsub -N ", make_job_name(job_code, "ipr_homology"), " -t 1-", seq_count, 
+      " /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb 'input.txt ", 
+      "F T ", DB, " ", NHITS, " ", EVAL, "'"
+    )
+    submit_and_log(cmd_ipr_homology)
   } else {
     write(queries, "accs.txt")
   }
+  # add the query job to total runs
   num_runs <- num_runs + 1
   write(paste0("0/", num_runs, " analyses completed"), "status.txt")
   # always do analysis on interpro file
-  system(paste0("qsub -N ", make_job_name(job_code), " /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb '", ipr, " T F'"))
+  cmd_ipr_query <- paste0(
+    "qsub -N ", make_job_name(job_code, "ipr_query"), 
+    " /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb '", 
+    ipr, " T F'"
+  )
+  submit_and_log(cmd_ipr_query)
 }
-
-# args <- commandArgs(trailingOnly = TRUE)
-
-## call function
-# submit_full(args[1], args[2], args[3], args[4], args[5], args[6])
