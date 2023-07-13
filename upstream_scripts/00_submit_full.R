@@ -145,14 +145,12 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
   }
 
   # submit job array that is batched by the number of queries
-  # for undergoing analysis on each table that was
-  # split by the unique protein queries
   # for example, 
   #   a blast table that only had one query protein will
   #   just be one job, but 2 queries protein would be split into 2 jobs, etc.
   # notably, the analysis on the query protein itself is still 
-  # done in the first submission above
-  n_queries <- length(base::unique(df_blast$Query))
+  # done in the first submission above; a separate job
+  n_queries <- df_blast %>% select(Query) %>% distinct() %>% nrow()
   cmd_blast_homologs <- paste0(
     "qsub -N ", make_job_name(job_code, "blast"), 
     " -t 1-", n_queries, 
