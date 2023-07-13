@@ -67,6 +67,6 @@ esac
 
 ## core script
 deltablast -query ${INFILE} -db ${dblast_db} -evalue ${EVAL} \
-    -num_alignments ${NHITS} -out ${OUTFILE} -num_threads 10 \
+    -num_alignments ${NHITS} -out ${OUTFILE} -num_threads ${DELTABLAST_THREADS:-10} \
     -outfmt '6 qacc sacc sseqid sallseqid stitle sscinames staxids pident length mismatch gapopen qstart qend qlen sstart send slen evalue bitscore ppos'
 
