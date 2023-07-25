@@ -33,7 +33,7 @@ make_job_name <- function(job_code, suffix = "molevol_analysis") {
 submit_and_log <- function(cmd, exit = FALSE) {
   submit_result <- system(cmd)
   if (submit_result != 0L && exit == TRUE) stop(paste0("failed to submit job; error code: ", submit_result, "\n", "cmd=", cmd))
-  cat(file=stderr(), paste0("Ran command ", cmd, ", result: ", submit_result))
+  cat(file=stderr(), paste0("Ran command ", cmd, ", result: ", submit_result, "\n"))
   flush.console()
 }
 
