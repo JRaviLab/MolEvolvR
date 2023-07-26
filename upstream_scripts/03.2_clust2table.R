@@ -6,6 +6,9 @@
 
 # Load tidyverse library
 suppressPackageStartupMessages(library("tidyverse"))
+
+options(readr.show_col_types = FALSE, readr.show_types = FALSE) # silence read tsv col types
+
 ## HPC reading in arguments
 args <- commandArgs(trailingOnly = TRUE)
 

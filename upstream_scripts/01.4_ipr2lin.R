@@ -1,6 +1,8 @@
 suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(data.table))
 
+options(readr.show_col_types = FALSE, readr.show_types = FALSE) # silence read tsv col types
+
 # source lineage script for add_name and add_lins
 # /data/research/jravilab/molevol_scripts/
 source("/data/research/jravilab/molevol_scripts/R/lineage.R")

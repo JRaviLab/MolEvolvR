@@ -8,6 +8,8 @@ source("/data/research/jravilab/molevol_scripts/R/colnames_molevol.R")
 
 conflicted::conflict_prefer("collapse", "dplyr")
 
+options(readr.show_col_types = FALSE, readr.show_types = FALSE) # silence read tsv col types
+
 # ipr2da function
 ipr2da <- function(infile_ipr, prefix,
                    analysis = c(

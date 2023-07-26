@@ -4,6 +4,8 @@
 suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(data.table))
 
+options(readr.show_col_types = FALSE, readr.show_types = FALSE) # silence read tsv col types
+
 # source scripts w/ add_name() and colnames
 source("/data/research/jravilab/molevol_scripts/R/pre-msa-tree.R")
 source("/data/research/jravilab/molevol_scripts/R/colnames_molevol.R")
