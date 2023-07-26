@@ -1,6 +1,6 @@
 suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(Biostrings))
-options(readr.show_col_types = FALSE) # silence read tsv col types
+options(readr.show_col_types = FALSE, readr.show_types = FALSE) # silence read tsv col types
 library(yaml)
 
 get_sequences <- function(sequences, acc_file_path = "accs.txt", dir_path = "~", separate = TRUE) {
