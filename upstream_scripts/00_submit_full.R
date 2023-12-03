@@ -37,7 +37,7 @@ submit_and_log <- function(cmd, exit = FALSE) {
   flush.console()
 }
 
-submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL = 0.0005, sequences = "~/test.fa", phylo = "FALSE", by_domain = "FALSE", domain_starting = "~/domain_seqs.fa", type = "full", job_code=NULL) {
+submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL = 0.0005, sequences = "~/test.fa", phylo = "FALSE", by_domain = "FALSE", domain_starting = "~/domain_seqs.fa", type = "full", job_code=NULL, submitter_email=NULL) {
   # submits jobs for fasta, MSA, or accession number type submissions
   setwd(dir)
   # write job submission params to file
@@ -45,7 +45,8 @@ submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL
     submission_type = type,
     database = ifelse(phylo == FALSE, DB, NA),
     nhits = ifelse(phylo == FALSE, NHITS, NA),
-    evalue = ifelse(phylo == FALSE, EVAL, NA)
+    evalue = ifelse(phylo == FALSE, EVAL, NA),
+    submitter_email = submitter_email
   )
   yml <- yaml::as.yaml(job_args)
   write(yml, "job_args.yml")
@@ -84,7 +85,7 @@ submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL
   write(paste0("0/", num_runs, " analyses completed"), "status.txt")
 }
 
-submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/seqs.fa", ncbi = FALSE, job_code=NULL) {
+submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/seqs.fa", ncbi = FALSE, job_code=NULL, submitter_email=NULL) {
   # starts analysis for an input blast tsv
   # a query sequence(s) file can be provided,
   # or the sequences can be parsed from the Query column of input blast table
@@ -93,7 +94,8 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
   # write job submission params to file
   job_args <- list(
     submission_type = "blast",
-    includes_ncbi_acc = ncbi
+    includes_ncbi_acc = ncbi,
+    submitter_email = submitter_email
   )
   yml <- yaml::as.yaml(job_args)
   write(yml, "job_args.yml")
@@ -171,7 +173,7 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
   write(paste0("0/", num_runs, " analyses completed"), "status.txt")
 }
 
-submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa", ncbi = FALSE, blast = FALSE, DB = "refseq", NHITS = 5000, EVAL = 0.0005, job_code=NULL) {
+submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa", ncbi = FALSE, blast = FALSE, DB = "refseq", NHITS = 5000, EVAL = 0.0005, job_code=NULL, submitter_email=NULL) {
   setwd(dir)
 
   # write job submission params to file
@@ -180,7 +182,8 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
     homology_search = blast,
     database = ifelse(blast == FALSE, NA, DB), # only include evalue, DB, & NHITS for blast jobs
     nhits = ifelse(blast == FALSE, NA, NHITS),
-    includes_ncbi_acc = ncbi
+    includes_ncbi_acc = ncbi,
+    submitter_email = submitter_email
   )
   yml <- yaml::as.yaml(job_args)
   write(yml, "job_args.yml")
