@@ -82,7 +82,4 @@ calc_log_process_stat <- function(
   }
   return(result)
 }
-   path_dev_results <- "/data/molevolvr_transfer/molevolvr_dev/job_results"
-   df_log <- aggregate_logs(path_dev_results)
-   df_log$df_log |> count_log_process_stat(columns = 'dblast', columns_group_by = 'query')
 
