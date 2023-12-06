@@ -56,10 +56,10 @@ submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL
   if (phylo == "FALSE") {
     # If not phylogenetic analysis, split up the sequences, run blast and full analysis
     num_seqs <- get_sequences(sequences, dir_path = dir, separate = TRUE)
-    cmd_full<- paste0("qsub -N ",
-      make_job_name(job_code, type), " -t 1-", num_seqs,
-      " /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb 'input.txt ",
-      DB, " ", NHITS, " ", EVAL, " F ", type, "'"
+    cmd_full <- stringr::str_glue(
+      "sbatch --job-name {make_job_name(job_code, type)} --array 1-{num_seqs} --time=27:07:00 ",
+      "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb ",
+      "input.txt {DB} {NHITS} {EVAL} F {type}"
     )
     submit_and_log(cmd_full)
     num_runs <- num_runs + num_seqs
@@ -68,18 +68,19 @@ submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL
   }
   # do analysis on query regardless of selected analysis
   if (by_domain == "TRUE") {
-    submit_cmd_full_by_domain <- paste0("qsub -N ", 
-      make_job_name(job_code, type),
-      " /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb '",
-      domain_starting, " ", DB, " ", NHITS, " ", EVAL," T ", type, "'"
+    cmd_by_domain <- stringr::str_glue(
+      "sbatch --job-name {make_job_name(job_code, type)} --time=27:07:00 ",
+      "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb ",
+      "{domain_starting} {DB} {NHITS} {EVAL} T {type}"
     )
-    submit_and_log(submit_cmd_full_by_domain)
+    submit_and_log(cmd_by_domain)
   } else {
-    cmd_full <- paste0("qsub -N ", make_job_name(job_code, type), 
-      " /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb '", 
-      sequences, " ", DB, " ", NHITS, " ", EVAL," T ", type, "'"
+    cmd_query <- stringr::str_glue(
+      "sbatch --job-name {make_job_name(job_code, type)} --time=27:07:00 ",
+      "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb ",
+      "{sequences} {DB} {NHITS} {EVAL} T {type}"
     )
-    submit_and_log(cmd_full)
+    submit_and_log(cmd_query)
   }
   num_runs <- num_runs + 1
   write(paste0("0/", num_runs, " analyses completed"), "status.txt")
@@ -131,15 +132,17 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
 
   # submit job for query proteins only
   if (ncbi) {
-    cmd_blast_query_ncbi <- paste0("qsub -N ", make_job_name(job_code, "blast_query_ncbi"), 
-      " /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb 'blast_query.tsv ",
-      " T F'"
+    cmd_blast_query_ncbi <- stringr::str_glue(
+      "sbatch --job-name {make_job_name(job_code, 'blast_query_ncbi')} --time=27:07:00 ",
+      "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb ",
+      "blast_query.tsv T F"
     )
     submit_and_log(cmd_blast_query_ncbi)
   } else {
-    cmd_blast_query <- paste0("qsub -N ", make_job_name(job_code, "blast_query"),
-      " /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb 'blast_query.tsv ",
-      " T T'"  
+    cmd_blast_query <- stringr::str_glue(
+      "sbatch --job-name {make_job_name(job_code, 'blast_query')} --time=27:07:00 ",
+      "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb ",
+      "blast_query.tsv T T"
     )
     submit_and_log(cmd_blast_query)
   }
@@ -160,16 +163,16 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
   # notably, the analysis on the query protein itself is still 
   # done in the first submission above; a separate job
   n_queries <- df_blast %>% select(Query) %>% distinct() %>% nrow()
-  cmd_blast_homologs <- paste0(
-    "qsub -N ", make_job_name(job_code, "blast"), 
-    " -t 1-", n_queries, 
-    " /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb 'accs.txt", " F F'"
+  cmd_blast_homologs <- stringr::str_glue(
+    "sbatch --job-name {make_job_name(job_code, 'blast')} --array 1-{n_queries} --time=27:07:00 ",
+    "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb ",
+    "accs.txt F F"
   )
   submit_and_log(cmd_blast_homologs)
 
   # 1 is from the initial job on just the query proteins themselves
   # n_queries represents the total number of unique query proteins
-  num_runs <- 1 + n_queries 
+  num_runs <- 1 + n_queries
   write(paste0("0/", num_runs, " analyses completed"), "status.txt")
 }
 
@@ -210,10 +213,10 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
     # if blast separate the query sequences and do blast+full analysis
     seq_count <- get_sequences(seqs, dir_path = dir, separate = TRUE)
     num_runs <- num_runs + seq_count
-    cmd_ipr_homology <- paste0(
-      "qsub -N ", make_job_name(job_code, "ipr_homology"), " -t 1-", seq_count, 
-      " /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb 'input.txt ", 
-      "F T ", DB, " ", NHITS, " ", EVAL, "'"
+    cmd_ipr_homology <- stringr::str_glue(
+      "sbatch --job-name {make_job_name(job_code, 'ipr_homology')} --array 1-{seq_count} --time=27:07:00 ",
+      "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb ",
+      "input.txt F T {DB} {NHITS} {EVAL}"
     )
     submit_and_log(cmd_ipr_homology)
   } else {
@@ -223,10 +226,10 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
   num_runs <- num_runs + 1
   write(paste0("0/", num_runs, " analyses completed"), "status.txt")
   # always do analysis on interpro file
-  cmd_ipr_query <- paste0(
-    "qsub -N ", make_job_name(job_code, "ipr_query"), 
-    " /data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb '", 
-    ipr, " T F'"
+  cmd_ipr_query <- stringr::str_glue(
+    "sbatch --job-name {make_job_name(job_code, 'ipr_query')} --time=27:07:00 ",
+    "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb ",
+    "{ipr} T F"
   )
   submit_and_log(cmd_ipr_query)
 }
