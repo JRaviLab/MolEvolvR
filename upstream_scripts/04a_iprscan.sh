@@ -25,7 +25,7 @@ OUTFILE=$(printf "${OUTDIR}/${PREFIX}.iprscan")
 printf "\nNow processing $QUERY_FILE\n"
 
 iprscan -i ${QUERY_FILE} -b ${OUTFILE} -f TSV --cpu ${INTERPROSCAN_CPUS:-4} \
-    --appl Pfam,MobiDBlite,Phobius,Coils,SignalP_GRAM_POSITIVE,SignalP_GRAM_NEGATIVE,Gene3D,Hamap
+    --appl Pfam,MobiDBlite,Phobius,Coils,SignalP_GRAM_POSITIVE,SignalP_GRAM_NEGATIVE,Hamap
 
 printf "##################\n"
 printf "END OF IPRSCAN RUN\n"

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eo pipefail
+
 # created by Lauren Sosinski 2019.01.20
 # blastclust with SBATCH commands
 # last edit 2020.05.18
@@ -61,6 +63,8 @@ printf "\n## Now running BLASTCLUST on file(s): $INFILE "
 printf "\n#####################################\n"
 
 OUTFILE=$(printf "${outdir}/${suffix}.bclust.L60S80.tsv")
+
+export BLASTMAT=/usr/share/ncbi/data/
 
 printf "\nPerforming BLASTCLUST analysis on $INFILE\n"
 blastclust -i $INFILE -o $OUTFILE -p T -L .6 -b T -S 80 -a 8

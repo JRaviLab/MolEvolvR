@@ -36,7 +36,7 @@ cd ${OUTPATH}
 export BLASTDB=/data/common_data/blastdb/v6
 export BLASTMAT=/opt/software/BLAST/2.2.26/data
 export INTERPRO=/opt/software/iprscan/5.47.82.0-Python3/data:/data/common_data/iprscan:/var/interproscan/data:$INTERPRO
-export SIGNALP=/var/interproscan/bin/signalp/4.1
+#export SIGNALP=/var/interproscan/bin/signalp/4.1
 export NCBI_API_KEY=YOUR_KEY_HERE
 
 start=$SECONDS
@@ -89,7 +89,7 @@ Rscript /data/research/jravilab/molevol_scripts/upstream_scripts/01.2_cleanup_bl
 blast_cln_dur=$(( $SECONDS - $blast_cln_dur ))
 ## BLASTCLUST ##
 bclust_start=$SECONDS
-sh /data/research/jravilab/molevol_scripts/upstream_scripts/03.1_blastclust.sh ${OUTDIR}/${PREFIX}.all_accnums.fa $PREFIX $OUTDIR
+bash /data/research/jravilab/molevol_scripts/upstream_scripts/03.1_blastclust.sh ${OUTDIR}/${PREFIX}.all_accnums.fa $PREFIX $OUTDIR
 bclust_dur=$(( $SECONDS - $bclust_start ))
 
 ## CLUST2TABLE
