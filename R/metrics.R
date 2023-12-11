@@ -123,3 +123,71 @@ calc_log_process_stat <- function(
   }
   return(result)
 }
+
+# use modification time of status.txt to estimate submission times
+get_df_t_submit <- function(dir_job_results) {
+
+  # job results dirs
+  vec_dir_results <- list.dirs(
+    dir_job_results,
+    recursive = FALSE,
+    full.names = TRUE
+  )
+
+  # search job folders for `status.txt`
+  # use modification time to estimate submission date
+  col_month <- character()
+  col_year <- character()
+  for (directory in vec_dir_results) {
+    # catch unforeseen errors
+    tryCatch(
+      expr = {
+        file_status_txt <- file.path(directory, "status.txt")
+          if (file.exists(file_status_txt)) {
+            modification_date <- file.mtime(file_status_txt)
+            col_month <- append(
+              x = col_month,
+              values = modification_date |> months()
+            )
+            col_year <- append(
+              x = col_year,
+              values = modification_date |> format("%Y")
+            )
+          }
+        },
+      error = function(e) {
+        msg <- stringr::str_glue("failed to measure submission date for '{directory}'")
+        warning(msg)
+      }
+    )
+  }
+  df_t_submit <- tibble::tibble("month" = col_month, "year" = col_year)
+  return(df_t_submit)
+
+}
+
+
+
+
+plot_df_t_submit <- function(df_t_submit) {
+  df_n_submissions <- df_t_submit |> dplyr::group_by(month, year) |>
+    dplyr::summarise(submissions = dplyr::n(), .groups = 'drop') |>
+    dplyr::arrange(year, month)
+  p <- ggplot2::ggplot(data = df_n_submissions) +
+    ggplot2::aes(x = paste(year, month, sep = '-'), y = submissions) +
+    ggplot2::theme_minimal() +
+    ggplot2::geom_col() +
+    ggplot2::labs(x = "Date", y = "Number of submissions") +
+    ggplot2::theme(
+      plot.title = ggplot2::element_text(size = 30, face = 'bold'),
+      axis.text.x = ggplot2::element_text(angle = 90, hjust = 1),
+      axis.text = ggplot2::element_text(size = 20),
+      axis.title = ggplot2::element_text(size = 22, face = "bold"),
+    )
+  return(p)
+}
+path_dev_results <- "/data/molevolvr_transfer/molevolvr_dev/job_results"
+path_prod_results <- "/data/molevolvr_transfer/hpc-cluster-tests/job_results"
+df_t_submit_dev <- get_df_t_submit(path_dev_results)
+df_t_submit_prod <- get_df_t_submit(path_prod_results)
+plot_df_t_submit(df_t_submit = df_t_submit_prod)
