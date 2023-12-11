@@ -124,8 +124,14 @@ calc_log_process_stat <- function(
   return(result)
 }
 
-# use modification time of status.txt to estimate submission times
+#' get file modification times of status.txt from job directory
+#' @param dir_job_results path to a MolEvolvR job_results directory
+#' @return tibble of submission times grouped by month and year
+# example
+#   path_prod_results <- "/data/molevolvr_transfer/hpc-cluster-tests/job_results"
+#   df_t_submit_prod <- get_df_t_submit(path_prod_results)
 get_df_t_submit <- function(dir_job_results) {
+  # use modification time of status.txt to estimate submission times
 
   # job results dirs
   vec_dir_results <- list.dirs(
@@ -163,11 +169,15 @@ get_df_t_submit <- function(dir_job_results) {
   }
   df_t_submit <- tibble::tibble("month" = col_month, "year" = col_year)
   return(df_t_submit)
-
 }
 
-
-
+#' plot MolEvolvR submission counts from a time submission table
+#' @param df_t_submit return tibble from `get_df_t_submit()`
+#' @return bar plot of submission counts grouped by month and year
+# example
+#   path_prod_results <- "/data/molevolvr_transfer/hpc-cluster-tests/job_results"
+#   df_t_submit_prod <- get_df_t_submit(path_prod_results)
+#   plot_df_t_submit(df_t_submit_prod)
 
 plot_df_t_submit <- function(df_t_submit) {
   df_n_submissions <- df_t_submit |> dplyr::group_by(month, year) |>
@@ -186,8 +196,3 @@ plot_df_t_submit <- function(df_t_submit) {
     )
   return(p)
 }
-path_dev_results <- "/data/molevolvr_transfer/molevolvr_dev/job_results"
-path_prod_results <- "/data/molevolvr_transfer/hpc-cluster-tests/job_results"
-df_t_submit_dev <- get_df_t_submit(path_dev_results)
-df_t_submit_prod <- get_df_t_submit(path_prod_results)
-plot_df_t_submit(df_t_submit = df_t_submit_prod)
