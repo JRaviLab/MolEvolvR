@@ -83,6 +83,10 @@ ipr2viz <- function(infile_ipr = NULL, infile_full = NULL, accessions = c(),
     "#FFE4B5", "black", "#FF7F50", "#FFB90F", "#FF69B4", "#836FFF",
     "#757575", "#CD3333", "#EE7600", "#CDAD00", "#556B2F", "#7AC5CD"
   )
+  # in the case of many, many unique domains, we will start re-using colors
+  # to prevent errors
+  ADDITIONAL_COLORS <- sample(CPCOLS, 1000, replace = TRUE)
+  CPCOLS <- append(x = CPCOLS, values = ADDITIONAL_COLORS)
   ## Read IPR file
   ipr_out <- read_tsv(infile_ipr, col_names = T, col_types = iprscan_cols)
   ipr_out <- ipr_out %>% filter(Name %in% accessions)
@@ -213,6 +217,10 @@ ipr2viz_web <- function(infile_ipr,
     "#FFE4B5", "black", "#FF7F50", "#FFB90F", "#FF69B4", "#836FFF",
     "#757575", "#CD3333", "#EE7600", "#CDAD00", "#556B2F", "#7AC5CD"
   )
+  # in the case of many, many unique domains, we will start re-using colors
+  # to prevent errors
+  ADDITIONAL_COLORS <- sample(CPCOLS, 1000, replace = TRUE)
+  CPCOLS <- append(x = CPCOLS, values = ADDITIONAL_COLORS)
   ## To filter by Analysis
   analysis <- paste0(analysis, collapse = "|")
 
