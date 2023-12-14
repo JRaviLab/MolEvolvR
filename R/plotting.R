@@ -1027,11 +1027,8 @@ lineage_sunburst <- function(prot, lineage_column = "Lineage",
       htmlwidgets::onRender(
         result,
         "function(el, x) {
-          // console.log('Rendered', el);
           jQuery('.sunburst-togglelegend', el).attr('checked', 'true');
           jQuery('.sunburst-legend', el).css('visibility', '');
-          // d3.select(el).select('.sunburst-togglelegend').property('checked', true);
-          // d3.select(el).select('.sunburst-legend').style('visibility', '');
         }"
       )
     )
