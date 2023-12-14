@@ -983,7 +983,7 @@ wordcloud2_element <- function(query_data = "prot",
 #### Sunburst #####
 lineage_sunburst <- function(prot, lineage_column = "Lineage",
                              type = "sunburst",
-                             levels = 2, colors = NULL, legendOrder = NULL) {
+                             levels = 2, colors = NULL, legendOrder = NULL, showLegend = TRUE) {
   #'
   #'
   #' @param prot Data frame containing a lineage column that the sunburst plot will be generated for
@@ -1017,10 +1017,27 @@ lineage_sunburst <- function(prot, lineage_column = "Lineage",
 
   # Plot sunburst
   if (type == "sunburst") {
-    sunburst(tree, legend = list(w = 225, h = 15, r = 5, s = 5), colors = CPCOLS, legendOrder = legendOrder, width = "100%", height = "100%")
+    result <- sunburst(tree, legend = list(w = 225, h = 15, r = 5, s = 5), colors = CPCOLS, legendOrder = legendOrder, width = "100%", height = "100%")
   } else if (type == "sund2b") {
-    sund2b(tree)
+    result <- sund2b(tree)
   }
+
+  if (showLegend) {
+    return(
+      htmlwidgets::onRender(
+        result,
+        "function(el, x) {
+          // console.log('Rendered', el);
+          jQuery('.sunburst-togglelegend', el).attr('checked', 'true');
+          jQuery('.sunburst-legend', el).css('visibility', '');
+          // d3.select(el).select('.sunburst-togglelegend').property('checked', true);
+          // d3.select(el).select('.sunburst-legend').style('visibility', '');
+        }"
+      )
+    )
+  }
+
+  return(result)
 }
 
 
