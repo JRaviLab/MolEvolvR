@@ -181,7 +181,7 @@ assign_job_queue <- function(
 #'
 #' example:
 #' p <- plot_estimated_walltimes()
-#' ggplot2::ggsave(filename = "/data/molevolvr_transfer/molevolvr_dev/molevol_scripts/figures/estimate_walltimes.png", plot = p)
+#' ggplot2::ggsave(filename = "/data/molevolvr_transfer/molevolvr_dev/molevol_scripts/docs/estimate_walltimes.png", plot = p)
 plot_estimated_walltimes <- function() {
   opts <- make_opts2procs() |> names()
   # get all possible submission permutations (powerset)
@@ -224,10 +224,9 @@ plot_estimated_walltimes <- function() {
   colnames(df_walltimes) <- names(est_walltimes)
   df_walltimes <- df_walltimes |> tibble::as_tibble()
   # rm any col or powerset outcome without the "any" processes
-  col_idx_keep <- grep(pattern = "_any$", x = names(df_walltimes))
+  col_idx_keep <- grep(pattern = "any$", x = names(df_walltimes))
   df_walltimes <- df_walltimes |>
     dplyr::select(col_idx_keep)
-  df_walltimes
   # bind n_inputs
   df_walltimes <- df_walltimes |>
     dplyr::mutate(n_inputs = 1:20)
