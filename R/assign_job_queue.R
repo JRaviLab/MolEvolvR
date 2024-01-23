@@ -1,5 +1,10 @@
 
-# example: list_opts2procs <- make_opts2procs
+#' Construct list where names (MolEvolvR input opts) point to processes
+#'
+#'
+#' @return list where names (MolEvolvR input opts) point to processes
+#'
+#' example: list_opts2procs <- make_opts2procs
 make_opts2procs <- function() {
   opts2processes <- list(
     "homology_search" = c("dblast", "dblast_cleanup"),
@@ -9,20 +14,39 @@ make_opts2procs <- function() {
   return(opts2processes)
 }
 
-# example:
-# in_opts <- c("homology_search", "domain_architecture")
-# procs <- map_input_opts2procs(in_opts)
+#' Use MolEvolvR input options to get associated processes
+#'
+#' @param input_opts character vector of MolEvolvR input opts
+#'
+#' @return character vector of process names that will execute given
+#' the input options
+#' 
+#' example:
+#' input_opts <- c("homology_search", "domain_architecture")
+#' procs <- map_input_opts2procs(input_opts)
 map_input_opts2procs <- function(input_opts) {
-  list_opts2proc <- make_opts2procs()
-  idx <- which(input_opts %in% names(list_opts2proc))
-  return(list_opts2proc[idx] |> unlist())
+  # append 'any' to add procs that always run
+  input_opts <- c(input_opts, "any")
+  opts2proc <- make_opts2procs()
+  # setup index for opts2proc based on input
+  idx <- which(names(opts2proc) %in% input_opts)
+  # extract processes that will run
+  procs <- opts2proc[idx] |> unlist()
+  return(procs)
 }
 
-in_opts <- c("homology_search", "domain_architecture")
-procs <- map_input_opts2procs(in_opts)
-
-### example code to get the median process walltimes from logs
-# run this function outside of container
+#' Scrape logs and calculate median processes
+#'
+#' for now execute this code outside of container
+#'
+#' @return list: names are processes and point to a single value of 
+#' median seconds for a given process
+#'
+#' see molevol_scripts/R/metrics.R for info on functions called here
+#'
+#' example:
+#' input_opts <- c("homology_search", "domain_architecture")
+#' procs <- map_input_opts2procs(input_opts)
 get_proc_medians <- function() {
   source("/data/molevolvr_transfer/molevolvr_dev/molevol_scripts/R/metrics.R")
   # aggregate logs from
@@ -61,16 +85,20 @@ get_proc_medians <- function() {
       "clust2table" = clust2table_median
     )
   )
-  ?format.POSIXct()
 }
 
-# example: write_proc_medians_table()
+#' Write a table of 2 columns: 1) process and 2) median seconds
+#'
+#' @param filepath path to save table
+#'
+#' @return tibble: 2 columns: 1) process and 2) median seconds
+#'
+#' example: write_proc_medians_table()
 write_proc_medians_table <- function(
     filepath = "/data/molevolvr_transfer/molevolvr_dev/molevol_scripts/log_data/prod_process_medians.tsv"
 ) {
-
 proc_medians <- get_proc_medians()
-df_proc_medians <- proc_medians |> 
+df_proc_medians <- proc_medians |>
   tibble::as_tibble() |>
   tidyr::pivot_longer(
     dplyr::everything(),
@@ -82,7 +110,7 @@ df_proc_medians <- proc_medians |>
   return(df_proc_medians)
 }
 
-# molevolvr backend process weight list based on the median walltimes 
+# molevolvr backend process weight list based on the median walltimes
 # for each process (proc)
 # example: get_proc_weights()
 get_proc_weights <- function() {
@@ -98,16 +126,120 @@ get_proc_weights <- function() {
   return(proc_weights)
 }
 
-# example: .test_input_opts_to_est_walltime("homology_search")
-.test_input_opts_to_est_walltime <- function(input_opts, n_inputs = 1L) {
+#' Given MolEvolvR input options and number of inputs,
+#' calculate the total estimated walltime for the job
+#'
+#' @param input_opts character vector of MolEvolvR input options
+#' (see make_opts2procs for the options)
+#' @param n_inputs total number of input proteins
+#'
+#' @return total estimated number of seconds a job will process (walltime)
+#'
+#' example: input_opts2est_walltime(c("homology_search", "domain_architecture"), 3)
+input_opts2est_walltime <- function(input_opts, n_inputs = 1L) {
   proc_weights <- get_proc_weights()
-  # sort the list by names and convert to vec
+  # sort process weights by names and convert to vec
   proc_weights <- proc_weights[order(names(proc_weights))] |> unlist()
   all_procs <- names(proc_weights) |> sort()
+  # get processes from input options and sort by names
   procs_from_opts <- map_input_opts2procs(input_opts)
   procs_from_opts <- sort(procs_from_opts)
+  # binary encode: yes proc will run (1); else 0
   binary_proc_vec  <- dplyr::if_else(all_procs %in% procs_from_opts, 1L, 0L)
-  # dot product of weights and procs to run multiplied by the number of inputs
-  est_walltime <- n_inputs * (binary_proc_vec %*% proc_weights) |> as.numeric()
+  # dot product of weights and procs to run; scaled by the number of inputs
+  est_walltime <- (n_inputs * (binary_proc_vec %*% proc_weights)) |>
+    as.numeric()
   return(est_walltime)
+}
+
+#' Decision function to assign job queue
+#'
+#' @param t_sec_estimate estimated number of seconds a job will process
+#' (from `input_opts2est_walltime`)
+#' @param t_long threshold value that defines the lower bound for assigning a
+#' job to the "long queue"
+#'
+#' @return a string of "short" or "long"
+#'
+#' example:
+#' input_opts2est_walltime(c("homology_search", "domain_architecture"), 3) |>
+#'   assign_job_queue()
+assign_job_queue <- function(
+  t_sec_estimate,
+  t_long = 21600 # 6 hours
+) {
+  queue <- ifelse(t_sec_estimate > t_cutoff, "long", "short")
+  return(queue)
+}
+
+#' Plot the estimated runtimes for different input options and number
+#' of inputs
+#'
+#' this function was just for fun; very, very messy code
+#'
+#' @return line plot object
+#'
+#' example:
+#' p <- plot_estimated_walltimes()
+#' ggplot2::ggsave(filename = "/data/molevolvr_transfer/molevolvr_dev/molevol_scripts/figures/estimate_walltimes.png", plot = p)
+plot_estimated_walltimes <- function() {
+  opts <- make_opts2procs() |> names()
+  # get all possible submission permutations (powerset)
+  get_powerset <- function(vec) {
+    # generate powerset (do not include empty set)
+    n <- length(vec)
+    indices <- 1:n
+    powerset <- lapply(1:n, function(x) combn(indices, x, simplify = FALSE))
+    powerset <- unlist(powerset, recursive = FALSE)
+    powerset <- lapply(powerset, function(index) vec[index])
+    powerset
+  }
+  opts_power_set <- get_powerset(opts)
+  est_walltimes <- list()
+  for (n_inputs in 1:20) {
+    est_walltimes <- append(
+      x = est_walltimes,
+      values = sapply(
+        opts_power_set,
+        FUN = function(input_opts) {
+          est_walltime <- input_opts2est_walltime(input_opts, n_inputs = n_inputs)
+          names(est_walltime) <- paste0(input_opts, collapse = "_")
+          est_walltime
+        }
+      ) 
+    )
+  }
+  # concat all results to their unique names
+  est_walltimes <- tapply(
+    unlist(
+      est_walltimes, use.names = FALSE),
+      rep(names(est_walltimes),
+      lengths(est_walltimes)
+    ),
+    FUN = c
+  )
+  df_walltimes <- est_walltimes |>
+    unlist() |> 
+    matrix(nrow = length(est_walltimes[[1]]), ncol = length(names(est_walltimes)))
+  colnames(df_walltimes) <- names(est_walltimes)
+  df_walltimes <- df_walltimes |> tibble::as_tibble()
+  # rm any col or powerset outcome without the "any" processes
+  col_idx_keep <- grep(pattern = "_any$", x = names(df_walltimes))
+  df_walltimes <- df_walltimes |>
+    dplyr::select(col_idx_keep)
+  df_walltimes
+  # bind n_inputs
+  df_walltimes <- df_walltimes |>
+    dplyr::mutate(n_inputs = 1:20)
+  df_walltimes <- tidyr::gather(df_walltimes, key = "input_opts", value = "est_walltime", -n_inputs)
+  # sec to min
+  df_walltimes <- df_walltimes |>
+    dplyr::mutate(est_walltime = est_walltime / 60)
+  p <- ggplot2::ggplot(df_walltimes, ggplot2::aes(x = n_inputs, y = est_walltime, color = input_opts)) +
+    ggplot2::geom_line() +
+    ggplot2::scale_y_log10() +
+    ggplot2::labs(title = "MolEvolvR estimated runtimes",
+        x = "Number of Inputs",
+        y = "Estimated walltime (log_10(minutes))")
+  return(p)
 }
