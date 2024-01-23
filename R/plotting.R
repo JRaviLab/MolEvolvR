@@ -983,7 +983,7 @@ wordcloud2_element <- function(query_data = "prot",
 #### Sunburst #####
 lineage_sunburst <- function(prot, lineage_column = "Lineage",
                              type = "sunburst",
-                             levels = 2, colors = NULL, legendOrder = NULL) {
+                             levels = 2, colors = NULL, legendOrder = NULL, showLegend = TRUE, maxLevels = 5) {
   #'
   #'
   #' @param prot Data frame containing a lineage column that the sunburst plot will be generated for
@@ -991,10 +991,17 @@ lineage_sunburst <- function(prot, lineage_column = "Lineage",
   #' @param type String, either "sunburst" or "sund2b". If type is "sunburst", a sunburst plot of the lineage
   #' @param levels Integer. Number of levels the sunburst will have.
   #' @param legendOrder String vector. The order of the legend. If legendOrder is NULL,
+  #' @param showLegend Boolean. If TRUE, the legend will be enabled when the component first renders.
+  #' @param maxLevels Integer, the maximum number of levels to display in the sunburst; 5 by default, NULL to disable
   #' then the legend will be in the descending order of the top level hierarchy.
   #' will be rendered. If the type is sund2b, a sund2b plot will be rendered.
 
   lin_col <- sym(lineage_column)
+
+  # ensure they don't exceed maxLevels, although this should
+  if (!is.null(maxLevels) && levels > maxLevels) {
+    levels <- maxLevels
+  }
 
   levels_vec <- c()
   for (i in 1:levels)
@@ -1017,10 +1024,53 @@ lineage_sunburst <- function(prot, lineage_column = "Lineage",
 
   # Plot sunburst
   if (type == "sunburst") {
-    sunburst(tree, legend = list(w = 225, h = 15, r = 5, s = 5), colors = CPCOLS, legendOrder = legendOrder, width = "100%", height = "100%")
+    result <- sunburst(tree, legend = list(w = 225, h = 15, r = 5, s = 5), colors = CPCOLS, legendOrder = legendOrder, width = "100%", height = "100%")
   } else if (type == "sund2b") {
-    sund2b(tree)
+    result <- sund2b(tree)
   }
+
+  if (showLegend) {
+    return(
+      htmlwidgets::onRender(
+        result,
+        "function(el, x) {
+          jQuery('.sunburst-togglelegend', el)
+            .attr('checked', 'true')
+            .attr('data-html2canvas-ignore', 'true');
+          jQuery('.sunburst-legend', el).css('visibility', '');
+
+          // create a button to download the sunburst
+          // (relies on html2canvas being included in the page)
+
+          // FIXME: consider pulling this all out into a js library
+          //  so that we can apply it to other components.
+          
+          const downloadBtn = jQuery('<button id=\"download-sunburst\">Download Sunburst</button>')
+            .css({'position': 'absolute', 'right': '5px', 'top': '5px'})
+            .attr('data-html2canvas-ignore', 'true')
+            .appendTo(el);
+
+          saveAs = (blob, fileName) => {
+              const link = document.createElement('a');
+              link.download = fileName
+              link.href = URL.createObjectURL(blob);
+              link.click();
+              URL.revokeObjectURL(link.href);
+          }
+
+          downloadBtn.click(() => {
+            html2canvas(el, { scale: 4, logging: false }).then(canvas => {
+              canvas.toBlob(function(blob) {
+                saveAs(blob, 'sunburst.png');
+              });
+            });
+          });
+        }"
+      )
+    )
+  }
+
+  return(result)
 }
 
 

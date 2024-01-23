@@ -15,9 +15,6 @@
 ## TORQUE ##
 ############
 #PBS -l nodes=1:ppn=1		# number of nodes requested, specify wall time (FA: originally 10)
-#PBS -m abe			# email notifications for job
-#PBS -M=falquaddoomi@gmail.com	# user email; (FA: originally jravilab.msu@gmail.com)
-#PBS -N molevol_analysis	# name of job being run
 
 ## change output directory based on user input
 OUTPATH=$SLURM_SUBMIT_DIR

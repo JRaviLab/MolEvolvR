@@ -27,7 +27,7 @@ seq_tree <- function(fasta_filepath){
   #   geom_tiplab(size=1, aes(angle=angle))
   #https://yulab-smu.top/treedata-book/chapter4.html
   #offs <- 0
-  tree <- ggtree(seqTree, branch.length = "dN_vs_dS") + theme_tree2()
+  tree <- ggtree(seqTree, branch.length = "dN_vs_dS") + theme_tree2(axis.line.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank())
   msaplot(tree, fasta=fasta_filepath, offset=0.5, bg_line = TRUE) + geom_tiplab(align=TRUE, linesize=0.5, size=3)
 
 }
