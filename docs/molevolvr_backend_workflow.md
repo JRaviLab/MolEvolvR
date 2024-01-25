@@ -1,85 +1,84 @@
-``` mermaid
+```mermaid
 ---
-title: MolEvolvR workflow
+title: MolEvolvR proceses to run for each input and advanced option
 ---
 
-flowchart TD
+flowchart LR
     %% Input types
-    A(User input)
-    A --> Z
-    Z{Select input type}
+    USER_INPUT(User input)
+    USER_INPUT --> SELECT_INPUT
+    SELECT_INPUT{Select input type}
     subgraph Input types
-        B(FASTA)
-        C(ACCNUM)
-        D(MSA)
-        E(BLAST output)
-        F(Interproscan output)
+        FASTA(FASTA)
+        ACCNUM(ACCNUM)
+        MSA(MSA)
+        BLAST_OUTPUT(BLAST output)
+        INTERPROSCAN_OUTPUT(Interproscan output)
     end
-        Z --> B
-        Z --> C
-        Z --> D
-        Z --> E
-        Z --> F
+        SELECT_INPUT --> FASTA
+        SELECT_INPUT --> ACCNUM
+        SELECT_INPUT --> MSA
+        SELECT_INPUT --> BLAST_OUTPUT
+        SELECT_INPUT --> INTERPROSCAN_OUTPUT
     %% Options for each input type
         subgraph Advanced options
-            G(Phylogenetic analysis & Domain architecture)
-            H(Homlogy search & Domain architecture)
-            I(Domain architecture ONLY)
-            J(Homology search ONLY)
+            PHYLO_AND_DOMARCH(Phylogenetic analysis & Domain architecture)
+            HOMOLOGY_AND_DOMARCH(Homlogy search & Domain architecture)
+            DOMARCH(Domain architecture ONLY)
+            HOMOLOGY(Homology search ONLY)
         end
         %%Y{Advanced options}
         %% FASTA
-        B --> G
-        B --> H
-        B --> I
-        B --> J
+        FASTA --> PHYLO_AND_DOMARCH
+        FASTA --> HOMOLOGY_AND_DOMARCH
+        FASTA --> DOMARCH
+        FASTA --> HOMOLOGY
         %% ACCNUM
-        C --> G
-        C --> H
-        C --> I
-        C --> J
+        ACCNUM --> PHYLO_AND_DOMARCH
+        ACCNUM --> HOMOLOGY_AND_DOMARCH
+        ACCNUM --> DOMARCH
+        ACCNUM --> HOMOLOGY
         %% MSA
-        D --> G
-        D --> H
-        D --> I
-        D --> J
+        MSA --> PHYLO_AND_DOMARCH
+        MSA --> HOMOLOGY_AND_DOMARCH
+        MSA --> DOMARCH
+        MSA --> HOMOLOGY
         %% Blast output
-        E --> G
+        BLAST_OUTPUT --> PHYLO_AND_DOMARCH
         %% Interproscan output
-        F --> H
-        F --> I
+        INTERPROSCAN_OUTPUT --> HOMOLOGY_AND_DOMARCH
+        INTERPROSCAN_OUTPUT --> DOMARCH
         %% Processes
         subgraph Processes
-            K(Deltablast)
-            L(Deltablast cleanup)
-            M(Interproscan)
-            N(ipr2lin)
-            O(ipr2da)
-            P(blastclust)
-            Q(clust2table)
+            DELTABLAST(Deltablast)
+            DELTABLAST_CLEANUP(Deltablast cleanup)
+            INTERPROSCAN(Interproscan)
+            IPR2LIN(ipr2lin)
+            IPR2DA(ipr2da)
+            BLASTCLUST(blastclust)
+            CLUST2TABLE(clust2table)
         end
         %% Options' processes
             %% Homology Search & Domain Architecture
-            H --> K
-            H --> L
-            H --> P
-            H --> Q
+            HOMOLOGY_AND_DOMARCH --> DELTABLAST
+            HOMOLOGY_AND_DOMARCH --> DELTABLAST_CLEANUP
+            HOMOLOGY_AND_DOMARCH --> BLASTCLUST
+            HOMOLOGY_AND_DOMARCH --> CLUST2TABLE
             %% Homology search only
-            J --> K
-            J --> L
-            J --> P
-            J --> Q
+            HOMOLOGY --> DELTABLAST
+            HOMOLOGY --> DELTABLAST_CLEANUP
+            HOMOLOGY --> BLASTCLUST
+            HOMOLOGY --> CLUST2TABLE
             %% Phylogenetic analysis & Domain Architecture
-            G --> M
-            G --> N
-            G --> O
-            G --> P
-            G --> Q
+            PHYLO_AND_DOMARCH --> INTERPROSCAN
+            PHYLO_AND_DOMARCH --> IPR2LIN
+            PHYLO_AND_DOMARCH --> IPR2DA
+            PHYLO_AND_DOMARCH --> BLASTCLUST
+            PHYLO_AND_DOMARCH --> CLUST2TABLE
             %% Domain Architecture ONLY
-            J --> M
-            J --> N
-            J --> O
-            J --> P
-            J --> Q
-
+            HOMOLOGY --> INTERPROSCAN
+            HOMOLOGY --> IPR2LIN
+            HOMOLOGY --> IPR2DA
+            HOMOLOGY --> BLASTCLUST
+            HOMOLOGY --> CLUST2TABLE
 ```
