@@ -14,7 +14,7 @@ title: MolEvolvR proceses to run for each input and advanced option
 flowchart LR
 
     SELECT_INPUT{Select input type}
-    subgraph "fa:fa-file-alt Input types"
+    subgraph "Input types"
         FASTA(FASTA)
         ACCNUM(ACCNUM)
         MSA(MSA)
@@ -28,7 +28,7 @@ flowchart LR
         SELECT_INPUT --> BLAST_OUTPUT
         SELECT_INPUT --> INTERPROSCAN_OUTPUT
     
-    subgraph "fa:fa-gear Advanced options"
+    subgraph "Advanced options"
         PHYLO_AND_DOMARCH(Phylogenetic analysis & Domain architecture)
         HOMOLOGY_AND_DOMARCH(Homlogy search & Domain architecture)
         DOMARCH(Domain architecture ONLY)
@@ -56,7 +56,7 @@ flowchart LR
         INTERPROSCAN_OUTPUT --> HOMOLOGY_AND_DOMARCH
         INTERPROSCAN_OUTPUT --> DOMARCH
         
-    subgraph "fa:fa-wrench Processes"
+    subgraph "Processes"
         DELTABLAST(Deltablast)
         DELTABLAST_CLEANUP(Deltablast cleanup)
         INTERPROSCAN(Interproscan)
