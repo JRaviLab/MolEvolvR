@@ -5,7 +5,7 @@
 The simplest way is to copy and paste the `mermaid` code block into mermaidchart.com and export.
 
 Mermaid CLI is not used because I/we have not installed the [node module](https://github.com/mermaid-js/mermaid-cli/tree/master#mermaid-cli) 
-on the server hosting the MolEvolvR application
+on the server hosting the MolEvolvR application.
 
 ```mermaid
 ---
