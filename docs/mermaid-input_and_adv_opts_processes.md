@@ -9,7 +9,7 @@ on the server hosting the MolEvolvR application.
 
 ```mermaid
 ---
-title: MolEvolvR proceses to run for each input and advanced option
+title: MolEvolvR processes to run for each input and advanced option
 ---
 flowchart LR
 
