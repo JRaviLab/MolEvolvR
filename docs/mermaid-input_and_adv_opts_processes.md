@@ -1,4 +1,4 @@
-# MolEvolvR mermaid diagram for mapping input types and advanced options to backend processes
+# MolEvolvR diagram for mapping input types and advanced options to backend processes
 
 ## How to export as PNG/SVG?
 
