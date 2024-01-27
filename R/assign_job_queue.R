@@ -47,11 +47,15 @@ map_input_opts2procs <- function(input_opts) {
 #' example:
 #' input_opts <- c("homology_search", "domain_architecture")
 #' procs <- map_input_opts2procs(input_opts)
-get_proc_medians <- function() {
-  source("/data/molevolvr_transfer/molevolvr_dev/molevol_scripts/R/metrics.R")
+get_proc_medians <- function(job_results_folder) {
+  # first, use rprojroot to identify the molevol_scripts base folder so we can do imports
+  scripts_root <- rprojroot::is_rstudio_project
+
+  source(scripts_root$find_file("R", "metrics.R"))
+  
   # aggregate logs from
-  path_prod_results <- "/data/molevolvr_transfer/hpc-cluster-tests/job_results"
-  path_log_data <- "/data/molevolvr_transfer/molevolvr_dev/molevol_scripts/log_data/prod_logs.rda"
+  path_prod_results <- job_results_folder
+  path_log_data <- scripts_root$find_file("log_data", "prod_logs.rda")
   if (!file.exists(path_log_data)) {
     logs <- aggregate_logs(path_prod_results, latest_date = Sys.Date() - 60)
     save(logs, file = path_log_data)
@@ -95,9 +99,10 @@ get_proc_medians <- function() {
 #'
 #' example: write_proc_medians_table()
 write_proc_medians_table <- function(
-    filepath = "/data/molevolvr_transfer/molevolvr_dev/molevol_scripts/log_data/prod_process_medians.tsv"
+    job_results_folder,
+    filepath
 ) {
-proc_medians <- get_proc_medians()
+proc_medians <- get_proc_medians(job_results_folder)
 df_proc_medians <- proc_medians |>
   tibble::as_tibble() |>
   tidyr::pivot_longer(
