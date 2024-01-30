@@ -73,14 +73,28 @@ submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL
     # If not phylogenetic analysis, split up the sequences, run blast and full analysis
     num_seqs <- get_sequences(sequences, dir_path = dir, separate = TRUE)
 
-    # compute estimated walltime, so we can store that in the collection
-    t_sec_esimate <- input_opts2est_walltime(advanced_options_names, num_seqs)
+    # calculate estimated walltime
+    t_sec_estimate <- ifelse(
+      type == "full" || type == "dblast",
+      input_opts2est_walltime(advanced_options_names, num_seqs, n_hits = NHITS, verbose = TRUE),
+      input_opts2est_walltime(advanced_options_names, num_seqs, verbose = TRUE)
+    )
 
     # determine whether it's in the long or short queue
     # (we map the names 'long' and 'short' to our actual partition names,
     # "LocalQLong" and "LocalQ", respectively)
-    destPartition <- ifelse(assign_job_queue(t_sec_esimate) == "long", "LocalQLong", "LocalQ")
-    cat(file=stderr(), stringr::str_glue("submit_full(): estimated time {t_sec_esimate}, queue {destQueue}\n\n"))
+    destPartition <- ifelse(
+      assign_job_queue(t_sec_estimate) == "long",
+      "LocalQLong",
+      "LocalQ"
+    )
+    cat(
+      file=stderr(),
+      stringr::str_glue(
+        "submit_full(): estimated time {t_sec_estimate}, ",
+        "queue {destPartition}\n\n"
+      )
+    )
     flush.console()
 
     cmd_full <- stringr::str_glue(
@@ -94,17 +108,18 @@ submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL
     get_sequences(sequences, dir_path = dir, separate = FALSE)
   }
 
-  # do analysis on query regardless of selected analysis
+  # run analysis on query regardless of selected advanced options
+  destPartitionQuery <- "LocalQ" # query run always goes to short queue
   if (by_domain == "TRUE") {
     cmd_by_domain <- stringr::str_glue(
-      "sbatch --partition {destPartition} --job-name {make_job_name(job_code, type)} --time=27:07:00 ",
+      "sbatch --partition {destPartitionQuery} --job-name {make_job_name(job_code, type)} --time=27:07:00 ",
       "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb ",
       "{domain_starting} {DB} {NHITS} {EVAL} T {type}"
     )
     submit_and_log(cmd_by_domain)
   } else {
     cmd_query <- stringr::str_glue(
-      "sbatch --partition {destPartition} --job-name {make_job_name(job_code, type)} --time=27:07:00 ",
+      "sbatch --partition {destPartitionQuery} --job-name {make_job_name(job_code, type)} --time=27:07:00 ",
       "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb ",
       "{sequences} {DB} {NHITS} {EVAL} T {type}"
     )
@@ -159,20 +174,18 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
     file = "logfile.tsv"
   )
 
-  # as in submit_full(), we assign a default partition in case one wasn't computed
-  destPartition <- "LocalQ"
-
   # submit job for query proteins only
+  destPartitionQuery <- "LocalQ" # query run always goes into short queue
   if (ncbi) {
     cmd_blast_query_ncbi <- stringr::str_glue(
-      "sbatch --partition {destPartition} --job-name {make_job_name(job_code, 'blast_query_ncbi')} --time=27:07:00 ",
+      "sbatch --partition {destPartitionQuery} --job-name {make_job_name(job_code, 'blast_query_ncbi')} --time=27:07:00 ",
       "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb ",
       "blast_query.tsv T F"
     )
     submit_and_log(cmd_blast_query_ncbi)
   } else {
     cmd_blast_query <- stringr::str_glue(
-      "sbatch --partition {destPartition} --job-name {make_job_name(job_code, 'blast_query')} --time=27:07:00 ",
+      "sbatch --partition {destPartitionQuery} --job-name {make_job_name(job_code, 'blast_query')} --time=27:07:00 ",
       "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb ",
       "blast_query.tsv T T"
     )
@@ -188,19 +201,43 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
     write_tsv(df_split, file.path(folder, file), col_names = FALSE)
   }
 
+  advanced_options_names <- names(advanced_options[advanced_options==TRUE])
+  # calculate estimated walltime
+  t_sec_estimate <- input_opts2est_walltime(
+    advanced_options_names,
+    n_inputs = nrow(df_blast),
+    verbose = TRUE
+  )
+  # determine whether it's in the long or short queue
+  # (we map the names 'long' and 'short' to our actual partition names,
+  # "LocalQLong" and "LocalQ", respectively)
+  destPartition <- ifelse(
+    assign_job_queue(t_sec_estimate) == "long",
+    "LocalQLong",
+    "LocalQ"
+  )
+  cat(
+    file=stderr(),
+    stringr::str_glue(
+      "submit_blast(): estimated time {t_sec_estimate}, ",
+      "queue {destPartition}\n\n"
+    )
+  )
+  flush.console()
+
   # submit job array that is batched by the number of queries
-  # for example, 
+  # for example,
   #   a blast table that only had one query protein will
   #   just be one job, but 2 queries protein would be split into 2 jobs, etc.
-  # notably, the analysis on the query protein itself is still 
+  # notably, the analysis on the query protein itself is still
   # done in the first submission above; a separate job
-  n_queries <- df_blast %>% select(Query) %>% distinct() %>% nrow()
-  cmd_blast_homologs <- stringr::str_glue(
+  n_queries <- nrow(df_query)
+  cmd_blast <- stringr::str_glue(
     "sbatch --partition {destPartition} --job-name {make_job_name(job_code, 'blast')} --array 1-{n_queries} --time=27:07:00 ",
     "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb ",
     "accs.txt F F"
   )
-  submit_and_log(cmd_blast_homologs)
+  submit_and_log(cmd_blast)
 
   # 1 is from the initial job on just the query proteins themselves
   # n_queries represents the total number of unique query proteins
@@ -234,12 +271,33 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
     ), 
     file = "logfile.tsv"
   )
-
-  # as in submit_full(), we assign a default partition in case one wasn't computed
-  destPartition <- "LocalQ"
-
   ipr_in <- read_tsv(ipr, col_names = TRUE)
   queries <- unique(ipr_in$AccNum)
+
+  advanced_options_names <- names(advanced_options[advanced_options==TRUE])
+  # calculate estimated walltime
+  t_sec_estimate <- ifelse(
+    blast,
+    input_opts2est_walltime(advanced_options_names, length(queries), n_hits = NHITS, verbose = TRUE),
+    input_opts2est_walltime(advanced_options_names, length(queries), verbose = TRUE)
+  )
+  # determine whether it's in the long or short queue
+  # (we map the names 'long' and 'short' to our actual partition names,
+  # "LocalQLong" and "LocalQ", respectively)
+  destPartition <- ifelse(
+    assign_job_queue(t_sec_estimate) == "long",
+    "LocalQLong",
+    "LocalQ"
+  )
+  cat(
+    file=stderr(),
+    stringr::str_glue(
+      "submit_iprscan(): estimated time {t_sec_estimate}, ",
+      "queue {destPartition}\n\n"
+    )
+  )
+  flush.console()
+
   if (ncbi) {
     # get seqs from accession number column
     acc2fa(queries, outpath = "seqs.fa")
@@ -260,9 +318,10 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
   # add the query job to total runs
   num_runs <- num_runs + 1
   write(paste0("0/", num_runs, " analyses completed"), "status.txt")
+  destPartitionQuery <- "LocalQ" # query run always goes to short queue
   # always do analysis on interpro file
   cmd_ipr_query <- stringr::str_glue(
-    "sbatch --partition {destPartition} --job-name {make_job_name(job_code, 'ipr_query')} --time=27:07:00 ",
+    "sbatch --partition {destPartitionQuery} --job-name {make_job_name(job_code, 'ipr_query')} --time=27:07:00 ",
     "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb ",
     "{ipr} T F"
   )
