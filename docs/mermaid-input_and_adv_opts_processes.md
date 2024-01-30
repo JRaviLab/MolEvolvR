@@ -9,17 +9,22 @@ on the server hosting the MolEvolvR application.
 
 ```mermaid
 ---
-title: MolEvolvR processes to run for each input and advanced option
+title: MolEvolvR proceses to run for each input and advanced option
 ---
 flowchart LR
 
     SELECT_INPUT{Select input type}
     subgraph "Input types"
-        FASTA(FASTA)
+        subgraph "Sequence-like inputs"
+            FASTA(FASTA)
+            MSA(MSA)
+        end
         ACCNUM(ACCNUM)
-        MSA(MSA)
-        BLAST_OUTPUT(BLAST output)
-        INTERPROSCAN_OUTPUT(Interproscan output)
+
+        subgraph "Tabular inputs"
+            BLAST_OUTPUT(BLAST output)
+            INTERPROSCAN_OUTPUT(Interproscan output)
+        end
     end
 
         SELECT_INPUT --> FASTA
@@ -28,7 +33,7 @@ flowchart LR
         SELECT_INPUT --> BLAST_OUTPUT
         SELECT_INPUT --> INTERPROSCAN_OUTPUT
     
-    subgraph "Advanced options"
+    subgraph "Advanced options "
         PHYLO_AND_DOMARCH(Phylogenetic analysis & Domain architecture)
         HOMOLOGY_AND_DOMARCH(Homlogy search & Domain architecture)
         DOMARCH(Domain architecture ONLY)
@@ -56,7 +61,7 @@ flowchart LR
         INTERPROSCAN_OUTPUT --> HOMOLOGY_AND_DOMARCH
         INTERPROSCAN_OUTPUT --> DOMARCH
         
-    subgraph "Processes"
+    subgraph "Processes "
         DELTABLAST(Deltablast)
         DELTABLAST_CLEANUP(Deltablast cleanup)
         INTERPROSCAN(Interproscan)
@@ -88,5 +93,29 @@ flowchart LR
         DOMARCH --> IPR2DA
         DOMARCH --> BLASTCLUST
         DOMARCH --> CLUST2TABLE
+
+    subgraph "Calculating number of inputs"
+        COUNT_SEQS[/Count number of input sequences/accessions/]
+        COUNT_UNIQUE_ID_ROWS[/Count number of rows with unique ID columns/]
+        COUNT_ROWS[/Count number of rows in BLAST table/]
+        HOMOLOGY_SEARCH_DECISION{Perfrom homology search?}
+        ADD[/Add/]
+        MULTIPLY_BLAST_HIT_OPTION[/Multiply number of queries by the 'NHITS' BLAST option/]
+        TOTAL_INPUTS((Total number of inputs))
+    end
+    %% Assign the workflow of calculating number of inputs for each type
+    FASTA --> COUNT_SEQS
+    ACCNUM --> COUNT_SEQS
+    MSA --> COUNT_SEQS
+    %% Factor in homology search option
+    COUNT_SEQS --> HOMOLOGY_SEARCH_DECISION
+    HOMOLOGY_SEARCH_DECISION --noo--> TOTAL_INPUTS
+    HOMOLOGY_SEARCH_DECISION --yes--> MULTIPLY_BLAST_HIT_OPTION
+    MULTIPLY_BLAST_HIT_OPTION --> TOTAL_INPUTS
+    %% Blast output
+    BLAST_OUTPUT --> COUNT_ROWS --> ADD --> COUNT_UNIQUE_ID_ROWS
+    %% Interproscan
+    INTERPROSCAN_OUTPUT --> COUNT_UNIQUE_ID_ROWS
+    COUNT_UNIQUE_ID_ROWS --> TOTAL_INPUTS
 
 ```
