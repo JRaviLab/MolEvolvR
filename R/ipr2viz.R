@@ -70,7 +70,7 @@ find_top_acc <- function(infile_full,
 ipr2viz <- function(infile_ipr = NULL, infile_full = NULL, accessions = c(),
                     analysis = c("Pfam", "Phobius", "TMHMM", "Gene3D"),
                     group_by = "Analysis", # "Analysis"
-                    topn = 20, name = "Name", text_size = 10, query = "All") {
+                    topn = 20, name = "Name", text_size = 15, query = "All") {
   CPCOLS <- c(
     "#AFEEEE", "#DDA0DD", "#EE2C2C", "#CDBE70", "#B0B099",
     "#8B2323", "#EE7600", "#EEC900", "chartreuse3", "#0000FF",
@@ -204,7 +204,7 @@ ipr2viz_web <- function(infile_ipr,
                         accessions,
                         analysis = c("Pfam", "Phobius", "TMHMM", "Gene3D"),
                         group_by = "Analysis", name = "Name",
-                        text_size = 8, legend_name = "ShortName", cols = 5, rows = 10) {
+                        text_size = 15, legend_name = "ShortName", cols = 5, rows = 10) {
   CPCOLS <- c(
     "#AFEEEE", "#DDA0DD", "#EE2C2C", "#CDBE70", "#B0B099",
     "#8B2323", "#EE7600", "#EEC900", "chartreuse3", "#0000FF",
