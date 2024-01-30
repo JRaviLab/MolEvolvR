@@ -48,14 +48,19 @@ map_input_opts2procs <- function(input_opts) {
 #' input_opts <- c("homology_search", "domain_architecture")
 #' procs <- map_input_opts2procs(input_opts)
 get_proc_medians <- function(job_results_folder) {
-  # first, use rprojroot to identify the molevol_scripts base folder so we can do imports
-  scripts_root <- rprojroot::is_rstudio_project
+  # first, use rprojroot to identify the molevol_scripts base folder so we can
+  # do project-local imports
+  common_root <- rprojroot::has_file(".molevol_root")
 
-  source(scripts_root$find_file("R", "metrics.R"))
+  source(common_root$find_file("molevol_scripts", "R", "metrics.R"))
   
   # aggregate logs from
   path_prod_results <- job_results_folder
-  path_log_data <- scripts_root$find_file("log_data", "prod_logs.rda")
+  path_log_data <- common_root$find_file("molevol_scripts", "log_data", "prod_logs.rda")
+
+  # ensure the folder exists to the location
+  dir.create(dirname(path_log_data), recursive=TRUE)
+
   if (!file.exists(path_log_data)) {
     logs <- aggregate_logs(path_prod_results, latest_date = Sys.Date() - 60)
     save(logs, file = path_log_data)
@@ -97,7 +102,10 @@ get_proc_medians <- function(job_results_folder) {
 #'
 #' @return tibble: 2 columns: 1) process and 2) median seconds
 #'
-#' example: write_proc_medians_table()
+#' example: write_proc_medians_table(
+#'   "/data/scratch/janani/molevolvr_out/",
+#'   "/data/scratch/janani/molevolvr_out/log_tbl.tsv"
+#' )
 write_proc_medians_table <- function(
     job_results_folder,
     filepath
@@ -115,19 +123,58 @@ df_proc_medians <- proc_medians |>
   return(df_proc_medians)
 }
 
+#' Compute median process runtimes, then write a YAML list of the processes and
+#' their median runtimes in seconds to the path specified by 'filepath'.
+#' 
+#' The default value of filepath is the value of the env var
+#' MOLEVOLVR_PROC_WEIGHTS, which get_proc_weights() also uses as its default
+#' read location.
+#'
+#' @param filepath path to save YAML file
+#'
+#' example: write_proc_medians_yml(
+#'   "/data/scratch/janani/molevolvr_out/",
+#'   "/data/scratch/janani/molevolvr_out/log_tbl.tsv"
+#' )
+write_proc_medians_yml <- function(
+  job_results_folder,
+  filepath=Sys.getenv("MOLEVOLVR_PROC_WEIGHTS", "/data/scratch/janani/molevolvr_out/job_proc_weights.yml")
+) {
+  medians <- get_proc_medians(job_results_folder)
+  yaml::write_yaml(medians, filepath)
+}
+
 # molevolvr backend process weight list based on the median walltimes
 # for each process (proc)
 # example: get_proc_weights()
-get_proc_weights <- function() {
-  proc_weights <- list(
-    "dblast" = 2810,
-    "iprscan" = 1016,
-    "dblast_cleanup" = 79,
-    "ipr2lineage" = 18,
-    "ipr2da" = 12,
-    "blast_clust" = 2,
-    "clust2table" = 2
+get_proc_weights <- function(
+  medians_yml_path=Sys.getenv("MOLEVOLVR_PROC_WEIGHTS", "/data/scratch/janani/molevolvr_out/job_proc_weights.yml")
+) {
+  tryCatch(
+    {
+      # attempt to read the weights from the YAML file produced by
+      # write_proc_medians_yml()
+      if (stringr::str_trim(medians_yml_path) == "") {
+        stop(
+          stringr::str_glue("medians_yml_path is empty ({medians_yml_path}), returning default weights")
+        )
+      }
+
+      proc_weights <- yaml::read_yaml(medians_yml_path)
+    },
+    error=function(cond) {
+      proc_weights <- list(
+        "dblast" = 2810,
+        "iprscan" = 1016,
+        "dblast_cleanup" = 79,
+        "ipr2lineage" = 18,
+        "ipr2da" = 12,
+        "blast_clust" = 2,
+        "clust2table" = 2
+      )
+    }
   )
+
   return(proc_weights)
 }
 
@@ -171,7 +218,7 @@ input_opts2est_walltime <- function(input_opts, n_inputs = 1L) {
 #'   assign_job_queue()
 assign_job_queue <- function(
   t_sec_estimate,
-  t_long = 21600 # 6 hours
+  t_cutoff = 21600 # 6 hours
 ) {
   queue <- ifelse(t_sec_estimate > t_cutoff, "long", "short")
   return(queue)
