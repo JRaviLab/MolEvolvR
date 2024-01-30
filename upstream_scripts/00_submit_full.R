@@ -3,6 +3,11 @@ suppressPackageStartupMessages(library(Biostrings))
 options(readr.show_col_types = FALSE, readr.show_types = FALSE) # silence read tsv col types
 library(yaml)
 
+# source assign_job_queue.R via apps and scripts common ancestor
+# assign_job_queue.R contains functions for computing how long jobs are estimated to take 
+common_root <- rprojroot::has_file(".molevol_root")
+source(common_root$find_file("molevol_scripts", "R", "assign_job_queue.R"))
+
 get_sequences <- function(sequences, acc_file_path = "accs.txt", dir_path = "~", separate = TRUE) {
   seqs <- readAAStringSet(sequences)
   cln_names <- c()
@@ -38,27 +43,48 @@ submit_and_log <- function(cmd, exit = FALSE) {
   flush.console()
 }
 
-submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL = 0.0005, sequences = "~/test.fa", phylo = "FALSE", by_domain = "FALSE", domain_starting = "~/domain_seqs.fa", type = "full", job_code=NULL, submitter_email=NULL) {
+submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL = 0.0005, sequences = "~/test.fa", phylo = "FALSE", by_domain = "FALSE", domain_starting = "~/domain_seqs.fa", type = "full", job_code=NULL, submitter_email=NULL, advanced_options=NULL) {
   # submits jobs for fasta, MSA, or accession number type submissions
   setwd(dir)
+
+  advanced_options_names <- names(advanced_options[advanced_options==TRUE])
+
   # write job submission params to file
   job_args <- list(
     submission_type = type,
     database = ifelse(phylo == FALSE, DB, NA),
     nhits = ifelse(phylo == FALSE, NHITS, NA),
     evalue = ifelse(phylo == FALSE, EVAL, NA),
-    submitter_email = submitter_email
+    submitter_email = submitter_email,
+    advanced_options = advanced_options_names
   )
   yml <- yaml::as.yaml(job_args)
   write(yml, "job_args.yml")
 
   num_runs <- 0
   write("START_DT\tSTOP_DT\tquery\tdblast\tacc2info\tdblast_cleanup\tacc2fa\tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2da\tduration", "logfile.tsv")
+
+  # assign destPartition to a known partition name just in case it doesn't get
+  # set below. (typically, it should be set from computing the walltime and
+  # calling assign_job_queue() to get the corresponding queue type)
+  destPartition <- "LocalQ"
+
   if (phylo == "FALSE") {
     # If not phylogenetic analysis, split up the sequences, run blast and full analysis
     num_seqs <- get_sequences(sequences, dir_path = dir, separate = TRUE)
+
+    # compute estimated walltime, so we can store that in the collection
+    t_sec_esimate <- input_opts2est_walltime(advanced_options_names, num_seqs)
+
+    # determine whether it's in the long or short queue
+    # (we map the names 'long' and 'short' to our actual partition names,
+    # "LocalQLong" and "LocalQ", respectively)
+    destPartition <- ifelse(assign_job_queue(t_sec_esimate) == "long", "LocalQLong", "LocalQ")
+    cat(file=stderr(), stringr::str_glue("submit_full(): estimated time {t_sec_esimate}, queue {destQueue}\n\n"))
+    flush.console()
+
     cmd_full <- stringr::str_glue(
-      "sbatch --job-name {make_job_name(job_code, type)} --array 1-{num_seqs} --time=27:07:00 ",
+      "sbatch --partition {destPartition} --job-name {make_job_name(job_code, type)} --array 1-{num_seqs} --time=27:07:00 ",
       "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb ",
       "input.txt {DB} {NHITS} {EVAL} F {type}"
     )
@@ -67,27 +93,29 @@ submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL
   } else {
     get_sequences(sequences, dir_path = dir, separate = FALSE)
   }
+
   # do analysis on query regardless of selected analysis
   if (by_domain == "TRUE") {
     cmd_by_domain <- stringr::str_glue(
-      "sbatch --job-name {make_job_name(job_code, type)} --time=27:07:00 ",
+      "sbatch --partition {destPartition} --job-name {make_job_name(job_code, type)} --time=27:07:00 ",
       "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb ",
       "{domain_starting} {DB} {NHITS} {EVAL} T {type}"
     )
     submit_and_log(cmd_by_domain)
   } else {
     cmd_query <- stringr::str_glue(
-      "sbatch --job-name {make_job_name(job_code, type)} --time=27:07:00 ",
+      "sbatch --partition {destPartition} --job-name {make_job_name(job_code, type)} --time=27:07:00 ",
       "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb ",
       "{sequences} {DB} {NHITS} {EVAL} T {type}"
     )
     submit_and_log(cmd_query)
   }
+
   num_runs <- num_runs + 1
   write(paste0("0/", num_runs, " analyses completed"), "status.txt")
 }
 
-submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/seqs.fa", ncbi = FALSE, job_code=NULL, submitter_email=NULL) {
+submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/seqs.fa", ncbi = FALSE, job_code=NULL, submitter_email=NULL, advanced_options=NULL) {
   # starts analysis for an input blast tsv
   # a query sequence(s) file can be provided,
   # or the sequences can be parsed from the Query column of input blast table
@@ -131,17 +159,20 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
     file = "logfile.tsv"
   )
 
+  # as in submit_full(), we assign a default partition in case one wasn't computed
+  destPartition <- "LocalQ"
+
   # submit job for query proteins only
   if (ncbi) {
     cmd_blast_query_ncbi <- stringr::str_glue(
-      "sbatch --job-name {make_job_name(job_code, 'blast_query_ncbi')} --time=27:07:00 ",
+      "sbatch --partition {destPartition} --job-name {make_job_name(job_code, 'blast_query_ncbi')} --time=27:07:00 ",
       "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb ",
       "blast_query.tsv T F"
     )
     submit_and_log(cmd_blast_query_ncbi)
   } else {
     cmd_blast_query <- stringr::str_glue(
-      "sbatch --job-name {make_job_name(job_code, 'blast_query')} --time=27:07:00 ",
+      "sbatch --partition {destPartition} --job-name {make_job_name(job_code, 'blast_query')} --time=27:07:00 ",
       "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb ",
       "blast_query.tsv T T"
     )
@@ -165,7 +196,7 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
   # done in the first submission above; a separate job
   n_queries <- df_blast %>% select(Query) %>% distinct() %>% nrow()
   cmd_blast_homologs <- stringr::str_glue(
-    "sbatch --job-name {make_job_name(job_code, 'blast')} --array 1-{n_queries} --time=27:07:00 ",
+    "sbatch --partition {destPartition} --job-name {make_job_name(job_code, 'blast')} --array 1-{n_queries} --time=27:07:00 ",
     "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb ",
     "accs.txt F F"
   )
@@ -177,7 +208,7 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
   write(paste0("0/", num_runs, " analyses completed"), "status.txt")
 }
 
-submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa", ncbi = FALSE, blast = FALSE, DB = "refseq", NHITS = 5000, EVAL = 0.0005, job_code=NULL, submitter_email=NULL) {
+submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa", ncbi = FALSE, blast = FALSE, DB = "refseq", NHITS = 5000, EVAL = 0.0005, job_code=NULL, submitter_email=NULL, advanced_options=NULL) {
   setwd(dir)
 
   # write job submission params to file
@@ -204,6 +235,9 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
     file = "logfile.tsv"
   )
 
+  # as in submit_full(), we assign a default partition in case one wasn't computed
+  destPartition <- "LocalQ"
+
   ipr_in <- read_tsv(ipr, col_names = TRUE)
   queries <- unique(ipr_in$AccNum)
   if (ncbi) {
@@ -215,7 +249,7 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
     seq_count <- get_sequences(seqs, dir_path = dir, separate = TRUE)
     num_runs <- num_runs + seq_count
     cmd_ipr_homology <- stringr::str_glue(
-      "sbatch --job-name {make_job_name(job_code, 'ipr_homology')} --array 1-{seq_count} --time=27:07:00 ",
+      "sbatch --partition {destPartition} --job-name {make_job_name(job_code, 'ipr_homology')} --array 1-{seq_count} --time=27:07:00 ",
       "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb ",
       "input.txt F T {DB} {NHITS} {EVAL}"
     )
@@ -228,7 +262,7 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
   write(paste0("0/", num_runs, " analyses completed"), "status.txt")
   # always do analysis on interpro file
   cmd_ipr_query <- stringr::str_glue(
-    "sbatch --job-name {make_job_name(job_code, 'ipr_query')} --time=27:07:00 ",
+    "sbatch --partition {destPartition} --job-name {make_job_name(job_code, 'ipr_query')} --time=27:07:00 ",
     "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb ",
     "{ipr} T F"
   )
