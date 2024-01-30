@@ -206,11 +206,10 @@ input_opts2est_walltime <- function(input_opts, n_inputs = 1L, n_hits = NULL) {
   # dot product of weights and procs to run; scaled by the number of inputs
   est_walltime_queries <- (n_inputs * (binary_proc_vec %*% proc_weights)) |>
     as.numeric()
-  # calculate the additional processes to run for the returned
-  # hits from homology search
+  # calculate the additional processes to run for the homologous hits
   if ("homology_search" %in% input_opts) {
     opts2procs <- make_opts2procs()
-    # exclude the homology search processes
+    # exclude the homology search processes for the homologous hits
     procs2exclude_for_homologs <- opts2procs[["homology_search"]]
     procs_homologs <- procs_from_opts[!(procs_from_opts %in% procs2exclude_for_homologs)]
     binary_proc_vec_homolog  <- dplyr::if_else(all_procs %in% procs_homologs, 1L, 0L)
