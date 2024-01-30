@@ -188,7 +188,7 @@ get_proc_weights <- function(
 #' @return total estimated number of seconds a job will process (walltime)
 #'
 #' example: input_opts2est_walltime(c("homology_search", "domain_architecture"), n_inputs = 3, n_hits = 50L)
-input_opts2est_walltime <- function(input_opts, n_inputs = 1L, n_hits = NULL) {
+input_opts2est_walltime <- function(input_opts, n_inputs = 1L, n_hits = NULL, verbose = FALSE) {
   # to calculate est walltime for a homology search job, the number of hits
   # must be provided
   validation_fail <- is.null(n_hits) && "homology_search" %in% input_opts
@@ -204,7 +204,7 @@ input_opts2est_walltime <- function(input_opts, n_inputs = 1L, n_hits = NULL) {
   # binary encode: yes proc will run (1); else 0
   binary_proc_vec  <- dplyr::if_else(all_procs %in% procs_from_opts, 1L, 0L)
   # dot product of weights and procs to run; scaled by the number of inputs
-  est_walltime_queries <- (n_inputs * (binary_proc_vec %*% proc_weights)) |>
+  est_walltime <- (n_inputs * (binary_proc_vec %*% proc_weights)) |>
     as.numeric()
   # calculate the additional processes to run for the homologous hits
   if ("homology_search" %in% input_opts) {
@@ -214,9 +214,19 @@ input_opts2est_walltime <- function(input_opts, n_inputs = 1L, n_hits = NULL) {
     procs_homologs <- procs_from_opts[!(procs_from_opts %in% procs2exclude_for_homologs)]
     binary_proc_vec_homolog  <- dplyr::if_else(all_procs %in% procs_homologs, 1L, 0L)
     # add the estimated walltime for processes run on the homologous hits
-    est_walltime_final <- est_walltime_queries + (n_hits * (binary_proc_vec_homolog %*% proc_weights))
+    est_walltime <- est_walltime +
+      (n_hits * (binary_proc_vec_homolog %*% proc_weights) |> as.numeric())
   }
-  return(est_walltime_final)
+  if (verbose) {
+    msg <- stringr::str_glue(
+      "warnings from input_opts2est_walltime():\n",
+      "\tn_inputs={n_inputs}\n",
+      "\tn_hits={ifelse(is.null(n_hits), 'null', n_hits)}\n",
+      "\test_walltime={est_walltime}\n\n"
+    )
+    cat(file=stderr(), msg)
+  }
+  return(est_walltime)
 }
 
 #' Decision function to assign job queue
