@@ -106,10 +106,7 @@ get_proc_medians <- function(job_results_folder) {
 #'   "/data/scratch/janani/molevolvr_out/",
 #'   "/data/scratch/janani/molevolvr_out/log_tbl.tsv"
 #' )
-write_proc_medians_table <- function(
-    job_results_folder,
-    filepath
-) {
+write_proc_medians_table <- function(job_results_folder, filepath) {
 proc_medians <- get_proc_medians(job_results_folder)
 df_proc_medians <- proc_medians |>
   tibble::as_tibble() |>
@@ -130,16 +127,18 @@ df_proc_medians <- proc_medians |>
 #' MOLEVOLVR_PROC_WEIGHTS, which get_proc_weights() also uses as its default
 #' read location.
 #'
-#' @param filepath path to save YAML file
+#' @param filepath path to save YAML file; if NULL, uses ./molevol_scripts/log_data/job_proc_weights.yml
 #'
 #' example: write_proc_medians_yml(
 #'   "/data/scratch/janani/molevolvr_out/",
-#'   "/data/scratch/janani/molevolvr_out/log_tbl.tsv"
+#'   "/data/scratch/janani/molevolvr_out/log_tbl.yml"
 #' )
-write_proc_medians_yml <- function(
-  job_results_folder,
-  filepath=Sys.getenv("MOLEVOLVR_PROC_WEIGHTS", "/data/scratch/janani/molevolvr_out/job_proc_weights.yml")
-) {
+write_proc_medians_yml <- function(job_results_folder, filepath=NULL) {
+  if (is.null(filepath)) {
+    common_root <- rprojroot::has_file(".molevol_root")
+    filepath <- common_root$find_file("molevol_scripts", "log_data", "job_proc_weights.yml")
+  }
+
   medians <- get_proc_medians(job_results_folder)
   yaml::write_yaml(medians, filepath)
 }
@@ -147,9 +146,12 @@ write_proc_medians_yml <- function(
 # molevolvr backend process weight list based on the median walltimes
 # for each process (proc)
 # example: get_proc_weights()
-get_proc_weights <- function(
-  medians_yml_path=Sys.getenv("MOLEVOLVR_PROC_WEIGHTS", "/data/scratch/janani/molevolvr_out/job_proc_weights.yml")
-) {
+get_proc_weights <- function(medians_yml_path=NULL) {
+  if (is.null(medians_yml_path)) {
+    common_root <- rprojroot::has_file(".molevol_root")
+    medians_yml_path <- common_root$find_file("molevol_scripts", "log_data", "job_proc_weights.yml")
+  }
+
   proc_weights <- tryCatch(
     {
       # attempt to read the weights from the YAML file produced by
