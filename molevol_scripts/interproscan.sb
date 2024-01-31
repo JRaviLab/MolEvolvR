@@ -19,10 +19,6 @@
 ## naming the job
 #SBATCH --job-name=interpro                 # RESET
 
-## email notifications for job
-#SBATCH --mail-type=all
-#SBATCH --mail-user=janani@msu.edu                 # RESET
-
 ###########
 ## SETUP ##
 ###########
