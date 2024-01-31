@@ -16,9 +16,6 @@
 ## #SBATCH --mem-per-cpu=64G		# memory used per cpu
 #SBATCH --mem=64G
 #SBATCH --job-name=iprscan		# naming the job
-#SBATCH --output=%x-%j.SLURMout		# std out & error
-#SBATCH --mail-type=all			# email notification
-#SBATCH --mail-user=janani@msu.edu	# RESET email ID
 
 ###########
 ## SETUP ##
