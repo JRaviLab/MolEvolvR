@@ -1,4 +1,4 @@
-# functions to measure:
+# functions to measure and summarize the performance of MolEvolvR
 # - process runtimes
 # - handle log files
 
@@ -118,81 +118,24 @@ calc_log_process_stat <- function(
     result <- df_log |>
       tidyr::drop_na(columns) |>
       dplyr::group_by(.data[[columns_group_by]]) |>
-      dplyr::mutate('stat' = dplyr::across(columns, f, ...)) |>
+      dplyr::mutate("stat" = dplyr::across(columns, f, ...)) |>
       dplyr::ungroup()
   }
   return(result)
 }
 
-#' get file modification times of status.txt from job directory
-#' @param dir_job_results path to a MolEvolvR job_results directory
-#' @return tibble of submission times grouped by month and year
-# example
-#   path_prod_results <- "/data/molevolvr_transfer/hpc-cluster-tests/job_results"
-#   df_t_submit_prod <- get_df_t_submit(path_prod_results)
-get_df_t_submit <- function(dir_job_results) {
-  # use modification time of status.txt to estimate submission times
-
-  # job results dirs
-  vec_dir_results <- list.dirs(
-    dir_job_results,
-    recursive = FALSE,
-    full.names = TRUE
+#' given a MolEvolvR log dataframe, calculate q3s for process runtimes
+#' @param df_log `df_log` element from the return list of `aggregate_logs()`
+#' @return if group_by is empty: a single value; else: tibble from summarise
+get_process_q3s <- function(
+  df_log,
+  processes = c(
+    "dblast", "acc2info", "dblast_cleanup", "acc2fa", "blast_clust",
+    "clust2table", "iprscan", "ipr2lineage", "ipr2da", "cln_blast"
   )
-
-  # search job folders for `status.txt`
-  # use modification time to estimate submission date
-  col_month <- character()
-  col_year <- character()
-  for (directory in vec_dir_results) {
-    # catch unforeseen errors
-    tryCatch(
-      expr = {
-        file_status_txt <- file.path(directory, "status.txt")
-          if (file.exists(file_status_txt)) {
-            modification_date <- file.mtime(file_status_txt)
-            col_month <- append(
-              x = col_month,
-              values = modification_date |> months()
-            )
-            col_year <- append(
-              x = col_year,
-              values = modification_date |> format("%Y")
-            )
-          }
-        },
-      error = function(e) {
-        msg <- stringr::str_glue("failed to measure submission date for '{directory}'")
-        warning(msg)
-      }
-    )
-  }
-  df_t_submit <- tibble::tibble("month" = col_month, "year" = col_year)
-  return(df_t_submit)
-}
-
-#' plot MolEvolvR submission counts from a time submission table
-#' @param df_t_submit return tibble from `get_df_t_submit()`
-#' @return bar plot of submission counts grouped by month and year
-# example
-#   path_prod_results <- "/data/molevolvr_transfer/hpc-cluster-tests/job_results"
-#   df_t_submit_prod <- get_df_t_submit(path_prod_results)
-#   plot_df_t_submit(df_t_submit_prod)
-
-plot_df_t_submit <- function(df_t_submit) {
-  df_n_submissions <- df_t_submit |> dplyr::group_by(month, year) |>
-    dplyr::summarise(submissions = dplyr::n(), .groups = 'drop') |>
-    dplyr::arrange(year, month)
-  p <- ggplot2::ggplot(data = df_n_submissions) +
-    ggplot2::aes(x = paste(year, month, sep = '-'), y = submissions) +
-    ggplot2::theme_minimal() +
-    ggplot2::geom_col() +
-    ggplot2::labs(x = "Date", y = "Number of submissions") +
-    ggplot2::theme(
-      plot.title = ggplot2::element_text(size = 30, face = 'bold'),
-      axis.text.x = ggplot2::element_text(angle = 90, hjust = 1),
-      axis.text = ggplot2::element_text(size = 20),
-      axis.title = ggplot2::element_text(size = 22, face = "bold"),
-    )
-  return(p)
+) {
+  q3s <- df_log |> dplyr::select(processes) |>
+    dplyr::summarise_all(~ {quantile(., probs = 0.75, na.rm=T)})
+  vec_q3s <- q3s |> unlist()
+  return(vec_q3s)
 }
