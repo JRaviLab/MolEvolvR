@@ -1,3 +1,10 @@
+# for now, we're using an env var, COMMON_SRC_ROOT, to specify this folder since
+# the working directory is changed in many parts of the current molevolvr
+# pipeline.
+# to use this, construct paths like so: file.path(common_root, "path", "to", "file.R")
+# for example, the reference for this file would be:
+# file.path(common_root, "molevol_scripts", "R", "assign_job_queue.R")
+common_root <- Sys.getenv('COMMON_SRC_ROOT')
 
 #' Construct list where names (MolEvolvR input opts) point to processes
 #'
@@ -48,15 +55,11 @@ map_input_opts2procs <- function(input_opts) {
 #' input_opts <- c("homology_search", "domain_architecture")
 #' procs <- map_input_opts2procs(input_opts)
 get_proc_medians <- function(job_results_folder) {
-  # first, use rprojroot to identify the molevol_scripts base folder so we can
-  # do project-local imports
-  common_root <- rprojroot::has_file(".molevol_root")
-
-  source(common_root$find_file("molevol_scripts", "R", "metrics.R"))
+  source(file.path(common_root, "molevol_scripts", "R", "metrics.R"))
   
   # aggregate logs from
   path_prod_results <- job_results_folder
-  path_log_data <- common_root$find_file("molevol_scripts", "log_data", "prod_logs.rda")
+  path_log_data <- file.path(common_root, "molevol_scripts", "log_data", "prod_logs.rda")
 
   # ensure the folder exists to the location
   dir.create(dirname(path_log_data), recursive=TRUE)
@@ -135,8 +138,7 @@ df_proc_medians <- proc_medians |>
 #' )
 write_proc_medians_yml <- function(job_results_folder, filepath=NULL) {
   if (is.null(filepath)) {
-    common_root <- rprojroot::has_file(".molevol_root")
-    filepath <- common_root$find_file("molevol_scripts", "log_data", "job_proc_weights.yml")
+    filepath <- file.path(common_root, "molevol_scripts", "log_data", "job_proc_weights.yml")
   }
 
   medians <- get_proc_medians(job_results_folder)
@@ -148,8 +150,7 @@ write_proc_medians_yml <- function(job_results_folder, filepath=NULL) {
 # example: get_proc_weights()
 get_proc_weights <- function(medians_yml_path=NULL) {
   if (is.null(medians_yml_path)) {
-    common_root <- rprojroot::has_file(".molevol_root")
-    medians_yml_path <- common_root$find_file("molevol_scripts", "log_data", "job_proc_weights.yml")
+    medians_yml_path <- file.path(common_root, "molevol_scripts", "log_data", "job_proc_weights.yml")
   }
 
   proc_weights <- tryCatch(
