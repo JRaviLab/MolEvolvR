@@ -169,5 +169,5 @@ plot_quarterly_proteins_processed <- function(df_log) {
         x = "Quarter",
         y = "Proteins submitted") +
     ggplot2::theme_minimal()
-  return(list(p, df_log))
+  return(p)
 }
