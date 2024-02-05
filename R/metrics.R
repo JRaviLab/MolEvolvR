@@ -142,7 +142,7 @@ get_process_q3s <- function(
 #' Plot number of submissions, grouped by quarter, for MolEvolvR
 #' @param df_log `df_log` element from the return list of `aggregate_logs()`
 #' @return line plot of the quarterly amount of proteins submitted to MolEvolvR
-plot_quarterly_proteins_processed <- function(df_log) {
+plot_cumulative_proteins_processed <- function(df_log) {
   # convert the shell date time to R's POSIXct type
   df_log <- df_log |> 
     dplyr::mutate(START_DT = START_DT |> as.POSIXct(format = "%d/%m/%Y-%H:%M:%S"))
@@ -162,12 +162,14 @@ plot_quarterly_proteins_processed <- function(df_log) {
     # coerce to factor, to respect x-axis ('quarter_year') order in plot
     dplyr::mutate(quarter_year = factor(paste0(quarter, "-", year))) |>
     dplyr::ungroup()
+  df_log <- df_log |>
+    dplyr::mutate(count_cumulative = cumsum(count))
 
-  p <- ggplot2::ggplot(df_log, ggplot2::aes(x = quarter_year, y = count, group = 1)) +
+  p <- ggplot2::ggplot(df_log, ggplot2::aes(x = quarter_year, y = count_cumulative, group = 1)) +
     ggplot2::geom_line() +
-    ggplot2::labs(title = "Number of proteins submitted by quarter",
+    ggplot2::labs(title = "Cumulative proteins submitted by quarter",
         x = "Quarter",
-        y = "Proteins submitted") +
+        y = "Total proteins submitted") +
     ggplot2::theme_minimal()
   return(p)
 }
