@@ -3,10 +3,11 @@ suppressPackageStartupMessages(library(Biostrings))
 options(readr.show_col_types = FALSE, readr.show_types = FALSE) # silence read tsv col types
 library(yaml)
 
-# source assign_job_queue.R via apps and scripts common ancestor
-# assign_job_queue.R contains functions for computing how long jobs are estimated to take 
-common_root <- rprojroot::has_file(".molevol_root")
-source(common_root$find_file("molevol_scripts", "R", "assign_job_queue.R"))
+# for now, we're using an env var, COMMON_SRC_ROOT, to specify this folder since
+# the working directory is changed in many parts of the current molevolvr
+# pipeline.
+common_root <- Sys.getenv('COMMON_SRC_ROOT')
+source(file.path(common_root, "molevol_scripts", "R", "assign_job_queue.R"))
 
 get_sequences <- function(sequences, acc_file_path = "accs.txt", dir_path = "~", separate = TRUE) {
   seqs <- readAAStringSet(sequences)
