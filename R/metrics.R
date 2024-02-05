@@ -10,7 +10,7 @@
 #   logs <- aggregate_logs(path_dev_results, verbose = TRUE)
 aggregate_logs <- function(
   dir_job_results,
-  latest_date = (Sys.Date() - 60), # default 60 days prior
+  latest_date = (Sys.Date() - 730), # default 2 years prior
   verbose = FALSE
 ) {
 
@@ -24,7 +24,7 @@ aggregate_logs <- function(
   vec_dir_results <- vapply(
     vec_dir_results,
     FUN = function(x) {
-      lgl <- (as.integer(file.mtime(x))) < (as.integer(as.POSIXct(latest_date)))
+      lgl <- (as.integer(file.mtime(x))) > (as.integer(as.POSIXct(latest_date)))
       ifelse(lgl, yes = x, no = "")
     },
     FUN.VALUE = character(1)
@@ -138,4 +138,36 @@ get_process_q3s <- function(
     dplyr::summarise_all(~ {quantile(., probs = 0.75, na.rm=T)})
   vec_q3s <- q3s |> unlist()
   return(vec_q3s)
+}
+#' Plot number of submissions, grouped by quarter, for MolEvolvR
+#' @param df_log `df_log` element from the return list of `aggregate_logs()`
+#' @return line plot of the quarterly amount of proteins submitted to MolEvolvR
+plot_quarterly_proteins_processed <- function(df_log) {
+  # convert the shell date time to R's POSIXct type
+  df_log <- df_log |> 
+    dplyr::mutate(START_DT = START_DT |> as.POSIXct(format = "%d/%m/%Y-%H:%M:%S"))
+  df_log <- df_log |>
+    dplyr::mutate(quarter = quarters(START_DT))
+  df_log <- df_log |>
+    dplyr::mutate(year = lubridate::year(START_DT))
+  df_log <- df_log |>
+    dplyr::select(quarter, year)
+
+  # Group by quarter and count the number of rows
+  df_log <- df_log |>
+    dplyr::group_by(quarter, year) |>
+    dplyr::summarize(count = dplyr::n()) |>
+    dplyr::arrange(year, quarter) |>
+    dplyr::rowwise() |>
+    # coerce to factor, to respect x-axis ('quarter_year') order in plot
+    dplyr::mutate(quarter_year = factor(paste0(quarter, "-", year))) |>
+    dplyr::ungroup()
+
+  p <- ggplot2::ggplot(df_log, ggplot2::aes(x = quarter_year, y = count, group = 1)) +
+    ggplot2::geom_line() +
+    ggplot2::labs(title = "Number of proteins submitted by quarter",
+        x = "Quarter",
+        y = "Proteins submitted") +
+    ggplot2::theme_minimal()
+  return(list(p, df_log))
 }
