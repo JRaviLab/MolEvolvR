@@ -85,8 +85,8 @@ submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL
     # calculate estimated walltime
     t_sec_estimate <- ifelse(
       type == "full" || type == "dblast",
-      input_opts2est_walltime(advanced_options_names, num_seqs, n_hits = NHITS, verbose = TRUE),
-      input_opts2est_walltime(advanced_options_names, num_seqs, verbose = TRUE)
+      advanced_opts2est_walltime(advanced_options_names, num_seqs, n_hits = NHITS, verbose = TRUE),
+      advanced_opts2est_walltime(advanced_options_names, num_seqs, verbose = TRUE)
     )
 
     # determine whether it's in the long or short queue
@@ -214,7 +214,7 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
 
   advanced_options_names <- names(advanced_options[advanced_options==TRUE])
   # calculate estimated walltime
-  t_sec_estimate <- input_opts2est_walltime(
+  t_sec_estimate <- advanced_opts2est_walltime(
     advanced_options_names,
     n_inputs = nrow(df_blast),
     verbose = TRUE
@@ -291,8 +291,8 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
   # calculate estimated walltime
   t_sec_estimate <- ifelse(
     blast,
-    input_opts2est_walltime(advanced_options_names, length(queries), n_hits = NHITS, verbose = TRUE),
-    input_opts2est_walltime(advanced_options_names, length(queries), verbose = TRUE)
+    advanced_opts2est_walltime(advanced_options_names, length(queries), n_hits = NHITS, verbose = TRUE),
+    advanced_opts2est_walltime(advanced_options_names, length(queries), verbose = TRUE)
   )
   # determine whether it's in the long or short queue
   # (we map the names 'long' and 'short' to our actual partition names,

@@ -6,37 +6,37 @@
 # file.path(common_root, "molevol_scripts", "R", "assign_job_queue.R")
 common_root <- Sys.getenv('COMMON_SRC_ROOT')
 
-#' Construct list where names (MolEvolvR input opts) point to processes
+#' Construct list where names (MolEvolvR advanced options) point to processes
 #'
 #'
-#' @return list where names (MolEvolvR input opts) point to processes
+#' @return list where names (MolEvolvR advanced options) point to processes
 #'
 #' example: list_opts2procs <- make_opts2procs
 make_opts2procs <- function() {
   opts2processes <- list(
     "homology_search" = c("dblast", "dblast_cleanup"),
     "domain_architecture" = c("iprscan", "ipr2lineage", "ipr2da"),
-    "any" = c("blast_clust", "clust2table") # processes always present agnostic of input opts 
+    "any" = c("blast_clust", "clust2table") # processes always present agnostic of advanced options
   )
   return(opts2processes)
 }
 
-#' Use MolEvolvR input options to get associated processes
+#' Use MolEvolvR advanced options to get associated processes
 #'
-#' @param input_opts character vector of MolEvolvR input opts
+#' @param advanced_opts character vector of MolEvolvR advanced options
 #'
 #' @return character vector of process names that will execute given
-#' the input options
+#' the advanced options
 #' 
 #' example:
-#' input_opts <- c("homology_search", "domain_architecture")
-#' procs <- map_input_opts2procs(input_opts)
-map_input_opts2procs <- function(input_opts) {
+#' advanced_opts <- c("homology_search", "domain_architecture")
+#' procs <- map_advanced_opts2procs(advanced_opts)
+map_advanced_opts2procs <- function(advanced_opts) {
   # append 'any' to add procs that always run
-  input_opts <- c(input_opts, "any")
+  advanced_opts <- c(advanced_opts, "any")
   opts2proc <- make_opts2procs()
-  # setup index for opts2proc based on input
-  idx <- which(names(opts2proc) %in% input_opts)
+  # setup index for opts2proc based on advanced options
+  idx <- which(names(opts2proc) %in% advanced_opts)
   # extract processes that will run
   procs <- opts2proc[idx] |> unlist()
   return(procs)
@@ -52,8 +52,8 @@ map_input_opts2procs <- function(input_opts) {
 #' see molevol_scripts/R/metrics.R for info on functions called here
 #'
 #' example:
-#' input_opts <- c("homology_search", "domain_architecture")
-#' procs <- map_input_opts2procs(input_opts)
+#' advanced_opts <- c("homology_search", "domain_architecture")
+#' procs <- map_advanced_opts2procs(advanced_opts)
 get_proc_medians <- function(job_results_folder) {
   source(file.path(common_root, "molevol_scripts", "R", "metrics.R"))
   
@@ -181,28 +181,28 @@ get_proc_weights <- function(medians_yml_path=NULL) {
   return(proc_weights)
 }
 
-#' Given MolEvolvR input options and number of inputs,
+#' Given MolEvolvR advanced options and number of inputs,
 #' calculate the total estimated walltime for the job
 #'
-#' @param input_opts character vector of MolEvolvR input options
+#' @param advanced_opts character vector of MolEvolvR advanced options
 #' (see make_opts2procs for the options)
 #' @param n_inputs total number of input proteins
 #'
 #' @return total estimated number of seconds a job will process (walltime)
 #'
-#' example: input_opts2est_walltime(c("homology_search", "domain_architecture"), n_inputs = 3, n_hits = 50L)
-input_opts2est_walltime <- function(input_opts, n_inputs = 1L, n_hits = NULL, verbose = FALSE) {
+#' example: advanced_opts2est_walltime(c("homology_search", "domain_architecture"), n_inputs = 3, n_hits = 50L)
+advanced_opts2est_walltime <- function(advanced_opts, n_inputs = 1L, n_hits = NULL, verbose = FALSE) {
   # to calculate est walltime for a homology search job, the number of hits
   # must be provided
-  validation_fail <- is.null(n_hits) && "homology_search" %in% input_opts
+  validation_fail <- is.null(n_hits) && "homology_search" %in% advanced_opts
   stopifnot(!validation_fail)
 
   proc_weights <- get_proc_weights()
   # sort process weights by names and convert to vec
   proc_weights <- proc_weights[order(names(proc_weights))] |> unlist()
   all_procs <- names(proc_weights) |> sort()
-  # get processes from input options and sort by names
-  procs_from_opts <- map_input_opts2procs(input_opts)
+  # get processes from advanced options and sort by names
+  procs_from_opts <- map_advanced_opts2procs(advanced_opts)
   procs_from_opts <- sort(procs_from_opts)
   # binary encode: yes proc will run (1); else 0
   binary_proc_vec  <- dplyr::if_else(all_procs %in% procs_from_opts, 1L, 0L)
@@ -210,7 +210,7 @@ input_opts2est_walltime <- function(input_opts, n_inputs = 1L, n_hits = NULL, ve
   est_walltime <- (n_inputs * (binary_proc_vec %*% proc_weights)) |>
     as.numeric()
   # calculate the additional processes to run for the homologous hits
-  if ("homology_search" %in% input_opts) {
+  if ("homology_search" %in% advanced_opts) {
     opts2procs <- make_opts2procs()
     # exclude the homology search processes for the homologous hits
     procs2exclude_for_homologs <- opts2procs[["homology_search"]]
@@ -222,7 +222,7 @@ input_opts2est_walltime <- function(input_opts, n_inputs = 1L, n_hits = NULL, ve
   }
   if (verbose) {
     msg <- stringr::str_glue(
-      "warnings from input_opts2est_walltime():\n",
+      "warnings from advanced_opts2est_walltime():\n",
       "\tn_inputs={n_inputs}\n",
       "\tn_hits={ifelse(is.null(n_hits), 'null', n_hits)}\n",
       "\test_walltime={est_walltime}\n\n"
@@ -235,14 +235,14 @@ input_opts2est_walltime <- function(input_opts, n_inputs = 1L, n_hits = NULL, ve
 #' Decision function to assign job queue
 #'
 #' @param t_sec_estimate estimated number of seconds a job will process
-#' (from `input_opts2est_walltime`)
+#' (from advanced_opts2est_walltime())
 #' @param t_long threshold value that defines the lower bound for assigning a
 #' job to the "long queue"
 #'
 #' @return a string of "short" or "long"
 #'
 #' example:
-#' input_opts2est_walltime(c("homology_search", "domain_architecture"), 3) |>
+#' advanced_opts2est_walltime(c("homology_search", "domain_architecture"), 3) |>
 #'   assign_job_queue()
 assign_job_queue <- function(
   t_sec_estimate,
@@ -252,7 +252,7 @@ assign_job_queue <- function(
   return(queue)
 }
 
-#' Plot the estimated runtimes for different input options and number
+#' Plot the estimated runtimes for different advanced options and number
 #' of inputs
 #'
 #' this function was just for fun; very, very messy code
@@ -281,9 +281,9 @@ plot_estimated_walltimes <- function() {
       x = est_walltimes,
       values = sapply(
         opts_power_set,
-        FUN = function(input_opts) {
-          est_walltime <- input_opts2est_walltime(input_opts, n_inputs = n_inputs)
-          names(est_walltime) <- paste0(input_opts, collapse = "_")
+        FUN = function(advanced_opts) {
+          est_walltime <- advanced_opts2est_walltime(advanced_opts, n_inputs = n_inputs)
+          names(est_walltime) <- paste0(advanced_opts, collapse = "_")
           est_walltime
         }
       ) 
@@ -310,15 +310,15 @@ plot_estimated_walltimes <- function() {
   # bind n_inputs
   df_walltimes <- df_walltimes |>
     dplyr::mutate(n_inputs = 1:20)
-  df_walltimes <- tidyr::gather(df_walltimes, key = "input_opts", value = "est_walltime", -n_inputs)
+  df_walltimes <- tidyr::gather(df_walltimes, key = "advanced_opts", value = "est_walltime", -n_inputs)
   # sec to min
   df_walltimes <- df_walltimes |>
     dplyr::mutate(est_walltime = est_walltime / 60)
-  p <- ggplot2::ggplot(df_walltimes, ggplot2::aes(x = n_inputs, y = est_walltime, color = input_opts)) +
+  p <- ggplot2::ggplot(df_walltimes, ggplot2::aes(x = n_inputs, y = est_walltime, color = advanced_opts)) +
     ggplot2::geom_line() +
     ggplot2::scale_y_log10() +
     ggplot2::labs(title = "MolEvolvR estimated runtimes",
-        x = "Number of Inputs",
+        x = "Number of inputs",
         y = "Estimated walltime (log_10(minutes))")
   return(p)
 }
