@@ -94,28 +94,4 @@ flowchart LR
         DOMARCH --> BLASTCLUST
         DOMARCH --> CLUST2TABLE
 
-    subgraph "Calculating number of inputs"
-        COUNT_SEQS[/Count number of input sequences/accessions/]
-        COUNT_UNIQUE_ID_ROWS[/Count number of rows with unique ID columns/]
-        COUNT_ROWS[/Count number of rows in BLAST table/]
-        HOMOLOGY_SEARCH_DECISION{Perfrom homology search?}
-        ADD[/Add/]
-        MULTIPLY_BLAST_HIT_OPTION[/Multiply number of queries by the 'NHITS' BLAST option/]
-        TOTAL_INPUTS((Total number of inputs))
-    end
-    %% Assign the workflow of calculating number of inputs for each type
-    FASTA --> COUNT_SEQS
-    ACCNUM --> COUNT_SEQS
-    MSA --> COUNT_SEQS
-    %% Factor in homology search option
-    COUNT_SEQS --> HOMOLOGY_SEARCH_DECISION
-    HOMOLOGY_SEARCH_DECISION --noo--> TOTAL_INPUTS
-    HOMOLOGY_SEARCH_DECISION --yes--> MULTIPLY_BLAST_HIT_OPTION
-    MULTIPLY_BLAST_HIT_OPTION --> TOTAL_INPUTS
-    %% Blast output
-    BLAST_OUTPUT --> COUNT_ROWS --> ADD --> COUNT_UNIQUE_ID_ROWS
-    %% Interproscan
-    INTERPROSCAN_OUTPUT --> COUNT_UNIQUE_ID_ROWS
-    COUNT_UNIQUE_ID_ROWS --> TOTAL_INPUTS
-
 ```
