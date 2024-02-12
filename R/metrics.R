@@ -1,4 +1,4 @@
-# functions to measure:
+# functions to measure and summarize the performance of MolEvolvR
 # - process runtimes
 # - handle log files
 
@@ -118,8 +118,24 @@ calc_log_process_stat <- function(
     result <- df_log |>
       tidyr::drop_na(columns) |>
       dplyr::group_by(.data[[columns_group_by]]) |>
-      dplyr::mutate('stat' = dplyr::across(columns, f, ...)) |>
+      dplyr::mutate("stat" = dplyr::across(columns, f, ...)) |>
       dplyr::ungroup()
   }
   return(result)
+}
+
+#' given a MolEvolvR log dataframe, calculate q3s for process runtimes
+#' @param df_log `df_log` element from the return list of `aggregate_logs()`
+#' @return if group_by is empty: a single value; else: tibble from summarise
+get_process_q3s <- function(
+  df_log,
+  processes = c(
+    "dblast", "acc2info", "dblast_cleanup", "acc2fa", "blast_clust",
+    "clust2table", "iprscan", "ipr2lineage", "ipr2da", "cln_blast"
+  )
+) {
+  q3s <- df_log |> dplyr::select(processes) |>
+    dplyr::summarise_all(~ {quantile(., probs = 0.75, na.rm=T)})
+  vec_q3s <- q3s |> unlist()
+  return(vec_q3s)
 }
