@@ -36,23 +36,78 @@ make_job_name <- function(job_code, suffix = "molevol_analysis") {
   if (!is.null(job_code)) paste(job_code, suffix, sep="_") else suffix
 }
 
-make_email_args <- function(submitter_email, mailtypes="END,FAIL") {
-  if (!is.null(submitter_email)) {
+make_email_args <- function(submitter_email, get_slurm_mails, mailtypes="END,FAIL") {
+  if (get_slurm_mails && !is.null(submitter_email) && stringr::str_trim(submitter_email) != "") {
     stringr::str_glue(
       "--mail-type={mailtypes} --mail-user=\"{submitter_email}\""
     )
   } else { "" }
 }
 
-# print info on slurm submission errors
-submit_and_log <- function(cmd, exit = FALSE) {
-  submit_result <- system(cmd)
-  if (submit_result != 0L && exit == TRUE) stop(paste0("failed to submit job; error code: ", submit_result, "\n", "cmd=", cmd))
-  cat(file=stderr(), paste0("Ran command ", cmd, ", result: ", submit_result, "\n"))
-  flush.console()
+#' Executes 'cmd', returning a list of the form {result, exit_code},
+#' where 'result' is the output of the command and 'exit_code' is the
+#' exit code of the command. If the command fails to execute, 'exit_code'
+#' will be the error code of the system call.
+#' 
+#' See the R system() docs for more info on the result object,
+#' https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/system
+#' 
+#' @param cmd A string containing the command to execute
+#' @return A list containing the result of the command and the exit code
+exec_cmd <- function(cmd) {
+  cmd_errored <- FALSE
+
+  result <- tryCatch(
+    system(cmd, intern=TRUE),
+    error = function(e) { cmd_errored <<- TRUE }
+  )
+  result_status <- attr(result, 'status')
+
+  exit_code <- ifelse(
+    cmd_errored,
+    result_status,
+    ifelse(is.null(result_status), 0, result_status)
+  )
+
+  return(list(result=result, exit_code=exit_code))
 }
 
-submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL = 0.0005, sequences = "~/test.fa", phylo = "FALSE", by_domain = "FALSE", domain_starting = "~/domain_seqs.fa", type = "full", job_code=NULL, submitter_email=NULL, advanced_options=NULL) {
+# print info on slurm submission errors
+# parses and returns the slurm job id if successful
+submit_and_log <- function(cmd, exit = FALSE) {
+  result <- exec_cmd(cmd)
+
+  cat(file=stderr(), paste0("Ran command ", cmd, ", result: ", result$exit_code, "\n"))
+  flush.console()
+
+  if (result$exit_code != 0L) {
+    if (exit == TRUE) stop(paste0("failed to submit job; error code: ", result$exit_code, "\n", "cmd=", cmd))
+  }
+  else {
+    # parse out the job id from the result.
+    # the response is always of the form 'Submitted batch job 123456',
+    # so we split on spaces and take the last element as an integer.
+    job_id <- tail(strsplit(result$result, " ")[[1]], n=1)
+    return(as.integer(job_id))
+  }
+}
+
+# if submitter_email is not NULL or empty, schedule a 'summary' job to notify
+# the user via email when all the job_ids have completed or failed
+submit_summary_job <- function(job_ids, submitter_email, job_dir, job_code, dep_jobs) {
+  if (!is.null(submitter_email) && stringr::str_trim(submitter_email) != "") {
+    type <- 'notify'
+    dep_jobs <- paste(job_ids, collapse=",")
+    submit_and_log(stringr::str_glue(
+      "sbatch --partition NotifyQ --dependency=afterany:", paste(job_ids, collapse=":"),
+      " --job-name {make_job_name(job_code, type)}",
+      " /data/research/jravilab/molevol_scripts/upstream_scripts/99_send_completion_mail.R",
+      " '{job_dir}' '{submitter_email}' '{job_code}' '{dep_jobs}'"
+    ))
+  }
+}
+
+submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL = 0.0005, sequences = "~/test.fa", phylo = "FALSE", by_domain = "FALSE", domain_starting = "~/domain_seqs.fa", type = "full", job_code=NULL, submitter_email=NULL, advanced_options=NULL, get_slurm_mails=FALSE) {
   # submits jobs for fasta, MSA, or accession number type submissions
   setwd(dir)
 
@@ -65,10 +120,14 @@ submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL
     nhits = ifelse(phylo == FALSE, NHITS, NA),
     evalue = ifelse(phylo == FALSE, EVAL, NA),
     submitter_email = submitter_email,
-    advanced_options = advanced_options_names
+    advanced_options = advanced_options_names,
+    job_code = job_code
   )
   yml <- yaml::as.yaml(job_args)
   write(yml, "job_args.yml")
+
+  # keep track of the job ids so we can join on them for the summary job
+  job_ids <- c()
 
   num_runs <- 0
   write("START_DT\tSTOP_DT\tquery\tdblast\tacc2info\tdblast_cleanup\tacc2fa\tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2da\tduration", "logfile.tsv")
@@ -109,52 +168,66 @@ submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL
     destQoS <- ifelse(destPartition == "LocalQLong", "longjobs", "shortjobs")
 
     cmd_full <- stringr::str_glue(
-      "sbatch {make_email_args(submitter_email)} --qos={destQoS} --partition {destPartition} --job-name {make_job_name(job_code, type)} --array 1-{num_seqs} --time=27:07:00 ",
+      "sbatch {make_email_args(submitter_email, get_slurm_mails)} --qos={destQoS} --partition {destPartition} --job-name {make_job_name(job_code, type)} --array 1-{num_seqs} --time=27:07:00 ",
       "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb ",
       "input.txt {DB} {NHITS} {EVAL} F {type}"
     )
-    submit_and_log(cmd_full)
+    job_id <- submit_and_log(cmd_full)
+    job_ids <- c(job_ids, job_id)
     num_runs <- num_runs + num_seqs
   } else {
     get_sequences(sequences, dir_path = dir, separate = FALSE)
   }
 
   # run analysis on query regardless of selected advanced options
-  destPartitionQuery <- "LocalQ" # query run always goes to short queue
+  destPartitionQuery <- "LocalQ" # query run always goes to short queues
   if (by_domain == "TRUE") {
     cmd_by_domain <- stringr::str_glue(
-      "sbatch {make_email_args(submitter_email)}  --qos=shortjobs --partition {destPartitionQuery} --job-name {make_job_name(job_code, type)} --time=27:07:00 ",
+      "sbatch {make_email_args(submitter_email, get_slurm_mails)} --qos=shortjobs --partition {destPartitionQuery} --job-name {make_job_name(job_code, type)} --time=27:07:00 ",
       "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb ",
       "{domain_starting} {DB} {NHITS} {EVAL} T {type}"
     )
-    submit_and_log(cmd_by_domain)
+    job_id <- submit_and_log(cmd_by_domain)
+    job_ids <- c(job_ids, job_id)
   } else {
     cmd_query <- stringr::str_glue(
-      "sbatch {make_email_args(submitter_email)} --qos=shortjobs --partition {destPartitionQuery} --job-name {make_job_name(job_code, type)} --time=27:07:00 ",
+      "sbatch {make_email_args(submitter_email, get_slurm_mails)} --qos=shortjobs --partition {destPartitionQuery} --job-name {make_job_name(job_code, type)} --time=27:07:00 ",
       "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb ",
       "{sequences} {DB} {NHITS} {EVAL} T {type}"
     )
-    submit_and_log(cmd_query)
+    job_id <- submit_and_log(cmd_query)
+    job_ids <- c(job_ids, job_id)
   }
 
   num_runs <- num_runs + 1
   write(paste0("0/", num_runs, " analyses completed"), "status.txt")
+
+  # schedule a 'summary' job to run when all the job_ids have completed or failed
+  # (note that if no email was supplied, the job won't be scheduled at all)
+  submit_summary_job(job_ids, submitter_email, dir, job_code)
 }
 
-submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/seqs.fa", ncbi = FALSE, job_code=NULL, submitter_email=NULL, advanced_options=NULL) {
+submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/seqs.fa", ncbi = FALSE, job_code=NULL, submitter_email=NULL, advanced_options=NULL, get_slurm_mails=FALSE) {
   # starts analysis for an input blast tsv
   # a query sequence(s) file can be provided,
   # or the sequences can be parsed from the Query column of input blast table
   setwd(dir)
 
+  advanced_options_names <- names(advanced_options[advanced_options==TRUE])
+
   # write job submission params to file
   job_args <- list(
     submission_type = "blast",
     includes_ncbi_acc = ncbi,
-    submitter_email = submitter_email
+    submitter_email = submitter_email,
+    advanced_options = advanced_options_names,
+    job_code = job_code
   )
   yml <- yaml::as.yaml(job_args)
   write(yml, "job_args.yml")
+
+  # keep track of the job ids so we can join on them for the summary job
+  job_ids <- c()
 
   df_blast <- read_tsv(blast, col_names = web_blastp_hit_colnames)
 
@@ -189,18 +262,20 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
   destPartitionQuery <- "LocalQ" # query run always goes into short queue
   if (ncbi) {
     cmd_blast_query_ncbi <- stringr::str_glue(
-      "sbatch {make_email_args(submitter_email)} --qos=shortjobs --partition {destPartitionQuery} --job-name {make_job_name(job_code, 'blast_query_ncbi')} --time=27:07:00 ",
+      "sbatch {make_email_args(submitter_email, get_slurm_mails)} --qos=shortjobs --partition {destPartitionQuery} --job-name {make_job_name(job_code, 'blast_query_ncbi')} --time=27:07:00 ",
       "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb ",
       "blast_query.tsv T F"
     )
-    submit_and_log(cmd_blast_query_ncbi)
+    job_id <- submit_and_log(cmd_blast_query_ncbi)
+    job_ids <- c(job_ids, job_id)
   } else {
     cmd_blast_query <- stringr::str_glue(
-      "sbatch {make_email_args(submitter_email)} --qos=shortjobs --partition {destPartitionQuery} --job-name {make_job_name(job_code, 'blast_query')} --time=27:07:00 ",
+      "sbatch {make_email_args(submitter_email, get_slurm_mails)} --qos=shortjobs --partition {destPartitionQuery} --job-name {make_job_name(job_code, 'blast_query')} --time=27:07:00 ",
       "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb ",
       "blast_query.tsv T T"
     )
-    submit_and_log(cmd_blast_query)
+    job_id <- submit_and_log(cmd_blast_query)
+    job_ids <- c(job_ids, job_id)
   }
 
   # split dataframes by query and write them to their 
@@ -212,7 +287,6 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
     write_tsv(df_split, file.path(folder, file), col_names = FALSE)
   }
 
-  advanced_options_names <- names(advanced_options[advanced_options==TRUE])
   # calculate estimated walltime
   t_sec_estimate <- advanced_opts2est_walltime(
     advanced_options_names,
@@ -246,20 +320,27 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
   # done in the first submission above; a separate job
   n_queries <- nrow(df_query)
   cmd_blast <- stringr::str_glue(
-    "sbatch {make_email_args(submitter_email)} --qos={destQoS} --partition {destPartition} --job-name {make_job_name(job_code, 'blast')} --array 1-{n_queries} --time=27:07:00 ",
+    "sbatch {make_email_args(submitter_email, get_slurm_mails)} --qos={destQoS} --partition {destPartition} --job-name {make_job_name(job_code, 'blast')} --array 1-{n_queries} --time=27:07:00 ",
     "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb ",
     "accs.txt F F"
   )
-  submit_and_log(cmd_blast)
+  job_id <- submit_and_log(cmd_blast)
+  job_ids <- c(job_ids, job_id)
 
   # 1 is from the initial job on just the query proteins themselves
   # n_queries represents the total number of unique query proteins
   num_runs <- 1 + n_queries
   write(paste0("0/", num_runs, " analyses completed"), "status.txt")
+
+  # schedule a 'summary' job to run when all the job_ids have completed or failed
+  # (note that if no email was supplied, the job won't be scheduled at all)
+  submit_summary_job(job_ids, submitter_email, dir, job_code)
 }
 
-submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa", ncbi = FALSE, blast = FALSE, DB = "refseq", NHITS = 5000, EVAL = 0.0005, job_code=NULL, submitter_email=NULL, advanced_options=NULL) {
+submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa", ncbi = FALSE, blast = FALSE, DB = "refseq", NHITS = 5000, EVAL = 0.0005, job_code=NULL, submitter_email=NULL, advanced_options=NULL, get_slurm_mails=FALSE) {
   setwd(dir)
+
+  advanced_options_names <- names(advanced_options[advanced_options==TRUE])
 
   # write job submission params to file
   job_args <- list(
@@ -268,7 +349,9 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
     database = ifelse(blast == FALSE, NA, DB), # only include evalue, DB, & NHITS for blast jobs
     nhits = ifelse(blast == FALSE, NA, NHITS),
     includes_ncbi_acc = ncbi,
-    submitter_email = submitter_email
+    submitter_email = submitter_email,
+    advanced_options = advanced_options_names,
+    job_code = job_code
   )
   yml <- yaml::as.yaml(job_args)
   write(yml, "job_args.yml")
@@ -287,7 +370,6 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
   ipr_in <- read_tsv(ipr, col_names = TRUE)
   queries <- unique(ipr_in$AccNum)
 
-  advanced_options_names <- names(advanced_options[advanced_options==TRUE])
   # calculate estimated walltime
   t_sec_estimate <- ifelse(
     blast,
@@ -322,11 +404,12 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
     seq_count <- get_sequences(seqs, dir_path = dir, separate = TRUE)
     num_runs <- num_runs + seq_count
     cmd_ipr_homology <- stringr::str_glue(
-      "sbatch {make_email_args(submitter_email)} --qos={destQoS} --partition {destPartition} --job-name {make_job_name(job_code, 'ipr_homology')} --array 1-{seq_count} --time=27:07:00 ",
+      "sbatch {make_email_args(submitter_email, get_slurm_mails)} --qos={destQoS} --partition {destPartition} --job-name {make_job_name(job_code, 'ipr_homology')} --array 1-{seq_count} --time=27:07:00 ",
       "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb ",
       "input.txt F T {DB} {NHITS} {EVAL}"
     )
-    submit_and_log(cmd_ipr_homology)
+    job_id <- submit_and_log(cmd_ipr_homology)
+    job_ids <- c(job_ids, job_id)
   } else {
     write(queries, "accs.txt")
   }
@@ -336,9 +419,14 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
   destPartitionQuery <- "LocalQ" # query run always goes to short queue
   # always do analysis on interpro file
   cmd_ipr_query <- stringr::str_glue(
-    "sbatch {make_email_args(submitter_email)} --qos=shortjobs --partition {destPartitionQuery} --job-name {make_job_name(job_code, 'ipr_query')} --time=27:07:00 ",
+    "sbatch {make_email_args(submitter_email, get_slurm_mails)} --qos=shortjobs --partition {destPartitionQuery} --job-name {make_job_name(job_code, 'ipr_query')} --time=27:07:00 ",
     "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb ",
     "{ipr} T F"
   )
-  submit_and_log(cmd_ipr_query)
+  job_id <- submit_and_log(cmd_ipr_query)
+  job_ids <- c(job_ids, job_id)
+
+  # schedule a 'summary' job to run when all the job_ids have completed or failed
+  # (note that if no email was supplied, the job won't be scheduled at all)
+  submit_summary_job(job_ids, submitter_email, dir, job_code)
 }
