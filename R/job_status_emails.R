@@ -6,7 +6,8 @@
 # Usage
 # 1. source("job_status_emails.R")
 # 2. call:
-#     send_job_start_email(notify_email, job_dir, pin_id, job_results_url)
+#     # event_type can be 'start' or 'end'
+#     send_job_status_email(notify_email, job_dir, pin_id, event_type)
 # Return
 #   unfortunately, there is no return value for the underlying sendmailR methods
 
