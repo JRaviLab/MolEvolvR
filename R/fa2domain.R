@@ -4,6 +4,29 @@
 # - a protein with no domains (unlikely) found from 
 # interproscan CLI will return a completely empty file (0Bytes)
 
+exec_interproscan <- function(
+  filepath_fasta,
+  filepath_out, # do not inlucde file extension since ipr handles this
+  appl = c("Pfam", "Gene3D")
+  #destPartition = "LocalQ",
+  #destQoS = "shortjobs"
+) {
+  # construct interproscan command
+  cmd_iprscan <- stringr::str_glue(
+    "iprscan -i {filepath_fasta} -b {filepath_out} --cpu 4 -f TSV ",
+    "--appl {appl}"
+  )
+  # execute
+  exit_code <- system(cmd_iprscan)
+  if (exit_code != 0L) {
+    warning("interproscan exited with non-zero code")
+    return(NULL)
+  }
+  # read and return results
+  df_iprscan <- read_iprscan_tsv(paste0(filepath_out, ".tsv"))
+  return(df_iprscan)
+}
+
 #' Constructor function for interproscan column names
 #' (based upon the global variable written in 
 #' molevol_scripts/R/colnames_molevol.R)
@@ -199,8 +222,8 @@ df_iprscan_domains2fasta <- function(df_iprscan_domains) {
 #' source("R/fa2domain.R")
 #' fasta <- Biostrings::readAAStringSet("./tests/example_protein.fa")
 #' df_iprscan <- read_iprscan_tsv("./tests/example_iprscan_valid.tsv")
-#' fasta2domain_fasta(fasta, df_iprscan)
-fasta2domain_fasta <- function(
+#' fasta2fasta_domain(fasta, df_iprscan)
+fasta2fasta_domain <- function(
   fasta,
   df_iprscan,
   analysis = c("Pfam", "Gene3D")

@@ -342,3 +342,23 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
   )
   submit_and_log(cmd_ipr_query)
 }
+
+submit_split_by_domain <- function(
+  dir, sequences, DB = "refseq", NHITS = 5000,
+  EVAL = 0.0001, phylo = "FALSE", type = "full",
+  job_code = NULL, submitter_email = NULL, advanced_options = NULL
+) {
+  setwd(dir)
+  # the pre-processing is not expensive 
+  # (just an interproscan run on a FASTA and post-hoc data wrangling)
+  # so we assing this job to the short queue always
+  destQoS <- "shortjobs"
+  destPartition <- "LocalQ"
+  cmd_split_by_domain <- stringr::str_glue(
+    "sbatch {make_email_args(submitter_email)} --qos={destQoS} --partition ",
+    "{destPartition} --job-name {make_job_name(job_code, 'fa2domain')} --time=27:07:00 ",
+    "/data/research/jravilab/molevol_scripts/upstream_scripts/split_by_domain_runner.R ",
+    "{dir} {sequences} {DB} {NHITS} {EVAL} {phylo} {type} {job_code} {submitter_email} {advanced_options}"
+  )
+  submit_and_log(cmd_split_by_domain)
+}
