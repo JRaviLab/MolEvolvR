@@ -16,6 +16,12 @@ job_code <- args[8]
 submitter_email <- args[9]
 advanced_options <- args[10]
 
+msg_args <- stringr::str_glue(
+  "args from split_by_domain-runner:\n",
+  "\tpaste(args, collapse = ',')\n"
+)
+print(msg_args)
+
 fasta <- Biostrings::readAAStringSet(filepath_fasta)
 
 # setup paths
@@ -30,19 +36,29 @@ filepath_ipr_out <- "interproscan"
 
 # 1. Exec interproscan
 df_iprscan <- exec_interproscan(filepath_fasta, filepath_ipr_out)
+print("### df_iprscan")
+print(df_iprscan)
 # validate data
-if (nrow(df_iprscan) < 1 | is.null(df)) {quit(save = "yes", status = 1)}
+if (nrow(df_iprscan) < 1 | is.null(df)) {
+  warning("validation of df_iprscan failed")
+  save.image("debug-session.rda")
+  quit(save = "no", status = 1)
+}
 
 # 2. Use the results to create a domain fasta
-fasta_domains <- fasta2fasta_domain(filepath_fasta, df_iprscan)
+fasta_domains <- fasta2fasta_domain(fasta, df_iprscan, verbose = TRUE)
+print("### fasta domains")
+print(fasta_domains)
 # validate data
 if (!is(fasta_domains, "AAStringSet") || length(fasta_domains) < 1) {
-  quit(save = "yes", status = 1)
+  warning("validation of fasta_domains failed")
+  save.image("debug-session.rda")
+  quit(save = "no", status = 1)
 }
 
 # set working dir back to top level of job folder
 setwd(dir_job_results)
-write(fasta_domains, "domains.fa")
+Biostrings::writeXStringSet(fasta_domains, "domains.fa")
 # just in-case, construct full path to seqs
 filepath_fasta_domains <- file.path(dir_job_results, "domains.fa")
 
