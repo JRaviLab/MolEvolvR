@@ -349,6 +349,17 @@ submit_split_by_domain <- function(
   job_code = NULL, submitter_email = NULL, advanced_options = NULL
 ) {
   setwd(dir)
+  # write job submission params to file
+  job_args <- list(
+    submission_type = type,
+    database = ifelse(phylo == FALSE, DB, NA),
+    nhits = ifelse(phylo == FALSE, NHITS, NA),
+    evalue = ifelse(phylo == FALSE, EVAL, NA),
+    submitter_email = submitter_email,
+    advanced_options = advanced_options
+  )
+  yml <- yaml::as.yaml(job_args)
+  write(yml, "job_args.yml")
   # the pre-processing is not expensive 
   # (just an interproscan run on a FASTA and post-hoc data wrangling)
   # so we assing this job to the short queue always
@@ -357,7 +368,7 @@ submit_split_by_domain <- function(
   cmd_split_by_domain <- stringr::str_glue(
     "sbatch {make_email_args(submitter_email)} --qos={destQoS} --partition ",
     "{destPartition} --job-name {make_job_name(job_code, 'fa2domain')} --time=27:07:00 ",
-    "/data/research/jravilab/molevol_scripts/upstream_scripts/split_by_domain_runner.R ",
+    "/data/research/jravilab/molevol_scripts/upstream_scripts/split_by_domain-runner.R ",
     "{dir} {sequences} {DB} {NHITS} {EVAL} {phylo} {type} {job_code} {submitter_email} {advanced_options}"
   )
   submit_and_log(cmd_split_by_domain)

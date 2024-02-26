@@ -226,7 +226,8 @@ df_iprscan_domains2fasta <- function(df_iprscan_domains) {
 fasta2fasta_domain <- function(
   fasta,
   df_iprscan,
-  analysis = c("Pfam", "Gene3D")
+  analysis = c("Pfam", "Gene3D"),
+  verbose = FALSE
 ) {
   # initialize an AAStringSet which will store
   # all the domain sequences
@@ -253,14 +254,30 @@ fasta2fasta_domain <- function(
       )
       # if the interpro results are empty OR 
       # there's no domains for the analyses (databases)
-      # then return early and do no append
-      if (nrow(df_iprscan) < 1) {return(FALSE)}
+      # then return early and do not append
+      if (nrow(df_iprscan) < 1) {
+        if (verbose) {
+          msg <- stringr::str_glue(
+            "accession number: {accnum} had no domains for the ",
+            "selected analyes: {paste(analysis, collapse = ',')}\n"
+          )
+          warning(msg)
+        }
+        return(FALSE)
+      }
       fasta_domains <- df_iprscan_domains2fasta(df_iprscan_domains)
       parent_fasta_domains <<- c(parent_fasta_domains, fasta_domains)
       return(TRUE)
     },
     FUN.VALUE = logical(1)
   )
-  print(results)
+  if (verbose) {
+    msg <- stringr::str_glue(
+      "{sum(results)} / {length(fasta)} accession numbers had ",
+      "at least 1 domain available from the selected analyses: ",
+      "{paste(analysis, collapse = ',')}\n"
+    )
+    print(msg)
+  }
   return(parent_fasta_domains)
 }
