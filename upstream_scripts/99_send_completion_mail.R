@@ -211,9 +211,10 @@ if (!interactive()) {
     duration <- toString(hms::as_hms(difftime(max_end, min_start)))
 
     # convert min_start and max_end back into human-readable strings
-    outFormat <- "%Y-%m-%d %I:%M:%S %p %Z"
-    min_start_str <- format(min_start, outFormat)
-    max_end_str   <- format(max_end,   outFormat)
+    local_tz <- Sys.getenv("LOCAL_TIMEZONE", unset="America/Denver")
+    outFormat <- "%Y-%m-%d %I:%M %p %Z"
+    min_start_str <- format.POSIXct(min_start, outFormat, tz = local_tz)
+    max_end_str   <- format.POSIXct(max_end,   outFormat, tz = local_tz)
 
     write(paste0("min_start: ", min_start_str), file=stderr())
     write(paste0("max_end: ", max_end_str), file=stderr())
