@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-
+t_0 <- Sys.time()
 source("/data/research/jravilab/molevol_scripts/R/fa2domain.R")
 source("/data/research/jravilab/molevol_scripts/upstream_scripts/00_submit_full.R")
 
@@ -26,52 +26,112 @@ fasta <- Biostrings::readAAStringSet(filepath_fasta)
 
 # setup paths
 dir_job_results <- Sys.getenv("SLURM_SUBMIT_DIR")
-dir_split_by_domain <- file.path(dir_job_results, "split_by_domain")
-dir.create(dir_split_by_domain)
-# change working dir to allow writing the R session in the
-# split_by_domain dir in the case of failure
-setwd(dir_split_by_domain)
-# note: no file-extension included here since interproscan handles this
-filepath_ipr_out <- "interproscan"
 
-# 1. Exec interproscan
-df_iprscan <- exec_interproscan(filepath_fasta, filepath_ipr_out)
-print("### df_iprscan")
-print(df_iprscan)
-# validate data
-if (nrow(df_iprscan) < 1 | is.null(df)) {
-  warning("validation of df_iprscan failed")
-  save.image("debug-session.rda")
-  quit(save = "no", status = 1)
+# wrap split by domain code in function
+# since this entire expression needs to be wrapped in tryCatch
+# (to handle the case of no domains returned from the selected analyses)
+# just to minimize the amount of indentation formatting
+# as an alternative to wrapping the whole expression in tryCatch directly
+split_by_domain <- function() {
+  dir_split_by_domain <- file.path(dir_job_results, "split_by_domain")
+  dir.create(dir_split_by_domain)
+  # change working dir to allow writing the R session in the
+  # split_by_domain dir in the case of failure
+  setwd(dir_split_by_domain)
+  # note: no file-extension included here since interproscan handles this
+  filepath_ipr_out <- "interproscan"
+
+  # 1. exec interproscan
+  df_iprscan <- exec_interproscan(filepath_fasta, filepath_ipr_out)
+  print("### df_iprscan")
+  print(df_iprscan)
+  # validate data
+  if (nrow(df_iprscan) < 1 || is.null(df)) {
+    save.image("debug-session.rda")
+    # raise error to launch regular submission
+    stop("validation of df_iprscan failed")
+  }
+
+  # 2. use the results to create a domain fasta
+  fasta_domains <- fasta2fasta_domain(fasta, df_iprscan, verbose = TRUE)
+  print("### fasta domains")
+  print(fasta_domains)
+  # validate data
+  if (!is(fasta_domains, "AAStringSet") || length(fasta_domains) < 1) {
+    save.image("debug-session.rda")
+    # raise error to launch regular submission
+    stop("validation of 'fasta_domains' failed")
+  }
+
+  # set working dir back to top level of job folder
+  setwd(dir_job_results)
+  Biostrings::writeXStringSet(fasta_domains, "domains.fa")
+  # just in-case, construct full path to seqs
+  filepath_fasta_domains <- file.path(dir_job_results, "domains.fa")
+
+  # 3. pass domain seqs into the usual app workflow
+  submit_full(
+    dir = dir,
+    sequences = filepath_fasta_domains,
+    DB = blast_database,
+    NHITS = blast_nhits,
+    EVAL = blast_evalue,
+    phylo = phylo,
+    type = type,
+    job_code = job_code,
+    submitter_email = submitter_email,
+    advanced_options = advanced_options
+  )
 }
 
-# 2. Use the results to create a domain fasta
-fasta_domains <- fasta2fasta_domain(fasta, df_iprscan, verbose = TRUE)
-print("### fasta domains")
-print(fasta_domains)
-# validate data
-if (!is(fasta_domains, "AAStringSet") || length(fasta_domains) < 1) {
-  warning("validation of fasta_domains failed")
-  save.image("debug-session.rda")
-  quit(save = "no", status = 1)
-}
+# upon any error (such as those explicitly raised by
+# lacking domain data), use the original protein data
+result_split_by_domain <- tryCatch(
+  # try getting domains from proteins and submit them to the app
+  expr = {
+    split_by_domain()
+    TRUE
+  },
+  # upon error submit the original protein data
+  error = function(e) {
+    print(e)
+    msg <- stringr::str_glue(
+      "* An error was raised during the split by domain phase.\n",
+      "* Trying to submit the original data (without processing domains)\n"
+    )
+    warning(msg)
+    submit_full(
+      dir = dir,
+      sequences = filepath_fasta,
+      DB = blast_database,
+      NHITS = blast_nhits,
+      EVAL = blast_evalue,
+      phylo = phylo,
+      type = type,
+      job_code = job_code,
+      submitter_email = submitter_email,
+      advanced_options = advanced_options
+    )
+    FALSE
+  }
+)
 
-# set working dir back to top level of job folder
-setwd(dir_job_results)
-Biostrings::writeXStringSet(fasta_domains, "domains.fa")
-# just in-case, construct full path to seqs
-filepath_fasta_domains <- file.path(dir_job_results, "domains.fa")
-
-# 3. Pass domain seqs into the usual app workflow
-submit_full(
-  dir = dir,
-  sequences = filepath_fasta_domains,
-  DB = blast_database,
-  NHITS = blast_nhits,
-  EVAL = blast_evalue,
-  phylo = phylo,
-  type = type,
-  job_code = job_code,
-  submitter_email = submitter_email,
-  advanced_options = advanced_options
+### logging
+# if the domain fasta was written, count number of domain seqs
+n_domains_split <- ifelse(
+  file.exists(file.path(dir_job_results, "domains.fa")),
+  readAAStringSet(file.path(dir_job_results, "domains.fa")) |> length(),
+  NA
+)
+df_log_split_by_domain <- tibble::tibble(
+  # format the date times to match the other molevolvr log files
+  "START_DT" = t_0 |> format("%d/%m/%Y-%H:%M:%S"),
+  "STOP_DT" = Sys.time() |> format("%d/%m/%Y-%H:%M:%S"),
+  "job_code" = job_code,
+  "was_domain_split_successful" = result_split_by_domain,
+  "n_domains_split" = n_domains_split
+)
+readr::write_tsv(
+  df_log_split_by_domain,
+  file = file.path(dir_job_results, "split_by_domain", "logfile.tsv")
 )
