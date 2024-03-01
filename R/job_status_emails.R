@@ -281,4 +281,5 @@ send_job_status_email <- function(notify_email, job_dir, pin_id, event_type, con
             )
         )
     }
+    return(result)
 }
