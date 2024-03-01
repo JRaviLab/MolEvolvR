@@ -79,7 +79,7 @@ run_cmd <- function(cmd, verbose=TRUE, ignore.stdout=FALSE, ignore.stderr=TRUE) 
 #'  <job_id>=list(<job_field>=<value>, <...more fields>), <...more jobs>
 #' )
 #' 
-get_job_info <- function(job_ids, verbose=TRUE) {
+get_completed_job_info <- function(job_ids, verbose=TRUE) {
     tryCatch({
         # store info about jobs by job_id in this list
         jobs <- list()
@@ -87,7 +87,7 @@ get_job_info <- function(job_ids, verbose=TRUE) {
         # list the fields we want to pull for the job from sacct
         # (see https://slurm.schedmd.com/sacct.html#OPT_helpformat for options)
         fields <- c(
-            "JobId",
+            "JobId", # required for filtering, excluded from email
             "JobName",
             "User",
             "Group",

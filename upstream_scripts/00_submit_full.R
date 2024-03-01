@@ -36,6 +36,17 @@ make_job_name <- function(job_code, suffix = "molevol_analysis") {
   if (!is.null(job_code)) paste(job_code, suffix, sep="_") else suffix
 }
 
+#' Produces arguments to make Slurm send job status emails to the submitter.
+#' The result of this function is intended to be used as an argument to sbatch.
+#' If the submitter's email is NULL or empty, or if get_slurm_mails is FALSE,
+#' this function returns an empty string.
+#' 
+#' @param submitter_email The email address of the job submitter
+#' @param get_slurm_mails Whether to use Slurm's built-in email notifications
+#' @param mailtypes A comma-delimited list of Slurm event types for which to send notifications
+#' 
+#' @return A string containing the arguments to pass to sbatch to enable email notifications, if applicable
+#' 
 make_email_args <- function(submitter_email, get_slurm_mails, mailtypes="END,FAIL") {
   if (get_slurm_mails && !is.null(submitter_email) && stringr::str_trim(submitter_email) != "") {
     stringr::str_glue(
