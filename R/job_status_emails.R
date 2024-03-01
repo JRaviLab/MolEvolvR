@@ -81,18 +81,15 @@ fields_metadata <- list(
 #' Format job arguments into html-formatted key/value pairs, for including
 #' in an email
 #' 
-#' @param job_dir
-#' the directory where the job's arguments are stored, in job_args.yml
+#' @param job_args
+#' a list of job arguments, e.g. as read from the job_args.yml file
 #' 
 #' @return
 #' a list of HTML-formatted key/value pairs
 #' 
 #' example:
 #' format_job_args("/data/scratch/janani/molevolvr_out/Ba5sV1_full")
-format_job_args <- function(job_dir) {
-    # get args written to dir/job_args.yml
-    job_args <- yaml::read_yaml(paste0(job_dir, "/job_args.yml"))
-
+format_job_args <- function(job_args) {
     # format job arguments into html-formatted key/value pairs
     job_args_list <- tags$ul(lapply(names(job_args), function(key) {
         # look up human labels for field names, values, if available
@@ -140,10 +137,8 @@ format_job_args <- function(job_dir) {
 }
 
 #' Produces a mail message that can be sent to a user when their job is accepted.
-#' Used by the send_job_start_email() method.
+#' Used by the send_job_status_email() method.
 #' 
-#' @param notify_email
-#' the email address to send the notification to
 #' @param job_dir
 #' the directory where the job's arguments are stored, in job_args.yml
 #' @param pin_id
@@ -152,13 +147,16 @@ format_job_args <- function(job_dir) {
 #' the URL where the user can check the status of their job
 #' @param event_type
 #' either 'start' or 'end', returns the corresponding email for the given type
+#' @param context
+#' a list of additional values, e.g. job runtime info, that can be used in the template emails
 #' 
 #' @return
 #' the result of the sendmailR::sendmail() call
 get_job_message <- function(job_dir, pin_id, job_results_url, event_type, context) {
     # pull the set of args written to dir/job_args.yml, so we
     # can send it in the email
-    job_args_list <- format_job_args(job_dir)
+    job_args <- yaml::read_yaml(file.path(job_dir, "job_args.yml"))
+    job_args_list <- format_job_args(job_args)
 
     # determine which template to use based on the event type
     if (event_type == 'start') {
