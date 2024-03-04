@@ -196,7 +196,7 @@ if (!interactive()) {
     # split dep_jobs on commas into vector of integers
     # and query for info about those jobs from the accounting system
     dep_job_ids_vec <- as.integer(unlist(strsplit(dep_jobs, ",")))
-    total_job_info <- get_job_info(dep_job_ids_vec, verbose=FALSE)
+    total_job_info <- get_completed_job_info(dep_job_ids_vec, verbose=FALSE)
 
     # get the minimum and maximum date values from total_job_info, i.e.
     # the minimum of the field "Start" and the maximum of the field "End"
