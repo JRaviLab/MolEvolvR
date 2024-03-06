@@ -15,7 +15,7 @@ get_sequences <- function(sequences, acc_file_path = "accs.txt", dir_path = "~",
   for (accnum in names(seqs)) {
     if (grepl("\\|", accnum)) {
       accnum_cln <- strsplit(accnum, "\\|")[[1]][2]
-      accnum_cln <- stringr::str_split_1(accnum_cln, " ")[1]
+      accnum_cln <- strsplit(accnum_cln, " ")[[1]]
     } else {
       accnum_cln <- strsplit(accnum, " ")[[1]][1]
     }
