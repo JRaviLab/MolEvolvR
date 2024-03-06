@@ -63,16 +63,25 @@ split_by_domain <- function() {
     stop("validation of 'fasta_domains' failed")
   }
 
+  # construct full path to domain seqs and write data
+  filepath_fasta_domains <- file.path(dir_split_by_domain, "domains.fa")
+  Biostrings::writeXStringSet(fasta_domains, filepath_fasta_domains)
+
   # set working dir back to top level of job folder
   setwd(dir_job_results)
-  Biostrings::writeXStringSet(fasta_domains, "domains.fa")
-  # just in-case, construct full path to seqs
-  filepath_fasta_domains <- file.path(dir_job_results, "domains.fa")
 
-  # 3. pass domain seqs into the usual app workflow
+  # 3. append domain seqs to input fasta and submit to usual app workflow
+  fa_original_txt <- readLines(filepath_fasta)
+  fa_domains_txt <- readLines(filepath_fasta_domains)
+  fa_concat_txt <- c(fa_original_txt, fa_domains_txt)
+  filepath_fasta_concat <- file.path(
+    paste0(filepath_fasta |> fs::path_ext_remove(), "-w-domain_seqs.fa")
+  )
+  writeLines(fa_concat_txt, con = filepath_fasta_concat)
+
   submit_full(
     dir = dir,
-    sequences = filepath_fasta_domains,
+    sequences = filepath_fasta_concat,
     DB = blast_database,
     NHITS = blast_nhits,
     EVAL = blast_evalue,
@@ -119,8 +128,8 @@ result_split_by_domain <- tryCatch(
 ### logging
 # if the domain fasta was written, count number of domain seqs
 n_domains_split <- ifelse(
-  file.exists(file.path(dir_job_results, "domains.fa")),
-  readAAStringSet(file.path(dir_job_results, "domains.fa")) |> length(),
+  file.exists(file.path(dir_job_results, "split_by_domain", "domains.fa")),
+  readAAStringSet(file.path(dir_job_results, "split_by_domain", "domains.fa")) |> length(),
   NA
 )
 df_log_split_by_domain <- tibble::tibble(
