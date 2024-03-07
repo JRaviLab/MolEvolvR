@@ -368,7 +368,7 @@ submit_split_by_domain <- function(
   cmd_split_by_domain <- stringr::str_glue(
     "sbatch {make_email_args(submitter_email)} --qos={destQoS} --partition ",
     "{destPartition} --job-name {make_job_name(job_code, 'fa2domain')} --time=27:07:00 ",
-    "--output=split_by_domain-slurm-%j.out --error=split_by_domain-slur-%j.err ",
+    "--output=split_by_domain-slurm-%j.out --error=split_by_domain-slurm-%j.err ",
     "/data/research/jravilab/molevol_scripts/upstream_scripts/split_by_domain-runner.R ",
     "{dir} {sequences} {DB} {NHITS} {EVAL} {phylo} {type} {job_code} {submitter_email} {advanced_options}"
   )
