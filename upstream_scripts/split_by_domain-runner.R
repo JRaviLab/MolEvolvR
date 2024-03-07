@@ -23,9 +23,10 @@ msg_args <- stringr::str_glue(
 )
 print(msg_args)
 
-# load fasta and ensure no duplicate headers
+# load fasta, ensure no duplicate headers, and re-write
 fasta <- Biostrings::readAAStringSet(filepath_fasta)
 fasta <- cleanup_fasta_header(fasta)
+Biostrings::writeXStringSet(fasta, filepath_fasta)
 
 # setup paths
 dir_job_results <- Sys.getenv("SLURM_SUBMIT_DIR")

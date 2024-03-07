@@ -24,9 +24,6 @@ exec_interproscan <- function(
   }
   # read and return results
   df_iprscan <- read_iprscan_tsv(paste0(filepath_out, ".tsv"))
-
-  # raise error for any duplicate accessions
-  stopifnot(!any(df_iprscan$AccNum |> table() > 1))
   return(df_iprscan)
 }
 
@@ -111,26 +108,26 @@ make_df_iprscan_domains <- function(
   df_iprscan,
   analysis = c("Pfam", "Gene3D")
 ) {
+  cat("accnum:",accnum,"\n")
   # handle rare case of an interproscan result with no domains at all; 
   # return the tibble with 0 rows quickly
   if (nrow(df_iprscan) < 1) {return(df_iprscan)}
   # filter for "Analysis" argument (i.e., the interproscan member database)
   # by default we're only selecting domains from a subset of the 
   # interproscan member databases, but this param can be overwritten 
-  df_iprscan <- df_iprscan |>
+  # and
+  # filter for the accnum of interest (note: it's possible the accession
+  # number is not in the table [i.e., it had no domains])
+  df_iprscan_accnum <- df_iprscan |>
     dplyr::filter(Analysis %in% analysis) |>
+    dplyr::filter(AccNum == accnum) |>
+    dplyr::select(dplyr::all_of(c("AccNum", "DB.ID", "StartLoc", "StopLoc"))) |>
     dplyr::arrange(StartLoc)
   # handle the case of no records after filtering by "Analysis"; return the tibble
   # with 0 rows quickly
-  if (nrow(df_iprscan) < 1) {return(df_iprscan)}
+  if (nrow(df_iprscan_accnum) < 1) {return(df_iprscan_accnum)}
 
-  # filter for domains by accession
-  df_iprscan_accnum <- df_iprscan |>
-    dplyr::arrange(StartLoc) |> # not necessary to sort, but for posteritory
-    dplyr::filter(AccNum == accnum) |>
-    dplyr::select(dplyr::all_of(c("AccNum", "DB.ID", "StartLoc", "StopLoc")))
   # create a new column to store the domain sequences
-  browser()
   df_iprscan_domains <- df_iprscan_accnum |>
     dplyr::rowwise() |>
     dplyr::mutate(
@@ -241,9 +238,8 @@ fasta2fasta_domain <- function(
     X = names(fasta),
     FUN = function(header) {
       # parse the accession number from header
-      accnum <- string2accnum(header)
       df_iprscan_domains <- make_df_iprscan_domains(
-        accnum,
+        header,
         fasta,
         df_iprscan,
         analysis = c("Pfam", "Gene3D")
@@ -251,10 +247,10 @@ fasta2fasta_domain <- function(
       # if the interpro results are empty OR 
       # there's no domains for the analyses (databases)
       # then return early and do not append
-      if (nrow(df_iprscan) < 1) {
+      if (nrow(df_iprscan_domains) < 1) {
         if (verbose) {
           msg <- stringr::str_glue(
-            "accession number: {accnum} had no domains for the ",
+            "accession number: {header} had no domains for the ",
             "selected analyes: {paste(analysis, collapse = ',')}\n"
           )
           warning(msg)
