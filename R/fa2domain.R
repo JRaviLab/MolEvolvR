@@ -24,6 +24,9 @@ exec_interproscan <- function(
   }
   # read and return results
   df_iprscan <- read_iprscan_tsv(paste0(filepath_out, ".tsv"))
+
+  # raise error for any duplicate accessions
+  stopifnot(!any(df_iprscan$AccNum |> table() > 1))
   return(df_iprscan)
 }
 
@@ -78,18 +81,6 @@ read_iprscan_tsv <- function(filepath) {
   return(df_ipr)
 }
 
-# use the same code as upstream_scripts/00_submit_full.R's
-# get_sequences() function to extract accession numbers
-string2accnum <- function(string) {
-  if (grepl("\\|", string)) {
-    accnum <- strsplit(string, "\\|")[[1]][2]
-    accnum <- stringr::str_split_1(accnum, " ")[1]
-  } else {
-    accnum <- strsplit(string, " ")[[1]][1]
-  }
-  return(accnum)
-}
-
 #' For a given accession number, get the domain sequences using a interproscan
 #' output table & the original FASTA file
 #' 
@@ -139,11 +130,16 @@ make_df_iprscan_domains <- function(
     dplyr::filter(AccNum == accnum) |>
     dplyr::select(dplyr::all_of(c("AccNum", "DB.ID", "StartLoc", "StopLoc")))
   # create a new column to store the domain sequences
+  browser()
   df_iprscan_domains <- df_iprscan_accnum |>
     dplyr::rowwise() |>
     dplyr::mutate(
-      seq_domain = XVector::subseq(fasta[[AccNum]], start = StartLoc, end = StopLoc) |> 
-        as.character()
+      seq_domain = XVector::subseq(
+        fasta[[base::grep(pattern = AccNum, x = names(fasta), fixed = TRUE)]],
+        start = StartLoc,
+        end = StopLoc
+      ) |>
+      as.character()
     )
 
   # create identifies for each domain sequence
@@ -181,7 +177,7 @@ df_iprscan_domains2fasta <- function(df_iprscan_domains) {
   # the quickly return an empty AAStringSet object
   if (nrow(df_iprscan_domains) < 1) {return(Biostrings::AAStringSet())}
 
-  # strange function to append a fasta when applied to tibble rows
+  # function with side effect to append a fasta when applied to tibble rows
   # 1. constructs a new fasta for a single domain and
   # 2. appends it to a `fasta_domains` object in the parent env
   # 3. returns the index of the new record; although, 
