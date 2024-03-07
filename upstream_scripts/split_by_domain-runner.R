@@ -1,5 +1,6 @@
 #!/usr/bin/env Rscript
 t_0 <- Sys.time()
+source("/data/research/jravilab/molevol_scripts/R/cleanup.R")
 source("/data/research/jravilab/molevol_scripts/R/fa2domain.R")
 source("/data/research/jravilab/molevol_scripts/upstream_scripts/00_submit_full.R")
 
@@ -18,11 +19,13 @@ advanced_options <- args[10]
 
 msg_args <- stringr::str_glue(
   "args from split_by_domain-runner:\n",
-  "\tpaste(args, collapse = ',')\n"
+  "\t{paste(args, collapse = ',')}\n"
 )
 print(msg_args)
 
+# load fasta and ensure no duplicate headers
 fasta <- Biostrings::readAAStringSet(filepath_fasta)
+fasta <- cleanup_fasta_header(fasta)
 
 # setup paths
 dir_job_results <- Sys.getenv("SLURM_SUBMIT_DIR")
