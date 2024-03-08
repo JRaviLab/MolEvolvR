@@ -34,18 +34,15 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
   #' \itemize{\item "grid" \item "circle" \item "random" \item "auto"}
   #' @examples domain_network(pspa)
   # by domain networks or all, as required.
-  tryCatch(
-    {
       column_name <- sym(column)
-
+    
       prot_tc <- prot %>% total_counts(column = column, cutoff = cutoff, RowsCutoff = F, digits = 5)
 
+      # ensure  only Domains that are in the tc cutoff range are kept
       within_list <- prot_tc %>%
         select({{ column_name }}) %>%
         distinct()
       within_list <- pull(within_list, {{ column_name }})
-
-      # nvm, it's making sure that only Domains that are in the tc cutoff range are kept
       prot <- prot %>% filter({{ column_name }} %in% within_list)
 
       ####### Below should be part of the standardized cleanup process
@@ -66,7 +63,7 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
         ))
       ## Separating column and converting to atomic vector prevents coercion
       domain.list <- domain.list$DomArch.ntwrk %>% str_split(pattern = "\\+")
-      # Get domain counts before eliminating domarchs with no edges
+      # Get a table of domain counts before eliminating domarchs with no edges
       wc <- elements2words(prot = prot, column = column, conversion_type = "da2doms") %>% words2wc()
       wc <- pivot_wider(wc, names_from = words, values_from = freq)
 
@@ -142,7 +139,25 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
         if ("X" %in% V(g)$name) {
           g <- delete_vertices(g, "X")
         }
-        V(g)$size <- as.numeric(wc[V(g)$name])
+
+        tryCatch(
+          expr = {V(g)$size <- as.numeric(wc[V(g)$name])},
+          error = function(e) {
+            print(e)
+          }
+        )
+        return(capture.output(
+              {print("### wc")
+              print(str(wc))
+              names(wc) |> print()
+              print("### graph vertex names")
+              print(V(g)$name)
+              print("### which vertex NOT in wc")
+              which(!(V(g)$name %in% names(wc))) |> print()
+              V(g)$name[which(!(V(g)$name %in% names(wc)))] |> print()
+              }
+        ))
+        # Error in `wc[V(g)$name]`: ! Can't subset columns that don't exist. ✖ Columns `SOLUTE_CARRIER_FAMILY_34__SODIUM_PHOSPHATE_,_MEMBER_2-RELATED`, `2-C-METHYL-D-ERYTHRITOL_4-PHOSPHATE_CYTIDYLYLTRANSFERASE,_CHLOROPLASTIC`, `POLYSACCHARIDE_BIOSYNTHESIS_PROTEIN_CAP5I,_PUTATIVE-RELATED`, `L-2,3-DIAMINOPROPANOATE--CITRATE_LIGASE`, `TRANSCRIPTIONAL_REGULATOR,_MARR_FAMILY`, etc. don't exist. 
 
         V(g)$size <- (V(g)$size - min(V(g)$size)) / (max(V(g)$size) - min(V(g)$size)) * 20 + 10 # scaled by degree
 
@@ -178,15 +193,6 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
       )
       vis_g <- vis_g %>%
         visOptions(highlightNearest = TRUE)
-    },
-    error = function(e) {
-      showNotification(toString(e))
-      vis_g <- "error"
-    },
-    finally = {
-      return(vis_g)
-    }
-  )
 }
 
 BinaryDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, cutoff = 70,
