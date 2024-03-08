@@ -178,6 +178,8 @@ filter_freq <- function(x, min.freq) {
 #########################
 ## SUMMARY FUNCTIONS ####
 #########################
+#' example: library(tidyverse); tibble(DomArch = c("a+b", "a+b", "b+c", "a+b"), Lineage = c("l1", "l1", "l1", "l2")) |>
+#'   summarize_bylin(query = "all")
 summarize_bylin <- function(prot = "prot", column = "DomArch", by = "Lineage",
                             query) {
   column <- sym(column)
