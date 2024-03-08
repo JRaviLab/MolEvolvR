@@ -130,6 +130,7 @@ elements2words <- function(prot, column = "DomArch", conversion_type = "da2doms"
     str_replace_all("   ", " ") %>%
     str_replace_all("  ", " ") %>%
     str_replace_all("  ", " ")
+  z3 <- z3 |> paste(collapse = " ")
   return(z3)
 }
 
