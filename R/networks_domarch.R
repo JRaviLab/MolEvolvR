@@ -61,6 +61,10 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
           x = DomArch.ntwrk,
           ignore.case = T, perl = T
         ))
+# debug notes: 
+# Full name is found in `domain.list`: 'Roxa-like winged helix'
+# partial name in `wc`: 'Roxa-like'
+# full name in V(g)$name: 'Roxa-like winged helix'
       ## Separating column and converting to atomic vector prevents coercion
       domain.list <- domain.list$DomArch.ntwrk %>% str_split(pattern = "\\+")
       # Get a table of domain counts before eliminating domarchs with no edges
@@ -147,7 +151,10 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
           }
         )
         return(capture.output(
-              {print("### wc")
+              {
+              print("### domain.list")
+              print(domain.list)
+              print("### str(wc)")
               print(str(wc))
               names(wc) |> print()
               print("### graph vertex names")
