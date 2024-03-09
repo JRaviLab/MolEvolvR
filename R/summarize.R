@@ -90,10 +90,18 @@ count_bycol <- function(prot = prot, column = "DomArch", min.freq = 1) {
   return(counts)
 }
 
-## Function to break up ELEMENTS to WORDS for DA and GC
+#' Break string ELEMENTS into WORDS for domain architecture (DA) and genomic 
+#' context (GC)
+#' @prot [dataframe]
+#' @column [string] column name
+#' @conversion_type [string] type of conversion: 'da2doms': domain architectures to 
+#' domains. 'gc2da' genomic context to domain architectures
+#' @return [string] with words delimited by spaces
+#' 
+#' example: tibble::tibble(DomArch = c("aaa+bbb", "a+b", "b+c", "b-c")) |> elements2words()
 elements2words <- function(prot, column = "DomArch", conversion_type = "da2doms") {
   z1 <- prot %>%
-    select(column) %>%
+    dplyr::pull(column) %>%
     str_replace_all("\\,", " ") %>%
     str_replace_all("\"", " ")
   switch(conversion_type,
@@ -122,13 +130,18 @@ elements2words <- function(prot, column = "DomArch", conversion_type = "da2doms"
     str_replace_all("   ", " ") %>%
     str_replace_all("  ", " ") %>%
     str_replace_all("  ", " ")
+  z3 <- z3 |> paste(collapse = " ")
   return(z3)
 }
 
-## Function to get WORD COUNTS [DOMAINS (DA) or DOMAIN ARCHITECTURES (GC)]
-## to be used after elements2words
-words2wc <- function(x) {
-  x %>%
+#' Get word counts (wc) [DOMAINS (DA) or DOMAIN ARCHITECTURES (GC)]
+#' @param string
+#' @return [tbl_df] table with 2 columns: 1) words & 2) counts/frequency
+#' example: tibble::tibble(DomArch = c("aaa+bbb", "a+b", "b+c", "b-c")) |> 
+#'   elements2words() |>
+#'   words2wc()
+words2wc <- function(string) {
+  df_word_count <- string %>%
     str_replace_all("   ", " ") %>%
     str_replace_all("  ", " ") %>%
     str_replace_all("  ", " ") %>%
@@ -154,6 +167,7 @@ words2wc <- function(x) {
 
     # filter(!grepl("\\*", words)) %>%			# Remove/Keep only Query
     arrange(-freq)
+    return(df_word_count)
 }
 ## Function to filter based on frequencies
 filter_freq <- function(x, min.freq) {
@@ -164,6 +178,8 @@ filter_freq <- function(x, min.freq) {
 #########################
 ## SUMMARY FUNCTIONS ####
 #########################
+#' example: library(tidyverse); tibble(DomArch = c("a+b", "a+b", "b+c", "a+b"), Lineage = c("l1", "l1", "l1", "l2")) |>
+#'   summarize_bylin(query = "all")
 summarize_bylin <- function(prot = "prot", column = "DomArch", by = "Lineage",
                             query) {
   column <- sym(column)
