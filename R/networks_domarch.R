@@ -34,6 +34,8 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
   #' \itemize{\item "grid" \item "circle" \item "random" \item "auto"}
   #' @examples domain_network(pspa)
   # by domain networks or all, as required.
+  tryCatch(
+    {
       column_name <- sym(column)
     
       prot_tc <- prot %>% total_counts(column = column, cutoff = cutoff, RowsCutoff = F, digits = 5)
@@ -167,22 +169,22 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
             print(e)
           }
         )
-        return(capture.output(
-              {
-              print("### df_prot")
-              print(prot |> filter(grepl(pattern = "ROXA", DomArch.Pfam)) |> head(200))
-              print("### domain.list")
-              print(domain.list)
-              print("### str(wc)")
-              print(str(wc))
-              names(wc) |> print()
-              print("### graph vertex names")
-              print(V(g)$name)
-              print("### which vertex NOT in wc")
-              which(!(V(g)$name %in% names(wc))) |> print()
-              V(g)$name[which(!(V(g)$name %in% names(wc)))] |> print()
-              }
-        ))
+#        return(capture.output(
+#              {
+#              print("### df_prot")
+#              print(prot |> filter(grepl(pattern = "ROXA", DomArch.Pfam)) |> head(200))
+#              print("### domain.list")
+#              print(domain.list)
+#              print("### str(wc)")
+#              print(str(wc))
+#              names(wc) |> print()
+#              print("### graph vertex names")
+#              print(V(g)$name)
+#              print("### which vertex NOT in wc")
+#              which(!(V(g)$name %in% names(wc))) |> print()
+#              V(g)$name[which(!(V(g)$name %in% names(wc)))] |> print()
+#              }
+#        ))
         # Error in `wc[V(g)$name]`: ! Can't subset columns that don't exist. ✖ Columns `SOLUTE_CARRIER_FAMILY_34__SODIUM_PHOSPHATE_,_MEMBER_2-RELATED`, `2-C-METHYL-D-ERYTHRITOL_4-PHOSPHATE_CYTIDYLYLTRANSFERASE,_CHLOROPLASTIC`, `POLYSACCHARIDE_BIOSYNTHESIS_PROTEIN_CAP5I,_PUTATIVE-RELATED`, `L-2,3-DIAMINOPROPANOATE--CITRATE_LIGASE`, `TRANSCRIPTIONAL_REGULATOR,_MARR_FAMILY`, etc. don't exist. 
 
         V(g)$size <- (V(g)$size - min(V(g)$size)) / (max(V(g)$size) - min(V(g)$size)) * 20 + 10 # scaled by degree
@@ -219,6 +221,15 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
       )
       vis_g <- vis_g %>%
         visOptions(highlightNearest = TRUE)
+    },
+    error = function(e) {
+      showNotification(toString(e))
+      vis_g <- "error"
+    },
+    finally = {
+      return(vis_g)
+    }
+  )
 }
 
 BinaryDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, cutoff = 70,
