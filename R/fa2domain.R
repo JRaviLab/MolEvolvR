@@ -139,7 +139,7 @@ make_df_iprscan_domains <- function(
       as.character()
     )
 
-  # create identifies for each domain sequence
+  # create identifiers for each domain sequence
   df_iprscan_domains <- df_iprscan_domains |>
     dplyr::mutate(
       id_domain = stringr::str_glue("{AccNum}-{DB.ID}-{StartLoc}_{StopLoc}")
