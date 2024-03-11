@@ -445,7 +445,8 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
 submit_split_by_domain <- function(
   dir, sequences, DB = "refseq", NHITS = 5000,
   EVAL = 0.0001, phylo = "FALSE", type = "full",
-  job_code = NULL, submitter_email = NULL, advanced_options = NULL
+  job_code = NULL, submitter_email = NULL, advanced_options = NULL,
+  get_slurm_mails = FALSE
 ) {
   setwd(dir)
   # write job submission params to file
@@ -465,7 +466,7 @@ submit_split_by_domain <- function(
   destQoS <- "shortjobs"
   destPartition <- "LocalQ"
   cmd_split_by_domain <- stringr::str_glue(
-    "sbatch {make_email_args(submitter_email)} --qos={destQoS} --partition ",
+    "sbatch {make_email_args(submitter_email, get_slurm_mails)} --qos={destQoS} --partition ",
     "{destPartition} --job-name {make_job_name(job_code, 'fa2domain')} --time=27:07:00 ",
     "--output=split_by_domain-slurm-%j.out --error=split_by_domain-slurm-%j.err ",
     "/data/research/jravilab/molevol_scripts/upstream_scripts/split_by_domain-runner.R ",
