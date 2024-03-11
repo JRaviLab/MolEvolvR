@@ -132,7 +132,7 @@ make_df_iprscan_domains <- function(
     dplyr::rowwise() |>
     dplyr::mutate(
       seq_domain = XVector::subseq(
-        fasta[[base::grep(pattern = AccNum, x = names(fasta), fixed = TRUE)]],
+        fasta[[grep(pattern = AccNum, x = names(fasta), fixed = TRUE)]],
         start = StartLoc,
         end = StopLoc
       ) |>
