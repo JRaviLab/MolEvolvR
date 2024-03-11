@@ -54,6 +54,16 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
       # domains_of_interest <- c("PspA || PspA_IM30 || PspA\\_IM30")  # your domain name here
       # ye=grep(pattern = dom,x = prot.list,value = T)
       # ye=unlist(strsplit(ye,"\\+"))
+      
+      # issue 95: by performing string clean up all of the Domain architecture columns
+      # the error seems to get resolved
+      prot <- prot |> mutate(DomArch.ntwrk = stringr::str_replace_all(string = DomArch.ntwrk, pattern = " ", replacement = "_"))
+      prot <- prot |> mutate(
+        across(
+          all_of(column),
+          function(x) {stringr::str_replace_all(string = x, pattern = " ", replacement = "_")}
+        )
+      )
       domains_of_interest_regex <- paste(domains_of_interest, collapse = "|")
       domain.list <- prot %>%
         dplyr::filter(grepl(
@@ -65,8 +75,13 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
 # Full name is found in `domain.list`: 'Roxa-like winged helix'
 # partial name in `wc`: 'Roxa-like'
 # full name in V(g)$name: 'Roxa-like winged helix'
+# ROXA-like winged helix (https://www.ebi.ac.uk/interpro/entry/pfam/PF20514/) is a Pfam domain
       ## Separating column and converting to atomic vector prevents coercion
+      domain.list <- domain.list |> lapply(
+        FUN = function(x) {stringr::str_replace_all(string = x, pattern = " ", replacement = "_")}
+      )
       domain.list <- domain.list$DomArch.ntwrk %>% str_split(pattern = "\\+")
+      # cleanup domain list
       # Get a table of domain counts before eliminating domarchs with no edges
       wc <- elements2words(prot = prot, column = column, conversion_type = "da2doms") %>% words2wc()
       wc <- pivot_wider(wc, names_from = words, values_from = freq)
@@ -106,10 +121,12 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
         # setting vertex color by size
         # V(g)$color <- rainbow(5,alpha = .5)[round( (v_size-min(v_size))/(max(v_size)-min(v_size)*4+1))]
         # V(g)$frame.color <- V(g)$color
+        warning('from if block')
         vis_g <- visNetwork(vertex_df)
         return(vis_g)
         # }
       } else {
+        warning('from else block')
         te <- unlist(lapply(domain.list, function(x) sapply(1:(length(x) - 1), function(y) x[y]))) # list elements 1 through n-1
         ye <- unlist(lapply(domain.list, function(x) sapply(1:(length(x) - 1), function(y) x[y + 1]))) # list elements 2 through n
         pwise <- cbind(te, ye)
@@ -152,6 +169,8 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
         )
         return(capture.output(
               {
+              print("### df_prot")
+              print(prot |> filter(grepl(pattern = "ROXA", DomArch.Pfam)) |> head(200))
               print("### domain.list")
               print(domain.list)
               print("### str(wc)")
