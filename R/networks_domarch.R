@@ -51,19 +51,17 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
       prot$DomArch.ntwrk <- as_vector(prot %>% select({{ column }})) %>% # testing with prot$DomArch.orig
         str_replace_all(coll(pattern = "\\?", ignore_case = T), "X")
 
-
       # dom="LTD"  #your domain name here
       # domains_of_interest <- c("PspA || PspA_IM30 || PspA\\_IM30")  # your domain name here
       # ye=grep(pattern = dom,x = prot.list,value = T)
       # ye=unlist(strsplit(ye,"\\+"))
       
-      # issue 95: by performing string clean up all of the Domain architecture columns
-      # the error seems to get resolved
-      prot <- prot |> mutate(DomArch.ntwrk = stringr::str_replace_all(string = DomArch.ntwrk, pattern = " ", replacement = "_"))
+      # string clean up all of the Domain Architecture columns
+      prot <- prot |> mutate(DomArch.ntwrk = clean_string(DomArch.ntwrk))
       prot <- prot |> mutate(
         across(
           all_of(column),
-          function(x) {stringr::str_replace_all(string = x, pattern = " ", replacement = "_")}
+          clean_string
         )
       )
       domains_of_interest_regex <- paste(domains_of_interest, collapse = "|")
@@ -73,11 +71,6 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
           x = DomArch.ntwrk,
           ignore.case = T, perl = T
         ))
-# debug notes: 
-# Full name is found in `domain.list`: 'Roxa-like winged helix'
-# partial name in `wc`: 'Roxa-like'
-# full name in V(g)$name: 'Roxa-like winged helix'
-# ROXA-like winged helix (https://www.ebi.ac.uk/interpro/entry/pfam/PF20514/) is a Pfam domain
       ## Separating column and converting to atomic vector prevents coercion
       domain.list <- domain.list |> lapply(
         FUN = function(x) {stringr::str_replace_all(string = x, pattern = " ", replacement = "_")}
@@ -163,32 +156,7 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
           g <- delete_vertices(g, "X")
         }
 
-        tryCatch(
-          expr = {V(g)$size <- as.numeric(wc[V(g)$name])},
-          error = function(e) {
-            print(e)
-          }
-        )
-#        return(capture.output(
-#              {
-#              print("### df_prot")
-#              print(prot |> filter(grepl(pattern = "ROXA", DomArch.Pfam)) |> head(200))
-#              print("### domain.list")
-#              print(domain.list)
-#              print("### str(wc)")
-#              print(str(wc))
-#              names(wc) |> print()
-#              print("### graph vertex names")
-#              print(V(g)$name)
-#              print("### which vertex NOT in wc")
-#              which(!(V(g)$name %in% names(wc))) |> print()
-#              V(g)$name[which(!(V(g)$name %in% names(wc)))] |> print()
-#              }
-#        ))
-        # Error in `wc[V(g)$name]`: ! Can't subset columns that don't exist. ✖ Columns `SOLUTE_CARRIER_FAMILY_34__SODIUM_PHOSPHATE_,_MEMBER_2-RELATED`, `2-C-METHYL-D-ERYTHRITOL_4-PHOSPHATE_CYTIDYLYLTRANSFERASE,_CHLOROPLASTIC`, `POLYSACCHARIDE_BIOSYNTHESIS_PROTEIN_CAP5I,_PUTATIVE-RELATED`, `L-2,3-DIAMINOPROPANOATE--CITRATE_LIGASE`, `TRANSCRIPTIONAL_REGULATOR,_MARR_FAMILY`, etc. don't exist. 
-
         V(g)$size <- (V(g)$size - min(V(g)$size)) / (max(V(g)$size) - min(V(g)$size)) * 20 + 10 # scaled by degree
-
 
         # setting vertex color by size
         V(g)$color <- rainbow(5, alpha = .5)[round((V(g)$size - min(V(g)$size)) / (max(V(g)$size) - min(V(g)$size)) * 4 + 1)]
