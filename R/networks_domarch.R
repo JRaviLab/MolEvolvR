@@ -117,12 +117,10 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
         # setting vertex color by size
         # V(g)$color <- rainbow(5,alpha = .5)[round( (v_size-min(v_size))/(max(v_size)-min(v_size)*4+1))]
         # V(g)$frame.color <- V(g)$color
-        warning('from if block')
         vis_g <- visNetwork(vertex_df)
         return(vis_g)
         # }
       } else {
-        warning('from else block')
         te <- unlist(lapply(domain.list, function(x) sapply(1:(length(x) - 1), function(y) x[y]))) # list elements 1 through n-1
         ye <- unlist(lapply(domain.list, function(x) sapply(1:(length(x) - 1), function(y) x[y + 1]))) # list elements 2 through n
         pwise <- cbind(te, ye)
