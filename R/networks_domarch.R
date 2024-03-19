@@ -76,9 +76,9 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
       domain.list <- domain.list |> purrr::map(
         \(x) stringr::str_replace_all(string = x, pattern = " ", replacement = "_")
       )
-      domain.list <- domain.list$DomArch.ntwrk %>% str_split(pattern = "\\+")
       # cleanup domain list
-      # Get a table of domain counts before eliminating domarchs with no edges
+      domain.list <- domain.list$DomArch.ntwrk %>% str_split(pattern = "\\+")
+      # Get a table of domain counts
       wc <- elements2words(prot = prot, column = column, conversion_type = "da2doms") %>% words2wc()
       wc <- pivot_wider(wc, names_from = words, values_from = freq)
 
