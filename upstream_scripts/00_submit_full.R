@@ -15,7 +15,7 @@ get_sequences <- function(sequences, acc_file_path = "accs.txt", dir_path = "~",
   for (accnum in names(seqs)) {
     if (grepl("\\|", accnum)) {
       accnum_cln <- strsplit(accnum, "\\|")[[1]][2]
-      accnum_cln <- stringr::str_split_1(accnum_cln, " ")[1]
+      accnum_cln <- strsplit(accnum_cln, " ")[[1]]
     } else {
       accnum_cln <- strsplit(accnum, " ")[[1]][1]
     }
@@ -440,4 +440,37 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
   # schedule a 'summary' job to run when all the job_ids have completed or failed
   # (note that if no email was supplied, the job won't be scheduled at all)
   submit_summary_job(job_ids, submitter_email, dir, job_code)
+}
+
+submit_split_by_domain <- function(
+  dir, sequences, DB = "refseq", NHITS = 5000,
+  EVAL = 0.0001, phylo = "FALSE", type = "full",
+  job_code = NULL, submitter_email = NULL, advanced_options = NULL,
+  get_slurm_mails = FALSE
+) {
+  setwd(dir)
+  # write job submission params to file
+  job_args <- list(
+    submission_type = type,
+    database = ifelse(phylo == FALSE, DB, NA),
+    nhits = ifelse(phylo == FALSE, NHITS, NA),
+    evalue = ifelse(phylo == FALSE, EVAL, NA),
+    submitter_email = submitter_email,
+    advanced_options = advanced_options
+  )
+  yml <- yaml::as.yaml(job_args)
+  write(yml, "job_args.yml")
+  # the pre-processing is not expensive 
+  # (just an interproscan run on a FASTA and post-hoc data wrangling)
+  # so we assing this job to the short queue always
+  destQoS <- "shortjobs"
+  destPartition <- "LocalQ"
+  cmd_split_by_domain <- stringr::str_glue(
+    "sbatch {make_email_args(submitter_email, get_slurm_mails)} --qos={destQoS} --partition ",
+    "{destPartition} --job-name {make_job_name(job_code, 'fa2domain')} --time=27:07:00 ",
+    "--output=split_by_domain-slurm-%j.out --error=split_by_domain-slurm-%j.err ",
+    "/data/research/jravilab/molevol_scripts/upstream_scripts/split_by_domain-runner.R ",
+    "{dir} {sequences} {DB} {NHITS} {EVAL} {phylo} {type} {job_code} {submitter_email} {advanced_options}"
+  )
+  submit_and_log(cmd_split_by_domain)
 }
