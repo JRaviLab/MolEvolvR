@@ -73,8 +73,8 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
           ignore.case = T, perl = T
         ))
       ## Separating column and converting to atomic vector prevents coercion
-      domain.list <- domain.list |> lapply(
-        FUN = function(x) {stringr::str_replace_all(string = x, pattern = " ", replacement = "_")}
+      domain.list <- domain.list |> purrr::map(
+        \(x) stringr::str_replace_all(string = x, pattern = " ", replacement = "_")
       )
       domain.list <- domain.list$DomArch.ntwrk %>% str_split(pattern = "\\+")
       # cleanup domain list
