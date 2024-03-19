@@ -1,0 +1,39 @@
+AccNum	SeqMD5Digest	SLength	Analysis	DB.ID	SignDesc	StartLoc	StopLoc	Score	Status	RunDate	IPRAcc	IPRDesc
+aaeB_6~~~aaeB_4	d4231a4500286c9ede1ae00b0188c294	476	MobiDBLite	mobidb-lite	consensus disorder prediction	346	476	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	d4231a4500286c9ede1ae00b0188c294	476	MobiDBLite	mobidb-lite	consensus disorder prediction	282	324	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	d4231a4500286c9ede1ae00b0188c294	476	MobiDBLite	mobidb-lite	consensus disorder prediction	55	76	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	d4231a4500286c9ede1ae00b0188c294	476	MobiDBLite	mobidb-lite	consensus disorder prediction	1	76	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	d4231a4500286c9ede1ae00b0188c294	476	MobiDBLite	mobidb-lite	consensus disorder prediction	395	411	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	d4231a4500286c9ede1ae00b0188c294	476	MobiDBLite	mobidb-lite	consensus disorder prediction	24	41	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	d4231a4500286c9ede1ae00b0188c294	476	MobiDBLite	mobidb-lite	consensus disorder prediction	356	383	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	e75c04573a86440a8df99ed5c0149e05	778	TMHMM	TMhelix	Region of a membrane-bound protein predicted to be embedded in the membrane.	403	425	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	e75c04573a86440a8df99ed5c0149e05	778	TMHMM	TMhelix	Region of a membrane-bound protein predicted to be embedded in the membrane.	483	502	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	e75c04573a86440a8df99ed5c0149e05	778	TMHMM	TMhelix	Region of a membrane-bound protein predicted to be embedded in the membrane.	506	527	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	e75c04573a86440a8df99ed5c0149e05	778	TMHMM	TMhelix	Region of a membrane-bound protein predicted to be embedded in the membrane.	168	190	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	e75c04573a86440a8df99ed5c0149e05	778	TMHMM	TMhelix	Region of a membrane-bound protein predicted to be embedded in the membrane.	534	556	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	e75c04573a86440a8df99ed5c0149e05	778	TMHMM	TMhelix	Region of a membrane-bound protein predicted to be embedded in the membrane.	139	158	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	e75c04573a86440a8df99ed5c0149e05	778	MobiDBLite	mobidb-lite	consensus disorder prediction	710	744	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	e75c04573a86440a8df99ed5c0149e05	778	TMHMM	TMhelix	Region of a membrane-bound protein predicted to be embedded in the membrane.	39	61	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	e75c04573a86440a8df99ed5c0149e05	778	TMHMM	TMhelix	Region of a membrane-bound protein predicted to be embedded in the membrane.	114	132	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	e75c04573a86440a8df99ed5c0149e05	778	PANTHER	PTHR30509	P-HYDROXYBENZOIC ACID EFFLUX PUMP SUBUNIT-RELATED	33	575	1.9e-31	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	e75c04573a86440a8df99ed5c0149e05	778	TMHMM	TMhelix	Region of a membrane-bound protein predicted to be embedded in the membrane.	88	110	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	e75c04573a86440a8df99ed5c0149e05	778	TMHMM	TMhelix	Region of a membrane-bound protein predicted to be embedded in the membrane.	454	476	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	e75c04573a86440a8df99ed5c0149e05	778	MobiDBLite	mobidb-lite	consensus disorder prediction	662	695	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	1191096e442e754020c2d4346b19500b	117	MobiDBLite	mobidb-lite	consensus disorder prediction	74	117	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	54e102e66ae6de33911351e1c30fedc7	113	SignalP_GRAM_POSITIVE	SignalP-TM	SignalP-TM	1	27	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	12976d2b20b076e8c645f8ef63700627	108	MobiDBLite	mobidb-lite	consensus disorder prediction	49	68	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	3c2cb09d2a9c25166b18dfc50531f88c	626	MobiDBLite	mobidb-lite	consensus disorder prediction	34	75	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	3c2cb09d2a9c25166b18dfc50531f88c	626	MobiDBLite	mobidb-lite	consensus disorder prediction	149	163	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	3c2cb09d2a9c25166b18dfc50531f88c	626	MobiDBLite	mobidb-lite	consensus disorder prediction	1	386	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	3c2cb09d2a9c25166b18dfc50531f88c	626	MobiDBLite	mobidb-lite	consensus disorder prediction	111	125	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	3c2cb09d2a9c25166b18dfc50531f88c	626	MobiDBLite	mobidb-lite	consensus disorder prediction	548	565	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	3c2cb09d2a9c25166b18dfc50531f88c	626	MobiDBLite	mobidb-lite	consensus disorder prediction	372	386	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	3c2cb09d2a9c25166b18dfc50531f88c	626	MobiDBLite	mobidb-lite	consensus disorder prediction	88	110	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	3c2cb09d2a9c25166b18dfc50531f88c	626	MobiDBLite	mobidb-lite	consensus disorder prediction	164	216	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	3c2cb09d2a9c25166b18dfc50531f88c	626	MobiDBLite	mobidb-lite	consensus disorder prediction	510	626	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	6f0bfd0f96b3f43f6c704497ba240673	168	MobiDBLite	mobidb-lite	consensus disorder prediction	142	168	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	6f0bfd0f96b3f43f6c704497ba240673	168	MobiDBLite	mobidb-lite	consensus disorder prediction	149	168	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	3235681da46c79bd3bda00db2b12e034	127	MobiDBLite	mobidb-lite	consensus disorder prediction	94	127	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	3235681da46c79bd3bda00db2b12e034	127	MobiDBLite	mobidb-lite	consensus disorder prediction	17	35	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	3235681da46c79bd3bda00db2b12e034	127	SignalP_GRAM_POSITIVE	SignalP-TM	SignalP-TM	1	22	NA	T	10-02-2024	-	-
+aaeB_6~~~aaeB_4	3235681da46c79bd3bda00db2b12e034	127	MobiDBLite	mobidb-lite	consensus disorder prediction	1	52	NA	T	10-02-2024	-	-
