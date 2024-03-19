@@ -118,7 +118,7 @@ submit_summary_job <- function(job_ids, submitter_email, job_dir, job_code, dep_
   }
 }
 
-submit_full <- function(dir = "/data/scratch", DB = "refseq", NHITS = 5000, EVAL = 0.0005, sequences = "~/test.fa", phylo = "FALSE", by_domain = "FALSE", domain_starting = "~/domain_seqs.fa", type = "full", job_code=NULL, submitter_email=NULL, advanced_options=NULL, get_slurm_mails=FALSE) {
+submit_full <- function(dir = "/data/scratch", DB = Sys.getenv("BLAST_DB", unset = "refseq"), NHITS = Sys.getenv("BLAST_HITS", unset = 100), EVAL = Sys.getenv("BLAST_EVALUE", unset = 0.00001), sequences = "~/test.fa", phylo = "FALSE", by_domain = "FALSE", domain_starting = "~/domain_seqs.fa", type = "full", job_code=NULL, submitter_email=NULL, advanced_options=NULL, get_slurm_mails=FALSE) {
   # submits jobs for fasta, MSA, or accession number type submissions
   setwd(dir)
 
@@ -348,7 +348,7 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
   submit_summary_job(job_ids, submitter_email, dir, job_code)
 }
 
-submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa", ncbi = FALSE, blast = FALSE, DB = "refseq", NHITS = 5000, EVAL = 0.0005, job_code=NULL, submitter_email=NULL, advanced_options=NULL, get_slurm_mails=FALSE) {
+submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa", ncbi = FALSE, blast = FALSE, DB = Sys.getenv("BLAST_DB", unset = "refseq"), NHITS = Sys.getenv("BLAST_HITS", unset = 100), EVAL = Sys.getenv("BLAST_EVALUE", unset = 0.00001), job_code=NULL, submitter_email=NULL, advanced_options=NULL, get_slurm_mails=FALSE) {
   setwd(dir)
 
   advanced_options_names <- names(advanced_options[advanced_options==TRUE])
