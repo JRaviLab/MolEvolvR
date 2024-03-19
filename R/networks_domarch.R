@@ -154,6 +154,7 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
         if ("X" %in% V(g)$name) {
           g <- delete_vertices(g, "X")
         }
+        V(g)$size <- as.numeric(wc[V(g)$name])
 
         V(g)$size <- (V(g)$size - min(V(g)$size)) / (max(V(g)$size) - min(V(g)$size)) * 20 + 10 # scaled by degree
 
