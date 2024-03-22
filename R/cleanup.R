@@ -59,14 +59,18 @@ make_accnums_unique <- function(accnums) {
 cleanup_fasta_header <- function(fasta) {
   headers <- names(fasta)
   # try parsing accession numbers from header
-  headers_adjusted <- vapply(
+  headers <- purrr::map_chr(
     headers,
-    string2accnum,
-    FUN.VALUE = character(1)
+    string2accnum
+  )
+  # sanitize string for pathing (file read/write-ing)
+  headers <- purrr::map_chr(
+    headers,
+    fs::path_sanitize
   )
   # append an index suffix for the ith occurence of each accnum
-  headers_adjusted <- make_accnums_unique(headers_adjusted)
-  names(fasta) <- headers_adjusted
+  headers <- make_accnums_unique(headers)
+  names(fasta) <- headers
   return(fasta)
 }
 remove_empty <- function(prot, by_column = "DomArch") {
