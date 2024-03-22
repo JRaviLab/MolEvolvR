@@ -52,6 +52,7 @@ split_by_domain <- function() {
   }
 
   # 2. use the results to create a domain fasta
+  fasta <- Biostrings::readAAStringSet(filepath_fasta)
   fasta_domains <- fasta2fasta_domain(fasta, df_iprscan, verbose = TRUE)
   print("### fasta domains")
   print(fasta_domains)
