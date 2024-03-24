@@ -23,11 +23,6 @@ msg_args <- stringr::str_glue(
 )
 print(msg_args)
 
-# load fasta, ensure no duplicate headers, and re-write
-fasta <- Biostrings::readAAStringSet(filepath_fasta)
-fasta <- cleanup_fasta_header(fasta)
-Biostrings::writeXStringSet(fasta, filepath_fasta)
-
 # setup paths
 dir_job_results <- Sys.getenv("SLURM_SUBMIT_DIR")
 
@@ -57,6 +52,7 @@ split_by_domain <- function() {
   }
 
   # 2. use the results to create a domain fasta
+  fasta <- Biostrings::readAAStringSet(filepath_fasta)
   fasta_domains <- fasta2fasta_domain(fasta, df_iprscan, verbose = TRUE)
   print("### fasta domains")
   print(fasta_domains)
