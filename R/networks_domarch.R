@@ -37,26 +37,34 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
   tryCatch(
     {
       column_name <- sym(column)
-
+    
       prot_tc <- prot %>% total_counts(column = column, cutoff = cutoff, RowsCutoff = F, digits = 5)
 
+      # ensure  only Domains that are in the tc cutoff range are kept
       within_list <- prot_tc %>%
         select({{ column_name }}) %>%
         distinct()
       within_list <- pull(within_list, {{ column_name }})
-
-      # nvm, it's making sure that only Domains that are in the tc cutoff range are kept
       prot <- prot %>% filter({{ column_name }} %in% within_list)
 
       ####### Below should be part of the standardized cleanup process
       prot$DomArch.ntwrk <- as_vector(prot %>% select({{ column }})) %>% # testing with prot$DomArch.orig
         str_replace_all(coll(pattern = "\\?", ignore_case = T), "X")
 
-
       # dom="LTD"  #your domain name here
       # domains_of_interest <- c("PspA || PspA_IM30 || PspA\\_IM30")  # your domain name here
       # ye=grep(pattern = dom,x = prot.list,value = T)
       # ye=unlist(strsplit(ye,"\\+"))
+      
+      # string clean up all of the Domain Architecture columns
+      prot <- prot |>
+        mutate(DomArch.ntwrk = clean_string(DomArch.ntwrk)) |>
+        mutate(
+          across(
+            all_of(column),
+            clean_string
+          )
+        )
       domains_of_interest_regex <- paste(domains_of_interest, collapse = "|")
       domain.list <- prot %>%
         dplyr::filter(grepl(
@@ -65,8 +73,12 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
           ignore.case = T, perl = T
         ))
       ## Separating column and converting to atomic vector prevents coercion
+      domain.list <- domain.list |> purrr::map(
+        \(x) stringr::str_replace_all(string = x, pattern = " ", replacement = "_")
+      )
+      # cleanup domain list
       domain.list <- domain.list$DomArch.ntwrk %>% str_split(pattern = "\\+")
-      # Get domain counts before eliminating domarchs with no edges
+      # Get a table of domain counts
       wc <- elements2words(prot = prot, column = column, conversion_type = "da2doms") %>% words2wc()
       wc <- pivot_wider(wc, names_from = words, values_from = freq)
 
@@ -145,7 +157,6 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
         V(g)$size <- as.numeric(wc[V(g)$name])
 
         V(g)$size <- (V(g)$size - min(V(g)$size)) / (max(V(g)$size) - min(V(g)$size)) * 20 + 10 # scaled by degree
-
 
         # setting vertex color by size
         V(g)$color <- rainbow(5, alpha = .5)[round((V(g)$size - min(V(g)$size)) / (max(V(g)$size) - min(V(g)$size)) * 4 + 1)]
