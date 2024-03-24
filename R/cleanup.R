@@ -31,6 +31,59 @@ clean_string <- function(string) {
   return(string)
 }
 
+# use the same code as upstream_scripts/00_submit_full.R's
+# get_sequences() function to extract accession numbers
+string2accnum <- function(string) {
+  if (grepl("\\|", string)) {
+    accnum <- strsplit(string, "\\|")[[1]][2]
+    accnum <- strsplit(accnum, " ")[[1]][1]
+  } else {
+    accnum <- strsplit(string, " ")[[1]][1]
+  }
+  return(accnum)
+}
+
+#' Append an index of occurence suffix to each accession number (or any 
+#' character vector) making them unique
+#' @param accnums [chr] a vector of accession numbers
+#' @return [chr] a vector of adjusted, unique accession numbers
+#' 
+#' example c("xxx", "xxx", "xxx", "yyy", "yyy") |> make_accnums_unique()
+make_accnums_unique <- function(accnums) {
+  # group by accnums then use the row count as a proxy 
+  # for the index of occurence for each accession number
+  df_accnums <- tibble::tibble("accnum" = accnums)
+  df_accnums <- df_accnums |>
+    dplyr::group_by(accnum) |>
+    dplyr::mutate(suffix = dplyr::row_number()) |>
+    dplyr::ungroup() |>
+    dplyr::mutate(accnum_adjusted = paste0(accnum, "_", suffix)) |>
+    dplyr::arrange(accnum_adjusted)
+  accnums_adjusted <- df_accnums |> dplyr::pull(accnum_adjusted)
+
+  return(accnums_adjusted)
+}
+
+#' Parse accesion numbers from fasta and add a 
+#' suffix of the ith occurence to handle duplicates
+#' @param [XStringSet] fasta
+#' @return [XStringSet] fasta with adjusted names (headers)
+#' 
+#' example AAStringSet(c("xxx" = "ATCG", "xxx" = "GGGC")) |> cleanup_fasta_header()
+cleanup_fasta_header <- function(fasta) {
+  headers <- names(fasta)
+  # try parsing accession numbers from header
+  headers_adjusted <- vapply(
+    headers,
+    string2accnum,
+    FUN.VALUE = character(1)
+  )
+  # append an index suffix for the ith occurence of each accnum
+  headers_adjusted <- make_accnums_unique(headers_adjusted)
+  names(fasta) <- headers_adjusted
+  return(fasta)
+}
+
 remove_empty <- function(prot, by_column = "DomArch") {
   #' Remove empty rows by column
   #'
