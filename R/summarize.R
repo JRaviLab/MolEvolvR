@@ -125,11 +125,8 @@ elements2words <- function(prot, column = "DomArch", conversion_type = "da2doms"
     str_replace_all("\n", " ") %>%
     str_replace_all("\r", " ") %>%
     str_replace_all("\t", " ") %>%
-    ## replace multiple spaces ...
-    str_replace_all("    ", " ") %>%
-    str_replace_all("   ", " ") %>%
-    str_replace_all("  ", " ") %>%
-    str_replace_all("  ", " ")
+    # reduce spaces with length 2 or greater to a single space
+    str_replace_all("\\s{2,}", " ")
   z3 <- z3 |> paste(collapse = " ")
   return(z3)
 }
@@ -142,9 +139,8 @@ elements2words <- function(prot, column = "DomArch", conversion_type = "da2doms"
 #'   words2wc()
 words2wc <- function(string) {
   df_word_count <- string %>%
-    str_replace_all("   ", " ") %>%
-    str_replace_all("  ", " ") %>%
-    str_replace_all("  ", " ") %>%
+    # reduce spaces with length 2 or greater to a single space
+    str_replace_all("\\s{2,}", " ") %>%
     paste(collapse = " ") %>%
     strsplit(" ") %>%
     # filter(grepl(query.list[j], Query)) %>% # Create separate WCs for each Query

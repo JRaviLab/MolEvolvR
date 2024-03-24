@@ -17,6 +17,20 @@ conflicted::conflict_prefer("filter", "dplyr")
 #### CLEANUP FUNCTIONS ####
 ###########################
 
+#' Keep only alphanumerics, "_", "+", and "." in strings
+#' and substitute spaces with "_". Used in MolEvolvR codebase to
+#' cleanup domain architecture values
+#' @param [string] string to clean
+#' @return [string] string with only alphanumerics, "_", "+", and "."
+#' 
+clean_string <- function(string) {
+  # replace spaces with "_"
+  string <- stringr::str_replace_all(string, "\\s+", "_")
+  # keep only alphanumeric characters, "_", and "."
+  string <- stringr::str_replace_all(string, "[^[:alnum:]_.+]", "")
+  return(string)
+}
+
 # use the same code as upstream_scripts/00_submit_full.R's
 # get_sequences() function to extract accession numbers
 string2accnum <- function(string) {
@@ -69,6 +83,7 @@ cleanup_fasta_header <- function(fasta) {
   names(fasta) <- headers_adjusted
   return(fasta)
 }
+
 remove_empty <- function(prot, by_column = "DomArch") {
   #' Remove empty rows by column
   #'
