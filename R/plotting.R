@@ -269,8 +269,11 @@ lineage.DA.plot <- function(query_data = "prot",
       ) + # , width=0.7, height=0.7),
       scale_fill_gradient(low = "white", high = "darkred") +
       scale_x_discrete(position = "top") +
-      theme_minimal() + # coord_flip() +
-      theme(axis.text.x = element_text(angle = 65, hjust = 0, vjust = 0.5))
+      theme_classic() + # coord_flip() +
+      theme(
+        axis.text.x = element_text(angle = 65, hjust = 0, vjust = 0.5),
+        panel.background = element_rect(fill = "white")
+      )
   } else {
     ggplot(
       data = query.summ.byLin.ggplot,
@@ -286,8 +289,11 @@ lineage.DA.plot <- function(query_data = "prot",
       # colour="darkred", size=0.3) + #, width=0.7, height=0.7),
       scale_fill_viridis(discrete = F, option = color) +
       scale_x_discrete(position = "top") +
-      theme_minimal() + # coord_flip() +
-      theme(axis.text.x = element_text(angle = 65, hjust = 0, vjust = 0.5))
+      theme_classic() + # coord_flip() +
+      theme(
+        axis.text.x = element_text(angle = 65, hjust = 0, vjust = 0.5),
+        panel.background = element_rect(fill = "white")
+      )
   }
 }
 
