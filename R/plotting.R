@@ -251,45 +251,26 @@ lineage.DA.plot <- function(query_data = "prot",
   query.summ.byLin.ggplot[, colname] <- factor(pull(query.summ.byLin.ggplot, {{ column }}),
     levels = (pull(query.summ.byLin.ggplot, {{ column }}) %>% unique())
   )
+  # drop NA counts
+  query.summ.byLin.ggplot <- subset(query.summ.byLin.ggplot, !is.na(count))
 
-
+  # plot heatmap
   if (color == "default") {
-    ## Tile plot
-    ggplot(
-      data = query.summ.byLin.ggplot,
-      aes_string(x = "Lineage", y = colname)
-    ) +
-      geom_tile(
-        data = subset(
-          query.summ.byLin.ggplot,
-          !is.na(count)
-        ),
-        aes(fill = count),
-        colour = "darkred", size = 0.3
-      ) + # , width=0.7, height=0.7),
+    ggplot(data = query.summ.byLin.ggplot, aes_string(x = "Lineage", y = colname)) +
+      geom_tile(aes(fill = count, colour = "darkred", size = 0.3)) +
       scale_fill_gradient(low = "white", high = "darkred") +
       scale_x_discrete(position = "top") +
-      theme_classic() + # coord_flip() +
+      theme_classic() +
       theme(
         axis.text.x = element_text(angle = 65, hjust = 0, vjust = 0.5),
         panel.background = element_rect(fill = "white")
       )
   } else {
-    ggplot(
-      data = query.summ.byLin.ggplot,
-      aes_string(x = "Lineage", y = colname)
-    ) +
-      geom_tile(
-        data = subset(
-          query.summ.byLin.ggplot,
-          !is.na(count)
-        ),
-        aes(fill = count)
-      ) +
-      # colour="darkred", size=0.3) + #, width=0.7, height=0.7),
+    ggplot(data = query.summ.byLin.ggplot, aes_string(x = "Lineage", y = colname)) +
+      geom_tile(aes(fill = count)) +
       scale_fill_viridis(discrete = F, option = color) +
       scale_x_discrete(position = "top") +
-      theme_classic() + # coord_flip() +
+      theme_classic() +
       theme(
         axis.text.x = element_text(angle = 65, hjust = 0, vjust = 0.5),
         panel.background = element_rect(fill = "white")
