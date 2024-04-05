@@ -57,17 +57,19 @@ if [ "$IS_QUERY" = "T" ]; then
 	OUTDIR=${OUTPATH}/${PREFIX}
 	mkdir ${OUTDIR}				## make the directory
 	cat $FILE >> ${OUTDIR}/${PREFIX}.all_accnums.fa
-
+	# use the attempted parsing of accession numbers from headers for acc2info
+	tail -n +2 query-fasta_header-map.tsv | cut -f2 > parsed_accnums.txt
 	if [ -e starting_accs.txt ]; then
 		cp starting_accs.txt ${OUTDIR}/${PREFIX}.all_accnums.txt
 	else
 		cp accs.txt ${OUTDIR}/${PREFIX}.all_accnums.txt
+		cp parsed_accnums.txt ${OUTDIR}/${PREFIX}.parsed_accnums.txt
 	fi
 
 	cd ${OUTDIR} || exit
 	## ACC2INFO ##
 	acc2info_start=$SECONDS
-	sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.all_accnums.txt $PREFIX $OUTDIR
+	sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.parsed_accnums.txt $PREFIX $OUTDIR
 	acc2info_dur=$(( $SECONDS - $acc2info_start ))
 	cp ${OUTDIR}/${PREFIX}.acc2info.tsv ${OUTDIR}/${PREFIX}.blast.cln.tsv
 else

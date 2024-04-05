@@ -18,14 +18,14 @@ acc2info()
 	# print colnames
 	printf "AccNum\tAccNum.noV\tFullAccNum\tDescription\tLength\tTaxID\tSpecies\tSourceDB\tCompleteness\n" > $OUTFILE
 	# Batch input of accession numbers --> Document Summaries --> Pull necessary columns --> Output
-	epost -input $INFILE -db protein | \
+	epost -input ${INFILE} -db protein | \
 	efetch -format docsum | xtract -pattern DocumentSummary -def "NA" \
 	-element OSLT,Caption,Extra,Title,Slen,TaxId,Organism,SourceDb,Completeness >> $OUTFILE
 	# If acc2info doesn't find anything, try UniProt
 	num_acc=$(wc -l "${OUTFILE}" | grep -Eo "^[[:digit:]]+")
 	if [ "${num_acc}" = 1 ]
 	then
-	split -l 100 -e ${OUTDIR}/${PREFIX}.all_accnums.txt ${OUTDIR}/acc
+	split -l 100 -e ${INFILE} ${OUTDIR}/acc
 	for x in ${OUTDIR}/acc*						# looping through each file following the pattern
 	do
    	#sleep 1
@@ -51,6 +51,9 @@ then
 else
 	acc2info $INFILE $PREFIX $OUTDIR
 fi
+
+# replace parsed accnums with the the cleanup versions
+#Rscript -e 'readr::read_tsv()
 
 # Unused XML alternative | parts of this could be slighly buggy
 #epost -input $INFILE -db protein | \
