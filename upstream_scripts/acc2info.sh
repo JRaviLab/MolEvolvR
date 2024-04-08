@@ -52,9 +52,6 @@ else
 	acc2info $INFILE $PREFIX $OUTDIR
 fi
 
-# replace parsed accnums with the the cleanup versions
-#Rscript -e 'readr::read_tsv()
-
 # Unused XML alternative | parts of this could be slighly buggy
 #epost -input $INFILE -db protein | \
 #efetch -format xml | \

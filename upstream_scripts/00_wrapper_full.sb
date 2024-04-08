@@ -70,6 +70,9 @@ if [ "$IS_QUERY" = "T" ]; then
 	## ACC2INFO ##
 	acc2info_start=$SECONDS
 	sh /data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh ${OUTDIR}/${PREFIX}.parsed_accnums.txt $PREFIX $OUTDIR
+	/data/research/jravilab/molevol_scripts/upstream_scripts/substitute_accnum_for_acc2info.R \
+		${OUTDIR}/${PREFIX}.acc2info.tsv \
+		${OUTPATH}/query-fasta_header-map.tsv
 	acc2info_dur=$(( $SECONDS - $acc2info_start ))
 	cp ${OUTDIR}/${PREFIX}.acc2info.tsv ${OUTDIR}/${PREFIX}.blast.cln.tsv
 else

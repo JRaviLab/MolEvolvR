@@ -135,9 +135,27 @@ ipg2lin <- function(accessions, ipg_file, assembly_path, lineagelookup_path) {
   return(lins)
 }
 
-
-
-
+# since MolEvolvR tracks queries using unique identifiers,
+# a step is necessary to try and parse accession numbers
+# to query databases for lineage info.
+# this function is a post-hoc cleanup which will re-map the 
+# lineage data to the unique ids assigned to each MolEvolvR query.
+# in a practical sense, the lineage data is joined onto the unique ids
+substitute_accnum_for_acc2info <- function(df_acc2info, df_header_map) {
+  df_result <- df_header_map |>
+    # set column name in header map to match accnum col in acc2info
+    dplyr::rename(AccNum = header_accnum) |>
+    # join onto header map
+    dplyr::left_join(df_acc2info, by = "AccNum") |>
+    # deselect accnum
+    dplyr::select(-AccNum) |>
+    # set the accnum col to the cleaned form
+    dplyr::rename(AccNum = header_clean) |>
+    # rm excess columns from header map file
+    dplyr::mutate(test = NA) |>
+    dplyr::select(-header_original)
+  return(df_result)
+}
 
 # efetch_ipg <- function(accnums, outpath)
 # {
