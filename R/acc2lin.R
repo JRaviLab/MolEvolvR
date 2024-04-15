@@ -152,7 +152,6 @@ substitute_accnum_for_acc2info <- function(df_acc2info, df_header_map) {
     # set the accnum col to the cleaned form
     dplyr::rename(AccNum = header_clean) |>
     # rm excess columns from header map file
-    dplyr::mutate(test = NA) |>
     dplyr::select(-header_original)
   return(df_result)
 }
