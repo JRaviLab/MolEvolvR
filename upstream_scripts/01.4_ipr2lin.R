@@ -19,20 +19,23 @@ ipr2lin <- function(ipr, acc2info, prefix) {
 
   acc2info_out <- fread(input = acc2info, sep = "\t", header = T, fill = T) %>%
     mutate(FullAccNum = gsub("\\|", "", FullAccNum)) %>%
-    mutate(FullAccNum = gsub(".*[a-z]", "", FullAccNum))
+    mutate(FullAccNum = gsub(".*[a-z]", "", FullAccNum)) 
 
   # merge ipr file with acc2info file
   ipr_in <- ipr_in %>%
-    mutate(AccNum.noV = gsub("\\.[0-9]", "", AccNum))
+    # remove version number and any other suffices
+    mutate(AccNum.noV = gsub("\\.[0-9].*", "", AccNum))
 
-  ipr_tax <- merge(ipr_in, acc2info_out, by = "AccNum", all.x = T)
+  ipr_tax <- left_join(ipr_in, acc2info_out, by = "AccNum")
 
   # read in lineage map
   lineage_map <- fread("/data/research/jravilab/common_data/lineage_lookup.txt", header = T, fill = T)
   # lineage_map <- fread("../ReferenceFiles/lineage_lookup.txt", header = T, fill = T)
 
-  # merge ipr+info w/ lineage, remove extra species column
-  ipr_lin <- merge(ipr_tax, lineage_map, by = "TaxID", all.x = T) %>%
+  # merge ipr+info w/ lineage
+  # both tables have a species column, but only 
+  # the lineage_map (y) species column is kept
+  ipr_lin <- left_join(ipr_tax, lineage_map, by = "TaxID") |>
     mutate(Species = Species.y) %>%
     select(-Species.x, -Species.y)
 
@@ -42,6 +45,8 @@ ipr2lin <- function(ipr, acc2info, prefix) {
     distinct()
   if ("AccNum.x" %in% names(ipr_lin)) {
     ipr_lin <- ipr_lin %>%
+    # deselect the AccNum.y from the lineage table (y) and set 
+    # the AccNum.x (x) from the ipr/acc2info tables to simply 'AccNum'
       mutate(AccNum = AccNum.x) %>%
       select(-AccNum.x, -AccNum.y)
   }
@@ -51,7 +56,7 @@ ipr2lin <- function(ipr, acc2info, prefix) {
     mutate(Name = gsub("^_", "", Name))
 
   # add domarch info to iprscan + lineage df, only keep what's in x
-  ipr_cln <- merge(ipr_lin, lookup_tbl, by = "DB.ID", all.x = T, all.y = F)
+  ipr_cln <- left_join(ipr_lin, lookup_tbl, by = "DB.ID")
 
   # populate empty description/short name columns
   for (i in 1:nrow(ipr_cln)) {
@@ -72,6 +77,11 @@ ipr2lin <- function(ipr, acc2info, prefix) {
   # rename unclear/duplicated columns
   names(ipr_cln)[names(ipr_cln) == "Description.x"] <- "ProteinName"
   names(ipr_cln)[names(ipr_cln) == "Description.y"] <- "LookupTblDesc"
+  # deselect the AccNum.noV from the lineage table (y) and set 
+  # the AccNum.noV.x (x) from the ipr/acc2info tables to simply 'AccNum.noV'
+  ipr_cln <- ipr_cln |> dplyr::select(-AccNum.noV.y) |> 
+    dplyr::mutate(AccNum.noV = AccNum.noV.x) |>
+    dplyr::select(-AccNum.noV.x)
   # create label column to use in ipr2viz
   ipr_cln <- ipr_cln %>%
     mutate(Label = strtrim(ShortName, 30)) %>%
