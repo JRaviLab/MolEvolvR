@@ -7,12 +7,42 @@ suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(biomartr))
 
 # https://stackoverflow.com/questions/18730491/sink-does-not-release-file
+#' Sink Reset
+#'
+#' @return No return, but run to close all outstanding `sink()`s
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' sink.reset()
+#' }
 sink.reset <- function() {
   for (i in seq_len(sink.number())) {
     sink(NULL)
   }
 }
 
+
+#' Add Lineages
+#'
+#' @param df
+#' @param acc_col
+#' @param assembly_path
+#' @param lineagelookup_path
+#' @param ipgout_path
+#' @param plan
+#'
+#' @importFrom dplyr pull
+#' @importFrom magrittr %>%
+#' @importFrom rlang sym
+#'
+#' @return Describe return, in detail
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' add_lins()
+#' }
 
 add_lins <- function(df, acc_col = "AccNum", assembly_path,
                      lineagelookup_path, ipgout_path = NULL, plan = "sequential") {
@@ -34,6 +64,30 @@ add_lins <- function(df, acc_col = "AccNum", assembly_path,
   return(merged)
 }
 
+
+#' acc2lin
+#'
+#' @author Samuel Chen, Janani Ravi
+#'
+#' @description This function combines 'efetch_ipg()' and 'ipg2lin()' to map a set
+#' of protein accessions to their assembly (GCA_ID), tax ID, and lineage.
+#'
+#' @param accessions Character vector of protein accessions
+#' @param assembly_path String of the path to the assembly_summary path
+#' This file can be generated using the "DownloadAssemblySummary()" function
+#' @param lineagelookup_path String of the path to the lineage lookup file
+#' (taxid to lineage mapping). This file can be generated using the
+#' @param ipgout_path Path to write the results of the efetch run of the accessions
+#' on the ipg database. If NULL, the file will not be written. Defaults to NULL
+#' @param plan
+#'
+#' @return Describe return, in detail
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' acc2lin()
+#' }
 
 acc2lin <- function(accessions, assembly_path, lineagelookup_path, ipgout_path = NULL, plan = "sequential") {
   #' @author Samuel Chen, Janani Ravi
@@ -61,7 +115,28 @@ acc2lin <- function(accessions, assembly_path, lineagelookup_path, ipgout_path =
   return(lins)
 }
 
-
+#' efetch_ipg
+#'
+#' @author Samuel Chen, Janani Ravi
+#'
+#' @description Perform efetch on the ipg database and write the results to out_path
+#'
+#' @param accnums Character vector containing the accession numbers to query on
+#' the ipg database
+#' @param out_path Path to write the efetch results to
+#' @param plan
+#'
+#' @importFrom furrr future_map
+#' @importFrom future plan
+#' @importFrom rentrez entrez_fetch
+#'
+#' @return Describe return, in detail
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' efetch_ipg()
+#' }
 
 efetch_ipg <- function(accnums, out_path, plan = "sequential") {
   #' @author Samuel Chen, Janani Ravi
@@ -71,6 +146,7 @@ efetch_ipg <- function(accnums, out_path, plan = "sequential") {
   #' @param out_path Path to write the efetch results to
   if (length(accnums) > 0) {
     partition <- function(in_data, groups) {
+      # \\TODO This function should be defined outside of efetch_ipg(). It can be non-exported/internal
       # Partition data to limit number of queries per second for rentrez fetch:
       # limit of 10/second w/ key
       l <- length(in_data)
@@ -102,13 +178,40 @@ efetch_ipg <- function(accnums, out_path, plan = "sequential") {
           id = partitioned_acc[[x]],
           db = "ipg",
           rettype = "xml",
-          api_key = "YOUR_KEY_HERE"
+          api_key = "YOUR_KEY_HERE" ## Can this be included in public package?
         )
       )
     })
     sink(NULL)
   }
 }
+
+#' ipg2lin
+#'
+#' @author Samuel Chen, Janani Ravi
+#'
+#' @description Takes the resulting file of an efetch run on the ipg database and
+#'
+#' @param accessions Character vector of protein accessions
+#' @param ipg_file Filepath to the file containing results of an efetch run on the
+#' ipg database. The protein accession in 'accessions' should be contained in this
+#' file
+#' @param assembly_path String of the path to the assembly_summary path
+#' This file can be generated using the "DownloadAssemblySummary()" function
+#' @param lineagelookup_path String of the path to the lineage lookup file
+#' (taxid to lineage mapping). This file can be generated using the
+#' "create_lineage_lookup()" function
+#'
+#' @importFrom data.table fread
+#'
+#' @return Describe return, in detail
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' ipg2lin()
+#' }
+#'
 
 ipg2lin <- function(accessions, ipg_file, assembly_path, lineagelookup_path) {
   #' @author Samuel Chen, Janani Ravi

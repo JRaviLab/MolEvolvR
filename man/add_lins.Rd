@@ -2,7 +2,7 @@
 % Please edit documentation in R/acc2lin.R
 \name{add_lins}
 \alias{add_lins}
-\title{Add lineages}
+\title{Add Lineages}
 \usage{
 add_lins(
   df,
@@ -13,6 +13,17 @@ add_lins(
   plan = "multicore"
 )
 }
+\arguments{
+\item{plan}{}
+}
+\value{
+Describe return, in detail
+}
 \description{
-Add lineages
+Add Lineages
+}
+\examples{
+\dontrun{
+add_lins()
+}
 }

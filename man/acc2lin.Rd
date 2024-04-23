@@ -2,7 +2,7 @@
 % Please edit documentation in R/acc2lin.R, R/lineage.R
 \name{acc2lin}
 \alias{acc2lin}
-\title{Function to map protein accession numbers to lineage}
+\title{acc2lin}
 \usage{
 acc2lin(
   accessions,
@@ -31,6 +31,11 @@ This file can be generated using the "DownloadAssemblySummary()" function}
 
 \item{ipgout_path}{Path to write the results of the efetch run of the accessions
 on the ipg database. If NULL, the file will not be written. Defaults to NULL}
+
+\item{plan}{}
+}
+\value{
+Describe return, in detail
 }
 \description{
 This function combines 'efetch_ipg()' and 'ipg2lin()' to map a set
@@ -38,6 +43,11 @@ of protein accessions to their assembly (GCA_ID), tax ID, and lineage.
 
 This function combines 'efetch_ipg()' and 'ipg2lin()' to map a set
 of protein accessions to their assembly (GCA_ID), tax ID, and lineage.
+}
+\examples{
+\dontrun{
+acc2lin()
+}
 }
 \author{
 Samuel Chen, Janani Ravi
