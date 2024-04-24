@@ -1,10 +1,10 @@
-suppressPackageStartupMessages(library(tidyverse))
-suppressPackageStartupMessages(library(rentrez))
-suppressPackageStartupMessages(library(future))
-suppressPackageStartupMessages(library(furrr))
-suppressPackageStartupMessages(library(data.table))
-suppressPackageStartupMessages(library(tidyverse))
-suppressPackageStartupMessages(library(biomartr))
+# suppressPackageStartupMessages(library(tidyverse))
+# suppressPackageStartupMessages(library(rentrez))
+# suppressPackageStartupMessages(library(future))
+# suppressPackageStartupMessages(library(furrr))
+# suppressPackageStartupMessages(library(data.table))
+# suppressPackageStartupMessages(library(tidyverse))
+# suppressPackageStartupMessages(library(biomartr))
 
 # https://stackoverflow.com/questions/18730491/sink-does-not-release-file
 #' Sink Reset
