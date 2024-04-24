@@ -2,12 +2,24 @@
 % Please edit documentation in R/summarize.R
 \name{summarize_bylin}
 \alias{summarize_bylin}
-\title{example: library(tidyverse); tibble(DomArch = c("a+b", "a+b", "b+c", "a+b"), Lineage = c("l1", "l1", "l1", "l2")) |>
-summarize_bylin(query = "all")}
+\title{Summarize by Lineage}
 \usage{
 summarize_bylin(prot = "prot", column = "DomArch", by = "Lineage", query)
 }
+\arguments{
+\item{query}{}
+}
+\value{
+Describe return, in detail
+}
 \description{
-example: library(tidyverse); tibble(DomArch = c("a+b", "a+b", "b+c", "a+b"), Lineage = c("l1", "l1", "l1", "l2")) |>
-summarize_bylin(query = "all")
+Summarize by Lineage
+}
+\examples{
+\dontrun{
+library(tidyverse)
+tibble(DomArch = c("a+b", "a+b", "b+c", "a+b"), Lineage = c("l1", "l1", "l1", "l2")) |>
+  summarize_bylin(query = "all")
+}
+
 }

@@ -9,13 +9,18 @@ find_paralogs(prot)
 \arguments{
 \item{prot}{A data frame filtered by a Query, containing columns Species and Lineage}
 }
+\value{
+returns a dataframe containing paralogs and the counts.
+}
 \description{
 Creates a data frame of paralogs.
-}
-\details{
-This function returns a dataframe containing paralogs and the counts.
 }
 \note{
 Please refer to the source code if you have alternate file formats and/or
 column names.
+}
+\examples{
+\dontrun{
+find_paralogs(pspa)
+}
 }

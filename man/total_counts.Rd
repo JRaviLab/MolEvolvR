@@ -16,8 +16,7 @@ total_counts(prot, cutoff = 0, type = "GC")
 }
 \description{
 Creates a data frame with a totalcount column
-}
-\details{
+
 This function is designed to sum the counts column by either Genomic Context or Domain Architecture and creates a totalcount column from those sums.
 }
 \note{
@@ -25,5 +24,7 @@ Please refer to the source code if you have alternate file formats and/or
 column names.
 }
 \examples{
+\dontrun{
 total_counts(pspa-gc_lin_counts,0,"GC")
+}
 }

@@ -2,17 +2,28 @@
 % Please edit documentation in R/summarize.R
 \name{elements2words}
 \alias{elements2words}
-\title{Break string ELEMENTS into WORDS for domain architecture (DA) and genomic
-context (GC)}
+\title{Elements 2 Words}
 \usage{
 elements2words(prot, column = "DomArch", conversion_type = "da2doms")
 }
+\arguments{
+\item{prot}{\link{dataframe}}
+
+\item{column}{\link{string} column name}
+
+\item{conversion_type}{\link{string} type of conversion: 'da2doms': domain architectures to
+domains. 'gc2da' genomic context to domain architectures}
+}
 \value{
 \link{string} with words delimited by spaces
-
-example: tibble::tibble(DomArch = c("aaa+bbb", "a+b", "b+c", "b-c")) |> elements2words()
 }
 \description{
 Break string ELEMENTS into WORDS for domain architecture (DA) and genomic
 context (GC)
+}
+\examples{
+\dontrun{
+tibble::tibble(DomArch = c("aaa+bbb", "a+b", "b+c", "b-c")) |> elements2words()
+}
+
 }
