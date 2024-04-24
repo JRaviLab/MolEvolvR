@@ -9,6 +9,9 @@ summ.GC.byDALin(x)
 \arguments{
 \item{x}{}
 }
+\value{
+Define return, in detail
+}
 \description{
 summ.GC.byDALin
 }

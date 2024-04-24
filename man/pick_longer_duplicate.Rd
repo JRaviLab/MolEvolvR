@@ -15,3 +15,8 @@ Describe return, in detail
 \description{
 Pick Longer Duplicate
 }
+\examples{
+\dontrun{
+pick_longer_duplicate()
+}
+}

@@ -336,7 +336,7 @@ summ.DA <- function(x) {
 #'
 #' @importFrom dplyr arrange desc filter group_by n summarise
 #'
-#' @return
+#' @return Define return, in detail
 #' @export
 #'
 #' @examples
@@ -428,7 +428,7 @@ summ.GC <- function(x) {
 #' @importFrom dplyr arrange distinct filter group_by left_join mutate select summarise ungroup
 #' @importFrom rlang as_string sym
 #'
-#' @return
+#' @return Define return, in detail
 #' @export
 #'
 #' @note Please refer to the source code if you have alternate file formats and/or
