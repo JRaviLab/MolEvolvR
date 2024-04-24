@@ -22,13 +22,18 @@ Defaults to an empty data frame with a new and old column such that non of the d
 
 \item{remove_asterisk}{Boolean. If TRUE, asterisks in 'ClustName' are removed. Default is TRUE.}
 }
+\value{
+A cleaned up version of the data table is returned.
+}
 \description{
 Cleans up the GenContext column of a data frame by removing certain characters and rows.
-}
-\details{
+
 This function removes empty rows based on the 'GenContext' column.
 A cleaned up version of the data table is returned.
 }
 \examples{
+\dontrun{
 cleanup_gencontext(prot, domains_rename, T, F)
+}
+
 }

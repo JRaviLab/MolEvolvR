@@ -2,20 +2,23 @@
 % Please edit documentation in R/cleanup.R
 \name{cleanup_fasta_header}
 \alias{cleanup_fasta_header}
-\title{Parse accesion numbers from fasta and add a
-suffix of the ith occurence to handle duplicates}
+\title{Cleanup FASTA Header}
 \usage{
 cleanup_fasta_header(fasta)
 }
 \arguments{
-\item{[XStringSet]}{fasta}
+\item{fasta}{}
 }
 \value{
 \link{XStringSet} fasta with adjusted names (headers)
-
-example AAStringSet(c("xxx" = "ATCG", "xxx" = "GGGC")) |> cleanup_fasta_header()
 }
 \description{
 Parse accesion numbers from fasta and add a
 suffix of the ith occurence to handle duplicates
+}
+\examples{
+\dontrun{
+AAStringSet(c("xxx" = "ATCG", "xxx" = "GGGC")) |>
+  cleanup_fasta_header()
+}
 }

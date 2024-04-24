@@ -2,7 +2,7 @@
 % Please edit documentation in R/cleanup.R
 \name{cleanup_clust}
 \alias{cleanup_clust}
-\title{Cleanup cluster file}
+\title{Cleanup Clust}
 \usage{
 cleanup_clust(
   prot,
@@ -26,13 +26,19 @@ cleanup_clust(
 
 \item{remove_empty}{Boolean. If TRUE, rows with empty/unnecessary values in 'ClustName' are removed. Default is FALSE.}
 }
-\description{
-Cleans a cluster file by removing rows that do not contain the query in the cluster.
+\value{
+Cleaned up data frame
 }
-\details{
+\description{
+Cleanup cluster file
+
+Cleans a cluster file by removing rows that do not contain the query in the cluster.
+
 This function removes irrelevant rows which do not contain the query protein within the ClustName column.
 The return value is the cleaned up data frame.
 }
 \examples{
+\dontrun{
 cleanup_clust(prot, TRUE, FALSE, domains_keep, domains_rename)
+}
 }

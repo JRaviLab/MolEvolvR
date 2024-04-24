@@ -2,7 +2,7 @@
 % Please edit documentation in R/cleanup.R
 \name{cleanup_domarch}
 \alias{cleanup_domarch}
-\title{Cleanup Domain Architectures}
+\title{Cleanup DomArch}
 \usage{
 cleanup_domarch(
   prot,
@@ -32,14 +32,20 @@ corresponding replacement values in a column 'new'.}
 
 \item{domains_ignore}{A data frame containing the domain names to be removed in a column called 'domains'}
 }
-\description{
-Cleans the DomArch column by replacing/removing certain domains
+\value{
+The original data frame is returned with the clean DomArchs column and the old domains in the DomArchs.old column.
 }
-\details{
+\description{
+Cleanup Domain Architectures
+
+Cleans the DomArch column by replacing/removing certain domains
+
 This function cleans the DomArch column of one data frame by renaming certain domains according to a second data frame.
 Certain domains can be removed according to an additional data frame.
 The original data frame is returned with the clean DomArchs column and the old domains in the DomArchs.old column.
 }
 \examples{
+\dontrun{
 cleanup_domarch(prot, TRUE, FALSE, domains_keep, domains_rename, domains_ignore=NULL)
+}
 }

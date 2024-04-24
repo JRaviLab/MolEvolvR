@@ -2,26 +2,31 @@
 % Please edit documentation in R/cleanup.R
 \name{repeat2s}
 \alias{repeat2s}
-\title{Condense repeated domains}
+\title{repeat2s}
 \usage{
 repeat2s(prot, by_column = "DomArch", excluded_prots = c())
 }
 \arguments{
 \item{prot}{A data frame containing 'DomArch', 'GenContext', 'ClustName' columns.}
 
-\item{by_column}{Column in which repeats are condensed to domain+domain -> domain(s).
-Default column is 'DomArch'. Can also take the following as input, 'GenContext', 'ClustName'.}
+\item{by_column}{Column in which repeats are condensed to domain+domain -> domain(s).}
 
 \item{excluded_prots}{Vector of strings that repeat2s should not reduce to (s). Defaults to c()}
 }
-\description{
-Condenses repeated domains in the specified column.
+\value{
+Describe return, in detail
 }
-\details{
+\description{
+Condense repeated domains
+
+Condenses repeated domains in the specified column.
+
 This function identifies repeated domains and condenses them to (s).
 ?? Certain domains can be removed according to an additional data frame.
 The original data frame is returned with the corresponding cleaned up column.
 }
 \examples{
+\dontrun{
 repeat2s(prot, "DomArch")
+}
 }
