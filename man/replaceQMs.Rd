@@ -2,8 +2,7 @@
 % Please edit documentation in R/cleanup.R
 \name{replaceQMs}
 \alias{replaceQMs}
-\title{Replace consecutive '?' separated by '->', '<-' or '||' with 'X(s)'
-Replace '?' with 'X'}
+\title{Replace QMs}
 \usage{
 replaceQMs(prot, by_column = "GenContext")
 }
@@ -12,7 +11,16 @@ replaceQMs(prot, by_column = "GenContext")
 
 \item{by_column}{Column to operate on}
 }
+\value{
+Describe return, in detail
+}
 \description{
 Replace consecutive '?' separated by '->', '<-' or '||' with 'X(s)'
 Replace '?' with 'X'
+}
+\examples{
+\dontrun{
+replaceQMs()
+}
+
 }

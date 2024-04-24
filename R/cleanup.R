@@ -8,21 +8,32 @@
 #################
 ## Pkgs needed ##
 #################
-library(tidyverse)
-library(glue)
-library(rlang) # needed?
-conflicted::conflict_prefer("filter", "dplyr")
+# library(tidyverse)
+# library(glue)
+# library(rlang) # needed?
+# conflicted::conflict_prefer("filter", "dplyr")
 
 ###########################
 #### CLEANUP FUNCTIONS ####
 ###########################
 
+#' Clean String
+#'
+#' @description
 #' Keep only alphanumerics, "_", "+", and "." in strings
 #' and substitute spaces with "_". Used in MolEvolvR codebase to
 #' cleanup domain architecture values
-#' @param [string] string to clean
+#'
+#' @param string
+#'
+#' @importFrom stringr str_replace_all
+#'
 #' @return [string] string with only alphanumerics, "_", "+", and "."
-#' 
+#' @examples
+#' \dontrun{
+#' clean_string()
+#' }
+#'
 clean_string <- function(string) {
   # replace spaces with "_"
   string <- stringr::str_replace_all(string, "\\s+", "_")
@@ -33,6 +44,17 @@ clean_string <- function(string) {
 
 # use the same code as upstream_scripts/00_submit_full.R's
 # get_sequences() function to extract accession numbers
+#' string2accnum
+#'
+#' @param string
+#'
+#' @return Describe return, in detail
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' string2accnum()
+#' }
 string2accnum <- function(string) {
   if (grepl("\\|", string)) {
     accnum <- strsplit(string, "\\|")[[1]][2]
@@ -43,14 +65,26 @@ string2accnum <- function(string) {
   return(accnum)
 }
 
-#' Append an index of occurence suffix to each accession number (or any 
+#' make accnums unique
+#'
+#' @description
+#' Append an index of occurence suffix to each accession number (or any
 #' character vector) making them unique
+#'
 #' @param accnums [chr] a vector of accession numbers
+#'
+#' @importFrom dplyr arrange group_by mutate pull ungroup
+#' @importFrom tibble tibble
+#'
 #' @return [chr] a vector of adjusted, unique accession numbers
-#' 
-#' example c("xxx", "xxx", "xxx", "yyy", "yyy") |> make_accnums_unique()
+#'
+#' @examples
+#' \dontrun{
+#' c("xxx", "xxx", "xxx", "yyy", "yyy") |>
+#'   make_accnums_unique()
+#' }
 make_accnums_unique <- function(accnums) {
-  # group by accnums then use the row count as a proxy 
+  # group by accnums then use the row count as a proxy
   # for the index of occurence for each accession number
   df_accnums <- tibble::tibble("accnum" = accnums)
   df_accnums <- df_accnums |>
@@ -64,12 +98,23 @@ make_accnums_unique <- function(accnums) {
   return(accnums_adjusted)
 }
 
-#' Parse accesion numbers from fasta and add a 
+#' Cleanup FASTA Header
+#'
+#' Parse accesion numbers from fasta and add a
 #' suffix of the ith occurence to handle duplicates
-#' @param [XStringSet] fasta
+#'
+#' @param fasta
+#'
+#' @importFrom purrr map_chr
+#' @importFrom fs path_sanitize
+#'
 #' @return [XStringSet] fasta with adjusted names (headers)
-#' 
-#' example AAStringSet(c("xxx" = "ATCG", "xxx" = "GGGC")) |> cleanup_fasta_header()
+#'
+#' @examples
+#' \dontrun{
+#' AAStringSet(c("xxx" = "ATCG", "xxx" = "GGGC")) |>
+#'   cleanup_fasta_header()
+#' }
 cleanup_fasta_header <- function(fasta) {
   headers <- names(fasta)
   # try parsing accession numbers from header
@@ -88,19 +133,29 @@ cleanup_fasta_header <- function(fasta) {
   return(fasta)
 }
 
+#' Remove Empty
+#' @description
+#' Remove empty rows by column
+#'
+#' Removes empty rows in the specified column.
+#'
+#' This function ...
+#' The original data frame is returned with the corresponding cleaned up column.
+#'
+#' @param prot  A data frame containing 'DomArch', 'Species', 'GenContext', 'ClustName' columns.
+#' @param by_column Column by which empty rows should be removed to domain+domain -> domain(s).
+#' Default column is 'DomArch'. Can also take the following as input, 'Species', 'GenContext', 'ClustName'.
+#'
+#' @importFrom dplyr as_tibble filter
+#'
+#' @return Describe return, in detail
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' remove_empty(prot, "DomArch")
+#' }
 remove_empty <- function(prot, by_column = "DomArch") {
-  #' Remove empty rows by column
-  #'
-  #' Removes empty rows in the specified column.
-  #'
-  #' This function ...
-  #' The original data frame is returned with the corresponding cleaned up column.
-  #'
-  #' @param prot A data frame containing 'DomArch', 'Species', 'GenContext', 'ClustName' columns.
-  #' @param by_column Column by which empty rows should be removed to domain+domain -> domain(s).
-  #' Default column is 'DomArch'. Can also take the following as input, 'Species', 'GenContext', 'ClustName'.
-  #' @examples remove_empty(prot, "DomArch")
-
   # ?? Don't call other psp functions within these functions
   prot <- prot %>%
     as_tibble() %>%
@@ -113,22 +168,32 @@ remove_empty <- function(prot, by_column = "DomArch") {
 }
 
 ###########################
+#' repeat2s
+#'
+#' @description
+#' Condense repeated domains
+#'
+#' Condenses repeated domains in the specified column.
+#'
+#' This function identifies repeated domains and condenses them to (s).
+#' ?? Certain domains can be removed according to an additional data frame.
+#' The original data frame is returned with the corresponding cleaned up column.
+#'
+#' @param prot A data frame containing 'DomArch', 'GenContext', 'ClustName' columns.
+#' @param by_column Column in which repeats are condensed to domain+domain -> domain(s).
+#' @param excluded_prots Vector of strings that repeat2s should not reduce to (s). Defaults to c()
+#'
+#' @return Describe return, in detail
+#' @export
+#'
+#' @importFrom dplyr pull
+#' @importFrom stringr str_replace_all
+#'
+#' @examples
+#' \dontrun{
+#' repeat2s(prot, "DomArch")
+#' }
 repeat2s <- function(prot, by_column = "DomArch", excluded_prots = c()) {
-  #' Condense repeated domains
-  #'
-  #' Condenses repeated domains in the specified column.
-  #'
-  #' This function identifies repeated domains and condenses them to (s).
-  #' ?? Certain domains can be removed according to an additional data frame.
-  #' The original data frame is returned with the corresponding cleaned up column.
-  #'
-  #' @param prot A data frame containing 'DomArch', 'GenContext', 'ClustName' columns.
-  #' @param by_column Column in which repeats are condensed to domain+domain -> domain(s).
-  #' Default column is 'DomArch'. Can also take the following as input, 'GenContext', 'ClustName'.
-  #' @param excluded_prots Vector of strings that repeat2s should not reduce to (s). Defaults to c()
-  #' @examples repeat2s(prot, "DomArch")
-
-
   # If there are strings that repeat2s should not affect, the pattern to search
   # for must be changed to exclude a search for those desired strings
 
@@ -170,11 +235,29 @@ repeat2s <- function(prot, by_column = "DomArch", excluded_prots = c()) {
 }
 
 
+#' Replace QMs
+#'
+#' @description
+#' Replace consecutive '?' separated by '->', '<-' or '||' with 'X(s)'
+#' Replace '?' with 'X'
+#'
+#' @param prot DataTable to operate on
+#' @param by_column Column to operate on
+#'
+#' @return Describe return, in detail
+#' @export
+#'
+#' @importFrom dplyr pull
+#' @importFrom stringr str_replace_all
+#' @importFrom rlang sym
+#'
+#' @examples
+#' \dontrun{
+#' replaceQMs()
+#' }
+#'
+
 replaceQMs <- function(prot, by_column = "GenContext") {
-  #' Replace consecutive '?' separated by '->', '<-' or '||' with 'X(s)'
-  #' Replace '?' with 'X'
-  #' @param prot DataTable to operate on
-  #' @param by_column Column to operate on
 
   by <- sym(by_column)
 
@@ -192,9 +275,28 @@ replaceQMs <- function(prot, by_column = "GenContext") {
 }
 
 
+#' Remove Astrk
+#'
+#' @description
+#' Remove the asterisks from a column of data
+#' Used for removing * from GenContext columns
+#'
+#' @param query_data
+#' @param colname
+#'
+#' @importFrom purrr map
+#' @importFrom stringr str_remove_all
+#'
+#' @return Describe return, in detail
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' remove_astrk()
+#' }
+
 remove_astrk <- function(query_data, colname = "GenContext") {
-  # Remove the asterisks from a column of data
-  # Used for removing * from GenContext columns
+
   query_data[, colname] <- map(query_data[, colname], function(x) str_remove_all(x, pattern = "\\*"))
 
   return(query_data)
@@ -202,19 +304,34 @@ remove_astrk <- function(query_data, colname = "GenContext") {
 
 
 ###########################
+#' Remove Tails
+#'
+#' @description
+#' Remove tails/singletons
+#'
+#'
+#' This function ...
+#' Certain low frequency domain architectures can be removed.
+#' The original data frame is returned with the corresponding cleaned up column.
+#'
+#'
+#' @param prot A data frame containing 'DomArch', 'GenContext', 'ClustName' columns.
+#' @param by_column Default column is 'DomArch'. Can also take 'ClustName', 'GenContext' as input.
+#' @param keep_domains Default is False Keeps tail entries that contain the query domains.
+#'
+#' @return Describe return, in detail
+#' @export
+#'
+#' @importFrom dplyr count filter group_by pull n summarize
+#' @importFrom rlang sym
+#'
+#' @examples
+#' \dontrun{
+#' remove_tails(prot, "DomArch")
+#' }
 remove_tails <- function(prot, by_column = "DomArch",
                          keep_domains = FALSE) { # !! currently redundant
-  #' Remove tails/singletons
-  #'
-  #'
-  #' This function ...
-  #' Certain low frequency domain architectures can be removed.
-  #' The original data frame is returned with the corresponding cleaned up column.
-  #'
-  #' @param prot A data frame containing 'DomArch', 'GenContext', 'ClustName' columns.
-  #' @param by_column Default column is 'DomArch'. Can also take 'ClustName', 'GenContext' as input.
-  #' @param keep_domains Default is False Keeps tail entries that contain the query domains.
-  #' @examples remove_tails(prot, "DomArch")
+
   by_column <- sym(by_column)
   domain_count <- prot %>%
     group_by({{ by_column }}) %>%
@@ -245,18 +362,30 @@ remove_tails <- function(prot, by_column = "DomArch",
 }
 
 ###########################
+#' Cleanup Species
+#'
+#' @description
+#' Cleanup Species
+#'
+#' Cleans up the species column of a data frame by removing certain characters and rows.
+#'
+#' This function removes unneccessary characters from the 'Species' column.
+#' A cleaned up version of the data table is returned.
+#'
+#' @param prot A data frame that contains columns 'Species'.
+#' @param remove_empty Boolean. If TRUE, rows with empty/unnecessary values in 'Species' are removed.
+#' Default is false.
+#'
+#' @importFrom stringr coll str_replace_all
+#'
+#' @return Describe return, in detail
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' cleanup_species(prot,TRUE)
+#' }
 cleanup_species <- function(prot, remove_empty = FALSE) {
-  #' Cleanup Species
-  #'
-  #' Cleans up the species column of a data frame by removing certain characters and rows.
-  #'
-  #' This function removes unneccessary characters from the 'Species' column.
-  #' A cleaned up version of the data table is returned.
-  #'
-  #' @param prot A data frame that contains columns 'Species'.
-  #' @param remove_empty Boolean. If TRUE, rows with empty/unnecessary values in 'Species' are removed.
-  #' Default is false.
-  #' @examples cleanup_species(prot,TRUE)
   # FUNCTIONS CALLED HERE, if else might be better since only two options, T and F
 
   # Create cleaned up Species column
@@ -287,25 +416,37 @@ cleanup_species <- function(prot, remove_empty = FALSE) {
 }
 
 ######################
+#' Cleanup Clust
+#'
+#' @description
+#' Cleanup cluster file
+#'
+#' Cleans a cluster file by removing rows that do not contain the query in the cluster.
+#'
+#' This function removes irrelevant rows which do not contain the query protein within the ClustName column.
+#' The return value is the cleaned up data frame.
+#'
+#' @param prot A data frame that must contain columns Query and ClustName.
+#' @param domains_rename A data frame containing the domain names to be replaced in a column 'old' and the corresponding replacement values in a column 'new'.
+#' @param domains_keep A data frame containing the domain names to be retained.
+#' @param repeat2s Boolean. If TRUE, repeated domains in 'ClustName' are condensed. Default is TRUE.
+#' @param remove_tails Boolean. If TRUE, 'ClustName' will be filtered based on domains to keep/remove. Default is FALSE.
+#' @param remove_empty  Boolean. If TRUE, rows with empty/unnecessary values in 'ClustName' are removed. Default is FALSE.
+#'
+#' @importFrom dplyr filter
+#' @importFrom stringr coll str_replace_all
+#'
+#' @return Cleaned up data frame
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' cleanup_clust(prot, TRUE, FALSE, domains_keep, domains_rename)
+#' }
 cleanup_clust <- function(prot,
                           domains_rename, domains_keep,
                           repeat2s = TRUE, remove_tails = FALSE,
                           remove_empty = FALSE) {
-  #' Cleanup cluster file
-  #'
-  #' Cleans a cluster file by removing rows that do not contain the query in the cluster.
-  #'
-  #' This function removes irrelevant rows which do not contain the query protein within the ClustName column.
-  #' The return value is the cleaned up data frame.
-  #'
-  #' @param prot A data frame that must contain columns Query and ClustName.
-  #' @param domains_rename A data frame containing the domain names to be replaced in a column 'old' and the corresponding replacement values in a column 'new'.
-  #' @param domains_keep A data frame containing the domain names to be retained.
-  #' @param repeat2s Boolean. If TRUE, repeated domains in 'ClustName' are condensed. Default is TRUE.
-  #' @param remove_tails Boolean. If TRUE, 'ClustName' will be filtered based on domains to keep/remove. Default is FALSE.
-  #' @param remove_empty Boolean. If TRUE, rows with empty/unnecessary values in 'ClustName' are removed. Default is FALSE.
-
-  #' @examples cleanup_clust(prot, TRUE, FALSE, domains_keep, domains_rename)
 
   # Create cleaned up ClustName column
   prot$ClustName <- prot$ClustName.orig
@@ -356,28 +497,43 @@ cleanup_clust <- function(prot,
 }
 
 ##############################
+#' Cleanup DomArch
+#'
+#' @description
+#' Cleanup Domain Architectures
+#'
+#' Cleans the DomArch column by replacing/removing certain domains
+#'
+#' This function cleans the DomArch column of one data frame by renaming certain domains according to a second data frame.
+#' Certain domains can be removed according to an additional data frame.
+#' The original data frame is returned with the clean DomArchs column and the old domains in the DomArchs.old column.
+#'
+#' @param prot A data frame containing a 'DomArch' column
+#' @param old
+#' @param new
+#' @param domains_keep A data frame containing the domain names to be retained.
+#' @param domains_rename A data frame containing the domain names to be replaced in a column 'old' and the
+#' corresponding replacement values in a column 'new'.
+#' @param repeat2s Boolean. If TRUE, repeated domains in 'DomArch' are condensed. Default is TRUE.
+#' @param remove_tails Boolean. If TRUE, 'ClustName' will be filtered based on domains to keep/remove. Default is FALSE.
+#' @param remove_empty Boolean. If TRUE, rows with empty/unnecessary values in 'DomArch' are removed. Default is FALSE.
+#' @param domains_ignore A data frame containing the domain names to be removed in a column called 'domains'
+#'
+#' @importFrom dplyr pull
+#' @importFrom stringr coll str_replace_all
+#'
+#' @return The original data frame is returned with the clean DomArchs column and the old domains in the DomArchs.old column.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' cleanup_domarch(prot, TRUE, FALSE, domains_keep, domains_rename, domains_ignore=NULL)
+#' }
 cleanup_domarch <- function(prot, old = "DomArch.orig", new = "DomArch",
                             domains_keep, domains_rename,
                             repeat2s = TRUE, remove_tails = FALSE,
                             remove_empty = F,
                             domains_ignore = NULL) {
-  #' Cleanup Domain Architectures
-  #'
-  #' Cleans the DomArch column by replacing/removing certain domains
-  #'
-  #' This function cleans the DomArch column of one data frame by renaming certain domains according to a second data frame.
-  #' Certain domains can be removed according to an additional data frame.
-  #' The original data frame is returned with the clean DomArchs column and the old domains in the DomArchs.old column.
-  #'
-  #' @param prot A data frame containing a 'DomArch' column
-  #' @param domains_keep A data frame containing the domain names to be retained.
-  #' @param domains_rename A data frame containing the domain names to be replaced in a column 'old' and the
-  #' corresponding replacement values in a column 'new'.
-  #' @param repeat2s Boolean. If TRUE, repeated domains in 'DomArch' are condensed. Default is TRUE.
-  #' @param remove_tails Boolean. If TRUE, 'ClustName' will be filtered based on domains to keep/remove. Default is FALSE.
-  #' @param remove_empty Boolean. If TRUE, rows with empty/unnecessary values in 'DomArch' are removed. Default is FALSE.
-  #' @param domains_ignore A data frame containing the domain names to be removed in a column called 'domains'
-  #' @examples cleanup_domarch(prot, TRUE, FALSE, domains_keep, domains_rename, domains_ignore=NULL)
 
   old_sym <- sym(old)
   new_sym <- sym(new)
@@ -448,22 +604,33 @@ cleanup_domarch <- function(prot, old = "DomArch.orig", new = "DomArch",
 }
 
 ##########################
+#' Cleanup Genomic Contexts
+#'
+#' @description
+#' Cleans up the GenContext column of a data frame by removing certain characters and rows.
+#'
+#' This function removes empty rows based on the 'GenContext' column.
+#' A cleaned up version of the data table is returned.
+#'
+#'
+#' @param prot A data frame that contains columns 'GenContext.orig'
+#' @param domains_rename A data frame containing the domain names to be replaced in a column 'old' and the replacement in a column 'new'.
+#' Defaults to an empty data frame with a new and old column such that non of the domains will be renamed
+#' @param repeat2s Boolean. If TRUE, repeated domains in 'GenContext' are condensed. Default is TRUE.
+#' @param remove_asterisk Boolean. If TRUE, asterisks in 'ClustName' are removed. Default is TRUE.
+#'
+#' @importFrom stringr str_replace_all
+#'
+#' @return A cleaned up version of the data table is returned.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' cleanup_gencontext(prot, domains_rename, T, F)
+#' }
+#'
 cleanup_gencontext <- function(prot, domains_rename = data.frame("old" = character(0), "new" = character(0), stringsAsFactors = F),
                                repeat2s = TRUE, remove_asterisk = TRUE) {
-  #' Cleanup Genomic Contexts
-  #'
-  #' Cleans up the GenContext column of a data frame by removing certain characters and rows.
-  #'
-  #' This function removes empty rows based on the 'GenContext' column.
-  #' A cleaned up version of the data table is returned.
-  #'
-  #' @param prot A data frame that contains columns 'GenContext.orig'
-  #' @param domains_rename A data frame containing the domain names to be replaced in a column 'old' and the replacement in a column 'new'.
-  #' Defaults to an empty data frame with a new and old column such that non of the domains will be renamed
-  #' @param repeat2s Boolean. If TRUE, repeated domains in 'GenContext' are condensed. Default is TRUE.
-  #' @param remove_asterisk Boolean. If TRUE, asterisks in 'ClustName' are removed. Default is TRUE.
-  #' @examples cleanup_gencontext(prot, domains_rename, T, F)
-
   # Create cleaned up GenContext column
   prot$GenContext <- prot$GenContext.orig
 
@@ -495,14 +662,37 @@ cleanup_gencontext <- function(prot, domains_rename = data.frame("old" = charact
   return(prot)
 }
 
+#' Cleanup GeneDesc
+#'
+#' @param prot
+#' @param column
+#'
+#' @return Return trailing period that occurs in GeneDesc column
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' cleanup_GeneDesc()
+#' }
 cleanup_GeneDesc <- function(prot, column) {
-  #' Return trailing period that occurs in GeneDesc column
   prot[, "GeneDesc"] <- gsub("\\.$", "", prot %>% pull(column))
   prot[, "GeneDesc"] <- gsub("%2C", ",", prot %>% pull(column))
   return(prot)
-}
+  }
 
 
+#' Pick Longer Duplicate
+#'
+#' @param prot
+#' @param column
+#'
+#' @importFrom dplyr arrange filter group_by pull n select summarize
+#' @importFrom rlang sym
+#'
+#' @return Describe return, in detail
+#' @export
+#'
+#' @examples
 pick_longer_duplicate <- function(prot, column) {
   col <- sym(column)
 
@@ -539,6 +729,18 @@ pick_longer_duplicate <- function(prot, column) {
   return(unique_dups)
 }
 
+#' Cleanup Lineage
+#'
+#' @param prot
+#' @param lins_rename
+#'
+#' @return Describe return, in detail
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' cleanup_lineage()
+#' }
 cleanup_lineage <- function(prot, lins_rename) {
   for (i in 1:nrow(lins_rename)) {
     prot$Lineage <- gsub(lins_rename$old[i], lins_rename$new[i],

@@ -2,8 +2,7 @@
 % Please edit documentation in R/cleanup.R
 \name{make_accnums_unique}
 \alias{make_accnums_unique}
-\title{Append an index of occurence suffix to each accession number (or any
-character vector) making them unique}
+\title{make accnums unique}
 \usage{
 make_accnums_unique(accnums)
 }
@@ -12,10 +11,14 @@ make_accnums_unique(accnums)
 }
 \value{
 \link{chr} a vector of adjusted, unique accession numbers
-
-example c("xxx", "xxx", "xxx", "yyy", "yyy") |> make_accnums_unique()
 }
 \description{
 Append an index of occurence suffix to each accession number (or any
 character vector) making them unique
+}
+\examples{
+\dontrun{
+c("xxx", "xxx", "xxx", "yyy", "yyy") |>
+  make_accnums_unique()
+}
 }

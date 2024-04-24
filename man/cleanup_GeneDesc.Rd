@@ -2,10 +2,21 @@
 % Please edit documentation in R/cleanup.R
 \name{cleanup_GeneDesc}
 \alias{cleanup_GeneDesc}
-\title{Return trailing period that occurs in GeneDesc column}
+\title{Cleanup GeneDesc}
 \usage{
 cleanup_GeneDesc(prot, column)
 }
-\description{
+\arguments{
+\item{column}{}
+}
+\value{
 Return trailing period that occurs in GeneDesc column
+}
+\description{
+Cleanup GeneDesc
+}
+\examples{
+\dontrun{
+cleanup_GeneDesc()
+}
 }

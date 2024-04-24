@@ -2,14 +2,12 @@
 % Please edit documentation in R/cleanup.R
 \name{clean_string}
 \alias{clean_string}
-\title{Keep only alphanumerics, "\emph{", "+", and "." in strings
-and substitute spaces with "}". Used in MolEvolvR codebase to
-cleanup domain architecture values}
+\title{Clean String}
 \usage{
 clean_string(string)
 }
 \arguments{
-\item{[string]}{string to clean}
+\item{string}{}
 }
 \value{
 \link{string} string with only alphanumerics, "_", "+", and "."
@@ -18,4 +16,10 @@ clean_string(string)
 Keep only alphanumerics, "\emph{", "+", and "." in strings
 and substitute spaces with "}". Used in MolEvolvR codebase to
 cleanup domain architecture values
+}
+\examples{
+\dontrun{
+clean_string()
+}
+
 }

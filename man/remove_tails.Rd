@@ -2,7 +2,7 @@
 % Please edit documentation in R/cleanup.R
 \name{remove_tails}
 \alias{remove_tails}
-\title{Remove tails/singletons}
+\title{Remove Tails}
 \usage{
 remove_tails(prot, by_column = "DomArch", keep_domains = FALSE)
 }
@@ -13,11 +13,18 @@ remove_tails(prot, by_column = "DomArch", keep_domains = FALSE)
 
 \item{keep_domains}{Default is False Keeps tail entries that contain the query domains.}
 }
+\value{
+Describe return, in detail
+}
 \description{
+Remove tails/singletons
+
 This function ...
 Certain low frequency domain architectures can be removed.
 The original data frame is returned with the corresponding cleaned up column.
 }
 \examples{
+\dontrun{
 remove_tails(prot, "DomArch")
+}
 }

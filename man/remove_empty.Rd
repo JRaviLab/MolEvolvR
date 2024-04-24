@@ -2,7 +2,7 @@
 % Please edit documentation in R/cleanup.R
 \name{remove_empty}
 \alias{remove_empty}
-\title{Remove empty rows by column}
+\title{Remove Empty}
 \usage{
 remove_empty(prot, by_column = "DomArch")
 }
@@ -12,13 +12,19 @@ remove_empty(prot, by_column = "DomArch")
 \item{by_column}{Column by which empty rows should be removed to domain+domain -> domain(s).
 Default column is 'DomArch'. Can also take the following as input, 'Species', 'GenContext', 'ClustName'.}
 }
-\description{
-Removes empty rows in the specified column.
+\value{
+Describe return, in detail
 }
-\details{
+\description{
+Remove empty rows by column
+
+Removes empty rows in the specified column.
+
 This function ...
 The original data frame is returned with the corresponding cleaned up column.
 }
 \examples{
+\dontrun{
 remove_empty(prot, "DomArch")
+}
 }
