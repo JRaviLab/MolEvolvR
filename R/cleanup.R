@@ -693,6 +693,9 @@ cleanup_GeneDesc <- function(prot, column) {
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' pick_longer_duplicate()
+#' }
 pick_longer_duplicate <- function(prot, column) {
   col <- sym(column)
 

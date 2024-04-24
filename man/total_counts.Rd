@@ -14,6 +14,9 @@ total_counts(prot, cutoff = 0, type = "GC")
 
 \item{type}{Character. Either "GC" for a total count by Genomic Context groupings or "DA" for a total count by Domain Architecture groupings.}
 }
+\value{
+Define return, in detail
+}
 \description{
 Creates a data frame with a totalcount column
 
