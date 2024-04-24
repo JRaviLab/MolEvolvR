@@ -6,25 +6,37 @@
 #################
 ## Pkgs needed ##
 #################
-suppressPackageStartupMessages(library(tidyverse))
-suppressPackageStartupMessages(library(rlang))
-conflicted::conflict_prefer("filter", "dplyr")
+# suppressPackageStartupMessages(library(tidyverse))
+# suppressPackageStartupMessages(library(rlang))
+# conflicted::conflict_prefer("filter", "dplyr")
 
+#' Filter by Domains
+#'
+#' @author Samuel Chen, Janani Ravi
+#' @description filter_by_doms filters a data frame by identifying exact domain matches
+#' and either keeping or removing rows with the identified domain
+#'
+#' @param prot Dataframe to filter
+#' @param column Column to search for domains in (DomArch column)
+#' @param doms_keep Vector of domains that must be identified within column in order for
+#' observation to be kept
+#' @param doms_remove Vector of domains that, if found within an observation, will be removed
+#' @param ignore.case Should the matching be non case sensitive
+#'
+#' @importFrom dplyr filter
+#' @importFrom stringr str_replace_all
+#' @importFrom rlang sym
+#'
+#' @return Filtered data frame
+#' @note There is no need to make the domains 'regex safe', that will be handled by this function
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' filter_by_doms()
+#' }
 filter_by_doms <- function(prot, column = "DomArch", doms_keep = c(), doms_remove = c(),
                            ignore.case = FALSE) {
-  #' @author Samuel Chen, Janani Ravi
-  #' @description filter_by_doms filters a data frame by identifying exact domain matches
-  #' and either keeping or removing rows with the identified domain
-  #' @param prot Dataframe to filter
-  #' @param column Column to search for domains in (DomArch column)
-  #' @param doms_keep Vector of domains that must be identified within column in order for
-  #' observation to be kept
-  #' @param doms_remove Vector of domains that, if found within an observation, will be removed
-  #' @param ignore.case Should the matching be non case sensitive
-  #' @return Filtered data frame
-  #' @note There is no need to make the domains 'regex safe', that will be handled by this function
-
-
   # Only rows with a domain in doms_keep will be kept
   # Any row containing a domain in doms_remove will be removed
 
@@ -77,6 +89,21 @@ filter_by_doms <- function(prot, column = "DomArch", doms_keep = c(), doms_remov
 ## Before/after break up ##
 ###########################
 ## Function to obtain element counts (DA, GC)
+#' Count Bycol
+#'
+#' @param prot
+#' @param column
+#' @param min.freq
+#'
+#' @importFrom dplyr arrange as_tibble filter select
+#'
+#' @return Describe return, in detail
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' count_bycol()
+#' }
 count_bycol <- function(prot = prot, column = "DomArch", min.freq = 1) {
   counts <- prot %>%
     select(column) %>%
@@ -90,15 +117,27 @@ count_bycol <- function(prot = prot, column = "DomArch", min.freq = 1) {
   return(counts)
 }
 
-#' Break string ELEMENTS into WORDS for domain architecture (DA) and genomic 
+#' Elements 2 Words
+#'
+#' @description
+#' Break string ELEMENTS into WORDS for domain architecture (DA) and genomic
 #' context (GC)
-#' @prot [dataframe]
-#' @column [string] column name
-#' @conversion_type [string] type of conversion: 'da2doms': domain architectures to 
+#'
+#' @param prot [dataframe]
+#' @param column [string] column name
+#' @param conversion_type [string] type of conversion: 'da2doms': domain architectures to
 #' domains. 'gc2da' genomic context to domain architectures
+#'
+#' @importFrom dplyr pull
+#' @importFrom stringr str_replace_all
+#'
 #' @return [string] with words delimited by spaces
-#' 
-#' example: tibble::tibble(DomArch = c("aaa+bbb", "a+b", "b+c", "b-c")) |> elements2words()
+#'
+#' @examples
+#' \dontrun{
+#' tibble::tibble(DomArch = c("aaa+bbb", "a+b", "b+c", "b-c")) |> elements2words()
+#' }
+#'
 elements2words <- function(prot, column = "DomArch", conversion_type = "da2doms") {
   z1 <- prot %>%
     dplyr::pull(column) %>%
@@ -131,12 +170,24 @@ elements2words <- function(prot, column = "DomArch", conversion_type = "da2doms"
   return(z3)
 }
 
+#' Words 2 Word Counts
+#'
+#' @description
 #' Get word counts (wc) [DOMAINS (DA) or DOMAIN ARCHITECTURES (GC)]
+#'
 #' @param string
+#'
+#' @importFrom dplyr as_tibble filter
+#'
 #' @return [tbl_df] table with 2 columns: 1) words & 2) counts/frequency
-#' example: tibble::tibble(DomArch = c("aaa+bbb", "a+b", "b+c", "b-c")) |> 
+#'
+#' @examples
+#' \dontrun{
+#' tibble::tibble(DomArch = c("aaa+bbb", "a+b", "b+c", "b-c")) |>
 #'   elements2words() |>
 #'   words2wc()
+#' }
+#'
 words2wc <- function(string) {
   df_word_count <- string %>%
     # reduce spaces with length 2 or greater to a single space
@@ -166,6 +217,18 @@ words2wc <- function(string) {
     return(df_word_count)
 }
 ## Function to filter based on frequencies
+#' Filter Frequency
+#'
+#' @param x
+#' @param min.freq
+#'
+#' @return Describe return, in detail
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' filter_freq()
+#' }
 filter_freq <- function(x, min.freq) {
   x %>%
     filter(freq >= min.freq)
@@ -174,8 +237,26 @@ filter_freq <- function(x, min.freq) {
 #########################
 ## SUMMARY FUNCTIONS ####
 #########################
-#' example: library(tidyverse); tibble(DomArch = c("a+b", "a+b", "b+c", "a+b"), Lineage = c("l1", "l1", "l1", "l2")) |>
+#' Summarize by Lineage
+#'
+#' @param prot
+#' @param column
+#' @param by
+#' @param query
+#'
+#' @importFrom dplyr arrange filter group_by summarise
+#' @importFrom rlang sym
+#'
+#' @return Describe return, in detail
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' library(tidyverse)
+#' tibble(DomArch = c("a+b", "a+b", "b+c", "a+b"), Lineage = c("l1", "l1", "l1", "l2")) |>
 #'   summarize_bylin(query = "all")
+#' }
+#'
 summarize_bylin <- function(prot = "prot", column = "DomArch", by = "Lineage",
                             query) {
   column <- sym(column)
@@ -196,8 +277,25 @@ summarize_bylin <- function(prot = "prot", column = "DomArch", by = "Lineage",
 }
 
 
-## Function to summarize and retrieve counts by Domains & Domains+Lineage
+#' summ.DA.byLin
+#'
+#' @description
+#' Function to summarize and retrieve counts by Domains & Domains+Lineage
+#'
+#'
+#' @param x
+#'
+#' @importFrom dplyr arrange count desc filter group_by summarise
+#'
+#' @return Describe return, in detail
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' summ.DA.byLin()
+#' }
 summ.DA.byLin <- function(x) {
+  ## Note: it is better to reserve dots for S3 Objects. Consider replacing '.' with '_'
   x %>%
     filter(!grepl("^-$", DomArch)) %>%
     group_by(DomArch, Lineage) %>%
@@ -206,7 +304,24 @@ summ.DA.byLin <- function(x) {
 }
 
 ## Function to retrieve counts of how many lineages a DomArch appears in
+#' summ.DA
+#'
+#' @description
+#' Function to retrieve counts of how many lineages a DomArch appears in
+#'
+#' @param x
+#'
+#' @importFrom dplyr arrange group_by filter summarise
+#'
+#' @return Describe return, in detail
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' summ.DA()
+#' }
 summ.DA <- function(x) {
+  ## Note: it is better to reserve dots for S3 Objects. Consider replacing '.' with '_'
   x %>%
     group_by(DomArch) %>%
     summarise(totalcount = sum(count), totallin = n()) %>% # totallin=n_distinct(Lineage),
@@ -214,7 +329,22 @@ summ.DA <- function(x) {
     filter(!grepl(" \\{n\\}", DomArch)) %>%
     filter(!grepl("^-$", DomArch))
 }
+
+#' summ.GC.byDALin
+#'
+#' @param x
+#'
+#' @importFrom dplyr arrange desc filter group_by n summarise
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' summ.GC.byDALin
+#' }
 summ.GC.byDALin <- function(x) {
+  ## Note: it is better to reserve dots for S3 Objects. Consider replacing '.' with '_'
   x %>%
     filter(!grepl("^-$", GenContext)) %>%
     filter(!grepl("^-$", DomArch)) %>%
@@ -224,7 +354,22 @@ summ.GC.byDALin <- function(x) {
     summarise(count = n()) %>% # , bin=as.numeric(as.logical(n()))
     arrange(desc(count))
 }
+
+#' summ.GC.byLin
+#'
+#' @param x
+#'
+#' @importFrom dplyr arrange desc filter group_by n summarise
+#'
+#' @return Describe return, in detail
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' summ.GC.byLin()
+#' }
 summ.GC.byLin <- function(x) {
+  ## Note: it is better to reserve dots for S3 Objects. Consider replacing '.' with '_'
   x %>%
     filter(!grepl("^-$", GenContext)) %>%
     filter(!grepl("^-$", DomArch)) %>%
@@ -234,7 +379,22 @@ summ.GC.byLin <- function(x) {
     summarise(count = n()) %>% # , bin=as.numeric(as.logical(n()))
     arrange(desc(count))
 }
+
+#' summ.GC
+#'
+#' @param x
+#'
+#' @importFrom dplyr arrange desc filter group_by n_distinct summarise
+#'
+#' @return Describe return, in detail
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' summ.GC()
+#' }
 summ.GC <- function(x) {
+  ## Note: it is better to reserve dots for S3 Objects. Consider replacing '.' with '_'
   x %>%
     group_by(GenContext) %>%
     summarise(
@@ -249,23 +409,39 @@ summ.GC <- function(x) {
 
 
 ##################
+#' Total Counts
+#'
+#' @description
+#' Creates a data frame with a totalcount column
+#'
+#' This function is designed to sum the counts column by either Genomic Context or Domain Architecture and creates a totalcount column from those sums.
+#'
+#'
+#' @param prot  A data frame that must contain columns:
+#' \itemize{\item Either 'GenContext' or 'DomArch.norep' \item count}
+#' @param column Character. The column to summarize
+#' @param lineage_col
+#' @param cutoff Numeric. Cutoff for total count. Counts below cutoff value will not be shown. Default is 0.
+#' @param RowsCutoff
+#' @param digits
+#'
+#' @importFrom dplyr arrange distinct filter group_by left_join mutate select summarise ungroup
+#' @importFrom rlang as_string sym
+#'
+#' @return
+#' @export
+#'
+#' @note Please refer to the source code if you have alternate file formats and/or
+#' column names.
+#'
+#' @examples
+#' \dontrun{
+#' total_counts(pspa-gc_lin_counts,0,"GC")
+#' }
 total_counts <- function(prot, column = "DomArch", lineage_col = "Lineage",
                          cutoff = 90, RowsCutoff = FALSE, digits = 2
                          # type = "GC"
-) {
-  #' Total Counts
-  #'
-  #' Creates a data frame with a totalcount column
-  #'
-  #' This function is designed to sum the counts column by either Genomic Context or Domain Architecture and creates a totalcount column from those sums.
-  #'
-  #' @param prot A data frame that must contain columns:
-  #' \itemize{\item Either 'GenContext' or 'DomArch.norep' \item count}
-  #' @param cutoff Numeric. Cutoff for total count. Counts below cutoff value will not be shown. Default is 0.
-  #' @param column Character. The column to summarize
-  #' @examples total_counts(pspa-gc_lin_counts,0,"GC")
-  #' @note Please refer to the source code if you have alternate file formats and/or
-  #' column names.
+                         ) {
   column <- sym(column)
 
   prot <- select(prot, {{ column }}, {{ lineage_col }}) %>%
@@ -404,19 +580,27 @@ total_counts <- function(prot, column = "DomArch", lineage_col = "Lineage",
 
 
 
+#' Find Paralogs
+#'
+#' @description
+#' Creates a data frame of paralogs.
+#'
+#' @param prot A data frame filtered by a Query, containing columns Species and Lineage
+#'
+#' @importFrom dplyr arrange count distinct filter group_by right_join select
+#' @importFrom purrr map
+#'
+#' @return returns a dataframe containing paralogs and the counts.
+#' @export
+#'
+#' @note Please refer to the source code if you have alternate file formats and/or
+#' column names.
+#'
+#' @examples
+#' \dontrun{
+#' find_paralogs(pspa)
+#' }
 find_paralogs <- function(prot) {
-  #' Find Paralogs
-  #'
-  #' Creates a data frame of paralogs.
-  #'
-  #' This function returns a dataframe containing paralogs and the counts.
-  #'
-  #' @param prot A data frame filtered by a Query, containing columns Species and Lineage
-  #' @example find_paralogs(pspa)
-  #' @note Please refer to the source code if you have alternate file formats and/or
-  #' column names.
-
-
   # Remove eukaryotes
   prot <- prot %>% filter(!grepl("^eukaryota", Lineage))
   paralogTable <- prot %>%
