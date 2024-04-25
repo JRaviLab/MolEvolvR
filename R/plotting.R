@@ -674,18 +674,6 @@ stacked_lin_plot <- function(prot, column = "DomArch", cutoff, Lineage_col = "Li
                              legend.cols = 2,
                              legend.size = 0.7,
                              coord_flip = TRUE, legend = TRUE) {
-  CPCOLS <- c(
-    "#AFEEEE", "#DDA0DD", "#EE2C2C", "#CDBE70", "#B0B099",
-    "#8B2323", "#EE7600", "#EEC900", "chartreuse3", "#0000FF",
-    "#FFD900", "#32CD32", "maroon4", "cornflowerblue", "darkslateblue",
-    "#AB82FF", "#CD6889", "#FFA07A", "#FFFF00", "#228B22",
-    "#FFFFE0", "#FFEC8B", "peru", "#668B8B", "honeydew",
-    "#A020F0", "grey", "#8B4513", "#191970", "#00FF7F",
-    "lemonchiffon", "#66CDAA", "#5F9EA0", "#A2CD5A", "#556B2F",
-    "#EEAEEE", "thistle4", "#473C8B", "#FFB6C1", "#8B1C62",
-    "#FFE4B5", "black", "#FF7F50", "#FFB90F", "#FF69B4", "#836FFF",
-    "#757575", "#CD3333", "#EE7600", "#CDAD00", "#556B2F", "#7AC5CD"
-  )
   col <- sym(column)
 
   if (reduce_lineage) {
@@ -729,7 +717,7 @@ stacked_lin_plot <- function(prot, column = "DomArch", cutoff, Lineage_col = "Li
         xlab("Group") +
         ylab("Number of proteins") +
         theme_minimal() +
-        scale_fill_manual(values = CPCOLS, na.value = "#A9A9A9") +
+        scale_fill_manual(values = cpcols, na.value = "#A9A9A9") +
         theme(
           legend.position = legend.position,
           legend.background = element_rect(fill = "white", color = "white"),
@@ -755,7 +743,7 @@ stacked_lin_plot <- function(prot, column = "DomArch", cutoff, Lineage_col = "Li
         xlab("Group") +
         ylab("Number of proteins") +
         theme_minimal() +
-        scale_fill_manual(values = CPCOLS, na.value = "#A9A9A9") +
+        scale_fill_manual(values = cpcols, na.value = "#A9A9A9") +
         theme(
           legend.position = "none",
           legend.spacing = unit(0.4, "cm"),
@@ -1011,7 +999,7 @@ lineage_sunburst <- function(prot, lineage_column = "Lineage",
 
   # Plot sunburst
   if (type == "sunburst") {
-    result <- sunburst(tree, legend = list(w = 225, h = 15, r = 5, s = 5), colors = CPCOLS, legendOrder = legendOrder, width = "100%", height = "100%")
+    result <- sunburst(tree, legend = list(w = 225, h = 15, r = 5, s = 5), colors = cpcols, legendOrder = legendOrder, width = "100%", height = "100%")
   } else if (type == "sund2b") {
     result <- sund2b(tree)
   }
