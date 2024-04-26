@@ -51,58 +51,76 @@ shorten_lineage <- function(data, colname = "Lineage", abr_len = 1) {
 #################
 ## UpSet Plots
 #################
+
+
+#' UpSet Plot
+#' @author Janani Ravi
+#' @keywords UpSetR, Domains, Domain Architectures, GenomicContexts
+#'
+#' @description UpSet plot for Domain Architectures vs Domains and
+#' Genomic Contexts vs Domain Architectures.
+#'
+#' @param query_data Data frame of protein homologs with the usual 11 columns +
+#' additional word columns (0/1 format). Default is toast_rack.sub
+#' @param colname
+#' @param cutoff Numeric. Cutoff for word frequency. Default is 90.
+#' @param RowsCutoff
+#' @param text.scale  Allows scaling of axis title, tick lables, and numbers above the intersection size bars.
+#' text.scale can either take a universal scale in the form of an integer,
+#' or a vector of specific scales in the format: c(intersection size title,
+#' intersection size tick labels, set size title, set size tick labels, set names,
+#'  numbers above bars)
+#' @param point.size
+#' @param line.size
+#'
+#' @importFrom dplyr across distinct filter if_else mutate pull select where
+#' @importFrom rlang sym
+#' @importFrom stringr str_detect str_replace_all str_split
+#' @importFrom UpSetR upset
+#'
+#' @return
+#' @export
+#'
+#' @note Please refer to the source code if you have alternate file formats and/or
+#' column names.
+#' @details For "da2doms" you would need the file DA.doms.wc as well as the
+#' column query_data$DomArch.norep
+#'
+#' For "gc2da", you would need the file GC.DA.wc as well as the column
+#' query_data$GenContext.norep
+#'
+#' @examples
+#' \dontrun{
+#'  upset.plot(pspa.sub, 10, "da2doms")
+#' }
 upset.plot <- function(query_data = "toast_rack.sub",
                        colname = "DomArch", cutoff = 90,
                        RowsCutoff = FALSE, text.scale = 1.5,
                        point.size = 2.2, line.size = 0.8) {
-  #' UpSet Plot
-  #' @author Janani Ravi
-  #' @keywords UpSetR, Domains, Domain Architectures, GenomicContexts
-  #' @description UpSet plot for Domain Architectures vs Domains and
-  #' Genomic Contexts vs Domain Architectures.
-  #' @param query_data Data frame of protein homologs with the usual 11 columns +
-  #' additional word columns (0/1 format). Default is toast_rack.sub
-  #' @param cutoff Numeric. Cutoff for word frequency. Default is 90.
-  #' @param type Character. Either "da2doms" for Domains vs Domain Architectures
-  #' or "gc2da" for Domain Architectures (of neighbors) vs Genomic Contexts.
-  #' Default is "da2doms"
-  #' @param text.scale Allows scaling of axis title, tick lables, and numbers above the intersection size bars.
-  #' text.scale can either take a universal scale in the form of an integer,
-  #' or a vector of specific scales in the format: c(intersection size title,
-  #' intersection size tick labels, set size title, set size tick labels, set names,
-  #'  numbers above bars)
-  #' @examples upset.plot(pspa.sub, 10, "da2doms")
-  #' @details For "da2doms" you would need the file DA.doms.wc as well as the
-  #' column query_data$DomArch.norep
-  #'
-  #' For "gc2da", you would need the file GC.DA.wc as well as the column
-  #' query_data$GenContext.norep
-  #' @note Please refer to the source code if you have alternate file formats and/or
-  #' column names.
+
+  #@param type Character. Either "da2doms" for Domains vs Domain Architectures
+  #or "gc2da" for Domain Architectures (of neighbors) vs Genomic Contexts.
+  #Default is "da2doms" -- unused param?
 
   # Get Total Counts
   # colname = string(colname)
   tryCatch(
     {
       tc <- query_data %>% total_counts(column = colname, cutoff = cutoff, RowsCutoff = RowsCutoff, digits = 5)
-
-
       ##### Remove Tails ####
       # tails comprise of less than 1% of data each
       # ie) individual percent is less than 1
       # Note: this is based on frequency of the actual DA's and GC's, not on the frequency of the constituent words
 
-
       #####
-
 
       column <- sym(colname)
 
       if (grepl("GenContext", colname, ignore.case = T)) {
         type <- "gc2da"
-      } else if (grepl("DomArch|ClustName", colname, ignore.case = T)) {
-        type <- "da2doms"
-      }
+        } else if (grepl("DomArch|ClustName", colname, ignore.case = T)) {
+          type <- "da2doms"
+          }
 
       # Get words from filter
       words.tc <- tc %>%
@@ -154,11 +172,10 @@ upset.plot <- function(query_data = "toast_rack.sub",
         select(
           AccNum, Lineage, {{ column }}, # GenContext, DomArch,
           words.tc
-        ) %>%
-        mutate_all(list(~ if (is.numeric(.)) as.integer(.) else .)) %>%
+          ) %>%
+        # mutate_all(list(~ if (is.numeric(.)) as.integer(.) else .)) %>%
+        mutate(across(where(is.numeric), as.integer)) %>%
         as.data.frame()
-
-
 
       ## Fix order of x and y variables
       upset.cutoff <- upset %>%

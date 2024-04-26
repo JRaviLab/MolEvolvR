@@ -13,9 +13,7 @@ additional word columns (0/1 format). Default is toast_rack.sub}
 
 \item{cutoff}{Numeric. Cutoff for word frequency. Default is 10.}
 
-\item{type}{Character. Either "da2doms" for Domains vs Domain Architectures
-or "gc2da" for Domain Architectures (of neighbors) vs Genomic Contexts.
-Default is "da2doms"}
+\item{line.size}{}
 }
 \description{
 UpSet plot for Domain Architectures vs Domains and
@@ -33,7 +31,9 @@ Please refer to the source code if you have alternate file formats and/or
 column names.
 }
 \examples{
-upset.plot(pspa.sub, 10, "da2doms")
+\dontrun{
+ upset.plot(pspa.sub, 10, "da2doms")
+}
 }
 \author{
 Janani Ravi
