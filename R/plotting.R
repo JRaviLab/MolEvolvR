@@ -215,35 +215,57 @@ upset.plot <- function(query_data = "toast_rack.sub",
 ## Lineage Plots ##
 ###################
 
+#' Lineage Plot: Heatmap of Domains/DAs/GCs vs Lineages
+#'
+#' @author Janani Ravi
+#' @keywords Lineages, Domains, Domain Architectures, GenomicContexts
+#' @description Lineage plot for Domains, Domain Architectures and
+#' Genomic Contexts. Heatmap.
+#'
+#' @param query_data Data frame of protein homologs with the usual 11 columns +
+#' additional word columns (0/1 format).
+#' Default is prot (variable w/ protein data).
+#' @param colname Column name from query_data: "DomArch.norep", "GenContext.norep",
+#' "DomArch.PFAM.norep" or "DomArch.LADB.norep". Default is "DomArch.norep".
+#' @param cutoff
+#' @param RowsCutoff
+#' @param color Color for the heatmap. One of six options: "default", "magma", "inferno",
+#' "plasma", "viridis", or "cividis"
+#'
+#' @importFrom BiocGenerics unique
+#' @importFrom dplyr arrange filter pull
+#' @importFrom ggplot2 aes_string element_text element_rect geom_tile ggplot scale_fill_gradient scale_x_discrete theme theme_classic
+#' @importFrom purrr map
+#' @importFrom stringr str_replace_all
+#' @importFrom tidyr drop_na
+#' @importFrom viridis scale_fill_viridis
+#' @importFrom rlang sym
+#'
+#' @return
+#' @export
+#'
+#' @details For "da2doms" you would need the file DA.doms.wc as well as the
+#' column query_data$DomArch.norep
+#'
+#' For "gc2da", you would need the file GC.DA.wc as well as the column
+#' query_data$GenContext.norep
+#' @note Please refer to the source code if you have alternate file formats and/or
+#' column names.
+#'
+#' @examples
+#' \dontrun{
+#' lineage.DA.plot(toast_rack_data, 10, "DomArch.norep", "da2doms")
+#' }
+
 lineage.DA.plot <- function(query_data = "prot",
                             colname = "DomArch",
                             cutoff = 90,
                             RowsCutoff = FALSE,
                             color = "default") { # query.elements, query.words,
   #' Lineage Plot: Heatmap of Domains/DAs/GCs vs Lineages
-  #' @author Janani Ravi
-  #' @keywords Lineages, Domains, Domain Architectures, GenomicContexts
-  #' @description Lineage plot for Domains, Domain Architectures and
-  #' Genomic Contexts. Heatmap.
-  #' @param query_data Data frame of protein homologs with the usual 11 columns +
-  #' additional word columns (0/1 format).
-  #' Default is prot (variable w/ protein data).
-  #' @param query.summ.byLin Output of summ.DA.byLin(XXX.sub) or summ.GC.byLin(XXX.sub)
-  #' @param colname Column name from query_data: "DomArch.norep", "GenContext.norep",
-  #' "DomArch.PFAM.norep" or "DomArch.LADB.norep". Default is "DomArch.norep".
-  #' @param type Character. Default is "da2doms" for Domain Architectures.
-  #' Other alternative: "gc2da" for Genomic Contexts.
-  #' @param color Color for the heatmap. One of six options: "default", "magma", "inferno",
-  #' "plasma", "viridis", or "cividis"
-  #' @examples lineage.DA.plot(toast_rack_data, 10, "DomArch.norep", "da2doms")
-  #' @details For "da2doms" you would need the file DA.doms.wc as well as the
-  #' column query_data$DomArch.norep
-  #'
-  #' For "gc2da", you would need the file GC.DA.wc as well as the column
-  #' query_data$GenContext.norep
-  #' @note Please refer to the source code if you have alternate file formats and/or
-  #' column names.
 
+  # @param type Character. Default is "da2doms" for Domain Architectures.
+  # Other alternative: "gc2da" for Genomic Contexts. -- unused parameter
 
   query_data <- shorten_lineage(query_data, "Lineage", abr_len = 1)
 
@@ -297,21 +319,44 @@ lineage.DA.plot <- function(query_data = "prot",
 
 
 
+#' Lineage Plot: Heatmap of Queries vs Lineages
+#'
+#' @authors Janani Ravi, Samuel Chen
+#' @keywords Lineages, Domains, Domain Architectures, GenomicContexts
+#' @description Lineage plot for queries. Heatmap.
+#'
+#' @param query_data Data frame of protein homologs with the usual 11 columns +
+#' additional word columns (0/1 format).
+#' Default is prot (variable w/ protein data).
+#' @param queries Character Vector containing the queries that will be used for the categories
+#' @param colname
+#' @param cutoff
+#' @param color
+#'
+#' @importFrom BiocGenerics unique
+#' @importFrom dplyr arrange desc filter group_by select summarise union
+#' @importFrom ggplot2 aes aes_string element_rect element_text geom_title ggplot scale_fill_gradient scale_x_discrete theme theme_minimal
+#' @importFrom purrr map
+#' @importFrom rlang sym
+#' @importFrom stringr str_replace_all
+#' @importFrom tidyr drop_na
+#' @importFrom viridis scale_fill_viridis
+#'
+#' @return
+#' @export
+#'
+#' @note Please refer to the source code if you have alternate file formats and/or
+#' column names.
+#'
+#' @examples
+#' \dontrun{
+#' lineage.Query.plot(prot, c("PspA","PspB","PspC","PspM","PspN"), 95)
+#' }
+
 lineage.Query.plot <- function(query_data = all,
                                queries,
                                colname = "ClustName",
                                cutoff, color = "default") {
-  #' Lineage Plot: Heatmap of Queries vs Lineages
-  #' @authors Janani Ravi, Samuel Chen
-  #' @keywords Lineages, Domains, Domain Architectures, GenomicContexts
-  #' @description Lineage plot for queries. Heatmap.
-  #' @param query_data Data frame of protein homologs with the usual 11 columns +
-  #' additional word columns (0/1 format).
-  #' Default is prot (variable w/ protein data).
-  #' @param queries Character Vector containing the queries that will be used for the categories
-  #' @examples lineage.Query.plot(prot, c("PspA","PspB","PspC","PspM","PspN"), 95)
-  #' @note Please refer to the source code if you have alternate file formats and/or
-  #' column names.
   query_by_lineage <- function(data, query, column, by) {
     column <- sym(column)
     by <- sym(by)

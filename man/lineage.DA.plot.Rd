@@ -37,7 +37,10 @@ Please refer to the source code if you have alternate file formats and/or
 column names.
 }
 \examples{
+\dontrun{
 lineage.DA.plot(toast_rack_data, 10, "DomArch.norep", "da2doms")
+}
+Lineage Plot: Heatmap of Domains/DAs/GCs vs Lineages
 }
 \author{
 Janani Ravi
