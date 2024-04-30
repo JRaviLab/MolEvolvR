@@ -335,7 +335,7 @@ lineage.DA.plot <- function(query_data = "prot",
 #'
 #' @importFrom BiocGenerics unique
 #' @importFrom dplyr arrange desc filter group_by select summarise union
-#' @importFrom ggplot2 aes aes_string element_rect element_text geom_title ggplot scale_fill_gradient scale_x_discrete theme theme_minimal
+#' @importFrom ggplot2 aes aes_string element_rect element_text geom_tile ggplot scale_fill_gradient scale_x_discrete theme theme_minimal
 #' @importFrom purrr map
 #' @importFrom rlang sym
 #' @importFrom stringr str_replace_all
@@ -466,7 +466,7 @@ lineage.Query.plot <- function(query_data = all,
 #' @param colname Column name from query_data. Default is "GenContext.norep".
 #'
 #' @importFrom dplyr arrange filter group_by if_else select summarise
-#' @importFrom ggplot2 aes element_text geom_title ggplot scale_fill_gradient scale_x_discrete theme theme_minimal
+#' @importFrom ggplot2 aes element_text geom_tile ggplot scale_fill_gradient scale_x_discrete theme theme_minimal
 #' @importFrom readr read_delim
 #' @importFrom stringr str_replace_all
 #' @importFrom tidyr gather
@@ -545,6 +545,23 @@ lineage.neighbors.plot <- function(query_data = "prot", query = "pspa",
     ))
 }
 
+#' Lineaage Domain Repeats Plot
+#'
+#' @param query_data
+#' @param colname
+#'
+#' @importFrom dplyr across mutate select where
+#' @importFrom ggplot2 aes element_text geom_tile ggplot scale_fill_gradient scale_x_discrete theme theme_minimal
+#' @importFrom stringr str_count str_replace_all
+#' @importFrom tidyr gather
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' lineage.domain_repeats.plot()
+#' }
 lineage.domain_repeats.plot <- function(query_data, colname) {
   # query_data <- pspa_data
   # colname <- "SIG.TM.LADB"
@@ -572,7 +589,8 @@ lineage.domain_repeats.plot <- function(query_data, colname) {
       SIG.TM.LADB, GenContext, AccNum,
       query.DAdoms$domains
     ) %>% # words.gecutoff$words
-    mutate_all(list(~ if (is.numeric(.)) as.integer(.) else .)) %>%
+    # mutate_all(list(~ if (is.numeric(.)) as.integer(.) else .)) %>%
+    mutate(across(where(is.numeric), as.integer)) %>%
     as.data.frame()
 
   # ## written on Sep 4, 2017
