@@ -179,7 +179,8 @@ submit_full <- function(dir = "/data/scratch", DB = Sys.getenv("BLAST_DB", unset
     destQoS <- ifelse(destPartition == "LocalQLong", "longjobs", "shortjobs")
 
     cmd_full <- stringr::str_glue(
-      "sbatch {make_email_args(submitter_email, get_slurm_mails)} --qos={destQoS} --partition {destPartition} --job-name {make_job_name(job_code, type)} --array 1-{num_seqs} --time=27:07:00 ",
+      "sbatch {make_email_args(submitter_email, get_slurm_mails)} --qos={destQoS} --partition {destPartition} ",
+      "--job-name {make_job_name(job_code, type)} --output=slurm_%x_%j.out --error=slurm_%x_%j.err --array 1-{num_seqs} --time=27:07:00 ",
       "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb ",
       "input.txt {DB} {NHITS} {EVAL} F {type}"
     )
@@ -192,23 +193,14 @@ submit_full <- function(dir = "/data/scratch", DB = Sys.getenv("BLAST_DB", unset
 
   # run analysis on query regardless of selected advanced options
   destPartitionQuery <- "LocalQ" # query run always goes to short queues
-  if (by_domain == "TRUE") {
-    cmd_by_domain <- stringr::str_glue(
-      "sbatch {make_email_args(submitter_email, get_slurm_mails)} --qos=shortjobs --partition {destPartitionQuery} --job-name {make_job_name(job_code, type)} --time=27:07:00 ",
-      "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb ",
-      "{domain_starting} {DB} {NHITS} {EVAL} T {type}"
-    )
-    job_id <- submit_and_log(cmd_by_domain)
-    job_ids <- c(job_ids, job_id)
-  } else {
-    cmd_query <- stringr::str_glue(
-      "sbatch {make_email_args(submitter_email, get_slurm_mails)} --qos=shortjobs --partition {destPartitionQuery} --job-name {make_job_name(job_code, type)} --time=27:07:00 ",
-      "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb ",
-      "{sequences} {DB} {NHITS} {EVAL} T {type}"
-    )
-    job_id <- submit_and_log(cmd_query)
-    job_ids <- c(job_ids, job_id)
-  }
+  cmd_query <- stringr::str_glue(
+    "sbatch {make_email_args(submitter_email, get_slurm_mails)} --qos=shortjobs --partition {destPartitionQuery} ",
+    "--job-name {make_job_name(job_code, paste0(type, '_query'))} --output=slurm_%x_%j.out --error=slurm_%x_%j.err --time=27:07:00 ",
+    "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_full.sb ",
+    "{sequences} {DB} {NHITS} {EVAL} T {type}"
+  )
+  job_id <- submit_and_log(cmd_query)
+  job_ids <- c(job_ids, job_id)
 
   num_runs <- num_runs + 1
   write(paste0("0/", num_runs, " analyses completed"), "status.txt")
@@ -273,7 +265,8 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
   destPartitionQuery <- "LocalQ" # query run always goes into short queue
   if (ncbi) {
     cmd_blast_query_ncbi <- stringr::str_glue(
-      "sbatch {make_email_args(submitter_email, get_slurm_mails)} --qos=shortjobs --partition {destPartitionQuery} --job-name {make_job_name(job_code, 'blast_query_ncbi')} --time=27:07:00 ",
+      "sbatch {make_email_args(submitter_email, get_slurm_mails)} --qos=shortjobs --partition {destPartitionQuery} ",
+      "--job-name {make_job_name(job_code, 'blast_query_ncbi')} --output=slurm_%x_%j.out --error=slurm_%x_%j.err --time=27:07:00 ",
       "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb ",
       "blast_query.tsv T F"
     )
@@ -281,7 +274,8 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
     job_ids <- c(job_ids, job_id)
   } else {
     cmd_blast_query <- stringr::str_glue(
-      "sbatch {make_email_args(submitter_email, get_slurm_mails)} --qos=shortjobs --partition {destPartitionQuery} --job-name {make_job_name(job_code, 'blast_query')} --time=27:07:00 ",
+      "sbatch {make_email_args(submitter_email, get_slurm_mails)} --qos=shortjobs --partition {destPartitionQuery} ",
+      "--job-name {make_job_name(job_code, 'blast_query')} --output=slurm_%x_%j.out --error=slurm_%x_%j.err --time=27:07:00 ",
       "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb ",
       "blast_query.tsv T T"
     )
@@ -331,7 +325,8 @@ submit_blast <- function(dir = "/data/scratch", blast = "~/test.fa", seqs = "~/s
   # done in the first submission above; a separate job
   n_queries <- nrow(df_query)
   cmd_blast <- stringr::str_glue(
-    "sbatch {make_email_args(submitter_email, get_slurm_mails)} --qos={destQoS} --partition {destPartition} --job-name {make_job_name(job_code, 'blast')} --array 1-{n_queries} --time=27:07:00 ",
+    "sbatch {make_email_args(submitter_email, get_slurm_mails)} --qos={destQoS} --partition {destPartition} ",
+    "--job-name {make_job_name(job_code, 'blast')} --output=slurm_%x_%j.out --error=slurm_%x_%j.err --array 1-{n_queries} --time=27:07:00 ",
     "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_blast.sb ",
     "accs.txt F F"
   )
@@ -415,7 +410,8 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
     seq_count <- get_sequences(seqs, dir_path = dir, separate = TRUE)
     num_runs <- num_runs + seq_count
     cmd_ipr_homology <- stringr::str_glue(
-      "sbatch {make_email_args(submitter_email, get_slurm_mails)} --qos={destQoS} --partition {destPartition} --job-name {make_job_name(job_code, 'ipr_homology')} --array 1-{seq_count} --time=27:07:00 ",
+      "sbatch {make_email_args(submitter_email, get_slurm_mails)} --qos={destQoS} --partition {destPartition} ",
+      "--job-name {make_job_name(job_code, 'ipr_homology')} --output=slurm_%x_%j.out --error=slurm_%x_%j.err --array 1-{seq_count} --time=27:07:00 ",
       "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb ",
       "input.txt F T {DB} {NHITS} {EVAL}"
     )
@@ -430,7 +426,8 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
   destPartitionQuery <- "LocalQ" # query run always goes to short queue
   # always do analysis on interpro file
   cmd_ipr_query <- stringr::str_glue(
-    "sbatch {make_email_args(submitter_email, get_slurm_mails)} --qos=shortjobs --partition {destPartitionQuery} --job-name {make_job_name(job_code, 'ipr_query')} --time=27:07:00 ",
+    "sbatch {make_email_args(submitter_email, get_slurm_mails)} --qos=shortjobs --partition {destPartitionQuery} ",
+    "--job-name {make_job_name(job_code, 'ipr_query')} --output=slurm_%x_%j.out --error=slurm_%x_%j.err --time=27:07:00 ",
     "/data/research/jravilab/molevol_scripts/upstream_scripts/00_wrapper_ipr.sb ",
     "{ipr} T F"
   )
