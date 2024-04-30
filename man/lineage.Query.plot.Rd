@@ -18,6 +18,8 @@ additional word columns (0/1 format).
 Default is prot (variable w/ protein data).}
 
 \item{queries}{Character Vector containing the queries that will be used for the categories}
+
+\item{color}{}
 }
 \description{
 Lineage plot for queries. Heatmap.
@@ -27,7 +29,9 @@ Please refer to the source code if you have alternate file formats and/or
 column names.
 }
 \examples{
+\dontrun{
 lineage.Query.plot(prot, c("PspA","PspB","PspC","PspM","PspN"), 95)
+}
 }
 \keyword{Architectures,}
 \keyword{Domain}
