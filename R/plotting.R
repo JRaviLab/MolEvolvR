@@ -453,25 +453,42 @@ lineage.Query.plot <- function(query_data = all,
 }
 
 
+#' Lineage Plot for top neighbors
+#' @author Janani Ravi
+#' @keywords Lineages, Domains, Domain Architectures, GenomicContexts
+#'
+#' @description Lineage plot for top neighbors obtained from DAs of
+#' Genomic Contexts.
+#'
+#' @param query_data Data frame of protein homologs with the usual 11 columns +
+#' additional word columns (0/1 format). Default is pspa_data.
+#' @param query Name of query protein/domain. Default is "pspa".
+#' @param colname Column name from query_data. Default is "GenContext.norep".
+#'
+#' @importFrom dplyr arrange filter group_by if_else select summarise
+#' @importFrom ggplot2 aes element_text geom_title ggplot scale_fill_gradient scale_x_discrete theme theme_minimal
+#' @importFrom readr read_delim
+#' @importFrom stringr str_replace_all
+#' @importFrom tidyr gather
+#'
+#' @return
+#' @export
+#' @details For "da2doms" you would need the file DA.doms.wc as well as the
+#' column query_data$DomArch.norep
+#'
+#' For "gc2da", you would need the file GC.DA.wc as well as the column
+#' query_data$GenContext.norep
+#'
+#' @note Please refer to the source code if you have alternate file formats and/or
+#' column names.
+#'
+#' @examples
+#' \dontrun{
+#' lineage.neighbors.plot(pspa_data, pspa, "GenContext.norep", "da2doms")
+#' }
+#'
 lineage.neighbors.plot <- function(query_data = "prot", query = "pspa",
                                    colname = "GenContext.norep") {
-  #' Lineage Plot for top neighbors
-  #' @author Janani Ravi
-  #' @keywords Lineages, Domains, Domain Architectures, GenomicContexts
-  #' @description Lineage plot for top neighbors obtained from DAs of
-  #' Genomic Contexts.
-  #' @param query_data Data frame of protein homologs with the usual 11 columns +
-  #' additional word columns (0/1 format). Default is pspa_data.
-  #' @param query Name of query protein/domain. Default is "pspa".
-  #' @param colname Column name from query_data. Default is "GenContext.norep".
-  #' @examples lineage.neighbors.plot(pspa_data, pspa, "GenContext.norep", "da2doms")
-  #' @details For "da2doms" you would need the file DA.doms.wc as well as the
-  #' column query_data$DomArch.norep
-  #'
-  #' For "gc2da", you would need the file GC.DA.wc as well as the column
-  #' query_data$GenContext.norep
-  #' @note Please refer to the source code if you have alternate file formats and/or
-  #' column names.
 
   query_data <- query_data %>% filter(grepl("a", Lineage))
   query.GCDA <- read_delim(paste0("Top-", query, "-neighbors.txt"),

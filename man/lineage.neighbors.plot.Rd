@@ -31,7 +31,10 @@ Please refer to the source code if you have alternate file formats and/or
 column names.
 }
 \examples{
+\dontrun{
 lineage.neighbors.plot(pspa_data, pspa, "GenContext.norep", "da2doms")
+}
+
 }
 \author{
 Janani Ravi
