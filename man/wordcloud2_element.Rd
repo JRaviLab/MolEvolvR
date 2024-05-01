@@ -15,8 +15,7 @@ wordcloud2_element(
 \item{query_data}{Data frame of protein homologs with the usual 11 columns +
 additional word columns (0/1 format). Default is "prot".}
 
-\item{type}{Character. Default is "da2doms" for Domain Architectures.
-Other alternative: "gc2da" for Genomic Contexts.}
+\item{UsingRowsCutoff}{}
 }
 \description{
 Wordclouds for the predominant domains (from DAs) and DAs (from GC)
@@ -33,7 +32,9 @@ Please refer to the source code if you have alternate file formats and/or
 column names.
 }
 \examples{
+\dontrun{
 wordcloud_element(prot, "da2doms", 10)
+}
 }
 \author{
 Janani Ravi
