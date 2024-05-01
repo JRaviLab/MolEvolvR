@@ -1079,26 +1079,43 @@ wordcloud_element <- function(query_data = "prot",
 }
 
 
+#' Wordclouds for the predominant domains, domain architectures.
+#'
+#' @author Janani Ravi
+#' @keywords Domains, Domain Architectures, GenomicContexts
+#' @description Wordclouds for the predominant domains (from DAs) and DAs (from GC)
+#'
+#' @param query_data Data frame of protein homologs with the usual 11 columns +
+#' additional word columns (0/1 format). Default is "prot".
+#' @param colname
+#' @param cutoff
+#' @param UsingRowsCutoff
+#'
+#' @importFrom dplyr filter pull
+#' @importFrom rlang sym
+#'
+#' @return
+#' @export
+#'
+#' @details For "da2doms" you would need the file DA.doms.wc as well as the
+#' column query_data$DomArch.norep
+#'
+#' For "gc2da", you would need the file GC.DA.wc as well as the column
+#' query_data$GenContext.norep
+#' @note Please refer to the source code if you have alternate file formats and/or
+#' column names.
+#'
+#' @examples
+#' \dontrun{
+#' wordcloud_element(prot, "da2doms", 10)
+#' }
 wordcloud2_element <- function(query_data = "prot",
                                colname = "DomArch",
                                cutoff = 70,
                                UsingRowsCutoff = FALSE) {
-  #' Wordclouds for the predominant domains, domain architectures.
-  #' @author Janani Ravi
-  #' @keywords Domains, Domain Architectures, GenomicContexts
-  #' @description Wordclouds for the predominant domains (from DAs) and DAs (from GC)
-  #' @param query_data Data frame of protein homologs with the usual 11 columns +
-  #' additional word columns (0/1 format). Default is "prot".
-  #' @param type Character. Default is "da2doms" for Domain Architectures.
-  #' Other alternative: "gc2da" for Genomic Contexts.
-  #' @examples wordcloud_element(prot, "da2doms", 10)
-  #' @details For "da2doms" you would need the file DA.doms.wc as well as the
-  #' column query_data$DomArch.norep
-  #'
-  #' For "gc2da", you would need the file GC.DA.wc as well as the column
-  #' query_data$GenContext.norep
-  #' @note Please refer to the source code if you have alternate file formats and/or
-  #' column names.
+  # @param type Character. Default is "da2doms" for Domain Architectures.
+  # Other alternative: "gc2da" for Genomic Contexts.
+
   tc <- query_data %>% total_counts(column = colname, cutoff = cutoff, RowsCutoff = UsingRowsCutoff, digits = 5)
 
   column <- sym(colname)
@@ -1135,20 +1152,36 @@ wordcloud2_element <- function(query_data = "prot",
 
 
 #### Sunburst #####
+#' Lineage Sunburst
+#'
+#' @param prot Data frame containing a lineage column that the sunburst plot will be generated for
+#' @param lineage_column String. Name of the lineage column within the data frame. Defaults to "Lineage"
+#' @param type String, either "sunburst" or "sund2b". If type is "sunburst", a sunburst plot of the lineage
+#' @param levels Integer. Number of levels the sunburst will have.
+#' @param colors
+#' @param legendOrder String vector. The order of the legend. If legendOrder is NULL,
+#' @param showLegend Boolean. If TRUE, the legend will be enabled when the component first renders.
+#' @param maxLevels Integer, the maximum number of levels to display in the sunburst; 5 by default, NULL to disable
+#' then the legend will be in the descending order of the top level hierarchy.
+#' will be rendered. If the type is sund2b, a sund2b plot will be rendered.
+#'
+#' @importFrom BiocGenerics append
+#' @importFrom dplyr arrange desc group_by_at select summarise
+#' @importFrom htmlwidgets onRender
+#' @importFrom rlang sym
+#' @importFrom sunburstR sunburst
+#' @importFrom tidyr drop_na separate
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' lineage_sunburst()
+#' }
 lineage_sunburst <- function(prot, lineage_column = "Lineage",
                              type = "sunburst",
                              levels = 2, colors = NULL, legendOrder = NULL, showLegend = TRUE, maxLevels = 5) {
-  #'
-  #'
-  #' @param prot Data frame containing a lineage column that the sunburst plot will be generated for
-  #' @param lineage_column String. Name of the lineage column within the data frame. Defaults to "Lineage"
-  #' @param type String, either "sunburst" or "sund2b". If type is "sunburst", a sunburst plot of the lineage
-  #' @param levels Integer. Number of levels the sunburst will have.
-  #' @param legendOrder String vector. The order of the legend. If legendOrder is NULL,
-  #' @param showLegend Boolean. If TRUE, the legend will be enabled when the component first renders.
-  #' @param maxLevels Integer, the maximum number of levels to display in the sunburst; 5 by default, NULL to disable
-  #' then the legend will be in the descending order of the top level hierarchy.
-  #' will be rendered. If the type is sund2b, a sund2b plot will be rendered.
 
   lin_col <- sym(lineage_column)
 
