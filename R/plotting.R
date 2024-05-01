@@ -622,21 +622,36 @@ lineage.domain_repeats.plot <- function(query_data, colname) {
 }
 
 
+#' LineagePlot
+#'
+#' @description
+#' Generate a lineage plot
+#'
+#' @author Samuel Chen, Janani Ravi
+#'
+#' @param prot Data frame containing DomArch and Lineage Columns
+#' @param domains_of_interest Vector of domains to check for the presence of in all the lineages
+#' @param level The max depth of Lineage. ie) i = Kingdom, 2 = Phylum, 3 = class ...
+#' @param label.size Size of the text labels
+#'
+#' @importFrom dplyr arrange filter mutate group_by summarize union
+#' @importFrom ggplot2 aes aes_string element_blank element_text ggplot scale_fill_gradient theme theme_minimal
+#' @importFrom purrr map
+#' @importFrom stringr str_locate str_locate_all
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' LineagePlot(psp_data, c("PspA", "Snf7","Classical-AAA","PspF","PspB",
+#' "PspC","ClgR","PspM","Thioredoxin","PspN_N","DUF3046","LiaI-LiaF-TM",
+#'  "Toast_rack", "REC", "HISKIN", "HAAS","SHOCT-bihelical", "SHOCT-like",
+#'  "Tfu_1009", "PspAA", "Spermine_synth","TM-Flotillin", "Band-7","Betapropeller",
+#'  "MacB_PCD", "FTSW_RODA_SPOVE", "Cest_Tir","SIGMA-HTH", "GNTR-HTH", "DUF2089-HTH",
+#'   "PadR-HTH","RHH","ZnR"), level = 2)
+#' }
 LineagePlot <- function(prot, domains_of_interest, level = 3, label.size = 8) {
-  #' @author Samuel Chen, Janani Ravi
-  #' Generate a lineage plot
-  #' @param prot Data frame containing DomArch and Lineage Columns
-  #' @param domains_of_interest Vector of domains to check for the presence of in all the lineages
-  #' @param level The max depth of Lineage. ie) i = Kingdom, 2 = Phylum, 3 = class ...
-  #' @param label.size Size of the text labels
-  #' @example LineagePlot(psp_data, c("PspA", "Snf7","Classical-AAA","PspF","PspB",
-  #' "PspC","ClgR","PspM","Thioredoxin","PspN_N","DUF3046","LiaI-LiaF-TM",
-  #'  "Toast_rack", "REC", "HISKIN", "HAAS","SHOCT-bihelical", "SHOCT-like",
-  #'  "Tfu_1009", "PspAA", "Spermine_synth","TM-Flotillin", "Band-7","Betapropeller",
-  #'  "MacB_PCD", "FTSW_RODA_SPOVE", "Cest_Tir","SIGMA-HTH", "GNTR-HTH", "DUF2089-HTH",
-  #'   "PadR-HTH","RHH","ZnR"), level = 2)
-
-
 
   LevelReduction <- function(lin) {
     if (level == 1) {
@@ -762,6 +777,34 @@ LineagePlot <- function(prot, domains_of_interest, level = 3, label.size = 8) {
     )
 }
 
+#' Stacked Lineage Plot
+#'
+#' @param prot
+#' @param column
+#' @param cutoff
+#' @param Lineage_col
+#' @param xlabel
+#' @param reduce_lineage
+#' @param label.size
+#' @param legend.position
+#' @param legend.text.size
+#' @param legend.cols
+#' @param legend.size
+#' @param coord_flip
+#' @param legend
+#'
+#' @importFrom BiocGenerics unique
+#' @importFrom dplyr pull select
+#' @importFrom ggplot2 aes_string coord_flip element_blank element_line element_rect element_text geom_bar ggplot guides guide_legend scale_fill_manual xlab ylab theme theme_minimal
+#' @importFrom purrr map
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' stacked_lin_plot()
+#' }
 stacked_lin_plot <- function(prot, column = "DomArch", cutoff, Lineage_col = "Lineage",
                              xlabel = "Domain Architecture",
                              reduce_lineage = TRUE,
@@ -881,13 +924,39 @@ stacked_lin_plot <- function(prot, column = "DomArch", cutoff, Lineage_col = "Li
 ################
 #### NEEDS SOME WORK
 
-
-# Modified script of wordcloud2
+#' Wordcloud3
+#'
+#' @param data
+#' @param size
+#' @param minSize
+#' @param gridSize
+#' @param fontFamily
+#' @param fontWeight
+#' @param color
+#' @param backgroundColor
+#' @param minRotation
+#' @param maxRotation
+#' @param shuffle
+#' @param rotateRatio
+#' @param shape
+#' @param ellipticity
+#' @param widgetsize
+#' @param figPath
+#' @param hoverFunction
+#'
+#' @importFrom base64enc base64encode
+#' @importFrom htmlwidgets createWidget JS sizingPolicy
+#'
+#' @return
+#' @export
+#'
+#' @examples
 wordcloud3 <- function(data, size = 1, minSize = 0, gridSize = 0, fontFamily = "Segoe UI",
                        fontWeight = "bold", color = "random-dark", backgroundColor = "white",
                        minRotation = -pi / 4, maxRotation = pi / 4, shuffle = TRUE,
                        rotateRatio = 0.4, shape = "circle", ellipticity = 0.65,
                        widgetsize = NULL, figPath = NULL, hoverFunction = NULL) {
+  # Modified script of wordcloud2
   if ("table" %in% class(data)) {
     dataOut <- data.frame(name = names(data), freq = as.vector(data))
   } else {
@@ -934,30 +1003,43 @@ wordcloud3 <- function(data, size = 1, minSize = 0, gridSize = 0, fontFamily = "
 }
 
 
+#' Wordclouds for the predominant domains, domain architectures
+#'
+#' @author Janani Ravi
+#' @keywords Domains, Domain Architectures, GenomicContexts
+#' @description Wordclouds for the predominant domains (from DAs) and DAs (from GC)
+#'
+#' @param query_data Data frame of protein homologs with the usual 11 columns +
+#' additional word columns (0/1 format). Default is "prot".
+#' @param colname
+#' @param cutoff
+#' @param UsingRowsCutoff
+#'
+#' @importFrom dplyr filter pull
+#' @importFrom RColorBrewer brewer.pal
+#' @importFrom rlang sym
+#' @importFrom wordcloud wordcloud
+#'
+#' @return
+#' @export
+#'
+#' @details For "da2doms" you would need the file DA.doms.wc as well as the
+#' column query_data$DomArch.norep
+#'
+#' For "gc2da", you would need the file GC.DA.wc as well as the column
+#' query_data$GenContext.norep
+#' @note Please refer to the source code if you have alternate file formats and/or
+#' column names.
+
+#'
+#' @examples
+#' \dontrun{
+#' wordcloud_element(prot, "da2doms", 10)
+#' }
 wordcloud_element <- function(query_data = "prot",
                               colname = "DomArch",
                               cutoff = 70,
                               UsingRowsCutoff = FALSE) {
-  #' Wordclouds for the predominant domains, domain architectures.
-  #' @author Janani Ravi
-  #' @keywords Domains, Domain Architectures, GenomicContexts
-  #' @description Wordclouds for the predominant domains (from DAs) and DAs (from GC)
-  #' @param query_data Data frame of protein homologs with the usual 11 columns +
-  #' additional word columns (0/1 format). Default is "prot".
-  #' @param type Character. Default is "da2doms" for Domain Architectures.
-  #' Other alternative: "gc2da" for Genomic Contexts.
-  #' @examples wordcloud_element(prot, "da2doms", 10)
-  #' @details For "da2doms" you would need the file DA.doms.wc as well as the
-  #' column query_data$DomArch.norep
-  #'
-  #' For "gc2da", you would need the file GC.DA.wc as well as the column
-  #' query_data$GenContext.norep
-  #' @note Please refer to the source code if you have alternate file formats and/or
-  #' column names.
-
-  # Get Total Counts
-  # colname = string(colname)
-
   tc <- query_data %>% total_counts(column = colname, cutoff = cutoff, RowsCutoff = UsingRowsCutoff, digits = 5)
 
   column <- sym(colname)
