@@ -4,7 +4,7 @@
 # to use this, construct paths like so: file.path(common_root, "path", "to", "file.R")
 # for example, the reference for this file would be:
 # file.path(common_root, "molevol_scripts", "R", "assign_job_queue.R")
-common_root <- Sys.getenv("COMMON_SRC_ROOT")
+# common_root <- Sys.getenv("COMMON_SRC_ROOT")
 
 #' Construct list where names (MolEvolvR advanced options) point to processes
 #'
