@@ -4,7 +4,7 @@
 # to use this, construct paths like so: file.path(common_root, "path", "to", "file.R")
 # for example, the reference for this file would be:
 # file.path(common_root, "molevol_scripts", "R", "assign_job_queue.R")
-# common_root <- Sys.getenv("COMMON_SRC_ROOT")
+common_root <- Sys.getenv("COMMON_SRC_ROOT")
 
 #' Construct list where names (MolEvolvR advanced options) point to processes
 #'
@@ -45,6 +45,8 @@ map_advanced_opts2procs <- function(advanced_opts) {
 #'
 #' @param dir_job_results [chr] path to MolEvolvR job_results 
 #' directory
+#'
+#' @importFrom dplyr across everything select summarise
 #'
 #' @return [list] names: processes; values: median runtime (seconds)
 #'
@@ -102,6 +104,11 @@ get_proc_medians <- function(dir_job_results) {
 #' @param dir_job_results [chr] path to MolEvolvR job_results
 #' @param filepath path to save tsv file
 #'
+#' @importFrom dplyr arrange desc everything
+#' @importFrom tibble as_tibble
+#' @importFrom readr write_tsv
+#' @importFrom tidyr pivot_longer
+#'
 #' @return [tbl_df] 2 columns: 1) process and 2) median seconds
 #'
 #' example: write_proc_medians_table(
@@ -131,7 +138,11 @@ write_proc_medians_table <- function(dir_job_results, filepath) {
 #' @param dir_job_results [chr] path to MolEvolvR job_results directory
 #' @param filepath [chr] path to save YAML file; if NULL, uses ./molevol_scripts/log_data/job_proc_weights.yml
 #'
-#' example: write_proc_medians_yml(
+#' @importFrom yaml write_yaml
+#'
+#' @examples
+#' \dontrun{
+#' write_proc_medians_yml(
 #'   "/data/scratch/janani/molevolvr_out/",
 #'   "/data/scratch/janani/molevolvr_out/log_tbl.yml"
 #' )
@@ -148,6 +159,9 @@ write_proc_medians_yml <- function(dir_job_results, filepath=NULL) {
 #'
 #' @param dir_job_results [chr] path to MolEvolvR job_results 
 #' directory
+#'
+#' @importFrom stringr str_glue str_trim
+#' @importFrom yaml read_yaml
 #'
 #' @return [list] names: processes; values: median runtime (seconds)
 #' 
@@ -195,6 +209,9 @@ get_proc_weights <- function(medians_yml_path=NULL) {
 #' @param advanced_opts character vector of MolEvolvR advanced options
 #' (see make_opts2procs for the options)
 #' @param n_inputs total number of input proteins
+#'
+#' @importFrom dplyr if_else
+#' @importFrom stringr str_glue
 #'
 #' @return total estimated number of seconds a job will process (walltime)
 #'
@@ -264,6 +281,10 @@ assign_job_queue <- function(
 #' of inputs
 #'
 #' this function was just for fun; very, very messy code
+#'
+#' @importFrom dplyr mutate select
+#' @importFrom ggplot2 aes geom_line ggplot labs
+#' @importFrom tibble as_tibble
 #'
 #' @return line plot object
 #'
