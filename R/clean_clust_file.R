@@ -9,43 +9,55 @@
 #################
 ## Pkgs needed ##
 #################
-suppressPackageStartupMessages(library(tidyverse))
+# suppressPackageStartupMessages(library(tidyverse))
 
 ##############
 ## COLNAMES ##
 ##############
 ## FUNCTION to ASSIGN COLUMN NAMES based on AUG 2017 VA format
-colnames.op_ins_cls <- c(
-  "AccNum", "GenContext.orig",
-  "DomArch.PFAM", "DomArch.orig", "DomArch.TMSIG",
-  "Length", "GeneName",
-  "Lineage", "Species.orig",
-  "Annotation", "GI"
-)
+# colnames.op_ins_cls <- c(
+#   "AccNum", "GenContext.orig",
+#   "DomArch.PFAM", "DomArch.orig", "DomArch.TMSIG",
+#   "Length", "GeneName",
+#   "Lineage", "Species.orig",
+#   "Annotation", "GI"
+# )
 ## FUNCTION to ASSIGN COLUMN NAMES based on DEC 2019 VA format
-colnames.op_ins_cls.clus2table <- c(
-  "AccNum", "ClustID", "ClustName.orig",
-  "GenContext.orig", "DomArch.Pfam", "DomArch.orig",
-  "-", "Length", "GeneName",
-  "Lineage", "Species.orig", "GCA_ID",
-  "Annotation", "GI"
-)
+# colnames.op_ins_cls.clus2table <- c(
+#   "AccNum", "ClustID", "ClustName.orig",
+#   "GenContext.orig", "DomArch.Pfam", "DomArch.orig",
+#   "-", "Length", "GeneName",
+#   "Lineage", "Species.orig", "GCA_ID",
+#   "Annotation", "GI"
+# )
 
 ###########################
 ## Adding ClustIDs/Names ##
 ###########################
 #' Clean Cluster File
 #'
+#' @description
 #' Reads and cleans a cluster file
 #'
 #' This function reads a space-separated cluster file and converts it to a cleaned up data frame.
-#' The cleaned up cluster data frame is returned and a tsv file is written if the "writepath" parameter is used.
 #'
 #' @param path A character to the path of the cluster file to be cleaned
 #' @param writepath A character designating where the tsv file of the cleaned cluster file will be written to. If value is NULL no
 #' file is written. Default NULL
 #' @param query A character identifying the query of the file.
-#' @examples clean_clust_file("data/pspa.op_ins_cls", writepath = NULL, query = "pspa")
+#'
+#' @importFrom BiocGenerics append
+#' @importFrom dplyr mutate filter
+#' @importFrom readr read_tsv
+#' @importFrom stringr str_length
+#' @importFrom tidyr separate
+#'
+#' @return The cleaned up cluster data frame is returned and a tsv file is written if the "writepath" parameter is used.
+#'
+#' @examples
+#' \dontrun{
+#' clean_clust_file("data/pspa.op_ins_cls", writepath = NULL, query = "pspa")
+#' }
 clean_clust_file <- function(path, writepath = NULL, query) {
   # ?? does the following line need to be changed to read_lines()?
   prot <- read_tsv(path, col_names = F)
