@@ -1,10 +1,19 @@
-library(RMariaDB)
-library(DBI)
-library(dplyr)
+# library(RMariaDB)
+# library(DBI)
+# library(dplyr)
 
+#' getCon
+#'
+#' @description
 #' Gets a connection to the accounting db. You should
 #' close this connection later via dbDisconnect(con).
+#'
+#' @importFrom DBI dbConnect
+#' @importFrom RMariaDB MariaDB
+#'
 #' @return A DBI connection object
+#' @export
+#'
 getCon <- function() {
     # get authentication info from environment variables
     MARIADB_USER <- Sys.getenv("MARIADB_USER")
@@ -21,12 +30,20 @@ getCon <- function() {
     )
 }
 
+#' getJobsForCode
+#'
+#' @description
 #' Given a job code, retrieves SLURM jobs where that code occurs in their name
 #' (i.e., the "job_name" column). Optionally, you may specify a vector of column
 #' names to return; if unspecified, returns all columns.
 #' 
 #' @param code A job code to search for in job names
+#'
+#' @importFrom DBI dbGetQuery dbDisconnect dbQuoteIdentifier
+#'
 #' @return Data frame with 'cols' columns (or all columns if 'cols') of jobs
+#' @export
+#'
 getJobsForCode <- function(code, cols=NA) {
     con <- getCon()
 
@@ -77,8 +94,14 @@ getJobsForCode <- function(code, cols=NA) {
 #' @param cols Column names to return; if unspecified, returns all columns.
 #' @param states integers for states to search for; you can specify either a single
 #' integer or a vector. if unspecified, returns all rows.
+#'
+#' @importFrom DBI dbDisconnect
+#' @importFrom dplyr any_of collect filter tbl select
+#'
 #' @return Data frame with 'cols' columns (or all columns if 'cols') of jobs
 #' with the specified states, or all jobs if 'states' is unspecified
+#' @export
+#'
 getJobsWithStates <- function(states=NA, cols=NA) {
     con <- getCon()
 
