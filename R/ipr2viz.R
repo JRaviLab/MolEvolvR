@@ -2,11 +2,11 @@
 ## Janani Ravi, Lauren Sosinski, Samuel Chen
 ## Created: Apr 9, 2020
 
-suppressPackageStartupMessages(library(here))
-suppressPackageStartupMessages(library(tidyverse))
-suppressPackageStartupMessages(library(data.table))
-suppressPackageStartupMessages(library(gggenes))
-suppressPackageStartupMessages(library(ggplot2))
+# suppressPackageStartupMessages(library(here))
+# suppressPackageStartupMessages(library(tidyverse))
+# suppressPackageStartupMessages(library(data.table))
+# suppressPackageStartupMessages(library(gggenes))
+# suppressPackageStartupMessages(library(ggplot2))
 # source("../the-approach/R/pre-msa-tree.R") # for "to_titlecase()"
 source("/data/research/jravilab/molevol_scripts/R/colnames_molevol.R")
 
@@ -15,6 +15,14 @@ source("/data/research/jravilab/molevol_scripts/R/colnames_molevol.R")
 #################################
 ## theme_genes2 adapted from theme_genes (w/o strip.text())
 ## https://github.com/wilkox/gggenes/blob/master/R/theme_genes.R
+#' Theme Genes2
+#'
+#' @importFrom ggplot2 element_blank element_line theme theme_grey
+#'
+#' @return
+#' @export
+#'
+#' @examples
 theme_genes2 <- function() {
   ggplot2::theme_grey() + ggplot2::theme(
     panel.background = ggplot2::element_blank(),
@@ -33,7 +41,23 @@ theme_genes2 <- function() {
 ##################################
 ## Get Top N AccNum by Lin+DomArch
 ##################################
-# Group by lineage + DA then take top 20
+#' Group by lineage + DA then take top 20
+#'
+#' @param infile_full
+#' @param DA_col
+#' @param lin_col
+#' @param n
+#' @param query
+#'
+#' @importFrom dplyr arrange filter group_by select summarise
+#' @importFrom shiny showNotification
+#' @importFrom stats na.omit
+#' @importFrom rlang sym
+#'
+#' @return
+#' @export
+#'
+#' @examples
 find_top_acc <- function(infile_full,
                          DA_col = "DomArch.Pfam",
                          lin_col = "Lineage_short",
@@ -67,6 +91,28 @@ find_top_acc <- function(infile_full,
 #############################################
 ## IPR + FULL files --> DomArch Visualization
 #############################################
+#' IPR2Viz
+#'
+#' @param infile_ipr
+#' @param infile_full
+#' @param accessions
+#' @param analysis
+#' @param group_by
+#' @param topn
+#' @param name
+#' @param text_size
+#' @param query
+#'
+#' @importFrom dplyr distinct filter select
+#' @importFrom gggenes geom_gene_arrow geom_subgene_arrow
+#' @importFrom ggplot2 aes aes_string as_labeller element_text facet_wrap ggplot guides margin scale_fill_manual theme theme_minimal ylab
+#' @importFrom readr read_tsv
+#' @importFrom tidyr pivot_wider
+#'
+#' @return
+#' @export
+#'
+#' @examples
 ipr2viz <- function(infile_ipr = NULL, infile_full = NULL, accessions = c(),
                     analysis = c("Pfam", "Phobius", "TMHMM", "Gene3D"),
                     group_by = "Analysis", # "Analysis"
@@ -200,6 +246,28 @@ ipr2viz <- function(infile_ipr = NULL, infile_full = NULL, accessions = c(),
   return(plot)
 }
 
+#' IPR2Viz Web
+#'
+#' @param infile_ipr
+#' @param accessions
+#' @param analysis
+#' @param group_by
+#' @param name
+#' @param text_size
+#' @param legend_name
+#' @param cols
+#' @param rows
+#'
+#' @importFrom dplyr arrange distinct filter select
+#' @importFrom gggenes geom_gene_arrow geom_subgene_arrow
+#' @importFrom ggplot2 aes aes_string as_labeller facet_wrap ggplot guides scale_fill_manual theme theme_minimal ylab
+#' @importFrom readr read_tsv
+#' @importFrom tidyr pivot_wider
+#'
+#' @return
+#' @export
+#'
+#' @examples
 ipr2viz_web <- function(infile_ipr,
                         accessions,
                         analysis = c("Pfam", "Phobius", "TMHMM", "Gene3D"),
