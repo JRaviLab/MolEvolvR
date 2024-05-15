@@ -1,20 +1,33 @@
-suppressPackageStartupMessages(library(tidyverse))
-suppressPackageStartupMessages(library(here))
+# suppressPackageStartupMessages(library(tidyverse))
+# suppressPackageStartupMessages(library(here))
 # library(biomartr)
 
 
+#' Create a look up table that goes from TaxID, to Lineage
+#'
+#' @author Samuel Chen
+#'
+#' @param lineage_file Path to the rankedlineage.dmp file containing taxid's and their
+#' corresponding taxonomic rank. rankedlineage.dmp can be downloaded at
+#' https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/new_taxdump/
+#' @param outfile File the resulting lineage lookup table should be written to
+#' @param taxonomic_rank The upperbound of taxonomic rank that the lineage includes. The lineaege will
+#' include superkingdom>...>taxonomic_rank.
+#' Choices include: "supperkingdom", "phylum",   "class","order", "family",
+#' "genus", and "species"
+#'
+#' @importFrom dplyr all_of mutate select
+#' @importFrom purrr map
+#' @importFrom readr read_file read_tsv write_tsv
+#' @importFrom stringr str_locate str_replace_all
+#' @importFrom tidyr unite
+#'
+#' @return
+#' @export
+#'
+#' @examples
 create_lineage_lookup <- function(lineage_file = here("data/rankedlineage.dmp"),
                                   outfile, taxonomic_rank = "phylum") {
-  #' Create a look up table that goes from TaxID, to Lineage
-  #' @author Samuel Chen
-  #' @param lineage_file Path to the rankedlineage.dmp file containing taxid's and their
-  #' corresponding taxonomic rank. rankedlineage.dmp can be downloaded at
-  #' https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/new_taxdump/
-  #' @param outfile File the resulting lineage lookup table should be written to
-  #' @param taxonomic_rank The upperbound of taxonomic rank that the lineage includes. The lineaege will
-  #' include superkingdom>...>taxonomic_rank.
-  #' Choices include: "supperkingdom", "phylum",   "class","order", "family",
-  #' "genus", and "species"
 
   shorten_NA <- function(Lineage) {
     first_NA <- str_locate(Lineage, "NA")[1]
