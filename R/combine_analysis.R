@@ -3,9 +3,20 @@
 # Created: Dec 19, 2020
 # Lauren Sosinski, Janani Ravi
 
-source("R/combine_files.R")
-source(here("R/combine_files.R")) # to work locally
+# source("R/combine_files.R")
+# source(here("R/combine_files.R")) # to work locally
 
+#' Combining full_analysis files
+#'
+#' @param inpath
+#' @param ret
+#'
+#' @importFrom readr write_tsv
+#'
+#' @return
+#' @export
+#'
+#' @examples
 combine_full <- function(inpath, ret = FALSE) {
   ## Combining full_analysis files
   full_combnd <- combine_files(inpath,
@@ -22,6 +33,17 @@ combine_full <- function(inpath, ret = FALSE) {
   }
 }
 
+#' Combining clean ipr files
+#'
+#' @param inpath
+#' @param ret
+#'
+#' @importFrom readr write_tsv
+#'
+#' @return
+#' @export
+#'
+#' @examples
 combine_ipr <- function(inpath, ret = FALSE) {
   ## Combining clean ipr files
   ipr_combnd <- combine_files(inpath,
