@@ -6,10 +6,10 @@
 #################
 ## Pkgs needed ##
 #################
-suppressPackageStartupMessages(library(tidyverse))
-suppressPackageStartupMessages(library(here))
-suppressPackageStartupMessages(library(msa)) # BiocManager::install("msa")
-suppressPackageStartupMessages(library(Biostrings)) # ; library(seqinr)
+# suppressPackageStartupMessages(library(tidyverse))
+# suppressPackageStartupMessages(library(here))
+# suppressPackageStartupMessages(library(msa)) # BiocManager::install("msa")
+# suppressPackageStartupMessages(library(Biostrings)) # ; library(seqinr)
 # library(rMSA) # to implement kalign
 # library(pdftools); library(latexpdf); library(tools); library(tinytex) #needed?
 
@@ -29,23 +29,36 @@ suppressPackageStartupMessages(library(Biostrings)) # ; library(seqinr)
 #########################################
 ## Generates MSA PDF from a Fasta file ##
 #########################################
+#' Multiple Sequence Alignment
+#'
+#' @description
+#' Generates a multiple sequence alignment from a fasta file
+#'
+#' msa_pdf is a function that reads a fasta file and generates a multiple sequence alignment as
+#' a pdf
+#'
+#'
+#' @param fasta_path Character. The path location of the fasta file to be read.
+#' @param out_path Character. The path location of the output pdf to write.
+#' Default is NULL. If value is NULL, the pdf is written to the same directory as the fasta file.
+#' @param lowerbound Numeric. The column that determines the starting location of the MSA.
+#' Default is NULL. If value is NULL, the entire multiple sequence alignment is printed.
+#' @param upperbound Numeric. The column that determines the ending location of the MSA.
+#' Default is NULL. If value is NULL, the entire multiple sequence alignment is printed.
+#'
+#' @importFrom Biostrings readAAStringSet
+#' @importFrom msa msa msaPrettyPrint
+#' @importFrom stringr str_replace
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' msa_pdf()
+#' }
 msa_pdf <- function(fasta_path, out_path = NULL,
                     lowerbound = NULL, upperbound = NULL) {
-  #' Multiple Sequence Alignment
-  #'
-  #' Generates a multiple sequence alignment from a fasta file
-  #'
-  #' msa_pdf is a function that reads a fasta file and generates a multiple sequence alignment as
-  #' a pdf
-  #'
-  #' @param fasta_path Character. The path location of the fasta file to be read.
-  #' @param out_path Character. The path location of the output pdf to write.
-  #' Default is NULL. If value is NULL, the pdf is written to the same directory as the fasta file.
-  #' @param lowerbound Numeric. The column that determines the starting location of the MSA.
-  #' Default is NULL. If value is NULL, the entire multiple sequence alignment is printed.
-  #' @param upperbound Numeric. The column that determines the ending location of the MSA.
-  #' Default is NULL. If value is NULL, the entire multiple sequence alignment is printed.
-  # #'@examples msa_pdf()
 
   ## SAMPLE ARGUMENTS to test run
   # fasta_path=here("../molevol_data/project_data/phage_defense/full_analysis_20210108/g3d.both_lin.gen.da_sub.fa")
@@ -173,6 +186,17 @@ msa_pdf <- function(fasta_path, out_path = NULL,
 ## Function to generate MSA using kalign
 ## ref: https://rdrr.io/github/mhahsler/rMSA/man/kalign.html
 ## https://github.com/mhahsler/rMSA
+#' Function to generate MSA using kalign
+#'
+#' @param fa_file
+#' @param outfile
+#'
+#' @importFrom Biostrings readAAStringSet
+#'
+#' @return
+#' @export
+#'
+#' @examples
 generate_msa <- function(fa_file = "", outfile = "") {
   prot_aa <- readAAStringSet(
     path = fa_file,
