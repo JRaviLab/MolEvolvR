@@ -120,3 +120,39 @@
 - [x] iprscan_cln.tsv
 - output: gene name of protein
 - doesn't take any input yet, still working on bugs
+
+### Phylogenetic analysis
+
+```
+krolja[0]:/data/molevolvr_transfer/hpc-cluster-tests/job_results/OZWf7S_phylo main🔸 Rscript -e 'fs::dir_tree()'
+.
+├── OZWf7S.fa
+├── accs.txt
+├── cmd.txt
+├── done.txt
+├── job_args.yml
+├── logfile.tsv
+├── parsed_accnums.txt
+├── query-fasta_header-map.tsv
+├── query_data
+│   ├── OZWf7S.fa
+│   ├── error.log
+│   ├── query_data.acc2info.tsv
+│   ├── query_data.all_accnums.fa
+│   ├── query_data.all_accnums.txt
+│   ├── query_data.bclust.L60S80.tsv
+│   ├── query_data.blast.cln.tsv
+│   ├── query_data.cln.clust.tsv
+│   ├── query_data.clustIDs
+│   ├── query_data.clust_reps
+│   ├── query_data.full_analysis.tsv
+│   ├── query_data.ipr_domarch.tsv
+│   ├── query_data.iprscan.tsv
+│   ├── query_data.iprscan_cln.tsv
+│   ├── query_data.parsed_accnums.txt
+│   └── temp
+├── slurm-3209.out
+├── slurm_OZWf7S_phylo_query_3208.err
+├── slurm_OZWf7S_phylo_query_3208.out
+└── status.txt
+```
