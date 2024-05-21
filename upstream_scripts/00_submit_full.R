@@ -362,6 +362,8 @@ submit_ipr <- function(dir = "/data/scratch", ipr = "~/test.fa", seqs = "seqs.fa
   yml <- yaml::as.yaml(job_args)
   write(yml, "job_args.yml")
 
+  job_ids <- c()
+
   # initialize counter for job progress
   num_runs <- 0
   # setup log file column headers
