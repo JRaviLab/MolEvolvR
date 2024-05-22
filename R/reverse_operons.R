@@ -3,6 +3,14 @@
 # Modified by Janani Ravi and Samuel Chen
 
 
+#' reveql
+#'
+#' @param prot
+#'
+#' @return
+#' @export
+#'
+#' @examples
 reveql <- function(prot) {
   w <- prot # $GenContext.orig # was 'x'
 
@@ -49,6 +57,14 @@ reveql <- function(prot) {
 
 ## The function to reverse operons
 
+#' reverse_operon
+#'
+#' @param prot
+#'
+#' @return
+#' @export
+#'
+#' @examples
 reverse_operon <- function(prot) {
   gencontext <- prot$GenContext
 
