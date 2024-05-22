@@ -32,7 +32,7 @@ column names.
 }
 \examples{
 \dontrun{
- upset.plot(pspa.sub, 10, "da2doms")
+upset.plot(pspa.sub, 10, "da2doms")
 }
 }
 \author{

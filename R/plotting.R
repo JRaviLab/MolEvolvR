@@ -91,7 +91,7 @@ shorten_lineage <- function(data, colname = "Lineage", abr_len = 1) {
 #'
 #' @examples
 #' \dontrun{
-#'  upset.plot(pspa.sub, 10, "da2doms")
+#' upset.plot(pspa.sub, 10, "da2doms")
 #' }
 upset.plot <- function(query_data = "toast_rack.sub",
                        colname = "DomArch", cutoff = 90,
@@ -219,7 +219,8 @@ upset.plot <- function(query_data = "toast_rack.sub",
 #'
 #' @author Janani Ravi
 #' @keywords Lineages, Domains, Domain Architectures, GenomicContexts
-#' @description Lineage plot for Domains, Domain Architectures and
+#' @description
+#' Lineage plot for Domains, Domain Architectures and
 #' Genomic Contexts. Heatmap.
 #'
 #' @param query_data Data frame of protein homologs with the usual 11 columns +
@@ -243,12 +244,15 @@ upset.plot <- function(query_data = "toast_rack.sub",
 #' @return
 #' @export
 #'
-#' @details For "da2doms" you would need the file DA.doms.wc as well as the
+#' @details
+#' For "da2doms" you would need the file DA.doms.wc as well as the
 #' column query_data$DomArch.norep
 #'
 #' For "gc2da", you would need the file GC.DA.wc as well as the column
 #' query_data$GenContext.norep
-#' @note Please refer to the source code if you have alternate file formats and/or
+#'
+#' @note
+#' Please refer to the source code if you have alternate file formats and/or
 #' column names.
 #'
 #' @examples
@@ -322,7 +326,8 @@ lineage.DA.plot <- function(query_data = "prot",
 #'
 #' @authors Janani Ravi, Samuel Chen
 #' @keywords Lineages, Domains, Domain Architectures, GenomicContexts
-#' @description Lineage plot for queries. Heatmap.
+#' @description
+#' Lineage plot for queries. Heatmap.
 #'
 #' @param query_data Data frame of protein homologs with the usual 11 columns +
 #' additional word columns (0/1 format).
@@ -343,7 +348,8 @@ lineage.DA.plot <- function(query_data = "prot",
 #' @return
 #' @export
 #'
-#' @note Please refer to the source code if you have alternate file formats and/or
+#' @note
+#' Please refer to the source code if you have alternate file formats and/or
 #' column names.
 #'
 #' @examples
@@ -455,7 +461,8 @@ lineage.Query.plot <- function(query_data = all,
 #' @author Janani Ravi
 #' @keywords Lineages, Domains, Domain Architectures, GenomicContexts
 #'
-#' @description Lineage plot for top neighbors obtained from DAs of
+#' @description
+#' Lineage plot for top neighbors obtained from DAs of
 #' Genomic Contexts.
 #'
 #' @param query_data Data frame of protein homologs with the usual 11 columns +
@@ -471,13 +478,16 @@ lineage.Query.plot <- function(query_data = all,
 #'
 #' @return
 #' @export
-#' @details For "da2doms" you would need the file DA.doms.wc as well as the
+#'
+#' @details
+#' For "da2doms" you would need the file DA.doms.wc as well as the
 #' column query_data$DomArch.norep
 #'
 #' For "gc2da", you would need the file GC.DA.wc as well as the column
 #' query_data$GenContext.norep
 #'
-#' @note Please refer to the source code if you have alternate file formats and/or
+#' @note
+#' Please refer to the source code if you have alternate file formats and/or
 #' column names.
 #'
 #' @examples
@@ -642,13 +652,16 @@ lineage.domain_repeats.plot <- function(query_data, colname) {
 #'
 #' @examples
 #' \dontrun{
-#' LineagePlot(psp_data, c("PspA", "Snf7","Classical-AAA","PspF","PspB",
-#' "PspC","ClgR","PspM","Thioredoxin","PspN_N","DUF3046","LiaI-LiaF-TM",
-#'  "Toast_rack", "REC", "HISKIN", "HAAS","SHOCT-bihelical", "SHOCT-like",
-#'  "Tfu_1009", "PspAA", "Spermine_synth","TM-Flotillin", "Band-7","Betapropeller",
-#'  "MacB_PCD", "FTSW_RODA_SPOVE", "Cest_Tir","SIGMA-HTH", "GNTR-HTH", "DUF2089-HTH",
-#'   "PadR-HTH","RHH","ZnR"), level = 2)
+#' LineagePlot(psp_data,
+#' c("PspA", "Snf7","Classical-AAA","PspF","PspB", "PspC","ClgR","PspM",
+#'   "Thioredoxin","PspN_N","DUF3046","LiaI-LiaF-TM", "Toast_rack", "REC",
+#'   "HISKIN", "HAAS","SHOCT-bihelical", "SHOCT-like", "Tfu_1009", "PspAA",
+#'   "Spermine_synth","TM-Flotillin", "Band-7","Betapropeller",
+#'   "MacB_PCD", "FTSW_RODA_SPOVE", "Cest_Tir","SIGMA-HTH", "GNTR-HTH",
+#'   "DUF2089-HTH", "PadR-HTH","RHH","ZnR"),
+#'   level = 2)
 #' }
+#'
 LineagePlot <- function(prot, domains_of_interest, level = 3, label.size = 8) {
 
   LevelReduction <- function(lin) {
@@ -948,6 +961,7 @@ stacked_lin_plot <- function(prot, column = "DomArch", cutoff, Lineage_col = "Li
 #' @export
 #'
 #' @examples
+#'
 wordcloud3 <- function(data, size = 1, minSize = 0, gridSize = 0, fontFamily = "Segoe UI",
                        fontWeight = "bold", color = "random-dark", backgroundColor = "white",
                        minRotation = -pi / 4, maxRotation = pi / 4, shuffle = TRUE,
@@ -1020,12 +1034,15 @@ wordcloud3 <- function(data, size = 1, minSize = 0, gridSize = 0, fontFamily = "
 #' @return
 #' @export
 #'
-#' @details For "da2doms" you would need the file DA.doms.wc as well as the
+#' @details
+#' For "da2doms" you would need the file DA.doms.wc as well as the
 #' column query_data$DomArch.norep
 #'
 #' For "gc2da", you would need the file GC.DA.wc as well as the column
 #' query_data$GenContext.norep
-#' @note Please refer to the source code if you have alternate file formats and/or
+#'
+#' @note
+#' Please refer to the source code if you have alternate file formats and/or
 #' column names.
 
 #'
@@ -1080,7 +1097,8 @@ wordcloud_element <- function(query_data = "prot",
 #'
 #' @author Janani Ravi
 #' @keywords Domains, Domain Architectures, GenomicContexts
-#' @description Wordclouds for the predominant domains (from DAs) and DAs (from GC)
+#' @description
+#' Wordclouds for the predominant domains (from DAs) and DAs (from GC)
 #'
 #' @param query_data Data frame of protein homologs with the usual 11 columns +
 #' additional word columns (0/1 format). Default is "prot".
@@ -1094,12 +1112,15 @@ wordcloud_element <- function(query_data = "prot",
 #' @return
 #' @export
 #'
-#' @details For "da2doms" you would need the file DA.doms.wc as well as the
+#' @details
+#' For "da2doms" you would need the file DA.doms.wc as well as the
 #' column query_data$DomArch.norep
 #'
 #' For "gc2da", you would need the file GC.DA.wc as well as the column
 #' query_data$GenContext.norep
-#' @note Please refer to the source code if you have alternate file formats and/or
+#'
+#' @note
+#' Please refer to the source code if you have alternate file formats and/or
 #' column names.
 #'
 #' @examples
