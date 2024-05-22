@@ -87,14 +87,14 @@ to_titlecase <- function(x, y = " ") {
 #'
 #' @return
 #' @export
-#' \dontrun{
-#' add_leaves('pspa_snf7.aln', 'pspa.txt')
-#' }
 #'
 #' @note Please refer to the source code if you have alternate +
 #' file formats and/or column names.
 #'
 #' @examples
+#' \dontrun{
+#' add_leaves('pspa_snf7.aln', 'pspa.txt')
+#' }
 add_leaves <- function(aln_file = "",
                        lin_file = "data/rawdata_tsv/all_semiclean.txt", # !! finally change to all_clean.txt!!
                        # lin_file="data/rawdata_tsv/PspA.txt",
