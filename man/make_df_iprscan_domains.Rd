@@ -25,17 +25,20 @@ read_iprscan_tsv()}
 }
 \value{
 \link{tbl_df} table with each domain sequence and a new identifier column
-
-example:
+}
+\description{
+For a given accession number, get the domain sequences using a interproscan
+output table & the original FASTA file
+}
+\examples{
+\dontrun{
 path_molevol_scripts <- file.path(Sys.getenv("DEV", unset = "/data/molevolvr_transfer/molevolvr_dev"), "molevol_scripts")
 setwd(path_molevol_scripts)
 source("R/fa2domain.R")
 fasta <- Biostrings::readAAStringSet("./tests/example_protein.fa")
 df_iprscan <- read_iprscan_tsv("./tests/example_iprscan_valid.tsv")
-accnum <- df_iprscan$AccNum\link{1}
+accnum <- df_iprscan$AccNum[1]
 df_iprscan_domains <- make_df_iprscan_domains(accnum,fasta, df_iprscan)
 }
-\description{
-For a given accession number, get the domain sequences using a interproscan
-output table & the original FASTA file
+
 }
