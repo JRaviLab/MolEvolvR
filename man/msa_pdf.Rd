@@ -20,8 +20,12 @@ Default is NULL. If value is NULL, the entire multiple sequence alignment is pri
 }
 \description{
 Generates a multiple sequence alignment from a fasta file
-}
-\details{
+
 msa_pdf is a function that reads a fasta file and generates a multiple sequence alignment as
 a pdf
+}
+\examples{
+\dontrun{
+msa_pdf()
+}
 }

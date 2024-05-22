@@ -29,6 +29,7 @@ Please refer to the source code if you have alternate +
 file formats and/or column names.
 }
 \examples{
+\dontrun{
 add_leaves('pspa_snf7.aln', 'pspa.txt')
 }
 \author{

@@ -9,7 +9,7 @@ map_acc2name(line, acc2name, acc_col = "AccNum", name_col = "Name")
 map_acc2name(line, acc2name, acc_col = "AccNum", name_col = "Name")
 }
 \arguments{
-\item{line}{The line of a fasta file starting with '>'}
+\item{line}{he line of a fasta file starting with '>'}
 
 \item{acc2name}{Data Table containing a column of accession numbers and a name column}
 

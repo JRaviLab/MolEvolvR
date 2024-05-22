@@ -19,8 +19,6 @@ One accession number will be assigned for each of these observations}
 }
 \description{
 Function to generate a vector of one Accession number per distinct observation from 'reduced' column
-
-Function to generate a vector of one Accession number per distinct observation from 'reduced' column
 }
 \author{
 Samuel Chen, Janani Ravi

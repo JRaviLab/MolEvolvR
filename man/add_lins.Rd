@@ -10,7 +10,7 @@ add_lins(
   assembly_path,
   lineagelookup_path,
   ipgout_path = NULL,
-  plan = "multicore"
+  plan = "sequential"
 )
 }
 \arguments{

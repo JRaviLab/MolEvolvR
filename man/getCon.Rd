@@ -2,8 +2,7 @@
 % Please edit documentation in R/accounting_db.R
 \name{getCon}
 \alias{getCon}
-\title{Gets a connection to the accounting db. You should
-close this connection later via dbDisconnect(con).}
+\title{getCon}
 \usage{
 getCon()
 }

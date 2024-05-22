@@ -12,9 +12,6 @@ format_job_args(job_args)
 }
 \value{
 a list of HTML-formatted key/value pairs
-
-example:
-format_job_args("/data/scratch/janani/molevolvr_out/Ba5sV1_full")
 }
 \description{
 Format job arguments into html-formatted key/value pairs, for including

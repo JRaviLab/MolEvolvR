@@ -2,9 +2,7 @@
 % Please edit documentation in R/accounting_db.R
 \name{getJobsForCode}
 \alias{getJobsForCode}
-\title{Given a job code, retrieves SLURM jobs where that code occurs in their name
-(i.e., the "job_name" column). Optionally, you may specify a vector of column
-names to return; if unspecified, returns all columns.}
+\title{getJobsForCode}
 \usage{
 getJobsForCode(code, cols = NA)
 }
