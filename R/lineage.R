@@ -1,21 +1,32 @@
-suppressPackageStartupMessages(library(tidyverse))
-suppressPackageStartupMessages(library(rentrez))
-suppressPackageStartupMessages(library(future))
-suppressPackageStartupMessages(library(furrr))
-suppressPackageStartupMessages(library(data.table))
+# suppressPackageStartupMessages(library(tidyverse))
+# suppressPackageStartupMessages(library(rentrez))
+# suppressPackageStartupMessages(library(future))
+# suppressPackageStartupMessages(library(furrr))
+# suppressPackageStartupMessages(library(data.table))
 
 #####################################
 ## Download Assembly Summary Files ##
 #####################################
+#' Download the combined assembly summaries of genbank and refseq
+#'
+#' @author Samuel Chen, Janani Ravi
+#'
+#' @param outpath String of path where the assembly summary file should be written
+#' @param keep Character vector containing which columns should be retained and downloaded
+#'
+#' @importFrom data.table fwrite setnames
+#' @importFrom dplyr bind_rows select
+#' @importFrom biomartr getKingdomAssemblySummary
+#'
+#' @return
+#' @export
+#'
+#' @examples
 DownloadAssemblySummary <- function(outpath,
                                     keep = c(
                                       "assembly_accession", "taxid",
                                       "species_taxid", "organism_name"
                                     )) {
-  #' Download the combined assembly summaries of genbank and refseq
-  #' @author Samuel Chen, Janani Ravi
-  #' @param outpath String of path where the assembly summary file should be written
-  #' @param keep Character vector containing which columns should be retained and downloaded
 
   assembly_kingdom_genbank <- getKingdomAssemblySummary("genbank")
   assembly_kingdom_refseq <- getKingdomAssemblySummary("refseq")
@@ -55,19 +66,33 @@ DownloadAssemblySummary <- function(outpath,
 ###################################
 ## Map GCA_ID to TaxID & Lineage ##
 ###################################
+#' Function to map GCA_ID to TaxID, and TaxID to Lineage
+#'
+#' @author Samuel Chen, Janani Ravi
+#' @note
+#' Currently configured to have at most kingdom and phylum
+#'
+#'
+#' @param prot_data Dataframe containing a column `GCA_ID`
+#' @param assembly_path String of the path to the assembly_summary path
+#' This file can be generated using the "DownloadAssemblySummary()" function
+#' @param lineagelookup_path String of the path to the lineage lookup file
+#' (taxid to lineage mapping). This file can be generated using the
+#' "create_lineage_lookup()" function
+#' @param acc_col
+#'
+#' @importFrom BiocGenerics unique
+#' @importFrom dplyr pull
+#' @importFrom data.table fread setnames
+#'
+#' @return
+#' @export
+#'
+#' @examples
 GCA2lin <- function(prot_data,
                     assembly_path = "/data/research/jravilab/common_data/assembly_summary_genbank.txt",
                     lineagelookup_path = "/data/research/jravilab/common_data/lineage_lookup.tsv",
                     acc_col = "AccNum") {
-  #' Function to map GCA_ID to TaxID, and TaxID to Lineage
-  #' Note: currently configured to have at most kingdom and phylum
-  #' @author Samuel Chen, Janani Ravi
-  #' @param prot_data Dataframe containing a column `GCA_ID`
-  #' @param assembly_path String of the path to the assembly_summary path
-  #' This file can be generated using the "DownloadAssemblySummary()" function
-  #' @param lineagelookup_path String of the path to the lineage lookup file
-  #' (taxid to lineage mapping). This file can be generated using the
-  #' "create_lineage_lookup()" function
 
   assembly_summary <- fread(assembly_path, sep = "\t")
   assembly_summary <- setnames(assembly_summary, "AssemblyID", "GCA_ID")
@@ -108,20 +133,25 @@ GCA2lin <- function(prot_data,
   return(mergedLins)
 }
 
-
-#####################################
-## !! @SAM, fill in
-#####################################
-# https://stackoverflow.com/questions/18730491/sink-does-not-release-file
-sink.reset <- function() {
-  for (i in seq_len(sink.number())) {
-    sink(NULL)
-  }
-}
-
 ###################################
 ## !! @SAM why is this called lins?
 ###################################
+#' add_lins
+#'
+#' @param df
+#' @param acc_col
+#' @param assembly_path
+#' @param lineagelookup_path
+#' @param ipgout_path
+#' @param plan
+#'
+#' @importFrom dplyr pull
+#' @importFrom rlang sym
+#'
+#' @return
+#' @export
+#'
+#' @examples
 add_lins <- function(df, acc_col = "AccNum", assembly_path,
                      lineagelookup_path, ipgout_path = NULL, plan = "multicore") {
   acc_sym <- sym(acc_col)
@@ -151,19 +181,30 @@ add_lins <- function(df, acc_col = "AccNum", assembly_path,
 #######################################
 ## Map Protein Accessions to Lineage ##
 #######################################
+#' acc2lin
+#'
+#' @description
+#' Function to map protein accession numbers to lineage
+#'
+#' @author Samuel Chen, Janani Ravi
+#' @description This function combines 'efetch_ipg()' and 'ipg2lin()' to map a set
+#' of protein accessions to their assembly (GCA_ID), tax ID, and lineage.
+#'
+#' @param accessions Character vector of protein accessions
+#' @param assembly_path String of the path to the assembly_summary path
+#' This file can be generated using the "DownloadAssemblySummary()" function
+#' @param lineagelookup_path String of the path to the lineage lookup file
+#' (taxid to lineage mapping). This file can be generated using the
+#' @param ipgout_path Path to write the results of the efetch run of the accessions
+#' on the ipg database. If NULL, the file will not be written. Defaults to NULL
+#' @param plan
+#'
+#' @return
+#' @export
+#'
+#' @examples
 acc2lin <- function(accessions, assembly_path, lineagelookup_path,
                     ipgout_path = NULL, plan = "multicore") {
-  #' Function to map protein accession numbers to lineage
-  #' @author Samuel Chen, Janani Ravi
-  #' @description This function combines 'efetch_ipg()' and 'ipg2lin()' to map a set
-  #' of protein accessions to their assembly (GCA_ID), tax ID, and lineage.
-  #' @param accessions Character vector of protein accessions
-  #' @param assembly_path String of the path to the assembly_summary path
-  #' This file can be generated using the "DownloadAssemblySummary()" function
-  #' @param lineagelookup_path String of the path to the lineage lookup file
-  #' (taxid to lineage mapping). This file can be generated using the
-  #' @param ipgout_path Path to write the results of the efetch run of the accessions
-  #' on the ipg database. If NULL, the file will not be written. Defaults to NULL
 
   tmp_ipg <- F
 
@@ -190,12 +231,26 @@ acc2lin <- function(accessions, assembly_path, lineagelookup_path,
 #########################################
 ## Download IPG results for Accessions ##
 #########################################
+#' efetch_ipg
+#'
+#' @author Samuel Chen, Janani Ravi
+#' @description Perform efetch on the ipg database and write the results to out_path
+#'
+#' @param accessions Character vector containing the accession numbers to query on
+#' the ipg database
+#' @param out_path Path to write the efetch results to
+#' @param plan
+#'
+#' @importFrom future future plan
+#' @importFrom purrr map
+#' @importFrom rentrez entrez_fetch
+#'
+#' @return
+#' @export
+#'
+#' @examples
 efetch_ipg <- function(accessions, out_path, plan = "multicore") {
-  #' @author Samuel Chen, Janani Ravi
-  #' @description Perform efetch on the ipg database and write the results to out_path
-  #' @param accessions Character vector containing the accession numbers to query on
-  #' the ipg database
-  #' @param out_path Path to write the efetch results to
+
   if (length(accessions) > 0) {
     partition <- function(v, groups) {
       # Partition data to limit number of queries per second for rentrez fetch:
@@ -245,21 +300,31 @@ efetch_ipg <- function(accessions, out_path, plan = "multicore") {
 #########################################
 ## Maps IPG results to TaxID + Lineage ##
 #########################################
+#' ipg2lin
+#'
+#' @author Samuel Chen, Janani Ravi
+#' @description Takes the resulting file of an efetch run on the ipg database and
+#' append lineage, and taxid columns
+#'
+#' @param accessions Character vector of protein accessions
+#' @param ipg_file Path to the file containing results of an efetch run on the
+#' ipg database. The protein accession in 'accessions' should be contained in this
+#' file
+#' @param refseq_assembly_path
+#' @param genbank_assembly_path
+#' @param lineagelookup_path String of the path to the lineage lookup file
+#' (taxid to lineage mapping). This file can be generated using the
+#' "create_lineage_lookup()" function
+#'
+#' @importFrom data.table fread setnames
+#'
+#' @return
+#' @export
+#'
+#' @examples
 ipg2lin <- function(accessions, ipg_file,
                     refseq_assembly_path, genbank_assembly_path,
                     lineagelookup_path) {
-  #' @author Samuel Chen, Janani Ravi
-  #' @description Takes the resulting file of an efetch run on the ipg database and
-  #' append lineage, and taxid columns
-  #' @param accessions Character vector of protein accessions
-  #' @param ipg_file Path to the file containing results of an efetch run on the
-  #' ipg database. The protein accession in 'accessions' should be contained in this
-  #' file
-  #' @param assembly_path String of the path to the assembly_summary path
-  #' This file can be generated using the "DownloadAssemblySummary()" function
-  #' @param lineagelookup_path String of the path to the lineage lookup file
-  #' (taxid to lineage mapping). This file can be generated using the
-  #' "create_lineage_lookup()" function
 
   ipg_dt <- fread(ipg_file, sep = "\t", fill = T)
 
@@ -322,6 +387,18 @@ ipg2lin <- function(accessions, ipg_file,
 #########################################
 ## !! @SAM: Add TaxID based on AccNum? ##
 #########################################
+#' add_tax
+#'
+#' @param data
+#' @param acc_col
+#' @param version
+#'
+#' @importFrom data.table as.data.table
+#'
+#' @return
+#' @export
+#'
+#' @examples
 add_tax <- function(data, acc_col = "AccNum", version = T) {
   if (!is.data.table(data)) {
     data <- as.data.table(data)
@@ -348,6 +425,19 @@ add_tax <- function(data, acc_col = "AccNum", version = T) {
 ##################################
 ## Maps Protein AccNum to TaxID ##
 ##################################
+#' prot2tax
+#'
+#' @param accnums
+#' @param suffix
+#' @param out_path
+#' @param return_dt
+#'
+#' @importFrom data.table fread
+#'
+#' @return
+#' @export
+#'
+#' @examples
 prot2tax <- function(accnums, suffix, out_path, return_dt = FALSE) {
   # Write accnums to a file
   acc_file <- tempfile()
@@ -366,13 +456,26 @@ prot2tax <- function(accnums, suffix, out_path, return_dt = FALSE) {
 #######################################
 ## OLD: Maps Protein AccNum to TaxID ##
 #######################################
+#' prot2tax_old
+#'
+#' @author Samuel Chen, Janani Ravi
+#' @description Perform elink to go from protein database to taxonomy database
+#' and write the resulting file of taxid and lineage to out_path
+#'
+#' @param accessions Character vector containing the accession numbers to query on
+#' the ipg database
+#' @param out_path Path to write the efetch results to
+#' @param plan
+#'
+#' @importFrom future plan
+#' @importFrom purrr map
+#'
+#' @return
+#' @export
+#'
+#' @examples
 prot2tax_old <- function(accessions, out_path, plan = "multicore") {
-  #' @author Samuel Chen, Janani Ravi
-  #' @description Perform elink to go from protein database to taxonomy database
-  #' and write the resulting file of taxid and lineage to out_path
-  #' @param accessions Character vector containing the accession numbers to query on
-  #' the ipg database
-  #' @param out_path Path to write the efetch results to
+
   if (length(accessions) > 0) {
 
     partition <- function(v, groups) {
