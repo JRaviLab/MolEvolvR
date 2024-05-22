@@ -555,7 +555,6 @@ acc2fa <- function(accessions, outpath, plan = "sequential") {
 #' One accession number will be assigned for each of these observations
 #' @param accnum_col Column from prot_data that contains Accession Numbers
 #'
-#' @importFrom BiocGenerics append unique
 #' @importFrom dplyr filter pull
 #' @importFrom rlang sym
 #'

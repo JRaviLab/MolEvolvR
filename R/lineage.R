@@ -81,7 +81,6 @@ DownloadAssemblySummary <- function(outpath,
 #' "create_lineage_lookup()" function
 #' @param acc_col
 #'
-#' @importFrom BiocGenerics unique
 #' @importFrom dplyr pull
 #' @importFrom data.table fread setnames
 #'
