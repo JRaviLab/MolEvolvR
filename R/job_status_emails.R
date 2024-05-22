@@ -90,8 +90,10 @@ make_job_results_url <- function(
 #' a list of HTML-formatted key/value pairs
 #' @export
 #'
-#' example:
+#' @examples
+#' \dontrun{
 #' format_job_args("/data/scratch/janani/molevolvr_out/Ba5sV1_full")
+#' }
 format_job_args <- function(job_args) {
     # format job arguments into html-formatted key/value pairs
     job_args_list <- tags$ul(lapply(names(job_args), function(key) {

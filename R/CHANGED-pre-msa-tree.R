@@ -283,11 +283,13 @@ add_name <- function(data,
 #'
 #' @return
 #' @export
+#'
+#' @examples
 #' \dontrun{
 #' add_leaves('pspa_snf7.aln', 'pspa.txt')
 #' }
 #'
-#' @examples
+
 convert_aln2fa <- function(aln_file = "",
                            lin_file = "data/rawdata_tsv/all_semiclean.txt", # !! finally change to all_clean.txt!!
                            fa_outpath = "",
