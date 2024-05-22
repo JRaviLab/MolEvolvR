@@ -10,15 +10,18 @@ write_proc_medians_yml(dir_job_results, filepath = NULL)
 \arguments{
 \item{dir_job_results}{\link{chr} path to MolEvolvR job_results directory}
 
-\item{filepath}{\link{chr} path to save YAML file; if NULL, uses ./molevol_scripts/log_data/job_proc_weights.yml
-
-example: write_proc_medians_yml(
-"/data/scratch/janani/molevolvr_out/",
-"/data/scratch/janani/molevolvr_out/log_tbl.yml"
-)}
+\item{filepath}{\link{chr} path to save YAML file; if NULL, uses ./molevol_scripts/log_data/job_proc_weights.yml}
 }
 \description{
 The default value of filepath is the value of the env var
 MOLEVOLVR_PROC_WEIGHTS, which get_proc_weights() also uses as its default
 read location.
+}
+\examples{
+\dontrun{
+write_proc_medians_yml(
+  "/data/scratch/janani/molevolvr_out/",
+  "/data/scratch/janani/molevolvr_out/log_tbl.yml"
+   )
+}
 }

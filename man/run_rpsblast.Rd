@@ -16,10 +16,9 @@ run_rpsblast(
 }
 \arguments{
 \item{db_search_path}{Path to the BLAST databases}
+
+\item{num_threads}{}
 }
 \description{
 Run RPSBLAST to generate domain architectures for proteins of interest
-}
-\author{
-Samuel Chen, Janani Ravi
 }

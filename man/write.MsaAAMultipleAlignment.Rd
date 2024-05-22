@@ -2,9 +2,7 @@
 % Please edit documentation in R/CHANGED-pre-msa-tree.R, R/pre-msa-tree.R
 \name{write.MsaAAMultipleAlignment}
 \alias{write.MsaAAMultipleAlignment}
-\title{Write MsaAAMultpleAlignment Objects as algined fasta sequence
-MsaAAMultipleAlignment Objects are generated from calls to msaClustalOmega
-and msaMuscle from the 'msa' package}
+\title{Write MsaAAMultpleAlignment Objects as algined fasta sequence}
 \usage{
 write.MsaAAMultipleAlignment(alignment, outpath)
 
@@ -16,7 +14,6 @@ write.MsaAAMultipleAlignment(alignment, outpath)
 \item{outpath}{Where the resulting FASTA file should be written to}
 }
 \description{
-Write MsaAAMultpleAlignment Objects as algined fasta sequence
 MsaAAMultipleAlignment Objects are generated from calls to msaClustalOmega
 and msaMuscle from the 'msa' package
 

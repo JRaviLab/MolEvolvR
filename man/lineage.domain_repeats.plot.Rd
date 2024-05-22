@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotting.R
 \name{lineage.domain_repeats.plot}
 \alias{lineage.domain_repeats.plot}
-\title{Lineaage Domain Repeats Plot}
+\title{Lineage Domain Repeats Plot}
 \usage{
 lineage.domain_repeats.plot(query_data, colname)
 }
@@ -10,7 +10,7 @@ lineage.domain_repeats.plot(query_data, colname)
 \item{colname}{}
 }
 \description{
-Lineaage Domain Repeats Plot
+Lineage Domain Repeats Plot
 }
 \examples{
 \dontrun{

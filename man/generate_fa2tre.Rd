@@ -2,7 +2,7 @@
 % Please edit documentation in R/tree.R
 \name{generate_fa2tre}
 \alias{generate_fa2tre}
-\title{Generating phylogenetic tree from alignment file '.fa'}
+\title{generate_fa2tre}
 \usage{
 generate_fa2tre(
   fa_file = "data/alns/pspa_snf7.fa",
@@ -13,10 +13,10 @@ generate_fa2tre(
 \item{fa_file}{Character. Path to file.
 Default is 'pspa_snf7.fa'}
 
-\item{xyz}{Boolean. If TRUE, a ...}
+\item{out_file}{}
 }
 \description{
-...
+Generating phylogenetic tree from alignment file '.fa'
 }
 \details{
 The alignment file would need two columns: 1. accession +
@@ -28,7 +28,9 @@ Please refer to the source code if you have alternate +
 file formats and/or column names.
 }
 \examples{
+\dontrun{
 generate_aln2tree('pspa_snf7.fa')
+}
 }
 \author{
 Janani Ravi, MolEcologist

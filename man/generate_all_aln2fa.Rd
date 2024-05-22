@@ -47,8 +47,12 @@ Please refer to the source code if you have alternate + file formats and/or colu
 Please refer to the source code if you have alternate + file formats and/or column names.
 }
 \examples{
+\dontrun{
 generate_all_aln2fa()
+}
+\dontrun{
 generate_all_aln2fa()
+}
 }
 \author{
 Janani Ravi

@@ -17,6 +17,8 @@ run_deltablast(
 }
 \arguments{
 \item{db_search_path}{Path to the BLAST databases}
+
+\item{num_threads}{}
 }
 \description{
 Run DELTABLAST to find homologs for proteins of interest

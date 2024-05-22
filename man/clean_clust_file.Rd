@@ -14,13 +14,16 @@ file is written. Default NULL}
 
 \item{query}{A character identifying the query of the file.}
 }
-\description{
-Reads and cleans a cluster file
-}
-\details{
-This function reads a space-separated cluster file and converts it to a cleaned up data frame.
+\value{
 The cleaned up cluster data frame is returned and a tsv file is written if the "writepath" parameter is used.
 }
+\description{
+Reads and cleans a cluster file
+
+This function reads a space-separated cluster file and converts it to a cleaned up data frame.
+}
 \examples{
+\dontrun{
 clean_clust_file("data/pspa.op_ins_cls", writepath = NULL, query = "pspa")
+}
 }

@@ -22,8 +22,6 @@ aligned fasta sequence as a MsaAAMultipleAlignment object
 }
 \description{
 Perform a Multiple Sequence Alignment on a FASTA file.
-
-Perform a Multiple Sequence Alignment on a FASTA file.
 }
 \author{
 Samuel Chen, Janani Ravi
