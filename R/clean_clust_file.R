@@ -46,7 +46,6 @@
 #' file is written. Default NULL
 #' @param query A character identifying the query of the file.
 #'
-#' @importFrom BiocGenerics append
 #' @importFrom dplyr mutate filter
 #' @importFrom readr read_tsv
 #' @importFrom stringr str_length

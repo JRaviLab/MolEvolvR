@@ -232,7 +232,6 @@ upset.plot <- function(query_data = "toast_rack.sub",
 #' @param color Color for the heatmap. One of six options: "default", "magma", "inferno",
 #' "plasma", "viridis", or "cividis"
 #'
-#' @importFrom BiocGenerics unique
 #' @importFrom dplyr arrange filter pull
 #' @importFrom ggplot2 aes_string element_text element_rect geom_tile ggplot scale_fill_gradient scale_x_discrete theme theme_classic
 #' @importFrom purrr map
@@ -333,7 +332,6 @@ lineage.DA.plot <- function(query_data = "prot",
 #' @param cutoff
 #' @param color
 #'
-#' @importFrom BiocGenerics unique
 #' @importFrom dplyr arrange desc filter group_by select summarise union
 #' @importFrom ggplot2 aes aes_string element_rect element_text geom_tile ggplot scale_fill_gradient scale_x_discrete theme theme_minimal
 #' @importFrom purrr map
@@ -793,7 +791,6 @@ LineagePlot <- function(prot, domains_of_interest, level = 3, label.size = 8) {
 #' @param coord_flip
 #' @param legend
 #'
-#' @importFrom BiocGenerics unique
 #' @importFrom dplyr pull select
 #' @importFrom ggplot2 aes_string coord_flip element_blank element_line element_rect element_text geom_bar ggplot guides guide_legend scale_fill_manual xlab ylab theme theme_minimal
 #' @importFrom purrr map
@@ -1165,7 +1162,6 @@ wordcloud2_element <- function(query_data = "prot",
 #' then the legend will be in the descending order of the top level hierarchy.
 #' will be rendered. If the type is sund2b, a sund2b plot will be rendered.
 #'
-#' @importFrom BiocGenerics append
 #' @importFrom dplyr arrange desc group_by_at select summarise
 #' @importFrom htmlwidgets onRender
 #' @importFrom rlang sym
