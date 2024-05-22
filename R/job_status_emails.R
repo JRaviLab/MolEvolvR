@@ -10,19 +10,21 @@
 #     send_job_status_email(notify_email, job_dir, pin_id, event_type)
 # Return
 #   unfortunately, there is no return value for the underlying sendmailR methods
-
-library(sendmailR, warn.conflicts=F, quietly=T)
-library(shiny, warn.conflicts=F, quietly=T) # includes tags that we use for HTML-formatting message
+#
+# library(sendmailR, warn.conflicts=F, quietly=T)
+# library(shiny, warn.conflicts=F, quietly=T) # includes tags that we use for HTML-formatting message
 
 #' Given a pin_id, returns the URL where the user can check the status of their job
-#' 
+#'
 #' The 'base_url' parameter is set from the environment variable 'BASE_URL' if it's
 #' available, and defaults to "http://jravilab.org/molevolvr/" if it's not.
-#' 
+#'
 #' @param pin_id the unique identifier for the job
 #' @param base_url the base URL for the MolEvolvR web app
-#' 
+#'
 #' @return the URL where the user can check the status of their job
+#' @export
+#'
 make_job_results_url <- function(
     pin_id,
     base_url=Sys.getenv("BASE_URL", unset="http://jravilab.org/molevolvr/")
@@ -32,61 +34,62 @@ make_job_results_url <- function(
 
 # stores human-readable names for fields and their possible values
 # (if an identifier isn't found here, it should be used verbatim)
-fields_metadata <- list(
-    submission_type=list(
-        name="Submission Type",
-        values=list(
-            'full'="FASTA",
-            'phylo'="Phylogenetic Analysis",
-            'da'="Domain Architecture",
-            'blast'="BLAST",
-            'dblast'="BLAST"
-        )
-    ),
-    homology_search=list(
-        name="Homology Search?"
-    ),
-    submitter_email=list(
-        name="Submitter Email"
-    ),
-    database=list(
-        name="Database for homology search"
-    ),
-    nhits=list(
-        name="Maximum hits"
-    ),
-    evalue=list(
-        name="E-value cutoff"
-    ),
-    includes_ncbi_acc=list(
-        name="Contains NCBI accessions?",
-        values=list(
-            "TRUE"="Yes",
-            "FALSE"="No"
-        )
-    ),
-    advanced_options=list(
-        name="Advanced Options",
-        values=list(
-            "domain_architecture"="Domain Architecture",
-            "homology_search"="Homology Search",
-            "phylogenetic_analysis"="Phylogenetic Analysis"
-        )
-    ),
-    job_code=list(
-        name="Job Code"
-    )
-)
+# fields_metadata <- list(
+#     submission_type=list(
+#         name="Submission Type",
+#         values=list(
+#             'full'="FASTA",
+#             'phylo'="Phylogenetic Analysis",
+#             'da'="Domain Architecture",
+#             'blast'="BLAST",
+#             'dblast'="BLAST"
+#         )
+#     ),
+#     homology_search=list(
+#         name="Homology Search?"
+#     ),
+#     submitter_email=list(
+#         name="Submitter Email"
+#     ),
+#     database=list(
+#         name="Database for homology search"
+#     ),
+#     nhits=list(
+#         name="Maximum hits"
+#     ),
+#     evalue=list(
+#         name="E-value cutoff"
+#     ),
+#     includes_ncbi_acc=list(
+#         name="Contains NCBI accessions?",
+#         values=list(
+#             "TRUE"="Yes",
+#             "FALSE"="No"
+#         )
+#     ),
+#     advanced_options=list(
+#         name="Advanced Options",
+#         values=list(
+#             "domain_architecture"="Domain Architecture",
+#             "homology_search"="Homology Search",
+#             "phylogenetic_analysis"="Phylogenetic Analysis"
+#         )
+#     ),
+#     job_code=list(
+#         name="Job Code"
+#     )
+# )
 
 #' Format job arguments into html-formatted key/value pairs, for including
 #' in an email
-#' 
+#'
 #' @param job_args
 #' a list of job arguments, e.g. as read from the job_args.yml file
-#' 
+#'
 #' @return
 #' a list of HTML-formatted key/value pairs
-#' 
+#' @export
+#'
 #' example:
 #' format_job_args("/data/scratch/janani/molevolvr_out/Ba5sV1_full")
 format_job_args <- function(job_args) {
@@ -138,7 +141,7 @@ format_job_args <- function(job_args) {
 
 #' Produces a mail message that can be sent to a user when their job is accepted.
 #' Used by the send_job_status_email() method.
-#' 
+#'
 #' @param job_dir
 #' the directory where the job's arguments are stored, in job_args.yml
 #' @param pin_id
@@ -149,9 +152,14 @@ format_job_args <- function(job_args) {
 #' either 'start' or 'end', returns the corresponding email for the given type
 #' @param context
 #' a list of additional values, e.g. job runtime info, that can be used in the template emails
-#' 
+#'
+#' @importFrom htmltools htmlTemplate
+#' @importFrom sendmailR mime_part
+#' @importFrom yaml read_yaml
+#'
 #' @return
 #' the result of the sendmailR::sendmail() call
+#' @export
 get_job_message <- function(job_dir, pin_id, job_results_url, event_type, context) {
     # pull the set of args written to dir/job_args.yml, so we
     # can send it in the email
@@ -186,7 +194,7 @@ get_job_message <- function(job_dir, pin_id, job_results_url, event_type, contex
 
 #' Sends a "job accepted" email to a user when their job is accepted,
 #' including details about the job submission and how to check its status.
-#' 
+#'
 #' @param notify_email
 #' the email address to send the notification to
 #' @param job_dir
@@ -197,9 +205,12 @@ get_job_message <- function(job_dir, pin_id, job_results_url, event_type, contex
 #' the URL where the user can check the status of their job
 #' @param event_type
 #' either 'start' or 'end', returns the corresponding email for the given type
-#' 
+#'
+#' @importFrom sendmailR sendmail
+#'
 #' @return
 #' the result of the sendmailR::sendmail() call
+#' @export
 send_job_status_email <- function(notify_email, job_dir, pin_id, event_type, context=NULL) {
     # -------------------------------------------------
     # --- step 1. build the email subject and contents
@@ -249,9 +260,9 @@ send_job_status_email <- function(notify_email, job_dir, pin_id, event_type, con
 
         # and finally send the email using cURL
         result <- sendmail(
-            from=Sys.getenv("SMTP_EMAIL"), 
-            to=c(notify_email), 
-            subject=mail_subject, 
+            from=Sys.getenv("SMTP_EMAIL"),
+            to=c(notify_email),
+            subject=mail_subject,
             msg=message,
             engine = "curl",
             engineopts = list(
@@ -269,9 +280,9 @@ send_job_status_email <- function(notify_email, job_dir, pin_id, event_type, con
         # note that CU's SMTP server balks at STARTTLS, so we have to use
         # the non-curl implementation
         result <- sendmail(
-            from=Sys.getenv("SMTP_EMAIL"), 
-            to=c(notify_email), 
-            subject=mail_subject, 
+            from=Sys.getenv("SMTP_EMAIL"),
+            to=c(notify_email),
+            subject=mail_subject,
             msg=message,
             control=list(
                 smtpServer=Sys.getenv("SMTP_HOST"),
