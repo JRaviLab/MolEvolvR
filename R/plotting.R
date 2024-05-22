@@ -545,7 +545,7 @@ lineage.neighbors.plot <- function(query_data = "prot", query = "pspa",
     ))
 }
 
-#' Lineaage Domain Repeats Plot
+#' Lineage Domain Repeats Plot
 #'
 #' @param query_data
 #' @param colname
