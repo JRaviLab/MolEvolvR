@@ -15,11 +15,11 @@ count_to_sunburst(
 count_to_treemap(count_data, fill_by_n = FALSE, sort_by_n = FALSE)
 }
 \arguments{
-\item{count_data}{An output of dplyr::count(), tibble or data frame}
+\item{count_data}{}
 
 \item{fill_by_n}{If TRUE, uses a continuous scale to fill plot by group size}
 
-\item{sort_by_n}{If TRUE, sorts groups in plot by size, if FALSE sorts them alphabetically}
+\item{sort_by_n}{}
 }
 \description{
 These functions help you quickly create interactive hierarchical plots
@@ -44,4 +44,5 @@ count_to_treemap(starwars_count, sort_by_n = TRUE)
 starwars \%>\%
   count(homeworld, name) \%>\%
   count_to_treemap(sort_by_n = TRUE)
+
 }

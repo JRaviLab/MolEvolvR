@@ -11,6 +11,9 @@
 #' @param fill_by_n If TRUE, uses a continuous scale to fill plot by group size
 #' @param sort_by_n If TRUE, sorts groups in plot by size, if FALSE sorts them alphabetically
 #'
+#' @importFrom plotly plot_ly
+#' @importFrom purrr exec
+#'
 #' @export
 #' @examples
 #' library(dplyr)
@@ -29,6 +32,7 @@
 #' starwars %>%
 #'   count(homeworld, name) %>%
 #'   count_to_treemap(sort_by_n = TRUE)
+#'
 count_to_sunburst <- function(count_data, fill_by_n = FALSE, sort_by_n = FALSE, maxdepth = 2) {
   params <- create_all_col_params(count_data, fill_by_n, sort_by_n)
 
@@ -40,6 +44,14 @@ count_to_sunburst <- function(count_data, fill_by_n = FALSE, sort_by_n = FALSE, 
 }
 
 
+#' @param count_data
+#'
+#' @param fill_by_n
+#' @param sort_by_n
+#'
+#' @importFrom plotly plot_ly
+#' @importFrom purrr exec
+#'
 #' @export
 #' @rdname count_to_sunburst
 count_to_treemap <- function(count_data, fill_by_n = FALSE, sort_by_n = FALSE) {
@@ -54,6 +66,20 @@ count_to_treemap <- function(count_data, fill_by_n = FALSE, sort_by_n = FALSE) {
 }
 
 
+#' create_all_col_params
+#'
+#' @param count_data
+#' @param fill_by_n
+#' @param sort_by_n
+#'
+#' @importFrom assertthat assert_that
+#' @importFrom dplyr bind_rows mutate
+#' @importFrom purrr map
+#'
+#' @return
+#' @export
+#'
+#' @examples
 create_all_col_params <- function(count_data, fill_by_n, sort_by_n) {
   assert_count_df(count_data)
   assertthat::assert_that(is.logical(fill_by_n),
@@ -88,6 +114,19 @@ create_all_col_params <- function(count_data, fill_by_n, sort_by_n) {
   params
 }
 
+#' create_one_col_params
+#'
+#' @param df
+#' @param col_num
+#' @param root
+#'
+#' @importFrom dplyr c_across group_by mutate rowwise select summarise ungroup
+#' @importFrom stringr str_glue
+#'
+#' @return
+#' @export
+#'
+#' @examples
 create_one_col_params <- function(df,
                                   col_num,
                                   root) {
@@ -117,6 +156,17 @@ create_one_col_params <- function(df,
     ) %>%
     dplyr::select(ids, parents, labels, values, hovertext)
 }
+#' assert_count_df
+#'
+#' @param var
+#'
+#' @importFrom assertthat assert_that has_name
+#' @importFrom dplyr across mutate
+#'
+#' @return
+#' @export
+#'
+#' @examples
 assert_count_df <- function(var) {
   msg <- paste(substitute(var), "must be a count dataframe (output of dplyr::count)")
   assertthat::assert_that(is.data.frame(var),
