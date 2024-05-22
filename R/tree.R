@@ -8,13 +8,13 @@
 ## Pkgs needed ##
 #################
 # Only these here+tidyerse are needed for FastTree
-suppressPackageStartupMessages(library(here))
-suppressPackageStartupMessages(library(tidyverse))
-suppressPackageStartupMessages(library(data.table))
-suppressPackageStartupMessages(library(ape))
-suppressPackageStartupMessages(library(phangorn))
-suppressPackageStartupMessages(library(seqinr))
-conflicted::conflict_prefer("filter", "dplyr")
+# suppressPackageStartupMessages(library(here))
+# suppressPackageStartupMessages(library(tidyverse))
+# suppressPackageStartupMessages(library(data.table))
+# suppressPackageStartupMessages(library(ape))
+# suppressPackageStartupMessages(library(phangorn))
+# suppressPackageStartupMessages(library(seqinr))
+# conflicted::conflict_prefer("filter", "dplyr")
 
 ###############
 ## References #
@@ -35,6 +35,16 @@ conflicted::conflict_prefer("filter", "dplyr")
 ## Approach 0 | FastTree2.0
 ###########################
 ## !! FastTree will only work if there are unique sequence names!!
+#' convert_fa2tre
+#'
+#' @param fa_path
+#' @param tre_path
+#' @param fasttree_path
+#'
+#' @return
+#' @export
+#'
+#' @examples
 convert_fa2tre <- function(fa_path = here("data/alns/pspa_snf7.fa"),
                            tre_path = here("data/alns/pspa_snf7.tre"),
                            fasttree_path = here("src/FastTree")) {
@@ -57,6 +67,21 @@ convert_fa2tre <- function(fa_path = here("data/alns/pspa_snf7.fa"),
   #              here("src/FastTree.c"), "-lm", collapse=" "))
 }
 ## Generate Trees for ALL fasta files in "data/alns"
+#' generate_trees
+#'
+#' @description
+#' Generate Trees for ALL fasta files in "data/alns"
+#'
+#' @param aln_path
+#'
+#' @importFrom here here
+#' @importFrom purrr pmap
+#' @importFrom stringr str_replace_all
+#'
+#' @return
+#' @export
+#'
+#' @examples
 generate_trees <- function(aln_path = here("data/alns/")) {
   # finding all fasta alignment files
   fa_filenames <- list.files(path = aln_path, pattern = "*.fa")
@@ -79,23 +104,38 @@ generate_trees <- function(aln_path = here("data/alns/")) {
 ##############################
 ## REFS: 1-4
 ############
+#' generate_fa2tre
+#'
+#' @author Janani Ravi, MolEcologist
+#' @keywords phylogenetic tree, alignment, fasta
+#' @description
+#' Generating phylogenetic tree from alignment file '.fa'
+#'
+#' @param fa_file Character. Path to file.
+#'  Default is 'pspa_snf7.fa'
+#' @param out_file
+#'
+#' @importFrom ape write.tree
+#' @importFrom phangorn bootstrap.pml dist.ml NJ modelTest phyDat plotBS pml pml.control pratchet optim.parsimony optim.pml read.aa upgma
+#' @importFrom seqinr dist.alignment read.alignment
+#' @importFrom stats logLik
+#'
+#' @return
+#' @export
+#'
+#' @details The alignment file would need two columns: 1. accession +
+#' number and 2. alignment. The protein homolog accession to lineage mapping +
+#' file should have
+#'
+#' @note Please refer to the source code if you have alternate +
+#' file formats and/or column names.
+#'
+#' @examples
+#' \dontrun{
+#' generate_aln2tree('pspa_snf7.fa')
+#' }
 generate_fa2tre <- function(fa_file = "data/alns/pspa_snf7.fa",
                             out_file = "data/alns/pspa_snf7.tre") {
-  #' Generating phylogenetic tree from alignment file '.fa'
-  #' @author Janani Ravi, MolEcologist
-  #' @keywords phylogenetic tree, alignment, fasta
-  #' @description ...
-  #' @param fa_file Character. Path to file.
-  #'  Default is 'pspa_snf7.fa'
-  #' @param xyz Boolean. If TRUE, a ...
-  #' @examples generate_aln2tree('pspa_snf7.fa')
-  #' @details The alignment file would need two columns: 1. accession +
-  #' number and 2. alignment. The protein homolog accession to lineage mapping +
-  #' file should have
-  #'
-  #' @note Please refer to the source code if you have alternate +
-  #' file formats and/or column names.
-
   ## SAMPLE ARGS
   # fa_file="data/alns/pspa_snf7.fa"
   # out_file="data/alns/pspa_snf7.tre"
