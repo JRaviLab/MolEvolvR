@@ -17,3 +17,8 @@ a list of HTML-formatted key/value pairs
 Format job arguments into html-formatted key/value pairs, for including
 in an email
 }
+\examples{
+\dontrun{
+format_job_args("/data/scratch/janani/molevolvr_out/Ba5sV1_full")
+}
+}

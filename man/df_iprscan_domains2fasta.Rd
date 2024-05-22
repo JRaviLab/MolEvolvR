@@ -14,19 +14,22 @@ df_iprscan_domains2fasta(df_iprscan_domains)
 \value{
 \link{AAStringSet} A domain fasta containing all the domains for a
 single protein in the original fasta passed as an argument to make_df_iprscan_domains()
-
-example:
-path_molevol_scripts <- file.path(Sys.getenv("DEV", unset = "/data/molevolvr_transfer/molevolvr_dev"), "molevol_scripts")
-setwd(path_molevol_scripts)
-source("R/fa2domain.R")
-fasta <- Biostrings::readAAStringSet("./tests/example_protein.fa")
-df_iprscan <- read_iprscan_tsv("./tests/example_iprscan_valid.tsv")
-accnum <- df_iprscan$AccNum\link{1}
-df_iprscan_domains <- make_df_iprscan_domains(accnum,fasta, df_iprscan)
-fasta_domains <- df_iprscan_domains |> df_iprscan_domains2fasta()
 }
 \description{
 Using the table returned from make_df_iprscan_domains, construct a
 domain fasta for a single accession number in the original fasta
 (i.e., the original fasta argument to make_df_iprscan_domains())
+}
+\examples{
+\dontrun{
+path_molevol_scripts <- file.path(Sys.getenv("DEV", unset = "/data/molevolvr_transfer/molevolvr_dev"), "molevol_scripts")
+setwd(path_molevol_scripts)
+source("R/fa2domain.R")
+fasta <- Biostrings::readAAStringSet("./tests/example_protein.fa")
+df_iprscan <- read_iprscan_tsv("./tests/example_iprscan_valid.tsv")
+accnum <- df_iprscan$AccNum[1]
+df_iprscan_domains <- make_df_iprscan_domains(accnum,fasta, df_iprscan)
+fasta_domains <- df_iprscan_domains |> df_iprscan_domains2fasta()
+}
+
 }
