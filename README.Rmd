@@ -26,8 +26,13 @@ The goal of molevolvR is to ...
 You can install the development version of molevolvR from [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("JRaviLab/molevol_scripts", ref = "begin-package-setup", subdir = "package/MolEvolvR")
+# Install Bioconductor
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install(version = "3.19")
+
+# Install Development Version of molevolvR
+BiocManager::install("JRaviLab/molevol_scripts", ref = "begin-package-setup", subdir = "package/MolEvolvR", auth_token = '<PersonalAccessToken>')
 ```
 
 ## Example
