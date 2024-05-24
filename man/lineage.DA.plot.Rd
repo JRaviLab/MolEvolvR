@@ -40,7 +40,6 @@ column names.
 \dontrun{
 lineage.DA.plot(toast_rack_data, 10, "DomArch.norep", "da2doms")
 }
-Lineage Plot: Heatmap of Domains/DAs/GCs vs Lineages
 }
 \author{
 Janani Ravi
