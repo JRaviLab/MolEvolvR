@@ -264,8 +264,8 @@ lineage.DA.plot <- function(query_data = "prot",
                             colname = "DomArch",
                             cutoff = 90,
                             RowsCutoff = FALSE,
-                            color = "default") { # query.elements, query.words,
-  #' Lineage Plot: Heatmap of Domains/DAs/GCs vs Lineages
+                            color = "default") {
+  # query.elements, query.words,
 
   # @param type Character. Default is "da2doms" for Domain Architectures.
   # Other alternative: "gc2da" for Genomic Contexts. -- unused parameter
