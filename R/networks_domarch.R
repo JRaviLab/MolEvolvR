@@ -25,9 +25,7 @@ conflicted::conflict_prefer("filter", "dplyr")
 #'
 #' @param prot A data frame that contains the column 'DomArch'.
 #' @param column Name of column containing Domain architecture from which nodes and edges are generated.
-#' @param domains_of_interest Character. Used to determine how data should be filtered. Either
-#' \itemize{\item "Lineage" to filter domains based off how many lineages the Domain architecture appears in
-#' \item "Total Count" to filter off the total amount of times a domain architecture occurs }
+#' @param domains_of_interest
 #' @param cutoff Integer. Only use domains that occur at or above the cutoff for total counts if cutoff_type is "Total Count".
 #' Only use domains that appear in cutoff or greater lineages if cutoff_type is Lineage.
 #' @param layout Character. Layout type to be used for the network. Options are:
