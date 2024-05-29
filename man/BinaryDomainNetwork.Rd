@@ -29,18 +29,19 @@ Only use domains that appear in cutoff or greater lineages if cutoff_type is Lin
 
 \item{query_color}{Color that the nodes of the domains in the domains_of_interest vector are colored}
 
-\item{IsDirected}{Is the network directed? Set to false to eliminate arrows}
+\item{partner_color}{Color that the nodes that are not part of the domains_of_interest vector are colored}
 
-\item{partnercolor}{Color that the nodes that are not part of the domains_of_interest vector are colored}
+\item{IsDirected}{Is the network directed? Set to false to eliminate arrows}
 }
 \description{
 This function creates a domain network from the 'DomArch' column.
-}
-\details{
+
 Domains that are part of the 'domains_of_interest' are a different node color than the other domains.
 
 A network of domains is returned based on shared domain architectures.
 }
 \examples{
+\dontrun{
 domain_network(pspa)
+}
 }

@@ -16,23 +16,41 @@ conflicted::conflict_prefer("filter", "dplyr")
 
 ##### !!!!! CHANGE TO MAKE OUR OWN !!!!!!
 
+#' Domain Network
+#'
+#' @description
+#' This function creates a domain network from the 'DomArch' column.
+#'
+#' A network of domains is returned based on shared domain architectures.
+#'
+#' @param prot A data frame that contains the column 'DomArch'.
+#' @param column Name of column containing Domain architecture from which nodes and edges are generated.
+#' @param domains_of_interest Character. Used to determine how data should be filtered. Either
+#' \itemize{\item "Lineage" to filter domains based off how many lineages the Domain architecture appears in
+#' \item "Total Count" to filter off the total amount of times a domain architecture occurs }
+#' @param cutoff Integer. Only use domains that occur at or above the cutoff for total counts if cutoff_type is "Total Count".
+#' Only use domains that appear in cutoff or greater lineages if cutoff_type is Lineage.
+#' @param layout Character. Layout type to be used for the network. Options are:
+#' \itemize{\item "grid" \item "circle" \item "random" \item "auto"}
+#' @param query_color
+#'
+#' @importFrom dplyr across add_row all_of distinct filter mutate pull select
+#' @importFrom igraph delete_vertices graph_from_edgelist vertex
+#' @importFrom purrr map
+#' @importFrom rlang sym
+#' @importFrom shiny showNotification
+#' @importFrom stringr str_replace_all str_split
+#' @importFrom tidyr pivot_wider
+#' @importFrom visNetwork visIgraph visIgraphLayout visNetwork visOptions
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' domain_network(pspa)
+#' }
 domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff = 70, layout = "nice", query_color = adjustcolor("green", alpha.f = .5)) {
-  #' Domain Network
-  #'
-  #' This function creates a domain network from the 'DomArch' column.
-  #'
-  #' A network of domains is returned based on shared domain architectures.
-  #'
-  #' @param prot A data frame that contains the column 'DomArch'.
-  #' @param column Name of column containing Domain architecture from which nodes and edges are generated.
-  #' @param cutoff_type Character. Used to determine how data should be filtered. Either
-  #' \itemize{\item "Lineage" to filter domains based off how many lineages the Domain architecture appears in
-  #' \item "Total Count" to filter off the total amount of times a domain architecture occurs }
-  #' @param cutoff Integer. Only use domains that occur at or above the cutoff for total counts if cutoff_type is "Total Count".
-  #' Only use domains that appear in cutoff or greater lineages if cutoff_type is Lineage.
-  #' @param layout Character. Layout type to be used for the network. Options are:
-  #' \itemize{\item "grid" \item "circle" \item "random" \item "auto"}
-  #' @examples domain_network(pspa)
   # by domain networks or all, as required.
   tryCatch(
     {
@@ -200,29 +218,47 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
   )
 }
 
+#' Domain Network
+#'
+#' @description
+#' This function creates a domain network from the 'DomArch' column.
+#'
+#' Domains that are part of the 'domains_of_interest' are a different node color than the other domains.
+#'
+#' A network of domains is returned based on shared domain architectures.
+#'
+#'
+#' @param prot A data frame that contains the column 'DomArch'.
+#' @param column Name of column containing Domain architecture from which nodes and edges are generated.
+#' @param domains_of_interest
+#' @param cutoff Integer. Only use domains that occur at or above the cutoff for total counts if cutoff_type is "Total Count".
+#' Only use domains that appear in cutoff or greater lineages if cutoff_type is Lineage.
+#' @param layout Character. Layout type to be used for the network. Options are:
+#' \itemize{\item "grid" \item "circle" \item "random" \item "auto"}
+#' @param query_color Color that the nodes of the domains in the domains_of_interest vector are colored
+#' @param partner_color Color that the nodes that are not part of the domains_of_interest vector are colored
+#' @param border_color
+#' @param IsDirected Is the network directed? Set to false to eliminate arrows
+#'
+#' @importFrom dplyr distinct filter group_by mutate pull select summarize
+#' @importFrom grDevices adjustcolor
+#' @importFrom purrr as_vector map
+#' @importFrom rlang sym
+#' @importFrom stringr str_replace_all str_split
+#' @importFrom visNetwork visEdges visGroups visIgraphLayout visLegend visNetwork visOptions
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' domain_network(pspa)
+#' }
 BinaryDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, cutoff = 70,
                                 layout = "nice", query_color = adjustcolor("yellow", alpha.f = .5),
                                 partner_color = adjustcolor("skyblue", alpha.f = .5),
                                 border_color = adjustcolor("grey", alpha.f = .8),
                                 IsDirected = T) {
-  #' Domain Network
-  #'
-  #' This function creates a domain network from the 'DomArch' column.
-  #'
-  #' Domains that are part of the 'domains_of_interest' are a different node color than the other domains.
-  #'
-  #' A network of domains is returned based on shared domain architectures.
-  #'
-  #' @param prot A data frame that contains the column 'DomArch'.
-  #' @param column Name of column containing Domain architecture from which nodes and edges are generated.
-  #' @param cutoff Integer. Only use domains that occur at or above the cutoff for total counts if cutoff_type is "Total Count".
-  #' Only use domains that appear in cutoff or greater lineages if cutoff_type is Lineage.
-  #' @param layout Character. Layout type to be used for the network. Options are:
-  #' \itemize{\item "grid" \item "circle" \item "random" \item "auto"}
-  #' @param query_color Color that the nodes of the domains in the domains_of_interest vector are colored
-  #' @param partnercolor Color that the nodes that are not part of the domains_of_interest vector are colored
-  #' @param IsDirected Is the network directed? Set to false to eliminate arrows
-  #' @examples domain_network(pspa)
   # by domain networks or all, as required.
   print(domains_of_interest)
 
