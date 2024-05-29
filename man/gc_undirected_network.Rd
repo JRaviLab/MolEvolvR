@@ -30,10 +30,11 @@ Only use domains that appear in cutoff or greater lineages if cutoff_type is Lin
 }
 \description{
 This function creates a domain network from the 'DomArch' column.
-}
-\details{
+
 A network of domains is returned based on shared domain architectures.
 }
 \examples{
+\dontrun{
 domain_network(pspa)
+}
 }
