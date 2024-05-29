@@ -18,22 +18,25 @@ domain_network(
 
 \item{column}{Name of column containing Domain architecture from which nodes and edges are generated.}
 
+\item{domains_of_interest}{Character. Used to determine how data should be filtered. Either
+\itemize{\item "Lineage" to filter domains based off how many lineages the Domain architecture appears in
+\item "Total Count" to filter off the total amount of times a domain architecture occurs }}
+
 \item{cutoff}{Integer. Only use domains that occur at or above the cutoff for total counts if cutoff_type is "Total Count".
 Only use domains that appear in cutoff or greater lineages if cutoff_type is Lineage.}
 
 \item{layout}{Character. Layout type to be used for the network. Options are:
 \itemize{\item "grid" \item "circle" \item "random" \item "auto"}}
 
-\item{cutoff_type}{Character. Used to determine how data should be filtered. Either
-\itemize{\item "Lineage" to filter domains based off how many lineages the Domain architecture appears in
-\item "Total Count" to filter off the total amount of times a domain architecture occurs }}
+\item{query_color}{}
 }
 \description{
 This function creates a domain network from the 'DomArch' column.
-}
-\details{
+
 A network of domains is returned based on shared domain architectures.
 }
 \examples{
+\dontrun{
 domain_network(pspa)
+}
 }
