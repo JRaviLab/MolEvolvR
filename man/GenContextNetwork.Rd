@@ -29,10 +29,11 @@ GenContextNetwork(
 }
 \description{
 This function creates a Genomic Context network from the 'GenContext' column.
-}
-\details{
+
 A network of Genomic Context is returned.
 }
 \examples{
+\dontrun{
 gc_directed_network(pspa, column = "GenContex", cutoff = 55)
+}
 }

@@ -8,24 +8,38 @@ conflicted::conflict_prefer("filter", "dplyr")
 ## GC Undirected Network ##
 ###########################
 
+#' Domain Network
+#'
+#' @description
+#' This function creates a domain network from the 'DomArch' column.
+#'
+#' A network of domains is returned based on shared domain architectures.
+#'
+#'
+#' @param prot A data frame that contains the column 'DomArch'.
+#' @param column Name of column containing Domain architecture from which nodes and edges are generated.
+#' @param domains_of_interest
+#' @param cutoff_type Character. Used to determine how data should be filtered. Either
+#' \itemize{\item "Lineage" to filter domains based off how many lineages the Domain architecture appears in
+#' \item "Total Count" to filter off the total amount of times a domain architecture occurs }
+#' @param cutoff Integer. Only use domains that occur at or above the cutoff for total counts if cutoff_type is "Total Count".
+#' Only use domains that appear in cutoff or greater lineages if cutoff_type is Lineage.
+#' @param layout Character. Layout type to be used for the network. Options are:
+#' \itemize{\item "grid" \item "circle" \item "random" \item "auto"}
+#'
+#' @importFrom dplyr filter select
+#' @importFrom grDevices rainbow
+#' @importFrom igraph E graph_from_edgelist layout.auto layout.circle layout_on_grid layout_randomly  plot.igraph V
+#' @importFrom stringr str_replace_all str_split
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' domain_network(pspa)
+#' }
 gc_undirected_network <- function(prot, column = "GenContext", domains_of_interest, cutoff_type = "Lineage", cutoff = 1, layout = "grid") {
-  #' Domain Network
-  #'
-  #' This function creates a domain network from the 'DomArch' column.
-  #'
-  #' A network of domains is returned based on shared domain architectures.
-  #'
-  #' @param prot A data frame that contains the column 'DomArch'.
-  #' @param column Name of column containing Domain architecture from which nodes and edges are generated.
-  #' @param cutoff_type Character. Used to determine how data should be filtered. Either
-  #' \itemize{\item "Lineage" to filter domains based off how many lineages the Domain architecture appears in
-  #' \item "Total Count" to filter off the total amount of times a domain architecture occurs }
-  #' @param cutoff Integer. Only use domains that occur at or above the cutoff for total counts if cutoff_type is "Total Count".
-  #' Only use domains that appear in cutoff or greater lineages if cutoff_type is Lineage.
-  #' @param layout Character. Layout type to be used for the network. Options are:
-  #' \itemize{\item "grid" \item "circle" \item "random" \item "auto"}
-  #' @examples domain_network(pspa)
-
   # by domain networks or all, as required.
   # ye is either all of prot.list or centered on one domain
 
@@ -103,24 +117,39 @@ gc_undirected_network <- function(prot, column = "GenContext", domains_of_intere
 #########################
 ## GC Directed Network ##
 #########################
+#' Genomic Context Directed Network
+#'
+#' @description
+#' This function creates a Genomic Context network from the 'GenContext' column.
+#'
+#' A network of Genomic Context is returned.
+#'
+#'
+#' @param prot A data frame that contains the column 'GenContext'.
+#' @param domains_of_interest Character vector of domains of interest.
+#' @param column Name of column containing Genomic Context from which nodes and edges are generated.
+#' @param cutoff Integer. Only use GenContexts that occur at or above the cutoff percentage for total count
+#' @param layout Character. Layout type to be used for the network. Options are:
+#' \itemize{\item "grid" \item "circle" \item "random" \item "auto" \item "nice"}
+#' @param directed Is the network directed?
+#'
+#' @importFrom dplyr distinct filter group_by pull select summarize
+#' @importFrom purrr as_vector map map2
+#' @importFrom rlang sym
+#' @importFrom stringr str_replace_all
+#' @importFrom visNetwork visIgraphLayout visLegend visNetwork visOptions
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' gc_directed_network(pspa, column = "GenContex", cutoff = 55)
+#' }
 GenContextNetwork <- function(prot, domains_of_interest, column = "GenContext",
                               cutoff = 40,
                               layout = "grid",
                               directed = TRUE) {
-  #' Genomic Context Directed Network
-  #'
-  #' This function creates a Genomic Context network from the 'GenContext' column.
-  #'
-  #' A network of Genomic Context is returned.
-  #'
-  #' @param prot A data frame that contains the column 'GenContext'.
-  #' @param column Name of column containing Genomic Context from which nodes and edges are generated.
-  #' @param domains_of_interest Character vector of domains of interest.
-  #' @param cutoff Integer. Only use GenContexts that occur at or above the cutoff percentage for total count
-  #' @param layout Character. Layout type to be used for the network. Options are:
-  #' \itemize{\item "grid" \item "circle" \item "random" \item "auto" \item "nice"}
-  #' @param directed Is the network directed?
-  #' @examples gc_directed_network(pspa, column = "GenContex", cutoff = 55)
 
   column_name <- sym(column)
 
