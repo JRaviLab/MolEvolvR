@@ -16,26 +16,26 @@
 #'
 #' @examples
 exec_interproscan <- function(
-  filepath_fasta,
-  filepath_out, # do not inlucde file extension since ipr handles this
-  appl = c("Pfam", "Gene3D")
-  #destPartition = "LocalQ",
-  #destQoS = "shortjobs"
-) {
-  # construct interproscan command
-  cmd_iprscan <- stringr::str_glue(
-    "iprscan -i {filepath_fasta} -b {filepath_out} --cpu 4 -f TSV ",
-    "--appl {appl}"
-  )
-  # execute
-  exit_code <- system(cmd_iprscan)
-  if (exit_code != 0L) {
-    warning("interproscan exited with non-zero code")
-    return(NULL)
-  }
-  # read and return results
-  df_iprscan <- read_iprscan_tsv(paste0(filepath_out, ".tsv"))
-  return(df_iprscan)
+        filepath_fasta,
+        filepath_out, # do not inlucde file extension since ipr handles this
+        appl = c("Pfam", "Gene3D")
+        # destPartition = "LocalQ",
+        # destQoS = "shortjobs"
+    ) {
+    # construct interproscan command
+    cmd_iprscan <- stringr::str_glue(
+        "iprscan -i {filepath_fasta} -b {filepath_out} --cpu 4 -f TSV ",
+        "--appl {appl}"
+    )
+    # execute
+    exit_code <- system(cmd_iprscan)
+    if (exit_code != 0L) {
+        warning("interproscan exited with non-zero code")
+        return(NULL)
+    }
+    # read and return results
+    df_iprscan <- read_iprscan_tsv(paste0(filepath_out, ".tsv"))
+    return(df_iprscan)
 }
 
 #' Constructor function for interproscan column names
@@ -44,12 +44,12 @@ exec_interproscan <- function(
 #'
 #' @return [chr] interproscan column names used throughout molevolvr
 get_df_ipr_col_names <- function() {
-  column_names <- c(
-    "AccNum", "SeqMD5Digest", "SLength", "Analysis",
-    "DB.ID", "SignDesc", "StartLoc", "StopLoc", "Score",
-    "Status", "RunDate", "IPRAcc", "IPRDesc"
-  )
-  return(column_names)
+    column_names <- c(
+        "AccNum", "SeqMD5Digest", "SLength", "Analysis",
+        "DB.ID", "SignDesc", "StartLoc", "StopLoc", "Score",
+        "Status", "RunDate", "IPRAcc", "IPRDesc"
+    )
+    return(column_names)
 }
 
 #' construct column types for reading interproscan output TSVs
@@ -59,22 +59,22 @@ get_df_ipr_col_names <- function() {
 #' for interproscan columns
 #'
 get_df_ipr_col_types <- function() {
-  column_types <- readr::cols(
-    "AccNum" = readr::col_character(),
-    "SeqMD5Digest" = readr::col_character(),
-    "SLength" = readr::col_integer(),
-    "Analysis" = readr::col_character(),
-    "DB.ID" = readr::col_character(),
-    "SignDesc" = readr::col_character(),
-    "StartLoc" = readr::col_integer(),
-    "StopLoc" = readr::col_integer(),
-    "Score" = readr::col_double(),
-    "Status" = readr::col_character(),
-    "RunDate" = readr::col_character(),
-    "IPRAcc" = readr::col_character(),
-    "IPRDesc" = readr::col_character(),
-  )
-  return(column_types)
+    column_types <- readr::cols(
+        "AccNum" = readr::col_character(),
+        "SeqMD5Digest" = readr::col_character(),
+        "SLength" = readr::col_integer(),
+        "Analysis" = readr::col_character(),
+        "DB.ID" = readr::col_character(),
+        "SignDesc" = readr::col_character(),
+        "StartLoc" = readr::col_integer(),
+        "StopLoc" = readr::col_integer(),
+        "Score" = readr::col_double(),
+        "Status" = readr::col_character(),
+        "RunDate" = readr::col_character(),
+        "IPRAcc" = readr::col_character(),
+        "IPRDesc" = readr::col_character(),
+    )
+    return(column_types)
 }
 
 #' Read an interproscan output TSV with standardized
@@ -86,11 +86,11 @@ get_df_ipr_col_types <- function() {
 #'
 #' @return [tbl_df] interproscan output table
 read_iprscan_tsv <- function(filepath) {
-  df_ipr <- readr::read_tsv(filepath,
-    col_types = get_df_ipr_col_types(),
-    col_names = get_df_ipr_col_names()
-  )
-  return(df_ipr)
+    df_ipr <- readr::read_tsv(filepath,
+        col_types = get_df_ipr_col_types(),
+        col_names = get_df_ipr_col_names()
+    )
+    return(df_ipr)
 }
 
 #' For a given accession number, get the domain sequences using a interproscan
@@ -117,54 +117,57 @@ read_iprscan_tsv <- function(filepath) {
 #' fasta <- Biostrings::readAAStringSet("./tests/example_protein.fa")
 #' df_iprscan <- read_iprscan_tsv("./tests/example_iprscan_valid.tsv")
 #' accnum <- df_iprscan$AccNum[1]
-#' df_iprscan_domains <- make_df_iprscan_domains(accnum,fasta, df_iprscan)
+#' df_iprscan_domains <- make_df_iprscan_domains(accnum, fasta, df_iprscan)
 #' }
 #'
 make_df_iprscan_domains <- function(
-  accnum,
-  fasta,
-  df_iprscan,
-  analysis = c("Pfam", "Gene3D")
-) {
-  cat("accnum:",accnum,"\n")
-  # handle rare case of an interproscan result with no domains at all;
-  # return the tibble with 0 rows quickly
-  if (nrow(df_iprscan) < 1) {return(df_iprscan)}
-  # filter for "Analysis" argument (i.e., the interproscan member database)
-  # by default we're only selecting domains from a subset of the
-  # interproscan member databases, but this param can be overwritten
-  # and
-  # filter for the accnum of interest (note: it's possible the accession
-  # number is not in the table [i.e., it had no domains])
-  df_iprscan_accnum <- df_iprscan |>
-    dplyr::filter(Analysis %in% analysis) |>
-    dplyr::filter(AccNum == accnum) |>
-    dplyr::select(dplyr::all_of(c("AccNum", "DB.ID", "StartLoc", "StopLoc"))) |>
-    dplyr::arrange(StartLoc)
-  # handle the case of no records after filtering by "Analysis"; return the tibble
-  # with 0 rows quickly
-  if (nrow(df_iprscan_accnum) < 1) {return(df_iprscan_accnum)}
+        accnum,
+        fasta,
+        df_iprscan,
+        analysis = c("Pfam", "Gene3D")) {
+    cat("accnum:", accnum, "\n")
+    # handle rare case of an interproscan result with no domains at all;
+    # return the tibble with 0 rows quickly
+    if (nrow(df_iprscan) < 1) {
+        return(df_iprscan)
+    }
+    # filter for "Analysis" argument (i.e., the interproscan member database)
+    # by default we're only selecting domains from a subset of the
+    # interproscan member databases, but this param can be overwritten
+    # and
+    # filter for the accnum of interest (note: it's possible the accession
+    # number is not in the table [i.e., it had no domains])
+    df_iprscan_accnum <- df_iprscan |>
+        dplyr::filter(Analysis %in% analysis) |>
+        dplyr::filter(AccNum == accnum) |>
+        dplyr::select(dplyr::all_of(c("AccNum", "DB.ID", "StartLoc", "StopLoc"))) |>
+        dplyr::arrange(StartLoc)
+    # handle the case of no records after filtering by "Analysis"; return the tibble
+    # with 0 rows quickly
+    if (nrow(df_iprscan_accnum) < 1) {
+        return(df_iprscan_accnum)
+    }
 
-  # create a new column to store the domain sequences
-  df_iprscan_domains <- df_iprscan_accnum |>
-    dplyr::rowwise() |>
-    dplyr::mutate(
-      seq_domain = XVector::subseq(
-        fasta[[grep(pattern = AccNum, x = names(fasta), fixed = TRUE)]],
-        start = StartLoc,
-        end = StopLoc
-      ) |>
-      as.character()
-    )
+    # create a new column to store the domain sequences
+    df_iprscan_domains <- df_iprscan_accnum |>
+        dplyr::rowwise() |>
+        dplyr::mutate(
+            seq_domain = XVector::subseq(
+                fasta[[grep(pattern = AccNum, x = names(fasta), fixed = TRUE)]],
+                start = StartLoc,
+                end = StopLoc
+            ) |>
+                as.character()
+        )
 
-  # create identifiers for each domain sequence
-  df_iprscan_domains <- df_iprscan_domains |>
-    dplyr::mutate(
-      id_domain = stringr::str_glue("{AccNum}-{DB.ID}-{StartLoc}_{StopLoc}")
-    ) |>
-    dplyr::ungroup() |>
-    dplyr::relocate(id_domain, .before = 1)
-  return(df_iprscan_domains)
+    # create identifiers for each domain sequence
+    df_iprscan_domains <- df_iprscan_domains |>
+        dplyr::mutate(
+            id_domain = stringr::str_glue("{AccNum}-{DB.ID}-{StartLoc}_{StopLoc}")
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::relocate(id_domain, .before = 1)
+    return(df_iprscan_domains)
 }
 
 #' Using the table returned from make_df_iprscan_domains, construct a
@@ -187,41 +190,42 @@ make_df_iprscan_domains <- function(
 #' fasta <- Biostrings::readAAStringSet("./tests/example_protein.fa")
 #' df_iprscan <- read_iprscan_tsv("./tests/example_iprscan_valid.tsv")
 #' accnum <- df_iprscan$AccNum[1]
-#' df_iprscan_domains <- make_df_iprscan_domains(accnum,fasta, df_iprscan)
+#' df_iprscan_domains <- make_df_iprscan_domains(accnum, fasta, df_iprscan)
 #' fasta_domains <- df_iprscan_domains |> df_iprscan_domains2fasta()
 #' }
 #'
 df_iprscan_domains2fasta <- function(df_iprscan_domains) {
+    # if there are no records (e.g., after filtering for Pfam analysis only)
+    # the quickly return an empty AAStringSet object
+    if (nrow(df_iprscan_domains) < 1) {
+        return(Biostrings::AAStringSet())
+    }
 
-  # if there are no records (e.g., after filtering for Pfam analysis only)
-  # the quickly return an empty AAStringSet object
-  if (nrow(df_iprscan_domains) < 1) {return(Biostrings::AAStringSet())}
+    # function with side effect to append a fasta when applied to tibble rows
+    # 1. constructs a new fasta for a single domain and
+    # 2. appends it to a `fasta_domains` object in the parent env
+    # 3. returns the index of the new record; although,
+    # note: return value is not particularly important here since we're
+    # writing the main object within this function block
+    fasta_domains <- Biostrings::AAStringSet()
+    append_fasta_domains <- function(new_seq, new_seq_id) {
+        idx_new_record <- length(fasta_domains) + 1
+        fasta_domain <- Biostrings::AAStringSet(new_seq)
+        names(fasta_domain) <- new_seq_id
+        fasta_domains <<- c(fasta_domains, fasta_domain)
+        return(idx_new_record)
+    }
 
-  # function with side effect to append a fasta when applied to tibble rows
-  # 1. constructs a new fasta for a single domain and
-  # 2. appends it to a `fasta_domains` object in the parent env
-  # 3. returns the index of the new record; although,
-  # note: return value is not particularly important here since we're
-  # writing the main object within this function block
-  fasta_domains <- Biostrings::AAStringSet()
-  append_fasta_domains <- function(new_seq, new_seq_id) {
-    idx_new_record <- length(fasta_domains) + 1
-    fasta_domain <- Biostrings::AAStringSet(new_seq)
-    names(fasta_domain) <- new_seq_id
-    fasta_domains <<- c(fasta_domains, fasta_domain)
-    return(idx_new_record)
-  }
-
-  # apply append_fasta_domains() rowwise
-  df_iprscan_domains <- df_iprscan_domains |>
-    dplyr::rowwise() |>
-    dplyr::mutate(
-      idx_new_record = append_fasta_domains(
-        new_seq = seq_domain,
-        new_seq_id = id_domain
-      )
-    )
-  return(fasta_domains)
+    # apply append_fasta_domains() rowwise
+    df_iprscan_domains <- df_iprscan_domains |>
+        dplyr::rowwise() |>
+        dplyr::mutate(
+            idx_new_record = append_fasta_domains(
+                new_seq = seq_domain,
+                new_seq_id = id_domain
+            )
+        )
+    return(fasta_domains)
 }
 
 #' fasta2fasta_domain
@@ -246,59 +250,58 @@ df_iprscan_domains2fasta <- function(df_iprscan_domains) {
 #' }
 #'
 fasta2fasta_domain <- function(
-  fasta,
-  df_iprscan,
-  analysis = c("Pfam", "Gene3D"),
-  verbose = FALSE
-) {
-  # initialize an AAStringSet which will store
-  # all the domain sequences
-  # named "parent" since this will be appended
-  # from a child environment
-  parent_fasta_domains <- Biostrings::AAStringSet()
-
-  # for each seq in the fasta use the interproscan
-  # table construct a new fasta of the domains
-  #
-  # a boolean result keeps track of which sequences do or
-  # do not have domain data that was added to the final
-  # domain fasta
-  results <- vapply(
-    X = names(fasta),
-    FUN = function(header) {
-      # parse the accession number from header
-      df_iprscan_domains <- make_df_iprscan_domains(
-        header,
         fasta,
         df_iprscan,
-        analysis = c("Pfam", "Gene3D")
-      )
-      # if the interpro results are empty OR
-      # there's no domains for the analyses (databases)
-      # then return early and do not append
-      if (nrow(df_iprscan_domains) < 1) {
-        if (verbose) {
-          msg <- stringr::str_glue(
-            "accession number: {header} had no domains for the ",
-            "selected analyes: {paste(analysis, collapse = ',')}\n"
-          )
-          warning(msg)
-        }
-        return(FALSE)
-      }
-      fasta_domains <- df_iprscan_domains2fasta(df_iprscan_domains)
-      parent_fasta_domains <<- c(parent_fasta_domains, fasta_domains)
-      return(TRUE)
-    },
-    FUN.VALUE = logical(1)
-  )
-  if (verbose) {
-    msg <- stringr::str_glue(
-      "{sum(results)} / {length(fasta)} accession numbers had ",
-      "at least 1 domain available from the selected analyses: ",
-      "{paste(analysis, collapse = ',')}\n"
+        analysis = c("Pfam", "Gene3D"),
+        verbose = FALSE) {
+    # initialize an AAStringSet which will store
+    # all the domain sequences
+    # named "parent" since this will be appended
+    # from a child environment
+    parent_fasta_domains <- Biostrings::AAStringSet()
+
+    # for each seq in the fasta use the interproscan
+    # table construct a new fasta of the domains
+    #
+    # a boolean result keeps track of which sequences do or
+    # do not have domain data that was added to the final
+    # domain fasta
+    results <- vapply(
+        X = names(fasta),
+        FUN = function(header) {
+            # parse the accession number from header
+            df_iprscan_domains <- make_df_iprscan_domains(
+                header,
+                fasta,
+                df_iprscan,
+                analysis = c("Pfam", "Gene3D")
+            )
+            # if the interpro results are empty OR
+            # there's no domains for the analyses (databases)
+            # then return early and do not append
+            if (nrow(df_iprscan_domains) < 1) {
+                if (verbose) {
+                    msg <- stringr::str_glue(
+                        "accession number: {header} had no domains for the ",
+                        "selected analyes: {paste(analysis, collapse = ',')}\n"
+                    )
+                    warning(msg)
+                }
+                return(FALSE)
+            }
+            fasta_domains <- df_iprscan_domains2fasta(df_iprscan_domains)
+            parent_fasta_domains <<- c(parent_fasta_domains, fasta_domains)
+            return(TRUE)
+        },
+        FUN.VALUE = logical(1)
     )
-    print(msg)
-  }
-  return(parent_fasta_domains)
+    if (verbose) {
+        msg <- stringr::str_glue(
+            "{sum(results)} / {length(fasta)} accession numbers had ",
+            "at least 1 domain available from the selected analyses: ",
+            "{paste(analysis, collapse = ',')}\n"
+        )
+        print(msg)
+    }
+    return(parent_fasta_domains)
 }

@@ -27,77 +27,76 @@
 #'
 #' @examples
 create_lineage_lookup <- function(lineage_file = here("data/rankedlineage.dmp"),
-                                  outfile, taxonomic_rank = "phylum") {
-
-  shorten_NA <- function(Lineage) {
-    first_NA <- str_locate(Lineage, "NA")[1]
-    if (is.na(first_NA)) {
-      # No NAs
-      return(Lineage)
-    } else {
-      # Only NA's
-      if (first_NA == 1) {
-        shortened <- ""
-      } else {
-        shortened <- substr(Lineage, 1, (first_NA - 2))
-      }
-      return(shortened)
+    outfile, taxonomic_rank = "phylum") {
+    shorten_NA <- function(Lineage) {
+        first_NA <- str_locate(Lineage, "NA")[1]
+        if (is.na(first_NA)) {
+            # No NAs
+            return(Lineage)
+        } else {
+            # Only NA's
+            if (first_NA == 1) {
+                shortened <- ""
+            } else {
+                shortened <- substr(Lineage, 1, (first_NA - 2))
+            }
+            return(shortened)
+        }
     }
-  }
 
-  rankedlins_cols <- c(
-    "TaxID", "tax_name", "species", "genus",
-    "family", "order", "class", "phylum", "kingdom", "superkingdom", "NA"
-  )
+    rankedlins_cols <- c(
+        "TaxID", "tax_name", "species", "genus",
+        "family", "order", "class", "phylum", "kingdom", "superkingdom", "NA"
+    )
 
-  rankedLins <- read_file(lineage_file) %>%
-    str_replace_all(pattern = "\\t\\|\\t|\\t\\|", "\t") %>%
-    read_tsv(col_names = rankedlins_cols) %>%
-    select(-"NA")
+    rankedLins <- read_file(lineage_file) %>%
+        str_replace_all(pattern = "\\t\\|\\t|\\t\\|", "\t") %>%
+        read_tsv(col_names = rankedlins_cols) %>%
+        select(-"NA")
 
-  rankedlins_cols_nona <- c(
-    "TaxID", "tax_name", "species", "genus",
-    "family", "order", "class", "phylum", "kingdom", "superkingdom"
-  )
+    rankedlins_cols_nona <- c(
+        "TaxID", "tax_name", "species", "genus",
+        "family", "order", "class", "phylum", "kingdom", "superkingdom"
+    )
 
-  # kingdom column is empty?
-  # rankedLins %>% group_by(kingdom) %>% summarize(n())
+    # kingdom column is empty?
+    # rankedLins %>% group_by(kingdom) %>% summarize(n())
 
-  taxonomy_ranks <- c(
-    "superkingdom", # "kingdom",
-    "phylum", "class", "order", "family", "genus", "species"
-  )
+    taxonomy_ranks <- c(
+        "superkingdom", # "kingdom",
+        "phylum", "class", "order", "family", "genus", "species"
+    )
 
-  tax_rank_index <- switch(taxonomic_rank,
-    "superkingdom" = 1,
-    # "kindom" = 2,
-    "phylum" = 2,
-    "class" = 3,
-    "order" = 4,
-    "family" = 5,
-    "genus" = 6,
-    "species" = 7
-  )
+    tax_rank_index <- switch(taxonomic_rank,
+        "superkingdom" = 1,
+        # "kindom" = 2,
+        "phylum" = 2,
+        "class" = 3,
+        "order" = 4,
+        "family" = 5,
+        "genus" = 6,
+        "species" = 7
+    )
 
-  combined_taxonomy <- taxonomy_ranks[1:tax_rank_index]
+    combined_taxonomy <- taxonomy_ranks[1:tax_rank_index]
 
-  if (tax_rank_index < length(taxonomy_ranks)) {
-    rankedLins <- rankedLins %>%
-      select(-all_of(taxonomy_ranks[(tax_rank_index + 1):length(taxonomy_ranks)]), -kingdom)
-  } else {
-    rankedLins <- rankedLins %>%
-      select(-kingdom)
-  }
-
-
-  # Takes a while (2million rows after all)
-  rankedLinsCombined <- rankedLins %>%
-    unite(col = "Lineage", all_of(combined_taxonomy), sep = ">") %>%
-    mutate(Lineage = unlist(map(Lineage, shorten_NA)))
+    if (tax_rank_index < length(taxonomy_ranks)) {
+        rankedLins <- rankedLins %>%
+            select(-all_of(taxonomy_ranks[(tax_rank_index + 1):length(taxonomy_ranks)]), -kingdom)
+    } else {
+        rankedLins <- rankedLins %>%
+            select(-kingdom)
+    }
 
 
+    # Takes a while (2million rows after all)
+    rankedLinsCombined <- rankedLins %>%
+        unite(col = "Lineage", all_of(combined_taxonomy), sep = ">") %>%
+        mutate(Lineage = unlist(map(Lineage, shorten_NA)))
 
-  write_tsv(x = rankedLinsCombined, path = outfile)
+
+
+    write_tsv(x = rankedLinsCombined, path = outfile)
 }
 
 

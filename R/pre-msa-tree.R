@@ -48,10 +48,10 @@
 #'
 #' @examples
 to_titlecase <- function(x, y = " ") {
-  s <- strsplit(x, y)[[1]]
-  paste(toupper(substring(s, 1, 1)), substring(s, 2),
-    sep = "", collapse = y
-  )
+    s <- strsplit(x, y)[[1]]
+    paste(toupper(substring(s, 1, 1)), substring(s, 2),
+        sep = "", collapse = y
+    )
 }
 
 ################################
@@ -93,93 +93,92 @@ to_titlecase <- function(x, y = " ") {
 #'
 #' @examples
 #' \dontrun{
-#' add_leaves('pspa_snf7.aln', 'pspa.txt')
+#' add_leaves("pspa_snf7.aln", "pspa.txt")
 #' }
 add_leaves <- function(aln_file = "",
-                       lin_file = "data/rawdata_tsv/all_semiclean.txt", # !! finally change to all_clean.txt!!
-                       # lin_file="data/rawdata_tsv/PspA.txt",
-                       reduced = FALSE) {
+    lin_file = "data/rawdata_tsv/all_semiclean.txt", # !! finally change to all_clean.txt!!
+    # lin_file="data/rawdata_tsv/PspA.txt",
+    reduced = FALSE) {
+    ## SAMPLE ARGS
+    # aln_file <- "data/rawdata_aln/pspc.gismo.aln"
+    # lin_file <- "data/rawdata_tsv/all_semiclean.txt"
+    # reduced=F
 
-  ## SAMPLE ARGS
-  # aln_file <- "data/rawdata_aln/pspc.gismo.aln"
-  # lin_file <- "data/rawdata_tsv/all_semiclean.txt"
-  # reduced=F
+    # 1. Read aln & lineage master files files w/ read_file/read_tsv
+    # 2. paste and collapse files so they can be read w/ tsv
+    # 3. If the file has 1 column, separate it
+    aln <- read_file(aln_file)
+    lin <- read_tsv(lin_file)
+    aln <- paste(aln, sep = "\\s+", collapse = "\\t")
+    aln <- read_tsv(aln, col_names = F)
+    if (length(aln) == 1) {
+        colnames(aln) <- "x1"
+        aln <- separate(aln,
+            col = x1,
+            into = c("x1", "x2"),
+            sep = "\\s+"
+        )
+    }
 
-  # 1. Read aln & lineage master files files w/ read_file/read_tsv
-  # 2. paste and collapse files so they can be read w/ tsv
-  # 3. If the file has 1 column, separate it
-  aln <- read_file(aln_file)
-  lin <- read_tsv(lin_file)
-  aln <- paste(aln, sep = "\\s+", collapse = "\\t")
-  aln <- read_tsv(aln, col_names = F)
-  if (length(aln) == 1) {
-    colnames(aln) <- "x1"
-    aln <- separate(aln,
-      col = x1,
-      into = c("x1", "x2"),
-      sep = "\\s+"
-    )
-  }
+    colnames(aln) <- c("AccNum", "Alignment")
 
-  colnames(aln) <- c("AccNum", "Alignment")
+    aln_lin <- left_join(aln, lin, by = "AccNum") %>%
+        select(
+            AccNum, Alignment,
+            Species, Lineage
+        )
 
-  aln_lin <- left_join(aln, lin, by = "AccNum") %>%
-    select(
-      AccNum, Alignment,
-      Species, Lineage
-    )
+    # Removes rows with NA
+    aln_lin <- aln_lin[complete.cases(aln_lin), ]
+    # Removes duplicated rows
+    aln_lin <- aln_lin %>% distinct()
 
-  # Removes rows with NA
-  aln_lin <- aln_lin[complete.cases(aln_lin), ]
-  # Removes duplicated rows
-  aln_lin <- aln_lin %>% distinct()
+    ## !! REVISE or REMOVE??? MSA doesn't work with too many sequences!!
+    ## !! FIX ASAP.
+    if (reduced) {
+        # Removes duplicate lineages
+        aln_lin <- aln_lin %>% distinct(Lineage, .keep_all = TRUE)
+    }
 
-  ## !! REVISE or REMOVE??? MSA doesn't work with too many sequences!!
-  ## !! FIX ASAP.
-  if (reduced) {
-    # Removes duplicate lineages
-    aln_lin <- aln_lin %>% distinct(Lineage, .keep_all = TRUE)
-  }
+    temp <- aln_lin %>%
+        separate(Lineage,
+            into = c("Kingdom", "Phylum"),
+            sep = ">", remove = F, ## !! How to deal w/ lineages without a phylum?
+            extra = "merge", fill = "right"
+        ) %>%
+        replace_na(replace = list(Kingdom = "", Phylum = "")) %>%
+        separate(Species,
+            into = c("Genus", "Spp"),
+            sep = " ", remove = F,
+            extra = "merge", fill = "left"
+        ) %>%
+        # 3char from kingdom, 6 char from phylum, 1 char from Genus, 3 char from species
+        # kingdomPhylum_GenusSpecies
+        mutate(Leaf = paste(
+            paste0(
+                str_sub(Kingdom,
+                    start = 1, end = 1
+                ),
+                str_sub(Phylum, 1, 6)
+            ),
+            paste0(
+                str_sub(Genus, start = 1, end = 1),
+                str_sub(Spp, start = 1, end = 3)
+            ),
+            # AccNum,
+            sep = "_"
+        ))
+    temp$Leaf <- map(temp$Leaf, to_titlecase)
+    temp <- temp %>%
+        mutate(Leaf_Acc = (paste(Leaf, AccNum, sep = "_")))
 
-  temp <- aln_lin %>%
-    separate(Lineage,
-      into = c("Kingdom", "Phylum"),
-      sep = ">", remove = F, ## !! How to deal w/ lineages without a phylum?
-      extra = "merge", fill = "right"
-    ) %>%
-    replace_na(replace = list(Kingdom = "", Phylum = "")) %>%
-    separate(Species,
-      into = c("Genus", "Spp"),
-      sep = " ", remove = F,
-      extra = "merge", fill = "left"
-    ) %>%
-    # 3char from kingdom, 6 char from phylum, 1 char from Genus, 3 char from species
-    # kingdomPhylum_GenusSpecies
-    mutate(Leaf = paste(
-      paste0(
-        str_sub(Kingdom,
-          start = 1, end = 1
-        ),
-        str_sub(Phylum, 1, 6)
-      ),
-      paste0(
-        str_sub(Genus, start = 1, end = 1),
-        str_sub(Spp, start = 1, end = 3)
-      ),
-      # AccNum,
-      sep = "_"
-    ))
-  temp$Leaf <- map(temp$Leaf, to_titlecase)
-  temp <- temp %>%
-    mutate(Leaf_Acc = (paste(Leaf, AccNum, sep = "_")))
-
-  # Combine and run through add leaves
-  # 3 columns AccNum Sequence Leaf result
-  # Create Leaf_AccNum pasted together
-  # 2 columns Leaf_AccNum and Sequence Far left
-  leaf_aln <- temp %>%
-    select(Leaf_Acc, Alignment)
-  return(leaf_aln)
+    # Combine and run through add leaves
+    # 3 columns AccNum Sequence Leaf result
+    # Create Leaf_AccNum pasted together
+    # 2 columns Leaf_AccNum and Sequence Far left
+    leaf_aln <- temp %>%
+        select(Leaf_Acc, Alignment)
+    return(leaf_aln)
 }
 
 
@@ -209,51 +208,50 @@ add_leaves <- function(aln_file = "",
 #'
 #' @examples
 add_name <- function(data,
-                     accnum_col = "AccNum", spec_col = "Species", lin_col = "Lineage",
-                     lin_sep = ">", out_col = "Name") {
+    accnum_col = "AccNum", spec_col = "Species", lin_col = "Lineage",
+    lin_sep = ">", out_col = "Name") {
+    cols <- c(accnum_col, "Kingdom", "Phylum", "Genus", "Spp")
+    split_data <- data %>%
+        separate(
+            col = lin_col, into = c("Kingdom", "Phylum"),
+            sep = lin_sep
+        ) %>%
+        mutate(
+            Kingdom = strtrim(Kingdom, 1),
+            Phylum = strtrim(Phylum, 6)
+        )
+    if (!is.null(spec_col)) {
+        split_data <- split_data %>%
+            separate(spec_col, into = c("Genus", "Spp"), sep = " ") %>%
+            mutate(
+                Genus = strtrim(Genus, 1),
+                Spp = word(string = Spp, start = 1)
+            )
+    } else {
+        split_data$Genus <- ""
+        split_data$Spp <- ""
+    }
 
-  cols <- c(accnum_col, "Kingdom", "Phylum", "Genus", "Spp")
-  split_data <- data %>%
-    separate(
-      col = lin_col, into = c("Kingdom", "Phylum"),
-      sep = lin_sep
-    ) %>%
-    mutate(
-      Kingdom = strtrim(Kingdom, 1),
-      Phylum = strtrim(Phylum, 6)
-    )
-  if (!is.null(spec_col)) {
     split_data <- split_data %>%
-      separate(spec_col, into = c("Genus", "Spp"), sep = " ") %>%
-      mutate(
-        Genus = strtrim(Genus, 1),
-        Spp = word(string = Spp, start = 1)
-      )
-  } else {
-    split_data$Genus <- ""
-    split_data$Spp <- ""
-  }
+        select(all_of(cols))
+    split_data[is.na(split_data)] <- ""
 
-  split_data <- split_data %>%
-    select(all_of(cols))
-  split_data[is.na(split_data)] <- ""
+    accnum_sym <- sym(accnum_col)
 
-  accnum_sym <- sym(accnum_col)
+    Leaf <- split_data %>%
+        mutate(Leaf = paste0(
+            Kingdom, Phylum, "_",
+            Genus, Spp, "_",
+            {{ accnum_sym }}
+        )) %>%
+        pull(Leaf) %>%
+        stringi::stri_replace_all_regex(pattern = "^_|_$", replacement = "") %>%
+        stringi::stri_replace_all_regex(pattern = "_+", replacement = "_")
 
-  Leaf <- split_data %>%
-    mutate(Leaf = paste0(
-      Kingdom, Phylum, "_",
-      Genus, Spp, "_",
-      {{ accnum_sym }}
-    )) %>%
-    pull(Leaf) %>%
-    stringi::stri_replace_all_regex(pattern = "^_|_$", replacement = "") %>%
-    stringi::stri_replace_all_regex(pattern = "_+", replacement = "_")
-
-  # out_col=sym(out_col)
-  data <- mutate(data, l = Leaf) %>%
-    setnames(old = "l", new = out_col)
-  return(data)
+    # out_col=sym(out_col)
+    data <- mutate(data, l = Leaf) %>%
+        setnames(old = "l", new = out_col)
+    return(data)
 }
 
 ################################
@@ -288,40 +286,40 @@ add_name <- function(data,
 #'
 #' @examples
 #' \dontrun{
-#' add_leaves('pspa_snf7.aln', 'pspa.txt')
+#' add_leaves("pspa_snf7.aln", "pspa.txt")
 #' }
 convert_aln2fa <- function(aln_file = "",
-                           lin_file = "data/rawdata_tsv/all_semiclean.txt", # !! finally change to all_clean.txt!!
-                           fa_outpath = "",
-                           reduced = FALSE) {
-  ## SAMPLE ARGS
-  # aln_file <- "data/rawdata_aln/pspc.gismo.aln"
-  # lin_file <- "data/rawdata_tsv/all_semiclean.txt"
-  # reduced=F
-  # fa_outpath="data/alns/pspc.fasta"
+    lin_file = "data/rawdata_tsv/all_semiclean.txt", # !! finally change to all_clean.txt!!
+    fa_outpath = "",
+    reduced = FALSE) {
+    ## SAMPLE ARGS
+    # aln_file <- "data/rawdata_aln/pspc.gismo.aln"
+    # lin_file <- "data/rawdata_tsv/all_semiclean.txt"
+    # reduced=F
+    # fa_outpath="data/alns/pspc.fasta"
 
-  ## Add leaves
-  aln <- add_leaves(
-    aln = aln_file,
-    lin = lin_file,
-    reduced = reduced
-  )
-  names <- aln$Leaf_Acc
-  sequences <- aln$Alignment
-  aln <- data.table(names, sequences)
+    ## Add leaves
+    aln <- add_leaves(
+        aln = aln_file,
+        lin = lin_file,
+        reduced = reduced
+    )
+    names <- aln$Leaf_Acc
+    sequences <- aln$Alignment
+    aln <- data.table(names, sequences)
 
-  ## Convert to Fasta
-  fasta <- ""
-  for (i in 1:length(aln$names)) {
-    fasta <- paste0(fasta, ">", aln$names[i], "\n", aln$sequences[i], "\n")
-  }
+    ## Convert to Fasta
+    fasta <- ""
+    for (i in 1:length(aln$names)) {
+        fasta <- paste0(fasta, ">", aln$names[i], "\n", aln$sequences[i], "\n")
+    }
 
-  if (!is.null(fa_outpath)) {
-    write_file(fasta, fa_outpath)
-  }
+    if (!is.null(fa_outpath)) {
+        write_file(fasta, fa_outpath)
+    }
 
-  # fasta_file <- dataframe2fas(aln, output_path)
-  return(fasta)
+    # fasta_file <- dataframe2fas(aln, output_path)
+    return(fasta)
 }
 
 #' Default rename_fasta() replacement function. Maps an accession number to its name
@@ -341,19 +339,18 @@ convert_aln2fa <- function(aln_file = "",
 #'
 #' @examples
 map_acc2name <- function(line, acc2name, acc_col = "AccNum", name_col = "Name") {
+    # change to be the name equivalent to an add_names column
+    # Find the first ' '
+    end_acc <- str_locate(line, " ")[[1]]
 
-  # change to be the name equivalent to an add_names column
-  # Find the first ' '
-  end_acc <- str_locate(line, " ")[[1]]
+    accnum <- substring(line, 2, end_acc - 1)
 
-  accnum <- substring(line, 2, end_acc - 1)
+    acc_sym <- sym(acc_col)
+    name_sym <- sym(name_col)
+    name <- as.character((filter(acc2name, {{ acc_sym }} == accnum) %>%
+        pull({{ name_sym }}))[1])
 
-  acc_sym <- sym(acc_col)
-  name_sym <- sym(name_col)
-  name <- as.character((filter(acc2name, {{ acc_sym }} == accnum) %>%
-    pull({{ name_sym }}))[1])
-
-  return(paste0(">", name))
+    return(paste0(">", name))
 }
 
 #' Rename the labels of fasta files
@@ -371,19 +368,19 @@ map_acc2name <- function(line, acc2name, acc_col = "AccNum", name_col = "Name") 
 #'
 #' @examples
 rename_fasta <- function(fa_path, outpath,
-                         replacement_function = map_acc2name, ...) {
-  lines <- read_lines(fa_path)
-  res <- map(lines, function(x) {
-    if (strtrim(x, 1) == ">") {
-      return(replacement_function(line = x, ...))
-    } else {
-      return(x)
-    }
-  }) %>% unlist()
+    replacement_function = map_acc2name, ...) {
+    lines <- read_lines(fa_path)
+    res <- map(lines, function(x) {
+        if (strtrim(x, 1) == ">") {
+            return(replacement_function(line = x, ...))
+        } else {
+            return(x)
+        }
+    }) %>% unlist()
 
-  write_lines(res, outpath)
+    write_lines(res, outpath)
 
-  return(res)
+    return(res)
 }
 
 ################################
@@ -417,31 +414,31 @@ rename_fasta <- function(fa_path, outpath,
 #' generate_all_aln2fa()
 #' }
 generate_all_aln2fa <- function(aln_path = here("data/rawdata_aln/"),
-                                fa_outpath = here("data/alns/"),
-                                lin_file = here("data/rawdata_tsv/all_semiclean.txt"),
-                                reduced = F) {
-  # library(here)
-  # library(tidyverse)
-  # aln_path <- here("data/rawdata_aln/")
-  # outpath <- here("data/alns/")
-  # lin_file <- here("data/rawdata_tsv/all_semiclean.txt")
+    fa_outpath = here("data/alns/"),
+    lin_file = here("data/rawdata_tsv/all_semiclean.txt"),
+    reduced = F) {
+    # library(here)
+    # library(tidyverse)
+    # aln_path <- here("data/rawdata_aln/")
+    # outpath <- here("data/alns/")
+    # lin_file <- here("data/rawdata_tsv/all_semiclean.txt")
 
-  aln_filenames <- list.files(path = aln_path, pattern = "*.aln")
-  aln_filepaths <- paste0(aln_path, "/", aln_filenames)
-  variable <- str_replace_all(basename(aln_filenames),
-    pattern = ".aln", replacement = ""
-  )
+    aln_filenames <- list.files(path = aln_path, pattern = "*.aln")
+    aln_filepaths <- paste0(aln_path, "/", aln_filenames)
+    variable <- str_replace_all(basename(aln_filenames),
+        pattern = ".aln", replacement = ""
+    )
 
-  ## Using purrr::pmap
-  aln2fa_args <- list(
-    aln_file = aln_filepaths,
-    fa_outpath = paste0(fa_outpath, "/", variable, ".fa")
-  )
-  pmap(
-    .l = aln2fa_args, .f = convert_aln2fa,
-    lin_file = lin_file,
-    reduced = reduced
-  )
+    ## Using purrr::pmap
+    aln2fa_args <- list(
+        aln_file = aln_filepaths,
+        fa_outpath = paste0(fa_outpath, "/", variable, ".fa")
+    )
+    pmap(
+        .l = aln2fa_args, .f = convert_aln2fa,
+        lin_file = lin_file,
+        reduced = reduced
+    )
 }
 
 
@@ -527,32 +524,32 @@ acc2fa <- function(accessions, outpath, plan = "sequential") {
 
 
 RepresentativeAccNums <- function(prot_data,
-                                  reduced = "Lineage",
-                                  accnum_col = "AccNum") {
-  # Get Unique reduced column and then bind the AccNums back to get one AccNum per reduced column
-  reduced_sym <- sym(reduced)
-  accnum_sym <- sym(accnum_col)
+    reduced = "Lineage",
+    accnum_col = "AccNum") {
+    # Get Unique reduced column and then bind the AccNums back to get one AccNum per reduced column
+    reduced_sym <- sym(reduced)
+    accnum_sym <- sym(accnum_col)
 
-  distinct_reduced <- prot_data %>%
-    pull(reduced) %>%
-    unique()
+    distinct_reduced <- prot_data %>%
+        pull(reduced) %>%
+        unique()
 
-  accessions <- c()
+    accessions <- c()
 
-  for (r in distinct_reduced)
-  {
-    if (is.na(r)) {
-      next
+    for (r in distinct_reduced)
+    {
+        if (is.na(r)) {
+            next
+        }
+        # r <- toString(distinct_reduced[i,reduced])
+
+        AccNum <- prot_data %>%
+            filter({{ reduced_sym }} == r) %>%
+            pull(accnum_col)
+
+        accessions <- append(accessions, AccNum[1])
     }
-    # r <- toString(distinct_reduced[i,reduced])
-
-    AccNum <- prot_data %>%
-      filter({{ reduced_sym }} == r) %>%
-      pull(accnum_col)
-
-    accessions <- append(accessions, AccNum[1])
-  }
-  return(accessions)
+    return(accessions)
 }
 
 #' alignFasta
@@ -574,19 +571,18 @@ RepresentativeAccNums <- function(prot_data,
 #'
 #' @examples
 alignFasta <- function(fasta_file, tool = "Muscle", outpath = NULL) {
+    fasta <- readAAStringSet(fasta_file)
 
-  fasta <- readAAStringSet(fasta_file)
+    aligned <- switch(tool,
+        "Muscle" = msaMuscle(fasta),
+        "ClustalO" = msaClustalOmega(fasta),
+        "ClustalW" = msaClustalW(fasta)
+    )
 
-  aligned <- switch(tool,
-    "Muscle" = msaMuscle(fasta),
-    "ClustalO" = msaClustalOmega(fasta),
-    "ClustalW" = msaClustalW(fasta)
-  )
-
-  if (typeof(outpath) == "character") {
-    write.MsaAAMultipleAlignment(aligned, outpath)
-  }
-  return(aligned)
+    if (typeof(outpath) == "character") {
+        write.MsaAAMultipleAlignment(aligned, outpath)
+    }
+    return(aligned)
 }
 
 #' write.MsaAAMultipleAlignment
@@ -609,17 +605,16 @@ alignFasta <- function(fasta_file, tool = "Muscle", outpath = NULL) {
 #'
 #' @examples
 write.MsaAAMultipleAlignment <- function(alignment, outpath) {
-
-  l <- length(rownames(alignment))
-  fasta <- ""
-  for (i in 1:l)
-  {
-    fasta <- paste0(fasta, paste(">", rownames(alignment)[i]), "\n")
-    seq <- toString(unmasked(alignment)[[i]])
-    fasta <- paste0(fasta, seq, "\n")
-  }
-  write_file(fasta, outpath)
-  return(fasta)
+    l <- length(rownames(alignment))
+    fasta <- ""
+    for (i in 1:l)
+    {
+        fasta <- paste0(fasta, paste(">", rownames(alignment)[i]), "\n")
+        seq <- toString(unmasked(alignment)[[i]])
+        fasta <- paste0(fasta, seq, "\n")
+    }
+    write_file(fasta, outpath)
+    return(fasta)
 }
 
 #' get_accnums_from_fasta_file
@@ -634,9 +629,9 @@ write.MsaAAMultipleAlignment <- function(alignment, outpath) {
 #'
 #' @examples
 get_accnums_from_fasta_file <- function(fasta_file) {
-  txt <- read_file(fasta_file)
-  accnums <- stringi::stri_extract_all_regex(fasta_file, "(?<=>)[\\w,.]+")[[1]]
-  return(accnums)
+    txt <- read_file(fasta_file)
+    accnums <- stringi::stri_extract_all_regex(fasta_file, "(?<=>)[\\w,.]+")[[1]]
+    return(accnums)
 }
 
 

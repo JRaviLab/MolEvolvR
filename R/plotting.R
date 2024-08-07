@@ -31,20 +31,20 @@ CPCOLS <- c(
 )
 
 shorten_lineage <- function(data, colname = "Lineage", abr_len = 1) {
-  abbrv <- function(x) {
-    pos_gt <- str_locate(x, ">")
-    pos_gt <- pos_gt[1]
-    if (is.na(pos_gt)) {
-      return(paste0(toupper(substr(x, 1, 1)), substring(x, 2)))
+    abbrv <- function(x) {
+        pos_gt <- str_locate(x, ">")
+        pos_gt <- pos_gt[1]
+        if (is.na(pos_gt)) {
+            return(paste0(toupper(substr(x, 1, 1)), substring(x, 2)))
+        }
+        if (abr_len > 1) {
+            return(paste0(toupper(substr(x, 1, 1)), substr(x, 2, abr_len), substr(x, pos_gt, nchar(as.character(x)))))
+        }
+        return(paste0(toupper(substr(x, 1, 1)), substr(x, pos_gt, nchar(as.character(x)))))
     }
-    if (abr_len > 1) {
-      return(paste0(toupper(substr(x, 1, 1)), substr(x, 2, abr_len), substr(x, pos_gt, nchar(as.character(x)))))
-    }
-    return(paste0(toupper(substr(x, 1, 1)), substr(x, pos_gt, nchar(as.character(x)))))
-  }
-  # Shorten lineages to include only the first letter of kingdom
-  data[[colname]] <- unlist((pmap(list(data[[colname]]), function(x) abbrv(x))))
-  return(data)
+    # Shorten lineages to include only the first letter of kingdom
+    data[[colname]] <- unlist((pmap(list(data[[colname]]), function(x) abbrv(x))))
+    return(data)
 }
 
 
@@ -94,121 +94,120 @@ shorten_lineage <- function(data, colname = "Lineage", abr_len = 1) {
 #' upset.plot(pspa.sub, 10, "da2doms")
 #' }
 upset.plot <- function(query_data = "toast_rack.sub",
-                       colname = "DomArch", cutoff = 90,
-                       RowsCutoff = FALSE, text.scale = 1.5,
-                       point.size = 2.2, line.size = 0.8) {
+    colname = "DomArch", cutoff = 90,
+    RowsCutoff = FALSE, text.scale = 1.5,
+    point.size = 2.2, line.size = 0.8) {
+    # @param type Character. Either "da2doms" for Domains vs Domain Architectures
+    # or "gc2da" for Domain Architectures (of neighbors) vs Genomic Contexts.
+    # Default is "da2doms" -- unused param?
 
-  #@param type Character. Either "da2doms" for Domains vs Domain Architectures
-  #or "gc2da" for Domain Architectures (of neighbors) vs Genomic Contexts.
-  #Default is "da2doms" -- unused param?
+    # Get Total Counts
+    # colname = string(colname)
+    tryCatch(
+        {
+            tc <- query_data %>% total_counts(column = colname, cutoff = cutoff, RowsCutoff = RowsCutoff, digits = 5)
+            ##### Remove Tails ####
+            # tails comprise of less than 1% of data each
+            # ie) individual percent is less than 1
+            # Note: this is based on frequency of the actual DA's and GC's, not on the frequency of the constituent words
 
-  # Get Total Counts
-  # colname = string(colname)
-  tryCatch(
-    {
-      tc <- query_data %>% total_counts(column = colname, cutoff = cutoff, RowsCutoff = RowsCutoff, digits = 5)
-      ##### Remove Tails ####
-      # tails comprise of less than 1% of data each
-      # ie) individual percent is less than 1
-      # Note: this is based on frequency of the actual DA's and GC's, not on the frequency of the constituent words
+            #####
 
-      #####
+            column <- sym(colname)
 
-      column <- sym(colname)
+            if (grepl("GenContext", colname, ignore.case = T)) {
+                type <- "gc2da"
+            } else if (grepl("DomArch|ClustName", colname, ignore.case = T)) {
+                type <- "da2doms"
+            }
 
-      if (grepl("GenContext", colname, ignore.case = T)) {
-        type <- "gc2da"
-        } else if (grepl("DomArch|ClustName", colname, ignore.case = T)) {
-          type <- "da2doms"
-          }
+            # Get words from filter
+            words.tc <- tc %>%
+                select({{ column }}) %>%
+                distinct() %>%
+                elements2words(column = colname, conversion_type = type)
+            # names(words.tc)[1] <- "words"
+            words.tc <- words.tc %>% str_split(pattern = " ")
+            words.tc <- as.data.frame(words.tc, col.names = "Words", stringsAsFactors = F) %>%
+                filter(!grepl("^X$|^X\\(s\\)$", Words)) %>%
+                pull(Words) # remove "X" and "X(s)"
+            words.tc <- words.tc[2:(length(words.tc) - 1)]
 
-      # Get words from filter
-      words.tc <- tc %>%
-        select({{ column }}) %>%
-        distinct() %>%
-        elements2words(column = colname, conversion_type = type)
-      # names(words.tc)[1] <- "words"
-      words.tc <- words.tc %>% str_split(pattern = " ")
-      words.tc <- as.data.frame(words.tc, col.names = "Words", stringsAsFactors = F) %>%
-        filter(!grepl("^X$|^X\\(s\\)$", Words)) %>%
-        pull(Words) # remove "X" and "X(s)"
-      words.tc <- words.tc[2:(length(words.tc) - 1)]
+            # Only use the DAs/GCs that are within the total count cutoff
+            query_data <- query_data %>% filter({{ column }} %in%
+                (select(tc, {{ column }}) %>% distinct()
+                    %>% pull({{ column }})))
 
-      # Only use the DAs/GCs that are within the total count cutoff
-      query_data <- query_data %>% filter({{ column }} %in%
-        (select(tc, {{ column }}) %>% distinct()
-          %>% pull({{ column }})))
+            ## Create columns for domains/DAs and fill them with 1/0
+            for (i in words.tc) # $words)
+            {
+                j <- str_replace_all(string = i, pattern = "\\(", replacement = "\\\\(")
+                j <- str_replace_all(string = j, pattern = "\\)", replacement = "\\\\)")
+                j <- str_replace_all(string = j, pattern = "\\+", replacement = "\\\\+")
+                j <- str_replace_all(string = j, pattern = "\\_", replacement = "\\\\_")
+                j <- str_replace_all(string = j, pattern = "\\?", replacement = "\\\\?")
 
-      ## Create columns for domains/DAs and fill them with 1/0
-      for (i in words.tc) # $words)
-      {
-        j <- str_replace_all(string = i, pattern = "\\(", replacement = "\\\\(")
-        j <- str_replace_all(string = j, pattern = "\\)", replacement = "\\\\)")
-        j <- str_replace_all(string = j, pattern = "\\+", replacement = "\\\\+")
-        j <- str_replace_all(string = j, pattern = "\\_", replacement = "\\\\_")
-        j <- str_replace_all(string = j, pattern = "\\?", replacement = "\\\\?")
+                # Don't pick up anything with a '(' immediatly following j
+                # Makes sure PspA doesn't pick up PspA(s)
+                if (grepl("DomArch|ClustName", colname, ignore.case = T)) {
+                    j <- paste0(j, "(?!\\()")
+                } else if (grepl("GenContext", colname, ignore.case = T)) {
+                    # Negative lookahead and lookbehind for +
+                    j <- paste0("(?<!\\+)", j, "(?!\\+)")
+                }
 
-        # Don't pick up anything with a '(' immediatly following j
-        # Makes sure PspA doesn't pick up PspA(s)
-        if (grepl("DomArch|ClustName", colname, ignore.case = T)) {
-          j <- paste0(j, "(?!\\()")
-        } else if (grepl("GenContext", colname, ignore.case = T)) {
-          # Negative lookahead and lookbehind for +
-          j <- paste0("(?<!\\+)", j, "(?!\\+)")
+                # Grep doesn't work with string+negative lookahead?
+                # Use str_detect instead
+                # query_data[[i]] <- if_else(grepl(j, as.matrix(query_data[,colname])),
+                #                            true=1, false=0)
+
+                query_data[[i]] <- if_else(str_detect(string = as.matrix(query_data[, colname]), pattern = j),
+                    true = 1, false = 0
+                )
+            }
+
+            ## Creating UpSet data
+            upset <- query_data %>%
+                select(
+                    AccNum, Lineage, {{ column }}, # GenContext, DomArch,
+                    words.tc
+                ) %>%
+                # mutate_all(list(~ if (is.numeric(.)) as.integer(.) else .)) %>%
+                mutate(across(where(is.numeric), as.integer)) %>%
+                as.data.frame()
+
+            ## Fix order of x and y variables
+            upset.cutoff <- upset %>%
+                # filter(!grepl(paste(words.ltcutoff$words, collapse="|"), colname)) %>%
+                within(colname <- factor(colname, levels = names(sort(table(colname),
+                    decreasing = TRUE
+                ))))
+            ## UpSetR plot
+            par(oma = c(5, 5, 5, 5), mar = c(3, 3, 3, 3))
+            final_plot <- upset(upset.cutoff[c(3, 4:ncol(upset.cutoff))], # text.scale=1.5,
+                # sets=words.tc,
+                nsets = length(words.tc),
+                nintersects = NA,
+                sets.bar.color = "turquoise3",
+                main.bar.color = "coral3", # 56B4E9 lightblue
+                group.by = "degree", order.by = c("freq"), # "degree"
+                mb.ratio = c(0.3, 0.7), # nintersects=20,
+                number.angles = 0, point.size = point.size, line.size = line.size,
+                show.numbers = "yes", shade.alpha = 0.25,
+                mainbar.y.label = "", # "Intersection counts",
+                sets.x.label = "", # "Individual set counts",
+                query.legend = "top",
+                text.scale = text.scale,
+                set_size.show = F
+            )
+        },
+        error = {
+            final_plot <- "error"
+        },
+        finally = {
+            return(final_plot)
         }
-
-        # Grep doesn't work with string+negative lookahead?
-        # Use str_detect instead
-        # query_data[[i]] <- if_else(grepl(j, as.matrix(query_data[,colname])),
-        #                            true=1, false=0)
-
-        query_data[[i]] <- if_else(str_detect(string = as.matrix(query_data[, colname]), pattern = j),
-          true = 1, false = 0
-        )
-      }
-
-      ## Creating UpSet data
-      upset <- query_data %>%
-        select(
-          AccNum, Lineage, {{ column }}, # GenContext, DomArch,
-          words.tc
-          ) %>%
-        # mutate_all(list(~ if (is.numeric(.)) as.integer(.) else .)) %>%
-        mutate(across(where(is.numeric), as.integer)) %>%
-        as.data.frame()
-
-      ## Fix order of x and y variables
-      upset.cutoff <- upset %>%
-        # filter(!grepl(paste(words.ltcutoff$words, collapse="|"), colname)) %>%
-        within(colname <- factor(colname, levels = names(sort(table(colname),
-          decreasing = TRUE
-        ))))
-      ## UpSetR plot
-      par(oma = c(5, 5, 5, 5), mar = c(3, 3, 3, 3))
-      final_plot <- upset(upset.cutoff[c(3, 4:ncol(upset.cutoff))], # text.scale=1.5,
-        # sets=words.tc,
-        nsets = length(words.tc),
-        nintersects = NA,
-        sets.bar.color = "turquoise3",
-        main.bar.color = "coral3", # 56B4E9 lightblue
-        group.by = "degree", order.by = c("freq"), # "degree"
-        mb.ratio = c(0.3, 0.7), # nintersects=20,
-        number.angles = 0, point.size = point.size, line.size = line.size,
-        show.numbers = "yes", shade.alpha = 0.25,
-        mainbar.y.label = "", # "Intersection counts",
-        sets.x.label = "", # "Individual set counts",
-        query.legend = "top",
-        text.scale = text.scale,
-        set_size.show = F
-      )
-    },
-    error = {
-      final_plot <- "error"
-    },
-    finally = {
-      return(final_plot)
-    }
-  )
+    )
 }
 
 ###################
@@ -259,65 +258,64 @@ upset.plot <- function(query_data = "toast_rack.sub",
 #' \dontrun{
 #' lineage.DA.plot(toast_rack_data, 10, "DomArch.norep", "da2doms")
 #' }
-
 lineage.DA.plot <- function(query_data = "prot",
-                            colname = "DomArch",
-                            cutoff = 90,
-                            RowsCutoff = FALSE,
-                            color = "default") {
-  # query.elements, query.words,
+    colname = "DomArch",
+    cutoff = 90,
+    RowsCutoff = FALSE,
+    color = "default") {
+    # query.elements, query.words,
 
-  # @param type Character. Default is "da2doms" for Domain Architectures.
-  # Other alternative: "gc2da" for Genomic Contexts. -- unused parameter
+    # @param type Character. Default is "da2doms" for Domain Architectures.
+    # Other alternative: "gc2da" for Genomic Contexts. -- unused parameter
 
-  query_data <- shorten_lineage(query_data, "Lineage", abr_len = 1)
+    query_data <- shorten_lineage(query_data, "Lineage", abr_len = 1)
 
-  query.summ.byLin <- query_data %>% total_counts(cutoff = cutoff, column = colname, RowsCutoff = RowsCutoff)
+    query.summ.byLin <- query_data %>% total_counts(cutoff = cutoff, column = colname, RowsCutoff = RowsCutoff)
 
-  query.summ.byLin$Lineage <- map(query.summ.byLin$Lineage, function(x) str_replace_all(string = x, pattern = ">", replacement = "_")) %>%
-    unlist()
+    query.summ.byLin$Lineage <- map(query.summ.byLin$Lineage, function(x) str_replace_all(string = x, pattern = ">", replacement = "_")) %>%
+        unlist()
 
-  query_data <- query_data %>% filter(grepl("a", Lineage))
+    query_data <- query_data %>% filter(grepl("a", Lineage))
 
-  column <- sym(colname)
+    column <- sym(colname)
 
-  query.summ.byLin.ggplot <- drop_na(query.summ.byLin) %>%
-    filter(Lineage != "NANA") %>%
-    filter(count >= 1) %>% # count or total count?
-    arrange(totalcount)
+    query.summ.byLin.ggplot <- drop_na(query.summ.byLin) %>%
+        filter(Lineage != "NANA") %>%
+        filter(count >= 1) %>% # count or total count?
+        arrange(totalcount)
 
-  query.summ.byLin.ggplot$Lineage <- factor(query.summ.byLin.ggplot$Lineage,
-    levels = sort(names(sort(table(query.summ.byLin.ggplot$Lineage), decreasing = TRUE)))
-  )
+    query.summ.byLin.ggplot$Lineage <- factor(query.summ.byLin.ggplot$Lineage,
+        levels = sort(names(sort(table(query.summ.byLin.ggplot$Lineage), decreasing = TRUE)))
+    )
 
-  query.summ.byLin.ggplot[, colname] <- factor(pull(query.summ.byLin.ggplot, {{ column }}),
-    levels = (pull(query.summ.byLin.ggplot, {{ column }}) %>% unique())
-  )
-  # drop NA counts
-  query.summ.byLin.ggplot <- subset(query.summ.byLin.ggplot, !is.na(count))
+    query.summ.byLin.ggplot[, colname] <- factor(pull(query.summ.byLin.ggplot, {{ column }}),
+        levels = (pull(query.summ.byLin.ggplot, {{ column }}) %>% unique())
+    )
+    # drop NA counts
+    query.summ.byLin.ggplot <- subset(query.summ.byLin.ggplot, !is.na(count))
 
-  # plot heatmap
-  if (color == "default") {
-    ggplot(data = query.summ.byLin.ggplot, aes_string(x = "Lineage", y = colname)) +
-      geom_tile(aes(fill = count, colour = "darkred", size = 0.3)) +
-      scale_fill_gradient(low = "white", high = "darkred") +
-      scale_x_discrete(position = "top") +
-      theme_classic() +
-      theme(
-        axis.text.x = element_text(angle = 65, hjust = 0, vjust = 0.5),
-        panel.background = element_rect(fill = "white")
-      )
-  } else {
-    ggplot(data = query.summ.byLin.ggplot, aes_string(x = "Lineage", y = colname)) +
-      geom_tile(aes(fill = count)) +
-      scale_fill_viridis(discrete = F, option = color) +
-      scale_x_discrete(position = "top") +
-      theme_classic() +
-      theme(
-        axis.text.x = element_text(angle = 65, hjust = 0, vjust = 0.5),
-        panel.background = element_rect(fill = "white")
-      )
-  }
+    # plot heatmap
+    if (color == "default") {
+        ggplot(data = query.summ.byLin.ggplot, aes_string(x = "Lineage", y = colname)) +
+            geom_tile(aes(fill = count, colour = "darkred", size = 0.3)) +
+            scale_fill_gradient(low = "white", high = "darkred") +
+            scale_x_discrete(position = "top") +
+            theme_classic() +
+            theme(
+                axis.text.x = element_text(angle = 65, hjust = 0, vjust = 0.5),
+                panel.background = element_rect(fill = "white")
+            )
+    } else {
+        ggplot(data = query.summ.byLin.ggplot, aes_string(x = "Lineage", y = colname)) +
+            geom_tile(aes(fill = count)) +
+            scale_fill_viridis(discrete = F, option = color) +
+            scale_x_discrete(position = "top") +
+            theme_classic() +
+            theme(
+                axis.text.x = element_text(angle = 65, hjust = 0, vjust = 0.5),
+                panel.background = element_rect(fill = "white")
+            )
+    }
 }
 
 
@@ -354,106 +352,105 @@ lineage.DA.plot <- function(query_data = "prot",
 #'
 #' @examples
 #' \dontrun{
-#' lineage.Query.plot(prot, c("PspA","PspB","PspC","PspM","PspN"), 95)
+#' lineage.Query.plot(prot, c("PspA", "PspB", "PspC", "PspM", "PspN"), 95)
 #' }
-
 lineage.Query.plot <- function(query_data = all,
-                               queries,
-                               colname = "ClustName",
-                               cutoff, color = "default") {
-  query_by_lineage <- function(data, query, column, by) {
-    column <- sym(column)
-    by <- sym(by)
+    queries,
+    colname = "ClustName",
+    cutoff, color = "default") {
+    query_by_lineage <- function(data, query, column, by) {
+        column <- sym(column)
+        by <- sym(by)
 
-    # filter the protein by the query
-    data <- data %>%
-      filter(grepl(
-        pattern = query, x = {{ column }},
-        ignore.case = T
-      )) %>%
-      select({{ by }}, count)
+        # filter the protein by the query
+        data <- data %>%
+            filter(grepl(
+                pattern = query, x = {{ column }},
+                ignore.case = T
+            )) %>%
+            select({{ by }}, count)
 
-    if (nrow(data) == 0) {
-      data$Query <- character(0)
-      # data$count <- integer(0)
-      return(data)
+        if (nrow(data) == 0) {
+            data$Query <- character(0)
+            # data$count <- integer(0)
+            return(data)
+        }
+
+        data$Query <- query
+
+        data <- data %>%
+            filter(!grepl("^-$", {{ by }})) %>%
+            group_by(Query, {{ by }}) %>%
+            summarise(count = sum(count)) %>%
+            arrange(desc(count))
+        return(data)
+    }
+    col <- sym(colname)
+
+    query_data <- query_data %>% total_counts(column = colname, cutoff = cutoff)
+    # query_data contains all rows that possess a lineage
+    query_data <- query_data %>% filter(grepl("a", Lineage))
+
+    query_data <- shorten_lineage(query_data, "Lineage", abr_len = 1)
+    query_lin_counts <- data.frame("Query" = character(0), "Lineage" = character(0), "count" = integer())
+    for (q in queries) {
+        query_lin <- query_by_lineage(data = query_data, query = q, column = {{ col }}, by = "Lineage")
+        query_lin_counts <- dplyr::union(query_lin_counts, query_lin)
     }
 
-    data$Query <- query
+    query_lin_counts$Lineage <- map(query_lin_counts$Lineage, function(x) str_replace_all(string = x, pattern = ">", replacement = "_")) %>%
+        unlist()
 
-    data <- data %>%
-      filter(!grepl("^-$", {{ by }})) %>%
-      group_by(Query, {{ by }}) %>%
-      summarise(count = sum(count)) %>%
-      arrange(desc(count))
-    return(data)
-  }
-  col <- sym(colname)
-
-  query_data <- query_data %>% total_counts(column = colname, cutoff = cutoff)
-  # query_data contains all rows that possess a lineage
-  query_data <- query_data %>% filter(grepl("a", Lineage))
-
-  query_data <- shorten_lineage(query_data, "Lineage", abr_len = 1)
-  query_lin_counts <- data.frame("Query" = character(0), "Lineage" = character(0), "count" = integer())
-  for (q in queries) {
-    query_lin <- query_by_lineage(data = query_data, query = q, column = {{ col }}, by = "Lineage")
-    query_lin_counts <- dplyr::union(query_lin_counts, query_lin)
-  }
-
-  query_lin_counts$Lineage <- map(query_lin_counts$Lineage, function(x) str_replace_all(string = x, pattern = ">", replacement = "_")) %>%
-    unlist()
-
-  query_lin_counts <- query_lin_counts %>% arrange(dplyr::desc(Query))
-  query.summ.byLin.ggplot <- drop_na(query_lin_counts) %>%
-    filter(count >= 1) %>% # count or total count?
-    within(Lineage <- factor(Lineage,
-      levels = unique(Lineage)
-    )) %>%
-    within(Query <- factor(Query,
-      levels = unique(Query)
-    ))
-  if (color == "default") {
-    ## Tile plot
-    ggplot(
-      data = query.summ.byLin.ggplot,
-      aes_string(x = "Lineage", y = "Query")
-    ) +
-      geom_tile(
-        data = subset(
-          query.summ.byLin.ggplot,
-          !is.na(count)
-        ),
-        aes(fill = count),
-        colour = "darkred", size = 0.3
-      ) + # , width=0.7, height=0.7),
-      scale_fill_gradient(low = "white", high = "darkred") +
-      scale_x_discrete(position = "top") +
-      theme_minimal() +
-      theme(axis.text.x = element_text(angle = 65, hjust = 0, vjust = 0.5), plot.background = element_rect(fill = "white"), text = element_text(size = 12))
-    # ggsave("/data/scratch/janani/molevolvr_out/GZKL61_full/plot.png", dpi = 400, device = "png", height = 12, width = 14)
-    # scale_y_discrete(position = "bottom") +
-    # scale_x_discrete(position = "bottom") +
-    # coord_flip()
-  } else {
-    ## Tile plot
-    ggplot(
-      data = query.summ.byLin.ggplot,
-      aes_string(x = "Lineage", y = "Query")
-    ) +
-      geom_tile(
-        data = subset(
-          query.summ.byLin.ggplot,
-          !is.na(count)
-        ),
-        aes(fill = count),
-        colour = "darkred", size = 0.3
-      ) + # , width=0.7, height=0.7),
-      scale_fill_viridis(discrete = F, option = color) +
-      scale_x_discrete(position = "top") +
-      theme_minimal() +
-      theme(axis.text.x = element_text(angle = 65, hjust = 0, vjust = 0.5))
-  }
+    query_lin_counts <- query_lin_counts %>% arrange(dplyr::desc(Query))
+    query.summ.byLin.ggplot <- drop_na(query_lin_counts) %>%
+        filter(count >= 1) %>% # count or total count?
+        within(Lineage <- factor(Lineage,
+            levels = unique(Lineage)
+        )) %>%
+        within(Query <- factor(Query,
+            levels = unique(Query)
+        ))
+    if (color == "default") {
+        ## Tile plot
+        ggplot(
+            data = query.summ.byLin.ggplot,
+            aes_string(x = "Lineage", y = "Query")
+        ) +
+            geom_tile(
+                data = subset(
+                    query.summ.byLin.ggplot,
+                    !is.na(count)
+                ),
+                aes(fill = count),
+                colour = "darkred", size = 0.3
+            ) + # , width=0.7, height=0.7),
+            scale_fill_gradient(low = "white", high = "darkred") +
+            scale_x_discrete(position = "top") +
+            theme_minimal() +
+            theme(axis.text.x = element_text(angle = 65, hjust = 0, vjust = 0.5), plot.background = element_rect(fill = "white"), text = element_text(size = 12))
+        # ggsave("/data/scratch/janani/molevolvr_out/GZKL61_full/plot.png", dpi = 400, device = "png", height = 12, width = 14)
+        # scale_y_discrete(position = "bottom") +
+        # scale_x_discrete(position = "bottom") +
+        # coord_flip()
+    } else {
+        ## Tile plot
+        ggplot(
+            data = query.summ.byLin.ggplot,
+            aes_string(x = "Lineage", y = "Query")
+        ) +
+            geom_tile(
+                data = subset(
+                    query.summ.byLin.ggplot,
+                    !is.na(count)
+                ),
+                aes(fill = count),
+                colour = "darkred", size = 0.3
+            ) + # , width=0.7, height=0.7),
+            scale_fill_viridis(discrete = F, option = color) +
+            scale_x_discrete(position = "top") +
+            theme_minimal() +
+            theme(axis.text.x = element_text(angle = 65, hjust = 0, vjust = 0.5))
+    }
 }
 
 
@@ -496,61 +493,60 @@ lineage.Query.plot <- function(query_data = all,
 #' }
 #'
 lineage.neighbors.plot <- function(query_data = "prot", query = "pspa",
-                                   colname = "GenContext.norep") {
-
-  query_data <- query_data %>% filter(grepl("a", Lineage))
-  query.GCDA <- read_delim(paste0("Top-", query, "-neighbors.txt"),
-    delim = "\t", escape_double = FALSE, col_names = FALSE,
-    na = "NA", comment = "#", trim_ws = TRUE
-  )
-  colnames(query.GCDA) <- "domarchs"
-
-  neighbors.da <- query.GCDA$domarchs
-  for (i in neighbors.da)
-  {
-    j <- str_replace_all(string = i, pattern = "\\(", replacement = "\\\\(")
-    j <- str_replace_all(string = j, pattern = "\\)", replacement = "\\\\)")
-    j <- str_replace_all(string = j, pattern = "\\+", replacement = "\\\\+")
-    j <- str_replace_all(string = j, pattern = "\\_", replacement = "\\\\_")
-    # j <- str_replace_all(string=j, pattern="\\-", replacement="\\\\-")
-    query_data[[i]] <- if_else(grepl(j, as.matrix(query_data[, colname])),
-      true = 1, false = 0
+    colname = "GenContext.norep") {
+    query_data <- query_data %>% filter(grepl("a", Lineage))
+    query.GCDA <- read_delim(paste0("Top-", query, "-neighbors.txt"),
+        delim = "\t", escape_double = FALSE, col_names = FALSE,
+        na = "NA", comment = "#", trim_ws = TRUE
     )
-  }
+    colnames(query.GCDA) <- "domarchs"
 
-  query.ggplot <- query_data %>%
-    gather(key = TopNeighbors.DA, value = count, 19:ncol(query_data)) %>%
-    select("Lineage", "TopNeighbors.DA", "count") %>% # "DomArch.norep","GenContext.norep",
-    group_by(TopNeighbors.DA, Lineage) %>%
-    summarise(lincount = sum(count), bin = as.numeric(as.logical(lincount))) %>%
-    arrange(desc(lincount)) %>%
-    within(TopNeighbors.DA <- factor(TopNeighbors.DA,
-      levels = rev(names(sort(table(TopNeighbors.DA),
-        decreasing = TRUE
-      )))
-    )) %>%
-    within(Lineage <- factor(Lineage,
-      levels = names(sort(table(Lineage),
-        decreasing = TRUE
-      ))
-    ))
+    neighbors.da <- query.GCDA$domarchs
+    for (i in neighbors.da)
+    {
+        j <- str_replace_all(string = i, pattern = "\\(", replacement = "\\\\(")
+        j <- str_replace_all(string = j, pattern = "\\)", replacement = "\\\\)")
+        j <- str_replace_all(string = j, pattern = "\\+", replacement = "\\\\+")
+        j <- str_replace_all(string = j, pattern = "\\_", replacement = "\\\\_")
+        # j <- str_replace_all(string=j, pattern="\\-", replacement="\\\\-")
+        query_data[[i]] <- if_else(grepl(j, as.matrix(query_data[, colname])),
+            true = 1, false = 0
+        )
+    }
 
-  ggplot(query.ggplot, aes(x = Lineage, y = TopNeighbors.DA)) +
-    geom_tile(
-      data = subset(
-        query.ggplot,
-        !is.na(lincount)
-      ), # bin
-      aes(fill = lincount), # bin
-      colour = "coral3", size = 0.3
-    ) + # , width=0.7, height=0.7),
-    scale_fill_gradient(low = "white", high = "darkred") +
-    scale_x_discrete(position = "top") + # guides(fill=FALSE) +
-    theme_minimal() + # coord_flip() +
-    theme(axis.text.x = element_text(
-      angle = 90,
-      hjust = 0, vjust = 0.5
-    ))
+    query.ggplot <- query_data %>%
+        gather(key = TopNeighbors.DA, value = count, 19:ncol(query_data)) %>%
+        select("Lineage", "TopNeighbors.DA", "count") %>% # "DomArch.norep","GenContext.norep",
+        group_by(TopNeighbors.DA, Lineage) %>%
+        summarise(lincount = sum(count), bin = as.numeric(as.logical(lincount))) %>%
+        arrange(desc(lincount)) %>%
+        within(TopNeighbors.DA <- factor(TopNeighbors.DA,
+            levels = rev(names(sort(table(TopNeighbors.DA),
+                decreasing = TRUE
+            )))
+        )) %>%
+        within(Lineage <- factor(Lineage,
+            levels = names(sort(table(Lineage),
+                decreasing = TRUE
+            ))
+        ))
+
+    ggplot(query.ggplot, aes(x = Lineage, y = TopNeighbors.DA)) +
+        geom_tile(
+            data = subset(
+                query.ggplot,
+                !is.na(lincount)
+            ), # bin
+            aes(fill = lincount), # bin
+            colour = "coral3", size = 0.3
+        ) + # , width=0.7, height=0.7),
+        scale_fill_gradient(low = "white", high = "darkred") +
+        scale_x_discrete(position = "top") + # guides(fill=FALSE) +
+        theme_minimal() + # coord_flip() +
+        theme(axis.text.x = element_text(
+            angle = 90,
+            hjust = 0, vjust = 0.5
+        ))
 }
 
 #' Lineage Domain Repeats Plot
@@ -571,62 +567,62 @@ lineage.neighbors.plot <- function(query_data = "prot", query = "pspa",
 #' lineage.domain_repeats.plot()
 #' }
 lineage.domain_repeats.plot <- function(query_data, colname) {
-  # query_data <- pspa_data
-  # colname <- "SIG.TM.LADB"
+    # query_data <- pspa_data
+    # colname <- "SIG.TM.LADB"
 
-  ## Create columns for domains/DAs and fill them with 1/0
-  for (i in query.DAdoms$domains)
-  {
-    j <- str_replace_all(string = i, pattern = "\\(", replacement = "\\\\(")
-    j <- str_replace_all(string = j, pattern = "\\)", replacement = "\\\\)")
-    j <- str_replace_all(string = j, pattern = "\\+", replacement = "\\\\+")
-    j <- str_replace_all(string = j, pattern = "\\_", replacement = "\\\\_")
-    # query_data[[i]] <- if_else(grepl(j, as.matrix(query_data[,colname])),
-    # 													true=1, false=0)		## BINARY
-    query_data[[i]] <- str_count(
-      string = as.matrix(query_data[, colname]),
-      pattern = j
-    ) ## ACTUAL COUNTS
-  }
+    ## Create columns for domains/DAs and fill them with 1/0
+    for (i in query.DAdoms$domains)
+    {
+        j <- str_replace_all(string = i, pattern = "\\(", replacement = "\\\\(")
+        j <- str_replace_all(string = j, pattern = "\\)", replacement = "\\\\)")
+        j <- str_replace_all(string = j, pattern = "\\+", replacement = "\\\\+")
+        j <- str_replace_all(string = j, pattern = "\\_", replacement = "\\\\_")
+        # query_data[[i]] <- if_else(grepl(j, as.matrix(query_data[,colname])),
+        # 													true=1, false=0)		## BINARY
+        query_data[[i]] <- str_count(
+            string = as.matrix(query_data[, colname]),
+            pattern = j
+        ) ## ACTUAL COUNTS
+    }
 
-  ## Subsetting relevant columns
-  ggplot.data <- query_data %>%
-    # filter(grepl(queryname, Query)) %>%
-    select(
-      DomArch.norep, Lineage, GenContext.norep,
-      SIG.TM.LADB, GenContext, AccNum,
-      query.DAdoms$domains
-    ) %>% # words.gecutoff$words
-    # mutate_all(list(~ if (is.numeric(.)) as.integer(.) else .)) %>%
-    mutate(across(where(is.numeric), as.integer)) %>%
-    as.data.frame()
+    ## Subsetting relevant columns
+    ggplot.data <- query_data %>%
+        # filter(grepl(queryname, Query)) %>%
+        select(
+            DomArch.norep, Lineage, GenContext.norep,
+            SIG.TM.LADB, GenContext, AccNum,
+            query.DAdoms$domains
+        ) %>% # words.gecutoff$words
+        # mutate_all(list(~ if (is.numeric(.)) as.integer(.) else .)) %>%
+        mutate(across(where(is.numeric), as.integer)) %>%
+        as.data.frame()
 
-  # ## written on Sep 4, 2017
-  # write_delim(x=ggplot.data, "toast-rack.domain_repeat_counts.v1-2.txt",
-  # 						delim="\t", col_names=TRUE)
+    # ## written on Sep 4, 2017
+    # write_delim(x=ggplot.data, "toast-rack.domain_repeat_counts.v1-2.txt",
+    # 						delim="\t", col_names=TRUE)
 
-  ## Gathering element/word columns
-  ggplot.data.gather <- ggplot.data %>%
-    gather(key = domains, value = count, 7:ncol(ggplot.data)) # %>%
-  # select(DomArch.norep, Lineage, domains, count)
+    ## Gathering element/word columns
+    ggplot.data.gather <- ggplot.data %>%
+        gather(key = domains, value = count, 7:ncol(ggplot.data)) # %>%
+    # select(DomArch.norep, Lineage, domains, count)
 
-  # ## written on Sep 4
-  # write_delim(ggplot.data.gather,
-  # 						"toast-rack.domain_repeat_counts-gathered.v1-2.txt",
-  # 						delim="\t", col_names=TRUE)
+    # ## written on Sep 4
+    # write_delim(ggplot.data.gather,
+    # 						"toast-rack.domain_repeat_counts-gathered.v1-2.txt",
+    # 						delim="\t", col_names=TRUE)
 
-  ## Stacked column plot
-  ggplot(data = ggplot.data.gather, aes(x = Lineage, y = domains)) + # aes_string # plot <- (
-    # geom_col(position="fill") +
-    geom_tile(
-      data = subset(ggplot.data.gather, !is.na(count)),
-      aes(fill = as.numeric(as.logical(count))),
-      colour = "coral3", size = 0.3
-    ) + # , width=0.7, height=0.7),
-    scale_fill_gradient(low = "white", high = "darkred") +
-    scale_x_discrete(position = "top") +
-    theme_minimal() +
-    theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5))
+    ## Stacked column plot
+    ggplot(data = ggplot.data.gather, aes(x = Lineage, y = domains)) + # aes_string # plot <- (
+        # geom_col(position="fill") +
+        geom_tile(
+            data = subset(ggplot.data.gather, !is.na(count)),
+            aes(fill = as.numeric(as.logical(count))),
+            colour = "coral3", size = 0.3
+        ) + # , width=0.7, height=0.7),
+        scale_fill_gradient(low = "white", high = "darkred") +
+        scale_x_discrete(position = "top") +
+        theme_minimal() +
+        theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5))
 }
 
 
@@ -653,139 +649,141 @@ lineage.domain_repeats.plot <- function(query_data, colname) {
 #' @examples
 #' \dontrun{
 #' LineagePlot(psp_data,
-#' c("PspA", "Snf7","Classical-AAA","PspF","PspB", "PspC","ClgR","PspM",
-#'   "Thioredoxin","PspN_N","DUF3046","LiaI-LiaF-TM", "Toast_rack", "REC",
-#'   "HISKIN", "HAAS","SHOCT-bihelical", "SHOCT-like", "Tfu_1009", "PspAA",
-#'   "Spermine_synth","TM-Flotillin", "Band-7","Betapropeller",
-#'   "MacB_PCD", "FTSW_RODA_SPOVE", "Cest_Tir","SIGMA-HTH", "GNTR-HTH",
-#'   "DUF2089-HTH", "PadR-HTH","RHH","ZnR"),
-#'   level = 2)
+#'     c(
+#'         "PspA", "Snf7", "Classical-AAA", "PspF", "PspB", "PspC", "ClgR", "PspM",
+#'         "Thioredoxin", "PspN_N", "DUF3046", "LiaI-LiaF-TM", "Toast_rack", "REC",
+#'         "HISKIN", "HAAS", "SHOCT-bihelical", "SHOCT-like", "Tfu_1009", "PspAA",
+#'         "Spermine_synth", "TM-Flotillin", "Band-7", "Betapropeller",
+#'         "MacB_PCD", "FTSW_RODA_SPOVE", "Cest_Tir", "SIGMA-HTH", "GNTR-HTH",
+#'         "DUF2089-HTH", "PadR-HTH", "RHH", "ZnR"
+#'     ),
+#'     level = 2
+#' )
 #' }
 #'
 LineagePlot <- function(prot, domains_of_interest, level = 3, label.size = 8) {
-
-  LevelReduction <- function(lin) {
-    if (level == 1) {
-      gt_loc <- str_locate(lin, ">")[[1]]
-      if (is.na(gt_loc)) {
-        # No '>' in lineage
-        return(lin)
-      } else {
-        lin <- substring(lin, first = 0, last = (gt_loc - 1))
-        return(lin)
-      }
+    LevelReduction <- function(lin) {
+        if (level == 1) {
+            gt_loc <- str_locate(lin, ">")[[1]]
+            if (is.na(gt_loc)) {
+                # No '>' in lineage
+                return(lin)
+            } else {
+                lin <- substring(lin, first = 0, last = (gt_loc - 1))
+                return(lin)
+            }
+        }
+        #### Add guard here to protect from out of bounds
+        gt_loc <- str_locate_all(lin, ">")[[1]] # [(level-1),][1]
+        l <- length(gt_loc) / 2
+        if (level > l) {
+            # Not enough '>' in lineage
+            return(lin)
+        } else {
+            gt_loc <- gt_loc[level, ][1] %>% as.numeric()
+            lin <- substring(lin, first = 0, last = (gt_loc - 1))
+            return(lin)
+        }
     }
-    #### Add guard here to protect from out of bounds
-    gt_loc <- str_locate_all(lin, ">")[[1]] # [(level-1),][1]
-    l <- length(gt_loc) / 2
-    if (level > l) {
-      # Not enough '>' in lineage
-      return(lin)
-    } else {
-      gt_loc <- gt_loc[level, ][1] %>% as.numeric()
-      lin <- substring(lin, first = 0, last = (gt_loc - 1))
-      return(lin)
+
+    all_grouped <- data.frame("Query" = character(0), "Lineage" = character(0), "count" = integer())
+    for (dom in domains_of_interest)
+    {
+        domSub <- prot %>% filter(grepl(dom, GenContext, ignore.case = T))
+
+        domSub <- domSub %>%
+            group_by(Lineage) %>%
+            summarize("count" = n())
+
+        domSub$Query <- dom
+
+        all_grouped <- dplyr::union(all_grouped, domSub)
     }
-  }
 
-  all_grouped <- data.frame("Query" = character(0), "Lineage" = character(0), "count" = integer())
-  for (dom in domains_of_interest)
-  {
-    domSub <- prot %>% filter(grepl(dom, GenContext, ignore.case = T))
+    GetKingdom <- function(lin) {
+        gt_loc <- str_locate(lin, ">")[, "start"]
 
-    domSub <- domSub %>%
-      group_by(Lineage) %>%
-      summarize("count" = n())
-
-    domSub$Query <- dom
-
-    all_grouped <- dplyr::union(all_grouped, domSub)
-  }
-
-  GetKingdom <- function(lin) {
-    gt_loc <- str_locate(lin, ">")[, "start"]
-
-    if (is.na(gt_loc)) {
-      # No '>' in lineage
-      return(lin)
-    } else {
-      kingdom <- substring(lin, first = 0, last = (gt_loc - 1))
-      return(kingdom)
+        if (is.na(gt_loc)) {
+            # No '>' in lineage
+            return(lin)
+        } else {
+            kingdom <- substring(lin, first = 0, last = (gt_loc - 1))
+            return(kingdom)
+        }
     }
-  }
 
-  all_grouped <- all_grouped %>% mutate(ReducedLin = unlist(purrr::map(Lineage, LevelReduction)))
+    all_grouped <- all_grouped %>% mutate(ReducedLin = unlist(purrr::map(Lineage, LevelReduction)))
 
-  all_grouped_reduced <- all_grouped %>%
-    group_by(Query, ReducedLin) %>%
-    summarize("count" = sum(count)) %>%
-    mutate(Kingdom = unlist(purrr::map(ReducedLin, GetKingdom)))
+    all_grouped_reduced <- all_grouped %>%
+        group_by(Query, ReducedLin) %>%
+        summarize("count" = sum(count)) %>%
+        mutate(Kingdom = unlist(purrr::map(ReducedLin, GetKingdom)))
 
-  lin_counts <- all_grouped_reduced %>%
-    group_by(Kingdom, ReducedLin) %>%
-    summarize("count" = n())
+    lin_counts <- all_grouped_reduced %>%
+        group_by(Kingdom, ReducedLin) %>%
+        summarize("count" = n())
 
-  # grep("bacteria", lin_counts$Kingdom) %>% length()
+    # grep("bacteria", lin_counts$Kingdom) %>% length()
 
-  bacteria_colors <- rep("#d94f25", length(grep("bacteria", lin_counts$Kingdom)))
+    bacteria_colors <- rep("#d94f25", length(grep("bacteria", lin_counts$Kingdom)))
 
-  archaea_colors <- rep("#26662d", length(grep("archaea", lin_counts$Kingdom)))
+    archaea_colors <- rep("#26662d", length(grep("archaea", lin_counts$Kingdom)))
 
-  eukaryota_colors <- rep("#0000ff", length(grep("eukaryota", lin_counts$Kingdom)))
+    eukaryota_colors <- rep("#0000ff", length(grep("eukaryota", lin_counts$Kingdom)))
 
-  virus_colors <- rep("#4f4f4f", length(grep("virus", lin_counts$Kingdom)))
-  colors <- append(archaea_colors, bacteria_colors) %>%
-    append(eukaryota_colors) %>%
-    append(virus_colors)
+    virus_colors <- rep("#4f4f4f", length(grep("virus", lin_counts$Kingdom)))
+    colors <- append(archaea_colors, bacteria_colors) %>%
+        append(eukaryota_colors) %>%
+        append(virus_colors)
 
-  all_grouped_reduced$ReducedLin <- map(
-    all_grouped_reduced$ReducedLin,
-    function(lin) {
-      gt_loc <- str_locate(lin, ">")[, "start"]
+    all_grouped_reduced$ReducedLin <- map(
+        all_grouped_reduced$ReducedLin,
+        function(lin) {
+            gt_loc <- str_locate(lin, ">")[, "start"]
 
-      if (is.na(gt_loc)) {
-        # No '>' in lineage
-        return(lin)
-      } else {
-        lin <- substring(lin, first = (gt_loc + 1), last = 100)
-        return(lin)
-      }
-    }
-  ) %>% unlist()
+            if (is.na(gt_loc)) {
+                # No '>' in lineage
+                return(lin)
+            } else {
+                lin <- substring(lin, first = (gt_loc + 1), last = 100)
+                return(lin)
+            }
+        }
+    ) %>% unlist()
 
-  ordered_lin <- all_grouped_reduced %>% arrange(Kingdom)
+    ordered_lin <- all_grouped_reduced %>% arrange(Kingdom)
 
-  all_grouped_reduced$Query <- factor(
-    x = all_grouped_reduced$Query,
-    levels = rev(domains_of_interest)
-  )
-  all_grouped_reduced$ReducedLin <- factor(
-    x = all_grouped_reduced$ReducedLin,
-    levels = unique(ordered_lin$ReducedLin)
-  )
-  ggplot(
-    data = all_grouped_reduced,
-    aes_string(x = "ReducedLin", y = "Query")
-  ) +
-    geom_tile(
-      data = subset(
-        all_grouped_reduced,
-        !is.na(count)
-      ),
-      aes(fill = count),
-      colour = "darkred", size = 0.3
-    ) + # , width=0.7, height=0.7),
-    scale_fill_gradient(low = "white", high = "darkred") +
-    # scale_x_discrete(position="top") +
-    theme_minimal() +
-    theme(
-      axis.title = element_blank(),
-      axis.text.x = element_text(
-        angle = 90, hjust = 1, vjust = 0.2,
-        color = colors, size = label.size + 5
-      ),
-      axis.text = element_text(size = label.size)
+    all_grouped_reduced$Query <- factor(
+        x = all_grouped_reduced$Query,
+        levels = rev(domains_of_interest)
     )
+    all_grouped_reduced$ReducedLin <- factor(
+        x = all_grouped_reduced$ReducedLin,
+        levels = unique(ordered_lin$ReducedLin)
+    )
+    ggplot(
+        data = all_grouped_reduced,
+        aes_string(x = "ReducedLin", y = "Query")
+    ) +
+        geom_tile(
+            data = subset(
+                all_grouped_reduced,
+                !is.na(count)
+            ),
+            aes(fill = count),
+            colour = "darkred", size = 0.3
+        ) + # , width=0.7, height=0.7),
+        scale_fill_gradient(low = "white", high = "darkred") +
+        # scale_x_discrete(position="top") +
+        theme_minimal() +
+        theme(
+            axis.title = element_blank(),
+            axis.text.x = element_text(
+                angle = 90, hjust = 1, vjust = 0.2,
+                color = colors, size = label.size + 5
+            ),
+            axis.text = element_text(size = label.size)
+        )
 }
 
 #' Stacked Lineage Plot
@@ -816,117 +814,117 @@ LineagePlot <- function(prot, domains_of_interest, level = 3, label.size = 8) {
 #' stacked_lin_plot()
 #' }
 stacked_lin_plot <- function(prot, column = "DomArch", cutoff, Lineage_col = "Lineage",
-                             xlabel = "Domain Architecture",
-                             reduce_lineage = TRUE,
-                             label.size = 8,
-                             legend.position = c(0.7, 0.4),
-                             legend.text.size = 10,
-                             legend.cols = 2,
-                             legend.size = 0.7,
-                             coord_flip = TRUE, legend = TRUE) {
-  col <- sym(column)
+    xlabel = "Domain Architecture",
+    reduce_lineage = TRUE,
+    label.size = 8,
+    legend.position = c(0.7, 0.4),
+    legend.text.size = 10,
+    legend.cols = 2,
+    legend.size = 0.7,
+    coord_flip = TRUE, legend = TRUE) {
+    col <- sym(column)
 
-  if (reduce_lineage) {
-    prot <- shorten_lineage(prot, Lineage_col, abr_len = 3)
-  }
-
-  total_count <- total_counts(prot, column, cutoff, lineage_col = Lineage_col)
-  # total_count = prot
-
-  # Order bars by descending freq
-  order <- total_count %>%
-    select({{ col }}) %>%
-    unique() %>%
-    pull({{ col }})
-  if (coord_flip) {
-    order <- order %>% rev()
-  }
-
-
-  prot_data <- total_count
-  prot_data[[Lineage_col]] <- unlist(map(prot_data[[Lineage_col]], function(x) {
-    gt_pos <- gregexpr(pattern = ">", x)[[1]][2]
-    # If there is not a second '>' in the lineage
-    if (is.na(gt_pos)) {
-      x
-    } else {
-      x
-      # substr(x,1, (gt_pos-1) )
+    if (reduce_lineage) {
+        prot <- shorten_lineage(prot, Lineage_col, abr_len = 3)
     }
-  }))
 
-  prot_data[, column] <- factor(pull(prot_data, {{ col }}))
+    total_count <- total_counts(prot, column, cutoff, lineage_col = Lineage_col)
+    # total_count = prot
 
-  # prot_data <- prot_data %>% arrange(-Lineage)
-
-  if (coord_flip) {
-    if (legend) {
-      ggplot(prot_data, aes_string(fill = Lineage_col, y = "count", x = column)) +
-        geom_bar(position = "stack", stat = "identity", color = "white") +
-        coord_flip() +
-        xlab("Group") +
-        ylab("Number of proteins") +
-        theme_minimal() +
-        scale_fill_manual(values = cpcols, na.value = "#A9A9A9") +
-        theme(
-          legend.position = legend.position,
-          legend.background = element_rect(fill = "white", color = "white"),
-          legend.text = element_text(size = legend.text.size),
-          legend.title = element_text(size = legend.text.size + 2),
-          legend.key.size = unit(legend.size, "cm"),
-          # legend.key.height = unit(2, "cm"),
-          # legend.key.width = unit(0.9, "cm"),
-          legend.spacing = unit(0.4, "cm"),
-          axis.text = element_text(size = label.size),
-          panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-          panel.background = element_blank(),
-          axis.line = element_line(colour = "black"),
-          plot.background = element_rect("white", size = 0),
-          panel.border = element_blank()
-          # axis.text.x = ele
-        ) +
-        guides(fill = guide_legend(ncol = legend.cols, reverse = TRUE))
-    } else {
-      ggplot(prot_data, aes_string(fill = Lineage_col, y = "count", x = column)) +
-        geom_bar(position = "stack", stat = "identity", color = "white") +
-        coord_flip() +
-        xlab("Group") +
-        ylab("Number of proteins") +
-        theme_minimal() +
-        scale_fill_manual(values = cpcols, na.value = "#A9A9A9") +
-        theme(
-          legend.position = "none",
-          legend.spacing = unit(0.4, "cm"),
-          axis.text = element_text(size = label.size),
-          panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-          panel.background = element_blank(),
-          axis.line = element_line(colour = "black"),
-          plot.background = element_rect("white", size = 0),
-          panel.border = element_blank()
-          # axis.text.x = ele
-        )
+    # Order bars by descending freq
+    order <- total_count %>%
+        select({{ col }}) %>%
+        unique() %>%
+        pull({{ col }})
+    if (coord_flip) {
+        order <- order %>% rev()
     }
-  } else {
-    ggplot(prot_data, aes(fill = {{ Lineage_col }}, y = count, x = {{ col }})) +
-      geom_bar(position = "stack", stat = "identity") +
-      xlab("") +
-      ylab("") +
-      theme_minimal() +
-      theme(
-        legend.position = legend.position,
-        legend.background = element_rect(fill = "white", color = "white"),
-        legend.text = element_text(size = legend.text.size),
-        legend.title = element_text(size = legend.text.size + 2),
-        legend.key.size = unit(legend.size, "cm"),
-        axis.text = element_text(size = label.size),
-        axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),
-        panel.grid.major = element_blank(), panel.grid.minor = element_blank()
-        # axis.text.x = ele
-      ) +
-      guides(fill = guide_legend(
-        ncol = legend.cols, reverse = TRUE
-      ))
-  }
+
+
+    prot_data <- total_count
+    prot_data[[Lineage_col]] <- unlist(map(prot_data[[Lineage_col]], function(x) {
+        gt_pos <- gregexpr(pattern = ">", x)[[1]][2]
+        # If there is not a second '>' in the lineage
+        if (is.na(gt_pos)) {
+            x
+        } else {
+            x
+            # substr(x,1, (gt_pos-1) )
+        }
+    }))
+
+    prot_data[, column] <- factor(pull(prot_data, {{ col }}))
+
+    # prot_data <- prot_data %>% arrange(-Lineage)
+
+    if (coord_flip) {
+        if (legend) {
+            ggplot(prot_data, aes_string(fill = Lineage_col, y = "count", x = column)) +
+                geom_bar(position = "stack", stat = "identity", color = "white") +
+                coord_flip() +
+                xlab("Group") +
+                ylab("Number of proteins") +
+                theme_minimal() +
+                scale_fill_manual(values = cpcols, na.value = "#A9A9A9") +
+                theme(
+                    legend.position = legend.position,
+                    legend.background = element_rect(fill = "white", color = "white"),
+                    legend.text = element_text(size = legend.text.size),
+                    legend.title = element_text(size = legend.text.size + 2),
+                    legend.key.size = unit(legend.size, "cm"),
+                    # legend.key.height = unit(2, "cm"),
+                    # legend.key.width = unit(0.9, "cm"),
+                    legend.spacing = unit(0.4, "cm"),
+                    axis.text = element_text(size = label.size),
+                    panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                    panel.background = element_blank(),
+                    axis.line = element_line(colour = "black"),
+                    plot.background = element_rect("white", size = 0),
+                    panel.border = element_blank()
+                    # axis.text.x = ele
+                ) +
+                guides(fill = guide_legend(ncol = legend.cols, reverse = TRUE))
+        } else {
+            ggplot(prot_data, aes_string(fill = Lineage_col, y = "count", x = column)) +
+                geom_bar(position = "stack", stat = "identity", color = "white") +
+                coord_flip() +
+                xlab("Group") +
+                ylab("Number of proteins") +
+                theme_minimal() +
+                scale_fill_manual(values = cpcols, na.value = "#A9A9A9") +
+                theme(
+                    legend.position = "none",
+                    legend.spacing = unit(0.4, "cm"),
+                    axis.text = element_text(size = label.size),
+                    panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                    panel.background = element_blank(),
+                    axis.line = element_line(colour = "black"),
+                    plot.background = element_rect("white", size = 0),
+                    panel.border = element_blank()
+                    # axis.text.x = ele
+                )
+        }
+    } else {
+        ggplot(prot_data, aes(fill = {{ Lineage_col }}, y = count, x = {{ col }})) +
+            geom_bar(position = "stack", stat = "identity") +
+            xlab("") +
+            ylab("") +
+            theme_minimal() +
+            theme(
+                legend.position = legend.position,
+                legend.background = element_rect(fill = "white", color = "white"),
+                legend.text = element_text(size = legend.text.size),
+                legend.title = element_text(size = legend.text.size + 2),
+                legend.key.size = unit(legend.size, "cm"),
+                axis.text = element_text(size = label.size),
+                axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),
+                panel.grid.major = element_blank(), panel.grid.minor = element_blank()
+                # axis.text.x = ele
+            ) +
+            guides(fill = guide_legend(
+                ncol = legend.cols, reverse = TRUE
+            ))
+    }
 }
 
 ################
@@ -961,56 +959,55 @@ stacked_lin_plot <- function(prot, column = "DomArch", cutoff, Lineage_col = "Li
 #' @export
 #'
 #' @examples
-#'
 wordcloud3 <- function(data, size = 1, minSize = 0, gridSize = 0, fontFamily = "Segoe UI",
-                       fontWeight = "bold", color = "random-dark", backgroundColor = "white",
-                       minRotation = -pi / 4, maxRotation = pi / 4, shuffle = TRUE,
-                       rotateRatio = 0.4, shape = "circle", ellipticity = 0.65,
-                       widgetsize = NULL, figPath = NULL, hoverFunction = NULL) {
-  # Modified script of wordcloud2
-  if ("table" %in% class(data)) {
-    dataOut <- data.frame(name = names(data), freq = as.vector(data))
-  } else {
-    data <- as.data.frame(data)
-    dataOut <- data[, 1:3]
-    names(dataOut) <- c("name", "freq", "label")
-  }
-  if (!is.null(figPath)) {
-    if (!file.exists(figPath)) {
-      stop("cannot find fig in the figPath")
+    fontWeight = "bold", color = "random-dark", backgroundColor = "white",
+    minRotation = -pi / 4, maxRotation = pi / 4, shuffle = TRUE,
+    rotateRatio = 0.4, shape = "circle", ellipticity = 0.65,
+    widgetsize = NULL, figPath = NULL, hoverFunction = NULL) {
+    # Modified script of wordcloud2
+    if ("table" %in% class(data)) {
+        dataOut <- data.frame(name = names(data), freq = as.vector(data))
+    } else {
+        data <- as.data.frame(data)
+        dataOut <- data[, 1:3]
+        names(dataOut) <- c("name", "freq", "label")
     }
-    spPath <- strsplit(figPath, "\\.")[[1]]
-    len <- length(spPath)
-    figClass <- spPath[len]
-    if (!figClass %in% c("jpeg", "jpg", "png", "bmp", "gif")) {
-      stop("file should be a jpeg, jpg, png, bmp or gif file!")
+    if (!is.null(figPath)) {
+        if (!file.exists(figPath)) {
+            stop("cannot find fig in the figPath")
+        }
+        spPath <- strsplit(figPath, "\\.")[[1]]
+        len <- length(spPath)
+        figClass <- spPath[len]
+        if (!figClass %in% c("jpeg", "jpg", "png", "bmp", "gif")) {
+            stop("file should be a jpeg, jpg, png, bmp or gif file!")
+        }
+        base64 <- base64enc::base64encode(figPath)
+        base64 <- paste0(
+            "data:image/", figClass, ";base64,",
+            base64
+        )
+    } else {
+        base64 <- NULL
     }
-    base64 <- base64enc::base64encode(figPath)
-    base64 <- paste0(
-      "data:image/", figClass, ";base64,",
-      base64
+    weightFactor <- size * 180 / max(dataOut$freq)
+    settings <- list(
+        word = dataOut$name, freq = dataOut$freq, label = dataOut$label,
+        fontFamily = fontFamily, fontWeight = fontWeight, color = color,
+        minSize = minSize, weightFactor = weightFactor, backgroundColor = backgroundColor,
+        gridSize = gridSize, minRotation = minRotation, maxRotation = maxRotation,
+        shuffle = shuffle, rotateRatio = rotateRatio, shape = shape,
+        ellipticity = ellipticity, figBase64 = base64, hover = htmlwidgets::JS(hoverFunction)
     )
-  } else {
-    base64 <- NULL
-  }
-  weightFactor <- size * 180 / max(dataOut$freq)
-  settings <- list(
-    word = dataOut$name, freq = dataOut$freq, label = dataOut$label,
-    fontFamily = fontFamily, fontWeight = fontWeight, color = color,
-    minSize = minSize, weightFactor = weightFactor, backgroundColor = backgroundColor,
-    gridSize = gridSize, minRotation = minRotation, maxRotation = maxRotation,
-    shuffle = shuffle, rotateRatio = rotateRatio, shape = shape,
-    ellipticity = ellipticity, figBase64 = base64, hover = htmlwidgets::JS(hoverFunction)
-  )
-  chart <- htmlwidgets::createWidget("wordcloud2", settings,
-    width = widgetsize[1], height = widgetsize[2], sizingPolicy = htmlwidgets::sizingPolicy(
-      viewer.padding = 0,
-      browser.padding = 0, browser.fill = TRUE
+    chart <- htmlwidgets::createWidget("wordcloud2", settings,
+        width = widgetsize[1], height = widgetsize[2], sizingPolicy = htmlwidgets::sizingPolicy(
+            viewer.padding = 0,
+            browser.padding = 0, browser.fill = TRUE
+        )
     )
-  )
 
-  chart
-  # htmlwidgets::onRender(chart, "function(el,x){\n                        console.log(123);\n                        if(!iii){\n                          window.location.reload();\n                          iii = False;\n\n                        }\n  }")
+    chart
+    # htmlwidgets::onRender(chart, "function(el,x){\n                        console.log(123);\n                        if(!iii){\n                          window.location.reload();\n                          iii = False;\n\n                        }\n  }")
 }
 
 
@@ -1051,45 +1048,45 @@ wordcloud3 <- function(data, size = 1, minSize = 0, gridSize = 0, fontFamily = "
 #' wordcloud_element(prot, "da2doms", 10)
 #' }
 wordcloud_element <- function(query_data = "prot",
-                              colname = "DomArch",
-                              cutoff = 70,
-                              UsingRowsCutoff = FALSE) {
-  tc <- query_data %>% total_counts(column = colname, cutoff = cutoff, RowsCutoff = UsingRowsCutoff, digits = 5)
+    colname = "DomArch",
+    cutoff = 70,
+    UsingRowsCutoff = FALSE) {
+    tc <- query_data %>% total_counts(column = colname, cutoff = cutoff, RowsCutoff = UsingRowsCutoff, digits = 5)
 
-  column <- sym(colname)
-  # Get words from filter
-  # words.tc <- tc %>% select({{column}}, totalcount) %>% distinct()
+    column <- sym(colname)
+    # Get words from filter
+    # words.tc <- tc %>% select({{column}}, totalcount) %>% distinct()
 
-  query_data <- query_data %>% filter({{ column }} %in% pull(tc, {{ colname }}))
+    query_data <- query_data %>% filter({{ column }} %in% pull(tc, {{ colname }}))
 
-  if (grepl("DomArch|Clustname", colname)) {
-    type <- "da2doms"
-  } else if (grepl("GenContext", colname)) {
-    type <- "gc2da"
-  }
+    if (grepl("DomArch|Clustname", colname)) {
+        type <- "da2doms"
+    } else if (grepl("GenContext", colname)) {
+        type <- "gc2da"
+    }
 
-  words.tc <- query_data %>%
-    elements2words(
-      column = colname,
-      conversion_type = type
-    ) %>%
-    words2wc()
+    words.tc <- query_data %>%
+        elements2words(
+            column = colname,
+            conversion_type = type
+        ) %>%
+        words2wc()
 
-  # names(words.tc) <- c("words", "freq")
+    # names(words.tc) <- c("words", "freq")
 
-  # need a label column for actual frequencies, and frequencies will be the
-  # normalized sizes
-  # words.tc$label <- words.tc$freq
-  #
-  # words.tc <- words.tc %>% mutate(freq = log10(freq))
-  #
-  # words.tc <- words.tc %>% select(words, freq, label)
-  #
-  # wordcloud3(words.tc, minSize = 0)
-  wordcloud(words.tc$words, words.tc$freq,
-    min.freq = 1,
-    colors = brewer.pal(8, "Spectral"), scale = c(2, 1)
-  )
+    # need a label column for actual frequencies, and frequencies will be the
+    # normalized sizes
+    # words.tc$label <- words.tc$freq
+    #
+    # words.tc <- words.tc %>% mutate(freq = log10(freq))
+    #
+    # words.tc <- words.tc %>% select(words, freq, label)
+    #
+    # wordcloud3(words.tc, minSize = 0)
+    wordcloud(words.tc$words, words.tc$freq,
+        min.freq = 1,
+        colors = brewer.pal(8, "Spectral"), scale = c(2, 1)
+    )
 }
 
 
@@ -1128,41 +1125,41 @@ wordcloud_element <- function(query_data = "prot",
 #' wordcloud_element(prot, "da2doms", 10)
 #' }
 wordcloud2_element <- function(query_data = "prot",
-                               colname = "DomArch",
-                               cutoff = 70,
-                               UsingRowsCutoff = FALSE) {
-  # @param type Character. Default is "da2doms" for Domain Architectures.
-  # Other alternative: "gc2da" for Genomic Contexts.
+    colname = "DomArch",
+    cutoff = 70,
+    UsingRowsCutoff = FALSE) {
+    # @param type Character. Default is "da2doms" for Domain Architectures.
+    # Other alternative: "gc2da" for Genomic Contexts.
 
-  tc <- query_data %>% total_counts(column = colname, cutoff = cutoff, RowsCutoff = UsingRowsCutoff, digits = 5)
+    tc <- query_data %>% total_counts(column = colname, cutoff = cutoff, RowsCutoff = UsingRowsCutoff, digits = 5)
 
-  column <- sym(colname)
-  query_data <- query_data %>% filter({{ column }} %in% pull(tc, {{ colname }}))
+    column <- sym(colname)
+    query_data <- query_data %>% filter({{ column }} %in% pull(tc, {{ colname }}))
 
-  if (grepl("DomArch|Clustname", colname)) {
-    type <- "da2doms"
-  } else if (grepl("GenContext", colname)) {
-    type <- "gc2da"
-  }
+    if (grepl("DomArch|Clustname", colname)) {
+        type <- "da2doms"
+    } else if (grepl("GenContext", colname)) {
+        type <- "gc2da"
+    }
 
-  words.tc <- query_data %>%
-    elements2words(
-      column = colname,
-      conversion_type = type
-    ) %>%
-    words2wc()
+    words.tc <- query_data %>%
+        elements2words(
+            column = colname,
+            conversion_type = type
+        ) %>%
+        words2wc()
 
-  names(words.tc) <- c("words", "freq")
+    names(words.tc) <- c("words", "freq")
 
-  # need a label column for actual frequencies, and frequencies will be the
-  # normalized sizes
-  words.tc$label <- words.tc$freq
+    # need a label column for actual frequencies, and frequencies will be the
+    # normalized sizes
+    words.tc$label <- words.tc$freq
 
-  words.tc <- words.tc %>% mutate(freq = log10(freq))
+    words.tc <- words.tc %>% mutate(freq = log10(freq))
 
-  words.tc <- words.tc %>% select(words, freq, label)
+    words.tc <- words.tc %>% select(words, freq, label)
 
-  wordcloud3(words.tc, minSize = 0)
+    wordcloud3(words.tc, minSize = 0)
 }
 
 
@@ -1197,47 +1194,46 @@ wordcloud2_element <- function(query_data = "prot",
 #' lineage_sunburst()
 #' }
 lineage_sunburst <- function(prot, lineage_column = "Lineage",
-                             type = "sunburst",
-                             levels = 2, colors = NULL, legendOrder = NULL, showLegend = TRUE, maxLevels = 5) {
+    type = "sunburst",
+    levels = 2, colors = NULL, legendOrder = NULL, showLegend = TRUE, maxLevels = 5) {
+    lin_col <- sym(lineage_column)
 
-  lin_col <- sym(lineage_column)
+    # ensure they don't exceed maxLevels, although this should
+    if (!is.null(maxLevels) && levels > maxLevels) {
+        levels <- maxLevels
+    }
 
-  # ensure they don't exceed maxLevels, although this should
-  if (!is.null(maxLevels) && levels > maxLevels) {
-    levels <- maxLevels
-  }
+    levels_vec <- c()
+    for (i in 1:levels)
+    {
+        levels_vec <- append(levels_vec, paste0("level", i))
+    }
 
-  levels_vec <- c()
-  for (i in 1:levels)
-  {
-    levels_vec <- append(levels_vec, paste0("level", i))
-  }
+    # Take lineage column and break into the first to levels
+    prot <- prot %>%
+        select({{ lin_col }}) %>%
+        arrange(desc({{ lin_col }})) %>%
+        drop_na({{ lin_col }})
+    protLevels <- prot %>% separate({{ lin_col }}, into = levels_vec, sep = ">")
+    # Count the occurrance of each group of levels
+    protLevels <- protLevels %>%
+        group_by_at(levels_vec) %>%
+        summarise(size = n())
+    protLevels <- protLevels %>% arrange()
+    tree <- d3_nest(protLevels, value_cols = "size")
 
-  # Take lineage column and break into the first to levels
-  prot <- prot %>%
-    select({{ lin_col }}) %>%
-    arrange(desc({{ lin_col }})) %>%
-    drop_na({{ lin_col }})
-  protLevels <- prot %>% separate({{ lin_col }}, into = levels_vec, sep = ">")
-  # Count the occurrance of each group of levels
-  protLevels <- protLevels %>%
-    group_by_at(levels_vec) %>%
-    summarise(size = n())
-  protLevels <- protLevels %>% arrange()
-  tree <- d3_nest(protLevels, value_cols = "size")
+    # Plot sunburst
+    if (type == "sunburst") {
+        result <- sunburst(tree, legend = list(w = 225, h = 15, r = 5, s = 5), colors = cpcols, legendOrder = legendOrder, width = "100%", height = "100%")
+    } else if (type == "sund2b") {
+        result <- sund2b(tree)
+    }
 
-  # Plot sunburst
-  if (type == "sunburst") {
-    result <- sunburst(tree, legend = list(w = 225, h = 15, r = 5, s = 5), colors = cpcols, legendOrder = legendOrder, width = "100%", height = "100%")
-  } else if (type == "sund2b") {
-    result <- sund2b(tree)
-  }
-
-  if (showLegend) {
-    return(
-      htmlwidgets::onRender(
-        result,
-        "function(el, x) {
+    if (showLegend) {
+        return(
+            htmlwidgets::onRender(
+                result,
+                "function(el, x) {
           jQuery('.sunburst-togglelegend', el)
             .attr('checked', 'true')
             .attr('data-html2canvas-ignore', 'true');
@@ -1270,11 +1266,11 @@ lineage_sunburst <- function(prot, lineage_column = "Lineage",
             });
           });
         }"
-      )
-    )
-  }
+            )
+        )
+    }
 
-  return(result)
+    return(result)
 }
 
 
