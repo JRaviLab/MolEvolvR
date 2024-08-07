@@ -42,7 +42,7 @@ count_to_treemap(starwars_count, sort_by_n = TRUE)
 
 # display al charchaters by homeworld
 starwars \%>\%
-  count(homeworld, name) \%>\%
-  count_to_treemap(sort_by_n = TRUE)
+    count(homeworld, name) \%>\%
+    count_to_treemap(sort_by_n = TRUE)
 
 }

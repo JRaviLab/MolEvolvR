@@ -30,7 +30,7 @@ column names.
 }
 \examples{
 \dontrun{
-lineage.Query.plot(prot, c("PspA","PspB","PspC","PspM","PspN"), 95)
+lineage.Query.plot(prot, c("PspA", "PspB", "PspC", "PspM", "PspN"), 95)
 }
 }
 \keyword{Architectures,}

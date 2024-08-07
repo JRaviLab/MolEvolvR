@@ -18,8 +18,8 @@ Get word counts (wc) \link{DOMAINS (DA) or DOMAIN ARCHITECTURES (GC)}
 \examples{
 \dontrun{
 tibble::tibble(DomArch = c("aaa+bbb", "a+b", "b+c", "b-c")) |>
-  elements2words() |>
-  words2wc()
+    elements2words() |>
+    words2wc()
 }
 
 }

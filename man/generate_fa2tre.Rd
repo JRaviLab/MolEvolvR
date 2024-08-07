@@ -29,7 +29,7 @@ file formats and/or column names.
 }
 \examples{
 \dontrun{
-generate_aln2tree('pspa_snf7.fa')
+generate_aln2tree("pspa_snf7.fa")
 }
 }
 \author{

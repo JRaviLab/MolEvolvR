@@ -38,7 +38,7 @@ source("R/fa2domain.R")
 fasta <- Biostrings::readAAStringSet("./tests/example_protein.fa")
 df_iprscan <- read_iprscan_tsv("./tests/example_iprscan_valid.tsv")
 accnum <- df_iprscan$AccNum[1]
-df_iprscan_domains <- make_df_iprscan_domains(accnum,fasta, df_iprscan)
+df_iprscan_domains <- make_df_iprscan_domains(accnum, fasta, df_iprscan)
 }
 
 }

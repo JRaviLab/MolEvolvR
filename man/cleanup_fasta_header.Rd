@@ -19,6 +19,6 @@ suffix of the ith occurence to handle duplicates
 \examples{
 \dontrun{
 AAStringSet(c("xxx" = "ATCG", "xxx" = "GGGC")) |>
-  cleanup_fasta_header()
+    cleanup_fasta_header()
 }
 }

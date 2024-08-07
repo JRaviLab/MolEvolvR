@@ -28,6 +28,6 @@ column names.
 }
 \examples{
 \dontrun{
-total_counts(pspa-gc_lin_counts,0,"GC")
+total_counts(pspa - gc_lin_counts, 0, "GC")
 }
 }
