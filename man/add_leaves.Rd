@@ -31,7 +31,7 @@ file formats and/or column names.
 }
 \examples{
 \dontrun{
-add_leaves('pspa_snf7.aln', 'pspa.txt')
+add_leaves("pspa_snf7.aln", "pspa.txt")
 }
 \author{
 Janani Ravi

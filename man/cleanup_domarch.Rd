@@ -46,6 +46,6 @@ The original data frame is returned with the clean DomArchs column and the old d
 }
 \examples{
 \dontrun{
-cleanup_domarch(prot, TRUE, FALSE, domains_keep, domains_rename, domains_ignore=NULL)
+cleanup_domarch(prot, TRUE, FALSE, domains_keep, domains_rename, domains_ignore = NULL)
 }
 }

@@ -21,13 +21,16 @@ Generate a lineage plot
 \examples{
 \dontrun{
 LineagePlot(psp_data,
-c("PspA", "Snf7","Classical-AAA","PspF","PspB", "PspC","ClgR","PspM",
-  "Thioredoxin","PspN_N","DUF3046","LiaI-LiaF-TM", "Toast_rack", "REC",
-  "HISKIN", "HAAS","SHOCT-bihelical", "SHOCT-like", "Tfu_1009", "PspAA",
-  "Spermine_synth","TM-Flotillin", "Band-7","Betapropeller",
-  "MacB_PCD", "FTSW_RODA_SPOVE", "Cest_Tir","SIGMA-HTH", "GNTR-HTH",
-  "DUF2089-HTH", "PadR-HTH","RHH","ZnR"),
-  level = 2)
+    c(
+        "PspA", "Snf7", "Classical-AAA", "PspF", "PspB", "PspC", "ClgR", "PspM",
+        "Thioredoxin", "PspN_N", "DUF3046", "LiaI-LiaF-TM", "Toast_rack", "REC",
+        "HISKIN", "HAAS", "SHOCT-bihelical", "SHOCT-like", "Tfu_1009", "PspAA",
+        "Spermine_synth", "TM-Flotillin", "Band-7", "Betapropeller",
+        "MacB_PCD", "FTSW_RODA_SPOVE", "Cest_Tir", "SIGMA-HTH", "GNTR-HTH",
+        "DUF2089-HTH", "PadR-HTH", "RHH", "ZnR"
+    ),
+    level = 2
+)
 }
 
 }

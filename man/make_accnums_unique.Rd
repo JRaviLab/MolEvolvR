@@ -19,6 +19,6 @@ character vector) making them unique
 \examples{
 \dontrun{
 c("xxx", "xxx", "xxx", "yyy", "yyy") |>
-  make_accnums_unique()
+    make_accnums_unique()
 }
 }

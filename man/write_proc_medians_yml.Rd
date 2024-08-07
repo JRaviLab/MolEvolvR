@@ -20,8 +20,8 @@ read location.
 \examples{
 \dontrun{
 write_proc_medians_yml(
-  "/data/scratch/janani/molevolvr_out/",
-  "/data/scratch/janani/molevolvr_out/log_tbl.yml"
-   )
+    "/data/scratch/janani/molevolvr_out/",
+    "/data/scratch/janani/molevolvr_out/log_tbl.yml"
+)
 }
 }
