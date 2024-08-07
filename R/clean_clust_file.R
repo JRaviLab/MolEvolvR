@@ -58,57 +58,57 @@
 #' clean_clust_file("data/pspa.op_ins_cls", writepath = NULL, query = "pspa")
 #' }
 clean_clust_file <- function(path, writepath = NULL, query) {
-  # ?? does the following line need to be changed to read_lines()?
-  prot <- read_tsv(path, col_names = F)
+    # ?? does the following line need to be changed to read_lines()?
+    prot <- read_tsv(path, col_names = F)
 
-  # ?? Unused? clust contains a column containing all the clustids
-  clust <- prot %>% filter(grepl("^#", X1))
+    # ?? Unused? clust contains a column containing all the clustids
+    clust <- prot %>% filter(grepl("^#", X1))
 
-  # Separate all rows into columns by spaces and create ClustName.orig and ClustID columns
-  # First warning below
-  prot <- prot %>%
-    separate(X1, colnames.op_ins_cls, sep = ("  +")) %>%
-    mutate(ClustName.orig = "", ClustID = "")
+    # Separate all rows into columns by spaces and create ClustName.orig and ClustID columns
+    # First warning below
+    prot <- prot %>%
+        separate(X1, colnames.op_ins_cls, sep = ("  +")) %>%
+        mutate(ClustName.orig = "", ClustID = "")
 
-  # ind_with_num contains a list of the row numbers with # in them.
-  # This indicates that the row contains a clust id
-  ind_with_num <- which(grepl("^#", prot$AccNum))
+    # ind_with_num contains a list of the row numbers with # in them.
+    # This indicates that the row contains a clust id
+    ind_with_num <- which(grepl("^#", prot$AccNum))
 
-  # Separate the clustIDs (# 186;ClustName) by ";" into columns ClustID and ClustName.orig
-  clsid <- separate(prot[ind_with_num, "AccNum"],
-    col = AccNum,
-    into = c("ClustID", "ClustName.orig"), sep = "; "
-  )
-
-  # iterate through the rows of clsid and get it into proper format
-  # e.g. # 186 -> 000001.186
-  for (x in 1:length(clsid$ClustID)) {
-    lng <- str_length(x)
-    clsid$ClustID[x] <- gsub(
-      pattern = "# ",
-      replacement = paste0(strrep("0", (6 - lng)), x, "."),
-      clsid$ClustID[x]
+    # Separate the clustIDs (# 186;ClustName) by ";" into columns ClustID and ClustName.orig
+    clsid <- separate(prot[ind_with_num, "AccNum"],
+        col = AccNum,
+        into = c("ClustID", "ClustName.orig"), sep = "; "
     )
-    # removing extra space at the start of ClustName
-    clsid$ClustName.orig[x] <- gsub(
-      pattern = "^ ", replacement = "",
-      clsid$ClustName.orig[x]
-    )
-  }
 
-  ind_with_num <- ind_with_num %>% append((length(prot$AccNum) + 1))
-  # Assign CLS id and CLS name to all rows
-  for (x in length(ind_with_num):2) {
-    prot[which(as.numeric(rownames(prot))
-    < ind_with_num[x]), "ClustName.orig"] <- clsid[x - 1, "ClustName.orig"]
-    prot[which(as.numeric(rownames(prot))
-    < ind_with_num[x]), "ClustID"] <- clsid[x - 1, "ClustID"]
-  }
+    # iterate through the rows of clsid and get it into proper format
+    # e.g. # 186 -> 000001.186
+    for (x in 1:length(clsid$ClustID)) {
+        lng <- str_length(x)
+        clsid$ClustID[x] <- gsub(
+            pattern = "# ",
+            replacement = paste0(strrep("0", (6 - lng)), x, "."),
+            clsid$ClustID[x]
+        )
+        # removing extra space at the start of ClustName
+        clsid$ClustName.orig[x] <- gsub(
+            pattern = "^ ", replacement = "",
+            clsid$ClustName.orig[x]
+        )
+    }
 
-  # filter out the rows containing just the clustid and create a Query column
-  prot <- prot %>%
-    filter(!grepl("^#", prot$AccNum)) %>%
-    mutate(Query = query)
+    ind_with_num <- ind_with_num %>% append((length(prot$AccNum) + 1))
+    # Assign CLS id and CLS name to all rows
+    for (x in length(ind_with_num):2) {
+        prot[which(as.numeric(rownames(prot))
+        < ind_with_num[x]), "ClustName.orig"] <- clsid[x - 1, "ClustName.orig"]
+        prot[which(as.numeric(rownames(prot))
+        < ind_with_num[x]), "ClustID"] <- clsid[x - 1, "ClustID"]
+    }
 
-  return(prot)
+    # filter out the rows containing just the clustid and create a Query column
+    prot <- prot %>%
+        filter(!grepl("^#", prot$AccNum)) %>%
+        mutate(Query = query)
+
+    return(prot)
 }

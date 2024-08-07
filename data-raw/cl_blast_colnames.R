@@ -2,12 +2,12 @@
 
 # pre-cleanup
 cl_blast_colnames <- c(
-  "Query", "SAccNum", "AccNum",
-  "SAllSeqID", "STitle", "Species", "TaxID",
-  "PcIdentity", "AlnLength", "Mismatch", "GapOpen",
-  "QStart", "QEnd", "QLength",
-  "SStart", "SEnd", "SLength",
-  "EValue", "BitScore", "PcPosOrig"
+    "Query", "SAccNum", "AccNum",
+    "SAllSeqID", "STitle", "Species", "TaxID",
+    "PcIdentity", "AlnLength", "Mismatch", "GapOpen",
+    "QStart", "QEnd", "QLength",
+    "SStart", "SEnd", "SLength",
+    "EValue", "BitScore", "PcPosOrig"
 )
 
 

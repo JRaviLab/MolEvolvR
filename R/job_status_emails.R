@@ -26,9 +26,8 @@
 #' @export
 #'
 make_job_results_url <- function(
-    pin_id,
-    base_url=Sys.getenv("BASE_URL", unset="http://jravilab.org/molevolvr/")
-) {
+        pin_id,
+        base_url = Sys.getenv("BASE_URL", unset = "http://jravilab.org/molevolvr/")) {
     return(paste0(base_url, "?r=", pin_id, "&p=home"))
 }
 
@@ -105,7 +104,10 @@ format_job_args <- function(job_args) {
                 toString(
                     ifelse(!is.null(field_meta), field_meta$name, key)
                 )
-            }, error=function(e) { return(value) }
+            },
+            error = function(e) {
+                return(value)
+            }
         )
 
         value <- job_args[[key]]
@@ -121,7 +123,9 @@ format_job_args <- function(job_args) {
                         field_meta$values[[value]], value
                     )
                 },
-                error=function(e) { return(value) }
+                error = function(e) {
+                    return(value)
+                }
             )
         }
 
@@ -169,12 +173,11 @@ get_job_message <- function(job_dir, pin_id, job_results_url, event_type, contex
     job_args_list <- format_job_args(job_args)
 
     # determine which template to use based on the event type
-    if (event_type == 'start') {
+    if (event_type == "start") {
         template <- "/data/research/jravilab/molevol_scripts/templates/job_start_email/job_start_email.html"
-    } else if (event_type == 'end') {
+    } else if (event_type == "end") {
         template <- "/data/research/jravilab/molevol_scripts/templates/job_end_email/job_end_email.html"
-    }
-    else {
+    } else {
         stop("Invalid event type (expected 'start' or 'end'): ", event_type)
     }
 
@@ -183,12 +186,13 @@ get_job_message <- function(job_dir, pin_id, job_results_url, event_type, contex
         paste0(
             htmlTemplate(
                 template,
-                pin_id=pin_id,
-                job_results_url=job_results_url,
-                job_args_list=job_args_list,
-                context=context
+                pin_id = pin_id,
+                job_results_url = job_results_url,
+                job_args_list = job_args_list,
+                context = context
             )
-        ), type="text/html"
+        ),
+        type = "text/html"
     )
 
     return(message)
@@ -213,18 +217,17 @@ get_job_message <- function(job_dir, pin_id, job_results_url, event_type, contex
 #' @return
 #' the result of the sendmailR::sendmail() call
 #' @export
-send_job_status_email <- function(notify_email, job_dir, pin_id, event_type, context=NULL) {
+send_job_status_email <- function(notify_email, job_dir, pin_id, event_type, context = NULL) {
     # -------------------------------------------------
     # --- step 1. build the email subject and contents
     # -------------------------------------------------
 
     # determine the subject based on the event type
-    if (event_type == 'start') {
+    if (event_type == "start") {
         mail_subject <- paste0("MolEvolvR Job Accepted (ID: ", pin_id, ")")
-    } else if (event_type == 'end') {
+    } else if (event_type == "end") {
         mail_subject <- paste0("MolEvolvR Job Completed (ID: ", pin_id, ")")
-    }
-    else {
+    } else {
         stop("Invalid event type (expected 'start' or 'end'): ", event_type)
     }
 
@@ -241,9 +244,9 @@ send_job_status_email <- function(notify_email, job_dir, pin_id, event_type, con
     # -------------------------------------------------
 
     # if verbose, output emails
-    mail_verbose <- (Sys.getenv("SMTP_VERBOSE", unset=1) == 1)
+    mail_verbose <- (Sys.getenv("SMTP_VERBOSE", unset = 1) == 1)
 
-    if (Sys.getenv("SMTP_USE_CURL", unset=1) == 1) {
+    if (Sys.getenv("SMTP_USE_CURL", unset = 1) == 1) {
         # when using curl, we need a full URL to the server of the form
         # smtp://<host>:<port>
 
@@ -254,40 +257,38 @@ send_job_status_email <- function(notify_email, job_dir, pin_id, event_type, con
         target_port <- Sys.getenv("SMTP_SSL_PORT")
 
         if (target_port != "25") {
-            target_server = paste0("smtp://", Sys.getenv("SMTP_HOST"), ":", target_port)
-        }
-        else {
-            target_server = paste0("smtp://", Sys.getenv("SMTP_HOST"))
+            target_server <- paste0("smtp://", Sys.getenv("SMTP_HOST"), ":", target_port)
+        } else {
+            target_server <- paste0("smtp://", Sys.getenv("SMTP_HOST"))
         }
 
         # and finally send the email using cURL
         result <- sendmail(
-            from=Sys.getenv("SMTP_EMAIL"),
-            to=c(notify_email),
-            subject=mail_subject,
-            msg=message,
+            from = Sys.getenv("SMTP_EMAIL"),
+            to = c(notify_email),
+            subject = mail_subject,
+            msg = message,
             engine = "curl",
             engineopts = list(
                 username = Sys.getenv("SMTP_EMAIL"),
                 password = Sys.getenv("SMTP_PASSWORD")
             ),
-            control=list(
-                smtpServer=target_server,
+            control = list(
+                smtpServer = target_server,
                 verbose = mail_verbose
             )
         )
-    }
-    else {
+    } else {
         # when not using curl, we don't need a URL, just the host
         # note that CU's SMTP server balks at STARTTLS, so we have to use
         # the non-curl implementation
         result <- sendmail(
-            from=Sys.getenv("SMTP_EMAIL"),
-            to=c(notify_email),
-            subject=mail_subject,
-            msg=message,
-            control=list(
-                smtpServer=Sys.getenv("SMTP_HOST"),
+            from = Sys.getenv("SMTP_EMAIL"),
+            to = c(notify_email),
+            subject = mail_subject,
+            msg = message,
+            control = list(
+                smtpServer = Sys.getenv("SMTP_HOST"),
                 verbose = mail_verbose
             )
         )

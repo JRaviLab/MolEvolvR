@@ -3,10 +3,10 @@
 ## Downloaded as Descriptions csv
 # BLASTP and related protein BLASTs
 web_blastp_desc_colnames <- c(
-  "Description", "Species", "CommonName", "TaxID",
-  "BitScore", "TotalScore",
-  "PcQCover", "EValue", "PcIdentity",
-  "SLen", "AccNum"
+    "Description", "Species", "CommonName", "TaxID",
+    "BitScore", "TotalScore",
+    "PcQCover", "EValue", "PcIdentity",
+    "SLen", "AccNum"
 )
 # Ref: https://ncbiinsights.ncbi.nlm.nih.gov/2020/11/23/blast-new-columns/
 # Description,	Scientific Name,	Common Name,	Taxid,

@@ -17,9 +17,9 @@
 #' sink.reset()
 #' }
 sink.reset <- function() {
-  for (i in seq_len(sink.number())) {
-    sink(NULL)
-  }
+    for (i in seq_len(sink.number())) {
+        sink(NULL)
+    }
 }
 
 
@@ -43,25 +43,24 @@ sink.reset <- function() {
 #' \dontrun{
 #' add_lins()
 #' }
-
 add_lins <- function(df, acc_col = "AccNum", assembly_path,
-                     lineagelookup_path, ipgout_path = NULL, plan = "sequential") {
-  s_acc_col <- sym(acc_col)
-  accessions <- df %>% pull(acc_col)
-  lins <- acc2lin(accessions, assembly_path, lineagelookup_path, ipgout_path, plan)
+    lineagelookup_path, ipgout_path = NULL, plan = "sequential") {
+    s_acc_col <- sym(acc_col)
+    accessions <- df %>% pull(acc_col)
+    lins <- acc2lin(accessions, assembly_path, lineagelookup_path, ipgout_path, plan)
 
-  # Drop a lot of the unimportant columns for now? will make merging much easier
-  lins <- lins[, c(
-    "Strand", "Start", "Stop", "Nucleotide Accession", "Source",
-    "Id", "Strain"
-  ) := NULL]
-  lins <- unique(lins)
+    # Drop a lot of the unimportant columns for now? will make merging much easier
+    lins <- lins[, c(
+        "Strand", "Start", "Stop", "Nucleotide Accession", "Source",
+        "Id", "Strain"
+    ) := NULL]
+    lins <- unique(lins)
 
-  # dup <- lins %>% group_by(Protein) %>% summarize(count = n()) %>% filter(count > 1) %>%
-  #   pull(Protein)
+    # dup <- lins %>% group_by(Protein) %>% summarize(count = n()) %>% filter(count > 1) %>%
+    #   pull(Protein)
 
-  merged <- merge(df, lins, by.x = acc_col, by.y = "Protein", all.x = TRUE)
-  return(merged)
+    merged <- merge(df, lins, by.x = acc_col, by.y = "Protein", all.x = TRUE)
+    return(merged)
 }
 
 
@@ -88,7 +87,6 @@ add_lins <- function(df, acc_col = "AccNum", assembly_path,
 #' \dontrun{
 #' acc2lin()
 #' }
-
 acc2lin <- function(accessions, assembly_path, lineagelookup_path, ipgout_path = NULL, plan = "sequential") {
   #' @author Samuel Chen, Janani Ravi
   #' @description This function combines 'efetch_ipg()' and 'ipg2lin()' to map a set
@@ -107,12 +105,10 @@ acc2lin <- function(accessions, assembly_path, lineagelookup_path, ipgout_path =
   }
   efetch_ipg(accessions, out_path = ipgout_path, plan)
 
-  lins <- ipg2lin(accessions, ipgout_path, assembly_path, lineagelookup_path)
-
-  if (tmp_ipg) {
-    unlink(tempdir(), recursive = T)
-  }
-  return(lins)
+    if (tmp_ipg) {
+        unlink(tempdir(), recursive = T)
+    }
+    return(lins)
 }
 
 #' efetch_ipg
@@ -137,7 +133,6 @@ acc2lin <- function(accessions, assembly_path, lineagelookup_path, ipgout_path =
 #' \dontrun{
 #' efetch_ipg()
 #' }
-
 efetch_ipg <- function(accnums, out_path, plan = "sequential") {
   #' @author Samuel Chen, Janani Ravi
   #' @description Perform efetch on the ipg database and write the results to out_path
@@ -151,39 +146,33 @@ efetch_ipg <- function(accnums, out_path, plan = "sequential") {
       # limit of 10/second w/ key
       l <- length(in_data)
 
-      partitioned <- list()
-      for (i in 1:groups)
-      {
-        partitioned[[i]] <- in_data[seq.int(i, l, groups)]
-      }
+            return(partitioned)
+        }
 
-      return(partitioned)
+        plan(strategy = plan, .skip = T)
+
+
+        min_groups <- length(accnums) / 200
+        groups <- min(max(min_groups, 15), length(accnums))
+        partitioned_acc <- partition(accnums, groups)
+        sink(out_path)
+
+        a <- future_map(1:length(partitioned_acc), function(x) {
+            # Avoid hitting the rate API limit
+            if (x %% 9 == 0) {
+                Sys.sleep(1)
+            }
+            cat(
+                entrez_fetch(
+                    id = partitioned_acc[[x]],
+                    db = "ipg",
+                    rettype = "xml",
+                    api_key = "55120df9f5dddbec857bbb247164f86a2e09" ## Can this be included in public package?
+                )
+            )
+        })
+        sink(NULL)
     }
-
-    plan(strategy = plan, .skip = T)
-
-
-    min_groups <- length(accnums) / 200
-    groups <- min(max(min_groups, 15), length(accnums))
-    partitioned_acc <- partition(accnums, groups)
-    sink(out_path)
-
-    a <- future_map(1:length(partitioned_acc), function(x) {
-      # Avoid hitting the rate API limit
-      if (x %% 9 == 0) {
-        Sys.sleep(1)
-      }
-      cat(
-        entrez_fetch(
-          id = partitioned_acc[[x]],
-          db = "ipg",
-          rettype = "xml",
-          api_key = "55120df9f5dddbec857bbb247164f86a2e09" ## Can this be included in public package?
-        )
-      )
-    })
-    sink(NULL)
-  }
 }
 
 #' ipg2lin
@@ -212,7 +201,6 @@ efetch_ipg <- function(accnums, out_path, plan = "sequential") {
 #' ipg2lin()
 #' }
 #'
-
 ipg2lin <- function(accessions, ipg_file, assembly_path, lineagelookup_path) {
   #' @author Samuel Chen, Janani Ravi
   #' @description Takes the resulting file of an efetch run on the ipg database and
@@ -228,14 +216,12 @@ ipg2lin <- function(accessions, ipg_file, assembly_path, lineagelookup_path) {
   #' "create_lineage_lookup()" function
   ipg_dt <- fread(ipg_file, sep = "\t", fill = T)
 
-  ipg_dt <- ipg_dt[Protein %in% accessions]
+    ipg_dt <- setnames(ipg_dt, "Assembly", "GCA_ID")
 
-  ipg_dt <- setnames(ipg_dt, "Assembly", "GCA_ID")
+    lins <- GCA2Lins(prot_data = ipg_dt, assembly_path, lineagelookup_path)
+    lins <- lins[!is.na(Lineage)] %>% unique()
 
-  lins <- GCA2Lins(prot_data = ipg_dt, assembly_path, lineagelookup_path)
-  lins <- lins[!is.na(Lineage)] %>% unique()
-
-  return(lins)
+    return(lins)
 }
 
 # since MolEvolvR tracks queries using unique identifiers,

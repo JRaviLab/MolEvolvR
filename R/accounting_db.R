@@ -49,7 +49,9 @@ getJobsForCode <- function(code, cols=NA) {
 
     colSpec <- if (!any(is.na(cols))) {
         toString(dbQuoteIdentifier(con, cols))
-    } else { "*" }
+    } else {
+        "*"
+    }
 
     query <- paste0(
         "SELECT ", colSpec, " FROM localcluster_job_table WHERE job_name like ?"
@@ -57,7 +59,7 @@ getJobsForCode <- function(code, cols=NA) {
 
     result <- dbGetQuery(
         con, query,
-        params=list(paste0("%", code, "%"))
+        params = list(paste0("%", code, "%"))
     )
 
     dbDisconnect(con)
