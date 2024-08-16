@@ -10,7 +10,16 @@ add_lins(
   assembly_path,
   lineagelookup_path,
   ipgout_path = NULL,
-  plan = "sequential"
+  plan = "multicore"
+)
+
+add_lins(
+  df,
+  acc_col = "AccNum",
+  assembly_path,
+  lineagelookup_path,
+  ipgout_path = NULL,
+  plan = "multicore"
 )
 
 add_lins(
