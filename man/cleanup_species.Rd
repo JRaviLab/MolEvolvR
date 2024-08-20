@@ -7,9 +7,10 @@
 cleanup_species(prot, remove_empty = FALSE)
 }
 \arguments{
-\item{prot}{A data frame that contains columns 'Species' and 'GenContext.norep'}
+\item{prot}{A data frame that contains columns 'Species'.}
 
-\item{remove_empty}{Boolean. If TRUE, rows with empty/unnecessary values in 'GenContext.norep' are removed}
+\item{remove_empty}{Boolean. If TRUE, rows with empty/unnecessary values in 'Species' are removed.
+Default is false.}
 }
 \value{
 Describe return, in detail
@@ -20,10 +21,10 @@ Cleanup Species
 Cleans up the species column of a data frame by removing certain characters and rows.
 
 This function removes unneccessary characters from the 'Species' column.
-Certain rows may also removed from the table based on values in the 'GenContext.norep' column.
 A cleaned up version of the data table is returned.
 }
 \examples{
-cleanup_species(pspa.sub,TRUE)
+\dontrun{
+cleanup_species(prot, TRUE)
 }
 }

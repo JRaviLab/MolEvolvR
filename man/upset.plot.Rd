@@ -4,14 +4,27 @@
 \alias{upset.plot}
 \title{UpSet Plot}
 \usage{
-upset.plot(query_data = "toast_rack.sub", cutoff = 10,
-  type = "da2doms")
+upset.plot(
+  query_data = "toast_rack.sub",
+  colname = "DomArch",
+  cutoff = 90,
+  RowsCutoff = FALSE,
+  text.scale = 1.5,
+  point.size = 2.2,
+  line.size = 0.8
+)
 }
 \arguments{
 \item{query_data}{Data frame of protein homologs with the usual 11 columns +
 additional word columns (0/1 format). Default is toast_rack.sub}
 
-\item{cutoff}{Numeric. Cutoff for word frequency. Default is 10.}
+\item{cutoff}{Numeric. Cutoff for word frequency. Default is 90.}
+
+\item{text.scale}{Allows scaling of axis title, tick lables, and numbers above the intersection size bars.
+text.scale can either take a universal scale in the form of an integer,
+or a vector of specific scales in the format: c(intersection size title,
+intersection size tick labels, set size title, set size tick labels, set names,
+numbers above bars)}
 
 \item{line.size}{}
 }

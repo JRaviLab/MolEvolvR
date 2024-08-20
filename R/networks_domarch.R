@@ -5,11 +5,11 @@
 #################
 ## Pkgs needed ##
 #################
-suppressPackageStartupMessages(library(tidyverse))
-suppressPackageStartupMessages(library(rlang))
-suppressPackageStartupMessages(library(igraph))
-suppressPackageStartupMessages(library(visNetwork))
-conflicted::conflict_prefer("filter", "dplyr")
+# suppressPackageStartupMessages(library(tidyverse))
+# suppressPackageStartupMessages(library(rlang))
+# suppressPackageStartupMessages(library(igraph))
+# suppressPackageStartupMessages(library(visNetwork))
+# conflicted::conflict_prefer("filter", "dplyr")
 ###########################
 #### Network FUNCTIONS ####
 ###########################
@@ -49,66 +49,8 @@ conflicted::conflict_prefer("filter", "dplyr")
 #' domain_network(pspa)
 #' }
 domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff = 70, layout = "nice", query_color = adjustcolor("green", alpha.f = .5)) {
-  # by domain networks or all, as required.
-  tryCatch(
-    {
-      column_name <- sym(column)
-    
-      prot_tc <- prot %>% total_counts(column = column, cutoff = cutoff, RowsCutoff = F, digits = 5)
-
-      # ensure  only Domains that are in the tc cutoff range are kept
-      within_list <- prot_tc %>%
-        select({{ column_name }}) %>%
-        distinct()
-      within_list <- pull(within_list, {{ column_name }})
-      prot <- prot %>% filter({{ column_name }} %in% within_list)
-
-      ####### Below should be part of the standardized cleanup process
-      prot$DomArch.ntwrk <- as_vector(prot %>% select({{ column }})) %>% # testing with prot$DomArch.orig
-        str_replace_all(coll(pattern = "\\?", ignore_case = T), "X")
-
-      # dom="LTD"  #your domain name here
-      # domains_of_interest <- c("PspA || PspA_IM30 || PspA\\_IM30")  # your domain name here
-      # ye=grep(pattern = dom,x = prot.list,value = T)
-      # ye=unlist(strsplit(ye,"\\+"))
-      
-      # string clean up all of the Domain Architecture columns
-      prot <- prot |>
-        mutate(DomArch.ntwrk = clean_string(DomArch.ntwrk)) |>
-        mutate(
-          across(
-            all_of(column),
-            clean_string
-          )
-        )
-      domains_of_interest_regex <- paste(domains_of_interest, collapse = "|")
-      domain.list <- prot %>%
-        dplyr::filter(grepl(
-          pattern = domains_of_interest_regex,
-          x = DomArch.ntwrk,
-          ignore.case = T, perl = T
-        ))
-      ## Separating column and converting to atomic vector prevents coercion
-      domain.list <- domain.list |> purrr::map(
-        \(x) stringr::str_replace_all(string = x, pattern = " ", replacement = "_")
-      )
-      # cleanup domain list
-      domain.list <- domain.list$DomArch.ntwrk %>% str_split(pattern = "\\+")
-      # Get a table of domain counts
-      wc <- elements2words(prot = prot, column = column, conversion_type = "da2doms") %>% words2wc()
-      wc <- pivot_wider(wc, names_from = words, values_from = freq)
-
-      # Remove all isolated domarchs, such that an adjacency list can easily be constructed
-      singletons <- domain.list[which(lengths(domain.list) == 1)] %>% unique()
-      if (length(singletons) > 0) {
-        domain.list <- domain.list[-which(lengths(domain.list) == 1)]
-      }
-      # This is where we know if the adjacency list is empty
-      if (length(domain.list) == 0) {
-        vertex_df <- data.frame(id = double(), label = character())
-        # Add nodes included in domains of interest
-        num <- 1
-        for (domain in singletons)
+    # by domain networks or all, as required.
+    tryCatch(
         {
             column_name <- sym(column)
 
@@ -327,7 +269,7 @@ BinaryDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, c
         distinct()
     within_list <- pull(within_list, {{ column_name }})
 
-  prot <- prot %>% filter({{ column_name }} %in% within_list)
+    prot <- prot %>% dplyr::filter({{ column_name }} %in% within_list)
 
     ####### Below should be part of the standardized cleanup process
     prot$DomArch.ntwrk <- as_vector(prot %>% select({{ column }})) %>% # testing with prot$DomArch.orig

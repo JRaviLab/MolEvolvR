@@ -7,6 +7,8 @@
 ## Modified: Dec 24, 2019 | Jan 2021
 ## Janani Ravi (@jananiravi) & Samuel Chen (@samuelzornchen)
 
+api_key <- Sys.getenv("ENTREZ_API_KEY", unset = "YOUR_KEY_HERE")
+
 #################
 ## Pkgs needed ##
 #################
@@ -442,87 +444,128 @@ generate_all_aln2fa <- function(aln_path = here("data/rawdata_aln/"),
 }
 
 
+# accessions <- c("P12345","Q9UHC1","O15530","Q14624","P0DTD1")
+# accessions <- rep("ANY95992.1", 201)
+#' acc2fa
+#'
+#' @author Samuel Chen, Janani Ravi
+#' @keywords accnum, fasta
+#'
+#' @description
+#' acc2fa converts protein accession numbers to a fasta format.
+#' Resulting fasta file is written to the outpath.
+#'
+#'
+#' @param accessions Character vector containing protein accession numbers to generate fasta sequences for.
+#' Function may not work for vectors of length > 10,000
+#' @param outpath [str]. Location where fasta file should be written to.
+#' @param plan
+#'
+#' @importFrom Biostrings readAAStringSet
+#' @importFrom future future plan
+#' @importFrom purrr map
+#' @importFrom rentrez entrez_fetch
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' acc2fa(accessions = c("ACU53894.1", "APJ14606.1", "ABK37082.1"), outpath = "my_proteins.fasta")
+#' Entrez:accessions <- rep("ANY95992.1", 201) |> acc2fa(outpath = "entrez.fa")
+#' EBI:accessions <- c("P12345", "Q9UHC1", "O15530", "Q14624", "P0DTD1") |> acc2fa(outpath = "ebi.fa")
+#' }
 acc2fa <- function(accessions, outpath, plan = "sequential") {
-  #' acc2fa converts protein accession numbers to a fasta format.
-  #' Resulting fasta file is written to the outpath.
-  #' @author Samuel Chen, Janani Ravi
-  #' @keywords accnum, fasta
-  #' @param accessions Character vector containing protein accession numbers to generate fasta sequences for.
-  #' Function may not work for vectors of length > 10,000
-  #' @param outpath String. Location where fasta file should be written to.
-  #' @example acc2fa(accessions=c("ACU53894.1", "APJ14606.1", "ABK37082.1"), outpath="my_proteins.fasta")
+    # validation
+    stopifnot(length(accessions) > 0)
 
-  if (length(accessions) > 0) {
+    # vector to partitioned list
     partition <- function(v, groups) {
-      # Partition data to limit number of queries per second for rentrez fetch:
-      # limit of 10/second w/ key
-      l <- length(v)
+        # partition data to limit number of accessions per POST
+        l <- length(v)
 
-      partitioned <- list()
-      for (i in 1:groups)
-      {
-        partitioned[[i]] <- v[seq.int(i, l, groups)]
-      }
+        partitioned <- list()
+        for (i in 1:groups)
+        {
+            partitioned[[i]] <- v[seq.int(i, l, groups)]
+        }
 
-      return(partitioned)
+        return(partitioned)
     }
 
+    # configure futures library
     plan(strategy = plan, .skip = T)
+    # group accession numbers into batches of maximum size 200
+    # the request header size allowance is unknown, but after some
+    # informal testing (molevol_scripts/tests) 200 accession numbers per POST
+    # seems a good compromise between efficiency of data per POST and staying
+    # under the maximum POST data limit
+    groups <- ifelse(
+        length(accessions) / 200 >= 1,
+        ceiling(length(accessions) / 200),
+        1
+    )
+    accessions_partitioned <- partition(accessions, groups)
 
-    min_groups <- length(accessions) / 200
-    groups <- min(max(min_groups, 15), length(accessions))
-
-    partitioned_acc <- partition(accessions, groups)
+    # open file connection
     sink(outpath)
 
-
-    # a <- foreach::foreach(x=1:length(partitioned_acc), .inorder=TRUE, .packages="rentrez") %dopar% {
-    #   cat(
-    #     entrez_fetch(id=partitioned_acc[[x]],
-    #                  db="protein",
-    #                  rettype="fasta",
-    #                  api_key="YOUR_KEY_HERE"
-    #     )
-    #   )
-    # }
-    a <- map(1:length(partitioned_acc), function(x) {
-      if (x %% 9 == 0) {
-        Sys.sleep(1)
-      }
-      f <- future(
-        entrez_fetch(
-          id = partitioned_acc[[x]],
-          db = "protein",
-          rettype = "fasta",
-          api_key = "YOUR_KEY_HERE"
+    # construct futures for each group of accession numbers
+    a <- map(1:length(accessions_partitioned), function(x) {
+        # limit of 10 POSTs/sec w/ key
+        if (x %% 10 == 0) {
+            Sys.sleep(1)
+        }
+        f <- future::future(
+            rentrez::entrez_fetch(
+                id = accessions_partitioned[[x]],
+                db = "protein",
+                rettype = "fasta",
+                api_key = Sys.getenv("ENTREZ_API_KEY")
+            )
         )
-      ) # %...>% cat()
     })
+    # perform POST&GET ('entrez_fetch') request(s); print output (output is directed to `outpath`)
     for (f in a)
     {
-      cat(value(f))
+        cat(future::value(f))
     }
-
-    # a <- future_map(1:length(partitioned_acc), function(x)
-    # {
-    #   if(x%%5 == 0)
-    #   {
-    #     Sys.sleep(1)
-    #   }
-    #   cat(
-    #     entrez_fetch(id=partitioned_acc[[x]],
-    #                  db="protein",
-    #                  rettype="fasta",
-    #                  api_key="YOUR_KEY_HERE"
-    #     )
-    #   )
-    # }
-    # )
+    # close file connection
     sink(NULL)
-  }
+    # validate the result
+    result <- tryCatch(
+        expr = {
+            Biostrings::readAAStringSet(outpath)
+            TRUE
+        },
+        error = function(e) {
+            print(e)
+            FALSE
+        }
+    )
+    return(result)
 }
 
-
+#' RepresentativeAccNums
+#'
+#' @description
+#' Function to generate a vector of one Accession number per distinct observation from 'reduced' column
+#'
+#' @author Samuel Chen, Janani Ravi
+#'
+#' @param prot_data Data frame containing Accession Numbers
+#' @param reduced Column from prot_data from which distinct observations
+#' will be generated from.
+#' One accession number will be assigned for each of these observations
+#' @param accnum_col Column from prot_data that contains Accession Numbers
+#'
+#' @importFrom dplyr filter pull
+#' @importFrom rlang sym
+#'
+#' @return
+#' @export
+#'
+#' @examples
 RepresentativeAccNums <- function(prot_data,
     reduced = "Lineage",
     accnum_col = "AccNum") {

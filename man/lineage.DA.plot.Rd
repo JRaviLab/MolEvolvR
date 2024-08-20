@@ -4,22 +4,24 @@
 \alias{lineage.DA.plot}
 \title{Lineage Plot: Heatmap of Domains/DAs/GCs vs Lineages}
 \usage{
-lineage.DA.plot(query_data = "prot",
-  query.summ.byLin = "prot.DA.summ.byLin", colname = "DomArch.norep",
-  type = "da2doms")
+lineage.DA.plot(
+  query_data = "prot",
+  colname = "DomArch",
+  cutoff = 90,
+  RowsCutoff = FALSE,
+  color = "default"
+)
 }
 \arguments{
 \item{query_data}{Data frame of protein homologs with the usual 11 columns +
 additional word columns (0/1 format).
 Default is prot (variable w/ protein data).}
 
-\item{query.summ.byLin}{Output of summ.DA.byLin(XXX.sub) or summ.GC.byLin(XXX.sub)}
-
 \item{colname}{Column name from query_data: "DomArch.norep", "GenContext.norep",
 "DomArch.PFAM.norep" or "DomArch.LADB.norep". Default is "DomArch.norep".}
 
-\item{type}{Character. Default is "da2doms" for Domain Architectures.
-Other alternative: "gc2da" for Genomic Contexts.}
+\item{color}{Color for the heatmap. One of six options: "default", "magma", "inferno",
+"plasma", "viridis", or "cividis"}
 }
 \description{
 Lineage plot for Domains, Domain Architectures and

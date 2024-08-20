@@ -4,15 +4,24 @@
 \alias{total_counts}
 \title{Total Counts}
 \usage{
-total_counts(prot, cutoff = 0, type = "GC")
+total_counts(
+  prot,
+  column = "DomArch",
+  lineage_col = "Lineage",
+  cutoff = 90,
+  RowsCutoff = FALSE,
+  digits = 2
+)
 }
 \arguments{
 \item{prot}{A data frame that must contain columns:
-\itemize{\item Either 'GenContext.norep' or 'DomArch.norep' \item count}}
+\itemize{\item Either 'GenContext' or 'DomArch.norep' \item count}}
+
+\item{column}{Character. The column to summarize}
 
 \item{cutoff}{Numeric. Cutoff for total count. Counts below cutoff value will not be shown. Default is 0.}
 
-\item{type}{Character. Either "GC" for a total count by Genomic Context groupings or "DA" for a total count by Domain Architecture groupings.}
+\item{digits}{}
 }
 \value{
 Define return, in detail
