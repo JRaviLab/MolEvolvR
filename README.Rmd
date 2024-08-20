@@ -32,7 +32,7 @@ if (!require("BiocManager", quietly = TRUE))
 BiocManager::install(version = "3.19")
 
 # Install Development Version of molevolvR
-BiocManager::install("JRaviLab/molevol_scripts", ref = "begin-package-setup", subdir = "package/MolEvolvR", auth_token = '<PersonalAccessToken>')
+BiocManager::install("JRaviLab/MolEvolvR", auth_token = '<PersonalAccessToken>')
 ```
 
 ## Example
