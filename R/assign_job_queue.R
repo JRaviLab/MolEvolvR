@@ -11,6 +11,7 @@ common_root <- Sys.getenv("COMMON_SRC_ROOT")
 #' @return list where names (MolEvolvR advanced options) point to processes
 #'
 #' example: list_opts2procs <- make_opts2procs
+#' @export
 make_opts2procs <- function() {
     opts2processes <- list(
         "homology_search" = c("dblast", "dblast_cleanup"),
@@ -26,10 +27,11 @@ make_opts2procs <- function() {
 #'
 #' @return character vector of process names that will execute given
 #' the advanced options
-#' 
+#'
 #' example:
 #' advanced_opts <- c("homology_search", "domain_architecture")
 #' procs <- map_advanced_opts2procs(advanced_opts)
+#' @export
 map_advanced_opts2procs <- function(advanced_opts) {
     # append 'always' to add procs that always run
     advanced_opts <- c(advanced_opts, "always")
@@ -43,7 +45,7 @@ map_advanced_opts2procs <- function(advanced_opts) {
 
 #' Scrape MolEvolvR logs and calculate median processes
 #'
-#' @param dir_job_results [chr] path to MolEvolvR job_results 
+#' @param dir_job_results [chr] path to MolEvolvR job_results
 #' directory
 #'
 #' @importFrom dplyr across everything select summarise
@@ -53,21 +55,21 @@ map_advanced_opts2procs <- function(advanced_opts) {
 #' see molevol_scripts/R/metrics.R for info on functions called here
 #'
 #' examples:
-#' 
+#'
 #' 1)
 #' dir_job_results <- "/data/scratch/janani/molevolvr_out"
 #' list_proc_medians <- get_proc_medians(dir_job_results)
-#' 
+#'
 #' 2) from outside container environment
 #' common_root <- "/data/molevolvr_transfer/molevolvr_dev"
 #' dir_job_results <- "/data/molevolvr_transfer/molevolvr_dev/job_results"
 #' list_proc_medians <- get_proc_medians(dir_job_results)
-#'
+#' @export
 get_proc_medians <- function(dir_job_results) {
-  source(file.path(common_root, "molevol_scripts", "R", "metrics.R"))
-  
-  # aggregate logs from
-  path_log_data <- file.path(common_root, "molevol_scripts", "log_data", "prod_logs.rda")
+    source(file.path(common_root, "molevol_scripts", "R", "metrics.R"))
+
+    # aggregate logs from
+    path_log_data <- file.path(common_root, "molevol_scripts", "log_data", "prod_logs.rda")
 
     # ensure the folder exists to the location
     if (!dir.exists(path_log_data)) {
@@ -115,6 +117,7 @@ get_proc_medians <- function(dir_job_results) {
 #'   "/data/scratch/janani/molevolvr_out/",
 #'   "/data/scratch/janani/molevolvr_out/log_tbl.tsv"
 #' )
+#' @export
 write_proc_medians_table <- function(dir_job_results, filepath) {
     df_proc_medians <- get_proc_medians(dir_job_results) |>
         tibble::as_tibble() |>
@@ -130,7 +133,7 @@ write_proc_medians_table <- function(dir_job_results, filepath) {
 
 #' Compute median process runtimes, then write a YAML list of the processes and
 #' their median runtimes in seconds to the path specified by 'filepath'.
-#' 
+#'
 #' The default value of filepath is the value of the env var
 #' MOLEVOLVR_PROC_WEIGHTS, which get_proc_weights() also uses as its default
 #' read location.
@@ -143,13 +146,15 @@ write_proc_medians_table <- function(dir_job_results, filepath) {
 #' @examples
 #' \dontrun{
 #' write_proc_medians_yml(
-#'   "/data/scratch/janani/molevolvr_out/",
-#'   "/data/scratch/janani/molevolvr_out/log_tbl.yml"
+#'     "/data/scratch/janani/molevolvr_out/",
+#'     "/data/scratch/janani/molevolvr_out/log_tbl.yml"
 #' )
-write_proc_medians_yml <- function(dir_job_results, filepath=NULL) {
-  if (is.null(filepath)) {
-    filepath <- file.path(common_root, "molevol_scripts", "log_data", "job_proc_weights.yml")
-  }
+#' }
+#' @export
+write_proc_medians_yml <- function(dir_job_results, filepath = NULL) {
+    if (is.null(filepath)) {
+        filepath <- file.path(common_root, "molevol_scripts", "log_data", "job_proc_weights.yml")
+    }
 
     medians <- get_proc_medians(dir_job_results)
     yaml::write_yaml(medians, filepath)
@@ -157,46 +162,19 @@ write_proc_medians_yml <- function(dir_job_results, filepath=NULL) {
 
 #' Quickly get the runtime weights for MolEvolvR backend processes
 #'
-#' @param dir_job_results [chr] path to MolEvolvR job_results 
+#' @param dir_job_results [chr] path to MolEvolvR job_results
 #' directory
 #'
 #' @importFrom stringr str_glue str_trim
 #' @importFrom yaml read_yaml
 #'
 #' @return [list] names: processes; values: median runtime (seconds)
-#' 
+#'
 #' example: get_proc_weights()
-get_proc_weights <- function(medians_yml_path=NULL) {
-  if (is.null(medians_yml_path)) {
-    medians_yml_path <- file.path(common_root, "molevol_scripts", "log_data", "job_proc_weights.yml")
-  }
-
-  proc_weights <- tryCatch(
-    {
-      # attempt to read the weights from the YAML file produced by
-      # write_proc_medians_yml()
-      if (stringr::str_trim(medians_yml_path) == "") {
-        stop(
-          stringr::str_glue("medians_yml_path is empty ({medians_yml_path}), returning default weights")
-        )
-      }
-
-      proc_weights <- yaml::read_yaml(medians_yml_path)
-    },
-    # to avoid fatal errors in reading the proc weights yaml,
-    # some median process runtimes have been hardcoded based on
-    # the result of get_proc_medians() from Jan 2024
-    error = function(cond) {
-      proc_weights <- list(
-        "dblast" = 2810,
-        "iprscan" = 1016,
-        "dblast_cleanup" = 79,
-        "ipr2lineage" = 18,
-        "ipr2da" = 12,
-        "blast_clust" = 2,
-        "clust2table" = 2
-      )
-      proc_weights
+#' @export
+get_proc_weights <- function(medians_yml_path = NULL) {
+    if (is.null(medians_yml_path)) {
+        medians_yml_path <- file.path(common_root, "molevol_scripts", "log_data", "job_proc_weights.yml")
     }
 
     proc_weights <- tryCatch(
@@ -244,6 +222,7 @@ get_proc_weights <- function(medians_yml_path=NULL) {
 #' @return total estimated number of seconds a job will process (walltime)
 #'
 #' example: advanced_opts2est_walltime(c("homology_search", "domain_architecture"), n_inputs = 3, n_hits = 50L)
+#' @export
 advanced_opts2est_walltime <- function(advanced_opts, n_inputs = 1L, n_hits = NULL, verbose = FALSE) {
     # to calculate est walltime for a homology search job, the number of hits
     # must be provided
@@ -297,6 +276,7 @@ advanced_opts2est_walltime <- function(advanced_opts, n_inputs = 1L, n_hits = NU
 #' example:
 #' advanced_opts2est_walltime(c("homology_search", "domain_architecture"), 3) |>
 #'   assign_job_queue()
+#' @export
 assign_job_queue <- function(
         t_sec_estimate,
         t_cutoff = 21600 # 6 hours
@@ -319,6 +299,7 @@ assign_job_queue <- function(
 #' example:
 #' p <- plot_estimated_walltimes()
 #' ggplot2::ggsave(filename = "/data/molevolvr_transfer/molevolvr_dev/molevol_scripts/docs/estimate_walltimes.png", plot = p)
+#' @export
 plot_estimated_walltimes <- function() {
     opts <- make_opts2procs() |> names()
     # get all possible submission permutations (powerset)
@@ -369,36 +350,28 @@ plot_estimated_walltimes <- function() {
         ),
         FUN = c
     )
-  }
-  # concat all results to their unique names
-  est_walltimes <- tapply(
-    unlist(
-      est_walltimes, use.names = FALSE),
-      rep(names(est_walltimes),
-      lengths(est_walltimes)
-    ),
-    FUN = c
-  )
-  df_walltimes <- est_walltimes |>
-    unlist() |> 
-    matrix(nrow = length(est_walltimes[[1]]), ncol = length(names(est_walltimes)))
-  colnames(df_walltimes) <- names(est_walltimes)
-  df_walltimes <- df_walltimes |> tibble::as_tibble()
-  # rm always col or powerset outcome without the "always" processes
-  col_idx_keep <- grep(pattern = "always$", x = names(df_walltimes))
-  df_walltimes <- df_walltimes |>
-    dplyr::select(col_idx_keep)
-  # bind n_inputs
-  df_walltimes <- df_walltimes |>
-    dplyr::mutate(n_inputs = 1:20)
-  df_walltimes <- tidyr::gather(df_walltimes, key = "advanced_opts", value = "est_walltime", -n_inputs)
-  # sec to hrs
-  df_walltimes <- df_walltimes |>
-    dplyr::mutate(est_walltime = est_walltime / 3600)
-  p <- ggplot2::ggplot(df_walltimes, ggplot2::aes(x = n_inputs, y = est_walltime, color = advanced_opts)) +
-    ggplot2::geom_line() +
-    ggplot2::labs(title = "MolEvolvR estimated runtimes",
-        x = "Number of inputs",
-        y = "Estimated walltime (hours)")
-  return(p)
+    df_walltimes <- est_walltimes |>
+        unlist() |>
+        matrix(nrow = length(est_walltimes[[1]]), ncol = length(names(est_walltimes)))
+    colnames(df_walltimes) <- names(est_walltimes)
+    df_walltimes <- df_walltimes |> tibble::as_tibble()
+    # rm always col or powerset outcome without the "always" processes
+    col_idx_keep <- grep(pattern = "always$", x = names(df_walltimes))
+    df_walltimes <- df_walltimes |>
+        dplyr::select(col_idx_keep)
+    # bind n_inputs
+    df_walltimes <- df_walltimes |>
+        dplyr::mutate(n_inputs = 1:20)
+    df_walltimes <- tidyr::gather(df_walltimes, key = "advanced_opts", value = "est_walltime", -n_inputs)
+    # sec to hrs
+    df_walltimes <- df_walltimes |>
+        dplyr::mutate(est_walltime = est_walltime / 3600)
+    p <- ggplot2::ggplot(df_walltimes, ggplot2::aes(x = n_inputs, y = est_walltime, color = advanced_opts)) +
+        ggplot2::geom_line() +
+        ggplot2::labs(
+            title = "MolEvolvR estimated runtimes",
+            x = "Number of inputs",
+            y = "Estimated walltime (hours)"
+        )
+    return(p)
 }

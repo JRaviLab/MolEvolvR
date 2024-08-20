@@ -9,27 +9,30 @@
 #################
 ## Pkgs needed ##
 #################
-suppressPackageStartupMessages(library(tidyverse))
-suppressPackageStartupMessages(library(UpSetR))
-suppressPackageStartupMessages(library(gridExtra))
-suppressPackageStartupMessages(library(wordcloud))
-suppressPackageStartupMessages(library(wordcloud2))
-suppressPackageStartupMessages(library(sunburstR))
-suppressPackageStartupMessages(library(d3r))
-suppressPackageStartupMessages(library(viridis))
-CPCOLS <- c(
-  "#AFEEEE", "#DDA0DD", "#EE2C2C", "#CDBE70", "#B0B099",
-  "#8B2323", "#EE7600", "#EEC900", "chartreuse3", "#0000FF",
-  "#FFD900", "#32CD32", "maroon4", "cornflowerblue", "darkslateblue",
-  "#AB82FF", "#CD6889", "#FFA07A", "#FFFF00", "#228B22",
-  "#FFFFE0", "#FFEC8B", "peru", "#668B8B", "honeydew",
-  "#A020F0", "grey", "#8B4513", "#191970", "#00FF7F",
-  "lemonchiffon", "#66CDAA", "#5F9EA0", "#A2CD5A", "#556B2F",
-  "#EEAEEE", "thistle4", "#473C8B", "#FFB6C1", "#8B1C62",
-  "#FFE4B5", "black", "#FF7F50", "#FFB90F", "#FF69B4", "#836FFF",
-  "#757575", "#CD3333", "#EE7600", "#CDAD00", "#556B2F", "#7AC5CD"
-)
+# suppressPackageStartupMessages(library(tidyverse))
+# suppressPackageStartupMessages(library(UpSetR))
+# suppressPackageStartupMessages(library(gridExtra))
+# suppressPackageStartupMessages(library(wordcloud))
+# suppressPackageStartupMessages(library(wordcloud2))
+# suppressPackageStartupMessages(library(sunburstR))
+# suppressPackageStartupMessages(library(d3r))
+# suppressPackageStartupMessages(library(viridis))
 
+#' Shorten Lineage
+#'
+#' @param data
+#' @param colname
+#' @param abr_len
+#'
+#' @importFrom stringr str_locate
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' shorten_lineage()
+#' }
 shorten_lineage <- function(data, colname = "Lineage", abr_len = 1) {
     abbrv <- function(x) {
         pos_gt <- str_locate(x, ">")
@@ -1244,7 +1247,7 @@ lineage_sunburst <- function(prot, lineage_column = "Lineage",
 
           // FIXME: consider pulling this all out into a js library
           //  so that we can apply it to other components.
-          
+
           const downloadBtn = jQuery('<button id=\"download-sunburst\">Download Sunburst</button>')
             .css({'position': 'absolute', 'right': '5px', 'top': '5px'})
             .attr('data-html2canvas-ignore', 'true')

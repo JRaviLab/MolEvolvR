@@ -21,15 +21,6 @@ add_lins(
   ipgout_path = NULL,
   plan = "multicore"
 )
-
-add_lins(
-  df,
-  acc_col = "AccNum",
-  assembly_path,
-  lineagelookup_path,
-  ipgout_path = NULL,
-  plan = "multicore"
-)
 }
 \arguments{
 \item{plan}{}

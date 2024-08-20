@@ -88,22 +88,14 @@ add_lins <- function(df, acc_col = "AccNum", assembly_path,
 #' acc2lin()
 #' }
 acc2lin <- function(accessions, assembly_path, lineagelookup_path, ipgout_path = NULL, plan = "sequential") {
-  #' @author Samuel Chen, Janani Ravi
-  #' @description This function combines 'efetch_ipg()' and 'ipg2lin()' to map a set
-  #' of protein accessions to their assembly (GCA_ID), tax ID, and lineage.
-  #' @param accessions Character vector of protein accessions
-  #' @param assembly_path String of the path to the assembly_summary path
-  #' This file can be generated using the "DownloadAssemblySummary()" function
-  #' @param lineagelookup_path String of the path to the lineage lookup file
-  #' (taxid to lineage mapping). This file can be generated using the
-  #' @param ipgout_path Path to write the results of the efetch run of the accessions
-  #' on the ipg database. If NULL, the file will not be written. Defaults to NULL
-  tmp_ipg <- F
-  if (is.null(ipgout_path)) {
-    tmp_ipg <- T
-    ipgout_path <- tempfile("ipg", fileext = ".txt")
-  }
-  efetch_ipg(accessions, out_path = ipgout_path, plan)
+    tmp_ipg <- F
+    if (is.null(ipgout_path)) {
+        tmp_ipg <- T
+        ipgout_path <- tempfile("ipg", fileext = ".txt")
+    }
+    efetch_ipg(accessions, out_path = ipgout_path, plan)
+
+    lins <- ipg2lin(accessions, ipgout_path, assembly_path, lineagelookup_path)
 
     if (tmp_ipg) {
         unlink(tempdir(), recursive = T)
@@ -134,17 +126,18 @@ acc2lin <- function(accessions, assembly_path, lineagelookup_path, ipgout_path =
 #' efetch_ipg()
 #' }
 efetch_ipg <- function(accnums, out_path, plan = "sequential") {
-  #' @author Samuel Chen, Janani Ravi
-  #' @description Perform efetch on the ipg database and write the results to out_path
-  #' @param accnums Character vector containing the accession numbers to query on
-  #' the ipg database
-  #' @param out_path Path to write the efetch results to
-  if (length(accnums) > 0) {
-    partition <- function(in_data, groups) {
-      # \\TODO This function should be defined outside of efetch_ipg(). It can be non-exported/internal
-      # Partition data to limit number of queries per second for rentrez fetch:
-      # limit of 10/second w/ key
-      l <- length(in_data)
+    if (length(accnums) > 0) {
+        partition <- function(in_data, groups) {
+            # \\TODO This function should be defined outside of efetch_ipg(). It can be non-exported/internal
+            # Partition data to limit number of queries per second for rentrez fetch:
+            # limit of 10/second w/ key
+            l <- length(in_data)
+
+            partitioned <- list()
+            for (i in 1:groups)
+            {
+                partitioned[[i]] <- in_data[seq.int(i, l, groups)]
+            }
 
             return(partitioned)
         }
@@ -202,19 +195,9 @@ efetch_ipg <- function(accnums, out_path, plan = "sequential") {
 #' }
 #'
 ipg2lin <- function(accessions, ipg_file, assembly_path, lineagelookup_path) {
-  #' @author Samuel Chen, Janani Ravi
-  #' @description Takes the resulting file of an efetch run on the ipg database and
-  #' append lineage, and taxid columns
-  #' @param accessions Character vector of protein accessions
-  #' @param ipg_file Filepath to the file containing results of an efetch run on the
-  #' ipg database. The protein accession in 'accessions' should be contained in this
-  #' file
-  #' @param assembly_path String of the path to the assembly_summary path
-  #' This file can be generated using the "DownloadAssemblySummary()" function
-  #' @param lineagelookup_path String of the path to the lineage lookup file
-  #' (taxid to lineage mapping). This file can be generated using the
-  #' "create_lineage_lookup()" function
-  ipg_dt <- fread(ipg_file, sep = "\t", fill = T)
+    ipg_dt <- fread(ipg_file, sep = "\t", fill = T)
+
+    ipg_dt <- ipg_dt[Protein %in% accessions]
 
     ipg_dt <- setnames(ipg_dt, "Assembly", "GCA_ID")
 
@@ -224,26 +207,9 @@ ipg2lin <- function(accessions, ipg_file, assembly_path, lineagelookup_path) {
     return(lins)
 }
 
-# since MolEvolvR tracks queries using unique identifiers,
-# a step is necessary to try and parse accession numbers
-# to query databases for lineage info.
-# this function is a post-hoc cleanup which will re-map the 
-# lineage data to the unique ids assigned to each MolEvolvR query.
-# in a practical sense, the lineage data is joined onto the unique ids
-substitute_accnum_for_acc2info <- function(df_acc2info, df_header_map) {
-  df_result <- df_header_map |>
-    # set column name in header map to match accnum col in acc2info
-    dplyr::rename(AccNum = header_accnum) |>
-    # join onto header map
-    dplyr::left_join(df_acc2info, by = "AccNum") |>
-    # deselect accnum
-    dplyr::select(-AccNum) |>
-    # set the accnum col to the cleaned form
-    dplyr::rename(AccNum = header_clean) |>
-    # rm excess columns from header map file
-    dplyr::select(-header_original)
-  return(df_result)
-}
+
+
+
 
 # efetch_ipg <- function(accnums, outpath)
 # {

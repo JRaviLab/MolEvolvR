@@ -36,7 +36,8 @@ getCon <- function() {
 #' Given a job code, retrieves SLURM jobs where that code occurs in their name
 #' (i.e., the "job_name" column). Optionally, you may specify a vector of column
 #' names to return; if unspecified, returns all columns.
-#' 
+#'
+#' @param cols
 #' @param code A job code to search for in job names
 #'
 #' @importFrom DBI dbGetQuery dbDisconnect dbQuoteIdentifier
@@ -44,7 +45,7 @@ getCon <- function() {
 #' @return Data frame with 'cols' columns (or all columns if 'cols') of jobs
 #' @export
 #'
-getJobsForCode <- function(code, cols=NA) {
+getJobsForCode <- function(code, cols = NA) {
     con <- getCon()
 
     colSpec <- if (!any(is.na(cols))) {
@@ -68,7 +69,7 @@ getJobsForCode <- function(code, cols=NA) {
 }
 
 #' Get jobs with a specific SLURM job state.
-#' 
+#'
 #' States are stored as integers, whose values derive from the file
 #' https://github.com/SchedMD/slurm/tree/master/slurm/slurm.h. The possible
 #' values and enumeration values are as follows.
@@ -88,11 +89,11 @@ getJobsForCode <- function(code, cols=NA) {
 #' }
 #' (See https://slurm.schedmd.com/squeue.html#SECTION_JOB-STATE-CODES for
 #' the meanings of these codes.)
-#' 
+#'
 #' For example, to search for all running, suspended, and pending jobs, you'd
 #' provide the states argument states=c(0, 1, 2). If you wanted just running
 #' jobs, you'd specify states=1.
-#' 
+#'
 #' @param cols Column names to return; if unspecified, returns all columns.
 #' @param states integers for states to search for; you can specify either a single
 #' integer or a vector. if unspecified, returns all rows.
@@ -104,7 +105,7 @@ getJobsForCode <- function(code, cols=NA) {
 #' with the specified states, or all jobs if 'states' is unspecified
 #' @export
 #'
-getJobsWithStates <- function(states=NA, cols=NA) {
+getJobsWithStates <- function(states = NA, cols = NA) {
     con <- getCon()
 
     # produces a "lazy" query object, i.e. the description
