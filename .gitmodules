@@ -1,0 +1,3 @@
+[submodule "molevol_scripts"]
+	path = molevol_scripts
+	url = https://github.com/JRaviLab/molevol_scripts
