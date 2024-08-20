@@ -1,8 +1,6 @@
-Type: Package
 Package: MolEvolvR
-Version: 0.0.0.9000
 Title: Molecular Evolution and Phylogeny
-Description: This R package provides a system for characterizing proteins using molecular evolution and phylogeny.
+Version: 0.99.5
 Authors@R:
     c(person("Janani", "Ravi", email = "janani.ravi@cuanschutz.edu", role = c("aut", "cre"),
         comment=c(ORCID="0000-0001-7443-925X")),
@@ -14,37 +12,68 @@ Authors@R:
         comment = c(ORCID = "")),
     person("Jacob", "Krol", role = "aut",
         comment = c(ORCID = "")))
-Depends:
-    R (>= 3.5.1)
-License: MIT + file License
-LazyData: true
+Description: This R package provides a system for characterizing proteins using molecular evolution and phylogeny.
+License: BSD_3_clause + file LICENSE
 URL: https://github.com/jravilab/molevolvr
 BugReports: https://github.com/jravilab/molevolvr/issues
-Imports:
-    tidyr,
-    dplyr,
-    ggplot2,
-    conflicted,
-    here,
-    UpSetR,
-    gridExtra,
-    roxygen2,
-    docstring,
-    igraph,
-    ape,
-    phylogram,
-    phangorn,
-    msa,
-    rMSA,
-    seqinr,
-    ggtree,
-    tidytree,
-    Rcpp,
-    tidytext
-VignetteBuilder: knitr
-RoxygenNote: 7.1.1
-Roxygen: list(markdown = TRUE)
-NeedsCompilation: yes
+biocViews:
+Depends: 
+    R (>= 4.4.0)
 Encoding: UTF-8
-LinkingTo: Rcpp
-Maintainer: Janani Ravi <janani.ravi@cuanschutz.edu>
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+VignetteBuilder: knitr
+Imports: 
+    ape,
+    assertthat,
+    base64enc,
+    Biostrings,
+    biomartr,
+    d3r,
+    data.table,
+    DBI,
+    doParallel,
+    dplyr,
+    forcats,
+    fs,
+    furrr,
+    future,
+    gggenes,
+    ggplot2,
+    glue,
+    gridExtra,
+    here,
+    htmltools,
+    htmlwidgets,
+    igraph,
+    latexpdf,
+    magrittr,
+    msa,
+    pdftools,
+    phangorn,
+    plotly,
+    purrr,
+    RColorBrewer,
+    readr,
+    rentrez,
+    rlang,
+    RMariaDB,
+    sendmailR,
+    seqinr,
+    shiny,
+    stringi,
+    stringr,
+    sunburstR,
+    tibble,
+    tidyr,
+    tinytex,
+    tools,
+    UpSetR,
+    viridis,
+    visNetwork,
+    wordcloud,
+    wordcloud2,
+    XVector,
+    yaml
+Suggests:
+    knitr
