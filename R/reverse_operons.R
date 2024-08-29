@@ -3,118 +3,134 @@
 # Modified by Janani Ravi and Samuel Chen
 
 
+#' reveql
+#'
+#' @param prot
+#'
+#' @return
+#' @export
+#'
+#' @examples
 reveql <- function(prot) {
-  w <- prot # $GenContext.orig # was 'x'
+    w <- prot # $GenContext.orig # was 'x'
 
-  y <- rep(NA, length(w))
+    y <- rep(NA, length(w))
 
-  d <- 1
-
-  b <- grep("\\*", w)
-
-  for (j in b:length(w)) {
-    if (w[j] == "=") {
-      d <- d * (-1)
-    }
-
-    if (d == 1 && w[j] != "=") {
-      y[j] <- paste(w[j], "->", sep = "")
-    } else if (d == -1 && w[j] != "=") {
-      y[j] <- paste("<-", w[j], sep = "")
-    } else {
-      y[j] <- "="
-    }
-  } # (for)
-
-  if (b > 1) {
     d <- 1
 
-    for (j in (b - 1):1) {
-      if (w[j] == "=") {
-        d <- d * (-1)
-      }
+    b <- grep("\\*", w)
 
-      if (d == 1 && w[j] != "=") {
-        y[j] <- paste(w[j], "->", sep = "")
-      } else if (d == -1 && w[j] != "=") {
-        y[j] <- paste("<-", w[j], sep = "")
-      } else {
-        y[j] <- "="
-      }
+    for (j in b:length(w)) {
+        if (w[j] == "=") {
+            d <- d * (-1)
+        }
+
+        if (d == 1 && w[j] != "=") {
+            y[j] <- paste(w[j], "->", sep = "")
+        } else if (d == -1 && w[j] != "=") {
+            y[j] <- paste("<-", w[j], sep = "")
+        } else {
+            y[j] <- "="
+        }
     } # (for)
-  } # (if b>1)
 
-  return(y)
+    if (b > 1) {
+        d <- 1
+
+        for (j in (b - 1):1) {
+            if (w[j] == "=") {
+                d <- d * (-1)
+            }
+
+            if (d == 1 && w[j] != "=") {
+                y[j] <- paste(w[j], "->", sep = "")
+            } else if (d == -1 && w[j] != "=") {
+                y[j] <- paste("<-", w[j], sep = "")
+            } else {
+                y[j] <- "="
+            }
+        } # (for)
+    } # (if b>1)
+
+    return(y)
 }
 
 ## The function to reverse operons
 
+#' reverse_operon
+#'
+#' @param prot
+#'
+#' @return
+#' @export
+#'
+#' @examples
 reverse_operon <- function(prot) {
-  gencontext <- prot$GenContext
+    gencontext <- prot$GenContext
 
-  gencontext <- gsub(pattern = ">", replacement = ">|", x = gencontext)
+    gencontext <- gsub(pattern = ">", replacement = ">|", x = gencontext)
 
-  gencontext <- gsub(pattern = "<", replacement = "|<", x = gencontext)
+    gencontext <- gsub(pattern = "<", replacement = "|<", x = gencontext)
 
-  gencontext <- gsub(pattern = "\\|\\|", replacement = "\\|=\\|", x = gencontext)
-
-
-
-  gc.list <- strsplit(x = gencontext, split = "\\|")
-
-  if (any(is.na(gc.list))) gc.list[[which(is.na(gc.list))]] <- "-"
-
-  gc.list <- lapply(1:length(gc.list), function(x) {
-    if (any(gc.list[[x]] == "")) gc.list[[x]][which(gc.list[[x]] != "")] else gc.list[[x]]
-  })
+    gencontext <- gsub(pattern = "\\|\\|", replacement = "\\|=\\|", x = gencontext)
 
 
 
-  te <- lapply(1:length(gc.list), function(x) gc.list[[x]][grep("\\*", gc.list[[x]])])
+    gc.list <- strsplit(x = gencontext, split = "\\|")
 
-  ye <- unlist(lapply(te, function(x) substr(x[1], 1, 1)))
+    if (any(is.na(gc.list))) gc.list[[which(is.na(gc.list))]] <- "-"
 
-  torev <- which(ye == "<")
-
-
-
-  te <- gc.list[torev]
-
-  te <- lapply(te, function(x) gsub(pattern = "<-|->", replacement = "", x = x))
-
-  te <- lapply(te, rev)
-
-  witheq <- grep(pattern = "=", x = te)
-
-  withouteq <- which(!((1:length(te)) %in% witheq))
-
-  ge <- te[witheq]
+    gc.list <- lapply(1:length(gc.list), function(x) {
+        if (any(gc.list[[x]] == "")) gc.list[[x]][which(gc.list[[x]] != "")] else gc.list[[x]]
+    })
 
 
 
-  ge <- lapply(1:length(ge), function(x) reveql(ge[[x]]))
+    te <- lapply(1:length(gc.list), function(x) gc.list[[x]][grep("\\*", gc.list[[x]])])
 
-  ye <- te[withouteq]
+    ye <- unlist(lapply(te, function(x) substr(x[1], 1, 1)))
 
-  ye <- lapply(1:length(ye), function(x) unname(sapply(ye[[x]], function(y) paste(y, "->", sep = ""))))
-
-
-
-  te[witheq] <- ge
-
-  te[withouteq] <- ye
-
-  gc.list[torev] <- te
+    torev <- which(ye == "<")
 
 
 
-  rev.gencontext <- unlist(lapply(gc.list, function(x) paste(x, collapse = "")))
+    te <- gc.list[torev]
 
-  rev.gencontext <- gsub(pattern = "=", replacement = "\\|\\|", rev.gencontext)
+    te <- lapply(te, function(x) gsub(pattern = "<-|->", replacement = "", x = x))
 
-  prot$GenContext <- rev.gencontext
+    te <- lapply(te, rev)
 
-  return(prot)
+    witheq <- grep(pattern = "=", x = te)
+
+    withouteq <- which(!((1:length(te)) %in% witheq))
+
+    ge <- te[witheq]
+
+
+
+    ge <- lapply(1:length(ge), function(x) reveql(ge[[x]]))
+
+    ye <- te[withouteq]
+
+    ye <- lapply(1:length(ye), function(x) unname(sapply(ye[[x]], function(y) paste(y, "->", sep = ""))))
+
+
+
+    te[witheq] <- ge
+
+    te[withouteq] <- ye
+
+    gc.list[torev] <- te
+
+
+
+    rev.gencontext <- unlist(lapply(gc.list, function(x) paste(x, collapse = "")))
+
+    rev.gencontext <- gsub(pattern = "=", replacement = "\\|\\|", rev.gencontext)
+
+    prot$GenContext <- rev.gencontext
+
+    return(prot)
 }
 
 

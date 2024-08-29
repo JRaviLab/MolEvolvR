@@ -4,8 +4,11 @@
 \alias{lineage.neighbors.plot}
 \title{Lineage Plot for top neighbors}
 \usage{
-lineage.neighbors.plot(query_data = "prot", query = "pspa",
-  colname = "GenContext.norep")
+lineage.neighbors.plot(
+  query_data = "prot",
+  query = "pspa",
+  colname = "GenContext.norep"
+)
 }
 \arguments{
 \item{query_data}{Data frame of protein homologs with the usual 11 columns +
@@ -31,7 +34,10 @@ Please refer to the source code if you have alternate file formats and/or
 column names.
 }
 \examples{
+\dontrun{
 lineage.neighbors.plot(pspa_data, pspa, "GenContext.norep", "da2doms")
+}
+
 }
 \author{
 Janani Ravi
