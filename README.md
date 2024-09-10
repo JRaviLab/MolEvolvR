@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# molevolvR
+# MolEvolvR 📦
 
 <!-- badges: start -->
 
@@ -9,11 +9,12 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-The goal of molevolvR is to …
+The *MolEvolvR* R-package provides a framework for characterizing
+proteins using molecular evolution and phylogeny.
 
 ## Installation
 
-You can install the development version of molevolvR from
+You can install the development version of MolEvolvR from
 [GitHub](https://github.com/) with:
 
 ``` r
@@ -33,35 +34,45 @@ This is a basic example which shows you how to solve a common problem:
 ``` r
 library(molevolvR)
 ## basic example code
+## TBA
 ```
 
-## MolEvolvR: v2 & beyond!
+## Companion repos & projects
 
-### Companion Repos
+### Related MolEvolvR codebases
 
-- [MolEvol data](https://github.com/jravilab/molevol_data/)
-- [MolEvolvR app](https://github.com/jravilab/molevolvr_app/)
-- [Psp app](https://github.com/jravilab/psp_app/)
-- [CompGenomeR](https://github.com/jravilab/compgenomer/)
-- [MicroGenomeR](https://github.com/jravilab/microgenomer/)
+- MolEvolvR web-app 1.0 \| [🔒
+  Repo](https://github.com/jravilab/molevol1.0/) \| [Live
+  web-app](//jravilab.org/molevolvr) \|
+  [Preprint](https://doi.org/10.1101/2022.02.18.461833) \| [Case
+  studies](https://jravilab.cuanschutz.edu/molevolvr/?r=&p=help)
+- MolEvolvR web-app 2.0 \| [🔒
+  Repo](https://github.com/jravilab/molevolvr2.0/)
 
-### Where’s what
+### Specific use cases
 
-- [Companion Shiny App](https://github.com/jravilab/molevolvr_app/) \|
-  [web-app](http://jravilab.org/molevovlr)
-- [Upstream `sh/R`
-  scripts](https://github.com/jravilab/molevol_scripts/tree/master/upstream_scripts)
-- [Downstream `R`
-  scripts](https://github.com/jravilab/molevol_scripts/tree/master/R)
-- [Test
-  data](https://github.com/jravilab/molevolvr_app/tree/master/TestData)
-- [Other
-  scripts](https://github.com/jravilab/molevol_scripts/tree/master/molevol_scripts)
+- PSP evolution across the tree of life \| [🔒
+  Repo](https://github.com/jravilab/psp_app/) \| [Live
+  web-app](//jravilab.org/psp)
+  [PubMed](https://pubmed.ncbi.nlm.nih.gov/38809013)
+- Bacterial phage defense system, avcDI \|
+  [Repo](https://github.com/JRaviLab/phage_defense_avcd) \|
+  [PubMed](https://pubmed.ncbi.nlm.nih.gov/35817890/)
+- DciA evolution across bacteria \|
+  [Repo](https://github.com/JRaviLab/dcia_evolution) \|
+  [PubMed](https://pubmed.ncbi.nlm.nih.gov/35880876/)
+- Internalins in Listeria \|
+  [Repo](https://github.com/JRaviLab/inlp_listeria) \|
+  [PubMed](https://pubmed.ncbi.nlm.nih.gov/35904424/)
 
-### The Team
+## Current contributors
 
-- [Jake Krol](//github.com/jakekrol) \| 2022–Now
-- [Joe Burke](//github.com/jburke11) \| 2021–2022
-- [Samuel Z Chen](//github.com/samuelzornchen) \| 2019–2021
-- [Lo Sosinski](//github.com/lsosinski) \| 2019–2020
-- [Janani Ravi](//github.com/jananiravi) \| 2019–Now
+- [David Mayer](//github.com/the-mayer) \| R-package, back-end
+- [Faisal Alquaddoomi](//github.com/falquaddoomi) \| Front-end 1.0,
+  back-end
+- [Evan Brenner](//github.com/epbrenner) \| MolEvolvR functionality
+- [Vince Rubinetti](//github.com/vincerubinetti) \| Front-end 2.0
+- [Dave Bunten](//github.com/d33bs) \| Data management, engineering
+- [Janani Ravi](//github.com/jananiravi) \| PI
+
+📜 [License](https://github.com/JRaviLab/MolEvolvR/blob/main/LICENSE.md)
