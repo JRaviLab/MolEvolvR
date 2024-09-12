@@ -92,7 +92,7 @@ collaborative process, please follow these
 
 📜 [License](https://github.com/JRaviLab/MolEvolvR/blob/main/LICENSE.md)
 
-#### Code of Conduct
+### Code of Conduct
 
 Please note that the MolEvolvR project is released with a [Contributor
 Code of
