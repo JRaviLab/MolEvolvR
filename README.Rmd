@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-The _MolEvolvR_ R-package provides a framework for characterizing proteins using molecular evolution and phylogeny. Check out our packagedown page here: [jravilab.github.io/molevolvR](https://jravilab.github.io/molevolvR)
+The _MolEvolvR_ R-package provides a framework for characterizing proteins using molecular evolution and phylogeny. Check out our pkgdown page here: [jravilab.github.io/MolEvolvR](https://jravilab.github.io/MolEvolvR)
 
 ## Installation
 
@@ -32,7 +32,7 @@ if (!require("BiocManager", quietly = TRUE))
 BiocManager::install(version = "3.19")
 
 # Install Development Version of molevolvR
-BiocManager::install("JRaviLab/MolEvolvR", auth_token = '<PersonalAccessToken>')
+BiocManager::install("JRaviLab/MolEvolvR")
 ```
 
 ### Loading the package

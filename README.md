@@ -10,9 +10,9 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 <!-- badges: end -->
 
 The *MolEvolvR* R-package provides a framework for characterizing
-proteins using molecular evolution and phylogeny. Check out our
-packagedown page here:
-[jravilab.github.io/molevolvR](https://jravilab.github.io/molevolvR)
+proteins using molecular evolution and phylogeny. Check out our pkgdown
+page here:
+[jravilab.github.io/MolEvolvR](https://jravilab.github.io/MolEvolvR)
 
 ## Installation
 
@@ -26,7 +26,7 @@ if (!require("BiocManager", quietly = TRUE))
 BiocManager::install(version = "3.19")
 
 # Install Development Version of molevolvR
-BiocManager::install("JRaviLab/MolEvolvR", auth_token = '<PersonalAccessToken>')
+BiocManager::install("JRaviLab/MolEvolvR")
 ```
 
 ### Loading the package
