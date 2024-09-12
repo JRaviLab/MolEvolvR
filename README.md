@@ -76,3 +76,16 @@ library(molevolvR)
 - [Janani Ravi](//github.com/jananiravi) \| PI
 
 📜 [License](https://github.com/JRaviLab/MolEvolvR/blob/main/LICENSE.md)
+
+## Code of Conduct
+
+Please note that the NewPackage project is released with a [Contributor
+Code of
+Conduct](https://contributor-covenant.org/version/2/1/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.
+
+## Contributing Guidelines
+
+We welcome contributions from the community! To ensure a smooth and
+collaborative process, please follow these
+[guidelines](CONTRIBUTING.MD).
