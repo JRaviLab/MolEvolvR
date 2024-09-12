@@ -1,20 +1,26 @@
 Package: MolEvolvR
 Title: Molecular Evolution and Phylogeny
-Version: 0.99.5
+Version: 0.99.9
 Authors@R:
     c(person("Janani", "Ravi", email = "janani.ravi@cuanschutz.edu", role = c("aut", "cre"),
         comment=c(ORCID="0000-0001-7443-925X")),
-    person("Samuel", "Chen", role = "aut",
+    person("David", "Mayer", role = "aut",
         comment = c(ORCID = "")),
-    person("Lo", "Sosinski", role = "aut",
+    person("Evan", "Brenner", role = "aut",
         comment = c(ORCID = "")),
-    person("Joseph", "Burke", role = "aut",
+    person("Faisal", "Alquaddoomi", role = "aut",
         comment = c(ORCID = "")),
-    person("Jacob", "Krol", role = "aut",
+    person("Samuel", "Chen", role = "ctb",
+        comment = c(ORCID = "")),
+    person("Lo", "Sosinski", role = "ctb",
+        comment = c(ORCID = "")),
+    person("Joseph", "Burke", role = "ctb",
+        comment = c(ORCID = "")),
+    person("Jacob", "Krol", role = "ctb",
         comment = c(ORCID = "")))
-Description: This R package provides a system for characterizing proteins using molecular evolution and phylogeny.
+Description: This R package provides a framework for characterizing proteins using molecular evolution and phylogeny.
 License: BSD_3_clause + file LICENSE
-URL: https://github.com/jravilab/molevolvr
+URL: https://github.com/jravilab/molevolvr, https://jravilab.github.io/MolEvolvR/
 BugReports: https://github.com/jravilab/molevolvr/issues
 biocViews:
 Depends: 
