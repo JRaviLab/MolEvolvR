@@ -11,13 +11,14 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 
 The *MolEvolvR* R-package provides a framework for characterizing
 proteins using molecular evolution and phylogeny.
+Check out our packagedown page here: <jravilab.github.io/molevolvR>
 
 ## Installation
 
 You can install the development version of MolEvolvR from
 [GitHub](https://github.com/) with:
 
-``` r
+```r
 # Install Bioconductor
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
@@ -27,9 +28,14 @@ BiocManager::install(version = "3.19")
 BiocManager::install("JRaviLab/MolEvolvR", auth_token = '<PersonalAccessToken>')
 ```
 
+### Loading the package
+```r
+library(molevolvR)
+```
+
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example which shows you how to analyze your favorite protein:
 
 ``` r
 library(molevolvR)
@@ -41,19 +47,19 @@ library(molevolvR)
 
 ### Related MolEvolvR codebases
 
-- MolEvolvR web-app 1.0 \| [🔒
-  Repo](https://github.com/jravilab/molevol1.0/) \| [Live
-  web-app](//jravilab.org/molevolvr) \|
-  [Preprint](https://doi.org/10.1101/2022.02.18.461833) \| [Case
-  studies](https://jravilab.cuanschutz.edu/molevolvr/?r=&p=help)
-- MolEvolvR web-app 2.0 \| [🔒
-  Repo](https://github.com/jravilab/molevolvr2.0/)
+- MolEvolvR web-app 1.0 \|
+  🔒[Repo](https://github.com/jravilab/molevol1.0/) \|
+  [Live web-app](//jravilab.org/molevolvr) \|
+  [Preprint](https://doi.org/10.1101/2022.02.18.461833) \|
+  [Case studies](https://jravilab.cuanschutz.edu/molevolvr/?r=&p=help)
+- MolEvolvR web-app 2.0 \|
+  🔒[Repo](https://github.com/jravilab/molevolvr2.0/)
 
 ### Specific use cases
 
-- PSP evolution across the tree of life \| [🔒
-  Repo](https://github.com/jravilab/psp_app/) \| [Live
-  web-app](//jravilab.org/psp)
+- PSP evolution across the tree of life \|
+  🔒[Repo](https://github.com/jravilab/psp_app/) \|
+  [Live web-app](//jravilab.org/psp) \|
   [PubMed](https://pubmed.ncbi.nlm.nih.gov/38809013)
 - Bacterial phage defense system, avcDI \|
   [Repo](https://github.com/JRaviLab/phage_defense_avcd) \|
@@ -75,4 +81,7 @@ library(molevolvR)
 - [Dave Bunten](//github.com/d33bs) \| Data management, engineering
 - [Janani Ravi](//github.com/jananiravi) \| PI
 
+## Contribution guidelines
 📜 [License](https://github.com/JRaviLab/MolEvolvR/blob/main/LICENSE.md)
+
+TBA
