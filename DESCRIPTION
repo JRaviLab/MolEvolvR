@@ -20,7 +20,7 @@ Authors@R:
         comment = c(ORCID = "")))
 Description: This R package provides a framework for characterizing proteins using molecular evolution and phylogeny.
 License: BSD_3_clause + file LICENSE
-URL: https://github.com/jravilab/molevolvr
+URL: https://github.com/jravilab/molevolvr, https://jravilab.github.io/MolEvolvR/
 BugReports: https://github.com/jravilab/molevolvr/issues
 biocViews:
 Depends: 
