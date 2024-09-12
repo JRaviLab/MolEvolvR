@@ -72,4 +72,4 @@ library(molevolvR)
 ### Contribution guidelines
 📜 [License](https://github.com/JRaviLab/MolEvolvR/blob/main/LICENSE.md)
 
-💭`Stay tuned!`
+⏳ _Stay tuned!_
