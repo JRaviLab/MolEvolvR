@@ -25,14 +25,14 @@ if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install(version = "3.19")
 
-# Install Development Version of molevolvR
+# Install Development Version of MolEvolvR
 BiocManager::install("JRaviLab/MolEvolvR")
 ```
 
 ### Loading the package
 
 ``` r
-library(molevolvR)
+library(MolEvolvR)
 ```
 
 ## Example
@@ -41,7 +41,7 @@ This is a basic example which shows you how to analyze your favorite
 protein:
 
 ``` r
-library(molevolvR)
+library(MolEvolvR)
 ## basic example code
 ## TBA
 ```
@@ -88,7 +88,7 @@ library(molevolvR)
 
 We welcome contributions from the community! To ensure a smooth and
 collaborative process, please follow these
-[guidelines](https://github.com/JRaviLab/MolEvolvR/blob/main/.github/CONTRIBUTING.md)
+[guidelines](https://github.com/JRaviLab/MolEvolvR/blob/main/.github/CONTRIBUTING.md).
 
 📜 [License](https://github.com/JRaviLab/MolEvolvR/blob/main/LICENSE.md)
 
