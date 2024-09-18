@@ -43,7 +43,7 @@ protein:
 ``` r
 library(MolEvolvR)
 ## basic example code
-## TBA
+## ⏳ Stay tuned!
 ```
 
 ## Companion repos & projects
@@ -89,6 +89,9 @@ library(MolEvolvR)
 We welcome contributions from the community! To ensure a smooth and
 collaborative process, please follow these
 [guidelines](https://github.com/JRaviLab/MolEvolvR/blob/main/.github/CONTRIBUTING.md).
+Outreachy interns, please check out these
+[pointers](https://github.com/JRaviLab/MolEvolvR/blob/main/.github/outreachy_guidelines.md)
+to get started.
 
 📜 [License](https://github.com/JRaviLab/MolEvolvR/blob/main/LICENSE.md)
 
@@ -98,5 +101,3 @@ Please note that the MolEvolvR project is released with a [Contributor
 Code of
 Conduct](https://contributor-covenant.org/version/2/1/CODE_OF_CONDUCT.html).
 By contributing to this project, you agree to abide by its terms.
-
-⏳ *Stay tuned!*
