@@ -116,7 +116,7 @@ generate_trees <- function(aln_path = here("data/alns/")) {
 #' @param out_file
 #'
 #' @importFrom ape write.tree
-#' @importFrom phangorn bootstrap.pml dist.ml NJ modelTest phyDat plotBS pml pml.control pratchet optim.parsimony optim.pml read.aa upgma
+#' @importFrom phangorn bootstrap.pml dist.ml NJ modelTest phyDat plotBS pml pml.control pratchet optim.parsimony optim.pml read.phyDat upgma
 #' @importFrom seqinr dist.alignment read.alignment
 #' @importFrom stats logLik
 #'
@@ -156,7 +156,7 @@ generate_fa2tre <- function(fa_file = "data/alns/pspa_snf7.fa",
     ###########################
     ## Alignment file formats and conversion
     # read in sequence data, convert to phyDat
-    prot_fa <- read.aa(fa_file, format = "fasta")
+    prot_fa <- read.phyDat(fa_file, format = "fasta", type = "AA")
     prot_phyDat <- phyDat(prot_fa, type = "AA", levels = NULL)
     prot10 <- subset(prot_phyDat, 1:10)
     prot10_phyDat <- phyDat(prot10, type = "AA", levels = NULL)
