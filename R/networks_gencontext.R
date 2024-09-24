@@ -147,9 +147,9 @@ gc_undirected_network <- function(prot, column = "GenContext", domains_of_intere
 #' gc_directed_network(pspa, column = "GenContex", cutoff = 55)
 #' }
 GenContextNetwork <- function(prot, domains_of_interest, column = "GenContext",
-    cutoff = 40,
-    layout = "grid",
-    directed = TRUE) {
+                              cutoff = 40,
+                              layout = "grid",
+                              directed = TRUE) {
     column_name <- sym(column)
 
 
@@ -223,9 +223,9 @@ GenContextNetwork <- function(prot, domains_of_interest, column = "GenContext",
 
     max_size <- max(nodes$size)
     min_size <- min(nodes$size)
-    nodes <- nodes %>% mutate(size = (size - min_size) / ((max_size - min_size)) * 20 + 10)
+    nodes <- nodes %>% mutate(size = (.data$size - min_size) / ((max_size - min_size)) * 20 + 10)
     max_font_size <- 43
-    nodes <- nodes %>% mutate(font.size = purrr::map(size, function(x) min(x * 2, max_font_size)))
+    nodes <- nodes %>% mutate(font.size = purrr::map(.data$size, function(x) min(x * 2, max_font_size)))
 
     max_size <- max(nodes$size)
     min_size <- min(nodes$size)
@@ -272,7 +272,7 @@ GenContextNetwork <- function(prot, domains_of_interest, column = "GenContext",
     edges <- data.frame(from = pwise[, 1], to = pwise[, 2]) %>%
         group_by(from, to) %>%
         summarize(width = n())
-    edges <- edges %>% mutate(width = ifelse(width == 1, .3, log(width)))
+    edges <- edges %>% mutate(width = ifelse(.data$width == 1, .3, log(.data$width)))
     ew <- c(2.7, 4.5)
 
     ColorEdges <- function(x) {
@@ -285,7 +285,7 @@ GenContextNetwork <- function(prot, domains_of_interest, column = "GenContext",
         }
     }
 
-    edges <- edges %>% mutate(color = unlist(purrr::map(width, ColorEdges)))
+    edges <- edges %>% mutate(color = unlist(purrr::map(.data$width, ColorEdges)))
 
     if (directed) {
         vg <- visNetwork(nodes, edges, width = "100%", height = "600px") %>%

@@ -241,7 +241,7 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
 #' @importFrom dplyr distinct filter group_by mutate pull select summarize
 #' @importFrom grDevices adjustcolor
 #' @importFrom purrr as_vector map
-#' @importFrom rlang sym
+#' @importFrom rlang .data sym
 #' @importFrom stringr str_replace_all str_split
 #' @importFrom visNetwork visEdges visGroups visIgraphLayout visLegend visNetwork visOptions
 #'
@@ -253,10 +253,10 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
 #' domain_network(pspa)
 #' }
 BinaryDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, cutoff = 70,
-    layout = "nice", query_color = adjustcolor("yellow", alpha.f = .5),
-    partner_color = adjustcolor("skyblue", alpha.f = .5),
-    border_color = adjustcolor("grey", alpha.f = .8),
-    IsDirected = T) {
+                                layout = "nice", query_color = adjustcolor("yellow", alpha.f = .5),
+                                partner_color = adjustcolor("skyblue", alpha.f = .5),
+                                border_color = adjustcolor("grey", alpha.f = .8),
+                                IsDirected = T) {
     # by domain networks or all, as required.
     print(domains_of_interest)
 
@@ -289,18 +289,17 @@ BinaryDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, c
     wc <- elements2words(prot = prot, column = column, conversion_type = "da2doms") %>% words2wc()
 
     nodes <- data.frame(id = wc$words, label = wc$words, size = wc$freq) %>%
-        mutate(group = purrr::map(
-            id,
-            function(x) {
-                ifelse(x %in% domains_of_interest, "Query", "Partner")
-            }
+        mutate(group = purrr::map(.data$id,
+                                  function(x) {
+                                      ifelse(x %in% domains_of_interest, "Query", "Partner")
+                                  }
         ))
 
     max_size <- max(nodes$size)
     min_size <- min(nodes$size)
-    nodes <- nodes %>% mutate(size = (size - min_size) / ((max_size - min_size)) * 20 + 10)
+    nodes <- nodes %>% mutate(size = (.data$size - min_size) / ((max_size - min_size)) * 20 + 10)
     max_font_size <- 43
-    nodes <- nodes %>% mutate(font.size = purrr::map(size, function(x) min(x * 2, max_font_size)))
+    nodes <- nodes %>% mutate(font.size = purrr::map(.data$size, function(x) min(x * 2, max_font_size)))
 
     domain.list <- domain.list[-which(lengths(domain.list) == 1)]
 
@@ -318,7 +317,7 @@ BinaryDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, c
         edges <- data.frame(from = pwise[, 1], to = pwise[, 2]) %>%
             group_by(from, to) %>%
             summarize(width = n())
-        edges <- edges %>% mutate(width = ifelse(width == 1, .3, log(width)))
+        edges <- edges %>% mutate(width = ifelse(.data$width == 1, .3, log(.data$width)))
         ew <- c(2.7, 4.5)
 
         ColorEdges <- function(x) {
@@ -331,7 +330,7 @@ BinaryDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, c
             }
         }
 
-        edges <- edges %>% mutate(color = unlist(purrr::map(width, ColorEdges)))
+        edges <- edges %>% mutate(color = unlist(purrr::map(.data$width, ColorEdges)))
     }
 
     if (IsDirected) {
