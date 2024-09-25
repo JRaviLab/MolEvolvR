@@ -219,15 +219,15 @@ add_name <- function(data,
             sep = lin_sep
         ) %>%
         mutate(
-            Kingdom = strtrim(Kingdom, 1),
-            Phylum = strtrim(Phylum, 6)
+            Kingdom = strtrim(.data$Kingdom, 1),
+            Phylum = strtrim(.data$Phylum, 6)
         )
     if (!is.null(spec_col)) {
         split_data <- split_data %>%
             separate(spec_col, into = c("Genus", "Spp"), sep = " ") %>%
             mutate(
-                Genus = strtrim(Genus, 1),
-                Spp = word(string = Spp, start = 1)
+                Genus = strtrim(.data$Genus, 1),
+                Spp = word(string = .data$Spp, start = 1)
             )
     } else {
         split_data$Genus <- ""
@@ -242,8 +242,8 @@ add_name <- function(data,
 
     Leaf <- split_data %>%
         mutate(Leaf = paste0(
-            Kingdom, Phylum, "_",
-            Genus, Spp, "_",
+            .data$Kingdom, .data$Phylum, "_",
+            .data$Genus, .data$Spp, "_",
             {{ accnum_sym }}
         )) %>%
         pull(Leaf) %>%

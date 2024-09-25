@@ -644,6 +644,7 @@ lineage.domain_repeats.plot <- function(query_data, colname) {
 #' @importFrom dplyr arrange filter mutate group_by summarize union
 #' @importFrom ggplot2 aes aes_string element_blank element_text ggplot scale_fill_gradient theme theme_minimal
 #' @importFrom purrr map
+#' @importFrom rlang .data
 #' @importFrom stringr str_locate str_locate_all
 #'
 #' @return
@@ -692,10 +693,10 @@ LineagePlot <- function(prot, domains_of_interest, level = 3, label.size = 8) {
     all_grouped <- data.frame("Query" = character(0), "Lineage" = character(0), "count" = integer())
     for (dom in domains_of_interest)
     {
-        domSub <- prot %>% filter(grepl(dom, GenContext, ignore.case = T))
+        domSub <- prot %>% filter(grepl(dom, .data$GenContext, ignore.case = T))
 
         domSub <- domSub %>%
-            group_by(Lineage) %>%
+            group_by(.data$Lineage) %>%
             summarize("count" = n())
 
         domSub$Query <- dom
@@ -715,15 +716,15 @@ LineagePlot <- function(prot, domains_of_interest, level = 3, label.size = 8) {
         }
     }
 
-    all_grouped <- all_grouped %>% mutate(ReducedLin = unlist(purrr::map(Lineage, LevelReduction)))
+    all_grouped <- all_grouped %>% mutate(ReducedLin = unlist(purrr::map(.data$Lineage, LevelReduction)))
 
     all_grouped_reduced <- all_grouped %>%
-        group_by(Query, ReducedLin) %>%
+        group_by(.data$Query, .data$ReducedLin) %>%
         summarize("count" = sum(count)) %>%
-        mutate(Kingdom = unlist(purrr::map(ReducedLin, GetKingdom)))
+        mutate(Kingdom = unlist(purrr::map(.data$ReducedLin, GetKingdom)))
 
     lin_counts <- all_grouped_reduced %>%
-        group_by(Kingdom, ReducedLin) %>%
+        group_by(.data$Kingdom, .data$ReducedLin) %>%
         summarize("count" = n())
 
     # grep("bacteria", lin_counts$Kingdom) %>% length()
@@ -754,7 +755,7 @@ LineagePlot <- function(prot, domains_of_interest, level = 3, label.size = 8) {
         }
     ) %>% unlist()
 
-    ordered_lin <- all_grouped_reduced %>% arrange(Kingdom)
+    ordered_lin <- all_grouped_reduced %>% arrange(.data$Kingdom)
 
     all_grouped_reduced$Query <- factor(
         x = all_grouped_reduced$Query,

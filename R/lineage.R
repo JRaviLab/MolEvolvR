@@ -143,7 +143,7 @@ GCA2lin <- function(prot_data,
 #' @param plan
 #'
 #' @importFrom dplyr pull
-#' @importFrom rlang sym
+#' @importFrom rlang sym :=
 #'
 #' @return
 #' @export
@@ -387,7 +387,8 @@ ipg2lin <- function(accessions, ipg_file,
 #' @param acc_col
 #' @param version
 #'
-#' @importFrom data.table as.data.table
+#' @importFrom data.table as.data.table is.data.table merge.data.table
+#' @importFrom rlang :=
 #'
 #' @return
 #' @export
@@ -401,7 +402,7 @@ add_tax <- function(data, acc_col = "AccNum", version = T) {
     accessions <- data[[acc_col]]
 
     if (version) {
-        data <- data[, AccNum.noV := substr(data[[acc_col]],
+        data <- data[, .data$AccNum.noV := substr(data[[acc_col]],
             start = 0, stop = nchar(data[[acc_col]]) - 2
         )]
         acc_col <- "AccNum.noV"
