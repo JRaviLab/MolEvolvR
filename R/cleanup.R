@@ -430,6 +430,7 @@ cleanup_species <- function(prot, remove_empty = FALSE) {
 #' @param remove_empty  Boolean. If TRUE, rows with empty/unnecessary values in 'ClustName' are removed. Default is FALSE.
 #'
 #' @importFrom dplyr filter
+#' @importFrom rlang .data
 #' @importFrom stringr coll str_replace_all
 #'
 #' @return Cleaned up data frame
@@ -465,7 +466,7 @@ cleanup_clust <- function(prot,
     # Contains all domains separated by "|"
     domains_for_grep <- paste(domains_keep$domains, collapse = "|")
     # Remove rows with no domains contained within domains_keep
-    prot <- prot %>% filter(grepl(domains_for_grep, ClustName))
+    prot <- prot %>% filter(grepl(domains_for_grep, .data$ClustName))
 
     ## Optional parameters
     # Condense repeats

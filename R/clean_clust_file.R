@@ -48,6 +48,7 @@
 #'
 #' @importFrom dplyr mutate filter
 #' @importFrom readr read_tsv
+#' @importFrom rlang .data
 #' @importFrom stringr str_length
 #' @importFrom tidyr separate
 #'
@@ -62,12 +63,12 @@ clean_clust_file <- function(path, writepath = NULL, query) {
     prot <- read_tsv(path, col_names = F)
 
     # ?? Unused? clust contains a column containing all the clustids
-    clust <- prot %>% filter(grepl("^#", X1))
+    clust <- prot %>% filter(grepl("^#", .data$X1))
 
     # Separate all rows into columns by spaces and create ClustName.orig and ClustID columns
     # First warning below
     prot <- prot %>%
-        separate(X1, colnames.op_ins_cls, sep = ("  +")) %>%
+        separate(.data$X1, .data$colnames.op_ins_cls, sep = ("  +")) %>%
         mutate(ClustName.orig = "", ClustID = "")
 
     # ind_with_num contains a list of the row numbers with # in them.
@@ -76,7 +77,7 @@ clean_clust_file <- function(path, writepath = NULL, query) {
 
     # Separate the clustIDs (# 186;ClustName) by ";" into columns ClustID and ClustName.orig
     clsid <- separate(prot[ind_with_num, "AccNum"],
-        col = AccNum,
+        col = .data$AccNum,
         into = c("ClustID", "ClustName.orig"), sep = "; "
     )
 

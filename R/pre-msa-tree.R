@@ -83,6 +83,7 @@ to_titlecase <- function(x, y = " ") {
 #' @importFrom dplyr distinct left_join mutate select
 #' @importFrom purrr map
 #' @importFrom readr read_file read_tsv
+#' @importFrom rlang .data
 #' @importFrom stats complete.cases
 #' @importFrom stringr str_sub
 #' @importFrom tidyr replace_na separate
@@ -116,7 +117,7 @@ add_leaves <- function(aln_file = "",
     if (length(aln) == 1) {
         colnames(aln) <- "x1"
         aln <- separate(aln,
-            col = x1,
+            col = .data$x1,
             into = c("x1", "x2"),
             sep = "\\s+"
         )
@@ -126,8 +127,8 @@ add_leaves <- function(aln_file = "",
 
     aln_lin <- left_join(aln, lin, by = "AccNum") %>%
         select(
-            AccNum, Alignment,
-            Species, Lineage
+            .data$AccNum, .data$Alignment,
+            .data$Species, .data$Lineage
         )
 
     # Removes rows with NA
@@ -139,17 +140,17 @@ add_leaves <- function(aln_file = "",
     ## !! FIX ASAP.
     if (reduced) {
         # Removes duplicate lineages
-        aln_lin <- aln_lin %>% distinct(Lineage, .keep_all = TRUE)
+        aln_lin <- aln_lin %>% distinct(.data$Lineage, .keep_all = TRUE)
     }
 
     temp <- aln_lin %>%
-        separate(Lineage,
+        separate(.data$Lineage,
             into = c("Kingdom", "Phylum"),
             sep = ">", remove = F, ## !! How to deal w/ lineages without a phylum?
             extra = "merge", fill = "right"
         ) %>%
         replace_na(replace = list(Kingdom = "", Phylum = "")) %>%
-        separate(Species,
+        separate(.data$Species,
             into = c("Genus", "Spp"),
             sep = " ", remove = F,
             extra = "merge", fill = "left"
@@ -158,33 +159,33 @@ add_leaves <- function(aln_file = "",
         # kingdomPhylum_GenusSpecies
         mutate(Leaf = paste(
             paste0(
-                str_sub(Kingdom,
+                str_sub(.data$Kingdom,
                     start = 1, end = 1
                 ),
-                str_sub(Phylum, 1, 6)
+                str_sub(.data$Phylum, 1, 6)
             ),
             paste0(
-                str_sub(Genus, start = 1, end = 1),
-                str_sub(Spp, start = 1, end = 3)
+                str_sub(.data$Genus, start = 1, end = 1),
+                str_sub(.data$Spp, start = 1, end = 3)
             ),
             # AccNum,
             sep = "_"
         ))
     temp$Leaf <- map(temp$Leaf, to_titlecase)
     temp <- temp %>%
-        mutate(Leaf_Acc = (paste(Leaf, AccNum, sep = "_")))
+        mutate(Leaf_Acc = (paste(.data$Leaf, .data$AccNum, sep = "_")))
 
     # Combine and run through add leaves
     # 3 columns AccNum Sequence Leaf result
     # Create Leaf_AccNum pasted together
     # 2 columns Leaf_AccNum and Sequence Far left
     leaf_aln <- temp %>%
-        select(Leaf_Acc, Alignment)
+        select(.data$Leaf_Acc, .data$Alignment)
     return(leaf_aln)
 }
 
 
-#' Title
+#' Add Name
 #'
 #' @author Samuel Chen, Janani Ravi
 #'
@@ -280,7 +281,8 @@ add_name <- function(data,
 #' file should have
 #' @note Please refer to the source code if you have alternate +
 #' file formats and/or column names.
-#'
+#' 
+#' @importFrom data.table data.table
 #' @importFrom readr write_file
 #'
 #' @return

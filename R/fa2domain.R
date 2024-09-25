@@ -178,6 +178,7 @@ make_df_iprscan_domains <- function(
 #'
 #' @importFrom Biostrings AAStringSet
 #' @importFrom dplyr mutate rowwise
+#' @importFrom rlang .data
 #'
 #' @return [AAStringSet] A domain fasta containing all the domains for a
 #' single protein in the original fasta passed as an argument to make_df_iprscan_domains()
@@ -221,8 +222,8 @@ df_iprscan_domains2fasta <- function(df_iprscan_domains) {
         dplyr::rowwise() |>
         dplyr::mutate(
             idx_new_record = append_fasta_domains(
-                new_seq = seq_domain,
-                new_seq_id = id_domain
+                new_seq = .data$seq_domain,
+                new_seq_id = .data$id_domain
             )
         )
     return(fasta_domains)

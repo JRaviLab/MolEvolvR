@@ -96,6 +96,7 @@ filter_by_doms <- function(prot, column = "DomArch", doms_keep = c(), doms_remov
 #' @param min.freq
 #'
 #' @importFrom dplyr arrange as_tibble filter select
+#' @importFrom rlang .data
 #'
 #' @return Describe return, in detail
 #' @export
@@ -112,8 +113,8 @@ count_bycol <- function(prot = prot, column = "DomArch", min.freq = 1) {
         `colnames<-`(c(column, "freq")) %>%
         filter(!grepl("^-$", column)) %>% # remove "-"
         filter(!is.na(column)) %>%
-        arrange(-freq) %>%
-        filter(freq >= min.freq)
+        arrange(-.data$freq) %>%
+        filter(.data$freq >= min.freq)
     return(counts)
 }
 
@@ -221,6 +222,9 @@ words2wc <- function(string) {
 #'
 #' @param x
 #' @param min.freq
+#' 
+#' @importFrom dplyr filter
+#' @importFrom rlang .data
 #'
 #' @return Describe return, in detail
 #' @export
@@ -231,7 +235,7 @@ words2wc <- function(string) {
 #' }
 filter_freq <- function(x, min.freq) {
     x %>%
-        filter(freq >= min.freq)
+        filter(.data$freq >= min.freq)
 }
 
 #########################
@@ -589,6 +593,7 @@ total_counts <- function(prot, column = "DomArch", lineage_col = "Lineage",
 #'
 #' @importFrom dplyr arrange count distinct filter group_by right_join select
 #' @importFrom purrr map
+#' @importFrom rlang .data
 #'
 #' @return returns a dataframe containing paralogs and the counts.
 #' @export
@@ -602,23 +607,23 @@ total_counts <- function(prot, column = "DomArch", lineage_col = "Lineage",
 #' }
 find_paralogs <- function(prot) {
     # Remove eukaryotes
-    prot <- prot %>% filter(!grepl("^eukaryota", Lineage))
+    prot <- prot %>% filter(!grepl("^eukaryota", .data$Lineage))
     paralogTable <- prot %>%
-        group_by(GCA_ID) %>%
-        count(DomArch) %>%
-        filter(n > 1 & GCA_ID != "-") %>%
+        group_by(.data$GCA_ID) %>%
+        count(.data$DomArch) %>%
+        filter(n > 1 & .data$GCA_ID != "-") %>%
         arrange(-n) %>%
         distinct()
     # %>% ccNums" = filter(prot, grepl(GCA_ID, prot))$AccNum)
-    paralogTable$AccNums <- map(paralogTable$GCA_ID, function(x) filter(prot, grepl(x, GCA_ID))$AccNum)
+    paralogTable$AccNums <- map(paralogTable$GCA_ID, function(x) filter(prot, grepl(x, .data$GCA_ID))$AccNum)
     colnames(paralogTable)[colnames(paralogTable) == "n"] <- "Count"
     ### Merge with columns: AccNum,TaxID, and GCA/ Species?
     paralogTable <- prot %>%
-        select(Species, GCA_ID, Lineage) %>%
+        select(.data$Species, .data$GCA_ID, .data$Lineage) %>%
         right_join(paralogTable, by = c("GCA_ID")) %>%
-        filter(!is.na(Count)) %>%
-        arrange(-Count) %>%
-        select(-GCA_ID) %>%
+        filter(!is.na(.data$Count)) %>%
+        arrange(-.data$Count) %>%
+        select(-.data$GCA_ID) %>%
         distinct()
     return(paralogTable)
 }

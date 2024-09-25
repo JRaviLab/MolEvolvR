@@ -33,9 +33,9 @@
 #' @param query_color
 #'
 #' @importFrom dplyr across add_row all_of distinct filter mutate pull select
-#' @importFrom igraph delete_vertices graph_from_edgelist vertex
+#' @importFrom igraph E delete_vertices graph_from_edgelist vertex V
 #' @importFrom purrr map
-#' @importFrom rlang sym
+#' @importFrom rlang .data sym
 #' @importFrom shiny showNotification
 #' @importFrom stringr str_replace_all str_split
 #' @importFrom tidyr pivot_wider
@@ -74,7 +74,7 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
 
             # string clean up all of the Domain Architecture columns
             prot <- prot |>
-                mutate(DomArch.ntwrk = clean_string(DomArch.ntwrk)) |>
+                mutate(DomArch.ntwrk = clean_string(.data$DomArch.ntwrk)) |>
                 mutate(
                     across(
                         all_of(column),
@@ -85,7 +85,7 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
             domain.list <- prot %>%
                 dplyr::filter(grepl(
                     pattern = domains_of_interest_regex,
-                    x = DomArch.ntwrk,
+                    x = .data$DomArch.ntwrk,
                     ignore.case = T, perl = T
                 ))
             ## Separating column and converting to atomic vector prevents coercion
@@ -96,7 +96,7 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
             domain.list <- domain.list$DomArch.ntwrk %>% str_split(pattern = "\\+")
             # Get a table of domain counts
             wc <- elements2words(prot = prot, column = column, conversion_type = "da2doms") %>% words2wc()
-            wc <- pivot_wider(wc, names_from = words, values_from = freq)
+            wc <- pivot_wider(wc, names_from = .data$words, values_from = .data$freq)
 
             # Remove all isolated domarchs, such that an adjacency list can easily be constructed
             singletons <- domain.list[which(lengths(domain.list) == 1)] %>% unique()
@@ -113,26 +113,26 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
                     vertex_df <- vertex_df %>% add_row(id = num, label = domain)
                     num <- num + 1
                 }
-                # V(g)$size <- length(singletons)
+                # igraph::V(g)$size <- length(singletons)
 
-                # if(length(V(g)$size) == 1 || min(V(g)$size) == max(V(g)$size)  )
+                # if(length(igraph::V(g)$size) == 1 || min(igraph::V(g)$size) == max(igraph::V(g)$size)  )
                 # {
                 #  showNotification("HERE")
-                #  V(g)$size <- 25
-                #  V(g)$color <- rainbow(1, alpha = .5)
-                #  V(g)$frame.color <- V(g)$color
+                #  igraph::V(g)$size <- 25
+                #  igraph::V(g)$color <- rainbow(1, alpha = .5)
+                #  igraph::V(g)$frame.color <- igraph::V(g)$color
                 # }
 
                 # Resize based on difference between sizes of max and size of min
-                # (length(V(g)$size) >1)
+                # (length(igraph::V(g)$size) >1)
                 # else{
                 ## Below scaling will not work if only one vertex
-                #  V(g)$size <- (V(g)$size-min( V(g)$size) )/(max(V(g)$size)-min(V(g)$size))*20+10 # scaled by degree
+                #  igraph::V(g)$size <- (igraph::V(g)$size-min( igraph::V(g)$size) )/(max(igraph::V(g)$size)-min(igraph::V(g)$size))*20+10 # scaled by degree
 
-                #  v_size <-(V(g)$size)
+                #  v_size <-(igraph::V(g)$size)
                 # setting vertex color by size
-                # V(g)$color <- rainbow(5,alpha = .5)[round( (v_size-min(v_size))/(max(v_size)-min(v_size)*4+1))]
-                # V(g)$frame.color <- V(g)$color
+                # igraph::V(g)$color <- rainbow(5,alpha = .5)[round( (v_size-min(v_size))/(max(v_size)-min(v_size)*4+1))]
+                # igraph::V(g)$frame.color <- igraph::V(g)$color
                 vis_g <- visNetwork(vertex_df)
                 return(vis_g)
                 # }
@@ -154,44 +154,44 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
                 # Plotting the network
                 g <- graph_from_edgelist(pwise, directed = TRUE)
                 # scaling vertex size
-                # V(g)$size <- v.sz[V(g)$name]
+                # igraph::V(g)$size <- v.sz[igraph::V(g)$name]
 
 
                 # # Add query domains if not already present b/c they have not adjacency add them to the graph if not already present
                 for (domain in singletons)
                 {
-                    if (!domain %in% V(g)$name) {
+                    if (!domain %in% igraph::V(g)$name) {
                         g <- g + vertex(domain)
                     }
                 }
 
                 # Make sure X does not appear
                 # if(g)
-                if ("X" %in% V(g)$name) {
+                if ("X" %in% igraph::V(g)$name) {
                     g <- delete_vertices(g, "X")
                 }
-                V(g)$size <- as.numeric(wc[V(g)$name])
+                igraph::V(g)$size <- as.numeric(wc[igraph::V(g)$name])
 
-                V(g)$size <- (V(g)$size - min(V(g)$size)) / (max(V(g)$size) - min(V(g)$size)) * 20 + 10 # scaled by degree
+                igraph::V(g)$size <- (igraph::V(g)$size - min(igraph::V(g)$size)) / (max(igraph::V(g)$size) - min(igraph::V(g)$size)) * 20 + 10 # scaled by degree
 
                 # setting vertex color by size
-                V(g)$color <- rainbow(5, alpha = .5)[round((V(g)$size - min(V(g)$size)) / (max(V(g)$size) - min(V(g)$size)) * 4 + 1)]
-                V(g)$frame.color <- V(g)$color
+                igraph::V(g)$color <- rainbow(5, alpha = .5)[round((igraph::V(g)$size - min(igraph::V(g)$size)) / (max(igraph::V(g)$size) - min(igraph::V(g)$size)) * 4 + 1)]
+                igraph::V(g)$frame.color <- igraph::V(g)$color
                 # scaling edge width
-                E(g)$width <- e.sz
-                E(g)$width <- ifelse(log(E(g)$width) == 0, .3, log(E(g)$width))
+                igraph::E(g)$width <- e.sz
+                igraph::E(g)$width <- ifelse(log(igraph::E(g)$width) == 0, .3, log(igraph::E(g)$width))
                 # coloring edges by width
                 ew <- c(2.7, 4.5)
-                E(g)$color <- sapply(
-                    E(g)$width,
-                    function(x) if (x >= ew[1] && x <= ew[2]) E(g)$color <- adjustcolor("cadetblue", alpha.f = .7) else if (x > ew[2]) E(g)$color <- adjustcolor("maroon", alpha.f = .5) else E(g)$color <- "gray55"
+                igraph::E(g)$color <- sapply(
+                    igraph::E(g)$width,
+                    function(x) if (x >= ew[1] && x <= ew[2]) igraph::E(g)$color <- adjustcolor("cadetblue", alpha.f = .7) else if (x > ew[2]) igraph::E(g)$color <- adjustcolor("maroon", alpha.f = .5) else igraph::E(g)$color <- "gray55"
                 )
                 vis_g <- visIgraph(g, type = "full")
             }
 
 
-            #   # V(g)[which(V(g)$name %in% domains_of_interest)]$size <- as.numeric(wc[domains_of_interest])
-            # V(g)[which(V(g)$name %in% domains_of_interest)]$color = query_color
+            #   # igraph::V(g)[which(igraph::V(g)$name %in% domains_of_interest)]$size <- as.numeric(wc[domains_of_interest])
+            # igraph::V(g)[which(igraph::V(g)$name %in% domains_of_interest)]$color = query_color
             max_font_size <- 43
 
             vis_g$x$nodes$font.size <- purrr::map(vis_g$x$nodes$size, function(x) min(x * 2, max_font_size))
