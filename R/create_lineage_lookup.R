@@ -19,6 +19,7 @@
 #' @importFrom dplyr all_of mutate select
 #' @importFrom purrr map
 #' @importFrom readr read_file read_tsv write_tsv
+#' @importFrom rlang .data
 #' @importFrom stringr str_locate str_replace_all
 #' @importFrom tidyr unite
 #'
@@ -82,17 +83,17 @@ create_lineage_lookup <- function(lineage_file = here("data/rankedlineage.dmp"),
 
     if (tax_rank_index < length(taxonomy_ranks)) {
         rankedLins <- rankedLins %>%
-            select(-all_of(taxonomy_ranks[(tax_rank_index + 1):length(taxonomy_ranks)]), -kingdom)
+            select(-all_of(taxonomy_ranks[(tax_rank_index + 1):length(taxonomy_ranks)]), -.data$kingdom)
     } else {
         rankedLins <- rankedLins %>%
-            select(-kingdom)
+            select(-.data$kingdom)
     }
 
 
     # Takes a while (2million rows after all)
     rankedLinsCombined <- rankedLins %>%
         unite(col = "Lineage", all_of(combined_taxonomy), sep = ">") %>%
-        mutate(Lineage = unlist(map(Lineage, shorten_NA)))
+        mutate(Lineage = unlist(map(.data$Lineage, shorten_NA)))
 
 
 

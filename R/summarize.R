@@ -96,6 +96,7 @@ filter_by_doms <- function(prot, column = "DomArch", doms_keep = c(), doms_remov
 #' @param min.freq
 #'
 #' @importFrom dplyr arrange as_tibble filter select
+#' @importFrom rlang .data
 #'
 #' @return Describe return, in detail
 #' @export
@@ -112,8 +113,8 @@ count_bycol <- function(prot = prot, column = "DomArch", min.freq = 1) {
         `colnames<-`(c(column, "freq")) %>%
         filter(!grepl("^-$", column)) %>% # remove "-"
         filter(!is.na(column)) %>%
-        arrange(-freq) %>%
-        filter(freq >= min.freq)
+        arrange(-.data$freq) %>%
+        filter(.data$freq >= min.freq)
     return(counts)
 }
 

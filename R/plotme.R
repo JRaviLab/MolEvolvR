@@ -114,6 +114,16 @@ create_all_col_params <- function(count_data, fill_by_n, sort_by_n) {
     params
 }
 
+#' Global Var Helper
+#' 
+#' https://github.com/tidyverse/magrittr/issues/29
+#' 
+#' @name helpr
+#' @importFrom utils globalVariables
+#' @keywords internal
+#' @noRd
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("."))
+
 #' create_one_col_params
 #'
 #' @param df
@@ -121,6 +131,7 @@ create_all_col_params <- function(count_data, fill_by_n, sort_by_n) {
 #' @param root
 #'
 #' @importFrom dplyr c_across group_by mutate rowwise select summarise ungroup
+#' @importFrom rlang .data
 #' @importFrom stringr str_glue
 #'
 #' @return
@@ -154,7 +165,7 @@ create_one_col_params <- function(df,
                 "column: {col_name}\nvalue: {labels}\nn: {values}"
             )
         ) %>%
-        dplyr::select(ids, parents, labels, values, hovertext)
+        dplyr::select(.data$ids, .data$parents, .data$labels, .data$values, .data$hovertext)
 }
 #' assert_count_df
 #'
@@ -162,6 +173,7 @@ create_one_col_params <- function(df,
 #'
 #' @importFrom assertthat assert_that has_name
 #' @importFrom dplyr across mutate
+#' @importFrom tidyr matches
 #'
 #' @return
 #' @export

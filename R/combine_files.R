@@ -32,7 +32,7 @@
 #' usage similar to col_names parameter in `readr::read_delim`
 #'
 #' @importFrom purrr pmap_dfr
-#' @importFrom readr cols
+#' @importFrom readr cols col_character
 #'
 #' @return
 #' @export

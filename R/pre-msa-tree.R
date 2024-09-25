@@ -280,7 +280,8 @@ add_name <- function(data,
 #' file should have
 #' @note Please refer to the source code if you have alternate +
 #' file formats and/or column names.
-#'
+#' 
+#' @importFrom data.table data.table
 #' @importFrom readr write_file
 #'
 #' @return
