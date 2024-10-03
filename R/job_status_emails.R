@@ -95,10 +95,10 @@ make_job_results_url <- function(
 #' }
 format_job_args <- function(job_args) {
     # format job arguments into html-formatted key/value pairs
-    job_args_list <- tags$ul(lapply(names(job_args), function(key) {
+    job_args_list <- .data$tags$ul(lapply(names(job_args), function(key) {
         # look up human labels for field names, values, if available
         # (if not, just use the keys and values as-is)
-        field_meta <- fields_metadata[[key]]
+        field_meta <- .data$fields_metadata[[key]]
         human_key <- tryCatch(
             {
                 toString(
@@ -136,8 +136,8 @@ format_job_args <- function(job_args) {
         # which works fine for our purposes.
         human_value <- toString(lapply(value, humanize_value))
 
-        tags$li(
-            tags$b(paste0(human_key, ":")),
+        .data$tags$li(
+           .data$tags$b(paste0(human_key, ":")),
             human_value
         )
     }))
