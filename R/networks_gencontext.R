@@ -30,6 +30,7 @@
 #' @importFrom dplyr filter select
 #' @importFrom grDevices rainbow
 #' @importFrom igraph E graph_from_edgelist layout.auto layout.circle layout_on_grid layout_randomly  plot.igraph V
+#' @importFrom rlang .data
 #' @importFrom stringr str_replace_all str_split
 #'
 #' @return
@@ -48,7 +49,7 @@ gc_undirected_network <- function(prot, column = "GenContext", domains_of_intere
         lin_summary <- prot %>%
             summ.DA.byLin() %>%
             summ.DA()
-        doms_above_cutoff <- (lin_summary %>% filter(totallin >= cutoff))[[column]]
+        doms_above_cutoff <- (lin_summary %>% filter(.data$totallin >= cutoff))[[column]]
     } else if (cutoff_type == "Total Count") { # Change this type?
         GC_above_cutoff <- (prot %>% total_counts(column = column, cutoff = cutoff))[[column]]
     }
@@ -89,19 +90,19 @@ gc_undirected_network <- function(prot, column = "GenContext", domains_of_intere
     # Plotting the network
     g <- graph_from_edgelist(pwise, directed = TRUE)
     # scaling vertex size
-    V(g)$size <- v.sz[V(g)$name]
-    V(g)$size <- (V(g)$size - min(V(g)$size)) / (max(V(g)$size) - min(V(g)$size)) * 20 + 10 # scaled by degree
+    igraph::V(g)$size <- v.sz[igraph::V(g)$name]
+    igraph::V(g)$size <- (igraph::V(g)$size - min(igraph::V(g)$size)) / (max(igraph::V(g)$size) - min(igraph::V(g)$size)) * 20 + 10 # scaled by degree
     # setting vertex color by size
-    V(g)$color <- rainbow(5, alpha = .5)[round((V(g)$size - min(V(g)$size)) / (max(V(g)$size) - min(V(g)$size)) * 4 + 1)]
-    V(g)$frame.color <- V(g)$color
+    igraph::V(g)$color <- rainbow(5, alpha = .5)[round((igraph::V(g)$size - min(igraph::V(g)$size)) / (max(igraph::V(g)$size) - min(igraph::V(g)$size)) * 4 + 1)]
+    igraph::V(g)$frame.color <- igraph::V(g)$color
     # scaling edge width
-    E(g)$width <- e.sz
-    E(g)$width <- ifelse(log(E(g)$width) == 0, .3, log(E(g)$width))
+    igraph::E(g)$width <- e.sz
+    igraph::E(g)$width <- ifelse(log(igraph::E(g)$width) == 0, .3, log(igraph::E(g)$width))
     # coloring edges by width
     ew <- c(2.7, 4.5)
-    E(g)$color <- sapply(
-        E(g)$width,
-        function(x) if (x >= ew[1] && x <= ew[2]) E(g)$color <- "cadetblue" else if (x > ew[2]) E(g)$color <- "maroon" else E(g)$color <- "gray55"
+    igraph::E(g)$color <- sapply(
+        igraph::E(g)$width,
+        function(x) if (x >= ew[1] && x <= ew[2]) igraph::E(g)$color <- "cadetblue" else if (x > ew[2]) igraph::E(g)$color <- "maroon" else igraph::E(g)$color <- "gray55"
     )
 
 

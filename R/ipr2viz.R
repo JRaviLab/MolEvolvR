@@ -49,10 +49,10 @@ theme_genes2 <- function() {
 #' @param n
 #' @param query
 #'
-#' @importFrom dplyr arrange filter group_by select summarise
+#' @importFrom dplyr arrange filter first group_by select summarise
 #' @importFrom shiny showNotification
 #' @importFrom stats na.omit
-#' @importFrom rlang sym
+#' @importFrom rlang .data sym
 #'
 #' @return
 #' @export
@@ -78,9 +78,9 @@ find_top_acc <- function(infile_full,
     ## Group by Lineage, DomArch and reverse sort by group counts
     grouped <- cln %>%
         group_by({{ DA_sym }}, {{ lin_sym }}) %>%
-        arrange(desc(PcPositive)) %>%
-        summarise(count = n(), AccNum = dplyr::first(AccNum)) %>%
-        arrange(-count) %>%
+        arrange(desc(.data$PcPositive)) %>%
+        summarise(count = n(), AccNum = dplyr::first(.data$AccNum)) %>%
+        arrange(-.data$count) %>%
         filter({{ lin_sym }} != "" && {{ DA_sym }} != "")
     top_acc <- grouped$AccNum[1:n]
     top_acc <- na.omit(top_acc)
