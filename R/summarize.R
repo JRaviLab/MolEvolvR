@@ -91,18 +91,31 @@ filter_by_doms <- function(prot, column = "DomArch", doms_keep = c(), doms_remov
 ## Function to obtain element counts (DA, GC)
 #' Count Bycol
 #'
-#' @param prot
-#' @param column
-#' @param min.freq
+#' @param prot A data frame containing the dataset to analyze, typically with 
+#' multiple columns including the one specified by the `column` parameter.
+#' @param column A character string specifying the name of the column to analyze. 
+#' The default is "DomArch".
+#' @param min.freq An integer specifying the minimum frequency an element must 
+#' have to be included in the output. Default is 1.
 #'
 #' @importFrom dplyr arrange as_tibble filter select
 #'
-#' @return Describe return, in detail
+#' @return A tibble with two columns:
+#' \describe{
+#'   \item{`column`}{The unique elements from the specified column 
+#'   (e.g., "DomArch").}
+#'   \item{`freq`}{The frequency of each element, i.e., the number of times 
+#'   each element appears in the specified column.}
+#' }
+#' The tibble is filtered to only include elements that have a frequency 
+#' greater than or equal to `min.freq` and does not include elements with `NA` 
+#' values or those starting with a hyphen ("-").
+#'
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' count_bycol()
+#' count_bycol(prot = my_data, column = "DomArch", min.freq = 10)
 #' }
 count_bycol <- function(prot = prot, column = "DomArch", min.freq = 1) {
     counts <- prot %>%
@@ -123,19 +136,30 @@ count_bycol <- function(prot = prot, column = "DomArch", min.freq = 1) {
 #' Break string ELEMENTS into WORDS for domain architecture (DA) and genomic
 #' context (GC)
 #'
-#' @param prot [dataframe]
-#' @param column [string] column name
-#' @param conversion_type [string] type of conversion: 'da2doms': domain architectures to
-#' domains. 'gc2da' genomic context to domain architectures
+#' @param prot A dataframe containing the dataset to analyze. The specified 
+#' `column` contains the string elements to be processed.
+#' @param column A character string specifying the name of the column to analyze. 
+#' Default is "DomArch".
+#' @param conversion_type A character string specifying the type of conversion. 
+#' Two options are available:
+#' \describe{
+#'   \item{`da2doms`}{Convert domain architectures into individual domains by 
+#'   replacing `+` symbols with spaces.}
+#'   \item{`gc2da`}{Convert genomic context into domain architectures by
+#'    replacing directional symbols (`<-`, `->`, and `|`) with spaces.}
+#' }
 #'
 #' @importFrom dplyr pull
 #' @importFrom stringr str_replace_all
 #'
-#' @return [string] with words delimited by spaces
+#' @return A single string where elements are delimited by spaces. The function 
+#' performs necessary substitutions based on the `conversion_type` and cleans up 
+#' extraneous characters like newlines, tabs, and multiple spaces.
 #'
 #' @examples
 #' \dontrun{
-#' tibble::tibble(DomArch = c("aaa+bbb", "a+b", "b+c", "b-c")) |> elements2words()
+#' tibble::tibble(DomArch = c("aaa+bbb", 
+#' "a+b", "b+c", "b-c")) |> elements2words()
 #' }
 #'
 elements2words <- function(prot, column = "DomArch", conversion_type = "da2doms") {
@@ -175,11 +199,19 @@ elements2words <- function(prot, column = "DomArch", conversion_type = "da2doms"
 #' @description
 #' Get word counts (wc) [DOMAINS (DA) or DOMAIN ARCHITECTURES (GC)]
 #'
-#' @param string
+#' @param string A character string containing the elements (words) to count. 
+#' This would typically be a space-delimited string representing domain 
+#' architectures or genomic contexts.
 #'
-#' @importFrom dplyr as_tibble filter
+#' @importFrom dplyr as_tibble filter arrange
+#' @importFrom stringr str_replace_all
 #'
-#' @return [tbl_df] table with 2 columns: 1) words & 2) counts/frequency
+#' @return A tibble (tbl_df) with two columns: 
+#' \describe{
+#'   \item{`words`}{A column containing the individual words 
+#'   (domains or domain architectures).}
+#'   \item{`freq`}{A column containing the frequency counts for each word.}
+#' }
 #'
 #' @examples
 #' \dontrun{
@@ -219,10 +251,15 @@ words2wc <- function(string) {
 ## Function to filter based on frequencies
 #' Filter Frequency
 #'
-#' @param x
-#' @param min.freq
+#' @param x A tibble (tbl_df) containing at least two columns: one for 
+#' elements (e.g., `words`) and one for their frequency (e.g., `freq`).
+#' @param min.freq A numeric value specifying the minimum frequency threshold. 
+#' Only elements with frequencies greater than or equal to this value will be 
+#' retained.
 #'
-#' @return Describe return, in detail
+#' @return A tibble with the same structure as `x`, but filtered to include 
+#' only rows where the frequency is greater than or equal to `min.freq`.
+#'
 #' @export
 #'
 #' @examples
@@ -239,15 +276,20 @@ filter_freq <- function(x, min.freq) {
 #########################
 #' Summarize by Lineage
 #'
-#' @param prot
-#' @param column
-#' @param by
-#' @param query
+#' @param prot A dataframe or tibble containing the data.
+#' @param column A string representing the column to be summarized 
+#' (e.g., `DomArch`). Default is "DomArch".
+#' @param by A string representing the grouping column (e.g., `Lineage`). 
+#' Default is "Lineage".
+#' @param query A string specifying the query pattern for filtering the target 
+#' column. Use "all" to skip filtering and include all rows.
 #'
 #' @importFrom dplyr arrange filter group_by summarise
 #' @importFrom rlang sym
 #'
-#' @return Describe return, in detail
+#' @return A tibble summarizing the counts of occurrences of elements in 
+#' the `column`, grouped by the `by` column. The result includes the number 
+#' of occurrences (`count`) and is arranged in descending order of count.
 #' @export
 #'
 #' @examples
@@ -283,11 +325,17 @@ summarize_bylin <- function(prot = "prot", column = "DomArch", by = "Lineage",
 #' Function to summarize and retrieve counts by Domains & Domains+Lineage
 #'
 #'
-#' @param x
+#' @param x A dataframe or tibble containing the data. It must have columns 
+#' named `DomArch` and `Lineage`.
 #'
 #' @importFrom dplyr arrange count desc filter group_by summarise
 #'
-#' @return Describe return, in detail
+#' @return A tibble summarizing the counts of unique domain architectures 
+#' (`DomArch`) per lineage (`Lineage`). The resulting table contains three 
+#' columns: `DomArch`, `Lineage`, and `count`, which indicates the frequency 
+#' of each domain architecture for each lineage. The results are arranged in 
+#' descending order of `count`.
+#'
 #' @export
 #'
 #' @examples
@@ -309,11 +357,18 @@ summ.DA.byLin <- function(x) {
 #' @description
 #' Function to retrieve counts of how many lineages a DomArch appears in
 #'
-#' @param x
+#' @param x A dataframe or tibble containing the data. It must have a column 
+#' named `DomArch` and a count column, such as `count`, which represents the 
+#' occurrences of each architecture in various lineages.
 #'
 #' @importFrom dplyr arrange group_by filter summarise
 #'
-#' @return Describe return, in detail
+#' @return A tibble summarizing each unique `DomArch`, along with the following 
+#' columns:
+#' - `totalcount`: The total occurrences of each `DomArch` across all lineages.
+#' - `totallin`: The total number of unique lineages in which each `DomArch` 
+#' appears.
+#' The results are arranged in descending order of `totallin` and `totalcount`.
 #' @export
 #'
 #' @examples
@@ -332,11 +387,20 @@ summ.DA <- function(x) {
 
 #' summ.GC.byDALin
 #'
-#' @param x
+#' @param x A dataframe or tibble containing the data. It must have columns 
+#' named `GenContext`, `DomArch`, and `Lineage`.
 #'
 #' @importFrom dplyr arrange desc filter group_by n summarise
 #'
-#' @return Define return, in detail
+#' @return A tibble summarizing each unique combination of `GenContext`, 
+#' `DomArch`, and `Lineage`, along with the following columns:
+#' - `GenContext`: The genomic context for each entry.
+#' - `DomArch`: The domain architecture for each entry.
+#' - `Lineage`: The lineage associated with each entry.
+#' - `count`: The total number of occurrences for each combination of 
+#' `GenContext`, `DomArch`, and `Lineage`.
+#'
+#' The results are arranged in descending order of `count`.
 #' @export
 #'
 #' @examples
@@ -382,11 +446,19 @@ summ.GC.byLin <- function(x) {
 
 #' summ.GC
 #'
-#' @param x
+#' @param x A dataframe or tibble containing the data. It must have columns 
+#' named `GenContext`, `DomArch`, and `Lineage`.
 #'
-#' @importFrom dplyr arrange desc filter group_by n_distinct summarise
+#' @importFrom dplyr arrange desc filter group_by n summarise
 #'
-#' @return Describe return, in detail
+#' @return A tibble summarizing each unique combination of `GenContext` and 
+#' `Lineage`, along with the following columns:
+#' - `GenContext`: The genomic context for each entry.
+#' - `Lineage`: The lineage associated with each entry.
+#' - `count`: The total number of occurrences for each combination of
+#'  `GenContext` and `Lineage`.
+#'
+#' The results are arranged in descending order of `count`.
 #' @export
 #'
 #' @examples
@@ -419,16 +491,27 @@ summ.GC <- function(x) {
 #'
 #' @param prot  A data frame that must contain columns:
 #' \itemize{\item Either 'GenContext' or 'DomArch.norep' \item count}
-#' @param column Character. The column to summarize
-#' @param lineage_col
-#' @param cutoff Numeric. Cutoff for total count. Counts below cutoff value will not be shown. Default is 0.
-#' @param RowsCutoff
-#' @param digits
+#' @param column Character. The column to summarize, default is "DomArch".
+#' @param lineage_col Character. The name of the lineage column, default is 
+#' "Lineage".
+#' @param cutoff Numeric. Cutoff for total count. Counts below this cutoff value 
+#' will not be shown. Default is 0.
+#' @param RowsCutoff Logical. If TRUE, filters based on cumulative percentage 
+#' cutoff. Default is FALSE.
+#' @param digits Numeric. Number of decimal places for percentage columns. 
+#' Default is 2.
+#'
 #'
 #' @importFrom dplyr arrange distinct filter group_by left_join mutate select summarise ungroup
 #' @importFrom rlang as_string sym
 #'
-#' @return Define return, in detail
+#' @return A data frame with the following columns:
+#' - `{{ column }}`: Unique values from the specified column.
+#' - `totalcount`: The total count of occurrences for each unique value in 
+#' the specified column.
+#' - `IndividualCountPercent`: The percentage of each `totalcount` relative to 
+#' the overall count.
+#' - `CumulativePercent`: The cumulative percentage of total counts.
 #' @export
 #'
 #' @note Please refer to the source code if you have alternate file formats and/or

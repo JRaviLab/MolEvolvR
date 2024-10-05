@@ -7,10 +7,21 @@
 summ.GC.byDALin(x)
 }
 \arguments{
-\item{x}{}
+\item{x}{A dataframe or tibble containing the data. It must have columns
+named \code{GenContext}, \code{DomArch}, and \code{Lineage}.}
 }
 \value{
-Define return, in detail
+A tibble summarizing each unique combination of \code{GenContext},
+\code{DomArch}, and \code{Lineage}, along with the following columns:
+\itemize{
+\item \code{GenContext}: The genomic context for each entry.
+\item \code{DomArch}: The domain architecture for each entry.
+\item \code{Lineage}: The lineage associated with each entry.
+\item \code{count}: The total number of occurrences for each combination of
+\code{GenContext}, \code{DomArch}, and \code{Lineage}.
+}
+
+The results are arranged in descending order of \code{count}.
 }
 \description{
 summ.GC.byDALin

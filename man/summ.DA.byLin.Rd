@@ -7,10 +7,15 @@
 summ.DA.byLin(x)
 }
 \arguments{
-\item{x}{}
+\item{x}{A dataframe or tibble containing the data. It must have columns
+named \code{DomArch} and \code{Lineage}.}
 }
 \value{
-Describe return, in detail
+A tibble summarizing the counts of unique domain architectures
+(\code{DomArch}) per lineage (\code{Lineage}). The resulting table contains three
+columns: \code{DomArch}, \code{Lineage}, and \code{count}, which indicates the frequency
+of each domain architecture for each lineage. The results are arranged in
+descending order of \code{count}.
 }
 \description{
 Function to summarize and retrieve counts by Domains & Domains+Lineage

@@ -7,10 +7,19 @@
 summ.DA(x)
 }
 \arguments{
-\item{x}{}
+\item{x}{A dataframe or tibble containing the data. It must have a column
+named \code{DomArch} and a count column, such as \code{count}, which represents the
+occurrences of each architecture in various lineages.}
 }
 \value{
-Describe return, in detail
+A tibble summarizing each unique \code{DomArch}, along with the following
+columns:
+\itemize{
+\item \code{totalcount}: The total occurrences of each \code{DomArch} across all lineages.
+\item \code{totallin}: The total number of unique lineages in which each \code{DomArch}
+appears.
+The results are arranged in descending order of \code{totallin} and \code{totalcount}.
+}
 }
 \description{
 Function to retrieve counts of how many lineages a DomArch appears in

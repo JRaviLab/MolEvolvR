@@ -7,10 +7,16 @@
 filter_freq(x, min.freq)
 }
 \arguments{
-\item{min.freq}{}
+\item{x}{A tibble (tbl_df) containing at least two columns: one for
+elements (e.g., \code{words}) and one for their frequency (e.g., \code{freq}).}
+
+\item{min.freq}{A numeric value specifying the minimum frequency threshold.
+Only elements with frequencies greater than or equal to this value will be
+retained.}
 }
 \value{
-Describe return, in detail
+A tibble with the same structure as \code{x}, but filtered to include
+only rows where the frequency is greater than or equal to \code{min.freq}.
 }
 \description{
 Filter Frequency

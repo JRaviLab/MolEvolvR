@@ -7,16 +7,32 @@
 count_bycol(prot = prot, column = "DomArch", min.freq = 1)
 }
 \arguments{
-\item{min.freq}{}
+\item{prot}{A data frame containing the dataset to analyze, typically with
+multiple columns including the one specified by the \code{column} parameter.}
+
+\item{column}{A character string specifying the name of the column to analyze.
+The default is "DomArch".}
+
+\item{min.freq}{An integer specifying the minimum frequency an element must
+have to be included in the output. Default is 1.}
 }
 \value{
-Describe return, in detail
+A tibble with two columns:
+\describe{
+\item{\code{column}}{The unique elements from the specified column
+(e.g., "DomArch").}
+\item{\code{freq}}{The frequency of each element, i.e., the number of times
+each element appears in the specified column.}
+}
+The tibble is filtered to only include elements that have a frequency
+greater than or equal to \code{min.freq} and does not include elements with \code{NA}
+values or those starting with a hyphen ("-").
 }
 \description{
 Count Bycol
 }
 \examples{
 \dontrun{
-count_bycol()
+count_bycol(prot = my_data, column = "DomArch", min.freq = 10)
 }
 }

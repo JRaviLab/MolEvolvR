@@ -17,14 +17,30 @@ total_counts(
 \item{prot}{A data frame that must contain columns:
 \itemize{\item Either 'GenContext' or 'DomArch.norep' \item count}}
 
-\item{column}{Character. The column to summarize}
+\item{column}{Character. The column to summarize, default is "DomArch".}
 
-\item{cutoff}{Numeric. Cutoff for total count. Counts below cutoff value will not be shown. Default is 0.}
+\item{lineage_col}{Character. The name of the lineage column, default is
+"Lineage".}
 
-\item{digits}{}
+\item{cutoff}{Numeric. Cutoff for total count. Counts below this cutoff value
+will not be shown. Default is 0.}
+
+\item{RowsCutoff}{Logical. If TRUE, filters based on cumulative percentage
+cutoff. Default is FALSE.}
+
+\item{digits}{Numeric. Number of decimal places for percentage columns.
+Default is 2.}
 }
 \value{
-Define return, in detail
+A data frame with the following columns:
+\itemize{
+\item \code{{{ column }}}: Unique values from the specified column.
+\item \code{totalcount}: The total count of occurrences for each unique value in
+the specified column.
+\item \code{IndividualCountPercent}: The percentage of each \code{totalcount} relative to
+the overall count.
+\item \code{CumulativePercent}: The cumulative percentage of total counts.
+}
 }
 \description{
 Creates a data frame with a totalcount column

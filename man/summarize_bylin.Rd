@@ -7,10 +7,21 @@
 summarize_bylin(prot = "prot", column = "DomArch", by = "Lineage", query)
 }
 \arguments{
-\item{query}{}
+\item{prot}{A dataframe or tibble containing the data.}
+
+\item{column}{A string representing the column to be summarized
+(e.g., \code{DomArch}). Default is "DomArch".}
+
+\item{by}{A string representing the grouping column (e.g., \code{Lineage}).
+Default is "Lineage".}
+
+\item{query}{A string specifying the query pattern for filtering the target
+column. Use "all" to skip filtering and include all rows.}
 }
 \value{
-Describe return, in detail
+A tibble summarizing the counts of occurrences of elements in
+the \code{column}, grouped by the \code{by} column. The result includes the number
+of occurrences (\code{count}) and is arranged in descending order of count.
 }
 \description{
 Summarize by Lineage
