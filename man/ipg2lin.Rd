@@ -38,7 +38,8 @@ This file can be generated using the "DownloadAssemblySummary()" function}
 Describe return, in detail
 }
 \description{
-Takes the resulting file of an efetch run on the ipg database and
+Takes the resulting file
+of an efetch run on the ipg database and
 
 Takes the resulting file of an efetch run on the ipg database and
 append lineage, and taxid columns

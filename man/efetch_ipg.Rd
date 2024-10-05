@@ -23,7 +23,8 @@ the ipg database}
 Describe return, in detail
 }
 \description{
-Perform efetch on the ipg database and write the results to out_path
+Perform efetch on the ipg database
+and write the results to out_path
 
 Perform efetch on the ipg database and write the results to out_path
 }
