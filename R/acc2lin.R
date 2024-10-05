@@ -25,18 +25,25 @@ sink.reset <- function() {
 
 #' Add Lineages
 #'
-#' @param df
-#' @param acc_col
-#' @param assembly_path
-#' @param lineagelookup_path
-#' @param ipgout_path
-#' @param plan
+#' @param df A `data.frame` containing the input data. One column must contain 
+#' the accession numbers.
+#' @param acc_col A string specifying the column name in `df` that holds the 
+#' accession numbers. Defaults to `"AccNum"`.
+#' @param assembly_path A string specifying the path to the `assembly_summary.txt` 
+#' file. This file contains metadata about assemblies.
+#' @param lineagelookup_path A string specifying the path to the lineage lookup 
+#' file, which contains a mapping from tax IDs to their corresponding lineages.
+#' @param ipgout_path (Optional) A string specifying the path where IPG database 
+#' fetch results will be saved. If `NULL`, the results are not written to a file.
+#' @param plan A string specifying the parallelization strategy for the future
+#' package, such as `"sequential"` or `"multisession"`.
 #'
 #' @importFrom dplyr pull
 #' @importFrom magrittr %>%
 #' @importFrom rlang sym
 #'
-#' @return Describe return, in detail
+#' @return A `data.frame` that combines the original `df` with the lineage 
+#' information.
 #' @export
 #'
 #' @examples
@@ -78,9 +85,12 @@ add_lins <- function(df, acc_col = "AccNum", assembly_path,
 #' (taxid to lineage mapping). This file can be generated using the
 #' @param ipgout_path Path to write the results of the efetch run of the accessions
 #' on the ipg database. If NULL, the file will not be written. Defaults to NULL
-#' @param plan
+#' @param plan A string specifying the parallelization strategy for the future
+#' package, such as `"sequential"` or `"multisession"`.
 #'
-#' @return Describe return, in detail
+#' @return A `data.table` that contains the lineage information, mapping protein 
+#' accessions to their tax IDs and lineages.
+#' @export
 #' @export
 #'
 #' @examples
@@ -112,13 +122,14 @@ acc2lin <- function(accessions, assembly_path, lineagelookup_path, ipgout_path =
 #' @param accnums Character vector containing the accession numbers to query on
 #' the ipg database
 #' @param out_path Path to write the efetch results to
-#' @param plan
+#' @param plan A string specifying the parallelization strategy for the future
+#' package, such as `"sequential"` or `"multisession"`.
 #'
 #' @importFrom furrr future_map
 #' @importFrom future plan
 #' @importFrom rentrez entrez_fetch
 #'
-#' @return Describe return, in detail
+#' @return No return value. The function writes the fetched results to `out_path`.
 #' @export
 #'
 #' @examples
@@ -186,7 +197,8 @@ efetch_ipg <- function(accnums, out_path, plan = "sequential") {
 #'
 #' @importFrom data.table fread
 #'
-#' @return Describe return, in detail
+#' @return A `data.table` with the lineage information for the provided protein 
+#' accessions.
 #' @export
 #'
 #' @examples
