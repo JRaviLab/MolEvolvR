@@ -23,7 +23,7 @@ See our guide on [how to create a great issue](https://code-review.tidyverse.org
 *   Install and load the `usethis` package with:
     ```
     install.packages("usethis")
-    library(usethis)
+    library("usethis")
     ```
 *   Clone and fork the MolEvolvR package using:
     ```
