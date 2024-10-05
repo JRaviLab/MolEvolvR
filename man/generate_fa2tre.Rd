@@ -10,10 +10,16 @@ generate_fa2tre(
 )
 }
 \arguments{
-\item{fa_file}{Character. Path to file.
-Default is 'pspa_snf7.fa'}
+\item{fa_file}{Character. Path to the alignment FASTA file (.fa) from which
+the phylogenetic tree will be generated. Default is 'pspa_snf7.fa'.}
 
-\item{out_file}{}
+\item{out_file}{Path to the output file where the generated tree (.tre) will
+be saved. Default is "data/alns/pspa_snf7.tre".}
+}
+\value{
+No return value. The function generates a phylogenetic tree file
+(.tre) based on different approaches like Neighbor Joining, UPGMA, and
+Maximum Likelihood.
 }
 \description{
 Generating phylogenetic tree from alignment file '.fa'
