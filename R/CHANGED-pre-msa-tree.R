@@ -1,9 +1,9 @@
 ## Pre-requisites to generate MSA and Phylogenetic Tree
 ## Includes the following functions:
-## convert_aln2fa, to_titlecase, add_leaves
-## generate_all_aln2fa
-## convert_aln2tsv??, convert_accnum2fa??
-## Created from add_leaves.R, convert_aln2fa.R, all_aln2fa.R
+## convertAlignment2FA, convert2TitleCase, addLeaves2Alignment
+## generateAllAlignments2FA
+## convertAlignment2TSV??, convertAccNumber2FA??
+## Created from addLeaves2Alignment.R, convertAlignment2FA.R, all_aln2fa.R
 ## Modified: Dec 24, 2019 | Jan 2021
 ## Janani Ravi (@jananiravi) & Samuel Chen (@samuelzornchen)
 
@@ -35,7 +35,7 @@ api_key <- Sys.getenv("ENTREZ_API_KEY", unset = "YOUR_KEY_HERE")
 #' @author Andrie, Janani Ravi
 #' @description Translate string to Title Case w/ delimitter.
 #' @aliases totitle, to_title
-#' @usage to_titlecase(text, delimitter)
+#' @usage convert2TitleCase(text, delimitter)
 #' @param x Character vector.
 #' @param y Delimitter. Default is space (" ").
 #' @seealso chartr, toupper, and tolower.
@@ -44,7 +44,7 @@ api_key <- Sys.getenv("ENTREZ_API_KEY", unset = "YOUR_KEY_HERE")
 #' @export
 #'
 #' @examples
-to_titlecase <- function(x, y = " ") {
+convert2TitleCase <- function(x, y = " ") {
     s <- strsplit(x, y)[[1]]
     paste(toupper(substring(s, 1, 1)), substring(s, 2),
         sep = "", collapse = y
@@ -89,9 +89,9 @@ to_titlecase <- function(x, y = " ") {
 #'
 #' @examples
 #' \dontrun{
-#' add_leaves("pspa_snf7.aln", "pspa.txt")
+#' addLeaves2Alignment("pspa_snf7.aln", "pspa.txt")
 #' }
-add_leaves <- function(aln_file = "",
+addLeaves2Alignment <- function(aln_file = "",
     lin_file = "data/rawdata_tsv/all_semiclean.txt", # !! finally change to all_clean.txt!!
     # lin_file="data/rawdata_tsv/PspA.txt",
     reduced = FALSE) {
@@ -164,7 +164,7 @@ add_leaves <- function(aln_file = "",
             # AccNum,
             sep = "_"
         ))
-    temp$Leaf <- map(temp$Leaf, to_titlecase)
+    temp$Leaf <- map(temp$Leaf, convert2TitleCase)
     temp <- temp %>%
         mutate(Leaf_Acc = (paste(Leaf, AccNum, sep = "_")))
 
@@ -203,7 +203,7 @@ add_leaves <- function(aln_file = "",
 #' @export
 #'
 #' @examples
-add_name <- function(data,
+addName <- function(data,
     accnum_col = "AccNum", spec_col = "Species", lin_col = "Lineage",
     lin_sep = ">", out_col = "Name") {
     cols <- c(accnum_col, "Kingdom", "Phylum", "Genus", "Spp")
@@ -283,10 +283,10 @@ add_name <- function(data,
 #'
 #' @examples
 #' \dontrun{
-#' add_leaves("pspa_snf7.aln", "pspa.txt")
+#' addLeaves2Alignment("pspa_snf7.aln", "pspa.txt")
 #' }
 #'
-convert_aln2fa <- function(aln_file = "",
+convertAlignment2FA <- function(aln_file = "",
     lin_file = "data/rawdata_tsv/all_semiclean.txt", # !! finally change to all_clean.txt!!
     fa_outpath = "",
     reduced = FALSE) {
@@ -297,7 +297,7 @@ convert_aln2fa <- function(aln_file = "",
     # fa_outpath="data/alns/pspc.fasta"
 
     ## Add leaves
-    aln <- add_leaves(
+    aln <- addLeaves2Alignment(
         aln = aln_file,
         lin = lin_file,
         reduced = reduced
@@ -320,7 +320,7 @@ convert_aln2fa <- function(aln_file = "",
     return(fasta)
 }
 
-#' Default rename_fasta() replacement function. Maps an accession number to its name
+#' Default renameFA() replacement function. Maps an accession number to its name
 #'
 #' @param line The line of a fasta file starting with '>'
 #' @param acc2name Data Table containing a column of accession numbers and a name column
@@ -335,8 +335,8 @@ convert_aln2fa <- function(aln_file = "",
 #' @export
 #'
 #' @examples
-map_acc2name <- function(line, acc2name, acc_col = "AccNum", name_col = "Name") {
-    # change to be the name equivalent to an add_names column
+mapAccession2Name <- function(line, acc2name, acc_col = "AccNum", name_col = "Name") {
+    # change to be the name equivalent to an addNames column
     # Find the first ' '
     end_acc <- str_locate(line, " ")[[1]]
 
@@ -364,8 +364,8 @@ map_acc2name <- function(line, acc2name, acc_col = "AccNum", name_col = "Name") 
 #' @export
 #'
 #' @examples
-rename_fasta <- function(fa_path, outpath,
-    replacement_function = map_acc2name, ...) {
+renameFA <- function(fa_path, outpath,
+    replacement_function = mapAccession2Name, ...) {
     lines <- read_lines(fa_path)
     res <- map(lines, function(x) {
         if (strtrim(x, 1) == ">") {
@@ -381,7 +381,7 @@ rename_fasta <- function(fa_path, outpath,
 }
 
 ################################
-## generate_all_aln2fa
+## generateAllAlignments2FA
 #' Adding Leaves to an alignment file w/ accessions
 #'
 #' @keywords alignment, accnum, leaves, lineage, species
@@ -408,9 +408,9 @@ rename_fasta <- function(fa_path, outpath,
 #'
 #' @examples
 #' \dontrun{
-#' generate_all_aln2fa()
+#' generateAllAlignments2FA()
 #' }
-generate_all_aln2fa <- function(aln_path = here("data/rawdata_aln/"),
+generateAllAlignments2FA <- function(aln_path = here("data/rawdata_aln/"),
     fa_outpath = here("data/alns/"),
     lin_file = here("data/rawdata_tsv/all_semiclean.txt"),
     reduced = F) {
@@ -432,7 +432,7 @@ generate_all_aln2fa <- function(aln_path = here("data/rawdata_aln/"),
         fa_outpath = paste0(fa_outpath, "/", variable, ".fa")
     )
     pmap(
-        .l = aln2fa_args, .f = convert_aln2fa,
+        .l = aln2fa_args, .f = convertAlignment2FA,
         lin_file = lin_file,
         reduced = reduced
     )
@@ -441,7 +441,7 @@ generate_all_aln2fa <- function(aln_path = here("data/rawdata_aln/"),
 
 # accessions <- c("P12345","Q9UHC1","O15530","Q14624","P0DTD1")
 # accessions <- rep("ANY95992.1", 201)
-#' acc2fa converts protein accession numbers to a fasta format.
+#' acc2FA converts protein accession numbers to a fasta format.
 #'
 #' @description
 #' Resulting fasta file is written to the outpath.
@@ -464,11 +464,11 @@ generate_all_aln2fa <- function(aln_path = here("data/rawdata_aln/"),
 #'
 #' @examples
 #' \dontrun{
-#' acc2fa(accessions = c("ACU53894.1", "APJ14606.1", "ABK37082.1"), outpath = "my_proteins.fasta")
-#' Entrez:accessions <- rep("ANY95992.1", 201) |> acc2fa(outpath = "entrez.fa")
-#' EBI:accessions <- c("P12345", "Q9UHC1", "O15530", "Q14624", "P0DTD1") |> acc2fa(outpath = "ebi.fa")
+#' acc2FA(accessions = c("ACU53894.1", "APJ14606.1", "ABK37082.1"), outpath = "my_proteins.fasta")
+#' Entrez:accessions <- rep("ANY95992.1", 201) |> acc2FA(outpath = "entrez.fa")
+#' EBI:accessions <- c("P12345", "Q9UHC1", "O15530", "Q14624", "P0DTD1") |> acc2FA(outpath = "ebi.fa")
 #' }
-acc2fa <- function(accessions, outpath, plan = "sequential") {
+acc2FA <- function(accessions, outpath, plan = "sequential") {
     # validation
     stopifnot(length(accessions) > 0)
 
@@ -663,7 +663,7 @@ get_accnums_from_fasta_file <- function(fasta_file) {
 
 
 ################################
-## convert_accnum2fa
+## convertAccNumber2FA
 #######
 ## 1 ##
 #######
@@ -706,9 +706,9 @@ get_accnums_from_fasta_file <- function(fasta_file) {
 # seqs <- retrieveseqs(seqnames,"swissprot")
 
 ################################
-## convert_aln2tsv
+## convertAlignment2TSV
 ## NEEDS FIXING!
-# convert_aln2tsv <- function(file_path){
+# convertAlignment2TSV <- function(file_path){
 #   cfile <- read_delim("data/alignments/pspc.gismo.aln", delim=" ")
 #   cfile <- as.data.frame(map(cfile,function(x) gsub("\\s+", "",x)))
 #   colnames(cfile) <- c("AccNum", "Alignment")
