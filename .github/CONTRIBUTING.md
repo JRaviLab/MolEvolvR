@@ -23,15 +23,29 @@ See our guide on [how to create a great issue](https://code-review.tidyverse.org
 *   Install and load the `usethis` package with:
     ```
     install.packages("usethis")
+    
     library("usethis")
     ```
 *   Clone and fork the MolEvolvR package using:
     ```
     usethis::create_from_github("JRaviLab/MolEvolvR", fork = TRUE)
     ```
-*   Install all development dependencies with `devtools::install_dev_deps()`, and then make sure the package passes R CMD check by running `devtools::check()`. 
-    If R CMD check doesn't pass cleanly, it's a good idea to ask for help before continuing. 
-*   Create a Git branch for your pull request (PR). We recommend using `usethis::pr_init("brief-description-of-change")`.
+*   Install all development dependencies and then make sure the package passes R CMD check using `devtools`:
+    ```
+    install.packages("devtools")
+    
+    library("devtools")
+    
+    devtools::install_dev_deps()
+    
+    devtools::check()
+    ```
+    _If R CMD check doesn't pass cleanly, it's a good idea to ask for help before continuing._
+    
+*   Create a Git branch for your pull request (PR). We recommend using
+    ```
+    usethis::pr_init("brief-description-of-change")
+    ```
 
 *   Make your changes, commit to git, and then create a PR by running `usethis::pr_push()`, and following the prompts in your browser.
     The title of your PR should briefly describe the change.
@@ -44,7 +58,14 @@ See our guide on [how to create a great issue](https://code-review.tidyverse.org
 *   New code should follow the tidyverse [style guide](https://style.tidyverse.org). 
     You can use the [styler](https://CRAN.R-project.org/package=styler) package to apply these styles, but please don't restyle code that has nothing to do with your PR.  
     
-*   Lint Your Code: Ensure your code adheres to our style guidelines by using [lintr](https://lintr.r-lib.org/): `lintr::lint("path/to/your/file.R")`
+*   Lint Your Code: Ensure your code adheres to our style guidelines by using [lintr](https://lintr.r-lib.org/):
+    ```
+    install.packages("lintr")
+    
+    library("lintr")
+    
+    lintr::lint("path/to/your/file.R")
+    ```
 
 *  We use [roxygen2](https://cran.r-project.org/package=roxygen2), with [Markdown syntax](https://cran.r-project.org/web/packages/roxygen2/vignettes/rd-formatting.html), for documentation.  
 
