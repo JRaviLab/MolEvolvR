@@ -4,7 +4,7 @@
 # - a protein with no domains (unlikely) found from
 # interproscan CLI will return a completely empty file (0Bytes)
 
-#' exec_interproscan
+#' runInterProScan
 #'
 #' @param filepath_fasta
 #' @param filepath_out
@@ -15,7 +15,7 @@
 #' @return
 #'
 #' @examples
-exec_interproscan <- function(
+runInterProScan <- function(
         filepath_fasta,
         filepath_out, # do not inlucde file extension since ipr handles this
         appl = c("Pfam", "Gene3D")
@@ -34,7 +34,7 @@ exec_interproscan <- function(
         return(NULL)
     }
     # read and return results
-    df_iprscan <- read_iprscan_tsv(paste0(filepath_out, ".tsv"))
+    df_iprscan <- readIPRScanTSV(paste0(filepath_out, ".tsv"))
     return(df_iprscan)
 }
 
@@ -43,7 +43,7 @@ exec_interproscan <- function(
 #' molevol_scripts/R/colnames_molevol.R)
 #'
 #' @return [chr] interproscan column names used throughout molevolvr
-get_df_ipr_col_names <- function() {
+getIPRScanColnames <- function() {
     column_names <- c(
         "AccNum", "SeqMD5Digest", "SLength", "Analysis",
         "DB.ID", "SignDesc", "StartLoc", "StopLoc", "Score",
@@ -58,7 +58,7 @@ get_df_ipr_col_names <- function() {
 #' @return [collector] a named vector of type expecatations
 #' for interproscan columns
 #'
-get_df_ipr_col_types <- function() {
+getIPRScanColtypes <- function() {
     column_types <- readr::cols(
         "AccNum" = readr::col_character(),
         "SeqMD5Digest" = readr::col_character(),
@@ -85,10 +85,10 @@ get_df_ipr_col_types <- function() {
 #' @importFrom readr read_tsv
 #'
 #' @return [tbl_df] interproscan output table
-read_iprscan_tsv <- function(filepath) {
+readIPRScanTSV <- function(filepath) {
     df_ipr <- readr::read_tsv(filepath,
-        col_types = get_df_ipr_col_types(),
-        col_names = get_df_ipr_col_names()
+        col_types = getIPRScanColtypes(),
+        col_names = getIPRScanColnames()
     )
     return(df_ipr)
 }
@@ -100,7 +100,7 @@ read_iprscan_tsv <- function(filepath) {
 #' which will be used to search for its sequence's domains (df_iprscan param)
 #' @param fasta [AAStringSet] original fasta file which was fed into interproscan
 #' @param df_iprscan [tbl_df] the output TSV of interproscan, read as a tibble with
-#' read_iprscan_tsv()
+#' readIPRScanTSV()
 #' @param analysis [chr] the domain databases to extract sequences from
 #'
 #' @importFrom dplyr arrange filter mutate rowwise relocate select ungroup
@@ -115,12 +115,12 @@ read_iprscan_tsv <- function(filepath) {
 #' setwd(path_molevol_scripts)
 #' source("R/fa2domain.R")
 #' fasta <- Biostrings::readAAStringSet("./tests/example_protein.fa")
-#' df_iprscan <- read_iprscan_tsv("./tests/example_iprscan_valid.tsv")
+#' df_iprscan <- readIPRScanTSV("./tests/example_iprscan_valid.tsv")
 #' accnum <- df_iprscan$AccNum[1]
-#' df_iprscan_domains <- make_df_iprscan_domains(accnum, fasta, df_iprscan)
+#' df_iprscan_domains <- createIPRScanDomainTable(accnum, fasta, df_iprscan)
 #' }
 #'
-make_df_iprscan_domains <- function(
+createIPRScanDomainTable <- function(
         accnum,
         fasta,
         df_iprscan,
@@ -170,17 +170,17 @@ make_df_iprscan_domains <- function(
     return(df_iprscan_domains)
 }
 
-#' Using the table returned from make_df_iprscan_domains, construct a
+#' Using the table returned from createIPRScanDomainTable, construct a
 #' domain fasta for a single accession number in the original fasta
-#' (i.e., the original fasta argument to make_df_iprscan_domains())
+#' (i.e., the original fasta argument to createIPRScanDomainTable())
 #'
-#' @param df_iprscan_domains [tbl_df] return value from make_df_iprscan_domains
+#' @param df_iprscan_domains [tbl_df] return value from createIPRScanDomainTable
 #'
 #' @importFrom Biostrings AAStringSet
 #' @importFrom dplyr mutate rowwise
 #'
 #' @return [AAStringSet] A domain fasta containing all the domains for a
-#' single protein in the original fasta passed as an argument to make_df_iprscan_domains()
+#' single protein in the original fasta passed as an argument to createIPRScanDomainTable()
 #'
 #' @examples
 #' \dontrun{
@@ -188,13 +188,13 @@ make_df_iprscan_domains <- function(
 #' setwd(path_molevol_scripts)
 #' source("R/fa2domain.R")
 #' fasta <- Biostrings::readAAStringSet("./tests/example_protein.fa")
-#' df_iprscan <- read_iprscan_tsv("./tests/example_iprscan_valid.tsv")
+#' df_iprscan <- readIPRScanTSV("./tests/example_iprscan_valid.tsv")
 #' accnum <- df_iprscan$AccNum[1]
-#' df_iprscan_domains <- make_df_iprscan_domains(accnum, fasta, df_iprscan)
-#' fasta_domains <- df_iprscan_domains |> df_iprscan_domains2fasta()
+#' df_iprscan_domains <- createIPRScanDomainTable(accnum, fasta, df_iprscan)
+#' fasta_domains <- df_iprscan_domains |> convertIPRScanDomainTable2FA()
 #' }
 #'
-df_iprscan_domains2fasta <- function(df_iprscan_domains) {
+convertIPRScanDomainTable2FA <- function(df_iprscan_domains) {
     # if there are no records (e.g., after filtering for Pfam analysis only)
     # the quickly return an empty AAStringSet object
     if (nrow(df_iprscan_domains) < 1) {
@@ -228,7 +228,7 @@ df_iprscan_domains2fasta <- function(df_iprscan_domains) {
     return(fasta_domains)
 }
 
-#' fasta2fasta_domain
+#' getDomainsFromFA
 #'
 #' @param fasta [AAStringSet] a protein (AA) fasta
 #' @param df_iprscan [tbl_df] the interproscan results from the original fasta
@@ -245,11 +245,11 @@ df_iprscan_domains2fasta <- function(df_iprscan_domains) {
 #' setwd(path_molevol_scripts)
 #' source("R/fa2domain.R")
 #' fasta <- Biostrings::readAAStringSet("./tests/example_protein.fa")
-#' df_iprscan <- read_iprscan_tsv("./tests/example_iprscan_valid.tsv")
-#' fasta2fasta_domain(fasta, df_iprscan)
+#' df_iprscan <- readIPRScanTSV("./tests/example_iprscan_valid.tsv")
+#' getDomainsFromFA(fasta, df_iprscan)
 #' }
 #'
-fasta2fasta_domain <- function(
+getDomainsFromFA <- function(
         fasta,
         df_iprscan,
         analysis = c("Pfam", "Gene3D"),
@@ -270,7 +270,7 @@ fasta2fasta_domain <- function(
         X = names(fasta),
         FUN = function(header) {
             # parse the accession number from header
-            df_iprscan_domains <- make_df_iprscan_domains(
+            df_iprscan_domains <- createIPRScanDomainTable(
                 header,
                 fasta,
                 df_iprscan,
@@ -289,7 +289,7 @@ fasta2fasta_domain <- function(
                 }
                 return(FALSE)
             }
-            fasta_domains <- df_iprscan_domains2fasta(df_iprscan_domains)
+            fasta_domains <- convertIPRScanDomainTable2FA(df_iprscan_domains)
             parent_fasta_domains <<- c(parent_fasta_domains, fasta_domains)
             return(TRUE)
         },
