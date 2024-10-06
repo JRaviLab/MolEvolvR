@@ -149,7 +149,7 @@ generate_fa2tre <- function(fa_file = "data/alns/pspa_snf7.fa",
     prot_dist <- dist.alignment(prot_aln, matrix = "similarity")
     prot_nj <- NJ(prot_dist)
     prot_nj_tree <- plot(prot_nj, main = "Neighbor Joining")
-    write.tree(phy = prot_nj_tree, file = tre_path)
+    write.tree(phy = prot_nj_tree, file = .data$tre_path)
 
     ###########################
     ## Approach 2
@@ -177,7 +177,7 @@ generate_fa2tre <- function(fa_file = "data/alns/pspa_snf7.fa",
     plot(prot_NJ, main = "Neighbor Joining")
 
     # parsimony searches
-    prot_optim <- optim.parsimony(prot_NJ, prot)
+    prot_optim <- optim.parsimony(prot_NJ, .data$prot)
     prot_pratchet <- pratchet(prot10) # returning error
     plot(prot_optim)
     plot(prot_pratchet)
@@ -192,7 +192,7 @@ generate_fa2tre <- function(fa_file = "data/alns/pspa_snf7.fa",
         bs = 100, optNni = TRUE, multicore = TRUE,
         control = pml.control(trace = 0)
     )
-    plotBS(midpoint(fitJC$tree), bs, p = 50, type = "p")
+    plotBS(.data$midpoint(fitJC$tree), bs, p = 50, type = "p")
 
     # subsetted alignment bs example
     prot10_dm <- dist.ml(prot10)
@@ -205,7 +205,7 @@ generate_fa2tre <- function(fa_file = "data/alns/pspa_snf7.fa",
         bs = 100, optNni = TRUE, multicore = TRUE,
         control = pml.control(trace = 0)
     )
-    bs2 <- plotBS(midpoint(fitJC2$tree), bs, p = 50, type = "p")
+    bs2 <- plotBS(.data$midpoint(fitJC2$tree), bs, p = 50, type = "p")
 
     ## Exporting Trees
     write.tree(bs2, file = "bootstrap_example.tre")

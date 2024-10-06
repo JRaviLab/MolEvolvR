@@ -323,7 +323,7 @@ ipg2lin <- function(accessions, ipg_file,
     ipg_dt <- fread(ipg_file, sep = "\t", fill = T)
 
     accessions <- unique(accessions)
-    ipg_dt <- ipg_dt[Protein %in% accessions]
+    ipg_dt <- ipg_dt[.data$Protein %in% accessions]
 
     ipg_dt <- setnames(ipg_dt, "Assembly", "GCA_ID")
 
@@ -335,10 +335,10 @@ ipg2lin <- function(accessions, ipg_file,
     {
         # browser()
         acc <- accessions[i]
-        acc_inds <- which(mergedTax$Protein == acc)
+        acc_inds <- which(.data$mergedTax$.data$Protein == acc)
         if (length(acc_inds) != 0) {
             # refseq inds take precedence
-            refseq_inds <- acc_inds[which(mergedTax[acc_inds, ]$Source == "RefSeq")]
+            refseq_inds <- acc_inds[which(.data$mergedTax[acc_inds, ]$Source == "RefSeq")]
             if (length(refseq_inds) != 0) {
                 # Take the first first row of the refseq (smallest index)
                 refseq_rows[i] <- refseq_inds[1]
@@ -358,21 +358,21 @@ ipg2lin <- function(accessions, ipg_file,
     if (length(refseq_rows) != 0) {
         refseq_ipg_dt <- ipg_dt[refseq_rows, ]
         refseq_lins <- GCA2lin(refseq_ipg_dt,
-            assembly_path = refseq_assembly_path,
+            .data$assembly_path = refseq_assembly_path,
             lineagelookup_path
         )
     }
     if (length(genbank_rows) != 0) {
         genbank_ipg_dt <- ipg_dt[genbank_rows, ]
-        genbank_lins <- GCA2lin(gca_ipg_dt,
-            assembly_path = genbank_assembly_path,
+        genbank_lins <- GCA2lin(.data$gca_ipg_dt,
+            .data$assembly_path = genbank_assembly_path,
             lineagelookup_path
         )
     }
 
 
-    lins <- GCA2lin(prot_data = ipg_dt, assembly_path, lineagelookup_path)
-    lins <- lins[!is.na(Lineage)] %>% unique()
+    lins <- GCA2lin(prot_data = ipg_dt, .data$assembly_path, lineagelookup_path)
+    lins <- lins[!is.na(.data$Lineage)] %>% unique()
 
     return(lins)
 }

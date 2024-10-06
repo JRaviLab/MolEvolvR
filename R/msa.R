@@ -210,7 +210,7 @@ generate_msa <- function(fa_file = "", outfile = "") {
     # source("scripts/c2r.R")
 
     ## align the sequences
-    al <- kalign(prot_aa) # !! won't work!
+    al <- .data$kalign(prot_aa) # !! won't work!
     al
 }
 
