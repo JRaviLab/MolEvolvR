@@ -29,6 +29,7 @@
 #'
 #' @return Filtered data frame
 #' @note There is no need to make the domains 'regex safe', that will be handled by this function
+#' @name summarize
 #' @export
 #'
 #' @examples
@@ -110,7 +111,7 @@ filter_by_doms <- function(prot, column = "DomArch", doms_keep = c(), doms_remov
 #' The tibble is filtered to only include elements that have a frequency 
 #' greater than or equal to `min.freq` and does not include elements with `NA` 
 #' values or those starting with a hyphen ("-").
-#'
+#' @name summarize
 #' @export
 #'
 #' @examples
@@ -155,6 +156,7 @@ count_bycol <- function(prot = prot, column = "DomArch", min.freq = 1) {
 #' @return A single string where elements are delimited by spaces. The function 
 #' performs necessary substitutions based on the `conversion_type` and cleans up 
 #' extraneous characters like newlines, tabs, and multiple spaces.
+#' @name summarize
 #'
 #' @examples
 #' \dontrun{
@@ -212,6 +214,8 @@ elements2words <- function(prot, column = "DomArch", conversion_type = "da2doms"
 #'   (domains or domain architectures).}
 #'   \item{`freq`}{A column containing the frequency counts for each word.}
 #' }
+#' 
+#' @name summarize
 #'
 #' @examples
 #' \dontrun{
@@ -259,6 +263,7 @@ words2wc <- function(string) {
 #'
 #' @return A tibble with the same structure as `x`, but filtered to include 
 #' only rows where the frequency is greater than or equal to `min.freq`.
+#' @name summarize
 #'
 #' @export
 #'
@@ -290,6 +295,7 @@ filter_freq <- function(x, min.freq) {
 #' @return A tibble summarizing the counts of occurrences of elements in 
 #' the `column`, grouped by the `by` column. The result includes the number 
 #' of occurrences (`count`) and is arranged in descending order of count.
+#' @name summarize
 #' @export
 #'
 #' @examples
@@ -335,6 +341,7 @@ summarize_bylin <- function(prot = "prot", column = "DomArch", by = "Lineage",
 #' columns: `DomArch`, `Lineage`, and `count`, which indicates the frequency 
 #' of each domain architecture for each lineage. The results are arranged in 
 #' descending order of `count`.
+#' @name summarize
 #'
 #' @export
 #'
@@ -369,6 +376,7 @@ summ.DA.byLin <- function(x) {
 #' - `totallin`: The total number of unique lineages in which each `DomArch` 
 #' appears.
 #' The results are arranged in descending order of `totallin` and `totalcount`.
+#' @name summarize
 #' @export
 #'
 #' @examples
@@ -401,6 +409,7 @@ summ.DA <- function(x) {
 #' `GenContext`, `DomArch`, and `Lineage`.
 #'
 #' The results are arranged in descending order of `count`.
+#' @name summarize
 #' @export
 #'
 #' @examples
@@ -421,11 +430,12 @@ summ.GC.byDALin <- function(x) {
 
 #' summ.GC.byLin
 #'
-#' @param x
+#' @param x A dataframe or tibble containing the data.
 #'
 #' @importFrom dplyr arrange desc filter group_by n summarise
 #'
 #' @return Describe return, in detail
+#' @name summarize
 #' @export
 #'
 #' @examples
@@ -459,6 +469,7 @@ summ.GC.byLin <- function(x) {
 #'  `GenContext` and `Lineage`.
 #'
 #' The results are arranged in descending order of `count`.
+#' @name summarize
 #' @export
 #'
 #' @examples
@@ -512,6 +523,7 @@ summ.GC <- function(x) {
 #' - `IndividualCountPercent`: The percentage of each `totalcount` relative to 
 #' the overall count.
 #' - `CumulativePercent`: The cumulative percentage of total counts.
+#' @name summarize
 #' @export
 #'
 #' @note Please refer to the source code if you have alternate file formats and/or
