@@ -10,13 +10,14 @@
 #' Sink Reset
 #'
 #' @return No return, but run to close all outstanding `sink()`s
+#' @rdname acc2lin
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' sink.reset()
 #' }
-sink.reset <- function() {
+sinkReset <- function() {
     for (i in seq_len(sink.number())) {
         sink(NULL)
     }
@@ -37,14 +38,15 @@ sink.reset <- function() {
 #' @importFrom rlang sym
 #'
 #' @return Describe return, in detail
+#' @rdname acc2lin
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' add_lins()
 #' }
-add_lins <- function(df, acc_col = "AccNum", assembly_path,
-    lineagelookup_path, ipgout_path = NULL, plan = "sequential") {
+addlineage <- function(df, acc_col = "AccNum", assembly_path,
+    lineagelookup_path, ipgout_path = NULL, plan = "sequential", ...) {
     s_acc_col <- sym(acc_col)
     accessions <- df %>% pull(acc_col)
     lins <- acc2lin(accessions, assembly_path, lineagelookup_path, ipgout_path, plan)
@@ -81,13 +83,14 @@ add_lins <- function(df, acc_col = "AccNum", assembly_path,
 #' @param plan
 #'
 #' @return Describe return, in detail
+#' @rdname acc2lin
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' acc2lin()
 #' }
-acc2lin <- function(accessions, assembly_path, lineagelookup_path, ipgout_path = NULL, plan = "sequential") {
+acc2Lineage <- function(accessions, assembly_path, lineagelookup_path, ipgout_path = NULL, plan = "sequential", ...) {
     tmp_ipg <- F
     if (is.null(ipgout_path)) {
         tmp_ipg <- T
@@ -119,13 +122,14 @@ acc2lin <- function(accessions, assembly_path, lineagelookup_path, ipgout_path =
 #' @importFrom rentrez entrez_fetch
 #'
 #' @return Describe return, in detail
+#' @rdname acc2lin
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' efetch_ipg()
 #' }
-efetch_ipg <- function(accnums, out_path, plan = "sequential") {
+efetchIPG <- function(accnums, out_path, plan = "sequential", ...) {
     if (length(accnums) > 0) {
         partition <- function(in_data, groups) {
             # \\TODO This function should be defined outside of efetch_ipg(). It can be non-exported/internal
@@ -187,6 +191,7 @@ efetch_ipg <- function(accnums, out_path, plan = "sequential") {
 #' @importFrom data.table fread
 #'
 #' @return Describe return, in detail
+#' @rdname acc2lin
 #' @export
 #'
 #' @examples
@@ -194,7 +199,7 @@ efetch_ipg <- function(accnums, out_path, plan = "sequential") {
 #' ipg2lin()
 #' }
 #'
-ipg2lin <- function(accessions, ipg_file, assembly_path, lineagelookup_path) {
+IPG2Lineage <- function(accessions, ipg_file, assembly_path, lineagelookup_path, ...) {
     ipg_dt <- fread(ipg_file, sep = "\t", fill = T)
 
     ipg_dt <- ipg_dt[Protein %in% accessions]
