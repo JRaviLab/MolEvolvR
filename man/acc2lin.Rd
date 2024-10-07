@@ -24,7 +24,7 @@ acc2lin(
 \item{accessions}{Character vector of protein accessions}
 
 \item{assembly_path}{String of the path to the assembly_summary path
-This file can be generated using the "DownloadAssemblySummary()" function}
+This file can be generated using the "downloadAssemblySummary()" function}
 
 \item{lineagelookup_path}{String of the path to the lineage lookup file
 (taxid to lineage mapping). This file can be generated using the}
