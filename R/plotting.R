@@ -574,7 +574,7 @@ lineage.domain_repeats.plot <- function(query_data, colname) {
     # colname <- "SIG.TM.LADB"
 
     ## Create columns for domains/DAs and fill them with 1/0
-    for (i in query.DAdoms$domains)
+    for (i in .data$query.DAdoms$.data$domains)
     {
         j <- str_replace_all(string = i, pattern = "\\(", replacement = "\\\\(")
         j <- str_replace_all(string = j, pattern = "\\)", replacement = "\\\\)")
@@ -592,9 +592,9 @@ lineage.domain_repeats.plot <- function(query_data, colname) {
     ggplot.data <- query_data %>%
         # filter(grepl(queryname, Query)) %>%
         select(
-            DomArch.norep, Lineage, GenContext.norep,
-            SIG.TM.LADB, GenContext, AccNum,
-            query.DAdoms$domains
+            .data$DomArch.norep, .data$Lineage, .data$GenContext.norep,
+            .data$SIG.TM.LADB, .data$GenContext, .data$AccNum,
+            .data$query.DAdoms$.data$domains
         ) %>% # words.gecutoff$words
         # mutate_all(list(~ if (is.numeric(.)) as.integer(.) else .)) %>%
         mutate(across(where(is.numeric), as.integer)) %>%
@@ -606,8 +606,8 @@ lineage.domain_repeats.plot <- function(query_data, colname) {
 
     ## Gathering element/word columns
     ggplot.data.gather <- ggplot.data %>%
-        gather(key = domains, value = count, 7:ncol(ggplot.data)) # %>%
-    # select(DomArch.norep, Lineage, domains, count)
+        gather(key = .data$domains, value = count, 7:ncol(ggplot.data)) # %>%
+    # select(.data$DomArch.norep, .data$Lineage, .data$domains, count)
 
     # ## written on Sep 4
     # write_delim(ggplot.data.gather,
@@ -615,7 +615,7 @@ lineage.domain_repeats.plot <- function(query_data, colname) {
     # 						delim="\t", col_names=TRUE)
 
     ## Stacked column plot
-    ggplot(data = ggplot.data.gather, aes(x = Lineage, y = domains)) + # aes_string # plot <- (
+    ggplot(data = ggplot.data.gather, aes(x = .data$Lineage, y = domains)) + # aes_string # plot <- (
         # geom_col(position="fill") +
         geom_tile(
             data = subset(ggplot.data.gather, !is.na(count)),
@@ -868,16 +868,16 @@ stacked_lin_plot <- function(prot, column = "DomArch", cutoff, Lineage_col = "Li
                 xlab("Group") +
                 ylab("Number of proteins") +
                 theme_minimal() +
-                scale_fill_manual(values = cpcols, na.value = "#A9A9A9") +
+                scale_fill_manual(values = .data$cpcols, na.value = "#A9A9A9") +
                 theme(
                     legend.position = legend.position,
                     legend.background = element_rect(fill = "white", color = "white"),
                     legend.text = element_text(size = legend.text.size),
                     legend.title = element_text(size = legend.text.size + 2),
-                    legend.key.size = unit(legend.size, "cm"),
-                    # legend.key.height = unit(2, "cm"),
-                    # legend.key.width = unit(0.9, "cm"),
-                    legend.spacing = unit(0.4, "cm"),
+                    legend.key.size = .data$unit(legend.size, "cm"),
+                    # legend.key.height = .data$unit(2, "cm"),
+                    # legend.key.width = .data$unit(0.9, "cm"),
+                    legend.spacing = .data$unit(0.4, "cm"),
                     axis.text = element_text(size = label.size),
                     panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                     panel.background = element_blank(),
@@ -894,10 +894,10 @@ stacked_lin_plot <- function(prot, column = "DomArch", cutoff, Lineage_col = "Li
                 xlab("Group") +
                 ylab("Number of proteins") +
                 theme_minimal() +
-                scale_fill_manual(values = cpcols, na.value = "#A9A9A9") +
+                scale_fill_manual(values = .data$cpcols, na.value = "#A9A9A9") +
                 theme(
                     legend.position = "none",
-                    legend.spacing = unit(0.4, "cm"),
+                    legend.spacing = .data$unit(0.4, "cm"),
                     axis.text = element_text(size = label.size),
                     panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                     panel.background = element_blank(),
@@ -918,7 +918,7 @@ stacked_lin_plot <- function(prot, column = "DomArch", cutoff, Lineage_col = "Li
                 legend.background = element_rect(fill = "white", color = "white"),
                 legend.text = element_text(size = legend.text.size),
                 legend.title = element_text(size = legend.text.size + 2),
-                legend.key.size = unit(legend.size, "cm"),
+                legend.key.size = .data$unit(legend.size, "cm"),
                 axis.text = element_text(size = label.size),
                 axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),
                 panel.grid.major = element_blank(), panel.grid.minor = element_blank()
@@ -1145,24 +1145,24 @@ wordcloud2_element <- function(query_data = "prot",
         type <- "gc2da"
     }
 
-    words.tc <- query_data %>%
+    .data$words.tc <- query_data %>%
         elements2words(
             column = colname,
             conversion_type = type
         ) %>%
         words2wc()
 
-    names(words.tc) <- c("words", "freq")
+    names(.data$words.tc) <- c("words", "freq")
 
     # need a label column for actual frequencies, and frequencies will be the
     # normalized sizes
-    words.tc$label <- words.tc$freq
+    .data$words.tc$.data$label <- .data$words.tc$.data$freq
 
-    words.tc <- words.tc %>% mutate(freq = log10(freq))
+    .data$words.tc <- .data$words.tc %>% mutate(.data$freq = log10(.data$freq))
 
-    words.tc <- words.tc %>% select(words, freq, label)
+    .data$words.tc <- .data$words.tc %>% select(words, .data$freq, .data$label)
 
-    wordcloud3(words.tc, minSize = 0)
+    wordcloud3(.data$words.tc, minSize = 0)
 }
 
 

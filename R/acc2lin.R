@@ -197,12 +197,12 @@ efetch_ipg <- function(accnums, out_path, plan = "sequential") {
 ipg2lin <- function(accessions, ipg_file, assembly_path, lineagelookup_path) {
     ipg_dt <- fread(ipg_file, sep = "\t", fill = T)
 
-    ipg_dt <- ipg_dt[Protein %in% accessions]
+    ipg_dt <- ipg_dt[.data$Protein %in% accessions]
 
     ipg_dt <- setnames(ipg_dt, "Assembly", "GCA_ID")
 
     lins <- GCA2Lins(prot_data = ipg_dt, assembly_path, lineagelookup_path)
-    lins <- lins[!is.na(Lineage)] %>% unique()
+    lins <- lins[!is.na(.data$Lineage)] %>% unique()
 
     return(lins)
 }

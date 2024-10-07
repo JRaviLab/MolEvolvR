@@ -94,7 +94,7 @@ get_proc_medians <- function(dir_job_results) {
         dplyr::summarise(
             dplyr::across(
                 dplyr::everything(),
-                \(x) median(x, na.rm = TRUE)
+                \(x) .data$median(x, na.rm = TRUE)
             )
         ) |>
         as.list()
@@ -126,7 +126,7 @@ write_proc_medians_table <- function(dir_job_results, filepath) {
             names_to = "process",
             values_to = "median_seconds"
         ) |>
-        dplyr::arrange(dplyr::desc(median_seconds))
+        dplyr::arrange(dplyr::desc(.data$median_seconds))
     readr::write_tsv(df_proc_medians, file = filepath)
     return(df_proc_medians)
 }

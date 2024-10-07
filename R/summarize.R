@@ -371,11 +371,11 @@ summ.GC.byDALin <- function(x) {
 summ.GC.byLin <- function(x) {
     ## Note: it is better to reserve dots for S3 Objects. Consider replacing '.' with '_'
     x %>%
-        filter(!grepl("^-$", GenContext)) %>%
-        filter(!grepl("^-$", DomArch)) %>%
-        filter(!grepl("^-$", Lineage)) %>%
-        filter(!grepl("^NA$", DomArch)) %>%
-        group_by(GenContext, Lineage) %>% # DomArch.norep,
+        filter(!grepl("^-$", .data$GenContext)) %>%
+        filter(!grepl("^-$", .data$DomArch)) %>%
+        filter(!grepl("^-$", .data$Lineage)) %>%
+        filter(!grepl("^NA$", .data$DomArch)) %>%
+        group_by(.data$GenContext, .data$Lineage) %>% # .data$DomArch.norep,
         summarise(count = n()) %>% # , bin=as.numeric(as.logical(n()))
         arrange(desc(count))
 }
@@ -396,15 +396,15 @@ summ.GC.byLin <- function(x) {
 summ.GC <- function(x) {
     ## Note: it is better to reserve dots for S3 Objects. Consider replacing '.' with '_'
     x %>%
-        group_by(GenContext) %>%
+        group_by(.data$GenContext) %>%
         summarise(
-            totalcount = sum(count),
-            totalDA = n_distinct(DomArch),
-            totallin = n_distinct(Lineage)
-        ) %>% # totallin=n_distinct(Lineage),
-        arrange(desc(totalcount), desc(totalDA), desc(totallin)) %>%
-        filter(!grepl(" \\{n\\}", GenContext)) %>%
-        filter(!grepl("^-$", GenContext))
+            .data$totalcount = sum(count),
+            .data$totalDA = n_distinct(.data$DomArch),
+            .data$totallin = n_distinct(.data$Lineage)
+        ) %>% # .data$totallin=n_distinct(.data$Lineage),
+        arrange(desc(.data$totalcount), desc(.data$totalDA), desc(.data$totallin)) %>%
+        filter(!grepl(" \\{n\\}", .data$GenContext)) %>%
+        filter(!grepl("^-$", .data$GenContext))
 }
 
 
@@ -451,52 +451,52 @@ total_counts <- function(prot, column = "DomArch", lineage_col = "Lineage",
     prot <- summarize_bylin(prot, column, by = lineage_col, query = "all")
     col_count <- prot %>%
         group_by({{ column }}) %>%
-        summarise(totalcount = sum(count))
+        summarise(.data$totalcount = sum(count))
 
     total <- left_join(prot, col_count, by = as_string(column))
 
     sum_count <- sum(total$count)
     total <- total %>%
-        mutate("IndividualCountPercent" = totalcount / sum_count * 100) %>%
-        arrange(-totalcount, -count)
+        mutate("IndividualCountPercent" = .data$totalcount / sum_count * 100) %>%
+        arrange(-.data$totalcount, -count)
 
     cumm_percent <- total %>%
-        select({{ column }}, totalcount) %>%
+        select({{ column }}, .data$totalcount) %>%
         distinct() %>%
         mutate("CumulativePercent" = 0)
     total_counter <- 0
-    for (x in length(cumm_percent$totalcount):1) {
-        total_counter <- total_counter + cumm_percent$totalcount[x]
-        cumm_percent$CumulativePercent[x] <- total_counter / sum_count * 100
+    for (x in length(cumm_percent$.data$totalcount):1) {
+        total_counter <- total_counter + cumm_percent$.data$totalcount[x]
+        cumm_percent$.data$CumulativePercent[x] <- total_counter / sum_count * 100
     }
 
-    cumm_percent <- cumm_percent %>% select(CumulativePercent, {{ column }})
+    cumm_percent <- cumm_percent %>% select(.data$CumulativePercent, {{ column }})
 
     total <- total %>% left_join(cumm_percent, by = as_string(column))
 
     # Round the percentage columns
-    total$CumulativePercent <- total$CumulativePercent %>% round(digits = digits)
+    total$.data$CumulativePercent <- total$.data$CumulativePercent %>% round(digits = digits)
     total$IndividualCountPercent <- total$IndividualCountPercent %>% round(digits = digits)
 
     if (RowsCutoff) {
         # If total counts is being used for plotting based on number of rows,
         # don't include other observations that fall below the cummulative percent cutoff
         # , but that have the same 'totalcount' number as the cutoff observation
-        total <- total %>% filter(CumulativePercent >= 100 - cutoff - .0001)
+        total <- total %>% filter(.data$CumulativePercent >= 100 - cutoff - .0001)
         return(total)
     }
 
     # Include observations that fall below the cummulative percent cutoff,
     # but that have the same 'totalcount' as the cutoff observation
-    t <- total %>% filter(CumulativePercent >= 100 - cutoff)
+    t <- total %>% filter(.data$CumulativePercent >= 100 - cutoff)
     if (length(t) == 0) {
         cutoff_count <- 0
     } else {
-        cutoff_count <- t$totalcount[nrow(t)]
+        cutoff_count <- t$.data$totalcount[nrow(t)]
     }
 
     total <- total %>%
-        filter(totalcount >= cutoff_count) %>%
+        filter(.data$totalcount >= cutoff_count) %>%
         ungroup()
 
     return(total)
