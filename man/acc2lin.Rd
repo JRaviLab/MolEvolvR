@@ -38,7 +38,8 @@ on the ipg database. If NULL, the file will not be written. Defaults to NULL}
 Describe return, in detail
 }
 \description{
-This function combines 'efetch_ipg()' and 'ipg2lin()' to map a set
+This function combines 'efetch_ipg()'
+and 'ipg2lin()' to map a set
 of protein accessions to their assembly (GCA_ID), tax ID, and lineage.
 
 Function to map protein accession numbers to lineage
