@@ -133,7 +133,7 @@ GCA2lin <- function(prot_data,
 ###################################
 ## !! @SAM why is this called lins?
 ###################################
-#' add_lins
+#' addlineage
 #'
 #' @param df
 #' @param acc_col
@@ -149,11 +149,11 @@ GCA2lin <- function(prot_data,
 #' @export
 #'
 #' @examples
-add_lins <- function(df, acc_col = "AccNum", assembly_path,
+addlineage <- function(df, acc_col = "AccNum", assembly_path,
     lineagelookup_path, ipgout_path = NULL, plan = "multicore") {
     acc_sym <- sym(acc_col)
     accessions <- df %>% pull(acc_sym)
-    lins <- acc2lin(accessions, assembly_path,
+    lins <- acc2Lineage(accessions, assembly_path,
         lineagelookup_path, ipgout_path,
         plan = plan
     )
@@ -178,13 +178,13 @@ add_lins <- function(df, acc_col = "AccNum", assembly_path,
 #######################################
 ## Map Protein Accessions to Lineage ##
 #######################################
-#' acc2lin
+#' acc2Lineage
 #'
 #' @description
 #' Function to map protein accession numbers to lineage
 #'
 #' @author Samuel Chen, Janani Ravi
-#' @description This function combines 'efetch_ipg()' and 'ipg2lin()' to map a set
+#' @description This function combines 'efetchIPG()' and 'IPG2Lineage()' to map a set
 #' of protein accessions to their assembly (GCA_ID), tax ID, and lineage.
 #'
 #' @param accessions Character vector of protein accessions
@@ -200,7 +200,7 @@ add_lins <- function(df, acc_col = "AccNum", assembly_path,
 #' @export
 #'
 #' @examples
-acc2lin <- function(accessions, assembly_path, lineagelookup_path,
+acc2Lineage <- function(accessions, assembly_path, lineagelookup_path,
     ipgout_path = NULL, plan = "multicore") {
     tmp_ipg <- F
 
@@ -208,9 +208,9 @@ acc2lin <- function(accessions, assembly_path, lineagelookup_path,
         tmp_ipg <- T
         ipgout_path <- tempfile("ipg", fileext = ".txt")
     }
-    efetch_ipg(accessions, out_path = ipgout_path, plan = plan)
+    efetchIPG(accessions, out_path = ipgout_path, plan = plan)
 
-    lins <- ipg2lin(accessions, ipgout_path, assembly_path, lineagelookup_path)
+    lins <- IPG2Lineage(accessions, ipgout_path, assembly_path, lineagelookup_path)
 
     # if(tmp_ipg)
     # {
@@ -227,7 +227,7 @@ acc2lin <- function(accessions, assembly_path, lineagelookup_path,
 #########################################
 ## Download IPG results for Accessions ##
 #########################################
-#' efetch_ipg
+#' efetchIPG
 #'
 #' @author Samuel Chen, Janani Ravi
 #' @description Perform efetch on the ipg database and write the results to out_path
@@ -245,7 +245,7 @@ acc2lin <- function(accessions, assembly_path, lineagelookup_path,
 #' @export
 #'
 #' @examples
-efetch_ipg <- function(accessions, out_path, plan = "multicore") {
+efetchIPG <- function(accessions, out_path, plan = "multicore") {
     if (length(accessions) > 0) {
         partition <- function(v, groups) {
             # Partition data to limit number of queries per second for rentrez fetch:
@@ -295,7 +295,7 @@ efetch_ipg <- function(accessions, out_path, plan = "multicore") {
 #########################################
 ## Maps IPG results to TaxID + Lineage ##
 #########################################
-#' ipg2lin
+#' IPG2Lineage
 #'
 #' @author Samuel Chen, Janani Ravi
 #' @description Takes the resulting file of an efetch run on the ipg database and
@@ -317,7 +317,7 @@ efetch_ipg <- function(accessions, out_path, plan = "multicore") {
 #' @export
 #'
 #' @examples
-ipg2lin <- function(accessions, ipg_file,
+IPG2Lineage <- function(accessions, ipg_file,
     refseq_assembly_path, genbank_assembly_path,
     lineagelookup_path) {
     ipg_dt <- fread(ipg_file, sep = "\t", fill = T)
