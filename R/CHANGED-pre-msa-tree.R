@@ -2,7 +2,7 @@
 ## Includes the following functions:
 ## convertAlignment2FA, convert2TitleCase, addLeaves2Alignment
 ## generateAllAlignments2FA
-## convertAlignment2TSV??, convertAccNumber2FA??
+## convertAlignment2TSV??, convertAccNum2FA??
 ## Created from addLeaves2Alignment.R, convertAlignment2FA.R, all_aln2fa.R
 ## Modified: Dec 24, 2019 | Jan 2021
 ## Janani Ravi (@jananiravi) & Samuel Chen (@samuelzornchen)
@@ -335,7 +335,7 @@ convertAlignment2FA <- function(aln_file = "",
 #' @export
 #'
 #' @examples
-mapAccession2Name <- function(line, acc2name, acc_col = "AccNum", name_col = "Name") {
+mapAcc2Name <- function(line, acc2name, acc_col = "AccNum", name_col = "Name") {
     # change to be the name equivalent to an addNames column
     # Find the first ' '
     end_acc <- str_locate(line, " ")[[1]]
@@ -365,7 +365,7 @@ mapAccession2Name <- function(line, acc2name, acc_col = "AccNum", name_col = "Na
 #'
 #' @examples
 renameFA <- function(fa_path, outpath,
-    replacement_function = mapAccession2Name, ...) {
+    replacement_function = mapAcc2Name, ...) {
     lines <- read_lines(fa_path)
     res <- map(lines, function(x) {
         if (strtrim(x, 1) == ">") {
@@ -663,7 +663,7 @@ get_accnums_from_fasta_file <- function(fasta_file) {
 
 
 ################################
-## convertAccNumber2FA
+## convertAccNum2FA
 #######
 ## 1 ##
 #######
