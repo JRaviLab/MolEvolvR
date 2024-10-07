@@ -235,6 +235,12 @@
         <dd>Adding Leaves to an alignment file w/ accessions</dd>
       </dl><dl><dt>
 
+          <code><a href="convertIPRScanDomainTable2FA.html">convertIPRScanDomainTable2FA()</a></code>
+
+        </dt>
+        <dd>Using the table returned from createIPRScanDomainTable, construct a domain fasta for a single accession number in the original fasta (i.e., the original fasta argument to createIPRScanDomainTable())</dd>
+      </dl><dl><dt>
+
           <code><a href="convert_aln2fa.html">convert_aln2fa()</a></code>
 
         </dt>
@@ -259,6 +265,12 @@
         <dd>Create an interactive plotly from count data</dd>
       </dl><dl><dt>
 
+          <code><a href="createIPRScanDomainTable.html">createIPRScanDomainTable()</a></code>
+
+        </dt>
+        <dd>For a given accession number, get the domain sequences using a interproscan output table &amp; the original FASTA file</dd>
+      </dl><dl><dt>
+
           <code><a href="create_all_col_params.html">create_all_col_params()</a></code>
 
         </dt>
@@ -277,12 +289,6 @@
         <dd>create_one_col_params</dd>
       </dl><dl><dt>
 
-          <code><a href="df_iprscan_domains2fasta.html">df_iprscan_domains2fasta()</a></code>
-
-        </dt>
-        <dd>Using the table returned from make_df_iprscan_domains, construct a domain fasta for a single accession number in the original fasta (i.e., the original fasta argument to make_df_iprscan_domains())</dd>
-      </dl><dl><dt>
-
           <code><a href="domain_network.html">domain_network()</a></code>
 
         </dt>
@@ -299,18 +305,6 @@
 
         </dt>
         <dd>Elements 2 Words</dd>
-      </dl><dl><dt>
-
-          <code><a href="exec_interproscan.html">exec_interproscan()</a></code>
-
-        </dt>
-        <dd>exec_interproscan</dd>
-      </dl><dl><dt>
-
-          <code><a href="fasta2fasta_domain.html">fasta2fasta_domain()</a></code>
-
-        </dt>
-        <dd>fasta2fasta_domain</dd>
       </dl><dl><dt>
 
           <code><a href="filter_by_doms.html">filter_by_doms()</a></code>
@@ -379,22 +373,28 @@
         <dd>generate_trees</dd>
       </dl><dl><dt>
 
-          <code><a href="get_accnums_from_fasta_file.html">get_accnums_from_fasta_file()</a></code>
+          <code><a href="getDomainsFromFA.html">getDomainsFromFA()</a></code>
 
         </dt>
-        <dd>Get accnums from fasta file</dd>
+        <dd>getDomainsFromFA</dd>
       </dl><dl><dt>
 
-          <code><a href="get_df_ipr_col_names.html">get_df_ipr_col_names()</a></code>
+          <code><a href="getIPRScanColNames.html">getIPRScanColNames()</a></code>
 
         </dt>
         <dd>Constructor function for interproscan column names (based upon the global variable written in molevol_scripts/R/colnames_molevol.R)</dd>
       </dl><dl><dt>
 
-          <code><a href="get_df_ipr_col_types.html">get_df_ipr_col_types()</a></code>
+          <code><a href="getIPRScanColTypes.html">getIPRScanColTypes()</a></code>
 
         </dt>
         <dd>construct column types for reading interproscan output TSVs (based upon the global variable written in molevol_scripts/R/colnames_molevol.R)</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_accnums_from_fasta_file.html">get_accnums_from_fasta_file()</a></code>
+
+        </dt>
+        <dd>Get accnums from fasta file</dd>
       </dl><dl><dt>
 
           <code><a href="get_job_message.html">get_job_message()</a></code>
@@ -469,12 +469,6 @@
         <dd>make accnums unique</dd>
       </dl><dl><dt>
 
-          <code><a href="make_df_iprscan_domains.html">make_df_iprscan_domains()</a></code>
-
-        </dt>
-        <dd>For a given accession number, get the domain sequences using a interproscan output table &amp; the original FASTA file</dd>
-      </dl><dl><dt>
-
           <code><a href="make_job_results_url.html">make_job_results_url()</a></code>
 
         </dt>
@@ -535,7 +529,7 @@
         <dd>prot2tax_old</dd>
       </dl><dl><dt>
 
-          <code><a href="read_iprscan_tsv.html">read_iprscan_tsv()</a></code>
+          <code><a href="readIPRScanTSV.html">readIPRScanTSV()</a></code>
 
         </dt>
         <dd>Read an interproscan output TSV with standardized column names and types</dd>
@@ -593,6 +587,12 @@
 
         </dt>
         <dd>reverse_operon</dd>
+      </dl><dl><dt>
+
+          <code><a href="runIPRScan.html">runIPRScan()</a></code>
+
+        </dt>
+        <dd>runIPRScan</dd>
       </dl><dl><dt>
 
           <code><a href="run_deltablast.html">run_deltablast()</a></code>
