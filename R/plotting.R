@@ -31,9 +31,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' shorten_lineage()
+#' shortenLineage()
 #' }
-shorten_lineage <- function(data, colname = "Lineage", abr_len = 1) {
+shortenLineage <- function(data, colname = "Lineage", abr_len = 1) {
     abbrv <- function(x) {
         pos_gt <- str_locate(x, ">")
         pos_gt <- pos_gt[1]
@@ -94,9 +94,9 @@ shorten_lineage <- function(data, colname = "Lineage", abr_len = 1) {
 #'
 #' @examples
 #' \dontrun{
-#' upset.plot(pspa.sub, 10, "da2doms")
+#' plotUpSet(pspa.sub, 10, "da2doms")
 #' }
-upset.plot <- function(query_data = "toast_rack.sub",
+plotUpSet <- function(query_data = "toast_rack.sub",
     colname = "DomArch", cutoff = 90,
     RowsCutoff = FALSE, text.scale = 1.5,
     point.size = 2.2, line.size = 0.8) {
@@ -259,9 +259,9 @@ upset.plot <- function(query_data = "toast_rack.sub",
 #'
 #' @examples
 #' \dontrun{
-#' lineage.DA.plot(toast_rack_data, 10, "DomArch.norep", "da2doms")
+#' plotLineageDA(toast_rack_data, 10, "DomArch.norep", "da2doms")
 #' }
-lineage.DA.plot <- function(query_data = "prot",
+plotLineageDA <- function(query_data = "prot",
     colname = "DomArch",
     cutoff = 90,
     RowsCutoff = FALSE,
@@ -271,7 +271,7 @@ lineage.DA.plot <- function(query_data = "prot",
     # @param type Character. Default is "da2doms" for Domain Architectures.
     # Other alternative: "gc2da" for Genomic Contexts. -- unused parameter
 
-    query_data <- shorten_lineage(query_data, "Lineage", abr_len = 1)
+    query_data <- shortenLineage(query_data, "Lineage", abr_len = 1)
 
     query.summ.byLin <- query_data %>% total_counts(cutoff = cutoff, column = colname, RowsCutoff = RowsCutoff)
 
@@ -355,9 +355,9 @@ lineage.DA.plot <- function(query_data = "prot",
 #'
 #' @examples
 #' \dontrun{
-#' lineage.Query.plot(prot, c("PspA", "PspB", "PspC", "PspM", "PspN"), 95)
+#' plotLineageQuery(prot, c("PspA", "PspB", "PspC", "PspM", "PspN"), 95)
 #' }
-lineage.Query.plot <- function(query_data = all,
+plotLineageQuery <- function(query_data = all,
     queries,
     colname = "ClustName",
     cutoff, color = "default") {
@@ -394,7 +394,7 @@ lineage.Query.plot <- function(query_data = all,
     # query_data contains all rows that possess a lineage
     query_data <- query_data %>% filter(grepl("a", Lineage))
 
-    query_data <- shorten_lineage(query_data, "Lineage", abr_len = 1)
+    query_data <- shortenLineage(query_data, "Lineage", abr_len = 1)
     query_lin_counts <- data.frame("Query" = character(0), "Lineage" = character(0), "count" = integer())
     for (q in queries) {
         query_lin <- query_by_lineage(data = query_data, query = q, column = {{ col }}, by = "Lineage")
@@ -492,10 +492,10 @@ lineage.Query.plot <- function(query_data = all,
 #'
 #' @examples
 #' \dontrun{
-#' lineage.neighbors.plot(pspa_data, pspa, "GenContext.norep", "da2doms")
+#' plotLineageNeighbors(pspa_data, pspa, "GenContext.norep", "da2doms")
 #' }
 #'
-lineage.neighbors.plot <- function(query_data = "prot", query = "pspa",
+plotLineageNeighbors <- function(query_data = "prot", query = "pspa",
     colname = "GenContext.norep") {
     query_data <- query_data %>% filter(grepl("a", Lineage))
     query.GCDA <- read_delim(paste0("Top-", query, "-neighbors.txt"),
@@ -567,9 +567,9 @@ lineage.neighbors.plot <- function(query_data = "prot", query = "pspa",
 #'
 #' @examples
 #' \dontrun{
-#' lineage.domain_repeats.plot()
+#' plotLineageDomainRepeats()
 #' }
-lineage.domain_repeats.plot <- function(query_data, colname) {
+plotLineageDomainRepeats <- function(query_data, colname) {
     # query_data <- pspa_data
     # colname <- "SIG.TM.LADB"
 
@@ -629,7 +629,7 @@ lineage.domain_repeats.plot <- function(query_data, colname) {
 }
 
 
-#' LineagePlot
+#' plotLineageHeatmap
 #'
 #' @description
 #' Generate a lineage plot
@@ -651,7 +651,7 @@ lineage.domain_repeats.plot <- function(query_data, colname) {
 #'
 #' @examples
 #' \dontrun{
-#' LineagePlot(psp_data,
+#' plotLineageHeatmap(psp_data,
 #'     c(
 #'         "PspA", "Snf7", "Classical-AAA", "PspF", "PspB", "PspC", "ClgR", "PspM",
 #'         "Thioredoxin", "PspN_N", "DUF3046", "LiaI-LiaF-TM", "Toast_rack", "REC",
@@ -664,8 +664,8 @@ lineage.domain_repeats.plot <- function(query_data, colname) {
 #' )
 #' }
 #'
-LineagePlot <- function(prot, domains_of_interest, level = 3, label.size = 8) {
-    LevelReduction <- function(lin) {
+plotLineageHeatmap <- function(prot, domains_of_interest, level = 3, label.size = 8) {
+    .LevelReduction <- function(lin) {
         if (level == 1) {
             gt_loc <- str_locate(lin, ">")[[1]]
             if (is.na(gt_loc)) {
@@ -703,7 +703,7 @@ LineagePlot <- function(prot, domains_of_interest, level = 3, label.size = 8) {
         all_grouped <- dplyr::union(all_grouped, domSub)
     }
 
-    GetKingdom <- function(lin) {
+    .GetKingdom <- function(lin) {
         gt_loc <- str_locate(lin, ">")[, "start"]
 
         if (is.na(gt_loc)) {
@@ -715,12 +715,12 @@ LineagePlot <- function(prot, domains_of_interest, level = 3, label.size = 8) {
         }
     }
 
-    all_grouped <- all_grouped %>% mutate(ReducedLin = unlist(purrr::map(Lineage, LevelReduction)))
+    all_grouped <- all_grouped %>% mutate(ReducedLin = unlist(purrr::map(Lineage, .LevelReduction)))
 
     all_grouped_reduced <- all_grouped %>%
         group_by(Query, ReducedLin) %>%
         summarize("count" = sum(count)) %>%
-        mutate(Kingdom = unlist(purrr::map(ReducedLin, GetKingdom)))
+        mutate(Kingdom = unlist(purrr::map(ReducedLin, .GetKingdom)))
 
     lin_counts <- all_grouped_reduced %>%
         group_by(Kingdom, ReducedLin) %>%
@@ -814,9 +814,9 @@ LineagePlot <- function(prot, domains_of_interest, level = 3, label.size = 8) {
 #'
 #' @examples
 #' \dontrun{
-#' stacked_lin_plot()
+#' plotStackedLineage()
 #' }
-stacked_lin_plot <- function(prot, column = "DomArch", cutoff, Lineage_col = "Lineage",
+plotStackedLineage <- function(prot, column = "DomArch", cutoff, Lineage_col = "Lineage",
     xlabel = "Domain Architecture",
     reduce_lineage = TRUE,
     label.size = 8,
@@ -828,7 +828,7 @@ stacked_lin_plot <- function(prot, column = "DomArch", cutoff, Lineage_col = "Li
     col <- sym(column)
 
     if (reduce_lineage) {
-        prot <- shorten_lineage(prot, Lineage_col, abr_len = 3)
+        prot <- shortenLineage(prot, Lineage_col, abr_len = 3)
     }
 
     total_count <- total_counts(prot, column, cutoff, lineage_col = Lineage_col)
@@ -935,7 +935,7 @@ stacked_lin_plot <- function(prot, column = "DomArch", cutoff, Lineage_col = "Li
 ################
 #### NEEDS SOME WORK
 
-#' Wordcloud3
+#' plotWordCloud3
 #'
 #' @param data
 #' @param size
@@ -1048,9 +1048,9 @@ wordcloud3 <- function(data, size = 1, minSize = 0, gridSize = 0, fontFamily = "
 #'
 #' @examples
 #' \dontrun{
-#' wordcloud_element(prot, "da2doms", 10)
+#' createWordCloudElement(prot, "da2doms", 10)
 #' }
-wordcloud_element <- function(query_data = "prot",
+createWordCloudElement <- function(query_data = "prot",
     colname = "DomArch",
     cutoff = 70,
     UsingRowsCutoff = FALSE) {
@@ -1125,9 +1125,9 @@ wordcloud_element <- function(query_data = "prot",
 #'
 #' @examples
 #' \dontrun{
-#' wordcloud_element(prot, "da2doms", 10)
+#' createWordCloudElement(prot, "da2doms", 10)
 #' }
-wordcloud2_element <- function(query_data = "prot",
+createWordCloud2Element <- function(query_data = "prot",
     colname = "DomArch",
     cutoff = 70,
     UsingRowsCutoff = FALSE) {
@@ -1194,9 +1194,9 @@ wordcloud2_element <- function(query_data = "prot",
 #'
 #' @examples
 #' \dontrun{
-#' lineage_sunburst()
+#' plotLineageSunburst()
 #' }
-lineage_sunburst <- function(prot, lineage_column = "Lineage",
+plotLineageSunburst <- function(prot, lineage_column = "Lineage",
     type = "sunburst",
     levels = 2, colors = NULL, legendOrder = NULL, showLegend = TRUE, maxLevels = 5) {
     lin_col <- sym(lineage_column)
@@ -1278,7 +1278,7 @@ lineage_sunburst <- function(prot, lineage_column = "Lineage",
 
 
 ## COMMENTED LINEAGE.DA.PLOT
-# lineage.plot <- function(query_data, cutoff, type) {
+# plotLineage <- function(query_data, cutoff, type) {
 # 	switch(type,
 # 				 da2doms={wc <- DA.doms.wc; words <- toast_rack.DAdoms; colname <- "DomArch.norep"; toast_rack.summ.byLin <- toast_rack.DA.summ.byLin}, # elements <- toast_rack.DA;
 # 				 gc2da={wc <- GC.DA.wc; words <- toast_rack.GCDA; colname <- "GenContext.norep"; toast_rack.summ.byLin <- toast_rack.GC.summ.byLin} # elements <- toast_rack.GC;
