@@ -1,11 +1,11 @@
-# Taken from https://github.com/yogevherz/plotme/blob/master/R/count_to_sunburst_treemap.R
+# Taken from https://github.com/yogevherz/plotme/blob/master/R/plotSunburst_treemap.R
 #' Create an interactive plotly from count data
 #'
 #' @description
 #' These functions help you quickly create interactive hierarchical plots
 #' from categorical data. They expect the summary of the data created by
-#' `dplyr::count()` and produce either a sunburst plot (`count_to_sunburst()`) or
-#' a treemap plot (`count_to_treemap()`)
+#' `dplyr::count()` and produce either a sunburst plot (`plotSunburst()`) or
+#' a treemap plot (`plotTreemap()`)
 #'
 #' @param count_data An output of dplyr::count(), tibble or data frame
 #' @param fill_by_n If TRUE, uses a continuous scale to fill plot by group size
@@ -20,21 +20,21 @@
 #' starwars_count <- count(starwars, species, eye_color, name)
 #'
 #' # sunburst plot
-#' count_to_sunburst(starwars_count)
+#' plotSunburst(starwars_count)
 #'
 #' # fill by group size
-#' count_to_sunburst(starwars_count, fill_by_n = TRUE)
+#' plotSunburst(starwars_count, fill_by_n = TRUE)
 #'
 #' # treemap plot, ordered by group size
-#' count_to_treemap(starwars_count, sort_by_n = TRUE)
+#' plotTreemap(starwars_count, sort_by_n = TRUE)
 #'
 #' # display al charchaters by homeworld
 #' starwars %>%
 #'     count(homeworld, name) %>%
-#'     count_to_treemap(sort_by_n = TRUE)
+#'     plotTreemap(sort_by_n = TRUE)
 #'
-count_to_sunburst <- function(count_data, fill_by_n = FALSE, sort_by_n = FALSE, maxdepth = 2) {
-    params <- create_all_col_params(count_data, fill_by_n, sort_by_n)
+plotSunburst <- function(count_data, fill_by_n = FALSE, sort_by_n = FALSE, maxdepth = 2) {
+    params <- prepareColumnParams(count_data, fill_by_n, sort_by_n)
 
     purrr::exec(plotly::plot_ly,
         !!!params,
@@ -53,9 +53,9 @@ count_to_sunburst <- function(count_data, fill_by_n = FALSE, sort_by_n = FALSE, 
 #' @importFrom purrr exec
 #'
 #' @export
-#' @rdname count_to_sunburst
-count_to_treemap <- function(count_data, fill_by_n = FALSE, sort_by_n = FALSE) {
-    params <- create_all_col_params(count_data, fill_by_n, sort_by_n)
+#' @rdname plotSunburst
+plotTreemap <- function(count_data, fill_by_n = FALSE, sort_by_n = FALSE) {
+    params <- prepareColumnParams(count_data, fill_by_n, sort_by_n)
 
     purrr::exec(plotly::plot_ly,
         !!!params,
@@ -66,7 +66,7 @@ count_to_treemap <- function(count_data, fill_by_n = FALSE, sort_by_n = FALSE) {
 }
 
 
-#' create_all_col_params
+#' prepareColumnParams
 #'
 #' @param count_data
 #' @param fill_by_n
@@ -80,8 +80,8 @@ count_to_treemap <- function(count_data, fill_by_n = FALSE, sort_by_n = FALSE) {
 #' @export
 #'
 #' @examples
-create_all_col_params <- function(count_data, fill_by_n, sort_by_n) {
-    assert_count_df(count_data)
+prepareColumnParams <- function(count_data, fill_by_n, sort_by_n) {
+    validateCountDF(count_data)
     assertthat::assert_that(is.logical(fill_by_n),
         length(fill_by_n) == 1,
         msg = "fill_by_n must be either TRUE or FALSE"
@@ -91,12 +91,12 @@ create_all_col_params <- function(count_data, fill_by_n, sort_by_n) {
         msg = "sort_by_n must be either TRUE or FALSE"
     )
 
-    count_data <- all_non_n_cols_to_char(count_data)
+    count_data <- .all_non_n_cols_to_char(count_data)
 
     category_num <- ncol(count_data) - 1
 
     params <- purrr::map(1:category_num,
-        create_one_col_params,
+        prepareSingleColumnParams,
         df = count_data,
         root = ""
     ) %>%
@@ -114,7 +114,7 @@ create_all_col_params <- function(count_data, fill_by_n, sort_by_n) {
     params
 }
 
-#' create_one_col_params
+#' prepareSingleColumnParams
 #'
 #' @param df
 #' @param col_num
@@ -127,7 +127,7 @@ create_all_col_params <- function(count_data, fill_by_n, sort_by_n) {
 #' @export
 #'
 #' @examples
-create_one_col_params <- function(df,
+prepareSingleColumnParams <- function(df,
     col_num,
     root) {
     col_name <- names(df)[col_num]
@@ -156,7 +156,7 @@ create_one_col_params <- function(df,
         ) %>%
         dplyr::select(ids, parents, labels, values, hovertext)
 }
-#' assert_count_df
+#' validateCountDF
 #'
 #' @param var
 #'
@@ -167,7 +167,7 @@ create_one_col_params <- function(df,
 #' @export
 #'
 #' @examples
-assert_count_df <- function(var) {
+validateCountDF <- function(var) {
     msg <- paste(substitute(var), "must be a count dataframe (output of dplyr::count)")
     assertthat::assert_that(is.data.frame(var),
         assertthat::has_name(var, "n"),
@@ -178,7 +178,7 @@ assert_count_df <- function(var) {
     assertthat::assert_that(is.numeric(n_col), msg = msg)
 }
 
-all_non_n_cols_to_char <- function(df) {
+.all_non_n_cols_to_char <- function(df) {
     df %>%
         dplyr::mutate(dplyr::across(!matches("^n$"), as.character))
 }
