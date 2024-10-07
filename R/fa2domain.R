@@ -4,7 +4,7 @@
 # - a protein with no domains (unlikely) found from
 # interproscan CLI will return a completely empty file (0Bytes)
 
-#' runInterProScan
+#' runIPRScan
 #'
 #' @param filepath_fasta
 #' @param filepath_out
@@ -15,7 +15,7 @@
 #' @return
 #'
 #' @examples
-runInterProScan <- function(
+runIPRScan <- function(
         filepath_fasta,
         filepath_out, # do not inlucde file extension since ipr handles this
         appl = c("Pfam", "Gene3D")
@@ -43,7 +43,7 @@ runInterProScan <- function(
 #' molevol_scripts/R/colnames_molevol.R)
 #'
 #' @return [chr] interproscan column names used throughout molevolvr
-getIPRScanColnames <- function() {
+getIPRScanColNames <- function() {
     column_names <- c(
         "AccNum", "SeqMD5Digest", "SLength", "Analysis",
         "DB.ID", "SignDesc", "StartLoc", "StopLoc", "Score",
@@ -58,7 +58,7 @@ getIPRScanColnames <- function() {
 #' @return [collector] a named vector of type expecatations
 #' for interproscan columns
 #'
-getIPRScanColtypes <- function() {
+getIPRScanColTypes <- function() {
     column_types <- readr::cols(
         "AccNum" = readr::col_character(),
         "SeqMD5Digest" = readr::col_character(),
@@ -87,8 +87,8 @@ getIPRScanColtypes <- function() {
 #' @return [tbl_df] interproscan output table
 readIPRScanTSV <- function(filepath) {
     df_ipr <- readr::read_tsv(filepath,
-        col_types = getIPRScanColtypes(),
-        col_names = getIPRScanColnames()
+        col_types = getIPRScanColTypes(),
+        col_names = getIPRScanColNames()
     )
     return(df_ipr)
 }
