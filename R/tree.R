@@ -51,6 +51,30 @@ convert_fa2tre <- function(fa_path = here("data/alns/pspa_snf7.fa"),
     # fa_path=here("data/alns/pspa_snf7.fa")
     # tre_path=here("data/alns/pspa_snf7.tre")
     # fasttree_path=here("src/FastTree")
+    
+    # Check if the FASTA file exists
+    if (!file.exists(fa_path)) {
+        stop(paste("Error: The FASTA file does not exist at:", fa_path))
+    }
+    
+    # Check if the FastTree executable exists
+    if (!file.exists(fasttree_path)) {
+        stop(paste("Error: The FastTree executable does not exist at:", 
+                   fasttree_path))
+    }
+    
+    # Check if the output directory exists
+    tre_dir <- dirname(tre_path)
+    if (!dir.exists(tre_dir)) {
+        stop(paste("Error: The output directory does not exist:", tre_dir))
+    }
+    
+    # Check if the output file already exists
+    if (file.exists(tre_path)) {
+        cat("Warning: The output file already exists and will be overwritten:", 
+            tre_path, "\n")
+    }
+    
     print(fa_path)
     system2(
         command = fasttree_path,
@@ -83,8 +107,18 @@ convert_fa2tre <- function(fa_path = here("data/alns/pspa_snf7.fa"),
 #'
 #' @examples
 generate_trees <- function(aln_path = here("data/alns/")) {
+    
+    # Check if the alignment directory exists
+    if (!dir.exists(aln_path)) {
+        stop(paste("Error: The alignment directory does not exist:", aln_path))
+    }
     # finding all fasta alignment files
     fa_filenames <- list.files(path = aln_path, pattern = "*.fa")
+    # Check if any FASTA files were found
+    if (length(fa_filenames) == 0) {
+        stop("Error: No FASTA files found in the specified directory.")
+    }
+    
     fa_paths <- paste0(aln_path, fa_filenames)
     variable <- str_replace_all(basename(fa_filenames),
         pattern = ".fa", replacement = ""
@@ -139,6 +173,23 @@ generate_fa2tre <- function(fa_file = "data/alns/pspa_snf7.fa",
     ## SAMPLE ARGS
     # fa_file="data/alns/pspa_snf7.fa"
     # out_file="data/alns/pspa_snf7.tre"
+    
+    # Check if the FASTA file exists
+    if (!file.exists(fa_file)) {
+        stop(paste("Error: The FASTA file does not exist at:", fa_file))
+    }
+    
+    # Check if the output directory exists
+    out_dir <- dirname(out_file)
+    if (!dir.exists(out_dir)) {
+        stop(paste("Error: The output directory does not exist:", out_dir))
+    }
+    
+    # Check if the output file already exists
+    if (file.exists(out_file)) {
+        cat("Warning: The output file already exists and will be overwritten:", 
+            out_file, "\n")
+    }
 
     ###########################
     ## Approach 1
