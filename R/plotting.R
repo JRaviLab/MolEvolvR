@@ -521,8 +521,8 @@ lineage.neighbors.plot <- function(query_data = "prot", query = "pspa",
         gather(key = TopNeighbors.DA, value = count, 19:ncol(query_data)) %>%
         select("Lineage", "TopNeighbors.DA", "count") %>% # "DomArch.norep","GenContext.norep",
         group_by(TopNeighbors.DA, Lineage) %>%
-        summarise(lincount = sum(count), bin = as.numeric(as.logical(lincount))) %>%
-        arrange(desc(lincount)) %>%
+        summarise(lincount =sum(count), bin = as.numeric(as.logical(.data$lincount))) %>%
+        arrange(desc(.data$lincount)) %>%
         within(TopNeighbors.DA <- factor(TopNeighbors.DA,
             levels = rev(names(sort(table(TopNeighbors.DA),
                 decreasing = TRUE
@@ -538,9 +538,9 @@ lineage.neighbors.plot <- function(query_data = "prot", query = "pspa",
         geom_tile(
             data = subset(
                 query.ggplot,
-                !is.na(lincount)
+                !is.na(.data$lincount)
             ), # bin
-            aes(fill = lincount), # bin
+            aes(fill = .data$lincount), # bin
             colour = "coral3", size = 0.3
         ) + # , width=0.7, height=0.7),
         scale_fill_gradient(low = "white", high = "darkred") +
@@ -1223,13 +1223,13 @@ lineage_sunburst <- function(prot, lineage_column = "Lineage",
         group_by_at(levels_vec) %>%
         summarise(size = n())
     protLevels <- protLevels %>% arrange()
-    tree <- d3_nest(protLevels, value_cols = "size")
+    tree <- .data$d3_nest(protLevels, value_cols = "size")
 
     # Plot sunburst
     if (type == "sunburst") {
-        result <- sunburst(tree, legend = list(w = 225, h = 15, r = 5, s = 5), colors = cpcols, legendOrder = legendOrder, width = "100%", height = "100%")
+        result <- sunburst(tree, legend = list(w = 225, h = 15, r = 5, s = 5), colors = .data$cpcols, legendOrder = legendOrder, width = "100%", height = "100%")
     } else if (type == "sund2b") {
-        result <- sund2b(tree)
+        result <- .data$sund2b(tree)
     }
 
     if (showLegend) {

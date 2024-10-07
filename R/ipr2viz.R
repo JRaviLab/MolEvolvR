@@ -53,6 +53,7 @@ theme_genes2 <- function() {
 #' @importFrom shiny showNotification
 #' @importFrom stats na.omit
 #' @importFrom rlang sym
+#' @importFrom rlang .data
 #'
 #' @return
 #' @export
@@ -295,7 +296,7 @@ ipr2viz_web <- function(infile_ipr,
     ## @SAM, colnames, merges, everything neeeds to be done now based on the
     ## combined lookup table from "common_data"
     lookup_tbl_path <- "/data/research/jravilab/common_data/cln_lookup_tbl.tsv"
-    lookup_tbl <- read_tsv(lookup_tbl_path, col_names = T, col_types = lookup_table_cols)
+    lookup_tbl <- read_tsv(lookup_tbl_path, col_names = T, col_types = .data$lookup_table_cols)
 
     ## Read IPR file and subset by Accessions
     ipr_out <- read_tsv(infile_ipr, col_names = T)
@@ -303,7 +304,7 @@ ipr2viz_web <- function(infile_ipr,
     ## Need to fix eventually based on 'real' gene orientation!
     ipr_out$Strand <- rep("forward", nrow(ipr_out))
 
-    ipr_out <- ipr_out %>% arrange(AccNum, StartLoc, StopLoc)
+    ipr_out <- ipr_out %>% arrange(.data$AccNum, .data$StartLoc, .data$StopLoc)
     ipr_out_sub <- filter(
         ipr_out,
         grepl(pattern = analysis, x = Analysis)

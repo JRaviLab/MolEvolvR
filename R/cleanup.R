@@ -88,12 +88,12 @@ make_accnums_unique <- function(accnums) {
     # for the index of occurence for each accession number
     df_accnums <- tibble::tibble("accnum" = accnums)
     df_accnums <- df_accnums |>
-        dplyr::group_by(accnum) |>
+        dplyr::group_by(.data$accnum) |>
         dplyr::mutate(suffix = dplyr::row_number()) |>
         dplyr::ungroup() |>
-        dplyr::mutate(accnum_adjusted = paste0(accnum, "_", suffix)) |>
-        dplyr::arrange(accnum_adjusted)
-    accnums_adjusted <- df_accnums |> dplyr::pull(accnum_adjusted)
+        dplyr::mutate(accnum_adjusted = paste0(.data$accnum, "_", .data$suffix)) |>
+        dplyr::arrange(.data$accnum_adjusted)
+    accnums_adjusted <- df_accnums |> dplyr::pull(.data$accnum_adjusted)
 
     return(accnums_adjusted)
 }
