@@ -15,6 +15,8 @@
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/RepresentativeAccNums.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/acc2fa.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/acc2lin.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/addLeaves2Alignment.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/addName.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/add_leaves.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/add_lins.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/add_name.html</loc></url>
@@ -35,6 +37,8 @@
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/combine_files.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/combine_full.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/combine_ipr.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/convert2TitleCase.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/convertAlignment2FA.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/convert_aln2fa.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/convert_fa2tre.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/count_bycol.html</loc></url>
@@ -54,6 +58,7 @@
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/find_top_acc.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/format_job_args.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/gc_undirected_network.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/generateAllAlignments2FA.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/generate_all_aln2fa.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/generate_fa2tre.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/generate_msa.html</loc></url>
@@ -77,6 +82,7 @@
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/make_df_iprscan_domains.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/make_job_results_url.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/make_opts2procs.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/mapAcc2Name.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/map_acc2name.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/map_advanced_opts2procs.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/msa_pdf.html</loc></url>
@@ -88,6 +94,7 @@
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/remove_astrk.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/remove_empty.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/remove_tails.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/renameFA.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/rename_fasta.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/repeat2s.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/replaceQMs.html</loc></url>
