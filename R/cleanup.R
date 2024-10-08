@@ -562,7 +562,7 @@ cleanDomainArchitecture <- function(prot, old = "DomArch.orig", new = "DomArch",
     # Remove rows with no domains contained within domains_keep
     # filter(grepl(domains_for_grep, DomArch))
     if (!is.null(domains_keep)) {
-        prot <- prot %>% filter_by_doms(column = new, doms_keep = domains_keep$domains)
+        prot <- prot %>% filterByDomains(column = new, doms_keep = domains_keep$domains)
     }
 
     # ##!! NOT RUN !!
