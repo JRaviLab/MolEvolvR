@@ -546,7 +546,7 @@ acc2fa <- function(accessions, outpath, plan = "sequential") {
     return(result)
 }
 
-#' RepresentativeAccNums
+#' createRepresentativeAccNum
 #'
 #' @description
 #' Function to generate a vector of one Accession number per distinct observation from 'reduced' column
@@ -566,7 +566,7 @@ acc2fa <- function(accessions, outpath, plan = "sequential") {
 #' @export
 #'
 #' @examples
-RepresentativeAccNums <- function(prot_data,
+createRepresentativeAccNum <- function(prot_data,
     reduced = "Lineage",
     accnum_col = "AccNum") {
     # Get Unique reduced column and then bind the AccNums back to get one AccNum per reduced column
@@ -623,15 +623,15 @@ alignFasta <- function(fasta_file, tool = "Muscle", outpath = NULL) {
     )
 
     if (typeof(outpath) == "character") {
-        write.MsaAAMultipleAlignment(aligned, outpath)
+        writeMSAAAMultipleAlignment2FA(aligned, outpath)
     }
     return(aligned)
 }
 
-#' write.MsaAAMultipleAlignment
+#' writeMSAAAMultipleAlignment2FA
 #'
 #' @description
-#' Write MsaAAMultpleAlignment Objects as algined fasta sequence
+#' Write MsaAAMultpleAlignment Objects as aligned fasta sequence
 #' MsaAAMultipleAlignment Objects are generated from calls to msaClustalOmega
 #' and msaMuscle from the 'msa' package
 #'
@@ -647,7 +647,7 @@ alignFasta <- function(fasta_file, tool = "Muscle", outpath = NULL) {
 #' @export
 #'
 #' @examples
-write.MsaAAMultipleAlignment <- function(alignment, outpath) {
+writeMSAAAMultipleAlignment2FA <- function(alignment, outpath) {
     l <- length(rownames(alignment))
     fasta <- ""
     for (i in 1:l)
@@ -660,7 +660,7 @@ write.MsaAAMultipleAlignment <- function(alignment, outpath) {
     return(fasta)
 }
 
-#' get_accnums_from_fasta_file
+#' getAccNumFromFA
 #'
 #' @param fasta_file
 #'
@@ -671,7 +671,7 @@ write.MsaAAMultipleAlignment <- function(alignment, outpath) {
 #' @export
 #'
 #' @examples
-get_accnums_from_fasta_file <- function(fasta_file) {
+getAccNumFromFA <- function(fasta_file) {
     txt <- read_file(fasta_file)
     accnums <- stringi::stri_extract_all_regex(fasta_file, "(?<=>)[\\w,.]+")[[1]]
     return(accnums)
