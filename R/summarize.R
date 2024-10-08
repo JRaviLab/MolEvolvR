@@ -13,7 +13,7 @@
 #' Filter by Domains
 #'
 #' @author Samuel Chen, Janani Ravi
-#' @description filterbydomains filters a data frame by identifying exact domain matches
+#' @description filterByDomains filters a data frame by identifying exact domain matches
 #' and either keeping or removing rows with the identified domain
 #'
 #' @param prot Dataframe to filter
@@ -33,9 +33,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' filterbydomains()
+#' filterByDomains()
 #' }
-filterbydomains <- function(prot, column = "DomArch", doms_keep = c(), doms_remove = c(),
+filterByDomains <- function(prot, column = "DomArch", doms_keep = c(), doms_remove = c(),
     ignore.case = FALSE) {
     # Only rows with a domain in doms_keep will be kept
     # Any row containing a domain in doms_remove will be removed
@@ -89,7 +89,7 @@ filterbydomains <- function(prot, column = "DomArch", doms_keep = c(), doms_remo
 ## Before/after break up ##
 ###########################
 ## Function to obtain element counts (DA, GC)
-#' Count Bycol
+#' Count By Column
 #'
 #' @param prot
 #' @param column
@@ -102,9 +102,9 @@ filterbydomains <- function(prot, column = "DomArch", doms_keep = c(), doms_remo
 #'
 #' @examples
 #' \dontrun{
-#' countbycolumn()
+#' countByColumn()
 #' }
-countbycolumn <- function(prot = prot, column = "DomArch", min.freq = 1) {
+countByColumn <- function(prot = prot, column = "DomArch", min.freq = 1) {
     counts <- prot %>%
         select(column) %>%
         table() %>%
@@ -185,10 +185,10 @@ elements2Words <- function(prot, column = "DomArch", conversion_type = "da2doms"
 #' \dontrun{
 #' tibble::tibble(DomArch = c("aaa+bbb", "a+b", "b+c", "b-c")) |>
 #'     elements2Words() |>
-#'     words2wordcounts()
+#'     words2WordCounts()
 #' }
 #'
-words2wordcounts <- function(string) {
+words2WordCounts <- function(string) {
     df_word_count <- string %>%
         # reduce spaces with length 2 or greater to a single space
         str_replace_all("\\s{2,}", " ") %>%
@@ -227,9 +227,9 @@ words2wordcounts <- function(string) {
 #'
 #' @examples
 #' \dontrun{
-#' filterbyfrequency()
+#' filterByFrequency()
 #' }
-filterbyfrequency <- function(x, min.freq) {
+filterByFrequency <- function(x, min.freq) {
     x %>%
         filter(freq >= min.freq)
 }
@@ -254,10 +254,10 @@ filterbyfrequency <- function(x, min.freq) {
 #' \dontrun{
 #' library(tidyverse)
 #' tibble(DomArch = c("a+b", "a+b", "b+c", "a+b"), Lineage = c("l1", "l1", "l1", "l2")) |>
-#'     summarizebylineage(query = "all")
+#'     summarizeByLineage(query = "all")
 #' }
 #'
-summarizebylineage <- function(prot = "prot", column = "DomArch", by = "Lineage",
+summarizeByLineage <- function(prot = "prot", column = "DomArch", by = "Lineage",
     query) {
     column <- sym(column)
     by <- sym(by)
@@ -295,7 +295,6 @@ summarizebylineage <- function(prot = "prot", column = "DomArch", by = "Lineage"
 #' summarizeDomArch_ByLineage()
 #' }
 summarizeDomArch_ByLineage <- function(x) {
-    ## Note: it is better to reserve dots for S3 Objects. Consider replacing '.' with '_'
     x %>%
         filter(!grepl("^-$", DomArch)) %>%
         group_by(DomArch, Lineage) %>%
@@ -321,7 +320,6 @@ summarizeDomArch_ByLineage <- function(x) {
 #' summarizeDomArch()
 #' }
 summarizeDomArch <- function(x) {
-    ## Note: it is better to reserve dots for S3 Objects. Consider replacing '.' with '_'
     x %>%
         group_by(DomArch) %>%
         summarise(totalcount = sum(count), totallin = n()) %>% # totallin=n_distinct(Lineage),
@@ -344,7 +342,6 @@ summarizeDomArch <- function(x) {
 #' summarizeGenContext_ByDomArchLineage
 #' }
 summarizeGenContext_ByDomArchLineage <- function(x) {
-    ## Note: it is better to reserve dots for S3 Objects. Consider replacing '.' with '_'
     x %>%
         filter(!grepl("^-$", GenContext)) %>%
         filter(!grepl("^-$", DomArch)) %>%
@@ -369,7 +366,6 @@ summarizeGenContext_ByDomArchLineage <- function(x) {
 #' summarizeGenContext_ByLineage()
 #' }
 summarizeGenContext_ByLineage <- function(x) {
-    ## Note: it is better to reserve dots for S3 Objects. Consider replacing '.' with '_'
     x %>%
         filter(!grepl("^-$", GenContext)) %>%
         filter(!grepl("^-$", DomArch)) %>%
@@ -394,7 +390,6 @@ summarizeGenContext_ByLineage <- function(x) {
 #' summarizeGenContext()
 #' }
 summarizeGenContext <- function(x) {
-    ## Note: it is better to reserve dots for S3 Objects. Consider replacing '.' with '_'
     x %>%
         group_by(GenContext) %>%
         summarise(
@@ -436,9 +431,9 @@ summarizeGenContext <- function(x) {
 #'
 #' @examples
 #' \dontrun{
-#' totalgencontextordomarchcounts(pspa - gc_lin_counts, 0, "GC")
+#' totalGenContextOrDomArchCounts(pspa - gc_lin_counts, 0, "GC")
 #' }
-totalgencontextordomarchcounts <- function(prot, column = "DomArch", lineage_col = "Lineage",
+totalGenContextOrDomArchCounts <- function(prot, column = "DomArch", lineage_col = "Lineage",
     cutoff = 90, RowsCutoff = FALSE, digits = 2
     # type = "GC"
 ) {
@@ -448,7 +443,7 @@ totalgencontextordomarchcounts <- function(prot, column = "DomArch", lineage_col
         filter(!is.na({{ column }}) & !is.na({{ lineage_col }})) %>%
         filter({{ column }} != "")
 
-    prot <- summarizebylineage(prot, column, by = lineage_col, query = "all")
+    prot <- summarizeByLineage(prot, column, by = lineage_col, query = "all")
     col_count <- prot %>%
         group_by({{ column }}) %>%
         summarise(totalcount = sum(count))
@@ -598,9 +593,9 @@ totalgencontextordomarchcounts <- function(prot, column = "DomArch", lineage_col
 #'
 #' @examples
 #' \dontrun{
-#' findparalogs(pspa)
+#' findParalogs(pspa)
 #' }
-findparalogs <- function(prot) {
+findParalogs <- function(prot) {
     # Remove eukaryotes
     prot <- prot %>% filter(!grepl("^eukaryota", Lineage))
     paralogTable <- prot %>%
@@ -644,8 +639,8 @@ findparalogs <- function(prot) {
 # 	elements2Words(\"gc2da\")")
 
 
-# ## words2wordcounts: Function to get WORD COUNTS [DOMAINS (DA) or DOMAIN ARCHITECTURES (GC)]
+# ## words2WordCounts: Function to get WORD COUNTS [DOMAINS (DA) or DOMAIN ARCHITECTURES (GC)]
 # cat("Word counts for broken up domains from DAs and DAs from GCs.
 # \nFor e.g.:
 # DA.doms.wc <- query.sub$DA.doms %>%
-#   words2wordcounts()")
+#   words2WordCounts()")
