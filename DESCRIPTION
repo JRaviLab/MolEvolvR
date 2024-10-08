@@ -82,4 +82,7 @@ Imports:
     XVector,
     yaml
 Suggests:
-    knitr
+    knitr,
+    testthat,
+    mockery,
+    readr
