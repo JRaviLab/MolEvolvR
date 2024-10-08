@@ -201,7 +201,7 @@ IPG2Lineage <- function(accessions, ipg_file, assembly_path, lineagelookup_path,
 
     ipg_dt <- setnames(ipg_dt, "Assembly", "GCA_ID")
 
-    lins <- GCA2Lins(prot_data = ipg_dt, assembly_path, lineagelookup_path)
+    lins <- GCA2Lineage(prot_data = ipg_dt, assembly_path, lineagelookup_path)
     lins <- lins[!is.na(Lineage)] %>% unique()
 
     return(lins)
