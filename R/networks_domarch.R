@@ -54,7 +54,7 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
         {
             column_name <- sym(column)
 
-            prot_tc <- prot %>% total_counts(column = column, cutoff = cutoff, RowsCutoff = F, digits = 5)
+            prot_tc <- prot %>% totalGenContextOrDomArchCounts(column = column, cutoff = cutoff, RowsCutoff = F, digits = 5)
 
             # ensure  only Domains that are in the tc cutoff range are kept
             within_list <- prot_tc %>%
@@ -74,11 +74,11 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
 
             # string clean up all of the Domain Architecture columns
             prot <- prot |>
-                mutate(DomArch.ntwrk = clean_string(DomArch.ntwrk)) |>
+                mutate(DomArch.ntwrk = cleanString(DomArch.ntwrk)) |>
                 mutate(
                     across(
                         all_of(column),
-                        clean_string
+                        cleanString
                     )
                 )
             domains_of_interest_regex <- paste(domains_of_interest, collapse = "|")
@@ -95,7 +95,7 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
             # cleanup domain list
             domain.list <- domain.list$DomArch.ntwrk %>% str_split(pattern = "\\+")
             # Get a table of domain counts
-            wc <- elements2words(prot = prot, column = column, conversion_type = "da2doms") %>% words2wc()
+            wc <- elements2Words(prot = prot, column = column, conversion_type = "da2doms") %>% words2WordCounts()
             wc <- pivot_wider(wc, names_from = words, values_from = freq)
 
             # Remove all isolated domarchs, such that an adjacency list can easily be constructed
@@ -262,7 +262,7 @@ BinaryDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, c
 
     column_name <- sym(column)
 
-    prot_tc <- prot %>% total_counts(column = column, cutoff = cutoff, RowsCutoff = F, digits = 5)
+    prot_tc <- prot %>% totalGenContextOrDomArchCounts(column = column, cutoff = cutoff, RowsCutoff = F, digits = 5)
 
     within_list <- prot_tc %>%
         select({{ column_name }}) %>%
@@ -286,7 +286,7 @@ BinaryDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, c
     domain.list <- domain.list$DomArch.ntwrk %>% str_split(pattern = "\\+")
 
     # Get domain counts before eliminating domarchs with no edges
-    wc <- elements2words(prot = prot, column = column, conversion_type = "da2doms") %>% words2wc()
+    wc <- elements2Words(prot = prot, column = column, conversion_type = "da2doms") %>% words2WordCounts()
 
     nodes <- data.frame(id = wc$words, label = wc$words, size = wc$freq) %>%
         mutate(group = purrr::map(

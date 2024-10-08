@@ -13,7 +13,7 @@
 #' Filter by Domains
 #'
 #' @author Samuel Chen, Janani Ravi
-#' @description filter_by_doms filters a data frame by identifying exact domain matches
+#' @description filterByDomains filters a data frame by identifying exact domain matches
 #' and either keeping or removing rows with the identified domain
 #'
 #' @param prot Dataframe to filter
@@ -33,9 +33,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' filter_by_doms()
+#' filterByDomains()
 #' }
-filter_by_doms <- function(prot, column = "DomArch", doms_keep = c(), doms_remove = c(),
+filterByDomains <- function(prot, column = "DomArch", doms_keep = c(), doms_remove = c(),
     ignore.case = FALSE) {
     # Only rows with a domain in doms_keep will be kept
     # Any row containing a domain in doms_remove will be removed
@@ -106,7 +106,7 @@ filter_by_doms <- function(prot, column = "DomArch", doms_keep = c(), doms_remov
 ## Before/after break up ##
 ###########################
 ## Function to obtain element counts (DA, GC)
-#' Count Bycol
+#' Count By Column
 #'
 #' @param prot
 #' @param column
@@ -119,9 +119,9 @@ filter_by_doms <- function(prot, column = "DomArch", doms_keep = c(), doms_remov
 #'
 #' @examples
 #' \dontrun{
-#' count_bycol()
+#' countByColumn()
 #' }
-count_bycol <- function(prot = prot, column = "DomArch", min.freq = 1) {
+countByColumn <- function(prot = prot, column = "DomArch", min.freq = 1) {
     
     # Check if 'prot' is a data frame
     if (!is.data.frame(prot)) {
@@ -169,10 +169,10 @@ count_bycol <- function(prot = prot, column = "DomArch", min.freq = 1) {
 #'
 #' @examples
 #' \dontrun{
-#' tibble::tibble(DomArch = c("aaa+bbb", "a+b", "b+c", "b-c")) |> elements2words()
+#' tibble::tibble(DomArch = c("aaa+bbb", "a+b", "b+c", "b-c")) |> elements2Words()
 #' }
 #'
-elements2words <- function(prot, column = "DomArch", conversion_type = "da2doms") {
+elements2Words <- function(prot, column = "DomArch", conversion_type = "da2doms") {
     # Check if 'prot' is a data frame
     if (!is.data.frame(prot)) {
         stop("Error: 'prot' must be a data frame.")
@@ -236,11 +236,11 @@ elements2words <- function(prot, column = "DomArch", conversion_type = "da2doms"
 #' @examples
 #' \dontrun{
 #' tibble::tibble(DomArch = c("aaa+bbb", "a+b", "b+c", "b-c")) |>
-#'     elements2words() |>
-#'     words2wc()
+#'     elements2Words() |>
+#'     words2WordCounts()
 #' }
 #'
-words2wc <- function(string) {
+words2WordCounts <- function(string) {
     # Check if 'string' is a character vector of length 1
     if (!is.character(string) || length(string) != 1) {
         stop("Error: 'string' must be a single character vector.")
@@ -284,9 +284,9 @@ words2wc <- function(string) {
 #'
 #' @examples
 #' \dontrun{
-#' filter_freq()
+#' filterByFrequency()
 #' }
-filter_freq <- function(x, min.freq) {
+filterByFrequency <- function(x, min.freq) {
     
     # Check if 'x' is a data frame
     if (!is.data.frame(x)) {
@@ -327,10 +327,10 @@ filter_freq <- function(x, min.freq) {
 #' \dontrun{
 #' library(tidyverse)
 #' tibble(DomArch = c("a+b", "a+b", "b+c", "a+b"), Lineage = c("l1", "l1", "l1", "l2")) |>
-#'     summarize_bylin(query = "all")
+#'     summarizeByLineage(query = "all")
 #' }
 #'
-summarize_bylin <- function(prot = "prot", column = "DomArch", by = "Lineage",
+summarizeByLineage <- function(prot = "prot", column = "DomArch", by = "Lineage",
     query) {
     # Check if 'prot' is a data frame
     if (!is.data.frame(prot)) {
@@ -367,7 +367,7 @@ summarize_bylin <- function(prot = "prot", column = "DomArch", by = "Lineage",
 }
 
 
-#' summ.DA.byLin
+#' summarizeDomArch_ByLineage
 #'
 #' @description
 #' Function to summarize and retrieve counts by Domains & Domains+Lineage
@@ -382,9 +382,9 @@ summarize_bylin <- function(prot = "prot", column = "DomArch", by = "Lineage",
 #'
 #' @examples
 #' \dontrun{
-#' summ.DA.byLin()
+#' summarizeDomArch_ByLineage()
 #' }
-summ.DA.byLin <- function(x) {
+summarizeDomArch_ByLineage <- function(x) {
     # Check if 'x' is a data frame
     if (!is.data.frame(x)) {
         stop("Error: 'x' must be a data frame.")
@@ -398,7 +398,6 @@ summ.DA.byLin <- function(x) {
         stop(paste("Error: The following required columns are 
                    missing:", paste(missing_columns, collapse = ", ")))
     }
-    ## Note: it is better to reserve dots for S3 Objects. Consider replacing '.' with '_'
     x %>%
         filter(!grepl("^-$", DomArch)) %>%
         group_by(DomArch, Lineage) %>%
@@ -407,7 +406,7 @@ summ.DA.byLin <- function(x) {
 }
 
 ## Function to retrieve counts of how many lineages a DomArch appears in
-#' summ.DA
+#' summarizeDomArch
 #'
 #' @description
 #' Function to retrieve counts of how many lineages a DomArch appears in
@@ -421,14 +420,13 @@ summ.DA.byLin <- function(x) {
 #'
 #' @examples
 #' \dontrun{
-#' summ.DA()
+#' summarizeDomArch()
 #' }
-summ.DA <- function(x) {
+summarizeDomArch <- function(x) {
     # Check if 'x' is a data frame
     if (!is.data.frame(x)) {
         stop("Error: 'x' must be a data frame.")
     }
-    ## Note: it is better to reserve dots for S3 Objects. Consider replacing '.' with '_'
     x %>%
         group_by(DomArch) %>%
         summarise(totalcount = sum(count), totallin = n()) %>% # totallin=n_distinct(Lineage),
@@ -437,7 +435,7 @@ summ.DA <- function(x) {
         filter(!grepl("^-$", DomArch))
 }
 
-#' summ.GC.byDALin
+#' summarizeGenContext_ByDomArchLineage
 #'
 #' @param x
 #'
@@ -448,14 +446,13 @@ summ.DA <- function(x) {
 #'
 #' @examples
 #' \dontrun{
-#' summ.GC.byDALin
+#' summarizeGenContext_ByDomArchLineage
 #' }
-summ.GC.byDALin <- function(x) {
+summarizeGenContext_ByDomArchLineage <- function(x) {
     # Check if 'x' is a data frame
     if (!is.data.frame(x)) {
         stop("Error: 'x' must be a data frame.")
     }
-    ## Note: it is better to reserve dots for S3 Objects. Consider replacing '.' with '_'
     x %>%
         filter(!grepl("^-$", GenContext)) %>%
         filter(!grepl("^-$", DomArch)) %>%
@@ -466,7 +463,7 @@ summ.GC.byDALin <- function(x) {
         arrange(desc(count))
 }
 
-#' summ.GC.byLin
+#' summarizeGenContext_ByLineage
 #'
 #' @param x
 #'
@@ -477,14 +474,13 @@ summ.GC.byDALin <- function(x) {
 #'
 #' @examples
 #' \dontrun{
-#' summ.GC.byLin()
+#' summarizeGenContext_ByLineage()
 #' }
-summ.GC.byLin <- function(x) {
+summarizeGenContext_ByLineage <- function(x) {
     # Check if 'x' is a data frame
     if (!is.data.frame(x)) {
         stop("Error: 'x' must be a data frame.")
     }
-    ## Note: it is better to reserve dots for S3 Objects. Consider replacing '.' with '_'
     x %>%
         filter(!grepl("^-$", GenContext)) %>%
         filter(!grepl("^-$", DomArch)) %>%
@@ -495,7 +491,7 @@ summ.GC.byLin <- function(x) {
         arrange(desc(count))
 }
 
-#' summ.GC
+#' summarizeGenContext
 #'
 #' @param x
 #'
@@ -506,14 +502,13 @@ summ.GC.byLin <- function(x) {
 #'
 #' @examples
 #' \dontrun{
-#' summ.GC()
+#' summarizeGenContext()
 #' }
-summ.GC <- function(x) {
+summarizeGenContext <- function(x) {
     # Check if 'x' is a data frame
     if (!is.data.frame(x)) {
         stop("Error: 'x' must be a data frame.")
     }
-    ## Note: it is better to reserve dots for S3 Objects. Consider replacing '.' with '_'
     x %>%
         group_by(GenContext) %>%
         summarise(
@@ -555,9 +550,9 @@ summ.GC <- function(x) {
 #'
 #' @examples
 #' \dontrun{
-#' total_counts(pspa - gc_lin_counts, 0, "GC")
+#' totalGenContextOrDomArchCounts(pspa - gc_lin_counts, 0, "GC")
 #' }
-total_counts <- function(prot, column = "DomArch", lineage_col = "Lineage",
+totalGenContextOrDomArchCounts <- function(prot, column = "DomArch", lineage_col = "Lineage",
     cutoff = 90, RowsCutoff = FALSE, digits = 2
     # type = "GC"
 ) {
@@ -592,7 +587,7 @@ total_counts <- function(prot, column = "DomArch", lineage_col = "Lineage",
         filter(!is.na({{ column }}) & !is.na({{ lineage_col }})) %>%
         filter({{ column }} != "")
 
-    prot <- summarize_bylin(prot, column, by = lineage_col, query = "all")
+    prot <- summarizeByLineage(prot, column, by = lineage_col, query = "all")
     col_count <- prot %>%
         group_by({{ column }}) %>%
         summarise(totalcount = sum(count))
@@ -742,9 +737,9 @@ total_counts <- function(prot, column = "DomArch", lineage_col = "Lineage",
 #'
 #' @examples
 #' \dontrun{
-#' find_paralogs(pspa)
+#' findParalogs(pspa)
 #' }
-find_paralogs <- function(prot) {
+findParalogs <- function(prot) {
     # Check if 'prot' is a data frame
     if (!is.data.frame(prot)) {
         stop("Error: 'prot' must be a data frame.")
@@ -784,17 +779,17 @@ find_paralogs <- function(prot) {
 # query.sub$GenContext %>%
 # counts(n)")
 
-# ## elements2words: Function to break up ELEMENTS to WORDS for DA and GC
+# ## elements2Words: Function to break up ELEMENTS to WORDS for DA and GC
 # cat("Converting DA to domains and GC to DAs.\n2 switches: da2doms and gc2da
 # \nFor e.g.:
 # query.sub$DA.doms <- query.sub$DomArch.norep %>%
-#   elements2words(\"da2doms\")
+#   elements2Words(\"da2doms\")
 # query.sub$GC.da <- query.sub$GenContext %>%
-# 	elements2words(\"gc2da\")")
+# 	elements2Words(\"gc2da\")")
 
 
-# ## words2wc: Function to get WORD COUNTS [DOMAINS (DA) or DOMAIN ARCHITECTURES (GC)]
+# ## words2WordCounts: Function to get WORD COUNTS [DOMAINS (DA) or DOMAIN ARCHITECTURES (GC)]
 # cat("Word counts for broken up domains from DAs and DAs from GCs.
 # \nFor e.g.:
 # DA.doms.wc <- query.sub$DA.doms %>%
-#   words2wc()")
+#   words2WordCounts()")

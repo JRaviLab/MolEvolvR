@@ -14,16 +14,16 @@
 #'
 #' @examples
 #' \dontrun{
-#' sink.reset()
+#' sinkReset()
 #' }
-sink.reset <- function() {
+sinkReset <- function() {
     for (i in seq_len(sink.number())) {
         sink(NULL)
     }
 }
 
 
-#' Add Lineages
+#' addLineage
 #'
 #' @param df
 #' @param acc_col
@@ -41,13 +41,13 @@ sink.reset <- function() {
 #'
 #' @examples
 #' \dontrun{
-#' add_lins()
+#' addLineage()
 #' }
-add_lins <- function(df, acc_col = "AccNum", assembly_path,
-    lineagelookup_path, ipgout_path = NULL, plan = "sequential") {
+addLineage <- function(df, acc_col = "AccNum", assembly_path,
+    lineagelookup_path, ipgout_path = NULL, plan = "sequential", ...) {
     s_acc_col <- sym(acc_col)
     accessions <- df %>% pull(acc_col)
-    lins <- acc2lin(accessions, assembly_path, lineagelookup_path, ipgout_path, plan)
+    lins <- acc2Lineage(accessions, assembly_path, lineagelookup_path, ipgout_path, plan)
 
     # Drop a lot of the unimportant columns for now? will make merging much easier
     lins <- lins[, c(
@@ -64,16 +64,16 @@ add_lins <- function(df, acc_col = "AccNum", assembly_path,
 }
 
 
-#' acc2lin
+#' acc2Lineage
 #'
 #' @author Samuel Chen, Janani Ravi
 #'
-#' @description This function combines 'efetch_ipg()' and 'ipg2lin()' to map a set
+#' @description This function combines 'efetchIPG()' and 'IPG2Lineage()' to map a set
 #' of protein accessions to their assembly (GCA_ID), tax ID, and lineage.
 #'
 #' @param accessions Character vector of protein accessions
 #' @param assembly_path String of the path to the assembly_summary path
-#' This file can be generated using the "DownloadAssemblySummary()" function
+#' This file can be generated using the \link[MolEvolvR]{downloadAssemblySummary} function
 #' @param lineagelookup_path String of the path to the lineage lookup file
 #' (taxid to lineage mapping). This file can be generated using the
 #' @param ipgout_path Path to write the results of the efetch run of the accessions
@@ -85,17 +85,17 @@ add_lins <- function(df, acc_col = "AccNum", assembly_path,
 #'
 #' @examples
 #' \dontrun{
-#' acc2lin()
+#' acc2Lineage()
 #' }
-acc2lin <- function(accessions, assembly_path, lineagelookup_path, ipgout_path = NULL, plan = "sequential") {
+acc2Lineage <- function(accessions, assembly_path, lineagelookup_path, ipgout_path = NULL, plan = "sequential", ...) {
     tmp_ipg <- F
     if (is.null(ipgout_path)) {
         tmp_ipg <- T
         ipgout_path <- tempfile("ipg", fileext = ".txt")
     }
-    efetch_ipg(accessions, out_path = ipgout_path, plan)
+    efetchIPG(accessions, out_path = ipgout_path, plan)
 
-    lins <- ipg2lin(accessions, ipgout_path, assembly_path, lineagelookup_path)
+    lins <- IPG2Lineage(accessions, ipgout_path, assembly_path, lineagelookup_path)
 
     if (tmp_ipg) {
         unlink(tempdir(), recursive = T)
@@ -103,7 +103,7 @@ acc2lin <- function(accessions, assembly_path, lineagelookup_path, ipgout_path =
     return(lins)
 }
 
-#' efetch_ipg
+#' efetchIPG
 #'
 #' @author Samuel Chen, Janani Ravi
 #'
@@ -123,12 +123,12 @@ acc2lin <- function(accessions, assembly_path, lineagelookup_path, ipgout_path =
 #'
 #' @examples
 #' \dontrun{
-#' efetch_ipg()
+#' efetchIPG()
 #' }
-efetch_ipg <- function(accnums, out_path, plan = "sequential") {
+efetchIPG <- function(accnums, out_path, plan = "sequential", ...) {
     if (length(accnums) > 0) {
         partition <- function(in_data, groups) {
-            # \\TODO This function should be defined outside of efetch_ipg(). It can be non-exported/internal
+            # \\TODO This function should be defined outside of efetchIPG(). It can be non-exported/internal
             # Partition data to limit number of queries per second for rentrez fetch:
             # limit of 10/second w/ key
             l <- length(in_data)
@@ -168,7 +168,7 @@ efetch_ipg <- function(accnums, out_path, plan = "sequential") {
     }
 }
 
-#' ipg2lin
+#' IPG2Lineage
 #'
 #' @author Samuel Chen, Janani Ravi
 #'
@@ -179,7 +179,7 @@ efetch_ipg <- function(accnums, out_path, plan = "sequential") {
 #' ipg database. The protein accession in 'accessions' should be contained in this
 #' file
 #' @param assembly_path String of the path to the assembly_summary path
-#' This file can be generated using the "DownloadAssemblySummary()" function
+#' This file can be generated using the \link[MolEvolvR]{downloadAssemblySummary} function
 #' @param lineagelookup_path String of the path to the lineage lookup file
 #' (taxid to lineage mapping). This file can be generated using the
 #' "create_lineage_lookup()" function
@@ -191,17 +191,17 @@ efetch_ipg <- function(accnums, out_path, plan = "sequential") {
 #'
 #' @examples
 #' \dontrun{
-#' ipg2lin()
+#' IPG2Lineage()
 #' }
 #'
-ipg2lin <- function(accessions, ipg_file, assembly_path, lineagelookup_path) {
+IPG2Lineage <- function(accessions, ipg_file, assembly_path, lineagelookup_path, ...) {
     ipg_dt <- fread(ipg_file, sep = "\t", fill = T)
 
     ipg_dt <- ipg_dt[Protein %in% accessions]
 
     ipg_dt <- setnames(ipg_dt, "Assembly", "GCA_ID")
 
-    lins <- GCA2Lins(prot_data = ipg_dt, assembly_path, lineagelookup_path)
+    lins <- GCA2Lineage(prot_data = ipg_dt, assembly_path, lineagelookup_path)
     lins <- lins[!is.na(Lineage)] %>% unique()
 
     return(lins)
@@ -211,7 +211,7 @@ ipg2lin <- function(accessions, ipg_file, assembly_path, lineagelookup_path) {
 
 
 
-# efetch_ipg <- function(accnums, outpath)
+# efetchIPG <- function(accnums, outpath)
 # {
 #   SIZE = 250
 #   lower_bound = 1
