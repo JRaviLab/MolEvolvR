@@ -7,7 +7,7 @@
 # 1. source("job_status_emails.R")
 # 2. call:
 #     # event_type can be 'start' or 'end'
-#     send_job_status_email(notify_email, job_dir, pin_id, event_type)
+#     sendJobStatusEmail(notify_email, job_dir, pin_id, event_type)
 # Return
 #   unfortunately, there is no return value for the underlying sendmailR methods
 #
@@ -25,7 +25,7 @@
 #' @return the URL where the user can check the status of their job
 #' @export
 #'
-make_job_results_url <- function(
+createJobResultsURL <- function(
         pin_id,
         base_url = Sys.getenv("BASE_URL", unset = "http://jravilab.org/molevolvr/")) {
     return(paste0(base_url, "?r=", pin_id, "&p=home"))
@@ -91,9 +91,9 @@ make_job_results_url <- function(
 #'
 #' @examples
 #' \dontrun{
-#' format_job_args("/data/scratch/janani/molevolvr_out/Ba5sV1_full")
+#' formatJobArgumentsHTML("/data/scratch/janani/molevolvr_out/Ba5sV1_full")
 #' }
-format_job_args <- function(job_args) {
+formatJobArgumentsHTML <- function(job_args) {
     # format job arguments into html-formatted key/value pairs
     job_args_list <- tags$ul(lapply(names(job_args), function(key) {
         # look up human labels for field names, values, if available
@@ -146,7 +146,7 @@ format_job_args <- function(job_args) {
 }
 
 #' Produces a mail message that can be sent to a user when their job is accepted.
-#' Used by the send_job_status_email() method.
+#' Used by the sendJobStatusEmail() method.
 #'
 #' @param job_dir
 #' the directory where the job's arguments are stored, in job_args.yml
@@ -166,11 +166,11 @@ format_job_args <- function(job_args) {
 #' @return
 #' the result of the sendmailR::sendmail() call
 #' @export
-get_job_message <- function(job_dir, pin_id, job_results_url, event_type, context) {
+createJobStatusEmailMessage <- function(job_dir, pin_id, job_results_url, event_type, context) {
     # pull the set of args written to dir/job_args.yml, so we
     # can send it in the email
     job_args <- yaml::read_yaml(file.path(job_dir, "job_args.yml"))
-    job_args_list <- format_job_args(job_args)
+    job_args_list <- formatJobArgumentsHTML(job_args)
 
     # determine which template to use based on the event type
     if (event_type == "start") {
@@ -217,7 +217,7 @@ get_job_message <- function(job_dir, pin_id, job_results_url, event_type, contex
 #' @return
 #' the result of the sendmailR::sendmail() call
 #' @export
-send_job_status_email <- function(notify_email, job_dir, pin_id, event_type, context = NULL) {
+sendJobStatusEmail <- function(notify_email, job_dir, pin_id, event_type, context = NULL) {
     # -------------------------------------------------
     # --- step 1. build the email subject and contents
     # -------------------------------------------------
@@ -232,10 +232,10 @@ send_job_status_email <- function(notify_email, job_dir, pin_id, event_type, con
     }
 
     # construct the job results URL from the pin_id
-    job_results_url <- make_job_results_url(pin_id)
+    job_results_url <- createJobResultsURL(pin_id)
 
     # produce a formatted email message from the arguments and template
-    message <- get_job_message(
+    message <- createJobStatusEmailMessage(
         job_dir, pin_id, job_results_url, event_type, context
     )
 
