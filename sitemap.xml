@@ -11,16 +11,17 @@
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/DownloadAssemblySummary.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/GCA2lin.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/GenContextNetwork.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/IPG2Lineage.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/LineagePlot.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/RepresentativeAccNums.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/acc2Lineage.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/acc2fa.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/acc2lin.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/addLeaves2Alignment.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/addName.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/add_leaves.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/add_lins.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/add_name.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/add_tax.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/addlineage.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/advanced_opts2est_walltime.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/alignFasta.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/assert_count_df.html</loc></url>
@@ -50,7 +51,7 @@
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/create_lineage_lookup.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/create_one_col_params.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/domain_network.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/efetch_ipg.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/efetchIPG.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/elements2words.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/ensureUniqAccNum.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/extractAccNum.html</loc></url>
@@ -73,7 +74,6 @@
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/get_proc_medians.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/get_proc_weights.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/index.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/ipg2lin.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/ipr2viz.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/ipr2viz_web.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/lineage.DA.plot.html</loc></url>
@@ -105,7 +105,7 @@
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/selectLongestDuplicate.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/send_job_status_email.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/shorten_lineage.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/sink.reset.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/sinkReset.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/stacked_lin_plot.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/summ.DA.byLin.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/summ.DA.html</loc></url>
