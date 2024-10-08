@@ -160,9 +160,10 @@ removeEmptyRows <- function(prot, by_column = "DomArch") {
     prot <- prot %>%
         as_tibble() %>%
         # filter(grepl("\\*", {{by_column}})) %>%		  # Keep only rows with Query (*) for GenContext
-        filter(!grepl("^-$", {{ by_column }})) %>% # remove "-"
-        filter(!grepl("^NA$", {{ by_column }})) %>% # remove "NA"
-        filter(!grepl("^$", {{ by_column }})) # remove empty rows
+        filter(!grepl("^-$", .[[by_column]])) %>%   # remove "-"
+        filter(!grepl("^NA$", .[[by_column]])) %>%  # remove "NA"
+        filter(!grepl("^$", .[[by_column]])) %>%    # remove empty rows
+        filter(!grepl("^\\s*$", .[[by_column]]))     # remove rows with only spaces
 
     return(prot)
 }
