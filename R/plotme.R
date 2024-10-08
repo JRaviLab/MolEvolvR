@@ -1,4 +1,4 @@
-# Taken from https://github.com/yogevherz/plotme/blob/master/R/plotSunburst_treemap.R
+# Taken from https://github.com/yogevherz/plotme/blob/master/R/count_to_sunburst_treemap.R
 #' Create an interactive plotly from count data
 #'
 #' @description
