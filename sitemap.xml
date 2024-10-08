@@ -45,6 +45,8 @@
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/countbycolumn.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/createFA2Tree.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/createIPRScanDomainTable.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/createJobResultsURL.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/createJobStatusEmailMessage.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/createWordCloud2Element.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/createWordCloudElement.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/create_lineage_lookup.html</loc></url>
@@ -58,7 +60,7 @@
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/filterbyfrequency.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/find_top_acc.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/findparalogs.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/format_job_args.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/formatJobArgumentsHTML.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/gc_undirected_network.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/generateAllAlignments2FA.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/generate_all_aln2fa.html</loc></url>
@@ -67,13 +69,11 @@
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/getIPRScanColNames.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/getIPRScanColTypes.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/get_accnums_from_fasta_file.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/get_job_message.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/get_proc_medians.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/get_proc_weights.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/index.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/ipr2viz.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/ipr2viz_web.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/make_job_results_url.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/make_opts2procs.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/mapAcc2Name.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/map_acc2name.html</loc></url>
@@ -106,7 +106,7 @@
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/run_deltablast.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/run_rpsblast.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/selectLongestDuplicate.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/send_job_status_email.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/sendJobStatusEmail.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/shortenLineage.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/sinkReset.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/summarizeDomArch.html</loc></url>
