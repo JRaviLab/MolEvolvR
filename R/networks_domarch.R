@@ -74,11 +74,11 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
 
             # string clean up all of the Domain Architecture columns
             prot <- prot |>
-                mutate(DomArch.ntwrk = clean_string(DomArch.ntwrk)) |>
+                mutate(DomArch.ntwrk = cleanString(DomArch.ntwrk)) |>
                 mutate(
                     across(
                         all_of(column),
-                        clean_string
+                        cleanString
                     )
                 )
             domains_of_interest_regex <- paste(domains_of_interest, collapse = "|")
