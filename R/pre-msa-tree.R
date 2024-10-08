@@ -623,12 +623,12 @@ alignFasta <- function(fasta_file, tool = "Muscle", outpath = NULL) {
     )
 
     if (typeof(outpath) == "character") {
-        writeMSAAAMultipleAlignment2FA(aligned, outpath)
+        writeMSA_AA2FA(aligned, outpath)
     }
     return(aligned)
 }
 
-#' writeMSAAAMultipleAlignment2FA
+#' writeMSA_AA2FA
 #'
 #' @description
 #' Write MsaAAMultpleAlignment Objects as aligned fasta sequence
@@ -647,7 +647,7 @@ alignFasta <- function(fasta_file, tool = "Muscle", outpath = NULL) {
 #' @export
 #'
 #' @examples
-writeMSAAAMultipleAlignment2FA <- function(alignment, outpath) {
+writeMSA_AA2FA <- function(alignment, outpath) {
     l <- length(rownames(alignment))
     fasta <- ""
     for (i in 1:l)
