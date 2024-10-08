@@ -1,6 +1,6 @@
 ## Generating Phylogenetic Trees from Alignment Fasta files
 ## Includes the following functions:
-## generate_trees, convert_fa2tre, generate_fa2tre
+## convertAlignment2Trees, convertFA2Tree, createFA2Tree
 ## Modified: Jan, 2020
 ## Janani Ravi (@jananiravi), Molecular Ecologist (@molecologist)
 
@@ -35,7 +35,7 @@
 ## Approach 0 | FastTree2.0
 ###########################
 ## !! FastTree will only work if there are unique sequence names!!
-#' convert_fa2tre
+#' convertFA2Tree
 #'
 #' @param fa_path
 #' @param tre_path
@@ -45,7 +45,7 @@
 #' @export
 #'
 #' @examples
-convert_fa2tre <- function(fa_path = here("data/alns/pspa_snf7.fa"),
+convertFA2Tree <- function(fa_path = here("data/alns/pspa_snf7.fa"),
     tre_path = here("data/alns/pspa_snf7.tre"),
     fasttree_path = here("src/FastTree")) {
     # fa_path=here("data/alns/pspa_snf7.fa")
@@ -91,7 +91,7 @@ convert_fa2tre <- function(fa_path = here("data/alns/pspa_snf7.fa"),
     #              here("src/FastTree.c"), "-lm", collapse=" "))
 }
 ## Generate Trees for ALL fasta files in "data/alns"
-#' generate_trees
+#' convertAlignment2Trees
 #'
 #' @description
 #' Generate Trees for ALL fasta files in "data/alns"
@@ -106,7 +106,7 @@ convert_fa2tre <- function(fa_path = here("data/alns/pspa_snf7.fa"),
 #' @export
 #'
 #' @examples
-generate_trees <- function(aln_path = here("data/alns/")) {
+convertAlignment2Trees <- function(aln_path = here("data/alns/")) {
     
     # Check if the alignment directory exists
     if (!dir.exists(aln_path)) {
@@ -130,7 +130,7 @@ generate_trees <- function(aln_path = here("data/alns/")) {
         tre_path = paste0(aln_path, variable, ".tre")
     )
     pmap(
-        .l = fa2tre_args, .f = convert_fa2tre,
+        .l = fa2tre_args, .f = convertFA2Tree,
         fasttree_path = here("src/FastTree")
     )
 }
@@ -138,7 +138,7 @@ generate_trees <- function(aln_path = here("data/alns/")) {
 ##############################
 ## REFS: 1-4
 ############
-#' generate_fa2tre
+#' createFA2Tree
 #'
 #' @author Janani Ravi, MolEcologist
 #' @keywords phylogenetic tree, alignment, fasta
@@ -168,7 +168,7 @@ generate_trees <- function(aln_path = here("data/alns/")) {
 #' \dontrun{
 #' generate_aln2tree("pspa_snf7.fa")
 #' }
-generate_fa2tre <- function(fa_file = "data/alns/pspa_snf7.fa",
+createFA2Tree <- function(fa_file = "data/alns/pspa_snf7.fa",
     out_file = "data/alns/pspa_snf7.tre") {
     ## SAMPLE ARGS
     # fa_file="data/alns/pspa_snf7.fa"
