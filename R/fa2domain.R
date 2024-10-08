@@ -293,7 +293,7 @@ getDomainsFromFA <- function(
                 if (verbose) {
                     msg <- stringr::str_glue(
                         "accession number: {header} had no domains for the ",
-                        "selected analyes: {paste(analysis, collapse = ',')}\n"
+                        "selected analyses: {paste(analysis, collapse = ',')}\n"
                     )
                     warning(msg)
                 }
