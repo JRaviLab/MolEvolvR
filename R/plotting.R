@@ -108,7 +108,7 @@ plotUpSet <- function(query_data = "toast_rack.sub",
     # colname = string(colname)
     tryCatch(
         {
-            tc <- query_data %>% total_counts(column = colname, cutoff = cutoff, RowsCutoff = RowsCutoff, digits = 5)
+            tc <- query_data %>% totalGenContextOrDomArchCounts(column = colname, cutoff = cutoff, RowsCutoff = RowsCutoff, digits = 5)
             ##### Remove Tails ####
             # tails comprise of less than 1% of data each
             # ie) individual percent is less than 1
@@ -128,7 +128,7 @@ plotUpSet <- function(query_data = "toast_rack.sub",
             words.tc <- tc %>%
                 select({{ column }}) %>%
                 distinct() %>%
-                elements2words(column = colname, conversion_type = type)
+                elements2Words(column = colname, conversion_type = type)
             # names(words.tc)[1] <- "words"
             words.tc <- words.tc %>% str_split(pattern = " ")
             words.tc <- as.data.frame(words.tc, col.names = "Words", stringsAsFactors = F) %>%
@@ -273,7 +273,7 @@ plotLineageDA <- function(query_data = "prot",
 
     query_data <- shortenLineage(query_data, "Lineage", abr_len = 1)
 
-    query.summ.byLin <- query_data %>% total_counts(cutoff = cutoff, column = colname, RowsCutoff = RowsCutoff)
+    query.summ.byLin <- query_data %>% totalGenContextOrDomArchCounts(cutoff = cutoff, column = colname, RowsCutoff = RowsCutoff)
 
     query.summ.byLin$Lineage <- map(query.summ.byLin$Lineage, function(x) str_replace_all(string = x, pattern = ">", replacement = "_")) %>%
         unlist()
@@ -390,7 +390,7 @@ plotLineageQuery <- function(query_data = all,
     }
     col <- sym(colname)
 
-    query_data <- query_data %>% total_counts(column = colname, cutoff = cutoff)
+    query_data <- query_data %>% totalGenContextOrDomArchCounts(column = colname, cutoff = cutoff)
     # query_data contains all rows that possess a lineage
     query_data <- query_data %>% filter(grepl("a", Lineage))
 
@@ -831,7 +831,7 @@ plotStackedLineage <- function(prot, column = "DomArch", cutoff, Lineage_col = "
         prot <- shortenLineage(prot, Lineage_col, abr_len = 3)
     }
 
-    total_count <- total_counts(prot, column, cutoff, lineage_col = Lineage_col)
+    total_count <- totalGenContextOrDomArchCounts(prot, column, cutoff, lineage_col = Lineage_col)
     # total_count = prot
 
     # Order bars by descending freq
@@ -1054,7 +1054,7 @@ createWordCloudElement <- function(query_data = "prot",
     colname = "DomArch",
     cutoff = 70,
     UsingRowsCutoff = FALSE) {
-    tc <- query_data %>% total_counts(column = colname, cutoff = cutoff, RowsCutoff = UsingRowsCutoff, digits = 5)
+    tc <- query_data %>% totalGenContextOrDomArchCounts(column = colname, cutoff = cutoff, RowsCutoff = UsingRowsCutoff, digits = 5)
 
     column <- sym(colname)
     # Get words from filter
@@ -1069,11 +1069,11 @@ createWordCloudElement <- function(query_data = "prot",
     }
 
     words.tc <- query_data %>%
-        elements2words(
+        elements2Words(
             column = colname,
             conversion_type = type
         ) %>%
-        words2wc()
+        words2WordCounts()
 
     # names(words.tc) <- c("words", "freq")
 
@@ -1134,7 +1134,7 @@ createWordCloud2Element <- function(query_data = "prot",
     # @param type Character. Default is "da2doms" for Domain Architectures.
     # Other alternative: "gc2da" for Genomic Contexts.
 
-    tc <- query_data %>% total_counts(column = colname, cutoff = cutoff, RowsCutoff = UsingRowsCutoff, digits = 5)
+    tc <- query_data %>% totalGenContextOrDomArchCounts(column = colname, cutoff = cutoff, RowsCutoff = UsingRowsCutoff, digits = 5)
 
     column <- sym(colname)
     query_data <- query_data %>% filter({{ column }} %in% pull(tc, {{ colname }}))
@@ -1146,11 +1146,11 @@ createWordCloud2Element <- function(query_data = "prot",
     }
 
     words.tc <- query_data %>%
-        elements2words(
+        elements2Words(
             column = colname,
             conversion_type = type
         ) %>%
-        words2wc()
+        words2WordCounts()
 
     names(words.tc) <- c("words", "freq")
 
