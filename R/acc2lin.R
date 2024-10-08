@@ -73,7 +73,7 @@ addLineage <- function(df, acc_col = "AccNum", assembly_path,
 #'
 #' @param accessions Character vector of protein accessions
 #' @param assembly_path String of the path to the assembly_summary path
-#' This file can be generated using the "DownloadAssemblySummary()" function
+#' This file can be generated using the \link[MolEvolvR]{downloadAssemblySummary} function
 #' @param lineagelookup_path String of the path to the lineage lookup file
 #' (taxid to lineage mapping). This file can be generated using the
 #' @param ipgout_path Path to write the results of the efetch run of the accessions
@@ -179,7 +179,7 @@ efetchIPG <- function(accnums, out_path, plan = "sequential", ...) {
 #' ipg database. The protein accession in 'accessions' should be contained in this
 #' file
 #' @param assembly_path String of the path to the assembly_summary path
-#' This file can be generated using the "DownloadAssemblySummary()" function
+#' This file can be generated using the \link[MolEvolvR]{downloadAssemblySummary} function
 #' @param lineagelookup_path String of the path to the lineage lookup file
 #' (taxid to lineage mapping). This file can be generated using the
 #' "create_lineage_lookup()" function
@@ -201,7 +201,7 @@ IPG2Lineage <- function(accessions, ipg_file, assembly_path, lineagelookup_path,
 
     ipg_dt <- setnames(ipg_dt, "Assembly", "GCA_ID")
 
-    lins <- GCA2Lins(prot_data = ipg_dt, assembly_path, lineagelookup_path)
+    lins <- GCA2Lineage(prot_data = ipg_dt, assembly_path, lineagelookup_path)
     lins <- lins[!is.na(Lineage)] %>% unique()
 
     return(lins)

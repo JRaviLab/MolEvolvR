@@ -22,7 +22,7 @@
 #' @export
 #'
 #' @examples
-DownloadAssemblySummary <- function(outpath,
+downloadAssemblySummary <- function(outpath,
     keep = c(
         "assembly_accession", "taxid",
         "species_taxid", "organism_name"
@@ -74,7 +74,7 @@ DownloadAssemblySummary <- function(outpath,
 #'
 #' @param prot_data Dataframe containing a column `GCA_ID`
 #' @param assembly_path String of the path to the assembly_summary path
-#' This file can be generated using the "DownloadAssemblySummary()" function
+#' This file can be generated using the "downloadAssemblySummary()" function
 #' @param lineagelookup_path String of the path to the lineage lookup file
 #' (taxid to lineage mapping). This file can be generated using the
 #' "create_lineage_lookup()" function
@@ -87,7 +87,7 @@ DownloadAssemblySummary <- function(outpath,
 #' @export
 #'
 #' @examples
-GCA2lin <- function(prot_data,
+GCA2Lineage <- function(prot_data,
     assembly_path = "/data/research/jravilab/common_data/assembly_summary_genbank.txt",
     lineagelookup_path = "/data/research/jravilab/common_data/lineage_lookup.tsv",
     acc_col = "AccNum") {
@@ -189,7 +189,7 @@ addLineage <- function(df, acc_col = "AccNum", assembly_path,
 #'
 #' @param accessions Character vector of protein accessions
 #' @param assembly_path String of the path to the assembly_summary path
-#' This file can be generated using the "DownloadAssemblySummary()" function
+#' This file can be generated using the "downloadAssemblySummary()" function
 #' @param lineagelookup_path String of the path to the lineage lookup file
 #' (taxid to lineage mapping). This file can be generated using the
 #' @param ipgout_path Path to write the results of the efetch run of the accessions
@@ -353,25 +353,25 @@ IPG2Lineage <- function(accessions, ipg_file,
     refseq_rows <- refseq_rows[which(refseq_rows != 0)]
     genbank_rows <- genbank_rows[which(genbank_rows != 0)]
 
-    # Call GCA2lins using refseq
+    # Call GCA2Lineages using refseq
     ### Possible to run these in parallel if it takes a while
     if (length(refseq_rows) != 0) {
         refseq_ipg_dt <- ipg_dt[refseq_rows, ]
-        refseq_lins <- GCA2lin(refseq_ipg_dt,
+        refseq_lins <- GCA2Lineage(refseq_ipg_dt,
             assembly_path = refseq_assembly_path,
             lineagelookup_path
         )
     }
     if (length(genbank_rows) != 0) {
         genbank_ipg_dt <- ipg_dt[genbank_rows, ]
-        genbank_lins <- GCA2lin(gca_ipg_dt,
+        genbank_lins <- GCA2Lineage(gca_ipg_dt,
             assembly_path = genbank_assembly_path,
             lineagelookup_path
         )
     }
 
 
-    lins <- GCA2lin(prot_data = ipg_dt, assembly_path, lineagelookup_path)
+    lins <- GCA2Lineage(prot_data = ipg_dt, assembly_path, lineagelookup_path)
     lins <- lins[!is.na(Lineage)] %>% unique()
 
     return(lins)
@@ -381,7 +381,7 @@ IPG2Lineage <- function(accessions, ipg_file,
 #########################################
 ## !! @SAM: Add TaxID based on AccNum? ##
 #########################################
-#' add_tax
+#' addTaxID
 #'
 #' @param data
 #' @param acc_col
@@ -393,7 +393,7 @@ IPG2Lineage <- function(accessions, ipg_file,
 #' @export
 #'
 #' @examples
-add_tax <- function(data, acc_col = "AccNum", version = T) {
+addTaxID <- function(data, acc_col = "AccNum", version = T) {
     if (!is.data.table(data)) {
         data <- as.data.table(data)
     }
@@ -408,7 +408,7 @@ add_tax <- function(data, acc_col = "AccNum", version = T) {
     }
 
     out_path <- tempdir()
-    tax <- prot2tax(accessions, "TEMPTAX", out_path, return_dt = TRUE)
+    tax <- proteinAcc2TaxID(accessions, "TEMPTAX", out_path, return_dt = TRUE)
 
     data <- merge.data.table(data, tax,
         by.x = acc_col, by.y = "AccNum.noV", all.x = T
@@ -419,7 +419,7 @@ add_tax <- function(data, acc_col = "AccNum", version = T) {
 ##################################
 ## Maps Protein AccNum to TaxID ##
 ##################################
-#' prot2tax
+#' proteinAcc2TaxID
 #'
 #' @param accnums
 #' @param suffix
@@ -432,7 +432,7 @@ add_tax <- function(data, acc_col = "AccNum", version = T) {
 #' @export
 #'
 #' @examples
-prot2tax <- function(accnums, suffix, out_path, return_dt = FALSE) {
+proteinAcc2TaxID <- function(accnums, suffix, out_path, return_dt = FALSE) {
     # Write accnums to a file
     acc_file <- tempfile()
     write(paste(accnums, collapse = "\n"), acc_file)
@@ -450,7 +450,7 @@ prot2tax <- function(accnums, suffix, out_path, return_dt = FALSE) {
 #######################################
 ## OLD: Maps Protein AccNum to TaxID ##
 #######################################
-#' prot2tax_old
+#' proteinAcc2TaxID_old
 #'
 #' @author Samuel Chen, Janani Ravi
 #' @description Perform elink to go from protein database to taxonomy database
@@ -468,7 +468,7 @@ prot2tax <- function(accnums, suffix, out_path, return_dt = FALSE) {
 #' @export
 #'
 #' @examples
-prot2tax_old <- function(accessions, out_path, plan = "multicore") {
+proteinAcc2TaxID_old <- function(accessions, out_path, plan = "multicore") {
     if (length(accessions) > 0) {
         partition <- function(v, groups) {
             # Partition data to limit number of queries per second for rentrez fetch:
@@ -500,7 +500,7 @@ prot2tax_old <- function(accessions, out_path, plan = "multicore") {
             }
             print(x)
             script <- "/data/research/jravilab/molevol_scripts/upstream_scripts/acc2info.sh"
-            # script <- "/data/research/jravilab/molevol_scripts/upstream_scripts/prot2tax.sh"
+            # script <- "/data/research/jravilab/molevol_scripts/upstream_scripts/proteinAcc2TaxID.sh"
 
             # accnum_in <- paste(partitioned_acc[[x]], collapse=",")
             accnum_in <- tempfile()
