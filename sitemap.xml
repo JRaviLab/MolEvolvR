@@ -40,11 +40,13 @@
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/condenseRepeatedDomains.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/convert2TitleCase.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/convertAlignment2FA.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/convertAlignment2Trees.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/convertFA2Tree.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/convertIPRScanDomainTable2FA.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/convert_aln2fa.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/convert_fa2tre.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/count_bycol.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/count_to_sunburst.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/createFA2Tree.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/createIPRScanDomainTable.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/createWordCloud2Element.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/createWordCloudElement.html</loc></url>
@@ -64,9 +66,7 @@
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/gc_undirected_network.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/generateAllAlignments2FA.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/generate_all_aln2fa.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/generate_fa2tre.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/generate_msa.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/generate_trees.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/getDomainsFromFA.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/getIPRScanColNames.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/getIPRScanColTypes.html</loc></url>
