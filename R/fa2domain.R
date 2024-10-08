@@ -22,6 +22,16 @@ runIPRScan <- function(
         # destPartition = "LocalQ",
         # destQoS = "shortjobs"
     ) {
+    # Validate inputs
+    if (is.null(filepath_fasta) || filepath_fasta == "") {
+        stop("filepath_fasta cannot be NULL or empty")
+    }
+    if (is.null(filepath_out) || filepath_out == "") {
+        stop("filepath_out cannot be NULL or empty")
+    }
+    if (!all(appl %in% c("Pfam", "Gene3D"))) {
+        stop("Invalid application specified")
+    }
     # construct interproscan command
     cmd_iprscan <- stringr::str_glue(
         "iprscan -i {filepath_fasta} -b {filepath_out} --cpu 4 -f TSV ",
@@ -283,7 +293,7 @@ getDomainsFromFA <- function(
                 if (verbose) {
                     msg <- stringr::str_glue(
                         "accession number: {header} had no domains for the ",
-                        "selected analyes: {paste(analysis, collapse = ',')}\n"
+                        "selected analyses: {paste(analysis, collapse = ',')}\n"
                     )
                     warning(msg)
                 }
