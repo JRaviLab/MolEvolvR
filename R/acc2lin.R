@@ -10,7 +10,6 @@
 #' Sink Reset
 #'
 #' @return No return, but run to close all outstanding `sink()`s
-#' @rdname acc2lin
 #' @export
 #'
 #' @examples
@@ -38,7 +37,6 @@ sinkReset <- function() {
 #' @importFrom rlang sym
 #'
 #' @return Describe return, in detail
-#' @rdname acc2lin
 #' @export
 #'
 #' @examples
@@ -83,7 +81,6 @@ addLineage <- function(df, acc_col = "AccNum", assembly_path,
 #' @param plan
 #'
 #' @return Describe return, in detail
-#' @rdname acc2lin
 #' @export
 #'
 #' @examples
@@ -122,7 +119,6 @@ acc2Lineage <- function(accessions, assembly_path, lineagelookup_path, ipgout_pa
 #' @importFrom rentrez entrez_fetch
 #'
 #' @return Describe return, in detail
-#' @rdname acc2lin
 #' @export
 #'
 #' @examples
@@ -191,7 +187,6 @@ efetchIPG <- function(accnums, out_path, plan = "sequential", ...) {
 #' @importFrom data.table fread
 #'
 #' @return Describe return, in detail
-#' @rdname acc2lin
 #' @export
 #'
 #' @examples
