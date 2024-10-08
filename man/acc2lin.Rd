@@ -2,7 +2,7 @@
 % Please edit documentation in R/acc2lin.R
 \name{sinkReset}
 \alias{sinkReset}
-\alias{addlineage}
+\alias{addLineage}
 \alias{acc2Lineage}
 \alias{efetchIPG}
 \alias{IPG2Lineage}
@@ -10,7 +10,7 @@
 \usage{
 sinkReset()
 
-addlineage(
+addLineage(
   df,
   acc_col = "AccNum",
   assembly_path,
@@ -85,7 +85,7 @@ Takes the resulting file of an efetch run on the ipg database and
 sinkReset()
 }
 \dontrun{
-addlineage()
+addLineage()
 }
 \dontrun{
 acc2Lineage()

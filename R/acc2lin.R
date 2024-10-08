@@ -24,7 +24,7 @@ sinkReset <- function() {
 }
 
 
-#' Add Lineages
+#' addLineage
 #'
 #' @param df
 #' @param acc_col
@@ -43,9 +43,9 @@ sinkReset <- function() {
 #'
 #' @examples
 #' \dontrun{
-#' addlineage()
+#' addLineage()
 #' }
-addlineage <- function(df, acc_col = "AccNum", assembly_path,
+addLineage <- function(df, acc_col = "AccNum", assembly_path,
     lineagelookup_path, ipgout_path = NULL, plan = "sequential", ...) {
     s_acc_col <- sym(acc_col)
     accessions <- df %>% pull(acc_col)

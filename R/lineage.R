@@ -133,7 +133,7 @@ GCA2lin <- function(prot_data,
 ###################################
 ## !! @SAM why is this called lins?
 ###################################
-#' addlineage
+#' addLineage
 #'
 #' @param df
 #' @param acc_col
@@ -149,7 +149,7 @@ GCA2lin <- function(prot_data,
 #' @export
 #'
 #' @examples
-addlineage <- function(df, acc_col = "AccNum", assembly_path,
+addLineage <- function(df, acc_col = "AccNum", assembly_path,
     lineagelookup_path, ipgout_path = NULL, plan = "multicore") {
     acc_sym <- sym(acc_col)
     accessions <- df %>% pull(acc_sym)
