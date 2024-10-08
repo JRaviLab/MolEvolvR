@@ -32,7 +32,7 @@ file}
 "create_lineage_lookup()" function}
 
 \item{assembly_path}{String of the path to the assembly_summary path
-This file can be generated using the "DownloadAssemblySummary()" function}
+This file can be generated using the \link[MolEvolvR]{downloadAssemblySummary} function}
 }
 \value{
 Describe return, in detail
