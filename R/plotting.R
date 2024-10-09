@@ -1183,10 +1183,11 @@ wordcloud2_element <- function(query_data = "prot",
 #' then the legend will be in the descending order of the top level hierarchy.
 #' will be rendered. If the type is sund2b, a sund2b plot will be rendered.
 #'
+#' @importFrom d3r d3_nest
 #' @importFrom dplyr arrange desc group_by_at select summarise
 #' @importFrom htmlwidgets onRender
 #' @importFrom rlang sym
-#' @importFrom sunburstR sunburst
+#' @importFrom sunburstR sunburst sund2b
 #' @importFrom tidyr drop_na separate
 #'
 #' @return
@@ -1223,7 +1224,7 @@ lineage_sunburst <- function(prot, lineage_column = "Lineage",
         group_by_at(levels_vec) %>%
         summarise(size = n())
     protLevels <- protLevels %>% arrange()
-    tree <- .data$d3_nest(protLevels, value_cols = "size")
+    tree <- d3_nest(protLevels, value_cols = "size")
 
     # Plot sunburst
     if (type == "sunburst") {
