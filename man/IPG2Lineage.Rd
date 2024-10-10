@@ -35,7 +35,8 @@ file}
 This file can be generated using the \link[MolEvolvR]{downloadAssemblySummary} function}
 }
 \value{
-Describe return, in detail
+A \code{data.table} with the lineage information for the provided protein
+accessions.
 }
 \description{
 Takes the resulting file of an efetch run on the ipg database and
