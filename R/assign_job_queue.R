@@ -3,16 +3,16 @@
 # pipeline.
 # to use this, construct paths like so: file.path(common_root, "path", "to", "file.R")
 # for example, the reference for this file would be:
-# file.path(common_root, "molevol_scripts", "R", "assignJobQueue.R")
+# file.path(common_root, "molevol_scripts", "R", "assign_job_queue.R")
 common_root <- Sys.getenv("COMMON_SRC_ROOT")
 
 #' Construct list where names (MolEvolvR advanced options) point to processes
 #'
 #' @return list where names (MolEvolvR advanced options) point to processes
 #'
-#' example: list_opts2procs <- mapOption2Process
+#' example: list_opts2procs <- make_opts2procs
 #' @export
-mapOption2Process <- function() {
+make_opts2procs <- function() {
   tryCatch({
     opts2processes <- list(
       "homology_search" = c("dblast", "dblast_cleanup"),
@@ -26,7 +26,7 @@ mapOption2Process <- function() {
   }, warning = function(w) {
     message(paste("Warning: ", w$message))
   }, finally = {
-    message("mapOption2Process function execution completed.")
+    message("make_opts2procs function execution completed.")
   })
 
 }
@@ -40,16 +40,16 @@ mapOption2Process <- function() {
 #'
 #' example:
 #' advanced_opts <- c("homology_search", "domain_architecture")
-#' procs <- mapAdvOption2Process(advanced_opts)
+#' procs <- map_advanced_opts2procs(advanced_opts)
 #' @export
-mapAdvOption2Process <- function(advanced_opts) {
+map_advanced_opts2procs <- function(advanced_opts) {
   if (!is.character(advanced_opts)) {
     stop("Argument must be a character vector!")
   }
   tryCatch({
     # append 'always' to add procs that always run
     advanced_opts <- c(advanced_opts, "always")
-    opts2proc <- mapOption2Process()
+    opts2proc <- make_opts2procs()
     # setup index for opts2proc based on advanced options
     idx <- which(names(opts2proc) %in% advanced_opts)
     # extract processes that will run
@@ -60,7 +60,7 @@ mapAdvOption2Process <- function(advanced_opts) {
   }, warning = function(w) {
     message(paste("Warning: ", w$message))
   }, finally = {
-    message("mapOption2Process function execution completed.")
+    message("make_opts2procs function execution completed.")
   })
 
 }
@@ -80,14 +80,14 @@ mapAdvOption2Process <- function(advanced_opts) {
 #'
 #' 1)
 #' dir_job_results <- "/data/scratch/janani/molevolvr_out"
-#' list_proc_medians <- calculateProcessRuntime(dir_job_results)
+#' list_proc_medians <- get_proc_medians(dir_job_results)
 #'
 #' 2) from outside container environment
 #' common_root <- "/data/molevolvr_transfer/molevolvr_dev"
 #' dir_job_results <- "/data/molevolvr_transfer/molevolvr_dev/job_results"
-#' list_proc_medians <- calculateProcessRuntime(dir_job_results)
+#' list_proc_medians <- get_proc_medians(dir_job_results)
 #' @export
-calculateProcessRuntime <- function(dir_job_results) {
+get_proc_medians <- function(dir_job_results) {
   tryCatch({
     # Check if dir_job_results is a character string
     if (!is.character(dir_job_results) || length(dir_job_results) != 1) {
@@ -139,7 +139,7 @@ calculateProcessRuntime <- function(dir_job_results) {
   }, warning = function(w) {
     message(paste("Warning: ", w$message))
   }, finally = {
-    message("calculateProcessRuntime function execution completed.")
+    message("get_proc_medians function execution completed.")
   })
 
 }
@@ -156,12 +156,12 @@ calculateProcessRuntime <- function(dir_job_results) {
 #'
 #' @return [tbl_df] 2 columns: 1) process and 2) median seconds
 #'
-#' example: writeProcessRuntime2TSV(
+#' example: write_proc_medians_table(
 #'   "/data/scratch/janani/molevolvr_out/",
 #'   "/data/scratch/janani/molevolvr_out/log_tbl.tsv"
 #' )
 #' @export
-writeProcessRuntime2TSV <- function(dir_job_results, filepath) {
+write_proc_medians_table <- function(dir_job_results, filepath) {
   tryCatch({
     # Error handling for input arguments
     if (!is.character(dir_job_results) || length(dir_job_results) != 1) {
@@ -175,7 +175,7 @@ writeProcessRuntime2TSV <- function(dir_job_results, filepath) {
     if (!is.character(filepath) || length(filepath) != 1) {
       stop("Input 'filepath' must be a single character string.")
     }
-    df_proc_medians <- calculateProcessRuntime(dir_job_results) |>
+    df_proc_medians <- get_proc_medians(dir_job_results) |>
       tibble::as_tibble() |>
       tidyr::pivot_longer(
         dplyr::everything(),
@@ -192,7 +192,7 @@ writeProcessRuntime2TSV <- function(dir_job_results, filepath) {
   }, warning = function(w) {
     message(paste("Warning: ", w$message))
   }, finally = {
-    message("writeProcessRuntime2TSV function execution completed.")
+    message("write_proc_medians_table function execution completed.")
   })
 
 }
@@ -201,7 +201,7 @@ writeProcessRuntime2TSV <- function(dir_job_results, filepath) {
 #' their median runtimes in seconds to the path specified by 'filepath'.
 #'
 #' The default value of filepath is the value of the env var
-#' MOLEVOLVR_PROC_WEIGHTS, which writeProcessRuntimeToYML() also uses as its default
+#' MOLEVOLVR_PROC_WEIGHTS, which write_proc_medians_yml() also uses as its default
 #' read location.
 #'
 #' @param dir_job_results [chr] path to MolEvolvR job_results directory
@@ -212,13 +212,13 @@ writeProcessRuntime2TSV <- function(dir_job_results, filepath) {
 #'
 #' @examples
 #' \dontrun{
-#' writeProcessRuntimeToYML(
+#' write_proc_medians_yml(
 #'     "/data/scratch/janani/molevolvr_out/",
 #'     "/data/scratch/janani/molevolvr_out/log_tbl.yml"
 #' )
 #' }
 #' @export
-writeProcessRuntimeToYML <- function(dir_job_results, filepath = NULL) {
+write_proc_medians_yml <- function(dir_job_results, filepath = NULL) {
   tryCatch({
     # Error handling for dir_job_results arguments
     if (!is.character(dir_job_results) || length(dir_job_results) != 1) {
@@ -238,7 +238,7 @@ writeProcessRuntimeToYML <- function(dir_job_results, filepath = NULL) {
       stop("Input 'filepath' must be a single character string.")
     }
 
-    medians <- calculateProcessRuntime(dir_job_results)
+    medians <- get_proc_medians(dir_job_results)
     yaml::write_yaml(medians, filepath)
   }, error = function(e) {
     message(paste("Encountered an error: "), e$message)
@@ -261,9 +261,9 @@ writeProcessRuntimeToYML <- function(dir_job_results, filepath = NULL) {
 #'
 #' @return [list] names: processes; values: median runtime (seconds)
 #'
-#' example: writeProcessRuntimeToYML()
+#' example: write_proc_medians_yml()
 #' @export
-getProcessRuntimeWeights <- function(medians_yml_path = NULL) {
+get_proc_weights <- function(medians_yml_path = NULL) {
   if (is.null(medians_yml_path)) {
     medians_yml_path <- file.path(common_root,
                                   "molevol_scripts",
@@ -273,7 +273,7 @@ getProcessRuntimeWeights <- function(medians_yml_path = NULL) {
 
   proc_weights <- tryCatch({
     # attempt to read the weights from the YAML file produced by
-    # writeProcessRuntimeToYML()
+    # write_proc_medians_yml()
     if (stringr::str_trim(medians_yml_path) == "") {
       stop(
         stringr::str_glue("medians_yml_path is empty 
@@ -285,7 +285,7 @@ getProcessRuntimeWeights <- function(medians_yml_path = NULL) {
   },
   # to avoid fatal errors in reading the proc weights yaml,
   # some median process runtimes have been hardcoded based on
-  # the result of calculateProcessRuntime() from Jan 2024
+  # the result of get_proc_medians() from Jan 2024
   error = function(cond) {
     proc_weights <- list(
       "dblast" = 2810,
@@ -306,7 +306,7 @@ getProcessRuntimeWeights <- function(medians_yml_path = NULL) {
 #' calculate the total estimated walltime for the job
 #'
 #' @param advanced_opts character vector of MolEvolvR advanced options
-#' (see mapOption2Process for the options)
+#' (see make_opts2procs for the options)
 #' @param n_inputs total number of input proteins
 #'
 #' @importFrom dplyr if_else
@@ -314,11 +314,11 @@ getProcessRuntimeWeights <- function(medians_yml_path = NULL) {
 #'
 #' @return total estimated number of seconds a job will process (walltime)
 #'
-#' example: calculateEstimatedWallTimeFromOptions(c("homology_search",
+#' example: advanced_opts2est_walltime	(c("homology_search",
 #'                                       "domain_architecture"),
 #'                                       n_inputs = 3, n_hits = 50L)
 #' @export
-calculateEstimatedWallTimeFromOptions <- function(advanced_opts,
+advanced_opts2est_walltime	 <- function(advanced_opts,
                                                   n_inputs = 1L,
                                                   n_hits = NULL,
                                                   verbose = FALSE) {
@@ -348,7 +348,7 @@ calculateEstimatedWallTimeFromOptions <- function(advanced_opts,
     }
 
     # Get process weights
-    proc_weights <- writeProcessRuntimeToYML()
+    proc_weights <- write_proc_medians_yml()
     if (!is.list(proc_weights)) {
       stop("Process weights could not be retrieved correctly.")
     }
@@ -357,7 +357,7 @@ calculateEstimatedWallTimeFromOptions <- function(advanced_opts,
     proc_weights <- proc_weights[order(names(proc_weights))] |> unlist()
     all_procs <- names(proc_weights) |> sort()
     # get processes from advanced options and sort by names
-    procs_from_opts <- mapAdvOption2Process(advanced_opts)
+    procs_from_opts <- map_advanced_opts2procs(advanced_opts)
     procs_from_opts <- sort(procs_from_opts)
     # binary encode: yes proc will run (1); else 0
     binary_proc_vec <- dplyr::if_else(all_procs %in% procs_from_opts, 1L, 0L)
@@ -366,7 +366,7 @@ calculateEstimatedWallTimeFromOptions <- function(advanced_opts,
       as.numeric()
     # calculate the additional processes to run for the homologous hits
     if ("homology_search" %in% advanced_opts) {
-      opts2procs <- mapOption2Process()
+      opts2procs <- make_opts2procs()
       # exclude the homology search processes for the homologous hits
       procs2exclude_for_homologs <- opts2procs[["homology_search"]]
       procs_homologs <- procs_from_opts[!(procs_from_opts 
@@ -380,7 +380,7 @@ calculateEstimatedWallTimeFromOptions <- function(advanced_opts,
     }
     if (verbose) {
       msg <- stringr::str_glue(
-        "warnings from calculateEstimatedWallTimeFromOptions():\n",
+        "warnings from advanced_opts2est_walltime	():\n",
         "\tn_inputs={n_inputs}\n",
         "\tn_hits={ifelse(is.null(n_hits), 'null', n_hits)}\n",
         "\test_walltime={est_walltime}\n\n"
@@ -393,7 +393,7 @@ calculateEstimatedWallTimeFromOptions <- function(advanced_opts,
   }, warning = function(w) {
     message(paste("Warning: ", w$message))
   }, finally = {
-    message("calculateEstimatedWallTimeFromOptions 
+    message("advanced_opts2est_walltime	 
             function execution completed.")
   })
 
@@ -403,18 +403,18 @@ calculateEstimatedWallTimeFromOptions <- function(advanced_opts,
 #' Decision function to assign job queue
 #'
 #' @param t_sec_estimate estimated number of seconds a job will process
-#' (from calculateEstimatedWallTimeFromOptions())
+#' (from advanced_opts2est_walltime	())
 #' @param t_long threshold value that defines the lower bound for assigning a
 #' job to the "long queue"
 #'
 #' @return a string of "short" or "long"
 #'
 #' example:
-#' calculateEstimatedWallTimeFromOptions(c("homology_search",
+#' advanced_opts2est_walltime	(c("homology_search",
 #'                                         "domain_architecture"), 3) |>
-#'   assignJobQueue()
+#'   assign_job_queue()
 #' @export
-assignJobQueue <- function(
+assign_job_queue <- function(
   t_sec_estimate,
   t_cutoff = 21600 # 6 hours
 ) {
@@ -434,7 +434,7 @@ assignJobQueue <- function(
   }, warning = function(w) {
     message(paste("Warning: ", w$message))
   }, finally = {
-    message("assignJobQueue function execution completed.")
+    message("assign_job_queue function execution completed.")
   })
 
 }
@@ -451,13 +451,13 @@ assignJobQueue <- function(
 #' @return line plot object
 #'
 #' example:
-#' p <- plotEstimatedWallTimes()
+#' p <- plot_estimated_walltimes()
 #' ggplot2::ggsave(filename = "/data/molevolvr_transfer/molevolvr_
 #'                 dev/molevol_scripts/docs/estimate_walltimes.png", plot = p)
 #' @export
-plotEstimatedWallTimes <- function() {
+plot_estimated_walltimes <- function() {
   tryCatch({
-    opts <- mapOption2Process() |> names()
+    opts <- make_opts2procs() |> names()
     # get all possible submission permutations (powerset)
     get_powerset <- function(vec) {
       # generate powerset (do not include empty set)
@@ -482,7 +482,7 @@ plotEstimatedWallTimes <- function() {
             } else {
                 NULL
               }
-            est_walltime <- calculateEstimatedWallTimeFromOptions(
+            est_walltime <- advanced_opts2est_walltime	(
               advanced_opts,
               n_inputs = i,
               n_hits = n_hits,
@@ -541,7 +541,7 @@ plotEstimatedWallTimes <- function() {
   }, warning = function(w) {
     message(paste("Warning: ", w$message))
   }, finally = {
-    message("plotEstimatedWallTimes function execution completed.")
+    message("plot_estimated_walltimes function execution completed.")
   })
 
 }
