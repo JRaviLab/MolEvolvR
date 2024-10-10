@@ -16,9 +16,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' sink.reset()
+#' sinkReset()
 #' }
-sink.reset <- function() {
+sinkReset <- function() {
   # Handle all errors and warnings
   tryCatch({
     for (i in seq_len(sink.number())) {
@@ -35,7 +35,7 @@ sink.reset <- function() {
 }
 
 
-#' Add Lineages
+#' addLineage
 #'
 #' @param df
 #' @param acc_col
@@ -53,11 +53,11 @@ sink.reset <- function() {
 #'
 #' @examples
 #' \dontrun{
-#' add_lins()
+#' addLineage()
 #' }
-add_lins <- function(df, acc_col = "AccNum", assembly_path,
+addLineage <- function(df, acc_col = "AccNum", assembly_path,
                      lineagelookup_path, ipgout_path = NULL,
-                     plan = "sequential") {
+                     plan = "sequential", ...) {
   # check for validate inputs
   if (!is.data.frame(df)) {
     stop("Input 'df' must be a data frame.")
@@ -85,7 +85,7 @@ add_lins <- function(df, acc_col = "AccNum", assembly_path,
       # Attempt to add lineages
       acc_col <- sym(acc_col)
       accessions <- df %>% pull(acc_col)
-      lins <- acc2lin(
+      lins <- acc2Lineage(
         accessions, assembly_path, lineagelookup_path, ipgout_path, plan
       )
 
@@ -114,17 +114,17 @@ add_lins <- function(df, acc_col = "AccNum", assembly_path,
 }
 
 
-#' acc2lin
+#' acc2Lineage
 #'
 #' @author Samuel Chen, Janani Ravi
 #'
-#' @description This function combines 'efetch_ipg()'
-#'              and 'ipg2lin()' to map a set
+#' @description This function combines 'efetchIPG()'
+#'              and 'IPG2Lineage()' to map a set
 #' of protein accessions to their assembly (GCA_ID), tax ID, and lineage.
 #'
 #' @param accessions Character vector of protein accessions
 #' @param assembly_path String of the path to the assembly_summary path
-#' This file can be generated using the "DownloadAssemblySummary()" function
+#' This file can be generated using the \link[MolEvolvR]{downloadAssemblySummary} function
 #' @param lineagelookup_path String of the path to the lineage lookup file
 #' (taxid to lineage mapping). This file can be generated using the
 #' @param ipgout_path Path to write the results 
@@ -137,11 +137,11 @@ add_lins <- function(df, acc_col = "AccNum", assembly_path,
 #'
 #' @examples
 #' \dontrun{
-#' acc2lin()
+#' acc2Lineage()
 #' }
-acc2lin <- function(accessions, assembly_path, 
+acc2Lineage <- function(accessions, assembly_path, 
                     lineagelookup_path, ipgout_path = NULL, 
-                    plan = "sequential") {
+                    plan = "sequential", ...) {
   tmp_ipg <- F
   if (is.null(ipgout_path)) {
     tmp_ipg <- T
@@ -151,10 +151,10 @@ acc2lin <- function(accessions, assembly_path,
   lins <- NULL
   tryCatch({
     # Attempt to fetch IPG
-    efetch_ipg(accessions, out_path = ipgout_path, plan)
+    efetchIPG(accessions, out_path = ipgout_path, plan)
 
     # Attempt to process IPG to lineages
-    lins <- ipg2lin(accessions, ipgout_path, assembly_path, lineagelookup_path)
+    lins <- IPG2Lineage(accessions, ipgout_path, assembly_path, lineagelookup_path)
   }, error = function(e) {
     print(paste("An error occurred: ", e$message))
   }, warning = function(w) {
@@ -170,7 +170,7 @@ acc2lin <- function(accessions, assembly_path,
 }
 
 
-#' efetch_ipg
+#' efetchIPG
 #'
 #' @author Samuel Chen, Janani Ravi
 #'
@@ -191,9 +191,9 @@ acc2lin <- function(accessions, assembly_path,
 #'
 #' @examples
 #' \dontrun{
-#' efetch_ipg()
+#' efetchIPG()
 #' }
-efetch_ipg <- function(accnums, out_path, plan = "sequential") {
+efetchIPG <- function(accnums, out_path, plan = "sequential", ...) {
   # Argument validation
   if (!is.character(accnums) || length(accnums) == 0) {
     stop("Error: 'accnums' must be a non-empty character vector.")
@@ -208,7 +208,7 @@ efetch_ipg <- function(accnums, out_path, plan = "sequential") {
   }
   if (length(accnums) > 0) {
     partition <- function(in_data, groups) {
-      # \\TODO This function should be defined outside of efetch_ipg().
+      # \\TODO This function should be defined outside of efetchIPG().
       # It can be non-exported/internal
       # Partition data to limit number of queries per second for rentrez fetch:
       # limit of 10/second w/ key
@@ -260,7 +260,7 @@ efetch_ipg <- function(accnums, out_path, plan = "sequential") {
 
 
 
-#' ipg2lin
+#' IPG2Lineage
 #'
 #' @author Samuel Chen, Janani Ravi
 #'
@@ -274,7 +274,7 @@ efetch_ipg <- function(accnums, out_path, plan = "sequential") {
 #'               'accessions' should be contained in this
 #' file
 #' @param assembly_path String of the path to the assembly_summary path
-#' This file can be generated using the "DownloadAssemblySummary()" function
+#' This file can be generated using the \link[MolEvolvR]{downloadAssemblySummary} function
 #' @param lineagelookup_path String of the path to the lineage lookup file
 #' (taxid to lineage mapping). This file can be generated using the
 #' "create_lineage_lookup()" function
@@ -286,10 +286,10 @@ efetch_ipg <- function(accnums, out_path, plan = "sequential") {
 #'
 #' @examples
 #' \dontrun{
-#' ipg2lin()
+#' IPG2Lineage()
 #' }
 #'
-ipg2lin <- function(accessions, ipg_file, assembly_path, lineagelookup_path) {
+IPG2Lineage <- function(accessions, ipg_file, assembly_path, lineagelookup_path, ...) {
   # Argument validation for accessions
   if (!is.character(accessions) || length(accessions) == 0) {
     stop("Input 'accessions' must be a non-empty character vector.")
@@ -325,7 +325,7 @@ ipg2lin <- function(accessions, ipg_file, assembly_path, lineagelookup_path) {
     ipg_dt <- setnames(ipg_dt, "Assembly", "GCA_ID")
 
     # Convert the IPG data table to a lineage data table
-    lins <- GCA2Lins(prot_data = ipg_dt, assembly_path, lineagelookup_path)
+    lins <- GCA2Lineage(prot_data = ipg_dt, assembly_path, lineagelookup_path)
 
     # Filter out rows with missing lineage information
     lins <- lins[!is.na(Lineage)] %>% unique()
@@ -344,7 +344,7 @@ ipg2lin <- function(accessions, ipg_file, assembly_path, lineagelookup_path) {
 
 
 
-# efetch_ipg <- function(accnums, outpath)
+# efetchIPG <- function(accnums, outpath)
 # {
 #   SIZE = 250
 #   lower_bound = 1

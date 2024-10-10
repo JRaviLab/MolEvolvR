@@ -46,11 +46,11 @@ gc_undirected_network <- function(prot, column = "GenContext", domains_of_intere
     column_name <- sym(column)
     if (cutoff_type == "Lineage") {
         lin_summary <- prot %>%
-            summ.DA.byLin() %>%
-            summ.DA()
+            summarizeDomArch_ByLineage() %>%
+            summarizeDomArch()
         doms_above_cutoff <- (lin_summary %>% filter(totallin >= cutoff))[[column]]
     } else if (cutoff_type == "Total Count") { # Change this type?
-        GC_above_cutoff <- (prot %>% total_counts(column = column, cutoff = cutoff))[[column]]
+        GC_above_cutoff <- (prot %>% totalGenContextOrDomArchCounts(column = column, cutoff = cutoff))[[column]]
     }
 
     prot <- prot[which(prot[[as_string(column_name)]] %in% GC_above_cutoff), ]
@@ -153,8 +153,8 @@ GenContextNetwork <- function(prot, domains_of_interest, column = "GenContext",
     column_name <- sym(column)
 
 
-    # Perform cutoff through total_counts
-    prot_tc <- prot %>% total_counts(column = column, cutoff = cutoff)
+    # Perform cutoff through totalGenContextOrDomArchCounts
+    prot_tc <- prot %>% totalGenContextOrDomArchCounts(column = column, cutoff = cutoff)
 
     within_list <- prot_tc %>%
         select({{ column_name }}) %>%
@@ -218,7 +218,7 @@ GenContextNetwork <- function(prot, domains_of_interest, column = "GenContext",
     }
 
     # Get domain counts before eliminating domarchs with no edges
-    wc <- elements2words(prot = prot, column = column, conversion_type = "gc2da") %>% words2wc()
+    wc <- elements2Words(prot = prot, column = column, conversion_type = "gc2da") %>% words2WordCounts()
     nodes <- data.frame(id = wc$words, label = wc$words, size = wc$freq)
 
     max_size <- max(nodes$size)

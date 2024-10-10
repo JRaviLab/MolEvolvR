@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotting.R
 \name{wordcloud3}
 \alias{wordcloud3}
-\title{Wordcloud3}
+\title{plotWordCloud3}
 \usage{
 wordcloud3(
   data,
@@ -28,5 +28,5 @@ wordcloud3(
 \item{hoverFunction}{}
 }
 \description{
-Wordcloud3
+plotWordCloud3
 }
