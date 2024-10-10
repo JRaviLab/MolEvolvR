@@ -12,6 +12,10 @@
 #'
 #' @examples
 reveql <- function(prot) {
+    # Check if 'prot' is a data frame
+    if (!is.data.frame(prot)) {
+        stop("Error: 'prot' must be a data frame.")
+    }
     w <- prot # $GenContext.orig # was 'x'
 
     y <- rep(NA, length(w))
@@ -66,6 +70,10 @@ reveql <- function(prot) {
 #'
 #' @examples
 reverse_operon <- function(prot) {
+    # Check if 'prot' is a data frame
+    if (!is.data.frame(prot)) {
+        stop("Error: 'prot' must be a data frame.")
+    }
     gencontext <- prot$GenContext
 
     gencontext <- gsub(pattern = ">", replacement = ">|", x = gencontext)
