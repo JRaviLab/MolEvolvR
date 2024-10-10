@@ -50,6 +50,11 @@ api_key <- Sys.getenv("ENTREZ_API_KEY", unset = "YOUR_KEY_HERE")
 #'
 #' @examples
 to_titlecase <- function(x, y = " ") {
+    # Check if the input is NULL or not a character
+    if (is.null(x) || !is.character(x)) {
+        stop("Error: Input must be a non-null character string.")
+    }
+    
     s <- strsplit(x, y)[[1]]
     paste(toupper(substring(s, 1, 1)), substring(s, 2),
         sep = "", collapse = y
@@ -101,6 +106,25 @@ add_leaves <- function(aln_file = "",
     lin_file = "data/rawdata_tsv/all_semiclean.txt", # !! finally change to all_clean.txt!!
     # lin_file="data/rawdata_tsv/PspA.txt",
     reduced = FALSE) {
+    
+    #Check if the alignment file is provided and exists
+    if (nchar(aln_file) == 0) {
+        stop("Error: Alignment file path must be provided.")
+    }
+    
+    if (!file.exists(aln_file)) {
+        stop(paste("Error: The alignment file '", aln_file, "' does not exist."))
+    }
+    
+    # Check if the lineage file exists
+    if (!file.exists(lin_file)) {
+        stop(paste("Error: The lineage file '", lin_file, "' does not exist."))
+    }
+    
+    # Check that the 'reduced' parameter is logical
+    if (!is.logical(reduced) || length(reduced) != 1) {
+        stop("Error: 'reduced' must be a single logical value (TRUE or FALSE).")
+    }
     ## SAMPLE ARGS
     # aln_file <- "data/rawdata_aln/pspc.gismo.aln"
     # lin_file <- "data/rawdata_tsv/all_semiclean.txt"
@@ -212,6 +236,19 @@ add_leaves <- function(aln_file = "",
 add_name <- function(data,
     accnum_col = "AccNum", spec_col = "Species", lin_col = "Lineage",
     lin_sep = ">", out_col = "Name") {
+    # Check if the data is a data fram
+    if (!is.data.frame(data)) {
+        stop("Error: The input 'data' must be a data frame")
+    }
+    
+    # Check that the specified columns exist in the data
+    required_cols <- c(accnum_col, spec_col, lin_col)
+    missing_cols <- setdiff(required_cols, names(data))
+    if (length(missing_cols) > 0) {
+        stop(paste("Error: The following columns are missing from the data:", 
+                   paste(missing_cols, collapse = ", ")))
+    }
+    
     cols <- c(accnum_col, "Kingdom", "Phylum", "Genus", "Spp")
     split_data <- data %>%
         separate(
@@ -294,6 +331,24 @@ convert_aln2fa <- function(aln_file = "",
     lin_file = "data/rawdata_tsv/all_semiclean.txt", # !! finally change to all_clean.txt!!
     fa_outpath = "",
     reduced = FALSE) {
+    #Check if the alignment file is provided and exists
+    if (nchar(aln_file) == 0) {
+        stop("Error: Alignment file path must be provided.")
+    }
+    
+    if (!file.exists(aln_file)) {
+        stop(paste("Error: The alignment file '", aln_file, "' does not exist."))
+    }
+    
+    # Check if the lineage file exists
+    if (!file.exists(lin_file)) {
+        stop(paste("Error: The lineage file '", lin_file, "' does not exist."))
+    }
+    
+    # Check that the 'reduced' parameter is logical
+    if (!is.logical(reduced) || length(reduced) != 1) {
+        stop("Error: 'reduced' must be a single logical value (TRUE or FALSE).")
+    }
     ## SAMPLE ARGS
     # aln_file <- "data/rawdata_aln/pspc.gismo.aln"
     # lin_file <- "data/rawdata_tsv/all_semiclean.txt"
@@ -341,6 +396,20 @@ convert_aln2fa <- function(aln_file = "",
 #'
 #' @examples
 map_acc2name <- function(line, acc2name, acc_col = "AccNum", name_col = "Name") {
+    # Check if acc2name is a data frame
+    if (!is.data.frame(acc2name)) {
+        stop("Error: acc2name must be a data frame.")
+    }
+    
+    # Check if the specified columns exist in the data frame
+    if (!(acc_col %in% colnames(acc2name))) {
+        stop("Error: The specified acc_col '", acc_col, "' does not exist in 
+             acc2name.")
+    }
+    if (!(name_col %in% colnames(acc2name))) {
+        stop("Error: The specified name_col '", name_col, "' does not exist in 
+             acc2name.")
+    }
     # change to be the name equivalent to an add_names column
     # Find the first ' '
     end_acc <- str_locate(line, " ")[[1]]
@@ -371,6 +440,17 @@ map_acc2name <- function(line, acc2name, acc_col = "AccNum", name_col = "Name") 
 #' @examples
 rename_fasta <- function(fa_path, outpath,
     replacement_function = map_acc2name, ...) {
+    # Check if the input FASTA file exists
+    if (!file.exists(fa_path)) {
+        stop("Error: The input FASTA file does not exist at the specified
+             path: ", fa_path)
+    }
+    
+    # Check if the output path is writable
+    outdir <- dirname(outpath)
+    if (!dir.exists(outdir)) {
+        stop("Error: The output directory does not exist: ", outdir)
+    }
     lines <- read_lines(fa_path)
     res <- map(lines, function(x) {
         if (strtrim(x, 1) == ">") {
@@ -419,6 +499,24 @@ generate_all_aln2fa <- function(aln_path = here("data/rawdata_aln/"),
     fa_outpath = here("data/alns/"),
     lin_file = here("data/rawdata_tsv/all_semiclean.txt"),
     reduced = F) {
+    # Check if the alignment path exists
+    if (!dir.exists(aln_path)) {
+        stop("Error: The alignment directory does not exist at the specified 
+             path: ", aln_path)
+    }
+    
+    # Check if the output path exists; if not, attempt to create it
+    if (!dir.exists(fa_outpath)) {
+        dir.create(fa_outpath, recursive = TRUE)
+        message("Note: The output directory did not exist and has been created: ", 
+                fa_outpath)
+    }
+    
+    # Check if the linear file exists
+    if (!file.exists(lin_file)) {
+        stop("Error: The linear file does not exist at the specified path: ", 
+             lin_file)
+    }
     # library(here)
     # library(tidyverse)
     # aln_path <- here("data/rawdata_aln/")
@@ -476,6 +574,13 @@ generate_all_aln2fa <- function(aln_path = here("data/rawdata_aln/"),
 #' EBI:accessions <- c("P12345", "Q9UHC1", "O15530", "Q14624", "P0DTD1") |> acc2fa(outpath = "ebi.fa")
 #' }
 acc2fa <- function(accessions, outpath, plan = "sequential") {
+    if (!is.character(accessions) || length(accessions) == 0) {
+        stop("Error: 'accessions' must be a non-empty character vector.")
+    }
+    
+    if (!dir.exists(dirname(outpath))) {
+        stop("Error: The output directory does not exist: ", dirname(outpath))
+    }
     # validation
     stopifnot(length(accessions) > 0)
 
@@ -569,6 +674,23 @@ acc2fa <- function(accessions, outpath, plan = "sequential") {
 RepresentativeAccNums <- function(prot_data,
     reduced = "Lineage",
     accnum_col = "AccNum") {
+    
+    # Validate input
+    if (!is.data.frame(prot_data)) {
+        stop("Error: 'prot_data' must be a data frame.")
+    }
+    
+    # Check if the reduced column exists in prot_data
+    if (!(reduced %in% colnames(prot_data))) {
+        stop("Error: The specified reduced column '", reduced, "' does not 
+             exist in the data frame.")
+    }
+    
+    # Check if the accnum_col exists in prot_data
+    if (!(accnum_col %in% colnames(prot_data))) {
+        stop("Error: The specified accession number column '", accnum_col, "' 
+             does not exist in the data frame.")
+    }
     # Get Unique reduced column and then bind the AccNums back to get one AccNum per reduced column
     reduced_sym <- sym(reduced)
     accnum_sym <- sym(accnum_col)
@@ -614,6 +736,14 @@ RepresentativeAccNums <- function(prot_data,
 #'
 #' @examples
 alignFasta <- function(fasta_file, tool = "Muscle", outpath = NULL) {
+    # Validate the input FASTA file
+    if (!file.exists(fasta_file)) {
+        stop("Error: The FASTA file does not exist: ", fasta_file)
+    }
+    
+    if (file_ext(fasta_file) != "fasta" && file_ext(fasta_file) != "fa") {
+        stop("Error: The specified file is not a valid FASTA file: ", fasta_file)
+    }
     fasta <- readAAStringSet(fasta_file)
 
     aligned <- switch(tool,
@@ -648,6 +778,21 @@ alignFasta <- function(fasta_file, tool = "Muscle", outpath = NULL) {
 #'
 #' @examples
 write.MsaAAMultipleAlignment <- function(alignment, outpath) {
+    # Validate input alignment
+    if (!inherits(alignment, "AAMultipleAlignment")) {
+        stop("Error: The alignment must be of type 'AAMultipleAlignment'.")
+    }
+    
+    # Check the output path is a character string
+    if (!is.character(outpath) || nchar(outpath) == 0) {
+        stop("Error: Invalid output path specified.")
+    }
+    
+    # Check if the output directory exists
+    outdir <- dirname(outpath)
+    if (!dir.exists(outdir)) {
+        stop("Error: The output directory does not exist: ", outdir)
+    }
     l <- length(rownames(alignment))
     fasta <- ""
     for (i in 1:l)
