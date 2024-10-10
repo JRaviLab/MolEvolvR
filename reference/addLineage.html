@@ -64,13 +64,39 @@ addLineage"></head><body>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-plan">plan<a class="anchor" aria-label="anchor" href="#arg-plan"></a></dt>
+<dl><dt id="arg-df">df<a class="anchor" aria-label="anchor" href="#arg-df"></a></dt>
+<dd><p>A <code>data.frame</code> containing the input data. One column must contain
+the accession numbers.</p></dd>
+
+
+<dt id="arg-acc-col">acc_col<a class="anchor" aria-label="anchor" href="#arg-acc-col"></a></dt>
+<dd><p>A string specifying the column name in <code>df</code> that holds the
+accession numbers. Defaults to <code>"AccNum"</code>.</p></dd>
+
+
+<dt id="arg-assembly-path">assembly_path<a class="anchor" aria-label="anchor" href="#arg-assembly-path"></a></dt>
+<dd><p>A string specifying the path to the <code>assembly_summary.txt</code>
+file. This file contains metadata about assemblies.</p></dd>
+
+
+<dt id="arg-lineagelookup-path">lineagelookup_path<a class="anchor" aria-label="anchor" href="#arg-lineagelookup-path"></a></dt>
+<dd><p>A string specifying the path to the lineage lookup
+file, which contains a mapping from tax IDs to their corresponding lineages.</p></dd>
+
+
+<dt id="arg-ipgout-path">ipgout_path<a class="anchor" aria-label="anchor" href="#arg-ipgout-path"></a></dt>
+<dd><p>(Optional) A string specifying the path where IPG database
+fetch results will be saved. If <code>NULL</code>, the results are not written to a file.</p></dd>
+
+
+<dt id="arg-plan">plan<a class="anchor" aria-label="anchor" href="#arg-plan"></a></dt>
 <dd></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Describe return, in detail</p>
+    <p>A <code>data.frame</code> that combines the original <code>df</code> with the lineage
+information.</p>
     </div>
 
     <div class="section level2">
