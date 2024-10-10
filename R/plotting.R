@@ -664,8 +664,9 @@ lineage.domain_repeats.plot <- function(query_data, colname) {
 #' )
 #' }
 #'
-LineagePlot <- function(prot, domains_of_interest, level = 3, label.size = 8) {
-    LevelReduction <- function(lin) {
+
+   # Global LevelReduction function
+    LevelReduction <- function(lin, level = 1) {
         if (level == 1) {
             gt_loc <- str_locate(lin, ">")[[1]]
             if (is.na(gt_loc)) {
@@ -688,21 +689,8 @@ LineagePlot <- function(prot, domains_of_interest, level = 3, label.size = 8) {
             return(lin)
         }
     }
-
-    all_grouped <- data.frame("Query" = character(0), "Lineage" = character(0), "count" = integer())
-    for (dom in domains_of_interest)
-    {
-        domSub <- prot %>% filter(grepl(dom, GenContext, ignore.case = T))
-
-        domSub <- domSub %>%
-            group_by(Lineage) %>%
-            summarize("count" = n())
-
-        domSub$Query <- dom
-
-        all_grouped <- dplyr::union(all_grouped, domSub)
-    }
-
+    
+# Global GetKingdom function
     GetKingdom <- function(lin) {
         gt_loc <- str_locate(lin, ">")[, "start"]
 
@@ -715,8 +703,24 @@ LineagePlot <- function(prot, domains_of_interest, level = 3, label.size = 8) {
         }
     }
 
+# Refactored LineagePlot function that uses global LevelReduction and GetKingdom
+LineagePlot <- function(prot, domains_of_interest, level = 3, label.size = 8) {
+    all_grouped <- data.frame("Query" = character(0), "Lineage" = character(0), "count" = integer())
+
+    for (dom in domains_of_interest) {
+        domSub <- prot %>% filter(grepl(dom, GenContext, ignore.case = T))
+        domSub <- domSub %>%
+            group_by(Lineage) %>%
+            summarize("count" = n())
+
+        domSub$Query <- dom
+        all_grouped <- dplyr::union(all_grouped, domSub)
+    }
+
+    # Use globally defined LevelReduction function
     all_grouped <- all_grouped %>% mutate(ReducedLin = unlist(purrr::map(Lineage, LevelReduction)))
 
+    # Use globally defined GetKingdom function
     all_grouped_reduced <- all_grouped %>%
         group_by(Query, ReducedLin) %>%
         summarize("count" = sum(count)) %>%
@@ -726,15 +730,11 @@ LineagePlot <- function(prot, domains_of_interest, level = 3, label.size = 8) {
         group_by(Kingdom, ReducedLin) %>%
         summarize("count" = n())
 
-    # grep("bacteria", lin_counts$Kingdom) %>% length()
-
     bacteria_colors <- rep("#d94f25", length(grep("bacteria", lin_counts$Kingdom)))
-
     archaea_colors <- rep("#26662d", length(grep("archaea", lin_counts$Kingdom)))
-
     eukaryota_colors <- rep("#0000ff", length(grep("eukaryota", lin_counts$Kingdom)))
-
     virus_colors <- rep("#4f4f4f", length(grep("virus", lin_counts$Kingdom)))
+
     colors <- append(archaea_colors, bacteria_colors) %>%
         append(eukaryota_colors) %>%
         append(virus_colors)
@@ -742,10 +742,8 @@ LineagePlot <- function(prot, domains_of_interest, level = 3, label.size = 8) {
     all_grouped_reduced$ReducedLin <- map(
         all_grouped_reduced$ReducedLin,
         function(lin) {
-            gt_loc <- str_locate(lin, ">")[, "start"]
-
+            gt_loc <- str_locate(lin, ">")[ "start"]
             if (is.na(gt_loc)) {
-                # No '>' in lineage
                 return(lin)
             } else {
                 lin <- substring(lin, first = (gt_loc + 1), last = 100)
@@ -764,20 +762,18 @@ LineagePlot <- function(prot, domains_of_interest, level = 3, label.size = 8) {
         x = all_grouped_reduced$ReducedLin,
         levels = unique(ordered_lin$ReducedLin)
     )
+    
+    # ggplot for the final plot
     ggplot(
         data = all_grouped_reduced,
         aes_string(x = "ReducedLin", y = "Query")
     ) +
         geom_tile(
-            data = subset(
-                all_grouped_reduced,
-                !is.na(count)
-            ),
+            data = subset(all_grouped_reduced, !is.na(count)),
             aes(fill = count),
             colour = "darkred", size = 0.3
-        ) + # , width=0.7, height=0.7),
+        ) +
         scale_fill_gradient(low = "white", high = "darkred") +
-        # scale_x_discrete(position="top") +
         theme_minimal() +
         theme(
             axis.title = element_blank(),
