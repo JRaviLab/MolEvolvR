@@ -196,7 +196,6 @@ msa_pdf <- function(fasta_path, out_path = NULL,
 #' will be saved.
 #'
 #' @importFrom Biostrings readAAStringSet
-#' @importFrom rMSA kalign
 #'
 #' @return A list containing the alignment object and the output file path.
 #' @export
