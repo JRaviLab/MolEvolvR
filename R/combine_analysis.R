@@ -17,7 +17,7 @@
 #' @export
 #'
 #' @examples
-combineFullAnalysis <- function(inpath, ret = FALSE) {
+combine_full <- function(inpath, ret = FALSE) {
     ## Combining full_analysis files
     full_combnd <- combine_files(inpath,
         pattern = "*.full_analysis.tsv", skip = 0,
@@ -44,7 +44,7 @@ combineFullAnalysis <- function(inpath, ret = FALSE) {
 #' @export
 #'
 #' @examples
-combineIPR <- function(inpath, ret = FALSE) {
+combine_ipr <- function(inpath, ret = FALSE) {
     ## Combining clean ipr files
     ipr_combnd <- combine_files(inpath,
         pattern = "*.iprscan_cln.tsv", skip = 0,

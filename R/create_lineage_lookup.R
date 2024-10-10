@@ -26,9 +26,9 @@
 #' @export
 #'
 #' @examples
-createLineageLookup <- function(lineage_file = here("data/rankedlineage.dmp"),
+create_lineage_lookup <- function(lineage_file = here("data/rankedlineage.dmp"),
     outfile, taxonomic_rank = "phylum") {
-    .shortenNA <- function(Lineage) {
+    shorten_NA <- function(Lineage) {
         first_NA <- str_locate(Lineage, "NA")[1]
         if (is.na(first_NA)) {
             # No NAs
@@ -92,7 +92,7 @@ createLineageLookup <- function(lineage_file = here("data/rankedlineage.dmp"),
     # Takes a while (2million rows after all)
     rankedLinsCombined <- rankedLins %>%
         unite(col = "Lineage", all_of(combined_taxonomy), sep = ">") %>%
-        mutate(Lineage = unlist(map(Lineage, .shortenNA)))
+        mutate(Lineage = unlist(map(Lineage, shorten_NA)))
 
 
 
@@ -101,7 +101,7 @@ createLineageLookup <- function(lineage_file = here("data/rankedlineage.dmp"),
 
 
 
-#' CreateLineageLookup <- function(assembly_path, updateAssembly = FALSE, file_type = "tsv")
+#' create_lineage_lookup <- function(assembly_path, updateAssembly = FALSE, file_type = "tsv")
 #' {
 #'   #' Create a look up table that goes from GCA_ID, to TaxID, to Lineage
 #'   #' @author Samuel Chen
