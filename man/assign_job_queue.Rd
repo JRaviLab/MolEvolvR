@@ -8,7 +8,7 @@ assign_job_queue(t_sec_estimate, t_cutoff = 21600)
 }
 \arguments{
 \item{t_sec_estimate}{estimated number of seconds a job will process
-(from advanced_opts2est_walltime())}
+(from advanced_opts2est_walltime    ())}
 
 \item{t_long}{threshold value that defines the lower bound for assigning a
 job to the "long queue"}
@@ -17,7 +17,8 @@ job to the "long queue"}
 a string of "short" or "long"
 
 example:
-advanced_opts2est_walltime(c("homology_search", "domain_architecture"), 3) |>
+advanced_opts2est_walltime	(c("homology_search",
+"domain_architecture"), 3) |>
 assign_job_queue()
 }
 \description{
