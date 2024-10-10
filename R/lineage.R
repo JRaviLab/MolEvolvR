@@ -77,7 +77,7 @@ DownloadAssemblySummary <- function(outpath,
 #' This file can be generated using the "DownloadAssemblySummary()" function
 #' @param lineagelookup_path String of the path to the lineage lookup file
 #' (taxid to lineage mapping). This file can be generated using the
-#' "create_lineage_lookup()" function
+#' "createLineageLookup()" function
 #' @param acc_col
 #'
 #' @importFrom dplyr pull
@@ -309,7 +309,7 @@ efetch_ipg <- function(accessions, out_path, plan = "multicore") {
 #' @param genbank_assembly_path
 #' @param lineagelookup_path String of the path to the lineage lookup file
 #' (taxid to lineage mapping). This file can be generated using the
-#' "create_lineage_lookup()" function
+#' "createLineageLookup()" function
 #'
 #' @importFrom data.table fread setnames
 #'

@@ -277,7 +277,7 @@ efetch_ipg <- function(accnums, out_path, plan = "sequential") {
 #' This file can be generated using the "DownloadAssemblySummary()" function
 #' @param lineagelookup_path String of the path to the lineage lookup file
 #' (taxid to lineage mapping). This file can be generated using the
-#' "create_lineage_lookup()" function
+#' "createLineageLookup()" function
 #'
 #' @importFrom data.table fread
 #'
