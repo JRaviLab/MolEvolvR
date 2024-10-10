@@ -7,7 +7,7 @@
 map_acc2name(line, acc2name, acc_col = "AccNum", name_col = "Name")
 }
 \arguments{
-\item{line}{he line of a fasta file starting with '>'}
+\item{line}{The line of a fasta file starting with '>'}
 
 \item{acc2name}{Data Table containing a column of accession numbers and a name column}
 
@@ -16,6 +16,19 @@ map_acc2name(line, acc2name, acc_col = "AccNum", name_col = "Name")
 \item{name_col}{Name of the column containing the names that the accession numbers
 are mapped to}
 }
+\value{
+Character string. The modified line from the Fasta file header with
+the name instead of the accession number.
+}
 \description{
 Default rename_fasta() replacement function. Maps an accession number to its name
+}
+\examples{
+\dontrun{
+acc2name_table <- data.table(AccNum = c("ACC001", "ACC002"), 
+Name = c("Species A", "Species B"))
+line <- ">ACC001 some additional info"
+mapped_line <- map_acc2name(line, acc2name_table)
+print(mapped_line)  # Expected output: ">Species A"
+}
 }

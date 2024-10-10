@@ -31,8 +31,13 @@ Lineage, and AccNum info}
 Original data with a 'Name' column
 }
 \description{
-This function adds a new 'Name' column that is comprised of components from
-Kingdom, Phylum, Genus, and species, as well as the accession
+This function adds a new 'Name' column that is comprised of
+components from Kingdom, Phylum, Genus, and species, as well as the accession
+}
+\examples{
+\dontrun{
+add_name(data_frame)
+}
 }
 \author{
 Samuel Chen, Janani Ravi

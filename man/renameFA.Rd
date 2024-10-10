@@ -15,6 +15,15 @@ renameFA(fa_path, outpath, replacement_function = mapAcc2Name, ...)
 
 \item{...}{Additional arguments to pass to replacement_function}
 }
+\value{
+A character vector of the modified lines in the FASTA file.
+}
 \description{
 Rename the labels of fasta files
+}
+\examples{
+\dontrun{
+renameFA("path/to/input.fasta", 
+"path/to/output.fasta", mapAcc2Name, acc2name)
+}
 }

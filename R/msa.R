@@ -50,12 +50,15 @@
 #' @importFrom msa msa msaPrettyPrint
 #' @importFrom stringr str_replace
 #'
-#' @return
+#' @return A PDF file containing the multiple sequence alignment.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' msa_pdf()
+#' msa_pdf(fasta_path = "path/to/your/file.fasta", 
+#'         out_path = "path/to/output/alignment.pdf", 
+#'         lowerbound = 10, 
+#'         upperbound = 200)
 #' }
 msa_pdf <- function(fasta_path, out_path = NULL,
     lowerbound = NULL, upperbound = NULL) {
@@ -187,15 +190,22 @@ msa_pdf <- function(fasta_path, out_path = NULL,
 ## https://github.com/mhahsler/rMSA
 #' Function to generate MSA using kalign
 #'
-#' @param fa_file
-#' @param outfile
+#' @param fa_file Character. The path to the input FASTA file containing protein 
+#' sequences.
+#' @param outfile Character. The path to the output file where the alignment 
+#' will be saved.
 #'
 #' @importFrom Biostrings readAAStringSet
+#' @importFrom rMSA kalign
 #'
-#' @return
+#' @return A list containing the alignment object and the output file path.
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' generate_msa(fa_file = "path/to/sequences.fasta", 
+#' outfile = "path/to/alignment.txt")
+#' }
 generate_msa <- function(fa_file = "", outfile = "") {
     prot_aa <- readAAStringSet(
         path = fa_file,

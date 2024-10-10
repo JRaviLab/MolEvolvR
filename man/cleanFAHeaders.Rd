@@ -7,7 +7,9 @@
 cleanFAHeaders(fasta)
 }
 \arguments{
-\item{fasta}{}
+\item{fasta}{An \link{XStringSet} object representing the sequences from a
+FASTA file. The sequence names (headers) will be adjusted for uniqueness
+and sanitized.}
 }
 \value{
 \link{XStringSet} fasta with adjusted names (headers)

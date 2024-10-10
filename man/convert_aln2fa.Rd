@@ -23,8 +23,13 @@ Default is 'pspa.txt'}
 \item{fa_outpath}{Character. Path to the written fasta file.
 Default is 'NULL'}
 
-\item{reduced}{Boolean. If TRUE, the fasta file will contain only one sequence per lineage.
-Default is 'FALSE'}
+\item{reduced}{Boolean. If TRUE, the fasta file will contain only one
+sequence per lineage. Default is 'FALSE'}
+}
+\value{
+Character string containing the Fasta formatted sequences.
+If \code{fa_outpath} is specified, the function also writes the sequences to the
+Fasta file.
 }
 \description{
 Adding Leaves to an alignment file w/ accessions

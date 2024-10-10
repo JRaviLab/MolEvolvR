@@ -13,15 +13,33 @@ combine_files(
 )
 }
 \arguments{
-\item{inpath}{String of 'master' path where the files reside (recursive=T)}
+\item{inpath}{Character. The master directory path where the files reside.
+The search is recursive (i.e., it will look in subdirectories as well).}
 
-\item{pattern}{Character vector containing search pattern for files}
+\item{pattern}{Character. A search pattern to identify files to be combined.
+Default is "*full_analysis.tsv".}
 
-\item{col_names}{Takes logical T/F arguments OR column names vector;
-usage similar to col_names parameter in \code{readr::read_delim}}
+\item{delim}{Character. The delimiter used in the input files.
+Default is tab ("\t").}
+
+\item{skip}{Integer. The number of lines to skip at the beginning of each file.
+Default is 0.}
+
+\item{col_names}{Logical or character vector. If TRUE, the first row of each file
+is treated as column names. Alternatively, a character vector can
+be provided to specify custom column names.}
+}
+\value{
+A data frame containing the combined contents of all matched files.
+Each row will include a new column "ByFile" indicating the source file of the data.
 }
 \description{
 Download the combined assembly summaries of genbank and refseq
+}
+\examples{
+\dontrun{
+combined_data <- combine_files(inpath = "../molevol_data/project_data/phage_defense/")
+}
 }
 \author{
 Janani Ravi

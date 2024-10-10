@@ -16,27 +16,40 @@ plotLineageSunburst(
 )
 }
 \arguments{
-\item{prot}{Data frame containing a lineage column that the sunburst plot will be generated for}
+\item{prot}{Data frame containing a lineage column that the sunburst plot
+will be generated for}
 
-\item{lineage_column}{String. Name of the lineage column within the data frame. Defaults to "Lineage"}
+\item{lineage_column}{String. Name of the lineage column within the
+data frame. Defaults to "Lineage"}
 
-\item{type}{String, either "sunburst" or "sund2b". If type is "sunburst", a sunburst plot of the lineage}
+\item{type}{String, either "sunburst" or "sund2b". If type is "sunburst",
+a sunburst plot of the lineage}
 
 \item{levels}{Integer. Number of levels the sunburst will have.}
 
-\item{legendOrder}{String vector. The order of the legend. If legendOrder is NULL,}
+\item{colors}{A vector of colors for the sunburst plot.
+If NULL, default colors are used.}
 
-\item{showLegend}{Boolean. If TRUE, the legend will be enabled when the component first renders.}
+\item{legendOrder}{String vector. The order of the legend. If legendOrder
+is NULL,}
 
-\item{maxLevels}{Integer, the maximum number of levels to display in the sunburst; 5 by default, NULL to disable
-then the legend will be in the descending order of the top level hierarchy.
-will be rendered. If the type is sund2b, a sund2b plot will be rendered.}
+\item{showLegend}{Boolean. If TRUE, the legend will be enabled when the
+component first renders.}
+
+\item{maxLevels}{Integer, the maximum number of levels to display in the
+sunburst; 5 by default, NULL to disable then the legend will be in the
+descending order of the top level hierarchy. will be rendered. If the type is
+sund2b, a sund2b plot will be rendered.}
+}
+\value{
+A sunburst or sund2b plot based on the input lineage data.
 }
 \description{
 Lineage Sunburst
 }
 \examples{
 \dontrun{
-plotLineageSunburst()
+plotLineageSunburst(prot, lineage_column = "Lineage", 
+type = "sunburst", levels = 3)
 }
 }

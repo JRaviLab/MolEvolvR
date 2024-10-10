@@ -15,10 +15,31 @@ run_rpsblast(
 )
 }
 \arguments{
-\item{db_search_path}{Path to the BLAST databases}
+\item{rpsblast_path}{Path to the RPS-BLAST executable.}
 
-\item{num_threads}{}
+\item{db_search_path}{Path to the BLAST databases.}
+
+\item{db}{Name of the BLAST database to search against (default is "refseq").}
+
+\item{query}{Path to the input query file.}
+
+\item{evalue}{E-value threshold for reporting matches (default is "1e-5").}
+
+\item{out}{Path to the output file where results will be saved.}
+
+\item{num_threads}{Number of threads to use for the search (default is 1).}
+}
+\value{
+This function does not return a value; it outputs results to the
+specified file.
 }
 \description{
-Run RPSBLAST to generate domain architectures for proteins of interest
+This function executes an RPS-BLAST search to generate domain architectures
+for specified proteins. It sets the BLAST database path, runs the RPS-BLAST
+command with the provided query, and outputs the results.
+}
+\examples{
+\dontrun{
+run_rpsblast(rpsblast_path, db_search_path, query, out)
+}
 }

@@ -13,8 +13,16 @@ convert2TitleCase(text, delimitter)
 
 \item{y}{Delimitter. Default is space (" ").}
 }
+\value{
+Character vector with the input strings converted to title case.
+}
 \description{
 Translate string to Title Case w/ delimitter.
+}
+\examples{
+# Convert a single string to title case
+convert2TitleCase("hello world") # Returns "Hello World"
+
 }
 \seealso{
 chartr, toupper, and tolower.

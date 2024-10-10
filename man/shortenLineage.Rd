@@ -2,18 +2,34 @@
 % Please edit documentation in R/plotting.R
 \name{shortenLineage}
 \alias{shortenLineage}
-\title{Shorten Lineage}
+\title{Shorten Lineage Names}
 \usage{
 shortenLineage(data, colname = "Lineage", abr_len = 1)
 }
 \arguments{
-\item{abr_len}{}
+\item{data}{A data frame that contains a column with lineage names to be
+shortened.}
+
+\item{colname}{Character. The name of the column in the data frame containing
+the lineage strings to be shortened. Default is \code{"Lineage"}.}
+
+\item{abr_len}{Integer. The number of characters to retain after the first
+letter. If set to 1, only the first letter of each segment before the
+delimiter (\code{>}) is retained. Default is 1.}
+}
+\value{
+A modified data frame where the specified lineage column has been
+shortened.
 }
 \description{
-Shorten Lineage
+This function abbreviates lineage names by shortening the first part of the
+string (up to a given delimiter).
 }
 \examples{
 \dontrun{
-shortenLineage()
+df <- data.frame(Lineage = c("Bacteria>Firmicutes>Clostridia", 
+"Archaea>Euryarchaeota>Thermococci"))
+shortened_df <- shortenLineage(df, colname = "Lineage", abr_len = 1)
+print(shortened_df)
 }
 }

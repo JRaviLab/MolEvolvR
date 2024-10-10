@@ -7,7 +7,8 @@
 extractAccNum(string)
 }
 \arguments{
-\item{string}{}
+\item{string}{A string from which to extract the accession number.
+The string may contain accession information delimited by \code{|} or spaces.}
 }
 \value{
 Describe return, in detail
