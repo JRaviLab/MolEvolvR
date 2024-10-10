@@ -22,6 +22,10 @@ Default is 'pspa.txt'}
 \item{reduced}{Boolean. If TRUE, a reduced data frame will be generated with
 only one sequence per lineage. Default is FALSE.}
 }
+\value{
+A data frame containing the enriched alignment data with lineage
+information.
+}
 \description{
 Adding Leaves to an alignment file w/ accessions
 Genomic Contexts vs Domain Architectures.

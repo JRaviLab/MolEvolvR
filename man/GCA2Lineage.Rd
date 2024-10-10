@@ -21,13 +21,26 @@ This file can be generated using the "downloadAssemblySummary()" function}
 (taxid to lineage mapping). This file can be generated using the
 "create_lineage_lookup()" function}
 
-\item{acc_col}{}
+\item{acc_col}{Character. The name of the column in \code{prot_data} containing
+accession numbers. Default is "AccNum".}
+}
+\value{
+A dataframe containing the merged information of GCA_IDs, TaxIDs,
+and their corresponding lineage up to the phylum level. The dataframe
+will include information from the input \code{prot_data} and lineage data.
 }
 \description{
 Function to map GCA_ID to TaxID, and TaxID to Lineage
 }
 \note{
 Currently configured to have at most kingdom and phylum
+}
+\examples{
+\dontrun{
+result <- GCA2Lineage(prot_data = my_prot_data,
+                       assembly_path = "path/to/assembly_summary.txt",
+                       lineagelookup_path = "path/to/lineage_lookup.tsv")
+}
 }
 \author{
 Samuel Chen, Janani Ravi

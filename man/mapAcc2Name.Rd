@@ -9,13 +9,24 @@ mapAcc2Name(line, acc2name, acc_col = "AccNum", name_col = "Name")
 \arguments{
 \item{line}{The line of a fasta file starting with '>'}
 
-\item{acc2name}{Data Table containing a column of accession numbers and a name column}
+\item{acc2name}{Data Table containing a column of accession numbers and a
+name column}
 
 \item{acc_col}{Name of the column containing Accession numbers}
 
-\item{name_col}{Name of the column containing the names that the accession numbers
+\item{name_col}{Name of the column containing the names that the accession
+numbers
 are mapped to}
+}
+\value{
+A character string representing the updated FASTA line, where the
+accession number is replaced with its corresponding name.
 }
 \description{
 Default renameFA() replacement function. Maps an accession number to its name
+}
+\examples{
+\dontrun{
+mapAcc2Name(">P12345 some description", acc2name, "AccNum", "Name")
+}
 }

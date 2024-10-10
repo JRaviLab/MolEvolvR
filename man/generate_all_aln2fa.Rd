@@ -18,20 +18,26 @@ Default is 'here("data/rawdata_aln/")'}
 \item{fa_outpath}{Character. Path to the written fasta file.
 Default is 'here("data/alns/")'.}
 
-\item{lin_file}{Character. Path to file. Master protein file with AccNum & lineages.
-Default is 'here("data/rawdata_tsv/all_semiclean.txt")'}
+\item{lin_file}{Character. Path to file. Master protein file with AccNum &
+lineages. Default is 'here("data/rawdata_tsv/all_semiclean.txt")'}
 
-\item{reduced}{Boolean. If TRUE, the fasta file will contain only one sequence per lineage.
-Default is 'FALSE'.}
+\item{reduced}{Boolean. If TRUE, the fasta file will contain only one
+sequence per lineage. Default is 'FALSE'.}
+}
+\value{
+A list of paths to the generated Fasta files.
 }
 \description{
 Adding Leaves to all alignment files w/ accessions & DAs?
 }
 \details{
-The alignment files would need two columns separated by spaces: 1. AccNum and 2. alignment. The protein homolog file should have AccNum, Species, Lineages.
+The alignment files would need two columns separated by spaces: 1.
+AccNum and 2. alignment. The protein homolog file should have AccNum,
+Species, Lineages.
 }
 \note{
-Please refer to the source code if you have alternate + file formats and/or column names.
+Please refer to the source code if you have alternate + file
+formats and/or column names.
 }
 \examples{
 \dontrun{

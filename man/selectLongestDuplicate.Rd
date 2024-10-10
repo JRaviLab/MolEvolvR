@@ -7,10 +7,15 @@
 selectLongestDuplicate(prot, column)
 }
 \arguments{
-\item{column}{}
+\item{prot}{A data frame containing the data, with at least one column
+named 'AccNum' for identification of duplicates.}
+
+\item{column}{The name of the column from which the longest entry among
+duplicates will be selected.}
 }
 \value{
-Describe return, in detail
+A data frame containing only the longest entries among duplicates
+based on the specified column.
 }
 \description{
 Pick Longer Duplicate

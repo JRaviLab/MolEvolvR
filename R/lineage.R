@@ -11,17 +11,24 @@
 #'
 #' @author Samuel Chen, Janani Ravi
 #'
-#' @param outpath String of path where the assembly summary file should be written
-#' @param keep Character vector containing which columns should be retained and downloaded
+#' @param outpath String of path where the assembly summary file should be 
+#' written
+#' @param keep Character vector containing which columns should be retained and 
+#' downloaded
 #'
 #' @importFrom data.table fwrite setnames
 #' @importFrom dplyr bind_rows select
 #' @importFrom biomartr getKingdomAssemblySummary
 #'
-#' @return
+#' @return A tab-separated file containing the assembly summary. The function 
+#' does notreturn any value but writes the output directly to the specified file.
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' downloadAssemblySummary(outpath = "assembly_summary.tsv", 
+#'      keep = c("assembly_accession", "taxid", "organism_name"))
+#' }
 downloadAssemblySummary <- function(outpath,
     keep = c(
         "assembly_accession", "taxid",
@@ -78,15 +85,24 @@ downloadAssemblySummary <- function(outpath,
 #' @param lineagelookup_path String of the path to the lineage lookup file
 #' (taxid to lineage mapping). This file can be generated using the
 #' "create_lineage_lookup()" function
-#' @param acc_col
+#' @param acc_col Character. The name of the column in `prot_data` containing 
+#' accession numbers. Default is "AccNum".
 #'
 #' @importFrom dplyr pull
 #' @importFrom data.table fread setnames
 #'
-#' @return
+#' @return A dataframe containing the merged information of GCA_IDs, TaxIDs, 
+#' and their corresponding lineage up to the phylum level. The dataframe 
+#' will include information from the input `prot_data` and lineage data.
+#' 
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' result <- GCA2Lineage(prot_data = my_prot_data,
+#'                        assembly_path = "path/to/assembly_summary.txt",
+#'                        lineagelookup_path = "path/to/lineage_lookup.tsv")
+#' }
 GCA2Lineage <- function(prot_data,
     assembly_path = "/data/research/jravilab/common_data/assembly_summary_genbank.txt",
     lineagelookup_path = "/data/research/jravilab/common_data/lineage_lookup.tsv",
@@ -135,20 +151,34 @@ GCA2Lineage <- function(prot_data,
 ###################################
 #' addLineage
 #'
-#' @param df
-#' @param acc_col
-#' @param assembly_path
-#' @param lineagelookup_path
-#' @param ipgout_path
-#' @param plan
+#' @param df Dataframe containing accession numbers. The dataframe should 
+#' have a column specified by `acc_col` that contains these accession numbers.
+#' @param acc_col Character. The name of the column in `df` containing 
+#' accession numbers. Default is "AccNum".
+#' @param assembly_path String. The path to the assembly summary file generated 
+#' using the `downloadAssemblySummary()` function.
+#' @param lineagelookup_path String. The path to the lineage lookup file (taxid 
+#' to lineage mapping) generated using the `create_lineage_lookup()` function.
+#' @param ipgout_path String. Optional path to save intermediate output files. 
+#' Default is NULL.
+#' @param plan Character. Specifies the execution plan for parallel processing. 
+#' Default is "multicore".
 #'
 #' @importFrom dplyr pull
 #' @importFrom rlang sym
 #'
-#' @return
+#' @return A dataframe that combines the original dataframe `df` with lineage 
+#' information retrieved based on the provided accession numbers.
+#' 
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' enriched_df <- addLineage(df = my_data,
+#'                            acc_col = "AccNum",
+#'                            assembly_path = "path/to/assembly_summary.txt",
+#'                            lineagelookup_path = "path/to/lineage_lookup.tsv")
+#' }
 addLineage <- function(df, acc_col = "AccNum", assembly_path,
     lineagelookup_path, ipgout_path = NULL, plan = "multicore") {
     acc_sym <- sym(acc_col)
@@ -194,12 +224,23 @@ addLineage <- function(df, acc_col = "AccNum", assembly_path,
 #' (taxid to lineage mapping). This file can be generated using the
 #' @param ipgout_path Path to write the results of the efetch run of the accessions
 #' on the ipg database. If NULL, the file will not be written. Defaults to NULL
-#' @param plan
+#' @param plan Character. Specifies the execution plan for parallel processing. 
+#' Default is "multicore".
 #'
-#' @return
+#' @return A dataframe containing lineage information mapped to the given protein 
+#' accessions. The dataframe includes relevant columns such as TaxID, GCA_ID, 
+#' Protein, Protein Name, Species, and Lineage.
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' lineage_data <- acc2Lineage(
+#'   accessions = c("P12345", "Q67890"),
+#'   assembly_path = "path/to/assembly_summary.txt",
+#'   lineagelookup_path = "path/to/lineage_lookup.tsv",
+#'   ipgout_path = "path/to/output.txt"
+#' )
+#' }
 acc2Lineage <- function(accessions, assembly_path, lineagelookup_path,
     ipgout_path = NULL, plan = "multicore") {
     tmp_ipg <- F
@@ -235,16 +276,25 @@ acc2Lineage <- function(accessions, assembly_path, lineagelookup_path,
 #' @param accessions Character vector containing the accession numbers to query on
 #' the ipg database
 #' @param out_path Path to write the efetch results to
-#' @param plan
+#' @param plan Character. Specifies the execution plan for parallel processing. 
+#' Default is "multicore".
 #'
 #' @importFrom future future plan
 #' @importFrom purrr map
 #' @importFrom rentrez entrez_fetch
 #'
-#' @return
+#' @return The function does not return a value but writes the efetch results 
+#' directly to the specified `out_path`.
+#' 
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' efetchIPG(
+#'   accessions = c("P12345", "Q67890", "A12345"),
+#'   out_path = "path/to/efetch_results.xml"
+#' )
+#' }
 efetchIPG <- function(accessions, out_path, plan = "multicore") {
     if (length(accessions) > 0) {
         partition <- function(v, groups) {
@@ -305,18 +355,28 @@ efetchIPG <- function(accessions, out_path, plan = "multicore") {
 #' @param ipg_file Path to the file containing results of an efetch run on the
 #' ipg database. The protein accession in 'accessions' should be contained in this
 #' file
-#' @param refseq_assembly_path
-#' @param genbank_assembly_path
+#' @param refseq_assembly_path String. Path to the RefSeq assembly summary file.
+#' @param genbank_assembly_path String. Path to the GenBank assembly summary file.
 #' @param lineagelookup_path String of the path to the lineage lookup file
 #' (taxid to lineage mapping). This file can be generated using the
 #' "create_lineage_lookup()" function
 #'
 #' @importFrom data.table fread setnames
 #'
-#' @return
+#' @return A data table containing protein accessions along with their 
+#' corresponding TaxIDs and lineage information.
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' lins <- IPG2Lineage(
+#'   accessions = c("P12345", "Q67890"),
+#'   ipg_file = "path/to/ipg_results.txt",
+#'   refseq_assembly_path = "path/to/refseq_assembly_summary.txt",
+#'   genbank_assembly_path = "path/to/genbank_assembly_summary.txt",
+#'   lineagelookup_path = "path/to/lineage_lookup.tsv"
+#' )
+#' }
 IPG2Lineage <- function(accessions, ipg_file,
     refseq_assembly_path, genbank_assembly_path,
     lineagelookup_path) {
@@ -383,16 +443,25 @@ IPG2Lineage <- function(accessions, ipg_file,
 #########################################
 #' addTaxID
 #'
-#' @param data
-#' @param acc_col
-#' @param version
+#' @param data A data frame or data table containing protein accession numbers.
+#' @param acc_col A string specifying the column name in `data` that contains 
+#' the accession numbers. Defaults to "AccNum".
+#' @param version A logical indicating whether to remove the last two characters 
+#' from the accession numbers for TaxID retrieval. Defaults to TRUE.
 #'
 #' @importFrom data.table as.data.table
 #'
-#' @return
+#' @return A data table that includes the original data along with a new column 
+#' containing the corresponding TaxIDs.
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' # Create a sample data table with accession numbers
+#' sample_data <- data.table(AccNum = c("ABC123.1", "XYZ456.1", "LMN789.2"))
+#' enriched_data <- addTaxID(sample_data, acc_col = "AccNum", version = TRUE)
+#' print(enriched_data)
+#' }
 addTaxID <- function(data, acc_col = "AccNum", version = T) {
     if (!is.data.table(data)) {
         data <- as.data.table(data)
@@ -421,17 +490,30 @@ addTaxID <- function(data, acc_col = "AccNum", version = T) {
 ##################################
 #' proteinAcc2TaxID
 #'
-#' @param accnums
-#' @param suffix
-#' @param out_path
-#' @param return_dt
+#' @param accnums A character vector of protein accession numbers to be mapped 
+#' to TaxIDs.
+#' @param suffix A string suffix used to name the output file generated by the 
+#' script.
+#' @param out_path A string specifying the directory where the output file will 
+#' be saved.
+#' @param return_dt A logical indicating whether to return the result as a data 
+#' table. Defaults to FALSE. If TRUE, the output file is read into a data table 
+#' and returned.
 #'
 #' @importFrom data.table fread
 #'
-#' @return
+#' @return If `return_dt` is TRUE, a data table containing the mapping of protein 
+#' accession numbers to TaxIDs. If FALSE, the function returns NULL.
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' # Example accession numbers
+#' accessions <- c("ABC123", "XYZ456", "LMN789")
+#' tax_data <- proteinAcc2TaxID(accessions, suffix = "example", 
+#' out_path = "/path/to/output", return_dt = TRUE)
+#' print(tax_data)
+#' }
 proteinAcc2TaxID <- function(accnums, suffix, out_path, return_dt = FALSE) {
     # Write accnums to a file
     acc_file <- tempfile()
@@ -456,18 +538,25 @@ proteinAcc2TaxID <- function(accnums, suffix, out_path, return_dt = FALSE) {
 #' @description Perform elink to go from protein database to taxonomy database
 #' and write the resulting file of taxid and lineage to out_path
 #'
-#' @param accessions Character vector containing the accession numbers to query on
-#' the ipg database
-#' @param out_path Path to write the efetch results to
-#' @param plan
+#' @param accessions A character vector containing the accession numbers to query 
+#' in the protein database.
+#' @param out_path A string specifying the path where the results of the query 
+#' will be written. If set to NULL, a temporary directory will be used.
+#' @param plan A character string that specifies the execution plan for parallel 
+#' processing. The default is "multicore".
 #'
 #' @importFrom future plan
 #' @importFrom purrr map
 #'
-#' @return
+#' @return This function does not return a value. It writes the results to the 
+#'         specified output path.
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' accessions <- c("ABC123", "XYZ456", "LMN789")
+#' proteinAcc2TaxID_old(accessions, out_path = "/path/to/output")
+#' }
 proteinAcc2TaxID_old <- function(accessions, out_path, plan = "multicore") {
     if (length(accessions) > 0) {
         partition <- function(v, groups) {

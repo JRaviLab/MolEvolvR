@@ -34,6 +34,16 @@ Original data with a 'Name' column
 This function adds a new 'Name' column that is comprised of components from
 Kingdom, Phylum, Genus, and species, as well as the accession
 }
+\examples{
+# Example usage of the addName function
+data <- data.frame(
+  AccNum = c("ACC123", "ACC456"),
+  Species = c("Homo sapiens", "Mus musculus"),
+  Lineage = c("Eukaryota>Chordata", "Eukaryota>Chordata")
+)
+enriched_data <- addName(data)
+print(enriched_data)
+}
 \author{
 Samuel Chen, Janani Ravi
 }

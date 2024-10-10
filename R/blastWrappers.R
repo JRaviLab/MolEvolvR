@@ -3,20 +3,28 @@
 #' Run DELTABLAST to find homologs for proteins of interest
 #'
 #' @author Samuel Chen, Janani Ravi
+#' @description
+#' This function executes a Delta-BLAST search using the specified parameters 
+#' and database. It sets the BLAST database path, runs the Delta-BLAST command 
+#' with the given query, and outputs the results.
 #'
-#' @param deltablast_path
-#' @param db_search_path Path to the BLAST databases
-#' @param db
-#' @param query
-#' @param evalue
-#' @param out
-#' @param num_alignments
-#' @param num_threads
+#' @param deltablast_path Path to the Delta-BLAST executable.
+#' @param db_search_path Path to the BLAST databases.
+#' @param db Name of the BLAST database to search against (default is "refseq").
+#' @param query Path to the input query file.
+#' @param evalue E-value threshold for reporting matches (default is "1e-5").
+#' @param out Path to the output file where results will be saved.
+#' @param num_alignments Number of alignments to report.
+#' @param num_threads Number of threads to use for the search (default is 1).
 #'
-#' @return
+#' @return This function does not return a value; it outputs results to the 
+#' specified file.
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' run_deltablast(deltablast_path, db_search_path, query, out, num_alignments)
+#' }
 run_deltablast <- function(deltablast_path, db_search_path,
     db = "refseq", query, evalue = "1e-5",
     out, num_alignments, num_threads = 1) {
@@ -42,18 +50,27 @@ run_deltablast <- function(deltablast_path, db_search_path,
 
 #' Run RPSBLAST to generate domain architectures for proteins of interest
 #'
-#' @param rpsblast_path
-#' @param db_search_path Path to the BLAST databases
-#' @param db
-#' @param query
-#' @param evalue
-#' @param out
-#' @param num_threads
+#' @description
+#' This function executes an RPS-BLAST search to generate domain architectures 
+#' for specified proteins. It sets the BLAST database path, runs the RPS-BLAST 
+#' command with the provided query, and outputs the results.
 #'
-#' @return
+#' @param rpsblast_path Path to the RPS-BLAST executable.
+#' @param db_search_path Path to the BLAST databases.
+#' @param db Name of the BLAST database to search against (default is "refseq").
+#' @param query Path to the input query file.
+#' @param evalue E-value threshold for reporting matches (default is "1e-5").
+#' @param out Path to the output file where results will be saved.
+#' @param num_threads Number of threads to use for the search (default is 1).
+#'
+#' @return This function does not return a value; it outputs results to the 
+#' specified file.
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' run_rpsblast(rpsblast_path, db_search_path, query, out)
+#' }
 run_rpsblast <- function(rpsblast_path, db_search_path,
     db = "refseq", query, evalue = "1e-5",
     out, num_threads = 1) {

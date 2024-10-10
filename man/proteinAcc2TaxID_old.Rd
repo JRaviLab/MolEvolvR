@@ -7,16 +7,28 @@
 proteinAcc2TaxID_old(accessions, out_path, plan = "multicore")
 }
 \arguments{
-\item{accessions}{Character vector containing the accession numbers to query on
-the ipg database}
+\item{accessions}{A character vector containing the accession numbers to query
+in the protein database.}
 
-\item{out_path}{Path to write the efetch results to}
+\item{out_path}{A string specifying the path where the results of the query
+will be written. If set to NULL, a temporary directory will be used.}
 
-\item{plan}{}
+\item{plan}{A character string that specifies the execution plan for parallel
+processing. The default is "multicore".}
+}
+\value{
+This function does not return a value. It writes the results to the
+specified output path.
 }
 \description{
 Perform elink to go from protein database to taxonomy database
 and write the resulting file of taxid and lineage to out_path
+}
+\examples{
+\dontrun{
+accessions <- c("ABC123", "XYZ456", "LMN789")
+proteinAcc2TaxID_old(accessions, out_path = "/path/to/output")
+}
 }
 \author{
 Samuel Chen, Janani Ravi

@@ -2,7 +2,8 @@
 % Please edit documentation in R/CHANGED-pre-msa-tree.R, R/pre-msa-tree.R
 \name{RepresentativeAccNums}
 \alias{RepresentativeAccNums}
-\title{Function to generate a vector of one Accession number per distinct observation from 'reduced' column}
+\title{Function to generate a vector of one Accession number per distinct
+observation from 'reduced' column}
 \usage{
 RepresentativeAccNums(prot_data, reduced = "Lineage", accnum_col = "AccNum")
 
@@ -17,8 +18,28 @@ One accession number will be assigned for each of these observations}
 
 \item{accnum_col}{Column from prot_data that contains Accession Numbers}
 }
+\value{
+A character vector containing one Accession number per distinct
+observation from the specified reduced column.
+
+A character vector containing representative accession numbers,
+one for each distinct observation in the specified 'reduced' column.
+}
 \description{
 Function to generate a vector of one Accession number per distinct observation from 'reduced' column
+}
+\examples{
+\dontrun{
+representative_accessions <- RepresentativeAccNums(prot_data, 
+reduced = "Lineage", accnum_col = "AccNum")
+}
+\dontrun{
+# Example usage with a data frame called `protein_data`
+representative_accessions <- RepresentativeAccNums(prot_data = protein_data, 
+                                                   reduced = "Lineage", 
+                                                   accnum_col = "AccNum")
+print(representative_accessions)
+}
 }
 \author{
 Samuel Chen, Janani Ravi
