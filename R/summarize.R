@@ -10,7 +10,7 @@
 # suppressPackageStartupMessages(library(rlang))
 # conflicted::conflict_prefer("filter", "dplyr")
 
-#' Filter by Domains
+#' filterByDomains
 #'
 #' @author Samuel Chen, Janani Ravi
 #' @description filterByDomains filters a data frame by identifying exact domain matches
@@ -29,7 +29,6 @@
 #'
 #' @return Filtered data frame
 #' @note There is no need to make the domains 'regex safe', that will be handled by this function
-#' @name summarize
 #' @export
 #'
 #' @examples
@@ -89,9 +88,11 @@ filterByDomains <- function(prot, column = "DomArch", doms_keep = c(), doms_remo
 ## COUNTS of DAs and GCs ##
 ## Before/after break up ##
 ###########################
-## Function to obtain element counts (DA, GC)
-#' Count By Column
-#'
+
+#' countByColumn
+#' @description
+#' Function to obtain element counts (DA, GC)
+#' 
 #' @param prot A data frame containing the dataset to analyze, typically with 
 #' multiple columns including the one specified by the `column` parameter.
 #' @param column A character string specifying the name of the column to analyze. 
@@ -111,7 +112,6 @@ filterByDomains <- function(prot, column = "DomArch", doms_keep = c(), doms_remo
 #' The tibble is filtered to only include elements that have a frequency 
 #' greater than or equal to `min.freq` and does not include elements with `NA` 
 #' values or those starting with a hyphen ("-").
-#' @name summarize
 #' @export
 #'
 #' @examples
@@ -131,7 +131,7 @@ countByColumn <- function(prot = prot, column = "DomArch", min.freq = 1) {
     return(counts)
 }
 
-#' Elements 2 Words
+#' elements2Words
 #'
 #' @description
 #' Break string ELEMENTS into WORDS for domain architecture (DA) and genomic
@@ -156,7 +156,6 @@ countByColumn <- function(prot = prot, column = "DomArch", min.freq = 1) {
 #' @return A single string where elements are delimited by spaces. The function 
 #' performs necessary substitutions based on the `conversion_type` and cleans up 
 #' extraneous characters like newlines, tabs, and multiple spaces.
-#' @name summarize
 #'
 #' @examples
 #' \dontrun{
@@ -196,7 +195,7 @@ elements2Words <- function(prot, column = "DomArch", conversion_type = "da2doms"
     return(z3)
 }
 
-#' Words 2 Word Counts
+#' words2WordCounts
 #'
 #' @description
 #' Get word counts (wc) [DOMAINS (DA) or DOMAIN ARCHITECTURES (GC)]
@@ -215,7 +214,6 @@ elements2Words <- function(prot, column = "DomArch", conversion_type = "da2doms"
 #'   \item{`freq`}{A column containing the frequency counts for each word.}
 #' }
 #' 
-#' @name summarize
 #'
 #' @examples
 #' \dontrun{
@@ -252,9 +250,11 @@ words2WordCounts <- function(string) {
         arrange(-freq)
     return(df_word_count)
 }
-## Function to filter based on frequencies
-#' Filter Frequency
-#'
+
+#' filterByFrequency
+#' @description
+#' Function to filter based on frequencies
+#' 
 #' @param x A tibble (tbl_df) containing at least two columns: one for 
 #' elements (e.g., `words`) and one for their frequency (e.g., `freq`).
 #' @param min.freq A numeric value specifying the minimum frequency threshold. 
@@ -263,7 +263,6 @@ words2WordCounts <- function(string) {
 #'
 #' @return A tibble with the same structure as `x`, but filtered to include 
 #' only rows where the frequency is greater than or equal to `min.freq`.
-#' @name summarize
 #'
 #' @export
 #'
@@ -279,7 +278,14 @@ filterByFrequency <- function(x, min.freq) {
 #########################
 ## SUMMARY FUNCTIONS ####
 #########################
-#' Summarize by Lineage
+#' MolEvolvR Summary
+#' @name MolEvolvR_summary
+#' @description
+#' A collection of summary functions for the MolEvolvR package.
+#' 
+NULL
+
+#' summarizeByLineage
 #'
 #' @param prot A dataframe or tibble containing the data.
 #' @param column A string representing the column to be summarized 
@@ -295,7 +301,7 @@ filterByFrequency <- function(x, min.freq) {
 #' @return A tibble summarizing the counts of occurrences of elements in 
 #' the `column`, grouped by the `by` column. The result includes the number 
 #' of occurrences (`count`) and is arranged in descending order of count.
-#' @name summarize
+#' @rdname MolEvolvR_summary
 #' @export
 #'
 #' @examples
@@ -341,7 +347,7 @@ summarizeByLineage <- function(prot = "prot", column = "DomArch", by = "Lineage"
 #' columns: `DomArch`, `Lineage`, and `count`, which indicates the frequency 
 #' of each domain architecture for each lineage. The results are arranged in 
 #' descending order of `count`.
-#' @name summarize
+#' @rdname MolEvolvR_summary
 #'
 #' @export
 #'
@@ -357,7 +363,7 @@ summarizeDomArch_ByLineage <- function(x) {
         arrange(desc(count))
 }
 
-## Function to retrieve counts of how many lineages a DomArch appears in
+
 #' summarizeDomArch
 #'
 #' @description
@@ -375,7 +381,7 @@ summarizeDomArch_ByLineage <- function(x) {
 #' - `totallin`: The total number of unique lineages in which each `DomArch` 
 #' appears.
 #' The results are arranged in descending order of `totallin` and `totalcount`.
-#' @name summarize
+#' @rdname MolEvolvR_summary
 #' @export
 #'
 #' @examples
@@ -407,7 +413,7 @@ summarizeDomArch <- function(x) {
 #' `GenContext`, `DomArch`, and `Lineage`.
 #'
 #' The results are arranged in descending order of `count`.
-#' @name summarize
+#' @rdname MolEvolvR_summary
 #' @export
 #'
 #' @examples
@@ -432,7 +438,7 @@ summarizeGenContext_ByDomArchLineage <- function(x) {
 #' @importFrom dplyr arrange desc filter group_by n summarise
 #'
 #' @return Describe return, in detail
-#' @name summarize
+#' @rdname MolEvolvR_summary
 #' @export
 #'
 #' @examples
@@ -455,7 +461,7 @@ summarizeGenContext_ByLineage <- function(x) {
 #' @param x A dataframe or tibble containing the data. It must have columns 
 #' named `GenContext`, `DomArch`, and `Lineage`.
 #'
-#' @importFrom dplyr arrange desc filter group_by n summarise
+#' @importFrom dplyr arrange desc filter group_by n n_distinct summarise
 #'
 #' @return A tibble summarizing each unique combination of `GenContext` and 
 #' `Lineage`, along with the following columns:
@@ -465,7 +471,7 @@ summarizeGenContext_ByLineage <- function(x) {
 #'  `GenContext` and `Lineage`.
 #'
 #' The results are arranged in descending order of `count`.
-#' @name summarize
+#' @rdname MolEvolvR_summary
 #' @export
 #'
 #' @examples
@@ -487,7 +493,7 @@ summarizeGenContext <- function(x) {
 
 
 ##################
-#' Total Counts
+#' totalGenContextOrDomArchCounts
 #'
 #' @description
 #' Creates a data frame with a totalcount column
@@ -518,7 +524,7 @@ summarizeGenContext <- function(x) {
 #' - `IndividualCountPercent`: The percentage of each `totalcount` relative to 
 #' the overall count.
 #' - `CumulativePercent`: The cumulative percentage of total counts.
-#' @name summarize
+#' @rdname MolEvolvR_summary
 #' @export
 #'
 #' @note Please refer to the source code if you have alternate file formats and/or
@@ -670,7 +676,7 @@ totalGenContextOrDomArchCounts <- function(prot, column = "DomArch", lineage_col
 
 
 
-#' Find Paralogs
+#' findParalogs
 #'
 #' @description
 #' Creates a data frame of paralogs.
