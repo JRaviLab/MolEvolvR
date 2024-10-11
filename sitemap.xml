@@ -11,6 +11,7 @@
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/GCA2Lineage.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/GenContextNetwork.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/IPG2Lineage.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/MolEvolvR_summary.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/RepresentativeAccNums.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/acc2Lineage.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/acc2fa.html</loc></url>
@@ -109,15 +110,8 @@
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/sendJobStatusEmail.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/shortenLineage.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/sinkReset.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/summarizeDomArch.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/summarizeDomArch_ByLineage.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/summarizeGenContext.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/summarizeGenContext_ByDomArchLineage.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/summarizeGenContext_ByLineage.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/summarizebylineage.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/theme_genes2.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/to_titlecase.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/totalgencontextordomarchcounts.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/validateCountDF.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/wordcloud3.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/words2wordcounts.html</loc></url>
