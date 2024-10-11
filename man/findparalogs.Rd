@@ -2,7 +2,7 @@
 % Please edit documentation in R/summarize.R
 \name{findParalogs}
 \alias{findParalogs}
-\title{Find Paralogs}
+\title{findParalogs}
 \usage{
 findParalogs(prot)
 }

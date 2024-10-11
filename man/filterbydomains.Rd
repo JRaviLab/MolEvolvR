@@ -2,7 +2,7 @@
 % Please edit documentation in R/summarize.R
 \name{filterByDomains}
 \alias{filterByDomains}
-\title{Filter by Domains}
+\title{filterByDomains}
 \usage{
 filterByDomains(
   prot,
