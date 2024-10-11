@@ -2,15 +2,22 @@
 % Please edit documentation in R/summarize.R
 \name{words2WordCounts}
 \alias{words2WordCounts}
-\title{Words 2 Word Counts}
+\title{words2WordCounts}
 \usage{
 words2WordCounts(string)
 }
 \arguments{
-\item{string}{}
+\item{string}{A character string containing the elements (words) to count.
+This would typically be a space-delimited string representing domain
+architectures or genomic contexts.}
 }
 \value{
-\link{tbl_df} table with 2 columns: 1) words & 2) counts/frequency
+A tibble (tbl_df) with two columns:
+\describe{
+\item{\code{words}}{A column containing the individual words
+(domains or domain architectures).}
+\item{\code{freq}}{A column containing the frequency counts for each word.}
+}
 }
 \description{
 Get word counts (wc) \link{DOMAINS (DA) or DOMAIN ARCHITECTURES (GC)}
