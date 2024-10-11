@@ -2,7 +2,7 @@
 % Please edit documentation in R/ipr2viz.R
 \name{getTopAccByLinDomArch}
 \alias{getTopAccByLinDomArch}
-\title{Group by lineage + DA then take top 20}
+\title{getTopAccByLinDomArch}
 \usage{
 getTopAccByLinDomArch(
   infile_full,

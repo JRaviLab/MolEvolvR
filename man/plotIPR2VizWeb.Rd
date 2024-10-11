@@ -2,7 +2,7 @@
 % Please edit documentation in R/ipr2viz.R
 \name{plotIPR2VizWeb}
 \alias{plotIPR2VizWeb}
-\title{IPR2Viz Web}
+\title{plotIPR2VizWeb}
 \usage{
 plotIPR2VizWeb(
   infile_ipr,
@@ -20,5 +20,5 @@ plotIPR2VizWeb(
 \item{rows}{}
 }
 \description{
-IPR2Viz Web
+plotIPR2VizWeb
 }

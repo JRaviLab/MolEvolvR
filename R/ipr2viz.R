@@ -15,7 +15,7 @@
 #################################
 ## themeGenes2 adapted from theme_genes (w/o strip.text())
 ## https://github.com/wilkox/gggenes/blob/master/R/theme_genes.R
-#' Theme Genes2
+#' themeGenes2
 #'
 #' @importFrom ggplot2 element_blank element_line theme theme_grey
 #'
@@ -41,7 +41,8 @@ themeGenes2 <- function() {
 ##################################
 ## Get Top N AccNum by Lin+DomArch
 ##################################
-#' Group by lineage + DA then take top 20
+#' getTopAccByLinDomArch
+#' @description Group by lineage + DA then take top 20
 #'
 #' @param infile_full
 #' @param DA_col
@@ -92,7 +93,7 @@ getTopAccByLinDomArch <- function(infile_full,
 #############################################
 ## IPR + FULL files --> DomArch Visualization
 #############################################
-#' IPR2Viz
+#' plotIPR2Viz
 #'
 #' @param infile_ipr
 #' @param infile_full
@@ -248,7 +249,7 @@ plotIPR2Viz <- function(infile_ipr = NULL, infile_full = NULL, accessions = c(),
     return(plot)
 }
 
-#' IPR2Viz Web
+#' plotIPR2VizWeb
 #'
 #' @param infile_ipr
 #' @param accessions

@@ -2,7 +2,7 @@
 % Please edit documentation in R/ipr2viz.R
 \name{plotIPR2Viz}
 \alias{plotIPR2Viz}
-\title{IPR2Viz}
+\title{plotIPR2Viz}
 \usage{
 plotIPR2Viz(
   infile_ipr = NULL,
@@ -20,5 +20,5 @@ plotIPR2Viz(
 \item{query}{}
 }
 \description{
-IPR2Viz
+plotIPR2Viz
 }

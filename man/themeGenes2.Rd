@@ -2,10 +2,10 @@
 % Please edit documentation in R/ipr2viz.R
 \name{themeGenes2}
 \alias{themeGenes2}
-\title{Theme Genes2}
+\title{themeGenes2}
 \usage{
 themeGenes2()
 }
 \description{
-Theme Genes2
+themeGenes2
 }
