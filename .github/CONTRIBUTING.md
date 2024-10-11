@@ -32,7 +32,7 @@ See our guide on [how to create a great issue](https://code-review.tidyverse.org
   ```
   usethis::create_from_github("JRaviLab/MolEvolvR", fork = TRUE)
   ```
-- Install Bioconductor dependencies:
+- Install BiocManager from Bioconductor:
 
   ```
   if (!require("BiocManager", quietly = TRUE))
