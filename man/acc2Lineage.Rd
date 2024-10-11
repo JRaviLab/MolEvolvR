@@ -35,7 +35,8 @@ on the ipg database. If NULL, the file will not be written. Defaults to NULL}
 \item{plan}{}
 }
 \value{
-Describe return, in detail
+A \code{data.table} that contains the lineage information, mapping protein
+accessions to their tax IDs and lineages.
 }
 \description{
 This function combines 'efetchIPG()' and 'IPG2Lineage()' to map a set
