@@ -53,6 +53,7 @@ themeGenes2 <- function() {
 #' @importFrom shiny showNotification
 #' @importFrom stats na.omit
 #' @importFrom rlang sym
+#' @importFrom rlang .data
 #'
 #' @return
 #' @export
@@ -105,9 +106,10 @@ getTopAccByLinDomArch <- function(infile_full,
 #'
 #' @importFrom dplyr distinct filter select
 #' @importFrom gggenes geom_gene_arrow geom_subgene_arrow
-#' @importFrom ggplot2 aes aes_string as_labeller element_text facet_wrap ggplot guides margin scale_fill_manual theme theme_minimal ylab
+#' @importFrom ggplot2 aes aes_string as_labeller element_text facet_wrap ggplot guides margin scale_fill_manual theme theme_minimal unit ylab
 #' @importFrom readr read_tsv
 #' @importFrom tidyr pivot_wider
+#' @importFrom stats as.formula
 #'
 #' @return
 #' @export
@@ -134,10 +136,10 @@ plotIPR2Viz <- function(infile_ipr = NULL, infile_full = NULL, accessions = c(),
     ADDITIONAL_COLORS <- sample(CPCOLS, 1000, replace = TRUE)
     CPCOLS <- append(x = CPCOLS, values = ADDITIONAL_COLORS)
     ## Read IPR file
-    ipr_out <- read_tsv(infile_ipr, col_names = T, col_types = iprscan_cols)
-    ipr_out <- ipr_out %>% filter(Name %in% accessions)
+    ipr_out <- read_tsv(infile_ipr, col_names = T, col_types = MolEvolvR::iprscan_cols)
+    ipr_out <- ipr_out %>% filter(.data$Name %in% accessions)
     analysis_cols <- paste0("DomArch.", analysis)
-    infile_full <- infile_full %>% select(analysis_cols, Lineage_short, QueryName, PcPositive, AccNum)
+    infile_full <- infile_full %>% select(.data$analysis_cols, .data$Lineage_short, .data$QueryName, .data$PcPositive, .data$AccNum)
     ## To filter by Analysis
     analysis <- paste(analysis, collapse = "|")
     ## @SAM: This can't be set in stone since the analysis may change!
@@ -157,22 +159,22 @@ plotIPR2Viz <- function(infile_ipr = NULL, infile_full = NULL, accessions = c(),
     ## Need to fix this eventually based on the 'real' gene orientation! :)
     ipr_out$Strand <- rep("forward", nrow(ipr_out))
 
-    ipr_out <- ipr_out %>% arrange(AccNum, StartLoc, StopLoc)
+    ipr_out <- ipr_out %>% arrange(.data$AccNum, .data$StartLoc, .data$StopLoc)
     ipr_out_sub <- filter(
         ipr_out,
-        grepl(pattern = analysis, x = Analysis)
+        grepl(pattern = analysis, x = .data$Analysis)
     )
     # dynamic analysis labeller
     analyses <- ipr_out_sub %>%
-        select(Analysis) %>%
+        select(.data$Analysis) %>%
         distinct()
     analysis_labeler <- analyses %>%
-        pivot_wider(names_from = Analysis, values_from = Analysis)
+        pivot_wider(names_from = .data$Analysis, values_from = .data$Analysis)
 
     lookup_tbl_path <- "/data/research/jravilab/common_data/cln_lookup_tbl.tsv"
-    lookup_tbl <- read_tsv(lookup_tbl_path, col_names = T, col_types = lookup_table_cols)
+    lookup_tbl <- read_tsv(lookup_tbl_path, col_names = T, col_types = MolEvolvR::lookup_table_cols)
 
-    lookup_tbl <- lookup_tbl %>% select(-ShortName) # Already has ShortName -- Just needs SignDesc
+    lookup_tbl <- lookup_tbl %>% select(-.data$ShortName) # Already has ShortName -- Just needs SignDesc
     # ipr_out_sub = ipr_out_sub %>% select(-ShortName)
     # TODO: Fix lookup table and uncomment below
     # ipr_out_sub <- merge(ipr_out_sub, lookup_tbl, by.x = "DB.ID", by.y = "DB.ID")
@@ -195,7 +197,7 @@ plotIPR2Viz <- function(infile_ipr = NULL, infile_full = NULL, accessions = c(),
             ), color = "white") +
             geom_gene_arrow(fill = NA, color = "grey") +
             # geom_blank(data = dummies) +
-            facet_wrap(~Analysis,
+            facet_wrap(~.data$Analysis,
                 strip.position = "top", ncol = 5,
                 labeller = as_labeller(analysis_labeler)
             ) +
@@ -216,9 +218,9 @@ plotIPR2Viz <- function(infile_ipr = NULL, infile_full = NULL, accessions = c(),
         plot <- ggplot(
             ipr_out_sub,
             aes(
-                xmin = 1, xmax = SLength,
-                y = Analysis, # y = AccNum
-                label = ShortName
+                xmin = 1, xmax = .data$SLength,
+                y = .data$Analysis, # y = AccNum
+                label = .data$ShortName
             )
         ) +
             geom_subgene_arrow(data = ipr_out_sub, aes_string(
@@ -295,7 +297,7 @@ plotIPR2VizWeb <- function(infile_ipr,
     ## @SAM, colnames, merges, everything neeeds to be done now based on the
     ## combined lookup table from "common_data"
     lookup_tbl_path <- "/data/research/jravilab/common_data/cln_lookup_tbl.tsv"
-    lookup_tbl <- read_tsv(lookup_tbl_path, col_names = T, col_types = lookup_table_cols)
+    lookup_tbl <- read_tsv(lookup_tbl_path, col_names = T, col_types = MolEvolvR::lookup_table_cols)
 
     ## Read IPR file and subset by Accessions
     ipr_out <- read_tsv(infile_ipr, col_names = T)
@@ -303,7 +305,7 @@ plotIPR2VizWeb <- function(infile_ipr,
     ## Need to fix eventually based on 'real' gene orientation!
     ipr_out$Strand <- rep("forward", nrow(ipr_out))
 
-    ipr_out <- ipr_out %>% arrange(AccNum, StartLoc, StopLoc)
+    ipr_out <- ipr_out %>% arrange(.data$AccNum, .data$StartLoc, .data$StopLoc)
     ipr_out_sub <- filter(
         ipr_out,
         grepl(pattern = analysis, x = Analysis)
