@@ -34,14 +34,12 @@ aro_index <- read.delim("CARD_data/aro_index.tsv", sep = "\t", header = TRUE)
 antibiotics_data <- read.delim("CARD_data/shortname_antibiotics.tsv", sep = "\t", header = TRUE)
 pathogens_data <- read.delim("CARD_data/shortname_pathogens.tsv", sep = "\t", header = TRUE)
 
-
-colnames(aro_index)
 # View the first few rows to ensure data is loaded correctly
 head(aro_index)
 head(antibiotics_data)
 head(pathogens_data)
 
-# Step 2: Split CARD.Short.Name into pathogen, gene, and drug (if applicable)
+# Split CARD.Short.Name into pathogen, gene, and drug
 aro_index <- aro_index %>%
   mutate(
     pathogen = sapply(strsplit(CARD.Short.Name, "_"), `[`, 1),   # First part: Pathogen
