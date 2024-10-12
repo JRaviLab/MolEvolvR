@@ -72,14 +72,6 @@ addLineage <- function(df, acc_col = "AccNum", assembly_path,
 
       merged <- merge(df, lins, by.x = acc_col, by.y = "Protein", all.x = TRUE)
       return(merged)
-    }, error = function(e) {
-      print(paste("Error: ", e$message))
-    }, warning = function(w) {
-      print(paste("Warning: ", w$message))
-    }, finally = {
-      print("addLineages function execution completed.")
-    })
-
 }
 
 
@@ -247,13 +239,6 @@ IPG2Lineage <- function(accessions, ipg_file, assembly_path, lineagelookup_path,
     lins <- lins[!is.na(Lineage)] %>% unique()
 
     return(lins)
-  }, error = function(e) {
-    print(paste("An error occurred: ", e$message))
-  }, warning = function(w) {
-    print(paste("Warning: ", w$message))
-  }, finally = {
-    print("ipg2lin function execution completed.")
-  })
 }
 
 
