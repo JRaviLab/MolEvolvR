@@ -2,7 +2,7 @@
 % Please edit documentation in R/CHANGED-pre-msa-tree.R, R/pre-msa-tree.R
 \name{alignFasta}
 \alias{alignFasta}
-\title{Perform a Multiple Sequence Alignment on a FASTA file.}
+\title{alignFasta}
 \usage{
 alignFasta(fasta_file, tool = "Muscle", outpath = NULL)
 
@@ -21,6 +21,8 @@ aligned fasta sequence as a MsaAAMultipleAlignment object
 aligned fasta sequence as a MsaAAMultipleAlignment object
 }
 \description{
+Perform a Multiple Sequence Alignment on a FASTA file.
+
 Perform a Multiple Sequence Alignment on a FASTA file.
 }
 \author{
