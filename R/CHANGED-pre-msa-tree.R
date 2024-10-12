@@ -645,7 +645,7 @@ writeMSA_AA2FA <- function(alignment, outpath) {
     return(fasta)
 }
 
-#' Get accnums from fasta file
+#' getAccNumFromFA
 #'
 #' @param fasta_file
 #'
@@ -655,7 +655,7 @@ writeMSA_AA2FA <- function(alignment, outpath) {
 #' @export
 #'
 #' @examples
-get_accnums_from_fasta_file <- function(fasta_file) {
+getAccNumFromFA <- function(fasta_file) {
     txt <- read_file(fasta_file)
     accnums <- stringi::stri_extract_all_regex(fasta_file, "(?<=>)[\\w,.]+")[[1]]
     return(accnums)
