@@ -16,78 +16,47 @@
 #'
 #' @examples
 #' \dontrun{
-#' sink.reset()
+#' sinkReset()
 #' }
-sink.reset <- function() {
-  # Handle all errors and warnings
-  tryCatch({
+sinkReset <- function() {
     for (i in seq_len(sink.number())) {
       sink(NULL)
     }
-    print("All sinks closed")
-  }, error = function(e) {
-    print(paste("Error: ", e$message))
-  }, warning = function(w) {
-    print(paste("Warning: ", w$message))
-  }, finally = {
-    print("resetSink function execution completed.")
-  })
 }
 
 
-#' Add Lineages
+#' addLineage
 #'
-#' @param df
-#' @param acc_col
-#' @param assembly_path
-#' @param lineagelookup_path
-#' @param ipgout_path
-#' @param plan
+#' @param df A `data.frame` containing the input data. One column must contain 
+#' the accession numbers.
+#' @param acc_col A string specifying the column name in `df` that holds the 
+#' accession numbers. Defaults to `"AccNum"`.
+#' @param assembly_path A string specifying the path to the `assembly_summary.txt` 
+#' file. This file contains metadata about assemblies.
+#' @param lineagelookup_path A string specifying the path to the lineage lookup 
+#' file, which contains a mapping from tax IDs to their corresponding lineages.
+#' @param ipgout_path (Optional) A string specifying the path where IPG database 
+#' fetch results will be saved. If `NULL`, the results are not written to a file.
+#' @param plan A string specifying the parallelization strategy for the future
+#' package, such as `"sequential"` or `"multisession"`.
 #'
 #' @importFrom dplyr pull
 #' @importFrom magrittr %>%
 #' @importFrom rlang sym
 #'
-#' @return Describe return, in detail
+#' @return A `data.frame` that combines the original `df` with the lineage 
+#' information.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' add_lins()
+#' addLineage()
 #' }
-add_lins <- function(df, acc_col = "AccNum", assembly_path,
-                     lineagelookup_path, ipgout_path = NULL,
-                     plan = "sequential") {
-  # check for validate inputs
-  if (!is.data.frame(df)) {
-    stop("Input 'df' must be a data frame.")
-  }
-
-  if (!acc_col %in% colnames(df)) {
-    stop(paste("Column", acc_col, "not found in data frame."))
-  }
-
-  # Ensure paths are character strings
-  if (!is.character(assembly_path) || !is.character(lineagelookup_path)) {
-    stop("Both 'assembly_path' and 
-         'lineagelookup_path' must be character strings.")
-  }
-
-  # Ensure paths exist
-  if (!file.exists(assembly_path)) {
-    stop(paste("Assembly file not found at:", assembly_path))
-  }
-
-  if (!file.exists(lineagelookup_path)) {
-    stop(paste("Lineage lookup file not found at:", lineagelookup_path))
-  }
-    tryCatch({
-      # Attempt to add lineages
-      acc_col <- sym(acc_col)
-      accessions <- df %>% pull(acc_col)
-      lins <- acc2lin(
-        accessions, assembly_path, lineagelookup_path, ipgout_path, plan
-      )
+addLineage <- function(df, acc_col = "AccNum", assembly_path,
+    lineagelookup_path, ipgout_path = NULL, plan = "sequential", ...) {
+    s_acc_col <- sym(acc_col)
+    accessions <- df %>% pull(acc_col)
+    lins <- acc2Lineage(accessions, assembly_path, lineagelookup_path, ipgout_path, plan)
 
       # Drop a lot of the unimportant columns for now? 
       # will make merging much easier
@@ -114,54 +83,42 @@ add_lins <- function(df, acc_col = "AccNum", assembly_path,
 }
 
 
-#' acc2lin
+#' acc2Lineage
 #'
 #' @author Samuel Chen, Janani Ravi
 #'
-#' @description This function combines 'efetch_ipg()'
-#'              and 'ipg2lin()' to map a set
+#' @description This function combines 'efetchIPG()' and 'IPG2Lineage()' to map a set
 #' of protein accessions to their assembly (GCA_ID), tax ID, and lineage.
 #'
 #' @param accessions Character vector of protein accessions
 #' @param assembly_path String of the path to the assembly_summary path
-#' This file can be generated using the "DownloadAssemblySummary()" function
+#' This file can be generated using the \link[MolEvolvR]{downloadAssemblySummary} function
 #' @param lineagelookup_path String of the path to the lineage lookup file
 #' (taxid to lineage mapping). This file can be generated using the
 #' @param ipgout_path Path to write the results 
 #'                    of the efetch run of the accessions
 #' on the ipg database. If NULL, the file will not be written. Defaults to NULL
-#' @param plan
+#' @param plan A string specifying the parallelization strategy for the future
+#' package, such as `"sequential"` or `"multisession"`.
 #'
-#' @return Describe return, in detail
+#' @return A `data.table` that contains the lineage information, mapping protein 
+#' accessions to their tax IDs and lineages.
+#' @export
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' acc2lin()
+#' acc2Lineage()
 #' }
-acc2lin <- function(accessions, assembly_path, 
-                    lineagelookup_path, ipgout_path = NULL, 
-                    plan = "sequential") {
-  tmp_ipg <- F
-  if (is.null(ipgout_path)) {
-    tmp_ipg <- T
-    ipgout_path <- tempfile("ipg", fileext = ".txt")
-  }
+acc2Lineage <- function(accessions, assembly_path, lineagelookup_path, ipgout_path = NULL, plan = "sequential", ...) {
+    tmp_ipg <- F
+    if (is.null(ipgout_path)) {
+        tmp_ipg <- T
+        ipgout_path <- tempfile("ipg", fileext = ".txt")
+    }
+    efetchIPG(accessions, out_path = ipgout_path, plan)
 
-  lins <- NULL
-  tryCatch({
-    # Attempt to fetch IPG
-    efetch_ipg(accessions, out_path = ipgout_path, plan)
-
-    # Attempt to process IPG to lineages
-    lins <- ipg2lin(accessions, ipgout_path, assembly_path, lineagelookup_path)
-  }, error = function(e) {
-    print(paste("An error occurred: ", e$message))
-  }, warning = function(w) {
-    print(paste("Warning: ", w$message))
-  }, finally = {
-    print("acc2lin function execution completed.")
-  })
+    lins <- IPG2Lineage(accessions, ipgout_path, assembly_path, lineagelookup_path)
 
   if (tmp_ipg) {
     unlink(tempdir(), recursive = T)
@@ -169,8 +126,7 @@ acc2lin <- function(accessions, assembly_path,
   return(lins)
 }
 
-
-#' efetch_ipg
+#' efetchIPG
 #'
 #' @author Samuel Chen, Janani Ravi
 #'
@@ -180,39 +136,27 @@ acc2lin <- function(accessions, assembly_path,
 #' @param accnums Character vector containing the accession numbers to query on
 #' the ipg database
 #' @param out_path Path to write the efetch results to
-#' @param plan
+#' @param plan A string specifying the parallelization strategy for the future
+#' package, such as `"sequential"` or `"multisession"`.
 #'
 #' @importFrom furrr future_map
 #' @importFrom future plan
 #' @importFrom rentrez entrez_fetch
 #'
-#' @return Describe return, in detail
+#' @return No return value. The function writes the fetched results to `out_path`.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' efetch_ipg()
+#' efetchIPG()
 #' }
-efetch_ipg <- function(accnums, out_path, plan = "sequential") {
-  # Argument validation
-  if (!is.character(accnums) || length(accnums) == 0) {
-    stop("Error: 'accnums' must be a non-empty character vector.")
-  }
-
-  if (!is.character(out_path) || nchar(out_path) == 0) {
-    stop("Error: 'out_path' must be a non-empty string.")
-  }
-
-  if (!is.function(plan)) {
-    stop("Error: 'plan' must be a valid plan function.")
-  }
-  if (length(accnums) > 0) {
-    partition <- function(in_data, groups) {
-      # \\TODO This function should be defined outside of efetch_ipg().
-      # It can be non-exported/internal
-      # Partition data to limit number of queries per second for rentrez fetch:
-      # limit of 10/second w/ key
-      l <- length(in_data)
+efetchIPG <- function(accnums, out_path, plan = "sequential", ...) {
+    if (length(accnums) > 0) {
+        partition <- function(in_data, groups) {
+            # \\TODO This function should be defined outside of efetchIPG(). It can be non-exported/internal
+            # Partition data to limit number of queries per second for rentrez fetch:
+            # limit of 10/second w/ key
+            l <- length(in_data)
 
       partitioned <- list()
       for (i in 1:groups){
@@ -260,7 +204,7 @@ efetch_ipg <- function(accnums, out_path, plan = "sequential") {
 
 
 
-#' ipg2lin
+#' IPG2Lineage
 #'
 #' @author Samuel Chen, Janani Ravi
 #'
@@ -274,48 +218,23 @@ efetch_ipg <- function(accnums, out_path, plan = "sequential") {
 #'               'accessions' should be contained in this
 #' file
 #' @param assembly_path String of the path to the assembly_summary path
-#' This file can be generated using the "DownloadAssemblySummary()" function
+#' This file can be generated using the \link[MolEvolvR]{downloadAssemblySummary} function
 #' @param lineagelookup_path String of the path to the lineage lookup file
 #' (taxid to lineage mapping). This file can be generated using the
 #' "createLineageLookup()" function
 #'
 #' @importFrom data.table fread
 #'
-#' @return Describe return, in detail
+#' @return A `data.table` with the lineage information for the provided protein 
+#' accessions.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' ipg2lin()
+#' IPG2Lineage()
 #' }
 #'
-ipg2lin <- function(accessions, ipg_file, assembly_path, lineagelookup_path) {
-  # Argument validation for accessions
-  if (!is.character(accessions) || length(accessions) == 0) {
-    stop("Input 'accessions' must be a non-empty character vector.")
-  }
-
-  # check for validate inputs
-  if (!is.character(ipg_file)) {
-    stop("Input 'ipg_file' must be a character string.")
-  }
-  # Ensure paths are character strings
-  if (!is.character(assembly_path) || !is.character(lineagelookup_path)) {
-    stop("Both 'assembly_path' and 
-         'lineagelookup_path' must be character strings.")
-  }
-
-  # Ensure paths exist
-  if (!file.exists(assembly_path)) {
-    stop(paste("Assembly file not found at:", assembly_path))
-  }
-
-  if (!file.exists(lineagelookup_path)) {
-    stop(paste("Lineage lookup file not found at:", lineagelookup_path))
-  }
-
-  try({
-    # Attempt to read the IPG file
+IPG2Lineage <- function(accessions, ipg_file, assembly_path, lineagelookup_path, ...) {
     ipg_dt <- fread(ipg_file, sep = "\t", fill = T)
 
     # Filter the IPG data table to only include the accessions
@@ -324,10 +243,7 @@ ipg2lin <- function(accessions, ipg_file, assembly_path, lineagelookup_path) {
     # Rename the 'Assembly' column to 'GCA_ID'
     ipg_dt <- setnames(ipg_dt, "Assembly", "GCA_ID")
 
-    # Convert the IPG data table to a lineage data table
-    lins <- GCA2Lins(prot_data = ipg_dt, assembly_path, lineagelookup_path)
-
-    # Filter out rows with missing lineage information
+    lins <- GCA2Lineage(prot_data = ipg_dt, assembly_path, lineagelookup_path)
     lins <- lins[!is.na(Lineage)] %>% unique()
 
     return(lins)
@@ -344,7 +260,7 @@ ipg2lin <- function(accessions, ipg_file, assembly_path, lineagelookup_path) {
 
 
 
-# efetch_ipg <- function(accnums, outpath)
+# efetchIPG <- function(accnums, outpath)
 # {
 #   SIZE = 250
 #   lower_bound = 1

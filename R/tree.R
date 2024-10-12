@@ -1,6 +1,6 @@
 ## Generating Phylogenetic Trees from Alignment Fasta files
 ## Includes the following functions:
-## generate_trees, convert_fa2tre, generate_fa2tre
+## convertAlignment2Trees, convertFA2Tree, createFA2Tree
 ## Modified: Jan, 2020
 ## Janani Ravi (@jananiravi), Molecular Ecologist (@molecologist)
 
@@ -35,17 +35,26 @@
 ## Approach 0 | FastTree2.0
 ###########################
 ## !! FastTree will only work if there are unique sequence names!!
-#' convert_fa2tre
+#' convertFA2Tree
 #'
-#' @param fa_path
-#' @param tre_path
-#' @param fasttree_path
+#' @param fa_path Path to the input FASTA alignment file (.fa). Default is the 
+#' path to "data/alns/pspa_snf7.fa".
+#' @param tre_path Path to the output file where the generated tree (.tre) will 
+#' be saved. Default is the path to "data/alns/pspa_snf7.tre".
+#' @param fasttree_path Path to the FastTree executable, which is used to 
+#' generate the phylogenetic tree. Default is "src/FastTree".
 #'
-#' @return
+#' @return No return value. The function generates a tree file (.tre) from the 
+#' input FASTA file.
 #' @export
 #'
 #' @examples
-convert_fa2tre <- function(fa_path = here("data/alns/pspa_snf7.fa"),
+#' \dontrun{
+#' convert_fa2tre(here("data/alns/pspa_snf7.fa"), 
+#'                 here("data/alns/pspa_snf7.tre"), 
+#'                 here("src/FastTree")
+#' }
+convertFA2Tree <- function(fa_path = here("data/alns/pspa_snf7.fa"),
     tre_path = here("data/alns/pspa_snf7.tre"),
     fasttree_path = here("src/FastTree")) {
     # fa_path=here("data/alns/pspa_snf7.fa")
@@ -67,22 +76,28 @@ convert_fa2tre <- function(fa_path = here("data/alns/pspa_snf7.fa"),
     #              here("src/FastTree.c"), "-lm", collapse=" "))
 }
 ## Generate Trees for ALL fasta files in "data/alns"
-#' generate_trees
+#' convertAlignment2Trees
 #'
 #' @description
 #' Generate Trees for ALL fasta files in "data/alns"
 #'
-#' @param aln_path
+#' @param aln_path Path to the directory containing all the alignment FASTA 
+#' files (.fa) for which trees will be generated. Default is "data/alns/".
+#' 
 #'
 #' @importFrom here here
 #' @importFrom purrr pmap
 #' @importFrom stringr str_replace_all
 #'
-#' @return
+#' @return No return value. The function generates tree files (.tre) for each 
+#' alignment file in the specified directory.
 #' @export
 #'
 #' @examples
-generate_trees <- function(aln_path = here("data/alns/")) {
+#' \dontrun{
+#' generate_trees(here("data/alns/"))
+#' }
+convertAlignment2Trees <- function(aln_path = here("data/alns/")) {
     # finding all fasta alignment files
     fa_filenames <- list.files(path = aln_path, pattern = "*.fa")
     fa_paths <- paste0(aln_path, fa_filenames)
@@ -96,7 +111,7 @@ generate_trees <- function(aln_path = here("data/alns/")) {
         tre_path = paste0(aln_path, variable, ".tre")
     )
     pmap(
-        .l = fa2tre_args, .f = convert_fa2tre,
+        .l = fa2tre_args, .f = convertFA2Tree,
         fasttree_path = here("src/FastTree")
     )
 }
@@ -104,23 +119,26 @@ generate_trees <- function(aln_path = here("data/alns/")) {
 ##############################
 ## REFS: 1-4
 ############
-#' generate_fa2tre
+#' createFA2Tree
 #'
 #' @author Janani Ravi, MolEcologist
 #' @keywords phylogenetic tree, alignment, fasta
 #' @description
 #' Generating phylogenetic tree from alignment file '.fa'
 #'
-#' @param fa_file Character. Path to file.
-#'  Default is 'pspa_snf7.fa'
-#' @param out_file
+#' @param fa_file Character. Path to the alignment FASTA file (.fa) from which
+#'  the phylogenetic tree will be generated. Default is 'pspa_snf7.fa'.
+#' @param out_file Path to the output file where the generated tree (.tre) will 
+#' be saved. Default is "data/alns/pspa_snf7.tre".
 #'
 #' @importFrom ape write.tree
 #' @importFrom phangorn bootstrap.pml dist.ml NJ modelTest phyDat plotBS pml pml.control pratchet optim.parsimony optim.pml read.phyDat upgma
 #' @importFrom seqinr dist.alignment read.alignment
 #' @importFrom stats logLik
 #'
-#' @return
+#' @return No return value. The function generates a phylogenetic tree file 
+#' (.tre) based on different approaches like Neighbor Joining, UPGMA, and 
+#' Maximum Likelihood.
 #' @export
 #'
 #' @details The alignment file would need two columns: 1. accession +
@@ -134,7 +152,7 @@ generate_trees <- function(aln_path = here("data/alns/")) {
 #' \dontrun{
 #' generate_aln2tree("pspa_snf7.fa")
 #' }
-generate_fa2tre <- function(fa_file = "data/alns/pspa_snf7.fa",
+createFA2Tree <- function(fa_file = "data/alns/pspa_snf7.fa",
     out_file = "data/alns/pspa_snf7.tre") {
     ## SAMPLE ARGS
     # fa_file="data/alns/pspa_snf7.fa"
