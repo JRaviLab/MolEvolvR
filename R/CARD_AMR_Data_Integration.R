@@ -80,7 +80,7 @@ merged_data_antibiotics <- left_join(aro_index_clean, antibiotics_data,
 merged_data_pathogens <- left_join(merged_data_antibiotics, pathogens_data,
                                    by = c("pathogen" = "Abbreviation"))
 
-#Remove duplicate rows (if any) and filter out rows where pathogen is empty
+#Remove duplicate rows and filter out rows where pathogen is empty
 cleaned_data <- merged_data_pathogens %>%
   distinct() %>%
   filter(!is.na(pathogen))
