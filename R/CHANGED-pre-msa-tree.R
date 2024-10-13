@@ -117,7 +117,7 @@ addLeaves2Alignment <- function(aln_file = "",
     }
 
     colnames(aln) <- c("AccNum", "Alignment")
-
+    
     aln_lin <- left_join(aln, lin, by = "AccNum") %>%
         select(
             AccNum, Alignment,
@@ -286,6 +286,7 @@ addName <- function(data,
 #' addLeaves2Alignment("pspa_snf7.aln", "pspa.txt")
 #' }
 #'
+#' @importFrom data.table data.table
 convertAlignment2FA <- function(aln_file = "",
     lin_file = "data/rawdata_tsv/all_semiclean.txt", # !! finally change to all_clean.txt!!
     fa_outpath = "",
@@ -670,7 +671,7 @@ writeMSA_AA2FA <- function(alignment, outpath) {
 #' @examples
 getAccNumFromFA <- function(fasta_file) {
     txt <- read_file(fasta_file)
-    accnums <- stringi::stri_extract_all_regex(fasta_file, "(?<=>)[\\w,.]+")[[1]]
+    accnums <- stringi::stri_extract_all_regex(txt, "(?<=>)[\\w,.]+")[[1]]
     return(accnums)
 }
 
