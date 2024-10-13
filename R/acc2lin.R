@@ -5,6 +5,7 @@
 # suppressPackageStartupMessages(library(data.table))
 # suppressPackageStartupMessages(library(tidyverse))
 # suppressPackageStartupMessages(library(biomartr))
+suppressPackageStartupMessages(library(rlang))
 
 # https://stackoverflow.com/questions/18730491/sink-does-not-release-file
 #' Sink Reset
@@ -24,13 +25,18 @@ sinkReset <- function() {
     for (i in seq_len(sink.number())) {
       sink(NULL)
     }
-    print("All sinks closed")
+    inform("All sinks closed", class = "sink_reset_info")
   }, error = function(e) {
-    print(paste("Error: ", e$message))
+    abort(paste("Error: ", e$message), class = "sink_reset_error")
   }, warning = function(w) {
-    print(paste("Warning: ", w$message))
+    warn(paste("Warning: ", w$message), class = "sink_reset_warning")
   }, finally = {
-    print("resetSink function execution completed.")
+    # If any additional cleanup is needed, it can be done here
+    if (sink.number() > 0) {
+      # Additional cleanup if sinks are still open
+      inform("Some sinks remain open, ensure proper cleanup.",
+             class = "sink_cleanup_warning")
+    }
   })
 }
 
@@ -56,60 +62,64 @@ sinkReset <- function() {
 #' addLineage()
 #' }
 addLineage <- function(df, acc_col = "AccNum", assembly_path,
-                     lineagelookup_path, ipgout_path = NULL,
-                     plan = "sequential", ...) {
+                       lineagelookup_path, ipgout_path = NULL,
+                       plan = "sequential", ...) {
   # check for validate inputs
   if (!is.data.frame(df)) {
-    stop("Input 'df' must be a data frame.")
+    abort("Input 'df' must be a data frame.", class = "input_error")
   }
 
   if (!acc_col %in% colnames(df)) {
-    stop(paste("Column", acc_col, "not found in data frame."))
+    abort(paste("Column", acc_col, 
+                "not found in data frame."), class = "column_error")
   }
 
   # Ensure paths are character strings
   if (!is.character(assembly_path) || !is.character(lineagelookup_path)) {
-    stop("Both 'assembly_path' and 
-         'lineagelookup_path' must be character strings.")
+    abort("Both 'assembly_path' and 
+          'lineagelookup_path' must be character strings.",
+          class = "path_type_error")
   }
 
   # Ensure paths exist
   if (!file.exists(assembly_path)) {
-    stop(paste("Assembly file not found at:", assembly_path))
+    abort(paste("Assembly file not found at:",
+                assembly_path), class = "file_not_found_error")
   }
 
   if (!file.exists(lineagelookup_path)) {
-    stop(paste("Lineage lookup file not found at:", lineagelookup_path))
+    abort(paste("Lineage lookup file not found at:",
+                lineagelookup_path), class = "file_not_found_error")
   }
-    tryCatch({
-      # Attempt to add lineages
-      acc_col <- sym(acc_col)
-      accessions <- df %>% pull(acc_col)
-      lins <- acc2Lineage(
-        accessions, assembly_path, lineagelookup_path, ipgout_path, plan
-      )
+  tryCatch({
+    # Attempt to add lineages
+    acc_col <- sym(acc_col)
+    accessions <- df %>% pull(acc_col)
+    lins <- acc2Lineage(
+      accessions, assembly_path, lineagelookup_path, ipgout_path, plan
+    )
 
-      # Drop a lot of the unimportant columns for now? 
-      # will make merging much easier
-      lins <- lins[, c(
-        "Strand", "Start", "Stop", "Nucleotide Accession", "Source",
-        "Id", "Strain"
-      ) := NULL]
-      lins <- unique(lins)
+    # Drop a lot of the unimportant columns for now? 
+    # will make merging much easier
+    lins <- lins[, c(
+      "Strand", "Start", "Stop", "Nucleotide Accession", "Source",
+      "Id", "Strain"
+    ) := NULL]
+    lins <- unique(lins)
 
-      # dup <- lins %>% group_by(Protein) %>% 
-      # summarize(count = n()) %>% filter(count > 1) %>%
-      # pull(Protein)
+    # dup <- lins %>% group_by(Protein) %>% 
+    # summarize(count = n()) %>% filter(count > 1) %>%
+    # pull(Protein)
 
-      merged <- merge(df, lins, by.x = acc_col, by.y = "Protein", all.x = TRUE)
-      return(merged)
-    }, error = function(e) {
-      print(paste("Error: ", e$message))
-    }, warning = function(w) {
-      print(paste("Warning: ", w$message))
-    }, finally = {
-      print("addLineages function execution completed.")
-    })
+    merged <- merge(df, lins, by.x = acc_col, by.y = "Protein", all.x = TRUE)
+    return(merged)
+  }, error = function(e) {
+    abort(paste("Error during lineage addition:", e$message),
+          class = "lineage_addition_error")
+  }, warning = function(w) {
+    warn(paste("Warning during lineage addition:", w$message),
+         class = "lineage_addition_warning")
+  })
 
 }
 
@@ -140,11 +150,11 @@ addLineage <- function(df, acc_col = "AccNum", assembly_path,
 #' acc2Lineage()
 #' }
 acc2Lineage <- function(accessions, assembly_path, 
-                    lineagelookup_path, ipgout_path = NULL, 
-                    plan = "sequential", ...) {
+                        lineagelookup_path, ipgout_path = NULL, 
+                        plan = "sequential", ...) {
   tmp_ipg <- F
   if (is.null(ipgout_path)) {
-    tmp_ipg <- T
+    tmp_ipg <- TRUE
     ipgout_path <- tempfile("ipg", fileext = ".txt")
   }
 
@@ -154,18 +164,41 @@ acc2Lineage <- function(accessions, assembly_path,
     efetchIPG(accessions, out_path = ipgout_path, plan)
 
     # Attempt to process IPG to lineages
-    lins <- IPG2Lineage(accessions, ipgout_path, assembly_path, lineagelookup_path)
+    lins <- IPG2Lineage(accessions, ipgout_path,
+                        assembly_path, lineagelookup_path)
   }, error = function(e) {
-    print(paste("An error occurred: ", e$message))
+    abort(
+      message = paste("An error occurred during IPG fetching
+                      or lineage processing:", e$message),
+      class = "lineage_processing_error",
+      # capturing the call stack
+      call = sys.call(),
+      # adding additional context
+      accessions = accessions,
+      assembly_path = assembly_path,
+      lineagelookup_path = lineagelookup_path,
+      ipgout_path = ipgout_path,
+      plan = plan
+    )
   }, warning = function(w) {
-    print(paste("Warning: ", w$message))
+    warn(
+      message = paste("Warning during IPG fetching
+                      or lineage processing:", w$message),
+      class = "lineage_processing_warning",
+      call = sys.call(), # capturing the call stack
+      accessions = accessions,
+      assembly_path = assembly_path,
+      lineagelookup_path = lineagelookup_path,
+      ipgout_path = ipgout_path,
+      plan = plan
+    )
   }, finally = {
-    print("acc2lin function execution completed.")
+    # Cleanup: delete temporary IPG file if it was created
+    if (tmp_ipg && file.exists(ipgout_path)) {
+      unlink(ipgout_path)
+    }
   })
 
-  if (tmp_ipg) {
-    unlink(tempdir(), recursive = T)
-  }
   return(lins)
 }
 
@@ -196,15 +229,18 @@ acc2Lineage <- function(accessions, assembly_path,
 efetchIPG <- function(accnums, out_path, plan = "sequential", ...) {
   # Argument validation
   if (!is.character(accnums) || length(accnums) == 0) {
-    stop("Error: 'accnums' must be a non-empty character vector.")
+    abort("Error: 'accnums' must be a non-empty character vector.",
+          class = "validation_error")
   }
 
   if (!is.character(out_path) || nchar(out_path) == 0) {
-    stop("Error: 'out_path' must be a non-empty string.")
+    abort("Error: 'out_path' must be a non-empty string.",
+          class = "validation_error")
   }
 
   if (!is.function(plan)) {
-    stop("Error: 'plan' must be a valid plan function.")
+    abort("Error: 'plan' must be a valid plan function.",
+          class = "validation_error")
   }
   if (length(accnums) > 0) {
     partition <- function(in_data, groups) {
@@ -249,11 +285,26 @@ efetchIPG <- function(accnums, out_path, plan = "sequential", ...) {
       })
       sink(NULL)
     }, error = function(e) {
-      print(paste("An error occurred: ", e$message))
+      abort(
+        message = paste("An error occurred: ", e$message),
+        class = "fetch_error",
+        call = sys.call(),
+        accnums = accnums,
+        out_path = out_path,
+        plan = plan
+      )
     }, warning = function(w) {
-      print(paste("Warning: ", w$message))
+      warn(
+        message = paste("Warning: ", w$message),
+        class = "fetch_warning",
+        call = sys.call(),
+        accnums = accnums,
+        out_path = out_path,
+        plan = plan
+      )
     }, finally = {
-      print("efetch_ipg function execution completed.")
+      # Ensure the sink is closed in case of errors
+      if (sink.number() > 0) sink(NULL)
     })
   }
 }
@@ -289,31 +340,38 @@ efetchIPG <- function(accnums, out_path, plan = "sequential", ...) {
 #' IPG2Lineage()
 #' }
 #'
-IPG2Lineage <- function(accessions, ipg_file, assembly_path, lineagelookup_path, ...) {
+IPG2Lineage <- function(accessions, ipg_file,
+                        assembly_path, lineagelookup_path, ...) {
   # Argument validation for accessions
   if (!is.character(accessions) || length(accessions) == 0) {
-    stop("Input 'accessions' must be a non-empty character vector.")
+    abort("Input 'accessions' must be a non-empty
+          character vector.", class = "validation_error")
   }
 
   # check for validate inputs
   if (!is.character(ipg_file)) {
-    stop("Input 'ipg_file' must be a character string.")
+    abort("Input 'ipg_file' must be a
+          character string.", class = "validation_error")
   }
+
   # Ensure paths are character strings
   if (!is.character(assembly_path) || !is.character(lineagelookup_path)) {
-    stop("Both 'assembly_path' and 
-         'lineagelookup_path' must be character strings.")
+    abort("Both 'assembly_path' and 'lineagelookup_path'
+          must be character strings.", class = "validation_error")
   }
 
   # Ensure paths exist
   if (!file.exists(assembly_path)) {
-    stop(paste("Assembly file not found at:", assembly_path))
+    abort(paste("Assembly file not found at:", assembly_path),
+          class = "file_error")
   }
 
   if (!file.exists(lineagelookup_path)) {
-    stop(paste("Lineage lookup file not found at:", lineagelookup_path))
+    abort(paste("Lineage lookup file not found at:", lineagelookup_path),
+          class = "file_error")
   }
 
+  # Process the IPG file
   try({
     # Attempt to read the IPG file
     ipg_dt <- fread(ipg_file, sep = "\t", fill = T)
@@ -332,12 +390,27 @@ IPG2Lineage <- function(accessions, ipg_file, assembly_path, lineagelookup_path,
 
     return(lins)
   }, error = function(e) {
-    print(paste("An error occurred: ", e$message))
+    abort(
+      message = paste("An error occurred: ", e$message),
+      class = "processing_error",
+      call = sys.call(),
+      accessions = accessions,
+      ipg_file = ipg_file,
+      assembly_path = assembly_path,
+      lineagelookup_path = lineagelookup_path
+    )
   }, warning = function(w) {
-    print(paste("Warning: ", w$message))
-  }, finally = {
-    print("ipg2lin function execution completed.")
+    warn(
+      message = paste("Warning: ", w$message),
+      class = "processing_warning",
+      call = sys.call(),
+      accessions = accessions,
+      ipg_file = ipg_file,
+      assembly_path = assembly_path,
+      lineagelookup_path = lineagelookup_path
+    )
   })
+
 }
 
 
