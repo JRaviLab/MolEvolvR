@@ -2,7 +2,7 @@
 % Please edit documentation in R/assign_job_queue.R
 \name{mapAdvOption2Process}
 \alias{mapAdvOption2Process}
-\title{Use MolEvolvR advanced options to get associated processes}
+\title{mapAdvOption2Process}
 \usage{
 mapAdvOption2Process(advanced_opts)
 }

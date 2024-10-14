@@ -2,7 +2,7 @@
 % Please edit documentation in R/assign_job_queue.R
 \name{assignJobQueue}
 \alias{assignJobQueue}
-\title{Decision function to assign job queue}
+\title{assignJobQueue}
 \usage{
 assignJobQueue(t_sec_estimate, t_cutoff = 21600)
 }

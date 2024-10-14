@@ -2,7 +2,7 @@
 % Please edit documentation in R/assign_job_queue.R
 \name{mapOption2Process}
 \alias{mapOption2Process}
-\title{Construct list where names (MolEvolvR advanced options) point to processes}
+\title{mapOption2Process}
 \usage{
 mapOption2Process()
 }

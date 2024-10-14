@@ -2,8 +2,7 @@
 % Please edit documentation in R/assign_job_queue.R
 \name{calculateEstimatedWallTimeFromOpts}
 \alias{calculateEstimatedWallTimeFromOpts}
-\title{Given MolEvolvR advanced options and number of inputs,
-calculate the total estimated walltime for the job}
+\title{calculateEstimatedWallTimeFromOpts}
 \usage{
 calculateEstimatedWallTimeFromOpts(
   advanced_opts,

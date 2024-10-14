@@ -2,8 +2,7 @@
 % Please edit documentation in R/assign_job_queue.R
 \name{plotEstimatedWallTimes}
 \alias{plotEstimatedWallTimes}
-\title{Plot the estimated runtimes for different advanced options and number
-of inputs}
+\title{plotEstimatedWallTimes}
 \usage{
 plotEstimatedWallTimes()
 }
@@ -16,5 +15,8 @@ ggplot2::ggsave(filename = "/data/molevolvr_transfer/molevolvr_
 dev/molevol_scripts/docs/estimate_walltimes.png", plot = p)
 }
 \description{
+Plot the estimated runtimes for different advanced options and number
+of inputs
+
 this function was just for fun; very, very messy code
 }

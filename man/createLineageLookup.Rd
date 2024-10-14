@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_lineage_lookup.R
 \name{createLineageLookup}
 \alias{createLineageLookup}
-\title{Create a look up table that goes from TaxID, to Lineage}
+\title{createLineageLookup}
 \usage{
 createLineageLookup(
   lineage_file = here("data/rankedlineage.dmp"),

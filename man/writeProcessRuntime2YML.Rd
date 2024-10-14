@@ -2,8 +2,7 @@
 % Please edit documentation in R/assign_job_queue.R
 \name{writeProcessRuntime2YML}
 \alias{writeProcessRuntime2YML}
-\title{Compute median process runtimes, then write a YAML list of the processes and
-their median runtimes in seconds to the path specified by 'filepath'.}
+\title{writeProcessRuntime2YML}
 \usage{
 writeProcessRuntime2YML(dir_job_results, filepath = NULL)
 }
@@ -14,6 +13,9 @@ writeProcessRuntime2YML(dir_job_results, filepath = NULL)
 uses ./molevol_scripts/log_data/job_proc_weights.yml}
 }
 \description{
+Compute median process runtimes, then write a YAML list of the processes and
+their median runtimes in seconds to the path specified by 'filepath'.
+
 The default value of filepath is the value of the env var
 MOLEVOLVR_PROC_WEIGHTS, which writeProcessRuntime2YML() also uses as its default
 read location.

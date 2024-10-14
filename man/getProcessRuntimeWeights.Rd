@@ -2,7 +2,7 @@
 % Please edit documentation in R/assign_job_queue.R
 \name{getProcessRuntimeWeights}
 \alias{getProcessRuntimeWeights}
-\title{Quickly get the runtime weights for MolEvolvR backend processes}
+\title{getProcessRuntimeWeights}
 \usage{
 getProcessRuntimeWeights(medians_yml_path = NULL)
 }

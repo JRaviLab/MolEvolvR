@@ -3,6 +3,9 @@
 # library(biomartr)
 
 
+#' createLineageLookup
+#' 
+#' @description
 #' Create a look up table that goes from TaxID, to Lineage
 #'
 #' @author Samuel Chen

@@ -2,7 +2,7 @@
 % Please edit documentation in R/assign_job_queue.R
 \name{writeProcessRuntime2TSV}
 \alias{writeProcessRuntime2TSV}
-\title{Write a table of 2 columns: 1) process and 2) median seconds}
+\title{writeProcessRuntime2TSV}
 \usage{
 writeProcessRuntime2TSV(dir_job_results, filepath)
 }

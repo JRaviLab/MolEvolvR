@@ -2,7 +2,7 @@
 % Please edit documentation in R/assign_job_queue.R
 \name{calculateProcessRuntime}
 \alias{calculateProcessRuntime}
-\title{Scrape MolEvolvR logs and calculate median processes}
+\title{calculateProcessRuntime}
 \usage{
 calculateProcessRuntime(dir_job_results)
 }

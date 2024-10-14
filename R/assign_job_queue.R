@@ -6,6 +6,9 @@
 # file.path(common_root, "molevol_scripts", "R", "assignJobQueue.R")
 common_root <- Sys.getenv("COMMON_SRC_ROOT")
 
+#' mapOption2Process
+#' 
+#' @description
 #' Construct list where names (MolEvolvR advanced options) point to processes
 #'
 #' @return list where names (MolEvolvR advanced options) point to processes
@@ -22,6 +25,9 @@ mapOption2Process <- function() {
   return(opts2processes)
 }
 
+#' mapAdvOption2Process
+#' 
+#' @description
 #' Use MolEvolvR advanced options to get associated processes
 #'
 #' @param advanced_opts character vector of MolEvolvR advanced options
@@ -44,6 +50,9 @@ mapAdvOption2Process <- function(advanced_opts) {
   return(procs)
 }
 
+#' calculateProcessRuntime
+#' 
+#' @description
 #' Scrape MolEvolvR logs and calculate median processes
 #'
 #' @param dir_job_results [chr] path to MolEvolvR job_results
@@ -104,6 +113,9 @@ calculateProcessRuntime <- function(dir_job_results) {
   return(list_proc_medians)
 }
 
+#' writeProcessRuntime2TSV
+#' 
+#' @description
 #' Write a table of 2 columns: 1) process and 2) median seconds
 #'
 #' @param dir_job_results [chr] path to MolEvolvR job_results
@@ -136,6 +148,9 @@ writeProcessRuntime2TSV <- function(dir_job_results, filepath) {
   return(df_proc_medians)
 }
 
+#' writeProcessRuntime2YML
+#' 
+#' @description
 #' Compute median process runtimes, then write a YAML list of the processes and
 #' their median runtimes in seconds to the path specified by 'filepath'.
 #'
@@ -162,6 +177,9 @@ writeProcessRuntime2YML <- function(dir_job_results, filepath = NULL) {
   yaml::write_yaml(medians, filepath)
 }
 
+#' getProcessRuntimeWeights
+#' 
+#' @description
 #' Quickly get the runtime weights for MolEvolvR backend processes
 #'
 #' @param dir_job_results [chr] path to MolEvolvR job_results
@@ -213,6 +231,9 @@ getProcessRuntimeWeights <- function(medians_yml_path = NULL) {
   return(proc_weights)
 }
 
+#' calculateEstimatedWallTimeFromOpts
+#' 
+#' @description
 #' Given MolEvolvR advanced options and number of inputs,
 #' calculate the total estimated walltime for the job
 #'
@@ -279,6 +300,9 @@ calculateEstimatedWallTimeFromOpts	 <- function(advanced_opts,
 }
 
 
+#' assignJobQueue
+#' 
+#' @description
 #' Decision function to assign job queue
 #'
 #' @param t_sec_estimate estimated number of seconds a job will process
@@ -301,6 +325,9 @@ assignJobQueue <- function(
   return(queue)
 }
 
+#' plotEstimatedWallTimes
+#' 
+#' @description
 #' Plot the estimated runtimes for different advanced options and number
 #' of inputs
 #'
