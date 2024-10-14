@@ -157,40 +157,34 @@ efetchIPG <- function(accnums, out_path, plan = "sequential", ...) {
 
       return(partitioned)
     }
-    tryCatch({
-      # Set the future plan strategy
-      plan(strategy = plan, .skip = T)
+
+    # Set the future plan strategy
+    plan(strategy = plan, .skip = T)
 
 
-      min_groups <- length(accnums) / 200
-      groups <- min(max(min_groups, 15), length(accnums))
-      partitioned_acc <- partition(accnums, groups)
+    min_groups <- length(accnums) / 200
+    groups <- min(max(min_groups, 15), length(accnums))
+    partitioned_acc <- partition(accnums, groups)
 
-      # Open the sink to the output path
-      sink(out_path)
+    # Open the sink to the output path
+    sink(out_path)
 
-      a <- future_map(1:length(partitioned_acc), function(x) {
-        # Avoid hitting the rate API limit
-        if (x %% 9 == 0) {
-          Sys.sleep(1)
-        }
-        cat(
-          entrez_fetch(
-            id = partitioned_acc[[x]],
-            db = "ipg",
-            rettype = "xml",
-            api_key = "YOUR_KEY_HERE" ## Can this be included in public package?
-          )
+    a <- future_map(1:length(partitioned_acc), function(x) {
+      # Avoid hitting the rate API limit
+      if (x %% 9 == 0) {
+        Sys.sleep(1)
+      }
+      cat(
+        entrez_fetch(
+          id = partitioned_acc[[x]],
+          db = "ipg",
+          rettype = "xml",
+          api_key = "YOUR_KEY_HERE" ## Can this be included in public package?
         )
-      })
-      sink(NULL)
-    }, error = function(e) {
-      print(paste("An error occurred: ", e$message))
-    }, warning = function(w) {
-      print(paste("Warning: ", w$message))
-    }, finally = {
-      print("efetch_ipg function execution completed.")
+      )
     })
+    sink(NULL)
+
   }
 }
 
