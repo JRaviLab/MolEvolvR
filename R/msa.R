@@ -197,21 +197,21 @@ msa_pdf <- function(fasta_path, out_path = NULL,
 #'
 #' @examples
 generate_msa <- function(fa_file = "", outfile = "") {
-    prot_aa <- readAAStringSet(
-        path = fa_file,
-        format = "fasta"
-    )
-    prot_aa
+  prot_aa <- readAAStringSet(
+    fa_file,
+    format = "fasta"
+  )
+  prot_aa
 
-    ## Install kalign ?rMSA_INSTALL
-    ## Messed up! Reimplement from kalign.R
-    ## https://github.com/mhahsler/rMSA/blob/master/R/kalign.R
+  ## Install kalign ?rMSA_INSTALL
+  ## Messed up! Reimplement from kalign.R
+  ## https://github.com/mhahsler/rMSA/blob/master/R/kalign.R
 
-    # source("scripts/c2r.R")
+  # source("scripts/c2r.R")
 
-    ## align the sequences
-    al <- kalign(prot_aa) # !! won't work!
-    al
+  ## align the sequences
+  al <- kalign(prot_aa) # !! won't work!
+  al
 }
 
 ############################
