@@ -1,3 +1,4 @@
+suppressPackageStartupMessages(library(rlang))
 # for now, we're using an env var, COMMON_SRC_ROOT, to specify this folder since
 # the working directory is changed in many parts of the current molevolvr
 # pipeline.
@@ -22,11 +23,9 @@ make_opts2procs <- function() {
     )
     return(opts2processes)
   }, error = function(e) {
-    message(paste("Encountered an error: ", e$message))
+    abort(paste("Error: ", e$message), class = "Opts_to_process_error")
   }, warning = function(w) {
-    message(paste("Warning: ", w$message))
-  }, finally = {
-    message("make_opts2procs function execution completed.")
+    warn(paste("Warning: ", w$message), class = "Opts_to_process_warning")
   })
 
 }
@@ -44,7 +43,7 @@ make_opts2procs <- function() {
 #' @export
 map_advanced_opts2procs <- function(advanced_opts) {
   if (!is.character(advanced_opts)) {
-    stop("Argument must be a character vector!")
+    abort("Argument must be a character vector!", class = "validation_error")
   }
   tryCatch({
     # append 'always' to add procs that always run
@@ -56,11 +55,19 @@ map_advanced_opts2procs <- function(advanced_opts) {
     procs <- opts2proc[idx] |> unlist()
     return(procs)
   }, error = function(e) {
-    message(paste("Encountered an error: ", e$message))
+    abort(
+      message = paste("Encountered an error: ", e$message),
+      class = "map_advanced_opts2procs_error",
+      call = sys.call(),
+      advanced_opts = advanced_opts
+    )
   }, warning = function(w) {
-    message(paste("Warning: ", w$message))
-  }, finally = {
-    message("make_opts2procs function execution completed.")
+    warn(
+      message = paste("Warning: ", w$message),
+      class = "map_advanced_opts2procs_warning",
+      call = sys.call(),
+      advanced_opts = advanced_opts
+    )
   })
 
 }
@@ -91,12 +98,14 @@ get_proc_medians <- function(dir_job_results) {
   tryCatch({
     # Check if dir_job_results is a character string
     if (!is.character(dir_job_results) || length(dir_job_results) != 1) {
-      stop("Input 'dir_job_results' must be a single character string.")
+      abort("Input 'dir_job_results' must be a single character string.",
+            class = "validation_error")
     }
 
     # Check if dir_job_results exists
     if (!dir.exists(dir_job_results)) {
-      stop(paste("The directory", dir_job_results, "does not exist."))
+      abort(paste("The directory", dir_job_results, "does not exist."),
+            class = "file_error")
     }
 
     source(file.path(common_root, "molevol_scripts", "R", "metrics.R"))
@@ -135,11 +144,10 @@ get_proc_medians <- function(dir_job_results) {
       as.list()
     return(list_proc_medians)
   }, error = function(e) {
-    message(paste("Encountered an error: ", e$message))
+    abort(paste("Encountered an error: ", e$message),
+          class = "processing_error")
   }, warning = function(w) {
-    message(paste("Warning: ", w$message))
-  }, finally = {
-    message("get_proc_medians function execution completed.")
+    warn(paste("Warning: ", w$message), class = "processing_warning")
   })
 
 }
@@ -165,15 +173,18 @@ write_proc_medians_table <- function(dir_job_results, filepath) {
   tryCatch({
     # Error handling for input arguments
     if (!is.character(dir_job_results) || length(dir_job_results) != 1) {
-      stop("Input 'dir_job_results' must be a single character string.")
+      abort("Input 'dir_job_results' must be a single character string.",
+            class = "validation_error")
     }
 
     if (!dir.exists(dir_job_results)) {
-      stop(paste("The directory", dir_job_results, "does not exist."))
+      abort(paste("The directory", dir_job_results, "does not exist."),
+            class = "file_error")
     }
 
     if (!is.character(filepath) || length(filepath) != 1) {
-      stop("Input 'filepath' must be a single character string.")
+      abort("Input 'filepath' must be a single character string.",
+            class = "validation_error")
     }
     df_proc_medians <- get_proc_medians(dir_job_results) |>
       tibble::as_tibble() |>
@@ -188,11 +199,21 @@ write_proc_medians_table <- function(dir_job_results, filepath) {
     readr::write_tsv(df_proc_medians, file = filepath)
     return(df_proc_medians)
   }, error = function(e) {
-    message(paste("Encountered an error: ", e$message))
+    abort(
+      message = paste("Encountered an error: ", e$message),
+      class = "processing_error",
+      call = sys.call(),
+      dir_job_results = dir_job_results,
+      filepath = filepath
+    )
   }, warning = function(w) {
-    message(paste("Warning: ", w$message))
-  }, finally = {
-    message("write_proc_medians_table function execution completed.")
+    warn(
+      message = paste("Warning: ", w$message),
+      class = "processing_warning",
+      call = sys.call(),
+      dir_job_results = dir_job_results,
+      filepath = filepath
+    )
   })
 
 }
@@ -222,12 +243,21 @@ write_proc_medians_yml <- function(dir_job_results, filepath = NULL) {
   tryCatch({
     # Error handling for dir_job_results arguments
     if (!is.character(dir_job_results) || length(dir_job_results) != 1) {
-      stop("Input 'dir_job_results' must be a single character string.")
+      abort(
+        message = "Input 'dir_job_results' must be a single character string.",
+        class = "validation_error",
+        dir_job_results = dir_job_results
+      )
     }
 
     if (!dir.exists(dir_job_results)) {
-      stop(paste("The directory", dir_job_results, "does not exist."))
+      abort(
+        message = paste("The directory", dir_job_results, "does not exist."),
+        class = "file_error",
+        dir_job_results = dir_job_results
+      )
     }
+
     if (is.null(filepath)) {
       filepath <- file.path(common_root,
                             "molevol_scripts",
@@ -235,20 +265,32 @@ write_proc_medians_yml <- function(dir_job_results, filepath = NULL) {
                             "job_proc_weights.yml")
     }
     if (!is.character(filepath) || length(filepath) != 1) {
-      stop("Input 'filepath' must be a single character string.")
+      abort(
+        message = "Input 'filepath' must be a single character string.",
+        class = "validation_error",
+        filepath = filepath
+      )
     }
 
     medians <- get_proc_medians(dir_job_results)
     yaml::write_yaml(medians, filepath)
   }, error = function(e) {
-    message(paste("Encountered an error: "), e$message)
+    abort(
+      message = paste("Encountered an error: ", e$message),
+      class = "processing_error",
+      call = sys.call(),
+      dir_job_results = dir_job_results,
+      filepath = filepath
+    )
   }, warning = function(w) {
-    message(paste("Warning: "), w$message)
-  }, finally = {
-    message("write_proc_medians_table function execution completed.")
-  }
-  )
-
+    warn(
+      message = paste("Warning: ", w$message),
+      class = "processing_warning",
+      call = sys.call(),
+      dir_job_results = dir_job_results,
+      filepath = filepath
+    )
+  })
 }
 
 #' Quickly get the runtime weights for MolEvolvR backend processes
@@ -275,13 +317,24 @@ get_proc_weights <- function(medians_yml_path = NULL) {
     # attempt to read the weights from the YAML file produced by
     # write_proc_medians_yml()
     if (stringr::str_trim(medians_yml_path) == "") {
-      stop(
-        stringr::str_glue("medians_yml_path is empty 
-                          ({medians_yml_path}), returning default weights")
+      abort(
+        message = stringr::str_glue("medians_yml_path is empty 
+                          ({medians_yml_path}), returning default weights"),
+        class = "input_error",
+        medians_yml_path = medians_yml_path
       )
     }
 
     proc_weights <- yaml::read_yaml(medians_yml_path)
+
+    if (!is.list(proc_weights) || length(proc_weights) == 0) {
+      abort(
+        message = "The loaded YAML file does not
+                  contain valid process weights.",
+        class = "file_error",
+        medians_yml_path = medians_yml_path
+      )
+    }
   },
   # to avoid fatal errors in reading the proc weights yaml,
   # some median process runtimes have been hardcoded based on
@@ -318,10 +371,9 @@ get_proc_weights <- function(medians_yml_path = NULL) {
 #'                                       "domain_architecture"),
 #'                                       n_inputs = 3, n_hits = 50L)
 #' @export
-advanced_opts2est_walltime	 <- function(advanced_opts,
-                                                  n_inputs = 1L,
-                                                  n_hits = NULL,
-                                                  verbose = FALSE) {
+advanced_opts2est_walltime <- function(advanced_opts, n_inputs = 1L,
+                                       n_hits = NULL,
+                                       verbose = FALSE) {
 
   tryCatch({
     # to calculate est walltime for a homology search job, the number of hits
@@ -331,26 +383,42 @@ advanced_opts2est_walltime	 <- function(advanced_opts,
 
     # Validate advanced_opts
     if (!is.character(advanced_opts)) {
-      stop("Argument 'advanced_opts' must be a character vector.")
+      abort(
+        message = "Argument 'advanced_opts' must be a character vector.",
+        class = "validation_error",
+        advanced_opts = advanced_opts
+      )
     }
 
     # Validate n_inputs
     if (!is.numeric(n_inputs) || length(n_inputs) != 1 || n_inputs <= 0) {
-      stop("Argument 'n_inputs' must be a single positive numeric value.")
+      abort(
+        message = "Argument 'n_inputs' 
+                  must be a single positive numeric value.",
+        class = "validation_error",
+        n_inputs = n_inputs
+      )
     }
 
     # Validate n_hits if homology_search is in advanced_opts
     if ("homology_search" %in% advanced_opts &&
-          (is.null(n_hits)|| !is.numeric(n_hits)
-           || length(n_hits) != 1 || n_hits < 0)) {
-      stop("Argument 'n_hits' must be a single non-negative numeric value when 
-           'homology_search' is in 'advanced_opts'.")
+          (is.null(n_hits) || !is.numeric(n_hits) ||
+             length(n_hits) != 1 || n_hits < 0)) {
+      abort(
+        message = "Argument 'n_hits' must be a single non-negative numeric 
+        value when 'homology_search' is in 'advanced_opts'.",
+        class = "validation_error",
+        n_hits = n_hits
+      )
     }
 
     # Get process weights
     proc_weights <- write_proc_medians_yml()
     if (!is.list(proc_weights)) {
-      stop("Process weights could not be retrieved correctly.")
+      abort(
+        message = "Process weights could not be retrieved correctly.",
+        class = "processing_error"
+      )
     }
 
     # sort process weights by names and convert to vec
@@ -389,12 +457,23 @@ advanced_opts2est_walltime	 <- function(advanced_opts,
     }
     return(est_walltime)
   }, error = function(e) {
-    message(paste("Encountered an error: ", e$message))
+    abort(
+      message = paste("Encountered an error: ", e$message),
+      class = "processing_error",
+      call = sys.call(),
+      advanced_opts = advanced_opts,
+      n_inputs = n_inputs,
+      n_hits = n_hits
+    )
   }, warning = function(w) {
-    message(paste("Warning: ", w$message))
-  }, finally = {
-    message("advanced_opts2est_walltime	 
-            function execution completed.")
+    warn(
+      message = paste("Warning: ", w$message),
+      class = "processing_warning",
+      call = sys.call(),
+      advanced_opts = advanced_opts,
+      n_inputs = n_inputs,
+      n_hits = n_hits
+    )
   })
 
 }
@@ -419,22 +498,44 @@ assign_job_queue <- function(
   t_cutoff = 21600 # 6 hours
 ) {
   tryCatch({
+    # Validate t_sec_estimate
     if (!is.numeric(t_sec_estimate) || length(t_sec_estimate) != 1) {
-      stop("Argument 't_sec_estimate' must be a single numeric value.")
+      abort(
+        message = "Argument 't_sec_estimate' must be a single numeric value.",
+        class = "validation_error",
+        t_sec_estimate = t_sec_estimate
+      )
     }
 
+    # Validate t_cutoff
     if (!is.numeric(t_cutoff) || length(t_cutoff) != 1 || t_cutoff < 0) {
-      stop("Argument 't_cutoff' must be a single non-negative numeric value.")
+      abort(
+        message = "Argument 't_cutoff' must be a 
+                  single non-negative numeric value.",
+        class = "validation_error",
+        t_cutoff = t_cutoff
+      )
     }
+
 
     queue <- ifelse(t_sec_estimate > t_cutoff, "long", "short")
     return(queue)
   }, error = function(e) {
-    message(paste("Encountered an error: ", e$message))
+    abort(
+      message = paste("Encountered an error: ", e$message),
+      class = "processing_error",
+      call = sys.call(),
+      t_sec_estimate = t_sec_estimate,
+      t_cutoff = t_cutoff
+    )
   }, warning = function(w) {
-    message(paste("Warning: ", w$message))
-  }, finally = {
-    message("assign_job_queue function execution completed.")
+    warn(
+      message = paste("Warning: ", w$message),
+      class = "processing_warning",
+      call = sys.call(),
+      t_sec_estimate = t_sec_estimate,
+      t_cutoff = t_cutoff
+    )
   })
 
 }
@@ -537,11 +638,15 @@ plot_estimated_walltimes <- function() {
       )
     return(p)
   }, error = function(e) {
-    message(paste("Encountered an error: ", e$message))
+    abort(
+      message = paste("Encountered an error:", e$message),
+      .internal = TRUE
+    )
   }, warning = function(w) {
-    message(paste("Warning: ", w$message))
-  }, finally = {
-    message("plot_estimated_walltimes function execution completed.")
+    warn(
+      message = paste("Warning:", w$message),
+      .internal = TRUE
+    )
   })
 
 }
