@@ -39,7 +39,8 @@ A \code{data.table} that contains the lineage information, mapping protein
 accessions to their tax IDs and lineages.
 }
 \description{
-This function combines 'efetchIPG()' and 'IPG2Lineage()' to map a set
+This function combines 'efetchIPG()'
+and 'IPG2Lineage()' to map a set
 of protein accessions to their assembly (GCA_ID), tax ID, and lineage.
 
 Function to map protein accession numbers to lineage

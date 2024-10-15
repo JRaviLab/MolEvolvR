@@ -12,7 +12,8 @@ line plot object
 
 example:
 p <- plot_estimated_walltimes()
-ggplot2::ggsave(filename = "/data/molevolvr_transfer/molevolvr_dev/molevol_scripts/docs/estimate_walltimes.png", plot = p)
+ggplot2::ggsave(filename = "/data/molevolvr_transfer/molevolvr_
+dev/molevol_scripts/docs/estimate_walltimes.png", plot = p)
 }
 \description{
 this function was just for fun; very, very messy code

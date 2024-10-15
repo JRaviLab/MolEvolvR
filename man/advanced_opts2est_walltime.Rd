@@ -21,7 +21,9 @@ advanced_opts2est_walltime(
 \value{
 total estimated number of seconds a job will process (walltime)
 
-example: advanced_opts2est_walltime(c("homology_search", "domain_architecture"), n_inputs = 3, n_hits = 50L)
+example: advanced_opts2est_walltime	(c("homology_search",
+"domain_architecture"),
+n_inputs = 3, n_hits = 50L)
 }
 \description{
 Given MolEvolvR advanced options and number of inputs,

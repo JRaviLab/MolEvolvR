@@ -13,7 +13,7 @@ directory}
 \value{
 \link{list} names: processes; values: median runtime (seconds)
 
-example: get_proc_weights()
+example: write_proc_medians_yml()
 }
 \description{
 Quickly get the runtime weights for MolEvolvR backend processes

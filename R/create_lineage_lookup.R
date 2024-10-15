@@ -101,7 +101,7 @@ create_lineage_lookup <- function(lineage_file = here("data/rankedlineage.dmp"),
 
 
 
-#' CreateLineageLookup <- function(assembly_path, updateAssembly = FALSE, file_type = "tsv")
+#' create_lineage_lookup <- function(assembly_path, updateAssembly = FALSE, file_type = "tsv")
 #' {
 #'   #' Create a look up table that goes from GCA_ID, to TaxID, to Lineage
 #'   #' @author Samuel Chen
