@@ -697,7 +697,7 @@ selectLongestDuplicate <- function(prot, column) {
 
     # Get list of duplicates
     dups <- prot %>%
-        group_by(AccNum) %>%
+        group_by(.data$AccNum) %>%
         summarize("count" = n()) %>%
         filter(count > 1) %>%
         arrange(-count) %>%
@@ -708,7 +708,7 @@ selectLongestDuplicate <- function(prot, column) {
     longest_rows <- c()
     remove_rows <- c()
     for (acc in dup_acc) {
-        dup_rows <- dups %>% filter(AccNum == acc)
+        dup_rows <- dups %>% filter(.data$AccNum == acc)
 
         longest <- dup_rows[which(nchar(pull(dup_rows, {{ col }})) == max(nchar(pull(dup_rows, {{ col }}))))[1], "row.orig"]
 

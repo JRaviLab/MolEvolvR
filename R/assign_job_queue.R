@@ -50,6 +50,8 @@ map_advanced_opts2procs <- function(advanced_opts) {
 #'
 #' @importFrom dplyr across everything select summarise
 #'
+#' @importFrom stats median
+#' 
 #' @return [list] names: processes; values: median runtime (seconds)
 #'
 #' see molevol_scripts/R/metrics.R for info on functions called here
@@ -126,7 +128,7 @@ write_proc_medians_table <- function(dir_job_results, filepath) {
             names_to = "process",
             values_to = "median_seconds"
         ) |>
-        dplyr::arrange(dplyr::desc(median_seconds))
+        dplyr::arrange(dplyr::desc(.data$median_seconds))
     readr::write_tsv(df_proc_medians, file = filepath)
     return(df_proc_medians)
 }
