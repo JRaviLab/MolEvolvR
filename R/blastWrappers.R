@@ -13,6 +13,8 @@
 #' @param num_alignments
 #' @param num_threads
 #'
+#' @importFrom rlang warn abort inform
+#'
 #' @return
 #' @export
 #'
@@ -23,23 +25,25 @@ run_deltablast <- function(deltablast_path, db_search_path,
 
   # Argument validation
   if (!file.exists(deltablast_path)) {
-    stop("The DELTABLAST executable path is invalid: ", deltablast_path)
+    rlang::abort(paste("The DELTABLAST executable path is invalid:",
+                       deltablast_path))
   }
   if (!dir.exists(db_search_path)) {
-    stop("The database search path is invalid: ", db_search_path)
+    rlang::abort(paste("The database search path is invalid:", db_search_path))
   }
   if (!file.exists(query)) {
-    stop("The query file path is invalid: ", query)
+    rlang::abort(paste("The query file path is invalid:", query))
   }
   if (!is.numeric(as.numeric(evalue)) || as.numeric(evalue) <= 0) {
-    stop("The evalue must be a positive number: ", evalue)
+    rlang::abort(paste("The evalue must be a positive number:", evalue))
   }
   if (!is.numeric(num_alignments) || num_alignments <= 0) {
-    stop("The number of alignments must be a 
-         positive integer: ", num_alignments)
+    rlang::abort(paste("The number of alignments must be a positive integer:",
+                       num_alignments))
   }
   if (!is.numeric(num_threads) || num_threads <= 0) {
-    stop("The number of threads must be a positive integer: ", num_threads)
+    rlang::abort(paste("The number of threads must be a positive integer:",
+                       num_threads))
   }
 
   start <- Sys.time()
@@ -61,13 +65,28 @@ run_deltablast <- function(deltablast_path, db_search_path,
     )
     print(Sys.time() - start)
   }, error = function(e) {
-    message(paste("Error in run_deltablast: ", e))
+    rlang::abort(
+      message = paste("Error in run_deltablast:", e$message),
+      class = "processing_error",
+      deltablast_path = deltablast_path,
+      db_search_path = db_search_path,
+      query = query,
+      out = out,
+      num_alignments = num_alignments,
+      num_threads = num_threads
+    )
   }, warning = function(w) {
-    message(paste("Warning in run_deltablast: ", w))
-  }, finally = {
-    message("run_deltablast completed")
+    rlang::warn(
+      message = paste("Warning in run_deltablast:", w$message),
+      class = "processing_warning",
+      deltablast_path = deltablast_path,
+      db_search_path = db_search_path,
+      query = query,
+      out = out,
+      num_alignments = num_alignments,
+      num_threads = num_threads
+    )
   })
-
 }
 
 
@@ -81,6 +100,8 @@ run_deltablast <- function(deltablast_path, db_search_path,
 #' @param out
 #' @param num_threads
 #'
+#' @importFrom rlang warn abort inform
+#'
 #' @return
 #' @export
 #'
@@ -90,19 +111,26 @@ run_rpsblast <- function(rpsblast_path, db_search_path,
                          out, num_threads = 1) {
   # Argument validation
   if (!file.exists(rpsblast_path)) {
-    stop("The RPSBLAST executable path is invalid: ", rpsblast_path)
+    rlang::abort(paste("The RPSBLAST executable path is invalid:",
+                       rpsblast_path),
+                 class = "file_error")
   }
   if (!dir.exists(db_search_path)) {
-    stop("The database search path is invalid: ", db_search_path)
+    rlang::abort(paste("The database search path is invalid:", db_search_path),
+                 class = "file_error")
   }
   if (!file.exists(query)) {
-    stop("The query file path is invalid: ", query)
+    rlang::abort(paste("The query file path is invalid:", query),
+                 class = "file_error")
   }
   if (!is.numeric(as.numeric(evalue)) || as.numeric(evalue) <= 0) {
-    stop("The evalue must be a positive number: ", evalue)
+    rlang::abort(paste("The evalue must be a positive number:", evalue),
+          class = "validation_error")
   }
   if (!is.numeric(num_threads) || num_threads <= 0) {
-    stop("The number of threads must be a positive integer: ", num_threads)
+    rlang::abort(paste("The number of threads must be a positive integer:",
+                       num_threads),
+                 class = "validation_error")
   }
 
   start <- Sys.time()
@@ -123,11 +151,25 @@ run_rpsblast <- function(rpsblast_path, db_search_path,
     )
     print(Sys.time() - start)
   }, error = function(e) {
-    message(paste("Error in run_rpsblast: ", e))
+    rlang::abort(
+      message = paste("Error in run_rpsblast:", e$message),
+      class = "processing_error",
+      rpsblast_path = rpsblast_path,
+      db_search_path = db_search_path,
+      query = query,
+      out = out,
+      num_threads = num_threads
+    )
   }, warning = function(w) {
-    message(paste("Warning in run_rpsblast: ", w))
-  }, finally = {
-    message("run_rpsblast completed")
+    rlang::warn(
+      message = paste("Warning in run_rpsblast:", w$message),
+      class = "processing_warning",
+      rpsblast_path = rpsblast_path,
+      db_search_path = db_search_path,
+      query = query,
+      out = out,
+      num_threads = num_threads
+    )
   })
 
 }
