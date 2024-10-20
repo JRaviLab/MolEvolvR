@@ -191,7 +191,7 @@ msa_pdf <- function(fasta_path, out_path = NULL,
 #' @param outfile
 #'
 #' @importFrom Biostrings readAAStringSet
-#'
+#' @importFrom stats kalign
 #' @return
 #' @export
 #'
