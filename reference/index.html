@@ -109,22 +109,34 @@
         <dd>addTaxID</dd>
       </dl><dl><dt>
 
-          <code><a href="advanced_opts2est_walltime.html">advanced_opts2est_walltime()</a></code>
-
-        </dt>
-        <dd>Given MolEvolvR advanced options and number of inputs, calculate the total estimated walltime for the job</dd>
-      </dl><dl><dt>
-
           <code><a href="alignFasta.html">alignFasta()</a></code>
 
         </dt>
         <dd>alignFasta</dd>
       </dl><dl><dt>
 
-          <code><a href="assign_job_queue.html">assign_job_queue()</a></code>
+          <code><a href="assignJobQueue.html">assignJobQueue()</a></code>
 
         </dt>
-        <dd>Decision function to assign job queue</dd>
+        <dd>assignJobQueue</dd>
+      </dl><dl><dt>
+
+          <code><a href="calculateEstimatedWallTimeFromOpts.html">calculateEstimatedWallTimeFromOpts()</a></code>
+
+        </dt>
+        <dd>calculateEstimatedWallTimeFromOpts</dd>
+      </dl><dl><dt>
+
+          <code><a href="calculateProcessRuntime.html">calculateProcessRuntime()</a></code>
+
+        </dt>
+        <dd>calculateProcessRuntime</dd>
+      </dl><dl><dt>
+
+          <code><a href="cleanClusterFile.html">cleanClusterFile()</a></code>
+
+        </dt>
+        <dd>Clean Cluster File</dd>
       </dl><dl><dt>
 
           <code><a href="cleanClusters.html">cleanClusters()</a></code>
@@ -175,25 +187,19 @@
         <dd>Clean String</dd>
       </dl><dl><dt>
 
-          <code><a href="clean_clust_file.html">clean_clust_file()</a></code>
-
-        </dt>
-        <dd>Clean Cluster File</dd>
-      </dl><dl><dt>
-
-          <code><a href="combine_files.html">combine_files()</a></code>
+          <code><a href="combineFiles.html">combineFiles()</a></code>
 
         </dt>
         <dd>Download the combined assembly summaries of genbank and refseq</dd>
       </dl><dl><dt>
 
-          <code><a href="combine_full.html">combine_full()</a></code>
+          <code><a href="combineFullAnalysis.html">combineFullAnalysis()</a></code>
 
         </dt>
         <dd>Combining full_analysis files</dd>
       </dl><dl><dt>
 
-          <code><a href="combine_ipr.html">combine_ipr()</a></code>
+          <code><a href="combineIPR.html">combineIPR()</a></code>
 
         </dt>
         <dd>Combining clean ipr files</dd>
@@ -265,6 +271,12 @@
         <dd>Produces a mail message that can be sent to a user when their job is accepted. Used by the sendJobStatusEmail() method.</dd>
       </dl><dl><dt>
 
+          <code><a href="createLineageLookup.html">createLineageLookup()</a></code>
+
+        </dt>
+        <dd>createLineageLookup</dd>
+      </dl><dl><dt>
+
           <code><a href="createRepresentativeAccNum.html">createRepresentativeAccNum()</a></code>
 
         </dt>
@@ -281,12 +293,6 @@
 
         </dt>
         <dd>Wordclouds for the predominant domains, domain architectures</dd>
-      </dl><dl><dt>
-
-          <code><a href="create_lineage_lookup.html">create_lineage_lookup()</a></code>
-
-        </dt>
-        <dd>Create a look up table that goes from TaxID, to Lineage</dd>
       </dl><dl><dt>
 
           <code><a href="domain_network.html">domain_network()</a></code>
@@ -391,28 +397,16 @@
         <dd>construct column types for reading interproscan output TSVs (based upon the global variable written in molevol_scripts/R/colnames_molevol.R)</dd>
       </dl><dl><dt>
 
+          <code><a href="getProcessRuntimeWeights.html">getProcessRuntimeWeights()</a></code>
+
+        </dt>
+        <dd>getProcessRuntimeWeights</dd>
+      </dl><dl><dt>
+
           <code><a href="getTopAccByLinDomArch.html">getTopAccByLinDomArch()</a></code>
 
         </dt>
         <dd>getTopAccByLinDomArch</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_proc_medians.html">get_proc_medians()</a></code>
-
-        </dt>
-        <dd>Scrape MolEvolvR logs and calculate median processes</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_proc_weights.html">get_proc_weights()</a></code>
-
-        </dt>
-        <dd>Quickly get the runtime weights for MolEvolvR backend processes</dd>
-      </dl><dl><dt>
-
-          <code><a href="make_opts2procs.html">make_opts2procs()</a></code>
-
-        </dt>
-        <dd>Construct list where names (MolEvolvR advanced options) point to processes</dd>
       </dl><dl><dt>
 
           <code><a href="mapAcc2Name.html">mapAcc2Name()</a></code>
@@ -421,16 +415,28 @@
         <dd>mapAcc2Name</dd>
       </dl><dl><dt>
 
-          <code><a href="map_advanced_opts2procs.html">map_advanced_opts2procs()</a></code>
+          <code><a href="mapAdvOption2Process.html">mapAdvOption2Process()</a></code>
 
         </dt>
-        <dd>Use MolEvolvR advanced options to get associated processes</dd>
+        <dd>mapAdvOption2Process</dd>
+      </dl><dl><dt>
+
+          <code><a href="mapOption2Process.html">mapOption2Process()</a></code>
+
+        </dt>
+        <dd>mapOption2Process</dd>
       </dl><dl><dt>
 
           <code><a href="msa_pdf.html">msa_pdf()</a></code>
 
         </dt>
         <dd>Multiple Sequence Alignment</dd>
+      </dl><dl><dt>
+
+          <code><a href="plotEstimatedWallTimes.html">plotEstimatedWallTimes()</a></code>
+
+        </dt>
+        <dd>plotEstimatedWallTimes</dd>
       </dl><dl><dt>
 
           <code><a href="plotIPR2Viz.html">plotIPR2Viz()</a></code>
@@ -497,12 +503,6 @@
 
         </dt>
         <dd>UpSet Plot</dd>
-      </dl><dl><dt>
-
-          <code><a href="plot_estimated_walltimes.html">plot_estimated_walltimes()</a></code>
-
-        </dt>
-        <dd>Plot the estimated runtimes for different advanced options and number of inputs</dd>
       </dl><dl><dt>
 
           <code><a href="prepareColumnParams.html">prepareColumnParams()</a></code>
@@ -655,16 +655,16 @@
         <dd>writeMSA_AA2FA</dd>
       </dl><dl><dt>
 
-          <code><a href="write_proc_medians_table.html">write_proc_medians_table()</a></code>
+          <code><a href="writeProcessRuntime2TSV.html">writeProcessRuntime2TSV()</a></code>
 
         </dt>
-        <dd>Write a table of 2 columns: 1) process and 2) median seconds</dd>
+        <dd>writeProcessRuntime2TSV</dd>
       </dl><dl><dt>
 
-          <code><a href="write_proc_medians_yml.html">write_proc_medians_yml()</a></code>
+          <code><a href="writeProcessRuntime2YML.html">writeProcessRuntime2YML()</a></code>
 
         </dt>
-        <dd>Compute median process runtimes, then write a YAML list of the processes and their median runtimes in seconds to the path specified by 'filepath'.</dd>
+        <dd>writeProcessRuntime2YML</dd>
       </dl></div>
   </main></div>
 

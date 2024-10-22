@@ -18,9 +18,11 @@
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/addLineage.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/addName.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/addTaxID.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/advanced_opts2est_walltime.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/alignFasta.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/assign_job_queue.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/assignJobQueue.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/calculateEstimatedWallTimeFromOpts.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/calculateProcessRuntime.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/cleanClusterFile.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/cleanClusters.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/cleanDomainArchitecture.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/cleanFAHeaders.html</loc></url>
@@ -29,10 +31,9 @@
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/cleanLineage.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/cleanSpecies.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/cleanString.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/clean_clust_file.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/combine_files.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/combine_full.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/combine_ipr.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/combineFiles.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/combineFullAnalysis.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/combineIPR.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/condenseRepeatedDomains.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/convert2TitleCase.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/convertAlignment2FA.html</loc></url>
@@ -44,10 +45,10 @@
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/createIPRScanDomainTable.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/createJobResultsURL.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/createJobStatusEmailMessage.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/createLineageLookup.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/createRepresentativeAccNum.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/createWordCloud2Element.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/createWordCloudElement.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/create_lineage_lookup.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/domain_network.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/downloadAssemblySummary.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/efetchIPG.html</loc></url>
@@ -65,14 +66,14 @@
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/getDomainsFromFA.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/getIPRScanColNames.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/getIPRScanColTypes.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/getProcessRuntimeWeights.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/getTopAccByLinDomArch.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/get_proc_medians.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/get_proc_weights.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/index.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/make_opts2procs.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/mapAcc2Name.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/map_advanced_opts2procs.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/mapAdvOption2Process.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/mapOption2Process.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/msa_pdf.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/plotEstimatedWallTimes.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/plotIPR2Viz.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/plotIPR2VizWeb.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/plotLineageDA.html</loc></url>
@@ -84,7 +85,6 @@
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/plotStackedLineage.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/plotSunburst.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/plotUpSet.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/plot_estimated_walltimes.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/prepareColumnParams.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/prepareSingleColumnParams.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/proteinAcc2TaxID.html</loc></url>
@@ -110,7 +110,7 @@
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/wordcloud3.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/words2WordCounts.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/writeMSA_AA2FA.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/write_proc_medians_table.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/write_proc_medians_yml.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/writeProcessRuntime2TSV.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/writeProcessRuntime2YML.html</loc></url>
 </urlset>
 
