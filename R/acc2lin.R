@@ -10,7 +10,6 @@
 #' Sink Reset
 #'
 #' @return No return, but run to close all outstanding `sink()`s
-#'         and handles any errors or warnings that occur during the process.
 #'
 #' @export
 #'
@@ -87,8 +86,7 @@ addLineage <- function(df, acc_col = "AccNum", assembly_path,
 #' This file can be generated using the \link[MolEvolvR]{downloadAssemblySummary} function
 #' @param lineagelookup_path String of the path to the lineage lookup file
 #' (taxid to lineage mapping). This file can be generated using the
-#' @param ipgout_path Path to write the results 
-#'                    of the efetch run of the accessions
+#' @param ipgout_path Path to write the results of the efetch run of the accessions
 #' on the ipg database. If NULL, the file will not be written. Defaults to NULL
 #' @param plan A string specifying the parallelization strategy for the future
 #' package, such as `"sequential"` or `"multisession"`.
@@ -122,9 +120,7 @@ acc2Lineage <- function(accessions, assembly_path, lineagelookup_path, ipgout_pa
 #'
 #' @author Samuel Chen, Janani Ravi
 #'
-#' @description Perform efetch on the ipg database
-#'              and write the results to out_path
-#'
+#' @description Perform efetch on the ipg database and write the results to out_path
 #' @param accnums Character vector containing the accession numbers to query on
 #' the ipg database
 #' @param out_path Path to write the efetch results to

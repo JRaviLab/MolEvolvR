@@ -23,8 +23,7 @@ the ipg database}
 No return value. The function writes the fetched results to \code{out_path}.
 }
 \description{
-Perform efetch on the ipg database
-and write the results to out_path
+Perform efetch on the ipg database and write the results to out_path
 
 Perform efetch on the ipg database and write the results to out_path
 }

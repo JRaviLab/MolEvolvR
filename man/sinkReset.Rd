@@ -8,7 +8,6 @@ sinkReset()
 }
 \value{
 No return, but run to close all outstanding \code{sink()}s
-and handles any errors or warnings that occur during the process.
 }
 \description{
 Sink Reset
