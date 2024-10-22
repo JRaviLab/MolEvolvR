@@ -17,7 +17,7 @@ Compute median process runtimes, then write a YAML list of the processes and
 their median runtimes in seconds to the path specified by 'filepath'.
 
 The default value of filepath is the value of the env var
-MOLEVOLVR_PROC_WEIGHTS, which writeProcessRuntime2YML() also uses as its default
+MOLEVOLVR_PROC_WEIGHTS, which getProcessRuntimeWeights() also uses as its default
 read location.
 }
 \examples{

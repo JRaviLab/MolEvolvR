@@ -155,7 +155,7 @@ writeProcessRuntime2TSV <- function(dir_job_results, filepath) {
 #' their median runtimes in seconds to the path specified by 'filepath'.
 #'
 #' The default value of filepath is the value of the env var
-#' MOLEVOLVR_PROC_WEIGHTS, which writeProcessRuntime2YML() also uses as its default
+#' MOLEVOLVR_PROC_WEIGHTS, which getProcessRuntimeWeights() also uses as its default
 #' read location.
 #'
 #' @param dir_job_results [chr] path to MolEvolvR job_results directory
@@ -173,6 +173,9 @@ writeProcessRuntime2TSV <- function(dir_job_results, filepath) {
 #' }
 #' @export
 writeProcessRuntime2YML <- function(dir_job_results, filepath = NULL) {
+  if (is.null(filepath)) {
+    filepath <- file.path(common_root, "molevol_scripts", "log_data", "job_proc_weights.yml")
+  }
   medians <- calculateProcessRuntime(dir_job_results)
   yaml::write_yaml(medians, filepath)
 }
