@@ -138,10 +138,10 @@ createIPRScanDomainTable <- function(
     # filter for the accnum of interest (note: it's possible the accession
     # number is not in the table [i.e., it had no domains])
     df_iprscan_accnum <- df_iprscan |>
-        dplyr::filter(Analysis %in% analysis) |>
-        dplyr::filter(AccNum == accnum) |>
+        dplyr::filter(.data$Analysis %in% analysis) |>
+        dplyr::filter(.data$AccNum == accnum) |>
         dplyr::select(dplyr::all_of(c("AccNum", "DB.ID", "StartLoc", "StopLoc"))) |>
-        dplyr::arrange(StartLoc)
+        dplyr::arrange(.data$StartLoc)
     # handle the case of no records after filtering by "Analysis"; return the tibble
     # with 0 rows quickly
     if (nrow(df_iprscan_accnum) < 1) {
@@ -153,9 +153,9 @@ createIPRScanDomainTable <- function(
         dplyr::rowwise() |>
         dplyr::mutate(
             seq_domain = XVector::subseq(
-                fasta[[grep(pattern = AccNum, x = names(fasta), fixed = TRUE)]],
-                start = StartLoc,
-                end = StopLoc
+                fasta[[grep(pattern = .data$AccNum, x = names(fasta), fixed = TRUE)]],
+                start = .data$StartLoc,
+                end = .data$StopLoc
             ) |>
                 as.character()
         )
@@ -166,7 +166,7 @@ createIPRScanDomainTable <- function(
             id_domain = stringr::str_glue("{AccNum}-{DB.ID}-{StartLoc}_{StopLoc}")
         ) |>
         dplyr::ungroup() |>
-        dplyr::relocate(id_domain, .before = 1)
+        dplyr::relocate(.data$id_domain, .before = 1)
     return(df_iprscan_domains)
 }
 

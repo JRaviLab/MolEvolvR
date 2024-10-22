@@ -29,16 +29,18 @@ file}
 
 \item{lineagelookup_path}{String of the path to the lineage lookup file
 (taxid to lineage mapping). This file can be generated using the
-"create_lineage_lookup()" function}
+"createLineageLookup()" function}
 
 \item{assembly_path}{String of the path to the assembly_summary path
 This file can be generated using the \link[MolEvolvR]{downloadAssemblySummary} function}
 }
 \value{
-Describe return, in detail
+A \code{data.table} with the lineage information for the provided protein
+accessions.
 }
 \description{
-Takes the resulting file of an efetch run on the ipg database and
+Takes the resulting file
+of an efetch run on the ipg database and
 
 Takes the resulting file of an efetch run on the ipg database and
 append lineage, and taxid columns
