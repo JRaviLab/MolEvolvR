@@ -20,7 +20,6 @@ untar("broadstreet-v3.3.0_old.tar", exdir = "CARD_data")
 list.files("CARD_data")
 
 # Parse the ARO_index.tsv file using read.delim
-aro_index <- read.delim("CARD_data/ARO_index.tsv", header = TRUE, sep = "\t")
 
 
 # Map CARD Short Name
