@@ -198,10 +198,8 @@ efetchIPG <- function(accnums, out_path, plan = "sequential", ...) {
 #'              of an efetch run on the ipg database and
 #'
 #' @param accessions Character vector of protein accessions
-#' @param ipg_file Filepath to the file
-#'                 containing results of an efetch run on the
-#' ipg database. The protein accession in
-#'               'accessions' should be contained in this
+#' @param ipg_file Filepath to the file containing results of an efetch run on the
+#' ipg database. The protein accession in 'accessions' should be contained in this
 #' file
 #' @param assembly_path String of the path to the assembly_summary path
 #' This file can be generated using the \link[MolEvolvR]{downloadAssemblySummary} function
