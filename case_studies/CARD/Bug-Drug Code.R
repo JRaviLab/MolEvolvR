@@ -143,7 +143,7 @@ for (i in 1:nrow(staph_aureus_dap_combinations)) {
 }
 
 # Save the combined FASTA sequences
-filename <- "Staph_aureus_Daptomycin_sequences5.fasta"
+filename <- "Staph_aureus_Daptomycin_sequences.fasta"
 
 writeLines(combined_sequences, filename)
 
