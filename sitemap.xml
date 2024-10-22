@@ -97,9 +97,9 @@
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/rename_fasta.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/replaceQuestionMarks.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/reverseOperonSeq.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/runDeltaBlast.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/runIPRScan.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/run_deltablast.html</loc></url>
-<url><loc>https://jravilab.github.io/MolEvolvR/reference/run_rpsblast.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/runRPSBlast.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/selectLongestDuplicate.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/sendJobStatusEmail.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/shortenLineage.html</loc></url>
