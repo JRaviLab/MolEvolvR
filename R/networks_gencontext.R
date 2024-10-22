@@ -8,7 +8,7 @@
 ## GC Undirected Network ##
 ###########################
 
-#' Domain Network
+#' createUndirectedGenomicContextNetwork
 #'
 #' @description
 #' This function creates a domain network from the 'DomArch' column.
@@ -37,7 +37,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' domain_network(pspa)
+#' createUndirectedGenomicContextNetwork(pspa)
 #' }
 createUndirectedGenomicContextNetwork <- function(prot, column = "GenContext", domains_of_interest, cutoff_type = "Lineage", cutoff = 1, layout = "grid") {
     # by domain networks or all, as required.

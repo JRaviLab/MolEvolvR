@@ -2,7 +2,7 @@
 % Please edit documentation in R/networks_gencontext.R
 \name{createUndirectedGenomicContextNetwork}
 \alias{createUndirectedGenomicContextNetwork}
-\title{Domain Network}
+\title{createUndirectedGenomicContextNetwork}
 \usage{
 createUndirectedGenomicContextNetwork(
   prot,
@@ -35,6 +35,6 @@ A network of domains is returned based on shared domain architectures.
 }
 \examples{
 \dontrun{
-domain_network(pspa)
+createUndirectedGenomicContextNetwork(pspa)
 }
 }
