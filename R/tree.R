@@ -49,6 +49,7 @@
 #' @param enable_fast Logical. If TRUE, uses FastTree approach; if FALSE, uses detailed phylogenetic analysis. Default is TRUE.
 #' @param fasttree_path Character. Path to the FastTree executable. Default is "src/FastTree".
 #' @param format Character. Format of the input file. Default is "fasta".
+#' @param f_seq_type Character. Type of fasta sequence, DNA or protein. Default is "protein". Choices are "protein","dna".
 #' @param seq_type Character. Type of sequences in the input file. Default is "AA" (amino acid).
 #' @param dist_matrix Character. Distance matrix to be used. Default is "similarity".
 #' @param subset_size Numeric. Number of sequences to subset for analysis. Default is 10.
@@ -101,6 +102,7 @@ createFA2Tree <- function(
     enable_fast = TRUE,
     fasttree_path = "src/FastTree",
     format = "fasta",
+    f_seq_type = "protein",
     seq_type = "AA",
     dist_matrix = "similarity",
     subset_size = 10,
@@ -117,7 +119,7 @@ createFA2Tree <- function(
     # fa_file="data/alns/pspa_snf7.fa"
     # out_file="data/alns/pspa_snf7.tre"
     # fasttree_path="src/FastTree"
-
+    
     if (enable_fast) {
         # FastTree approach
         print(fa_file)
@@ -163,12 +165,18 @@ createFA2Tree <- function(
         print(mt)
 
         # estimate a distance matrix using a Jules-Cantor Model
-        dna_dist <- dist.ml(prot_subset, model = dna_model)
+        if(f_seq_type=="protein"){
+            seq_dist <- dist.ml(prot_subset, model = mt)
+        } else if(f_seq_type=="dna") {
+            seq_dist <- dist.ml(prot_subset, model = dna_model)
+        } else {
+            stop("Error: The f_seq_type must be one of ['protein','dna'].")
+        }
 
         ## Neighbor Joining, UPGMA, and Maximum Parsimony
         # quick and dirty UPGMA and NJ trees
-        prot_UPGMA <- upgma(dna_dist)
-        prot_NJ <- NJ(dna_dist)
+        prot_UPGMA <- upgma(seq_dist)
+        prot_NJ <- NJ(seq_dist)
         plot(prot_UPGMA, main = "UPGMA")
         plot(prot_NJ, main = "Neighbor Joining")
 
@@ -182,27 +190,39 @@ createFA2Tree <- function(
         # ml estimation w/ distance matrix
         fit <- pml(prot_NJ, prot_subset)
         print(fit)
-        fitJC <- optim.pml(fit, model = ml_model, rearrangement = rearrangement)
-        logLik(fitJC)
-        bs <- bootstrap.pml(fitJC,
+        if(f_seq_type=="protein"){
+            fit_optimized <- optim.pml(fit, model = fit, rearrangement = rearrangement)
+        } else if(f_seq_type=="dna") {
+            fit_optimized <- optim.pml(fit, model = ml_model, rearrangement = rearrangement)
+        } else {
+            stop("Error: The f_seq_type must be one of ['protein','dna'].")
+        }
+        logLik(fit_optimized)
+        bs <- bootstrap.pml(fit_optimized,
             bs = bootstrap_reps, optNni = TRUE, multicore = TRUE,
             control = pml.control(trace = 0)
         )
-        plotBS(midpoint(fitJC$tree), bs, p = bootstrap_p, type = plot_type)
+        plotBS(midpoint(fit_optimized$tree), bs, p = bootstrap_p, type = plot_type)
 
         # subsetted alignment bs example
         prot_subset_dm <- dist.ml(prot_subset)
         prot_subset_NJ <- NJ(prot_subset_dm)
         fit2 <- pml(prot_subset_NJ, data = prot_subset)
         print(fit2)
-        fitJC2 <- optim.pml(fit2, model = ml_model, rearrangement = rearrangement)
-        logLik(fitJC2)
-        bs_subset <- bootstrap.pml(fitJC2,
+        if(f_seq_type=="protein"){
+            fit_optimized <- optim.pml(fit2, model = fit2, rearrangement = rearrangement)
+        } else if(f_seq_type=="dna") {
+            fit_optimized <- optim.pml(fit2, model = ml_model, rearrangement = rearrangement)
+        } else {
+            stop("Error: The f_seq_type must be one of ['protein','dna'].")
+        }
+        logLik(fit_optimized2)
+        bs_subset <- bootstrap.pml(fit_optimized2,
             bs = bootstrap_reps, optNni = TRUE, multicore = TRUE,
             control = pml.control(trace = 0)
         )
-        bs2 <- plotBS(midpoint(fitJC2$tree), bs, p = bootstrap_p, type = plot_type)
-
+        bs2 <- plotBS(midpoint(fit_optimized2$tree), bs, p = bootstrap_p, type = plot_type)
+        
         ## Exporting Trees
         write.tree(bs2, file = bootstrap_file)
     }
@@ -220,6 +240,7 @@ createFA2Tree <- function(
 #' phylogenetic analysis. Default is TRUE.
 #' @param fasttree_path Character. Path to the FastTree executable. Default is here("src/FastTree").
 #' @param format Character. Format of the input files. Default is "fasta".
+#' @param f_seq_type Character. Type of fasta sequence, DNA or protein. Default is "protein". Choices are "protein","dna".
 #' @param seq_type Character. Type of sequences in the input files. Default is "AA" (amino acid).
 #' @param dist_matrix Character. Distance matrix to be used. Default is "similarity".
 #' @param subset_size Numeric. Number of sequences to subset for analysis. Default is 10.
@@ -268,6 +289,7 @@ convertAlignment2Trees <- function(
     enable_fast = TRUE,
     fasttree_path = here("src/FastTree"),
     format = "fasta",
+    f_seq_type = "protein",
     seq_type = "AA",
     dist_matrix = "similarity",
     subset_size = 10,
@@ -294,6 +316,7 @@ convertAlignment2Trees <- function(
         enable_fast = enable_fast,
         fasttree_path = fasttree_path,
         format = format,
+        f_seq_type = f_seq_type,
         seq_type = seq_type,
         dist_matrix = dist_matrix,
         subset_size = subset_size,
