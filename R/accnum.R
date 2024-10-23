@@ -33,3 +33,36 @@ up2ncbi <- function(uniprot_id) {
     return(NA)  # Return NA if no mapping is found
   }
 }
+
+
+
+#' Convert an NCBI Entrez Gene ID to a UniProt ID
+#'
+#' This function takes a single NCBI Entrez Gene ID and returns the corresponding UniProt ID.
+#' It uses the `org.Hs.eg.db` package to perform the mapping.
+#'
+#' @param entrez_id A string representing a single NCBI Entrez Gene ID.
+#' @return A string representing the corresponding UniProt ID. Returns `NA` if no mapping is found.
+#' @examples
+#' \dontrun{
+#'   entrez_id <- "3586"
+#'   uniprot_id <- ncbi2up(entrez_id)
+#'   print(uniprot_id)
+#' }
+#' @importFrom AnnotationDbi select
+#' @import org.Hs.eg.db
+#' @export
+ncbi2up <- function(entrez_id) {
+  # Use the select function to map the Entrez Gene ID to a UniProt ID
+  result <- AnnotationDbi::select(org.Hs.eg.db,
+                                  keys = entrez_id,
+                                  columns = "UNIPROT",
+                                  keytype = "ENTREZID")
+  
+  # Check if the result is not empty and return the first UniProt ID
+  if (nrow(result) > 0 && !is.na(result$UNIPROT[1])) {
+    return(as.character(result$UNIPROT[1]))
+  } else {
+    return(NA)  # Return NA if no mapping is found
+  }
+}
