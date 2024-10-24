@@ -6,44 +6,29 @@ destfile <- "broadstreet-v3.3.0.tar.bz2"
 download.file(url, destfile)
 
 #Extract the file
-install.packages("R.utils")
-library(R.utils)
+if (!require("R.utils")) {
+  install.packages("R.utils")
+  library(R.utils)
+}
 
-# Decompress the file
-bunzip2("broadstreet-v3.3.0.tar.bz2", destname = "broadstreet-v3.3.0.tar", remove = FALSE)
-file.rename("broadstreet-v3.3.0.tar", "broadstreet-v3.3.0_old.tar")
 
 # Extract the tar file
-untar("broadstreet-v3.3.0_old.tar", exdir = "CARD_data")
-
-# List the contents of the extraction directory
-list.files("CARD_data")
-
-# Parse the ARO_index.tsv file using read.delim
+untar("broadstreet-v3.3.0.tar", exdir = "CARD_data")
 
 
 # Map CARD Short Name
-# Load necessary library
-library(dplyr)
+# Install and Load dplyr
+if (!require("dplyr")) {
+  install.packages("dplyr")
+  library(dplyr)
+} else {
+  library(dplyr)
+}
 
-#  Read the files
+#  Read the required files
 aro_index <- read.delim("CARD_data/aro_index.tsv", sep = "\t", header = TRUE)
 antibiotics_data <- read.delim("CARD_data/shortname_antibiotics.tsv", sep = "\t", header = TRUE)
 pathogens_data <- read.delim("CARD_data/shortname_pathogens.tsv", sep = "\t", header = TRUE)
-
-
-# Mutate data
-aro_index <- aro_index %>%
-  mutate(
-    pathogen = sapply(strsplit(CARD.Short.Name, "_"), `[`, 1),   # First part: Pathogen
-    gene = sapply(strsplit(CARD.Short.Name, "_"), `[`, 2),       # Second part: Gene
-    drug = ifelse(sapply(strsplit(CARD.Short.Name, "_"), length) == 3,   # Third part: Drug
-                  sapply(strsplit(CARD.Short.Name, "_"), `[`, 3), NA),
-    Protein.Accession = Protein.Accession   # Include existing Protein.Accession column
-  )
-
-# View the mutated data
-head(aro_index)
 
 
 # Extract pathogen, gene, drug, and include Protein.Accession from 'CARD.Short.Name'
@@ -88,9 +73,19 @@ staph_aureus_dap_combinations <- summarized_data %>%
 # View the filtered data
 head(staph_aureus_dap_combinations)
 
+#FASTA sequences
+#Install and Load required packages
+if (!requireNamespace("rentrez", quietly = TRUE)) {
+  install.packages("rentrez")
+}
+if (!requireNamespace("XML", quietly = TRUE)) {
+  install.packages("XML")
+}
+if (!requireNamespace("stringr", quietly = TRUE)) {
+  install.packages("stringr")
+}
 
-#Fetch FASTA sequences from Entrez using protein accession
-#Load required packages
+
 library(rentrez)
 library(XML)
 library(stringr)
