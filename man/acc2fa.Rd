@@ -15,6 +15,9 @@ Function may not work for vectors of length > 10,000}
 \item{plan}{}
 }
 \description{
+converts protein accession numbers to a fasta format. Resulting
+fasta file is written to the outpath.
+
 acc2fa converts protein accession numbers to a fasta format.
 Resulting fasta file is written to the outpath.
 }

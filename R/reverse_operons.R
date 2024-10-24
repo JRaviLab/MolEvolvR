@@ -3,7 +3,7 @@
 # Modified by Janani Ravi and Samuel Chen
 
 
-#' reveql
+#' straightenOperonSeq
 #'
 #' @param prot
 #'
@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @examples
-reveql <- function(prot) {
+straightenOperonSeq <- function(prot) {
     w <- prot # $GenContext.orig # was 'x'
 
     y <- rep(NA, length(w))
@@ -57,7 +57,7 @@ reveql <- function(prot) {
 
 ## The function to reverse operons
 
-#' reverse_operon
+#' reverseOperonSeq
 #'
 #' @param prot
 #'
@@ -65,7 +65,7 @@ reveql <- function(prot) {
 #' @export
 #'
 #' @examples
-reverse_operon <- function(prot) {
+reverseOperonSeq <- function(prot) {
     gencontext <- prot$GenContext
 
     gencontext <- gsub(pattern = ">", replacement = ">|", x = gencontext)
@@ -108,7 +108,7 @@ reverse_operon <- function(prot) {
 
 
 
-    ge <- lapply(1:length(ge), function(x) reveql(ge[[x]]))
+    ge <- lapply(1:length(ge), function(x) straightenOperonSeq(ge[[x]]))
 
     ye <- te[withouteq]
 
@@ -141,4 +141,4 @@ reverse_operon <- function(prot) {
 # colnames(prot) <- c("AccNum","GenContext.orig","len", "GeneName","TaxID","Species")
 
 ## ??? straighten operons
-# prot$GenContext.orig <- reverse_operon(prot)
+# prot$GenContext.orig <- reverseOperonSeq(prot)

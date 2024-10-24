@@ -55,9 +55,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' clean_clust_file("data/pspa.op_ins_cls", writepath = NULL, query = "pspa")
+#' cleanClusterFile("data/pspa.op_ins_cls", writepath = NULL, query = "pspa")
 #' }
-clean_clust_file <- function(path, writepath = NULL, query) {
+cleanClusterFile <- function(path, writepath = NULL, query) {
     # ?? does the following line need to be changed to read_lines()?
     prot <- read_tsv(path, col_names = F)
 
