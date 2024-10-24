@@ -84,7 +84,7 @@ downloadAssemblySummary <- function(outpath,
 #' This file can be generated using the "downloadAssemblySummary()" function
 #' @param lineagelookup_path String of the path to the lineage lookup file
 #' (taxid to lineage mapping). This file can be generated using the
-#' "create_lineage_lookup()" function
+#' "createLineageLookup()" function
 #' @param acc_col Character. The name of the column in `prot_data` containing 
 #' accession numbers. Default is "AccNum".
 #'
@@ -359,7 +359,7 @@ efetchIPG <- function(accessions, out_path, plan = "multicore") {
 #' @param genbank_assembly_path String. Path to the GenBank assembly summary file.
 #' @param lineagelookup_path String of the path to the lineage lookup file
 #' (taxid to lineage mapping). This file can be generated using the
-#' "create_lineage_lookup()" function
+#' "createLineageLookup()" function
 #'
 #' @importFrom data.table fread setnames
 #'

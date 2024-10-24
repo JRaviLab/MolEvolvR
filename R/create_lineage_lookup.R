@@ -3,6 +3,9 @@
 # library(biomartr)
 
 
+#' createLineageLookup
+#' 
+#' @description
 #' Create a look up table that goes from TaxID, to Lineage
 #'
 #' @author Samuel Chen
@@ -29,13 +32,13 @@
 #'
 #' @examples
 #' \dontrun{
-#' create_lineage_lookup(lineage_file = "data/rankedlineage.dmp", 
-#'                       outfile = "data/lineage_lookup.tsv", 
-#'                       taxonomic_rank = "family")
+#' createLineageLookup(lineage_file = "data/rankedlineage.dmp", 
+#'                      outfile = "data/lineage_lookup.tsv", 
+#'                      taxonomic_rank = "family")
 #' }
-create_lineage_lookup <- function(lineage_file = here("data/rankedlineage.dmp"),
+createLineageLookup <- function(lineage_file = here("data/rankedlineage.dmp"),
     outfile, taxonomic_rank = "phylum") {
-    shorten_NA <- function(Lineage) {
+    .shortenNA <- function(Lineage) {
         first_NA <- str_locate(Lineage, "NA")[1]
         if (is.na(first_NA)) {
             # No NAs
@@ -99,7 +102,7 @@ create_lineage_lookup <- function(lineage_file = here("data/rankedlineage.dmp"),
     # Takes a while (2million rows after all)
     rankedLinsCombined <- rankedLins %>%
         unite(col = "Lineage", all_of(combined_taxonomy), sep = ">") %>%
-        mutate(Lineage = unlist(map(Lineage, shorten_NA)))
+        mutate(Lineage = unlist(map(Lineage, .shortenNA)))
 
 
 
@@ -108,7 +111,7 @@ create_lineage_lookup <- function(lineage_file = here("data/rankedlineage.dmp"),
 
 
 
-#' CreateLineageLookup <- function(assembly_path, updateAssembly = FALSE, file_type = "tsv")
+#' createLineageLookup <- function(assembly_path, updateAssembly = FALSE, file_type = "tsv")
 #' {
 #'   #' Create a look up table that goes from GCA_ID, to TaxID, to Lineage
 #'   #' @author Samuel Chen

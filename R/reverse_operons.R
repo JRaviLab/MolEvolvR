@@ -3,7 +3,7 @@
 # Modified by Janani Ravi and Samuel Chen
 
 
-#' reveql: Reverse Equalities in Genomic Context
+#' straightenOperonSeq: Reverse Equalities in Genomic Context
 #'
 #' @description
 #' This function processes the genomic context strings (GenContext) and reverses
@@ -20,10 +20,10 @@
 #' @examples
 #' # Example input: Genomic context with directional symbols and an asterisk
 #' genomic_context <- c("A", "B", "*", "C", "D", "=", "E", "F")
-#' reveql(genomic_context)
+#' straightenOperonSeq(genomic_context)
 #'
 #' # Output: "A->", "B->", "*", "<-C", "<-D", "=", "E->", "F->"
-reveql <- function(prot) {
+straightenOperonSeq <- function(prot) {
     w <- prot # $GenContext.orig # was 'x'
 
     y <- rep(NA, length(w))
@@ -69,7 +69,7 @@ reveql <- function(prot) {
 
 ## The function to reverse operons
 
-#' reverse_operon: Reverse the Direction of Operons in Genomic Context
+#' reverseOperon: Reverse the Direction of Operons in Genomic ContextSeq
 #'
 #' @description
 #' This function processes a genomic context data frame to reverse the direction
@@ -89,9 +89,9 @@ reveql <- function(prot) {
 #' @examples
 #' # Example genomic context data frame
 #' prot <- data.frame(GenContext = c("A>B", "C<D", "E=F*G", "H>I"))
-#' reversed_prot <- reverse_operon(prot)
+#' reversed_prot <- reverseOperonSeq(prot)
 #' print(reversed_prot)
-reverse_operon <- function(prot) {
+reverseOperonSeq <- function(prot) {
     gencontext <- prot$GenContext
 
     gencontext <- gsub(pattern = ">", replacement = ">|", x = gencontext)
@@ -134,7 +134,7 @@ reverse_operon <- function(prot) {
 
 
 
-    ge <- lapply(1:length(ge), function(x) reveql(ge[[x]]))
+    ge <- lapply(1:length(ge), function(x) straightenOperonSeq(ge[[x]]))
 
     ye <- te[withouteq]
 
@@ -167,4 +167,4 @@ reverse_operon <- function(prot) {
 # colnames(prot) <- c("AccNum","GenContext.orig","len", "GeneName","TaxID","Species")
 
 ## ??? straighten operons
-# prot$GenContext.orig <- reverse_operon(prot)
+# prot$GenContext.orig <- reverseOperonSeq(prot)

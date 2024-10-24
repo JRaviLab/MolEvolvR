@@ -50,9 +50,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' domain_network(pspa)
+#' createDomainNetwork(pspa)
 #' }
-domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff = 70, layout = "nice", query_color = adjustcolor("green", alpha.f = .5)) {
+createDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, cutoff = 70, layout = "nice", query_color = adjustcolor("green", alpha.f = .5)) {
     # by domain networks or all, as required.
     tryCatch(
         {
@@ -259,9 +259,9 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
 #'
 #' @examples
 #' \dontrun{
-#' BinaryDomainNetwork(pspa)
+#' createBinaryDomainNetwork(pspa)
 #' }
-BinaryDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, cutoff = 70,
+createBinaryDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, cutoff = 70,
     layout = "nice", query_color = adjustcolor("yellow", alpha.f = .5),
     partner_color = adjustcolor("skyblue", alpha.f = .5),
     border_color = adjustcolor("grey", alpha.f = .8),

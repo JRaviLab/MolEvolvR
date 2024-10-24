@@ -23,11 +23,11 @@
 #'
 #' @examples
 #' \dontrun{
-#' combined_data <- combine_full("path/to/full_analysis/files", ret = TRUE)
+#' combined_data <- combineFullAnalysis("path/to/full_analysis/files", ret = TRUE)
 #' }
-combine_full <- function(inpath, ret = FALSE) {
+combineFullAnalysis <- function(inpath, ret = FALSE) {
     ## Combining full_analysis files
-    full_combnd <- combine_files(inpath,
+    full_combnd <- combineFiles(inpath,
         pattern = "*.full_analysis.tsv", skip = 0,
         col_names = T
     )
@@ -58,11 +58,11 @@ combine_full <- function(inpath, ret = FALSE) {
 #'
 #' @examples
 #' \dontrun{
-#' combined_ipr_data <- combine_ipr("path/to/ipr/files", ret = TRUE)
+#' combineIPR <- combine_ipr("path/to/ipr/files", ret = TRUE)
 #' }
-combine_ipr <- function(inpath, ret = FALSE) {
+combineIPR <- function(inpath, ret = FALSE) {
     ## Combining clean ipr files
-    ipr_combnd <- combine_files(inpath,
+    ipr_combnd <- combineFiles(inpath,
         pattern = "*.iprscan_cln.tsv", skip = 0,
         col_names = T
     )

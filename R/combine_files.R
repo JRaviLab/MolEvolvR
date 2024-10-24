@@ -46,9 +46,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' combined_data <- combine_files(inpath = "../molevol_data/project_data/phage_defense/")
+#' combined_data <- combineFiles(inpath = "../molevol_data/project_data/phage_defense/")
 #' }
-combine_files <- function(inpath = c("../molevol_data/project_data/phage_defense/"),
+combineFiles <- function(inpath = c("../molevol_data/project_data/phage_defense/"),
     pattern = "*full_analysis.tsv",
     delim = "\t", skip = 0,
     col_names = T) {
@@ -77,7 +77,7 @@ combine_files <- function(inpath = c("../molevol_data/project_data/phage_defense
 ## Sample Runs ##
 #################
 # ## Combining full_analysis files
-# full_combnd <- combine_files(inpath,
+# full_combnd <- combineFiles(inpath,
 #                             pattern="*full_analysis.txt", skip=0,
 #                             col_names=T)
 #
@@ -85,7 +85,7 @@ combine_files <- function(inpath = c("../molevol_data/project_data/phage_defense
 #           path="../molevol_data/project_data/slps/full_combined.tsv")
 #
 # ## Combining clean files
-# cln_combnd <- combine_files(inpath,
+# cln_combnd <- combineFiles(inpath,
 #                             pattern="^.*cln.txt", skip=0,
 #                             col_names=T)
 #
@@ -96,14 +96,14 @@ combine_files <- function(inpath = c("../molevol_data/project_data/phage_defense
 # ## Less helpful examples!
 # ## Combining BLAST files
 # ## Likely makes no sense since clustering is done per query
-# cl_blast_combnd <- combine_files(inpath,
+# cl_blast_combnd <- combineFiles(inpath,
 #                                  pattern="^.*refseq.1e-5.txt", skip=0,
 #                                  col_names=cl_blast_colnames) %>%
 #   select(-PcPositive, -ClusterID)
 #
 # ## Combining IPR files
 # ## Likely makes no sense since there may be repeated AccNum from indiv. files!
-# ipr_combnd <- combine_files(inpath,
+# ipr_combnd <- combineFiles(inpath,
 #                             pattern="*iprscan.lins*",  skip=0,
 #                             col_names=ipr_colnames)
 #
