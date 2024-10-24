@@ -16,15 +16,24 @@ createDomainNetwork(
 \arguments{
 \item{prot}{A data frame that contains the column 'DomArch'.}
 
-\item{column}{Name of column containing Domain architecture from which nodes and edges are generated.}
+\item{column}{Name of column containing Domain architecture from which nodes
+and edges are generated.}
 
-\item{cutoff}{Integer. Only use domains that occur at or above the cutoff for total counts if cutoff_type is "Total Count".
-Only use domains that appear in cutoff or greater lineages if cutoff_type is Lineage.}
+\item{domains_of_interest}{Character vector specifying domains of interest.}
+
+\item{cutoff}{Integer. Only use domains that occur at or above the cutoff for
+total counts if cutoff_type is "Total Count".
+Only use domains that appear in cutoff or greater lineages if cutoff_type is
+Lineage.}
 
 \item{layout}{Character. Layout type to be used for the network. Options are:
 \itemize{\item "grid" \item "circle" \item "random" \item "auto"}}
 
-\item{query_color}{}
+\item{query_color}{Character. Color to represent the queried domain in the
+network.}
+}
+\value{
+A network visualization of domain architectures.
 }
 \description{
 This function creates a domain network from the 'DomArch' column.

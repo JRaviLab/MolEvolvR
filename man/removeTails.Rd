@@ -14,7 +14,8 @@ removeTails(prot, by_column = "DomArch", keep_domains = FALSE)
 \item{keep_domains}{Default is False Keeps tail entries that contain the query domains.}
 }
 \value{
-Describe return, in detail
+The original data frame with singletons removed from the specified
+column.
 }
 \description{
 Remove tails/singletons

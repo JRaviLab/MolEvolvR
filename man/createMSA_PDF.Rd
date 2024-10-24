@@ -23,6 +23,9 @@ Default is NULL. If value is NULL, the entire multiple sequence alignment is pri
 \item{upperbound}{Numeric. The column that determines the ending location of the MSA.
 Default is NULL. If value is NULL, the entire multiple sequence alignment is printed.}
 }
+\value{
+A PDF file containing the multiple sequence alignment.
+}
 \description{
 Generates a multiple sequence alignment from a fasta file
 
@@ -31,6 +34,9 @@ a pdf
 }
 \examples{
 \dontrun{
-createMSA_PDF()
+createMSA_PDF(fasta_path = "path/to/your/file.fasta", 
+        out_path = "path/to/output/alignment.pdf", 
+        lowerbound = 10, 
+        upperbound = 200)
 }
 }

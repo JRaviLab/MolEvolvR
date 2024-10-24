@@ -25,8 +25,60 @@ wordcloud3(
 )
 }
 \arguments{
-\item{hoverFunction}{}
+\item{data}{Data frame or table containing words and their frequencies for
+the word cloud.}
+
+\item{size}{Numeric. Scaling factor for word sizes (default is 1).}
+
+\item{minSize}{Numeric. Minimum font size for the smallest word
+(default is 0).}
+
+\item{gridSize}{Numeric. Size of the grid for placing words (default is 0).}
+
+\item{fontFamily}{Character. Font family to use for the words
+(default is "Segoe UI").}
+
+\item{fontWeight}{Character. Font weight for the words (default is "bold").}
+
+\item{color}{Character or vector. Color of the words. Use "random-dark" for
+random dark colors (default) or specify a color.}
+
+\item{backgroundColor}{Character. Background color of the word cloud
+(default is "white").}
+
+\item{minRotation}{Numeric. Minimum rotation angle of words in radians
+(default is -π/4).}
+
+\item{maxRotation}{Numeric. Maximum rotation angle of words in radians
+(default is π/4).}
+
+\item{shuffle}{Logical. Whether to shuffle the words (default is TRUE).}
+
+\item{rotateRatio}{Numeric. Proportion of words that are rotated
+(default is 0.4).}
+
+\item{shape}{Character. Shape of the word cloud ("circle" is default, but
+you can use "cardioid", "star", "triangle", etc.).}
+
+\item{ellipticity}{Numeric. Degree of ellipticity (default is 0.65).}
+
+\item{widgetsize}{Numeric vector. Width and height of the widget
+(default is NULL, which uses default size).}
+
+\item{figPath}{Character. Path to an image file to use as a mask for the
+word cloud (optional).}
+
+\item{hoverFunction}{JS function. JavaScript function to run when hovering
+over words (optional).}
+}
+\value{
+An HTML widget object displaying a word cloud.
 }
 \description{
 plotWordCloud3
+}
+\examples{
+\dontrun{
+wordcloud3(data = your_data, size = 1.5, color = "random-light")
+}
 }

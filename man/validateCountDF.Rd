@@ -7,8 +7,16 @@
 validateCountDF(var)
 }
 \arguments{
-\item{var}{}
+\item{var}{A data frame whose columns are to be converted.}
+}
+\value{
+A data frame with non-'n' columns converted to character type.
 }
 \description{
 validateCountDF
+}
+\examples{
+\dontrun{
+new_df <- .all_non_n_cols_to_char(my_data)
+}
 }
