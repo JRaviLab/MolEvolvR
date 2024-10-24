@@ -17,26 +17,27 @@
 #' @export
 #'
 #' @examples
-run_deltablast <- function(deltablast_path, db_search_path,
+runDeltaBlast <- function(deltablast_path, db_search_path,
     db = "refseq", query, evalue = "1e-5",
     out, num_alignments, num_threads = 1) {
     start <- Sys.time()
 
-    system(paste0("export BLASTDB=/", db_search_path))
+  system(paste0("export BLASTDB=/", db_search_path))
 
-    system2(
-        command = deltablast_path,
-        args = c(
-            "-db", db,
-            "-query", query,
-            "-evalue", evalue,
-            "-out", out,
-            "-num_threads", num_threads,
-            "-num_alignments", num_alignments
-            #   ,"-outfmt", outfmt
-        )
+  system2(
+    command = deltablast_path,
+    args = c(
+      "-db", db,
+      "-query", query,
+      "-evalue", evalue,
+      "-out", out,
+      "-num_threads", num_threads,
+      "-num_alignments", num_alignments
+      #   ,"-outfmt", outfmt
     )
-    print(Sys.time() - start)
+  )
+  print(Sys.time() - start)
+
 }
 
 
@@ -54,7 +55,7 @@ run_deltablast <- function(deltablast_path, db_search_path,
 #' @export
 #'
 #' @examples
-run_rpsblast <- function(rpsblast_path, db_search_path,
+runRPSBlast <- function(rpsblast_path, db_search_path,
     db = "refseq", query, evalue = "1e-5",
     out, num_threads = 1) {
     start <- Sys.time()
