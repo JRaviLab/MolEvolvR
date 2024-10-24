@@ -54,7 +54,7 @@ convert2TitleCase <- function(x, y = " ") {
 ################################
 ## Function to add leaves to an alignment file
 ## !! Add DA to leaves?
-#' Adding Leaves to an alignment file w/ accessions
+#' addLeaves2Alignment
 #'
 #' @author Janani Ravi
 #' @keywords alignment, accnum, leaves, lineage, species
@@ -178,7 +178,7 @@ addLeaves2Alignment <- function(aln_file = "",
 }
 
 
-#' Add Name
+#' addName
 #'
 #' @author Samuel Chen, Janani Ravi
 #' @description This function adds a new 'Name' column that is comprised of components from
@@ -252,7 +252,7 @@ addName <- function(data,
 
 ################################
 ## Function to convert alignment 'aln' to fasta format for MSA + Tree
-#' Adding Leaves to an alignment file w/ accessions
+#' convertAlignment2FA
 #'
 #' @author Janani Ravi
 #' @keywords alignment, accnum, leaves, lineage, species
@@ -321,6 +321,9 @@ convertAlignment2FA <- function(aln_file = "",
     return(fasta)
 }
 
+#' mapAcc2Name
+#' 
+#' @description
 #' Default renameFA() replacement function. Maps an accession number to its name
 #'
 #' @param line The line of a fasta file starting with '>'
@@ -383,6 +386,9 @@ renameFA <- function(fa_path, outpath,
 
 ################################
 ## generateAllAlignments2FA
+#' generateAllAlignments2FA
+#' 
+#' @description 
 #' Adding Leaves to an alignment file w/ accessions
 #'
 #' @keywords alignment, accnum, leaves, lineage, species
@@ -442,10 +448,11 @@ generateAllAlignments2FA <- function(aln_path = here("data/rawdata_aln/"),
 
 # accessions <- c("P12345","Q9UHC1","O15530","Q14624","P0DTD1")
 # accessions <- rep("ANY95992.1", 201)
-#' acc2FA converts protein accession numbers to a fasta format.
+#' acc2FA 
 #'
 #' @description
-#' Resulting fasta file is written to the outpath.
+#' converts protein accession numbers to a fasta format. Resulting 
+#' fasta file is written to the outpath.
 #'
 #' @author Samuel Chen, Janani Ravi
 #' @keywords accnum, fasta
@@ -540,6 +547,9 @@ acc2FA <- function(accessions, outpath, plan = "sequential") {
     return(result)
 }
 
+#' createRepresentativeAccNum
+#' 
+#' @description
 #' Function to generate a vector of one Accession number per distinct observation from 'reduced' column
 #'
 #' @author Samuel Chen, Janani Ravi
@@ -557,7 +567,7 @@ acc2FA <- function(accessions, outpath, plan = "sequential") {
 #' @export
 #'
 #' @examples
-RepresentativeAccNums <- function(prot_data,
+createRepresentativeAccNum <- function(prot_data,
     reduced = "Lineage",
     accnum_col = "AccNum") {
     # Get Unique reduced column and then bind the AccNums back to get one AccNum per reduced column
@@ -586,6 +596,9 @@ RepresentativeAccNums <- function(prot_data,
     return(accessions)
 }
 
+#' alignFasta
+#' 
+#' @description
 #' Perform a Multiple Sequence Alignment on a FASTA file.
 #'
 #' @author Samuel Chen, Janani Ravi
@@ -611,12 +624,12 @@ alignFasta <- function(fasta_file, tool = "Muscle", outpath = NULL) {
     )
 
     if (typeof(outpath) == "character") {
-        write.MsaAAMultipleAlignment(aligned, outpath)
+        writeMSA_AA2FA(aligned, outpath)
     }
     return(aligned)
 }
 
-#' Write MsaAAMultpleAlignment Objects as algined fasta sequence
+#' writeMSA_AA2FA
 #'
 #' @description
 #' MsaAAMultipleAlignment Objects are generated from calls to msaClustalOmega
@@ -633,7 +646,7 @@ alignFasta <- function(fasta_file, tool = "Muscle", outpath = NULL) {
 #' @export
 #'
 #' @examples
-write.MsaAAMultipleAlignment <- function(alignment, outpath) {
+writeMSA_AA2FA <- function(alignment, outpath) {
     l <- length(rownames(alignment))
     fasta <- ""
     for (i in 1:l)
@@ -646,7 +659,7 @@ write.MsaAAMultipleAlignment <- function(alignment, outpath) {
     return(fasta)
 }
 
-#' Get accnums from fasta file
+#' getAccNumFromFA
 #'
 #' @param fasta_file
 #'
@@ -656,7 +669,7 @@ write.MsaAAMultipleAlignment <- function(alignment, outpath) {
 #' @export
 #'
 #' @examples
-get_accnums_from_fasta_file <- function(fasta_file) {
+getAccNumFromFA <- function(fasta_file) {
     txt <- read_file(fasta_file)
     accnums <- stringi::stri_extract_all_regex(txt, "(?<=>)[\\w,.]+")[[1]]
     return(accnums)

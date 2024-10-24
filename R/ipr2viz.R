@@ -13,9 +13,9 @@
 #################################
 ## Modified gggenes::theme_genes
 #################################
-## theme_genes2 adapted from theme_genes (w/o strip.text())
+## themeGenes2 adapted from theme_genes (w/o strip.text())
 ## https://github.com/wilkox/gggenes/blob/master/R/theme_genes.R
-#' Theme Genes2
+#' themeGenes2
 #'
 #' @importFrom ggplot2 element_blank element_line theme theme_grey
 #'
@@ -23,7 +23,7 @@
 #' @export
 #'
 #' @examples
-theme_genes2 <- function() {
+themeGenes2 <- function() {
     ggplot2::theme_grey() + ggplot2::theme(
         panel.background = ggplot2::element_blank(),
         panel.grid.major.y = ggplot2::element_line(colour = "grey80", size = 0.2),
@@ -41,7 +41,8 @@ theme_genes2 <- function() {
 ##################################
 ## Get Top N AccNum by Lin+DomArch
 ##################################
-#' Group by lineage + DA then take top 20
+#' getTopAccByLinDomArch
+#' @description Group by lineage + DA then take top 20
 #'
 #' @param infile_full
 #' @param DA_col
@@ -59,7 +60,7 @@ theme_genes2 <- function() {
 #' @export
 #'
 #' @examples
-find_top_acc <- function(infile_full,
+getTopAccByLinDomArch <- function(infile_full,
     DA_col = "DomArch.Pfam",
     lin_col = "Lineage_short",
     n = 20,
@@ -92,7 +93,7 @@ find_top_acc <- function(infile_full,
 #############################################
 ## IPR + FULL files --> DomArch Visualization
 #############################################
-#' IPR2Viz
+#' plotIPR2Viz
 #'
 #' @param infile_ipr
 #' @param infile_full
@@ -115,7 +116,7 @@ find_top_acc <- function(infile_full,
 #' @export
 #'
 #' @examples
-ipr2viz <- function(infile_ipr = NULL, infile_full = NULL, accessions = c(),
+plotIPR2Viz <- function(infile_ipr = NULL, infile_full = NULL, accessions = c(),
     analysis = c("Pfam", "Phobius", "TMHMM", "Gene3D"),
     group_by = "Analysis", # "Analysis"
     topn = 20, name = "Name", text_size = 15, query = "All") {
@@ -143,8 +144,8 @@ ipr2viz <- function(infile_ipr = NULL, infile_full = NULL, accessions = c(),
     ## To filter by Analysis
     analysis <- paste(analysis, collapse = "|")
     ## @SAM: This can't be set in stone since the analysis may change!
-    ## Getting top n accession numbers using find_top_acc()
-    top_acc <- find_top_acc(
+    ## Getting top n accession numbers using getTopAccByLinDomArch()
+    top_acc <- getTopAccByLinDomArch(
         infile_full = infile_full,
         DA_col = "DomArch.Pfam",
         ## @SAM, you could pick by the Analysis w/ max rows!
@@ -204,7 +205,7 @@ ipr2viz <- function(infile_ipr = NULL, infile_full = NULL, accessions = c(),
             # , ncol = 1 + #scales = "free",
             scale_fill_manual(values = CPCOLS, na.value = "#A9A9A9") +
             theme_minimal() +
-            theme_genes2() +
+            themeGenes2() +
             theme(
                 legend.position = "bottom",
                 legend.box = "horizontal",
@@ -234,7 +235,7 @@ ipr2viz <- function(infile_ipr = NULL, infile_full = NULL, accessions = c(),
             ) +
             scale_fill_manual(values = CPCOLS, na.value = "#A9A9A9") +
             theme_minimal() +
-            theme_genes2() +
+            themeGenes2() +
             theme(
                 legend.position = "bottom",
                 legend.box = "horizontal",
@@ -248,7 +249,7 @@ ipr2viz <- function(infile_ipr = NULL, infile_full = NULL, accessions = c(),
     return(plot)
 }
 
-#' IPR2Viz Web
+#' plotIPR2VizWeb
 #'
 #' @param infile_ipr
 #' @param accessions
@@ -270,7 +271,7 @@ ipr2viz <- function(infile_ipr = NULL, infile_full = NULL, accessions = c(),
 #' @export
 #'
 #' @examples
-ipr2viz_web <- function(infile_ipr,
+plotIPR2VizWeb <- function(infile_ipr,
     accessions,
     analysis = c("Pfam", "Phobius", "TMHMM", "Gene3D"),
     group_by = "Analysis", name = "Name",
@@ -346,7 +347,7 @@ ipr2viz_web <- function(infile_ipr,
             # , ncol = 1 + #scales = "free",
             scale_fill_manual(values = CPCOLS, na.value = "#A9A9A9") +
             theme_minimal() +
-            theme_genes2() +
+            themeGenes2() +
             theme(
                 legend.position = "bottom",
                 legend.box = "horizontal",
@@ -376,7 +377,7 @@ ipr2viz_web <- function(infile_ipr,
             ) +
             scale_fill_manual(values = CPCOLS, na.value = "#A9A9A9") +
             theme_minimal() +
-            theme_genes2() +
+            themeGenes2() +
             theme(
                 legend.position = "bottom",
                 legend.box = "horizontal",
