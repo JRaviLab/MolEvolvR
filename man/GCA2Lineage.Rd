@@ -19,7 +19,7 @@ This file can be generated using the "downloadAssemblySummary()" function}
 
 \item{lineagelookup_path}{String of the path to the lineage lookup file
 (taxid to lineage mapping). This file can be generated using the
-"create_lineage_lookup()" function}
+"createLineageLookup()" function}
 
 \item{acc_col}{}
 }
