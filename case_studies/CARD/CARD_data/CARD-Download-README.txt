@@ -52,7 +52,7 @@ including reference sequences, SNP mapping data, model parameters, and ARO class
 Values for "High Confidence TB", "Moderate Confidence TB", "Minimal Confidence TB", and
 "Indeterminate Confidence TB" were obtained from https://platform.reseqtb.org.
 
-INDEX FILES:
+## INDEX FILES
 
 The file "aro_index.tsv" contains a list of ARO tagging of GenBank accessions stored in 
 CARD.
