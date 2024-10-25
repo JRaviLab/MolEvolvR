@@ -43,7 +43,7 @@ includes reference wild type sequences used for mapping SNPs conferring antimicr
 resistance - without secondary mutation screening, analyses using these data will include 
 false positives for antibiotic resistant gene variants or mutants.
 
-MODELS:
+## MODELS
 
 The file "card.json" contains the complete data for all of CARD's AMR detection models, 
 including reference sequences, SNP mapping data, model parameters, and ARO classification.
