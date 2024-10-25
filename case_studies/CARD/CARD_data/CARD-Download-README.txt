@@ -32,7 +32,7 @@ or pathogen_gene_drug. The full lists of abbreviations can be found in the enclo
 "shortname_antibiotics.tsv"
 "shortname_pathogens.tsv"
 
-FASTA:
+## FASTA
 
 Nucleotide and corresponding protein FASTA downloads are available as separate files for 
 each model type.  For example, the "protein homolog" model type contains sequences of
