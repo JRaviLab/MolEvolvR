@@ -12,7 +12,7 @@ Alcock et al. 2023. "CARD 2023: expanded curation, support for machine learning,
 prediction at the Comprehensive Antibiotic Resistance Database" Nucleic Acids Research, 
 51, D690-D699. https://pubmed.ncbi.nlm.nih.gov/36263822/
 
-CARD SHORT NAMES:
+## CARD SHORT NAMES
 
 A CARD-specific abbreviation for AMR gene names associated with Antibiotic Resistance
 Ontology terms, often not based on the literature. This is used for programmatic and 
