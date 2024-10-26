@@ -73,7 +73,7 @@ get_card_data <- function(pathogen = NULL, drug = NULL) {
 
 # Run analysis
 run_analysis <- function(
-        dupload_type = "Fasta",
+        upload_type = "Fasta",
         evalue = 0.00001,
         accnum_fasta_input = "",
         file_paths = list(accnum = NULL, fasta = tempfile(), msa = tempfile(),
@@ -114,8 +114,8 @@ run_analysis <- function(
                     fasta_path = file_paths$fasta)
     query_data <- new("queryData")
 
-    if (length(dupload_type) != 1) {
-        stop("dupload_type must be a single value.")
+    if (length(upload_type) != 1) {
+        stop("upload_type must be a single value.")
     }
 
     # Reset default analysis function
@@ -129,8 +129,8 @@ run_analysis <- function(
     fasta_set <- c("Fasta", "AccNum", "MSA")
 
     # Update settings based on upload type
-    updateUploadType <- function(dupload_type) {
-        switch(dupload_type,
+    updateUploadType <- function(upload_type) {
+        switch(upload_type,
                "Fasta" = {
                    resetSettings()
                    acc_homology_analysis <<- TRUE
@@ -157,7 +157,7 @@ run_analysis <- function(
         )
     }
 
-    updateUploadType(dupload_type)
+    updateUploadType(upload_type)
 
     ####### File Upload Functions ########
 
@@ -239,7 +239,7 @@ run_analysis <- function(
     if (phylo) {
         # Validate phylogenetic analysis based on upload type
         is_valid_phylo <- switch(
-            dupload_type,
+            upload_type,
             "Fasta" = {
                 str_count(string = sequence_upload_data@seqs, ">") > 1
             },
@@ -261,7 +261,7 @@ run_analysis <- function(
         }
     }
     # Fasta-like submissions
-    if (dupload_type %in% fasta_set) {
+    if (upload_type %in% fasta_set) {
         # Can have any combination of select options
         type <- ""
         script <- ""
@@ -308,7 +308,7 @@ run_analysis <- function(
     path <- paste0(dir, "/", pin_id, ".fa")
     # Adding validation logic based on upload type
     system(paste0("mkdir ", dir), wait = TRUE)
-    switch(dupload_type,
+    switch(upload_type,
            "Fasta" = {
                # Validate sequence limit
                if (str_count(sequence_upload_data@seqs, ">") > 200) {
@@ -458,7 +458,7 @@ run_analysis <- function(
     }
 
     # Additional handling for different upload types
-    if (dupload_type == "BLAST Output") {
+    if (upload_type == "BLAST Output") {
         dir <- paste0(OUT_PATH, pin_id, "_blast")
         if (blast_upload_data@df == "") {
             stop("Error: Please upload a BLAST file.")
@@ -511,7 +511,7 @@ run_analysis <- function(
             )
         }
 
-    } else if (dupload_type == "InterProScan Output") {
+    } else if (upload_type == "InterProScan Output") {
         dir <- paste0(OUT_PATH, pin_id, "_ipr")
         path <- paste0(dir, "/", pin_id, "_ipr.tsv")
         if (ipr_upload_data()@df == "") {
