@@ -702,7 +702,7 @@ cleanup_blast <- function(infile_blast, acc2info, prefix, wblast = F) {
 
   # TaxID to lineage mapping
   cleanedup_blast$TaxID <- as.integer(cleanedup_blast$TaxID)
-  lineage_map <- fread("~/awasyn/new_trial/lineage_lookup.txt",
+  lineage_map <- fread("~/data/lineage_lookup.txt",
                        header = TRUE, fill = TRUE,
                        colClasses = lineage_map_cols)
 
@@ -841,7 +841,7 @@ run_interproscan <- function(query_file, prefix, outdir) {
   # Run InterProScan command
   # Construct the command
   command <- paste(
-    "/home/simple/iprdir/interproscan-5.70-102.0/interproscan.sh -i",
+    "~/interproscan-5.70-102.0/interproscan.sh -i",
     shQuote(query_file),
     "-b", shQuote(outfile),
     "-f TSV --cpu", Sys.getenv("INTERPROSCAN_CPUS", "4"),
@@ -875,7 +875,7 @@ ipr2lin <- function(ipr, acc2info, prefix) {
   ipr_tax <- left_join(ipr_in, acc2info_out, by = "AccNum")
 
   # read in lineage map
-  lineage_map <- fread("~/awasyn/new_trial/lineage_lookup.txt",
+  lineage_map <- fread("~/data/lineage_lookup.txt",
                        header = T, fill = T)
 
   # merge ipr+info w/ lineage
@@ -889,7 +889,7 @@ ipr2lin <- function(ipr, acc2info, prefix) {
     select(-Species.x, -Species.y)
 
   # add lookup table to iprscan file
-  lookup_tbl <- fread(input = "~/awasyn/new_trial/cln_lookup_tbl.tsv",
+  lookup_tbl <- fread(input = "~/data/cln_lookup_tbl.tsv",
                       sep = "\t", header = T, fill = T) %>%
     distinct()
   if ("AccNum.x" %in% names(ipr_lin)) {
