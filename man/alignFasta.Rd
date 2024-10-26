@@ -29,14 +29,14 @@ Perform a Multiple Sequence Alignment on a FASTA file.
 }
 \examples{
 \dontrun{
-aligned_sequences <- alignFasta("my_sequences.fasta", 
+aligned_sequences <- alignFasta("my_sequences.fasta",
 tool = "Muscle", outpath = "aligned_output.fasta")
 }
 \dontrun{
 # Example usage
-aligned_sequences <- alignFasta("path/to/sequences.fasta", 
+aligned_sequences <- alignFasta("path/to/sequences.fasta",
 tool = "ClustalO", outpath = "path/to/aligned_sequences.fasta")
-print(aligned_sequences)
+aligned_sequences
 }
 }
 \author{

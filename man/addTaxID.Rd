@@ -27,6 +27,6 @@ addTaxID
 # Create a sample data table with accession numbers
 sample_data <- data.table(AccNum = c("ABC123.1", "XYZ456.1", "LMN789.2"))
 enriched_data <- addTaxID(sample_data, acc_col = "AccNum", version = TRUE)
-print(enriched_data)
+enriched_data
 }
 }

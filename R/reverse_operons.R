@@ -7,12 +7,12 @@
 #'
 #' @description
 #' This function processes the genomic context strings (GenContext) and reverses
-#'  directional signs based on the presence of an equal sign ("="). 
+#'  directional signs based on the presence of an equal sign ("=").
 #'
 #' @param prot [vector] A vector of genomic context strings to be processed.
 #'
-#' @return [vector] A vector of the same length as the input, where each genomic 
-#' element is annotated with either a forward ("->") or reverse ("<-") direction, 
+#' @return [vector] A vector of the same length as the input, where each genomic
+#' element is annotated with either a forward ("->") or reverse ("<-") direction,
 #' depending on its position relative to the "=" symbols.
 #'
 #' @export
@@ -73,12 +73,12 @@ straightenOperonSeq <- function(prot) {
 #'
 #' @description
 #' This function processes a genomic context data frame to reverse the direction
-#' of operons based on specific patterns in the GenContext column. It handles 
-#' elements represented by ">" and "<" and restructures the genomic context by 
-#' flipping the direction of operons while preserving the relationships 
+#' of operons based on specific patterns in the GenContext column. It handles
+#' elements represented by ">" and "<" and restructures the genomic context by
+#' flipping the direction of operons while preserving the relationships
 #' indicated by "=".
 #'
-#' @param prot [data.frame] A data frame containing at least a column named 
+#' @param prot [data.frame] A data frame containing at least a column named
 #' 'GenContext', which represents the genomic contexts that need to be reversed.
 #'
 #' @return [data.frame] The input data frame with the 'GenContext' column updated t
@@ -90,7 +90,7 @@ straightenOperonSeq <- function(prot) {
 #' # Example genomic context data frame
 #' prot <- data.frame(GenContext = c("A>B", "C<D", "E=F*G", "H>I"))
 #' reversed_prot <- reverseOperonSeq(prot)
-#' print(reversed_prot)
+#' reversed_prot
 reverseOperonSeq <- function(prot) {
     gencontext <- prot$GenContext
 

@@ -25,6 +25,6 @@ prepareSingleColumnParams
 df <- data.frame(Category = c("A", "A", "B", "B", "C"),
                  n = c(10, 20, 30, 40, 50))
 params <- prepareSingleColumnParams(df, col_num = 1, root = "Root")
-print(params)
+params
 }
 }

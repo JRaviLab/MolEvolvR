@@ -21,31 +21,31 @@
 #' Shorten Lineage Names
 #'
 #' @description
-#' This function abbreviates lineage names by shortening the first part of the 
-#' string (up to a given delimiter). 
+#' This function abbreviates lineage names by shortening the first part of the
+#' string (up to a given delimiter).
 #'
-#' @param data A data frame that contains a column with lineage names to be 
+#' @param data A data frame that contains a column with lineage names to be
 #' shortened.
-#' @param colname Character. The name of the column in the data frame containing 
+#' @param colname Character. The name of the column in the data frame containing
 #' the lineage strings to be shortened. Default is `"Lineage"`.
-#' @param abr_len Integer. The number of characters to retain after the first 
-#' letter. If set to 1, only the first letter of each segment before the 
+#' @param abr_len Integer. The number of characters to retain after the first
+#' letter. If set to 1, only the first letter of each segment before the
 #' delimiter (`>`) is retained. Default is 1.
 #'
 #' @importFrom stringr str_locate
 #' @importFrom purrr pmap
 #'
-#' @return A modified data frame where the specified lineage column has been 
+#' @return A modified data frame where the specified lineage column has been
 #' shortened.
 #'
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' df <- data.frame(Lineage = c("Bacteria>Firmicutes>Clostridia", 
+#' df <- data.frame(Lineage = c("Bacteria>Firmicutes>Clostridia",
 #' "Archaea>Euryarchaeota>Thermococci"))
 #' shortened_df <- shortenLineage(df, colname = "Lineage", abr_len = 1)
-#' print(shortened_df)
+#' shortened_df
 #' }
 shortenLineage <- function(data, colname = "Lineage", abr_len = 1) {
     abbrv <- function(x) {
@@ -82,17 +82,17 @@ shortenLineage <- function(data, colname = "Lineage", abr_len = 1) {
 #' @param colname Column name from query_data: "DomArch.norep", "GenContext.norep",
 #' "DomArch.PFAM.norep" or "DomArch.LADB.norep". Default is "DomArch.norep".
 #' @param cutoff Numeric. Cutoff for word frequency. Default is 90.
-#' @param RowsCutoff Boolean. If TRUE, applies a row cutoff to remove data rows 
+#' @param RowsCutoff Boolean. If TRUE, applies a row cutoff to remove data rows
 #' based on a certain condition. Default is FALSE.
-#' @param text.scale  Allows scaling of axis title, tick lables, and numbers 
+#' @param text.scale  Allows scaling of axis title, tick lables, and numbers
 #' above the intersection size bars.
 #' text.scale can either take a universal scale in the form of an integer,
 #' or a vector of specific scales in the format: c(intersection size title,
 #' intersection size tick labels, set size title, set size tick labels, set names,
 #'  numbers above bars)
-#' @param point.size Numeric. Sets the size of points in the UpSet plot. 
+#' @param point.size Numeric. Sets the size of points in the UpSet plot.
 #' Default is 2.2.
-#' @param line.size Numeric. Sets the line width in the UpSet plot. 
+#' @param line.size Numeric. Sets the line width in the UpSet plot.
 #' Default is 0.8.
 #'
 #' @importFrom dplyr across distinct filter if_else mutate pull select where
@@ -100,7 +100,7 @@ shortenLineage <- function(data, colname = "Lineage", abr_len = 1) {
 #' @importFrom stringr str_detect str_replace_all str_split
 #' @importFrom UpSetR upset
 #'
-#' @return An UpSet plot object. The plot visualizes intersections of sets based 
+#' @return An UpSet plot object. The plot visualizes intersections of sets based
 #' on the provided colname in query_data.
 #' @export
 #'
@@ -251,7 +251,7 @@ plotUpSet <- function(query_data = "toast_rack.sub",
 #' @param colname Column name from query_data: "DomArch.norep", "GenContext.norep",
 #' "DomArch.PFAM.norep" or "DomArch.LADB.norep". Default is "DomArch.norep".
 #' @param cutoff Numeric. Cutoff for word frequency. Default is 90.
-#' @param RowsCutoff Boolean. If TRUE, applies a row cutoff to remove data rows 
+#' @param RowsCutoff Boolean. If TRUE, applies a row cutoff to remove data rows
 #' based on a certain condition. Default is FALSE.
 #' @param color Color for the heatmap. One of six options: "default", "magma", "inferno",
 #' "plasma", "viridis", or "cividis"
@@ -354,13 +354,13 @@ plotLineageDA <- function(query_data = "prot",
 #' @param query_data Data frame of protein homologs with the usual 11 columns +
 #' additional word columns (0/1 format).
 #' Default is prot (variable w/ protein data).
-#' @param queries Character Vector containing the queries that will be used for 
+#' @param queries Character Vector containing the queries that will be used for
 #' the categories.
-#' @param colname Character. The column used for filtering based on the `queries`. 
+#' @param colname Character. The column used for filtering based on the `queries`.
 #' Default is "ClustName".
-#' @param cutoff Numeric. The cutoff value for filtering rows based on their 
+#' @param cutoff Numeric. The cutoff value for filtering rows based on their
 #' total count. Rows with values below this cutoff are excluded.
-#' @param color Character. Defines the color palette used for the heatmap. 
+#' @param color Character. Defines the color palette used for the heatmap.
 #' Default is a red gradient.
 #'
 #' @importFrom dplyr arrange desc filter group_by select summarise union
@@ -371,8 +371,8 @@ plotLineageDA <- function(query_data = "prot",
 #' @importFrom tidyr drop_na
 #' @importFrom viridis scale_fill_viridis
 #'
-#' @return A ggplot object representing a heatmap (tile plot) showing the 
-#' relationship between queries and lineages, with the intensity of color 
+#' @return A ggplot object representing a heatmap (tile plot) showing the
+#' relationship between queries and lineages, with the intensity of color
 #' representing the count of matching records.
 #' @export
 #'
@@ -503,8 +503,8 @@ plotLineageQuery <- function(query_data = all,
 #' @importFrom stringr str_replace_all
 #' @importFrom tidyr gather
 #'
-#' @return A ggplot object representing a heatmap (tile plot) of lineage versus 
-#' the top neighboring domain architectures, with color intensity representing 
+#' @return A ggplot object representing a heatmap (tile plot) of lineage versus
+#' the top neighboring domain architectures, with color intensity representing
 #' the frequency of occurrences.
 #' @export
 #'
@@ -583,9 +583,9 @@ plotLineageNeighbors <- function(query_data = "prot", query = "pspa",
 
 #' Lineage Domain Repeats Plot
 #'
-#' @param query_data Data frame containing protein homolog data, including 
+#' @param query_data Data frame containing protein homolog data, including
 #' relevant domain architectures and lineages.
-#' @param colname Character. The name of the column in query_data that contains 
+#' @param colname Character. The name of the column in query_data that contains
 #' domain architectures or other structural information.
 #'
 #' @importFrom dplyr across mutate select where
@@ -593,8 +593,8 @@ plotLineageNeighbors <- function(query_data = "prot", query = "pspa",
 #' @importFrom stringr str_count str_replace_all
 #' @importFrom tidyr gather
 #'
-#' @return A ggplot object representing a heatmap (tile plot) of domain repeat 
-#' counts across different lineages, with color intensity representing the 
+#' @return A ggplot object representing a heatmap (tile plot) of domain repeat
+#' counts across different lineages, with color intensity representing the
 #' occurrence of domains.
 #' @export
 #'
@@ -679,8 +679,8 @@ plotLineageDomainRepeats <- function(query_data, colname) {
 #' @importFrom purrr map
 #' @importFrom stringr str_locate str_locate_all
 #'
-#' @return A ggplot object representing a heatmap (tile plot) of domain repeat 
-#' counts across different lineages, with color intensity representing the 
+#' @return A ggplot object representing a heatmap (tile plot) of domain repeat
+#' counts across different lineages, with color intensity representing the
 #' occurrence of domains.
 #' @export
 #'
@@ -826,26 +826,26 @@ plotLineageHeatmap <- function(prot, domains_of_interest, level = 3, label.size 
 
 #' Stacked Lineage Plot
 #'
-#' @param prot Data frame containing protein data including domain architecture 
+#' @param prot Data frame containing protein data including domain architecture
 #' and lineage information.
-#' @param column Character. The name of the column in prot representing domain 
+#' @param column Character. The name of the column in prot representing domain
 #' architectures (default is "DomArch").
-#' @param cutoff Numeric. A threshold value for filtering domain architectures 
+#' @param cutoff Numeric. A threshold value for filtering domain architectures
 #' or protein counts.
-#' @param Lineage_col Character. The name of the column representing lineage 
+#' @param Lineage_col Character. The name of the column representing lineage
 #' data (default is "Lineage").
-#' @param xlabel Character. Label for the x-axis 
+#' @param xlabel Character. Label for the x-axis
 #' (default is "Domain Architecture").
-#' @param reduce_lineage Logical. Whether to shorten lineage names 
+#' @param reduce_lineage Logical. Whether to shorten lineage names
 #' (default is TRUE).
 #' @param label.size Numeric. The size of axis text labels (default is 8).
-#' @param legend.position Numeric vector. Coordinates for placing the legend 
+#' @param legend.position Numeric vector. Coordinates for placing the legend
 #' (default is c(0.7, 0.4)).
-#' @param legend.text.size Numeric. Size of the text in the legend 
+#' @param legend.text.size Numeric. Size of the text in the legend
 #' (default is 10).
 #' @param legend.cols Numeric. Number of columns in the legend (default is 2).
 #' @param legend.size Numeric. Size of the legend keys (default is 0.7).
-#' @param coord_flip Logical. Whether to flip the coordinates of the plot 
+#' @param coord_flip Logical. Whether to flip the coordinates of the plot
 #' (default is TRUE).
 #' @param legend Logical. Whether to display the legend (default is TRUE).
 #'
@@ -853,7 +853,7 @@ plotLineageHeatmap <- function(prot, domains_of_interest, level = 3, label.size 
 #' @importFrom ggplot2 aes_string coord_flip element_blank element_line element_rect element_text geom_bar ggplot guides guide_legend scale_fill_manual xlab ylab theme theme_minimal
 #' @importFrom purrr map
 #'
-#' @return A ggplot object representing a stacked bar plot showing the 
+#' @return A ggplot object representing a stacked bar plot showing the
 #' distribution of protein domain architectures across lineages.
 #' @export
 #'
@@ -982,34 +982,34 @@ plotStackedLineage <- function(prot, column = "DomArch", cutoff, Lineage_col = "
 
 #' plotWordCloud3
 #'
-#' @param data Data frame or table containing words and their frequencies for 
+#' @param data Data frame or table containing words and their frequencies for
 #' the word cloud.
 #' @param size Numeric. Scaling factor for word sizes (default is 1).
-#' @param minSize Numeric. Minimum font size for the smallest word 
+#' @param minSize Numeric. Minimum font size for the smallest word
 #' (default is 0).
 #' @param gridSize Numeric. Size of the grid for placing words (default is 0).
-#' @param fontFamily Character. Font family to use for the words 
+#' @param fontFamily Character. Font family to use for the words
 #' (default is "Segoe UI").
 #' @param fontWeight Character. Font weight for the words (default is "bold").
-#' @param color Character or vector. Color of the words. Use "random-dark" for 
+#' @param color Character or vector. Color of the words. Use "random-dark" for
 #' random dark colors (default) or specify a color.
-#' @param backgroundColor Character. Background color of the word cloud 
+#' @param backgroundColor Character. Background color of the word cloud
 #' (default is "white").
-#' @param minRotation Numeric. Minimum rotation angle of words in radians 
+#' @param minRotation Numeric. Minimum rotation angle of words in radians
 #' (default is -π/4).
-#' @param maxRotation Numeric. Maximum rotation angle of words in radians 
+#' @param maxRotation Numeric. Maximum rotation angle of words in radians
 #' (default is π/4).
 #' @param shuffle Logical. Whether to shuffle the words (default is TRUE).
-#' @param rotateRatio Numeric. Proportion of words that are rotated 
+#' @param rotateRatio Numeric. Proportion of words that are rotated
 #' (default is 0.4).
-#' @param shape Character. Shape of the word cloud ("circle" is default, but 
+#' @param shape Character. Shape of the word cloud ("circle" is default, but
 #' you can use "cardioid", "star", "triangle", etc.).
 #' @param ellipticity Numeric. Degree of ellipticity (default is 0.65).
-#' @param widgetsize Numeric vector. Width and height of the widget 
+#' @param widgetsize Numeric vector. Width and height of the widget
 #' (default is NULL, which uses default size).
-#' @param figPath Character. Path to an image file to use as a mask for the 
+#' @param figPath Character. Path to an image file to use as a mask for the
 #' word cloud (optional).
-#' @param hoverFunction JS function. JavaScript function to run when hovering 
+#' @param hoverFunction JS function. JavaScript function to run when hovering
 #' over words (optional).
 #'
 #' @importFrom base64enc base64encode
@@ -1082,11 +1082,11 @@ wordcloud3 <- function(data, size = 1, minSize = 0, gridSize = 0, fontFamily = "
 #'
 #' @param query_data Data frame of protein homologs with the usual 11 columns +
 #' additional word columns (0/1 format). Default is "prot".
-#' @param colname Character. The name of the column in `query_data` to generate 
+#' @param colname Character. The name of the column in `query_data` to generate
 #' the word cloud from. Default is "DomArch".
-#' @param cutoff Numeric. The cutoff value for filtering elements based on their 
+#' @param cutoff Numeric. The cutoff value for filtering elements based on their
 #' frequency. Default is 70.
-#' @param UsingRowsCutoff Logical. Whether to use a row-based cutoff instead of 
+#' @param UsingRowsCutoff Logical. Whether to use a row-based cutoff instead of
 #' a frequency cutoff. Default is FALSE.
 #'
 #' @importFrom dplyr filter pull
@@ -1094,7 +1094,7 @@ wordcloud3 <- function(data, size = 1, minSize = 0, gridSize = 0, fontFamily = "
 #' @importFrom rlang sym
 #' @importFrom wordcloud wordcloud
 #'
-#' @return A word cloud plot showing the frequency of elements from the selected 
+#' @return A word cloud plot showing the frequency of elements from the selected
 #' column.
 #' @export
 #'
@@ -1166,17 +1166,17 @@ createWordCloudElement <- function(query_data = "prot",
 #'
 #' @param query_data Data frame of protein homologs with the usual 11 columns +
 #' additional word columns (0/1 format). Default is "prot".
-#' @param colname Character. The name of the column in `query_data` to generate 
+#' @param colname Character. The name of the column in `query_data` to generate
 #' the word cloud from. Default is "DomArch".
-#' @param cutoff Numeric. The cutoff value for filtering elements based on their 
+#' @param cutoff Numeric. The cutoff value for filtering elements based on their
 #' frequency. Default is 70.
-#' @param UsingRowsCutoff Logical. Whether to use a row-based cutoff instead of 
+#' @param UsingRowsCutoff Logical. Whether to use a row-based cutoff instead of
 #' a frequency cutoff. Default is FALSE.
 #'
 #' @importFrom dplyr filter pull
 #' @importFrom rlang sym
 #'
-#' @return A word cloud plot showing the frequency of elements from the selected 
+#' @return A word cloud plot showing the frequency of elements from the selected
 #' column.
 #' @export
 #'
@@ -1240,22 +1240,22 @@ createWordCloud2Element <- function(query_data = "prot",
 #### Sunburst #####
 #' Lineage Sunburst
 #'
-#' @param prot Data frame containing a lineage column that the sunburst plot 
+#' @param prot Data frame containing a lineage column that the sunburst plot
 #' will be generated for
-#' @param lineage_column String. Name of the lineage column within the 
+#' @param lineage_column String. Name of the lineage column within the
 #' data frame. Defaults to "Lineage"
-#' @param type String, either "sunburst" or "sund2b". If type is "sunburst", 
+#' @param type String, either "sunburst" or "sund2b". If type is "sunburst",
 #' a sunburst plot of the lineage
 #' @param levels Integer. Number of levels the sunburst will have.
-#' @param colors A vector of colors for the sunburst plot. 
+#' @param colors A vector of colors for the sunburst plot.
 #' If NULL, default colors are used.
-#' @param legendOrder String vector. The order of the legend. If legendOrder 
+#' @param legendOrder String vector. The order of the legend. If legendOrder
 #' is NULL,
-#' @param showLegend Boolean. If TRUE, the legend will be enabled when the 
+#' @param showLegend Boolean. If TRUE, the legend will be enabled when the
 #' component first renders.
-#' @param maxLevels Integer, the maximum number of levels to display in the 
-#' sunburst; 5 by default, NULL to disable then the legend will be in the 
-#' descending order of the top level hierarchy. will be rendered. If the type is 
+#' @param maxLevels Integer, the maximum number of levels to display in the
+#' sunburst; 5 by default, NULL to disable then the legend will be in the
+#' descending order of the top level hierarchy. will be rendered. If the type is
 #' sund2b, a sund2b plot will be rendered.
 #'
 #' @importFrom d3r d3_nest
@@ -1270,7 +1270,7 @@ createWordCloud2Element <- function(query_data = "prot",
 #'
 #' @examples
 #' \dontrun{
-#' plotLineageSunburst(prot, lineage_column = "Lineage", 
+#' plotLineageSunburst(prot, lineage_column = "Lineage",
 #' type = "sunburst", levels = 3)
 #' }
 plotLineageSunburst <- function(prot, lineage_column = "Lineage",

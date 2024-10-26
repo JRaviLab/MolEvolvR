@@ -56,7 +56,7 @@ data <- data.frame(
   Lineage = c("Eukaryota>Chordata", "Eukaryota>Chordata")
 )
 enriched_data <- addName(data)
-print(enriched_data)
+enriched_data
 \dontrun{
 addName(data_frame)
 }

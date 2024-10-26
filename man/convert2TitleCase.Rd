@@ -30,8 +30,8 @@ Changing case to 'Title Case'
 # Convert a single string to title case
 convert2TitleCase("hello world") # Returns "Hello World"
 
-convert2TitleCase("hello world") 
-convert2TitleCase("this is a test", "_") 
+convert2TitleCase("hello world")
+convert2TitleCase("this is a test", "_")
 }
 \seealso{
 chartr, toupper, and tolower.

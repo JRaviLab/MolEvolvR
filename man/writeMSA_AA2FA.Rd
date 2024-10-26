@@ -28,6 +28,9 @@ and msaMuscle from the 'msa' package
 }
 \examples{
 \dontrun{
+writeMSA_AA2FA("my_sequences.fasta", outpath = "aligned_output.fasta")
+}
+\dontrun{
 # Example usage
 alignment <- alignFasta("path/to/sequences.fasta")
 writeMSA_AA2FA(alignment, "path/to/aligned_sequences.fasta")

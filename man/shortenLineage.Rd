@@ -27,9 +27,9 @@ string (up to a given delimiter).
 }
 \examples{
 \dontrun{
-df <- data.frame(Lineage = c("Bacteria>Firmicutes>Clostridia", 
+df <- data.frame(Lineage = c("Bacteria>Firmicutes>Clostridia",
 "Archaea>Euryarchaeota>Thermococci"))
 shortened_df <- shortenLineage(df, colname = "Lineage", abr_len = 1)
-print(shortened_df)
+shortened_df
 }
 }

@@ -37,8 +37,8 @@ Group by lineage + DA then take top 20
 }
 \examples{
 \dontrun{
-top_accessions <- getTopAccByLinDomArch(infile_full = my_data, 
-DA_col = "DomArch.Pfam", lin_col = "Lineage_short", 
+top_accessions <- getTopAccByLinDomArch(infile_full = my_data,
+DA_col = "DomArch.Pfam", lin_col = "Lineage_short",
 n = 20, query = "specific_query_name")
 }
 }

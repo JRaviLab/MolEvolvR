@@ -83,7 +83,7 @@ plotTreemap <- function(count_data, fill_by_n = FALSE, sort_by_n = FALSE) {
 #' count_data <- data.frame(Category = c("A", "B", "C"),
 #'                           n = c(10, 20, 15))
 #' params <- prepareColumnParams(count_data, fill_by_n = TRUE, sort_by_n = FALSE)
-#' print(params)
+#' params
 #' }
 prepareColumnParams <- function(count_data, fill_by_n, sort_by_n) {
     validateCountDF(count_data)
@@ -128,7 +128,7 @@ prepareColumnParams <- function(count_data, fill_by_n, sort_by_n) {
 #' @importFrom dplyr c_across group_by mutate rowwise select summarise ungroup
 #' @importFrom stringr str_glue
 #'
-#' @return A data frame containing parameters for the specified column for 
+#' @return A data frame containing parameters for the specified column for
 #' treemap visualization.
 #' @export
 #'
@@ -137,7 +137,7 @@ prepareColumnParams <- function(count_data, fill_by_n, sort_by_n) {
 #' df <- data.frame(Category = c("A", "A", "B", "B", "C"),
 #'                  n = c(10, 20, 30, 40, 50))
 #' params <- prepareSingleColumnParams(df, col_num = 1, root = "Root")
-#' print(params)
+#' params
 #' }
 prepareSingleColumnParams <- function(df,
     col_num,

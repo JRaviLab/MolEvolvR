@@ -25,7 +25,7 @@ Download the combined assembly summaries of genbank and refseq
 }
 \examples{
 \dontrun{
-downloadAssemblySummary(outpath = "assembly_summary.tsv", 
+downloadAssemblySummary(outpath = "assembly_summary.tsv",
      keep = c("assembly_accession", "taxid", "organism_name"))
 }
 }

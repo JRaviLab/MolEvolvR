@@ -31,8 +31,8 @@ proteinAcc2TaxID
 \dontrun{
 # Example accession numbers
 accessions <- c("ABC123", "XYZ456", "LMN789")
-tax_data <- proteinAcc2TaxID(accessions, suffix = "example", 
+tax_data <- proteinAcc2TaxID(accessions, suffix = "example",
 out_path = "/path/to/output", return_dt = TRUE)
-print(tax_data)
+tax_data
 }
 }

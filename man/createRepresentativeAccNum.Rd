@@ -40,11 +40,14 @@ Function to generate a vector of one Accession number per distinct observation f
 }
 \examples{
 \dontrun{
+createRepresentativeAccNum(prot)
+}
+\dontrun{
 # Example usage with a data frame called `protein_data`
-createRepresentativeAccNum <- RepresentativeAccNums(prot_data = protein_data, 
-                                                    reduced = "Lineage", 
+createRepresentativeAccNum <- RepresentativeAccNums(prot_data = protein_data,
+                                                    reduced = "Lineage",
                                                     accnum_col = "AccNum")
-print(representative_accessions)
+representative_accessions
 }
 }
 \author{

@@ -24,8 +24,11 @@ getAccNumFromFA
 }
 \examples{
 \dontrun{
+getAccNumFromFA("my_sequences.fasta")
+}
+\dontrun{
 # Example usage
 accnums <- getAccNumFromFA("path/to/sequences.fasta")
-print(accnums)
+accnums
 }
 }

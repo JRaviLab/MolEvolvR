@@ -49,7 +49,7 @@ Lineage Sunburst
 }
 \examples{
 \dontrun{
-plotLineageSunburst(prot, lineage_column = "Lineage", 
+plotLineageSunburst(prot, lineage_column = "Lineage",
 type = "sunburst", levels = 3)
 }
 }

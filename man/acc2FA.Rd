@@ -35,17 +35,17 @@ Resulting fasta file is written to the outpath.
 }
 \examples{
 \dontrun{
-acc2FA(accessions = c("ACU53894.1", "APJ14606.1", "ABK37082.1"), 
+acc2FA(accessions = c("ACU53894.1", "APJ14606.1", "ABK37082.1"),
 outpath = "my_proteins.fasta")
 Entrez:accessions <- rep("ANY95992.1", 201) |> acc2FA(outpath = "entrez.fa")
-EBI:accessions <- c("P12345", "Q9UHC1", 
+EBI:accessions <- c("P12345", "Q9UHC1",
 "O15530", "Q14624", "P0DTD1") |> acc2FA(outpath = "ebi.fa")
 }
 \dontrun{
-acc2FA(accessions = c("ACU53894.1", "APJ14606.1", "ABK37082.1"), 
+acc2FA(accessions = c("ACU53894.1", "APJ14606.1", "ABK37082.1"),
 outpath = "my_proteins.fasta")
 Entrez:accessions <- rep("ANY95992.1", 201) |> acc2FA(outpath = "entrez.fa")
-EBI:accessions <- c("P12345", "Q9UHC1", "O15530", "Q14624", "P0DTD1") |> 
+EBI:accessions <- c("P12345", "Q9UHC1", "O15530", "Q14624", "P0DTD1") |>
 acc2FA(outpath = "ebi.fa")
 }
 }

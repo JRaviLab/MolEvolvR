@@ -23,7 +23,7 @@ Rename the labels of fasta files
 }
 \examples{
 \dontrun{
-rename_fasta("input.fasta", "output.fasta", 
+rename_fasta("input.fasta", "output.fasta",
 replacement_function = map_acc2name, acc2name = acc2name_table)
 }
 }

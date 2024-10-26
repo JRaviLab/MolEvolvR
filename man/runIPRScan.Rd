@@ -29,6 +29,6 @@ results <- runIPRScan(
     filepath_out = "path/to/output_file",
     appl = c("Pfam", "Gene3D")
 )
-print(results)
+results
 }
 }

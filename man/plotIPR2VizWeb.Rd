@@ -54,15 +54,15 @@ plotIPR2VizWeb
 }
 \examples{
 \dontrun{
-plot <- plotIPR2VizWeb(infile_ipr = "path/to/ipr_file.tsv", 
-                       accessions = c("ACC123", "ACC456"), 
-                       analysis = c("Pfam", "TMHMM"), 
-                       group_by = "Analysis", 
-                       name = "Gene Name", 
-                       text_size = 15, 
-                       legend_name = "ShortName", 
-                       cols = 5, 
+plot <- plotIPR2VizWeb(infile_ipr = "path/to/ipr_file.tsv",
+                       accessions = c("ACC123", "ACC456"),
+                       analysis = c("Pfam", "TMHMM"),
+                       group_by = "Analysis",
+                       name = "Gene Name",
+                       text_size = 15,
+                       legend_name = "ShortName",
+                       cols = 5,
                        rows = 10)
-print(plot)
+plot
 }
 }

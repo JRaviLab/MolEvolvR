@@ -23,7 +23,7 @@
 #' @export
 #' @examples
 #' library(ggplot2)
-#' 
+#'
 #' # Create a sample plot using the custom theme
 #' ggplot(mtcars, aes(x = wt, y = mpg)) +
 #'     geom_point() +
@@ -51,15 +51,15 @@ themeGenes2 <- function() {
 #' getTopAccByLinDomArch
 #' @description Group by lineage + DA then take top 20
 #'
-#' @param infile_full A data frame containing the full dataset with lineage and 
+#' @param infile_full A data frame containing the full dataset with lineage and
 #' domain architecture information.
-#' @param DA_col A string representing the name of the domain architecture 
+#' @param DA_col A string representing the name of the domain architecture
 #' column. Default is "DomArch.Pfam".
-#' @param lin_col A string representing the name of the lineage column. 
+#' @param lin_col A string representing the name of the lineage column.
 #' Default is "Lineage_short".
-#' @param n An integer specifying the number of top accession numbers to return. 
+#' @param n An integer specifying the number of top accession numbers to return.
 #' Default is 20.
-#' @param query A string for filtering a specific query name. If it is not 
+#' @param query A string for filtering a specific query name. If it is not
 #' "All", only the data matching this query will be processed.
 #'
 #' @importFrom dplyr arrange filter group_by select summarise
@@ -68,14 +68,14 @@ themeGenes2 <- function() {
 #' @importFrom rlang sym
 #' @importFrom rlang .data
 #'
-#' @return A vector of the top N accession numbers (`AccNum`) based on counts 
+#' @return A vector of the top N accession numbers (`AccNum`) based on counts
 #' grouped by lineage and domain architecture.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' top_accessions <- getTopAccByLinDomArch(infile_full = my_data, 
-#' DA_col = "DomArch.Pfam", lin_col = "Lineage_short", 
+#' top_accessions <- getTopAccByLinDomArch(infile_full = my_data,
+#' DA_col = "DomArch.Pfam", lin_col = "Lineage_short",
 #' n = 20, query = "specific_query_name")
 #' }
 getTopAccByLinDomArch <- function(infile_full,
@@ -113,26 +113,26 @@ getTopAccByLinDomArch <- function(infile_full,
 #############################################
 #' plotIPR2Viz
 #'
-#' @param infile_ipr A path to the input IPR file (TSV format) containing 
+#' @param infile_ipr A path to the input IPR file (TSV format) containing
 #' domain information.
-#' @param infile_full A path to the full input file (TSV format) containing 
+#' @param infile_full A path to the full input file (TSV format) containing
 #' lineage and accession information.
-#' @param accessions A character vector of accession numbers to filter the 
+#' @param accessions A character vector of accession numbers to filter the
 #' analysis. Default is an empty vector.
-#' @param analysis A character vector specifying the types of analysis to 
-#' include (e.g., "Pfam", "Phobius", "TMHMM", "Gene3D"). Default is a 
+#' @param analysis A character vector specifying the types of analysis to
+#' include (e.g., "Pfam", "Phobius", "TMHMM", "Gene3D"). Default is a
 #' vector of these analyses.
-#' @param group_by A string specifying how to group the visualization. 
+#' @param group_by A string specifying how to group the visualization.
 #' Default is "Analysis". Options include "Analysis" or "Query".
-#' @param topn An integer specifying the number of top accessions to visualize. 
+#' @param topn An integer specifying the number of top accessions to visualize.
 #' Default is 20.
-#' @param name A string representing the name to use for y-axis labels. 
+#' @param name A string representing the name to use for y-axis labels.
 #' Default is "Name".
-#' @param text_size An integer specifying the text size for the plot. 
+#' @param text_size An integer specifying the text size for the plot.
 #' Default is 15.
-#' @param query A string for filtering a specific query name. If it is not 
+#' @param query A string for filtering a specific query name. If it is not
 #' "All", only the data matching this query will be processed.
-#' 
+#'
 #' @importFrom dplyr distinct filter select
 #' @importFrom gggenes geom_gene_arrow geom_subgene_arrow
 #' @importFrom ggplot2 aes aes_string as_labeller element_text facet_wrap ggplot guides margin scale_fill_manual theme theme_minimal unit ylab
@@ -145,16 +145,16 @@ getTopAccByLinDomArch <- function(infile_full,
 #'
 #' @examples
 #' \dontrun{
-#' plot <- plotIPR2Viz(infile_ipr = "path/to/ipr_file.tsv", 
-#'                     infile_full = "path/to/full_file.tsv", 
-#'                     accessions = c("ACC123", "ACC456"), 
-#'                     analysis = c("Pfam", "TMHMM"), 
-#'                     group_by = "Analysis", 
-#'                     topn = 20, 
-#'                     name = "Gene Name", 
-#'                     text_size = 15, 
+#' plot <- plotIPR2Viz(infile_ipr = "path/to/ipr_file.tsv",
+#'                     infile_full = "path/to/full_file.tsv",
+#'                     accessions = c("ACC123", "ACC456"),
+#'                     analysis = c("Pfam", "TMHMM"),
+#'                     group_by = "Analysis",
+#'                     topn = 20,
+#'                     name = "Gene Name",
+#'                     text_size = 15,
 #'                     query = "All")
-#' print(plot)
+#' plot
 #' }
 plotIPR2Viz <- function(infile_ipr = NULL, infile_full = NULL, accessions = c(),
     analysis = c("Pfam", "Phobius", "TMHMM", "Gene3D"),
@@ -291,24 +291,24 @@ plotIPR2Viz <- function(infile_ipr = NULL, infile_full = NULL, accessions = c(),
 
 #' plotIPR2VizWeb
 #'
-#' @param infile_ipr A path to the input IPR file (TSV format) containing 
+#' @param infile_ipr A path to the input IPR file (TSV format) containing
 #' domain information.
-#' @param accessions A character vector of accession numbers to filter the 
+#' @param accessions A character vector of accession numbers to filter the
 #' analysis.
-#' @param analysis A character vector specifying the types of analysis to 
-#' include (e.g., "Pfam", "Phobius", "TMHMM", "Gene3D"). Default is a vector 
+#' @param analysis A character vector specifying the types of analysis to
+#' include (e.g., "Pfam", "Phobius", "TMHMM", "Gene3D"). Default is a vector
 #' of these analyses.
-#' @param group_by A string specifying how to group the visualization. 
+#' @param group_by A string specifying how to group the visualization.
 #' Default is "Analysis". Options include "Analysis" or "Query".
-#' @param name A string representing the name to use for y-axis labels. 
+#' @param name A string representing the name to use for y-axis labels.
 #' Default is "Name".
-#' @param text_size An integer specifying the text size for the plot. 
+#' @param text_size An integer specifying the text size for the plot.
 #' Default is 15.
-#' @param legend_name A string representing the column to use for legend labels. 
+#' @param legend_name A string representing the column to use for legend labels.
 #' Default is "ShortName".
-#' @param cols An integer specifying the number of columns in the facet wrap. 
+#' @param cols An integer specifying the number of columns in the facet wrap.
 #' Default is 5.
-#' @param rows An integer specifying the number of rows in the legend. 
+#' @param rows An integer specifying the number of rows in the legend.
 #' Default is 10.
 #'
 #' @importFrom dplyr arrange distinct filter select
@@ -317,22 +317,22 @@ plotIPR2Viz <- function(infile_ipr = NULL, infile_full = NULL, accessions = c(),
 #' @importFrom readr read_tsv
 #' @importFrom tidyr pivot_wider
 #'
-#' @return A ggplot object representing the domain architecture visualization 
+#' @return A ggplot object representing the domain architecture visualization
 #' for web display.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' plot <- plotIPR2VizWeb(infile_ipr = "path/to/ipr_file.tsv", 
-#'                        accessions = c("ACC123", "ACC456"), 
-#'                        analysis = c("Pfam", "TMHMM"), 
-#'                        group_by = "Analysis", 
-#'                        name = "Gene Name", 
-#'                        text_size = 15, 
-#'                        legend_name = "ShortName", 
-#'                        cols = 5, 
+#' plot <- plotIPR2VizWeb(infile_ipr = "path/to/ipr_file.tsv",
+#'                        accessions = c("ACC123", "ACC456"),
+#'                        analysis = c("Pfam", "TMHMM"),
+#'                        group_by = "Analysis",
+#'                        name = "Gene Name",
+#'                        text_size = 15,
+#'                        legend_name = "ShortName",
+#'                        cols = 5,
 #'                        rows = 10)
-#' print(plot)
+#' plot
 #' }
 plotIPR2VizWeb <- function(infile_ipr,
     accessions,

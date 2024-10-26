@@ -53,15 +53,15 @@ plotIPR2Viz
 }
 \examples{
 \dontrun{
-plot <- plotIPR2Viz(infile_ipr = "path/to/ipr_file.tsv", 
-                    infile_full = "path/to/full_file.tsv", 
-                    accessions = c("ACC123", "ACC456"), 
-                    analysis = c("Pfam", "TMHMM"), 
-                    group_by = "Analysis", 
-                    topn = 20, 
-                    name = "Gene Name", 
-                    text_size = 15, 
+plot <- plotIPR2Viz(infile_ipr = "path/to/ipr_file.tsv",
+                    infile_full = "path/to/full_file.tsv",
+                    accessions = c("ACC123", "ACC456"),
+                    analysis = c("Pfam", "TMHMM"),
+                    group_by = "Analysis",
+                    topn = 20,
+                    name = "Gene Name",
+                    text_size = 15,
                     query = "All")
-print(plot)
+plot
 }
 }

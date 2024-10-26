@@ -35,10 +35,10 @@ Default rename_fasta() replacement function. Maps an accession number to its nam
 mapAcc2Name(">P12345 some description", acc2name, "AccNum", "Name")
 }
 \dontrun{
-acc2name_table <- data.table(AccNum = c("ACC001", "ACC002"), 
+acc2name_table <- data.table(AccNum = c("ACC001", "ACC002"),
 Name = c("Species A", "Species B"))
 line <- ">ACC001 some additional info"
 mapped_line <- mapAcc2Name(line, acc2name_table)
-print(mapped_line)  # Expected output: ">Species A"
+mapped_line  # Expected output: ">Species A"
 }
 }

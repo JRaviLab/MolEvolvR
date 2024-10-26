@@ -5,7 +5,7 @@
 \title{Run DELTABLAST to find homologs for proteins of interest}
 \usage{
 runDeltaBlast(
-  deltablast_path,
+  runDeltaBlast,
   db_search_path,
   db = "refseq",
   query,
@@ -16,8 +16,6 @@ runDeltaBlast(
 )
 }
 \arguments{
-\item{deltablast_path}{Path to the Delta-BLAST executable.}
-
 \item{db_search_path}{Path to the BLAST databases.}
 
 \item{db}{Name of the BLAST database to search against (default is "refseq").}
@@ -31,6 +29,8 @@ runDeltaBlast(
 \item{num_alignments}{Number of alignments to report.}
 
 \item{num_threads}{Number of threads to use for the search (default is 1).}
+
+\item{deltablast_path}{Path to the Delta-BLAST executable.}
 }
 \value{
 This function does not return a value; it outputs results to the
@@ -40,6 +40,11 @@ specified file.
 This function executes a Delta-BLAST search using the specified parameters
 and database. It sets the BLAST database path, runs the Delta-BLAST command
 with the given query, and outputs the results.
+}
+\examples{
+\dontrun{
+runDeltaBlast(runDeltaBlast, db_search_path)
+}
 }
 \author{
 Samuel Chen, Janani Ravi

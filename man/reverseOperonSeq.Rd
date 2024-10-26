@@ -25,5 +25,5 @@ indicated by "=".
 # Example genomic context data frame
 prot <- data.frame(GenContext = c("A>B", "C<D", "E=F*G", "H>I"))
 reversed_prot <- reverseOperonSeq(prot)
-print(reversed_prot)
+reversed_prot
 }
