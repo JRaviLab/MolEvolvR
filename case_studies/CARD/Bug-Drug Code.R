@@ -44,10 +44,35 @@ aro_index_clean <- aro_index %>%
     Protein.Accession = Protein.Accession  # Include the Protein.Accession column
   )
 
-# Merge aro_index_clean with the antibiotics_data and pathogens_data
+# Extract pathogen, gene, drug, and include Protein.Accession from 'CARD Short Name'
+library(dplyr)
+library(purrr)
+library(stringr)
+
+# Extract pathogen, gene, drug, and include Protein.Accession from 'CARD Short Name'
+resistance_profile <- aro_index %>%
+  mutate(
+    split_name = strsplit(`CARD Short Name`, "_"),  # Split the CARD Short Name
+    pathogen = map_chr(split_name, ~ if (length(.) >= 1) .[1] else NA),  # Extract pathogen
+    gene = map_chr(split_name, ~ if (length(.) >= 2) .[2] else NA),      # Extract gene
+    drug = map_chr(split_name, ~ if (length(.) == 3) .[3] else NA),      # Extract drug
+    Protein.Accession = `Protein Accession`  # Include the Protein Accession column
+  ) %>%
+  select(-split_name)
+
+# View the cleaned data
+head(resistance_profile)
+
+
+# Merge resistance_profile with the antibiotics_data and pathogens_data
 # For merging with antibiotics_data
-merged_data_antibiotics <- left_join(aro_index_clean, antibiotics_data,
-                                     by = c("drug" = "AAC.Abbreviation"))
+merged_data_antibiotics <- left_join(resistance_profile, antibiotics_data,
+                                     by = c("drug" = "AAC Abbreviation"),
+                                     relationship = "many-to-many")
+
+# View the merged data
+head(merged_data_antibiotics)
+
 
 # For merging with pathogens_data
 merged_data_pathogens <- left_join(merged_data_antibiotics, pathogens_data,
@@ -60,12 +85,12 @@ head(merged_data_pathogens)
 #filter out rows where pathogen is empty
 cleaned_data <- merged_data_pathogens %>%
   distinct() %>%
-  filter(!is.na(Pathogen)) # Use 'Pathogen' instead of 'pathogen'
+  filter(!is.na(Pathogen))
 View(cleaned_data)
 
-# Group by Pathogen, Gene, Drug, and Protein.Accession, then summarize Antibiotic information
+# Group by Pathogen, Gene, Drug, and Protein_Accession, then summarize Antibiotic information
 summarized_data <- cleaned_data %>%
-  group_by(Pathogen = Pathogen, Gene = gene, Drug = drug, Protein_Accession = Protein.Accession) %>%
+  group_by(Pathogen = Pathogen, Gene = gene, Drug = drug, Protein_Accession = Protein_Accession) %>%
   summarize(Antibiotic_Info = paste(unique(Molecule), collapse = ", ")) %>%
   arrange(Pathogen, Gene, Drug, Protein_Accession)
 
@@ -76,8 +101,8 @@ staph_aureus_dap_combinations <- summarized_data %>%
 # View the filtered data
 head(staph_aureus_dap_combinations)
 
-#FASTA sequences
-#Install and Load required packages
+# FASTA sequences
+# Install and Load required packages
 if (!requireNamespace("rentrez", quietly = TRUE)) {
   install.packages("rentrez")
 }
@@ -88,18 +113,16 @@ if (!requireNamespace("stringr", quietly = TRUE)) {
   install.packages("stringr")
 }
 
-
 library(rentrez)
 library(XML)
 library(stringr)
 
-
 # Fetch FASTA sequence from Entrez
-fetch_fasta_sequence <- function(protein_accession) {
+fetch_fasta_sequence <- function(Protein_Accession) {
   tryCatch({
     # Fetch the FASTA sequence using Entrez
     fasta_seq <- rentrez::entrez_fetch(db = "protein",
-                                       id = protein_accession,
+                                       id = Protein_Accession,
                                        rettype = "fasta",
                                        retmode = "text")
 
@@ -117,14 +140,15 @@ fetch_fasta_sequence <- function(protein_accession) {
 
       return(fasta_seq)
     } else {
-      warning(paste("Failed to retrieve FASTA sequence for protein accession:", protein_accession))
+      warning(paste("Failed to retrieve FASTA sequence for protein accession:", Protein_Accession))
       return(NULL)
     }
   }, error = function(e) {
-    warning(paste("Error fetching FASTA sequence for protein accession:", protein_accession, ":", e$message))
+    warning(paste("Error fetching FASTA sequence for protein accession:", Protein_Accession, ":", e$message))
     return(NULL)
   })
 }
+
 
 # Loop through staph_aureus_dap_combinations to fetch and save FASTA sequences
 combined_sequences <- character()
