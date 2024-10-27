@@ -17,19 +17,22 @@ untar("broadstreet-v3.3.0.tar", exdir = "CARD_data")
 
 
 # Map CARD Short Name
-# Install and Load dplyr
-if (!require("dplyr")) {
-  install.packages("dplyr")
-  library(dplyr)
-} else {
-  library(dplyr)
+# Install and Load dplyr and readr
+packages <- c("dplyr", "readr")
+
+for (pkg in packages) {
+  if (!require(pkg, character.only = TRUE)) {
+    install.packages(pkg)
+    library(pkg, character.only = TRUE)
+  } else {
+    library(pkg, character.only = TRUE)
+  }
 }
 
-#  Read the required files
-aro_index <- read.delim("CARD_data/aro_index.tsv", sep = "\t", header = TRUE)
-antibiotics_data <- read.delim("CARD_data/shortname_antibiotics.tsv", sep = "\t", header = TRUE)
-pathogens_data <- read.delim("CARD_data/shortname_pathogens.tsv", sep = "\t", header = TRUE)
-
+# Parse the required files using readr::read_delim
+aro_index <- read_delim("CARD_data/aro_index.tsv", delim = "\t", col_names = TRUE)
+antibiotics_data <- read_delim("CARD_data/shortname_antibiotics.tsv", delim = "\t", col_names = TRUE)
+pathogens_data <- read_delim("CARD_data/shortname_pathogens.tsv", delim = "\t", col_names = TRUE)
 
 # Extract pathogen, gene, drug, and include Protein.Accession from 'CARD.Short.Name'
 aro_index_clean <- aro_index %>%
