@@ -23,22 +23,12 @@
 ########################
 #' 
 #' 
-.LevelReduction <- function(lin, level) {   
-    if (level == 1) {
-        gt_loc <- str_locate(lin, ">")[[1]]
-        if (is.na(gt_loc)) {
-            # No '>' in lineage
-            return(lin)
-        } else {
-            lin <- substring(lin, first = 0, last = (gt_loc - 1))
-            return(lin)
-        }
-    }
-    # Out of bounds guard
-    gt_loc <- str_locate_all(lin, ">")[[1]] 
-    l <- length(gt_loc) / 2
-    if (level > l) {
-        # Not enough '>' in lineage
+.LevelReduction <- function(lin, level) {
+    gt_loc <- str_locate_all(lin, ">")[[1]]
+    available_levels <- length(gt_loc) / 2  # Since `str_locate_all` returns a matrix
+    
+    # Guard against out-of-bounds level requests
+    if (level > available_levels || level < 1) {
         return(lin)
     } else {
         gt_loc <- gt_loc[level, ][1] %>% as.numeric()
@@ -46,6 +36,8 @@
         return(lin)
     }
 }
+
+
 
 .GetKingdom <- function(lin) {
     gt_loc <- str_locate(lin, ">")[, "start"]
