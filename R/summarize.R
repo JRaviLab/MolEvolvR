@@ -464,36 +464,35 @@ summarizeGenContext_ByLineage <- function(x) {
 #' summarizeGenContext
 #'
 #' @param x A dataframe or tibble containing the data. It must have columns 
-#' named `GenContext`, `DomArch`, and `Lineage`.
+#' named `GenContext`, `DomArch`, `Lineage`, and `count`.
 #'
-#' @importFrom dplyr arrange desc filter group_by n n_distinct summarise
+#' @importFrom dplyr arrange desc filter group_by n_distinct summarise
+#' @importFrom rlang .data
 #'
-#' @return A tibble summarizing each unique combination of `GenContext` and 
-#' `Lineage`, along with the following columns:
-#' - `GenContext`: The genomic context for each entry.
-#' - `Lineage`: The lineage associated with each entry.
-#' - `count`: The total number of occurrences for each combination of
-#'  `GenContext` and `Lineage`.
+#' @return A tibble summarizing each unique `GenContext`, along with the following columns:
+#' - `totalcount`: The total count for each `GenContext`.
+#' - `totalDA`: The number of distinct `DomArch` for each `GenContext`.
+#' - `totallin`: The number of distinct `Lineage` for each `GenContext`.
 #'
-#' The results are arranged in descending order of `count`.
+#' The results are arranged in descending order of `totalcount`, `totalDA`, and `totallin`.
 #' @rdname MolEvolvR_summary
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' summarizeGenContext()
+#' summarizeGenContext(data1)
 #' }
 summarizeGenContext <- function(x) {
     x %>%
-        group_by(GenContext) %>%
+        group_by(.data$GenContext) %>%
         summarise(
-            totalcount = sum(count),
-            totalDA = n_distinct(DomArch),
-            totallin = n_distinct(Lineage)
-        ) %>% # totallin=n_distinct(Lineage),
-        arrange(desc(totalcount), desc(totalDA), desc(totallin)) %>%
-        filter(!grepl(" \\{n\\}", GenContext)) %>%
-        filter(!grepl("^-$", GenContext))
+            totalcount = sum(.data$count),
+            totalDA = n_distinct(.data$DomArch),
+            totallin = n_distinct(.data$Lineage)
+        ) %>%
+        arrange(desc(.data$totalcount), desc(.data$totalDA), desc(.data$totallin)) %>%
+        filter(!grepl(" \\{n\\}", .data$GenContext)) %>%
+        filter(!grepl("^-$", .data$GenContext))
 }
 
 
