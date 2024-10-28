@@ -66,6 +66,7 @@
 #' @importFrom phangorn bootstrap.pml dist.ml NJ modelTest phyDat plotBS pml pml.control pratchet optim.parsimony optim.pml read.phyDat upgma
 #' @importFrom seqinr dist.alignment read.alignment
 #' @importFrom stats logLik
+#' @importFrom phangorn midpoint
 #'
 #' @return No return value. The function generates phylogenetic tree files 
 #' (.tre) based on either FastTree or detailed phylogenetic analysis approaches. 
@@ -142,7 +143,7 @@ createFA2Tree <- function(
         ## Approach 1
         ###########################
         ## https://a-little-book-of-r-for-bioinformatics.readthedocs.io/en/latest/src/chapter5.html
-        prot_aln <- read.alignment(file = fa_file, format = format)
+        prot_aln <- seqinr::read.alignment(file = fa_file, format = format)
         prot_aln$seq
         prot_dist <- dist.alignment(prot_aln, matrix = dist_matrix)
         prot_nj <- NJ(prot_dist)
@@ -210,9 +211,9 @@ createFA2Tree <- function(
         fit2 <- pml(prot_subset_NJ, data = prot_subset)
         print(fit2)
         if(f_seq_type=="protein"){
-            fit_optimized <- optim.pml(fit2, model = fit2, rearrangement = rearrangement)
+            fit_optimized2 <- optim.pml(fit2, model = fit2, rearrangement = rearrangement)
         } else if(f_seq_type=="dna") {
-            fit_optimized <- optim.pml(fit2, model = ml_model, rearrangement = rearrangement)
+            fit_optimized2 <- optim.pml(fit2, model = ml_model, rearrangement = rearrangement)
         } else {
             stop("Error: The f_seq_type must be one of ['protein','dna'].")
         }
