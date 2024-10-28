@@ -668,8 +668,8 @@ cleanGeneDescription <- function(prot, column) {
 #' @param prot
 #' @param column
 #'
-#' @importFrom dplyr arrange filter group_by pull n select summarize
-#' @importFrom rlang sym
+#' @importFrom dplyr arrange filter group_by pull n select summarize mutate
+#' @importFrom rlang sym .data
 #'
 #' @return Describe return, in detail
 #' @export
@@ -679,37 +679,38 @@ cleanGeneDescription <- function(prot, column) {
 #' selectLongestDuplicate()
 #' }
 selectLongestDuplicate <- function(prot, column) {
-    col <- sym(column)
+    col <- rlang::sym(column)
 
-    prot$row.orig <- 1:nrow(prot)
-
+    prot <- prot %>% 
+        mutate(row.orig = seq_len(n()))
     # Get list of duplicates
     dups <- prot %>%
-        group_by(AccNum) %>%
-        summarize("count" = n()) %>%
+        group_by(.data$AccNum) %>%
+        summarize(count = n()) %>%
         filter(count > 1) %>%
-        arrange(-count) %>%
-        merge(prot, by = "AccNum")
+        arrange(desc(count)) %>%
+        left_join(prot, by = "AccNum")
 
-    dup_acc <- dups$AccNum
+    dup_acc <- unique(dups$AccNum)
 
-    longest_rows <- c()
-    remove_rows <- c()
+    longest_rows <- integer()
+    remove_rows <- integer()
     for (acc in dup_acc) {
-        dup_rows <- dups %>% filter(AccNum == acc)
+        dup_rows <- dups %>% filter(.data$AccNum == acc)
 
-        longest <- dup_rows[which(nchar(pull(dup_rows, {{ col }})) == max(nchar(pull(dup_rows, {{ col }}))))[1], "row.orig"]
+        longest <- dup_rows$row.orig[which.max(nchar(pull(dup_rows, !!col)))]
 
         longest_rows <- c(longest_rows, longest)
 
-        to_remove <- dup_rows[which(dup_rows$row.orig != longest), "row.orig"][]
+        to_remove <- dup_rows$row.orig[dup_rows$row.orig != longest]
 
-        # dup_rows[which(nchar(pull(dup_rows,{{col}})) == max(nchar(pull(dup_rows,{{col}}))))[2:nrow(dup_rows)], "row.orig"]
         remove_rows <- c(remove_rows, to_remove)
     }
 
     # grab all the longest rows
-    unique_dups <- prot[-remove_rows, ] %>% select(-row.orig)
+    unique_dups <- prot %>% 
+        filter(!.data$row.orig %in% remove_rows) %>% 
+        select(-.data$row.orig)
 
     return(unique_dups)
 }
