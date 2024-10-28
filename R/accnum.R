@@ -35,34 +35,48 @@ up2ncbi <- function(uniprot_id) {
 }
 
 
-
-#' Convert an NCBI Entrez Gene ID to a UniProt ID
+#' Convert NCBI RefSeq Accessions to UniProt IDs
 #'
-#' This function takes a single NCBI Entrez Gene ID and returns the corresponding UniProt ID.
-#' It uses the `org.Hs.eg.db` package to perform the mapping.
+#' This function takes one or more NCBI RefSeq accession numbers and returns the corresponding UniProt IDs.
+#' It uses the org.Hs.eg.db package to perform the mapping.
 #'
-#' @param entrez_id A string representing a single NCBI Entrez Gene ID.
-#' @return A string representing the corresponding UniProt ID. Returns `NA` if no mapping is found.
+#' @param ncbi_accessions A character vector of NCBI RefSeq accession numbers.
+#' @return A data frame with columns 'REFSEQ' and 'UNIPROT', mapping RefSeq accessions to UniProt IDs.
+#'         Returns NA for UniProt if no mapping is found.
 #' @examples
 #' \dontrun{
-#'   entrez_id <- "3586"
-#'   uniprot_id <- ncbi2up(entrez_id)
-#'   print(uniprot_id)
+#'   ncbi_accessions <- c("NP_000005.2", "NP_000007.1")
+#'   uniprot_ids <- ncbi2up(ncbi_accessions)
+#'   print(uniprot_ids)
 #' }
 #' @importFrom AnnotationDbi select
 #' @import org.Hs.eg.db
 #' @export
-ncbi2up <- function(entrez_id) {
-  # Use the select function to map the Entrez Gene ID to a UniProt ID
-  result <- AnnotationDbi::select(org.Hs.eg.db,
-                                  keys = entrez_id,
-                                  columns = "UNIPROT",
-                                  keytype = "ENTREZID")
-  
-  # Check if the result is not empty and return the first UniProt ID
-  if (nrow(result) > 0 && !is.na(result$UNIPROT[1])) {
-    return(as.character(result$UNIPROT[1]))
-  } else {
-    return(NA)  # Return NA if no mapping is found
+ncbi2up <- function(ncbi_accessions) {
+  # Check if input is provided
+  if (length(ncbi_accessions) == 0) {
+    stop("No NCBI accessions provided.")
   }
+  
+  # Strip version numbers from accessions
+  stripped_accessions <- gsub("\\.[0-9]+$", "", ncbi_accessions)
+  
+  # Perform the mapping
+  tryCatch({
+    mapping <- AnnotationDbi::select(
+      org.Hs.eg.db,
+      keys = stripped_accessions,
+      columns = "UNIPROT",
+      keytype = "REFSEQ"
+    )
+    
+    # Check if any mappings were found
+    if (nrow(mapping) == 0) {
+      warning("No UniProt IDs found for the given NCBI accessions.")
+    }
+    
+    return(mapping)
+  }, error = function(e) {
+    stop(paste("Error in mapping:", e$message))
+  })
 }
