@@ -680,7 +680,6 @@ cleanGeneDescription <- function(prot, column) {
 #' }
 selectLongestDuplicate <- function(prot, column) {
     col <- rlang::sym(column)
-
     prot <- prot %>% 
         mutate(row.orig = seq_len(n()))
     # Get list of duplicates
