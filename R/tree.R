@@ -63,10 +63,9 @@
 #' @param bootstrap_file Character. Path to save the bootstrap tree file. Default is "bootstrap_example.tre".
 #'
 #' @importFrom ape write.tree
-#' @importFrom phangorn bootstrap.pml dist.ml NJ modelTest phyDat plotBS pml pml.control pratchet optim.parsimony optim.pml read.phyDat upgma
+#' @importFrom phangorn bootstrap.pml dist.ml NJ modelTest phyDat plotBS pml pml.control pratchet optim.parsimony optim.pml read.phyDat upgma midpoint
 #' @importFrom seqinr dist.alignment read.alignment
 #' @importFrom stats logLik
-#' @importFrom phangorn midpoint
 #'
 #' @return No return value. The function generates phylogenetic tree files 
 #' (.tre) based on either FastTree or detailed phylogenetic analysis approaches. 
@@ -203,13 +202,14 @@ createFA2Tree <- function(
             bs = bootstrap_reps, optNni = TRUE, multicore = TRUE,
             control = pml.control(trace = 0)
         )
-        plotBS(midpoint(fit_optimized$tree), bs, p = bootstrap_p, type = plot_type)
+        plotBS(phangorn::midpoint(fit_optimized$tree), bs, p = bootstrap_p, type = plot_type)
 
         # subsetted alignment bs example
         prot_subset_dm <- dist.ml(prot_subset)
         prot_subset_NJ <- NJ(prot_subset_dm)
         fit2 <- pml(prot_subset_NJ, data = prot_subset)
         print(fit2)
+        fit_optimized2 <- NULL
         if(f_seq_type=="protein"){
             fit_optimized2 <- optim.pml(fit2, model = fit2, rearrangement = rearrangement)
         } else if(f_seq_type=="dna") {
@@ -222,7 +222,7 @@ createFA2Tree <- function(
             bs = bootstrap_reps, optNni = TRUE, multicore = TRUE,
             control = pml.control(trace = 0)
         )
-        bs2 <- plotBS(midpoint(fit_optimized2$tree), bs, p = bootstrap_p, type = plot_type)
+        bs2 <- plotBS(phangorn::midpoint(fit_optimized2$tree), bs_subset, p = bootstrap_p, type = plot_type)
         
         ## Exporting Trees
         write.tree(bs2, file = bootstrap_file)
