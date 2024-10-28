@@ -408,6 +408,7 @@ summarizeDomArch <- function(x) {
 #' named `GenContext`, `DomArch`, and `Lineage`.
 #'
 #' @importFrom dplyr arrange desc filter group_by n summarise
+#' @importFrom rlang .data
 #'
 #' @return A tibble summarizing each unique combination of `GenContext`, 
 #' `DomArch`, and `Lineage`, along with the following columns:
@@ -423,42 +424,45 @@ summarizeDomArch <- function(x) {
 #'
 #' @examples
 #' \dontrun{
-#' summarizeGenContext_ByDomArchLineage
+#' summarizeGenContext_ByDomArchLineage(your_data)
 #' }
 summarizeGenContext_ByDomArchLineage <- function(x) {
     x %>%
-        filter(!grepl("^-$", GenContext)) %>%
-        filter(!grepl("^-$", DomArch)) %>%
-        filter(!grepl("^-$", Lineage)) %>%
-        filter(!grepl("^NA$", DomArch)) %>%
-        group_by(GenContext, DomArch, Lineage) %>%
-        summarise(count = n()) %>% # , bin=as.numeric(as.logical(n()))
-        arrange(desc(count))
+        filter(!grepl("^-$", .data$GenContext)) %>%
+        filter(!grepl("^-$", .data$DomArch)) %>%
+        filter(!grepl("^-$", .data$Lineage)) %>%
+        filter(!grepl("^NA$", .data$DomArch)) %>%
+        group_by(.data$GenContext, .data$DomArch, .data$Lineage) %>%
+        summarise(count = n()) %>%
+        arrange(desc(.data$count))
 }
 
 #' summarizeGenContext_ByLineage
 #'
-#' @param x A dataframe or tibble containing the data.
+#' @param x A dataframe or tibble containing the data. It must have columns 
+#' named `GenContext`, `DomArch`, and `Lineage`.
 #'
 #' @importFrom dplyr arrange desc filter group_by n summarise
+#' @importFrom rlang .data
 #'
-#' @return Describe return, in detail
+#' @return A tibble summarizing each unique combination of `GenContext` and `Lineage`, 
+#' along with the count of occurrences. The results are arranged in descending order of count.
 #' @rdname MolEvolvR_summary
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' summarizeGenContext_ByLineage()
+#' summarizeGenContext_ByLineage(your_data)
 #' }
 summarizeGenContext_ByLineage <- function(x) {
     x %>%
-        filter(!grepl("^-$", GenContext)) %>%
-        filter(!grepl("^-$", DomArch)) %>%
-        filter(!grepl("^-$", Lineage)) %>%
-        filter(!grepl("^NA$", DomArch)) %>%
-        group_by(GenContext, Lineage) %>% # DomArch.norep,
-        summarise(count = n()) %>% # , bin=as.numeric(as.logical(n()))
-        arrange(desc(count))
+        filter(!grepl("^-$", .data$GenContext)) %>%
+        filter(!grepl("^-$", .data$DomArch)) %>%
+        filter(!grepl("^-$", .data$Lineage)) %>%
+        filter(!grepl("^NA$", .data$DomArch)) %>%
+        group_by(.data$GenContext, .data$Lineage) %>%
+        summarise(count = n()) %>%
+        arrange(desc(.data$count))
 }
 
 #' summarizeGenContext
