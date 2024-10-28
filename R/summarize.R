@@ -373,7 +373,8 @@ summarizeDomArch_ByLineage <- function(x) {
 #' named `DomArch` and a count column, such as `count`, which represents the 
 #' occurrences of each architecture in various lineages.
 #'
-#' @importFrom dplyr arrange group_by filter summarise
+#' @importFrom dplyr arrange group_by filter summarise desc
+#' @importFrom rlang .data
 #'
 #' @return A tibble summarizing each unique `DomArch`, along with the following 
 #' columns:
@@ -386,15 +387,18 @@ summarizeDomArch_ByLineage <- function(x) {
 #'
 #' @examples
 #' \dontrun{
-#' summarizeDomArch()
+#' summarizeDomArch(data1)
 #' }
 summarizeDomArch <- function(x) {
     x %>%
-        group_by(DomArch) %>%
-        summarise(totalcount = sum(count), totallin = n()) %>% # totallin=n_distinct(Lineage),
-        arrange(desc(totallin), desc(totalcount)) %>%
-        filter(!grepl(" \\{n\\}", DomArch)) %>%
-        filter(!grepl("^-$", DomArch))
+        group_by(.data$DomArch) %>%
+        summarise(
+            totalcount = sum(.data$count), 
+            totallin = n()
+        ) %>%
+        arrange(desc(.data$totallin), desc(.data$totalcount)) %>%
+        filter(!grepl(" \\{n\\}", .data$DomArch)) %>%
+        filter(!grepl("^-$", .data$DomArch))
 }
 
 #' summarizeGenContext_ByDomArchLineage
