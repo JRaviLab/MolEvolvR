@@ -186,8 +186,9 @@ removeEmptyRows <- function(prot, by_column = "DomArch") {
 #' @return Describe return, in detail
 #' @export
 #'
-#' @importFrom dplyr pull
+#' @importFrom dplyr pull mutate
 #' @importFrom stringr str_replace_all
+#' @importFrom rlang .data :=
 #'
 #' @examples
 #' \dontrun{
@@ -202,36 +203,23 @@ condenseRepeatedDomains <- function(prot, by_column = "DomArch", excluded_prots 
     regex_identify_repeats <- paste0("(?i)", regex_exclude, "\\b([a-z0-9_-]+)\\b(?:\\s+\\1\\b)+")
 
     # !! FUNS is soft-deprecated. FIX!!!
-    prot[, by_column] <- prot %>%
-        pull(by_column) %>%
-        str_replace_all(., pattern = "\\.", replacement = "_d_") %>%
-        #  str_replace_all(., pattern = " ", replacement = "_s_") %>%
-        str_replace_all(., pattern = " ", replacement = "_") %>%
-        str_replace_all(.,
-            pattern = "\\+",
-            replacement = " "
-        ) %>% # Use a different placeholder other than space
-        str_replace_all(.,
-            pattern = "-",
-            replacement = "__"
-        ) %>%
-        str_replace_all(.,
-            pattern = regex_identify_repeats,
-            replacement = "\\1(s)"
-        ) %>%
-        str_replace_all(.,
-            pattern = "__",
-            replacement = "-"
-        ) %>%
-        str_replace_all(.,
-            pattern = " ",
-            replacement = "+"
-        ) %>%
-        # 			    str_replace_all(., pattern = "_s_", replacement = " ") %>%
-        str_replace_all(., pattern = "_d_", replacement = ".")
-
+    prot <- prot %>%
+        dplyr::mutate(!!by_column := stringr::str_replace_all(
+            .data[[by_column]],
+            c(
+                "\\." = "_d_",
+                " " = "_",
+                "\\+" = " ",
+                "-" = "__",
+                regex_identify_repeats = "\\1(s)",
+                "__" = "-",
+                " " = "+",
+                "_d_" = "."
+            )
+        ))
 
     return(prot)
+
 }
 
 
