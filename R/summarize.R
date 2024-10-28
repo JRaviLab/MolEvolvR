@@ -341,6 +341,7 @@ summarizeByLineage <- function(prot = "prot", column = "DomArch", by = "Lineage"
 #' named `DomArch` and `Lineage`.
 #'
 #' @importFrom dplyr arrange count desc filter group_by summarise
+#' @importFrom rlang .data
 #'
 #' @return A tibble summarizing the counts of unique domain architectures 
 #' (`DomArch`) per lineage (`Lineage`). The resulting table contains three 
@@ -353,12 +354,12 @@ summarizeByLineage <- function(prot = "prot", column = "DomArch", by = "Lineage"
 #'
 #' @examples
 #' \dontrun{
-#' summarizeDomArch_ByLineage()
+#' summarizeDomArch_ByLineage(data1)
 #' }
 summarizeDomArch_ByLineage <- function(x) {
     x %>%
-        filter(!grepl("^-$", DomArch)) %>%
-        group_by(DomArch, Lineage) %>%
+        filter(!grepl("^-$", .data$DomArch)) %>%
+        group_by(.data$DomArch, .data$Lineage) %>%
         summarise(count = n()) %>% # , bin=as.numeric(as.logical(n()))
         arrange(desc(count))
 }
