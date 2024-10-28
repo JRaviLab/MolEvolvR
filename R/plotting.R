@@ -804,6 +804,7 @@ plotLineageHeatmap <- function(prot, domains_of_interest, level = 3, label.size 
 #' @param legend.size
 #' @param coord_flip
 #' @param legend
+#' @param cpcols
 #'
 #' @importFrom dplyr pull select
 #' @importFrom ggplot2 aes_string coord_flip element_blank element_line element_rect element_text geom_bar ggplot guides guide_legend scale_fill_manual xlab ylab theme theme_minimal
@@ -824,8 +825,13 @@ plotStackedLineage <- function(prot, column = "DomArch", cutoff, Lineage_col = "
     legend.text.size = 10,
     legend.cols = 2,
     legend.size = 0.7,
-    coord_flip = TRUE, legend = TRUE) {
+    coord_flip = TRUE, legend = TRUE,
+    cpcols = NULL) {
     col <- sym(column)
+    
+    if (is.null(cpcols)) {
+        cpcols <- c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "#FF7F00", "#FFFF33", "#A65628", "#F781BF")
+    }
 
     if (reduce_lineage) {
         prot <- shortenLineage(prot, Lineage_col, abr_len = 3)
