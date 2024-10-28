@@ -1,38 +1,48 @@
 
 
-
-
-#' Convert a UniProt ID to an NCBI Entrez Gene ID
+#' Convert UniProt IDs to NCBI RefSeq Accessions
 #'
-#' This function takes a single UniProt ID and returns the corresponding NCBI Entrez Gene ID.
-#' It uses the `org.Hs.eg.db` package to perform the mapping.
-#' 
-#' @author Klangina
-#' @param uniprot_id A string representing a single UniProt ID.
-#' @return A string representing the corresponding NCBI Entrez Gene ID. Returns `NA` if no mapping is found.
+#' This function takes one or more UniProt IDs and returns the corresponding NCBI RefSeq accessions.
+#' It uses the org.Hs.eg.db package to perform the mapping.
+#'
+#' @param uniprot_ids A character vector of UniProt IDs.
+#' @return A data frame with columns 'UNIPROT' and 'REFSEQ', mapping UniProt IDs to RefSeq accessions.
+#'         Returns an empty data frame if no mappings are found.
 #' @examples
 #' \dontrun{
-#'   uniprot_id <- "P04217"
-#'   entrez_id <- up2ncbi(uniprot_id)
-#'   print(entrez_id)
+#'   uniprot_ids <- c("P04217", "P01023")
+#'   refseq_accessions <- up2ncbi(uniprot_ids)
+#'   print(refseq_accessions)
 #' }
 #' @importFrom AnnotationDbi select
 #' @import org.Hs.eg.db
 #' @export
-up2ncbi <- function(uniprot_id) {
-  # Use the select function to map the UniProt ID to an Entrez Gene ID
-  result <- AnnotationDbi::select(org.Hs.eg.db,
-                                  keys = uniprot_id,
-                                  columns = "ENTREZID",
-                                  keytype = "UNIPROT")
-  
-  # Check if the result is not empty and return the first Entrez ID
-  if (nrow(result) > 0 && !is.na(result$ENTREZID[1])) {
-    return(as.character(result$ENTREZID[1]))
-  } else {
-    return(NA)  # Return NA if no mapping is found
+up2ncbi <- function(uniprot_ids) {
+  # Check if input is provided
+  if (length(uniprot_ids) == 0) {
+    stop("No UniProt IDs provided.")
   }
+  
+  # Perform the mapping
+  tryCatch({
+    mapping <- AnnotationDbi::select(
+      org.Hs.eg.db,
+      keys = uniprot_ids,
+      columns = "REFSEQ",
+      keytype = "UNIPROT"
+    )
+    
+    # Check if any mappings were found
+    if (nrow(mapping) == 0) {
+      warning("No NCBI accessions found for the given UniProt IDs.")
+    }
+    
+    return(mapping)
+  }, error = function(e) {
+    stop(paste("Error in mapping:", e$message))
+  })
 }
+
 
 
 #' Convert NCBI RefSeq Accessions to UniProt IDs
