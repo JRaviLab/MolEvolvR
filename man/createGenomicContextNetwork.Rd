@@ -18,14 +18,19 @@ createGenomicContextNetwork(
 
 \item{domains_of_interest}{Character vector of domains of interest.}
 
-\item{column}{Name of column containing Genomic Context from which nodes and edges are generated.}
+\item{column}{Name of column containing Genomic Context from which nodes and
+edges are generated.}
 
-\item{cutoff}{Integer. Only use GenContexts that occur at or above the cutoff percentage for total count}
+\item{cutoff}{Integer. Only use GenContexts that occur at or above the cutoff
+percentage for total count}
 
 \item{layout}{Character. Layout type to be used for the network. Options are:
 \itemize{\item "grid" \item "circle" \item "random" \item "auto" \item "nice"}}
 
 \item{directed}{Is the network directed?}
+}
+\value{
+A plot of the genomic context network.
 }
 \description{
 This function creates a Genomic Context network from the 'GenContext' column.
@@ -34,6 +39,6 @@ A network of Genomic Context is returned.
 }
 \examples{
 \dontrun{
-gc_directed_network(pspa, column = "GenContex", cutoff = 55)
+gc_directed_network(pspa, column = "GenContext", cutoff = 55)
 }
 }

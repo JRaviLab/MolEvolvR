@@ -6,6 +6,19 @@
 \usage{
 themeGenes2()
 }
+\value{
+A ggplot2 theme object.
+}
 \description{
 themeGenes2
+}
+\examples{
+library(ggplot2)
+
+# Create a sample plot using the custom theme
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+    geom_point() +
+    themeGenes2() +
+    labs(title = "Car Weight vs MPG")
+
 }

@@ -2,15 +2,19 @@
 % Please edit documentation in R/cleanup.R
 \name{removeAsterisks}
 \alias{removeAsterisks}
-\title{Remove Astrk}
+\title{Remove Asterisk}
 \usage{
 removeAsterisks(query_data, colname = "GenContext")
 }
 \arguments{
-\item{colname}{}
+\item{query_data}{A data frame containing the data to be processed.}
+
+\item{colname}{The name of the column from which asterisks should be removed.
+Defaults to "GenContext".}
 }
 \value{
-Describe return, in detail
+The original data frame with asterisks removed from the specified
+column.
 }
 \description{
 Remove the asterisks from a column of data

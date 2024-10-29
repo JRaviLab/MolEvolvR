@@ -7,10 +7,15 @@
 cleanLineage(prot, lins_rename)
 }
 \arguments{
-\item{lins_rename}{}
+\item{prot}{A data frame containing a 'Lineage' column that needs to be
+cleaned up.}
+
+\item{lins_rename}{A data frame with two columns: 'old' containing terms
+to be replaced and 'new' containing the corresponding replacement terms.}
 }
 \value{
-Describe return, in detail
+The original data frame with the 'Lineage' column updated based on
+the provided replacements.
 }
 \description{
 Cleanup Lineage
