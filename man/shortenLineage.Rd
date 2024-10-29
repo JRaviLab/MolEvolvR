@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotting.R
 \name{shortenLineage}
 \alias{shortenLineage}
-\title{Shorten Lineage Names}
+\title{shortenLineage}
 \usage{
 shortenLineage(data, colname = "Lineage", abr_len = 1)
 }
