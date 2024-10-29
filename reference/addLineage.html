@@ -65,44 +65,53 @@ addLineage"></head><body>
 
 
 <dl><dt id="arg-df">df<a class="anchor" aria-label="anchor" href="#arg-df"></a></dt>
-<dd><p>A <code>data.frame</code> containing the input data. One column must contain
-the accession numbers.</p></dd>
+<dd><p>Dataframe containing accession numbers. The dataframe should
+have a column specified by <code>acc_col</code> that contains these accession numbers.</p></dd>
 
 
 <dt id="arg-acc-col">acc_col<a class="anchor" aria-label="anchor" href="#arg-acc-col"></a></dt>
-<dd><p>A string specifying the column name in <code>df</code> that holds the
-accession numbers. Defaults to <code>"AccNum"</code>.</p></dd>
+<dd><p>Character. The name of the column in <code>df</code> containing
+accession numbers. Default is "AccNum".</p></dd>
 
 
 <dt id="arg-assembly-path">assembly_path<a class="anchor" aria-label="anchor" href="#arg-assembly-path"></a></dt>
-<dd><p>A string specifying the path to the <code>assembly_summary.txt</code>
-file. This file contains metadata about assemblies.</p></dd>
+<dd><p>String. The path to the assembly summary file generated
+using the <code><a href="downloadAssemblySummary.html">downloadAssemblySummary()</a></code> function.</p></dd>
 
 
 <dt id="arg-lineagelookup-path">lineagelookup_path<a class="anchor" aria-label="anchor" href="#arg-lineagelookup-path"></a></dt>
-<dd><p>A string specifying the path to the lineage lookup
-file, which contains a mapping from tax IDs to their corresponding lineages.</p></dd>
+<dd><p>String. The path to the lineage lookup file (taxid
+to lineage mapping) generated using the <code>create_lineage_lookup()</code> function.</p></dd>
 
 
 <dt id="arg-ipgout-path">ipgout_path<a class="anchor" aria-label="anchor" href="#arg-ipgout-path"></a></dt>
-<dd><p>(Optional) A string specifying the path where IPG database
-fetch results will be saved. If <code>NULL</code>, the results are not written to a file.</p></dd>
+<dd><p>String. Optional path to save intermediate output files.
+Default is NULL.</p></dd>
 
 
 <dt id="arg-plan">plan<a class="anchor" aria-label="anchor" href="#arg-plan"></a></dt>
-<dd></dd>
+<dd><p>Character. Specifies the execution plan for parallel processing.
+Default is "multicore".</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A <code>data.frame</code> that combines the original <code>df</code> with the lineage
 information.</p>
+<p>A dataframe that combines the original dataframe <code>df</code> with lineage
+information retrieved based on the provided accession numbers.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="fu">addLineage</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="va">enriched_df</span> <span class="op">&lt;-</span> <span class="fu">addLineage</span><span class="op">(</span>df <span class="op">=</span> <span class="va">my_data</span>,</span></span>
+<span class="r-in"><span>                           acc_col <span class="op">=</span> <span class="st">"AccNum"</span>,</span></span>
+<span class="r-in"><span>                           assembly_path <span class="op">=</span> <span class="st">"path/to/assembly_summary.txt"</span>,</span></span>
+<span class="r-in"><span>                           lineagelookup_path <span class="op">=</span> <span class="st">"path/to/lineage_lookup.tsv"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

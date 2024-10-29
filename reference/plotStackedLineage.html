@@ -59,10 +59,72 @@
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-legend">legend<a class="anchor" aria-label="anchor" href="#arg-legend"></a></dt>
-<dd></dd>
+<dl><dt id="arg-prot">prot<a class="anchor" aria-label="anchor" href="#arg-prot"></a></dt>
+<dd><p>Data frame containing protein data including domain architecture
+and lineage information.</p></dd>
+
+
+<dt id="arg-column">column<a class="anchor" aria-label="anchor" href="#arg-column"></a></dt>
+<dd><p>Character. The name of the column in prot representing domain
+architectures (default is "DomArch").</p></dd>
+
+
+<dt id="arg-cutoff">cutoff<a class="anchor" aria-label="anchor" href="#arg-cutoff"></a></dt>
+<dd><p>Numeric. A threshold value for filtering domain architectures
+or protein counts.</p></dd>
+
+
+<dt id="arg-lineage-col">Lineage_col<a class="anchor" aria-label="anchor" href="#arg-lineage-col"></a></dt>
+<dd><p>Character. The name of the column representing lineage
+data (default is "Lineage").</p></dd>
+
+
+<dt id="arg-xlabel">xlabel<a class="anchor" aria-label="anchor" href="#arg-xlabel"></a></dt>
+<dd><p>Character. Label for the x-axis
+(default is "Domain Architecture").</p></dd>
+
+
+<dt id="arg-reduce-lineage">reduce_lineage<a class="anchor" aria-label="anchor" href="#arg-reduce-lineage"></a></dt>
+<dd><p>Logical. Whether to shorten lineage names
+(default is TRUE).</p></dd>
+
+
+<dt id="arg-label-size">label.size<a class="anchor" aria-label="anchor" href="#arg-label-size"></a></dt>
+<dd><p>Numeric. The size of axis text labels (default is 8).</p></dd>
+
+
+<dt id="arg-legend-position">legend.position<a class="anchor" aria-label="anchor" href="#arg-legend-position"></a></dt>
+<dd><p>Numeric vector. Coordinates for placing the legend
+(default is c(0.7, 0.4)).</p></dd>
+
+
+<dt id="arg-legend-text-size">legend.text.size<a class="anchor" aria-label="anchor" href="#arg-legend-text-size"></a></dt>
+<dd><p>Numeric. Size of the text in the legend
+(default is 10).</p></dd>
+
+
+<dt id="arg-legend-cols">legend.cols<a class="anchor" aria-label="anchor" href="#arg-legend-cols"></a></dt>
+<dd><p>Numeric. Number of columns in the legend (default is 2).</p></dd>
+
+
+<dt id="arg-legend-size">legend.size<a class="anchor" aria-label="anchor" href="#arg-legend-size"></a></dt>
+<dd><p>Numeric. Size of the legend keys (default is 0.7).</p></dd>
+
+
+<dt id="arg-coord-flip">coord_flip<a class="anchor" aria-label="anchor" href="#arg-coord-flip"></a></dt>
+<dd><p>Logical. Whether to flip the coordinates of the plot
+(default is TRUE).</p></dd>
+
+
+<dt id="arg-legend">legend<a class="anchor" aria-label="anchor" href="#arg-legend"></a></dt>
+<dd><p>Logical. Whether to display the legend (default is TRUE).</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>A ggplot object representing a stacked bar plot showing the
+distribution of protein domain architectures across lineages.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>

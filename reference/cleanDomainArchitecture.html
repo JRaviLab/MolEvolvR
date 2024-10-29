@@ -71,40 +71,57 @@ The original data frame is returned with the clean DomArchs column and the old d
 <dd><p>A data frame containing a 'DomArch' column</p></dd>
 
 
+<dt id="arg-old">old<a class="anchor" aria-label="anchor" href="#arg-old"></a></dt>
+<dd><p>The name of the original column containing domain architecture.
+Defaults to "DomArch.orig".</p></dd>
+
+
+<dt id="arg-new">new<a class="anchor" aria-label="anchor" href="#arg-new"></a></dt>
+<dd><p>The name of the cleaned column to be created. Defaults to
+"DomArch".</p></dd>
+
+
 <dt id="arg-domains-keep">domains_keep<a class="anchor" aria-label="anchor" href="#arg-domains-keep"></a></dt>
 <dd><p>A data frame containing the domain names to be retained.</p></dd>
 
 
 <dt id="arg-domains-rename">domains_rename<a class="anchor" aria-label="anchor" href="#arg-domains-rename"></a></dt>
-<dd><p>A data frame containing the domain names to be replaced in a column 'old' and the
+<dd><p>A data frame containing the domain names to be replaced
+in a column 'old' and the
 corresponding replacement values in a column 'new'.</p></dd>
 
 
 <dt id="arg-condenserepeateddomains">condenseRepeatedDomains<a class="anchor" aria-label="anchor" href="#arg-condenserepeateddomains"></a></dt>
-<dd><p>Boolean. If TRUE, repeated domains in 'DomArch' are condensed. Default is TRUE.</p></dd>
+<dd><p>Boolean. If TRUE, repeated domains in
+'DomArch' are condensed. Default is TRUE.</p></dd>
 
 
 <dt id="arg-removetails">removeTails<a class="anchor" aria-label="anchor" href="#arg-removetails"></a></dt>
-<dd><p>Boolean. If TRUE, 'ClustName' will be filtered based on domains to keep/remove. Default is FALSE.</p></dd>
+<dd><p>Boolean. If TRUE, 'ClustName' will be filtered based on
+domains to keep/remove. Default is FALSE.</p></dd>
 
 
 <dt id="arg-removeemptyrows">removeEmptyRows<a class="anchor" aria-label="anchor" href="#arg-removeemptyrows"></a></dt>
-<dd><p>Boolean. If TRUE, rows with empty/unnecessary values in 'DomArch' are removed. Default is FALSE.</p></dd>
+<dd><p>Boolean. If TRUE, rows with empty/unnecessary values
+in 'DomArch' are removed. Default is FALSE.</p></dd>
 
 
 <dt id="arg-domains-ignore">domains_ignore<a class="anchor" aria-label="anchor" href="#arg-domains-ignore"></a></dt>
-<dd><p>A data frame containing the domain names to be removed in a column called 'domains'</p></dd>
+<dd><p>A data frame containing the domain names to be removed
+in a column called 'domains'</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>The original data frame is returned with the clean DomArchs column and the old domains in the DomArchs.old column.</p>
+    <p>The original data frame is returned with the clean DomArchs column
+and the old domains in the DomArchs.old column.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="fu">cleanDomainArchitecture</span><span class="op">(</span><span class="va">prot</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="va">domains_keep</span>, <span class="va">domains_rename</span>, domains_ignore <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">cleanDomainArchitecture</span><span class="op">(</span><span class="va">prot</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>, </span></span>
+<span class="r-in"><span><span class="va">omains_keep</span>, <span class="va">domains_rename</span>, domains_ignore <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

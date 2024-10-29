@@ -55,10 +55,26 @@
 additional word columns (0/1 format). Default is "prot".</p></dd>
 
 
+<dt id="arg-colname">colname<a class="anchor" aria-label="anchor" href="#arg-colname"></a></dt>
+<dd><p>Character. The name of the column in <code>query_data</code> to generate
+the word cloud from. Default is "DomArch".</p></dd>
+
+
+<dt id="arg-cutoff">cutoff<a class="anchor" aria-label="anchor" href="#arg-cutoff"></a></dt>
+<dd><p>Numeric. The cutoff value for filtering elements based on their
+frequency. Default is 70.</p></dd>
+
+
 <dt id="arg-usingrowscutoff">UsingRowsCutoff<a class="anchor" aria-label="anchor" href="#arg-usingrowscutoff"></a></dt>
-<dd></dd>
+<dd><p>Logical. Whether to use a row-based cutoff instead of
+a frequency cutoff. Default is FALSE.</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>A word cloud plot showing the frequency of elements from the selected
+column.</p>
+    </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>For "da2doms" you would need the file DA.doms.wc as well as the

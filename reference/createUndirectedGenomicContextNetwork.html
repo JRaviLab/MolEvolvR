@@ -60,17 +60,26 @@ A network of domains is returned based on shared domain architectures."></head><
 
 
 <dt id="arg-column">column<a class="anchor" aria-label="anchor" href="#arg-column"></a></dt>
-<dd><p>Name of column containing Domain architecture from which nodes and edges are generated.</p></dd>
+<dd><p>Name of column containing Domain architecture from which nodes
+and edges are generated.</p></dd>
+
+
+<dt id="arg-domains-of-interest">domains_of_interest<a class="anchor" aria-label="anchor" href="#arg-domains-of-interest"></a></dt>
+<dd><p>Character vector specifying the domains of interest.</p></dd>
 
 
 <dt id="arg-cutoff-type">cutoff_type<a class="anchor" aria-label="anchor" href="#arg-cutoff-type"></a></dt>
-<dd><p>Character. Used to determine how data should be filtered. Either</p><ul><li><p>"Total Count" to filter off the total amount of times a domain architecture occurs</p></li>
+<dd><p>Character. Used to determine how data should be filtered.
+Either</p><ul><li><p>"Total Count" to filter off the total amount of times a
+domain architecture occurs</p></li>
 </ul></dd>
 
 
 <dt id="arg-cutoff">cutoff<a class="anchor" aria-label="anchor" href="#arg-cutoff"></a></dt>
-<dd><p>Integer. Only use domains that occur at or above the cutoff for total counts if cutoff_type is "Total Count".
-Only use domains that appear in cutoff or greater lineages if cutoff_type is Lineage.</p></dd>
+<dd><p>Integer. Only use domains that occur at or above the cutoff
+for total counts if cutoff_type is "Total Count".
+Only use domains that appear in cutoff or greater lineages if cutoff_type is
+Lineage.</p></dd>
 
 
 <dt id="arg-layout">layout<a class="anchor" aria-label="anchor" href="#arg-layout"></a></dt>
@@ -80,11 +89,17 @@ Only use domains that appear in cutoff or greater lineages if cutoff_type is Lin
 </ul></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>A plot of the domain architecture network.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="fu">createUndirectedGenomicContextNetwork</span><span class="op">(</span><span class="va">pspa</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">createUndirectedGenomicContextNetwork</span><span class="op">(</span><span class="va">pspa</span>, column <span class="op">=</span> <span class="st">"DomArch"</span>, </span></span>
+<span class="r-in"><span>domains_of_interest <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Domain1"</span>, <span class="st">"Domain2"</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span>cutoff_type <span class="op">=</span> <span class="st">"Total Count"</span>, cutoff <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

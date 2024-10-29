@@ -55,11 +55,74 @@
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-rows">rows<a class="anchor" aria-label="anchor" href="#arg-rows"></a></dt>
-<dd></dd>
+<dl><dt id="arg-infile-ipr">infile_ipr<a class="anchor" aria-label="anchor" href="#arg-infile-ipr"></a></dt>
+<dd><p>A path to the input IPR file (TSV format) containing
+domain information.</p></dd>
+
+
+<dt id="arg-accessions">accessions<a class="anchor" aria-label="anchor" href="#arg-accessions"></a></dt>
+<dd><p>A character vector of accession numbers to filter the
+analysis.</p></dd>
+
+
+<dt id="arg-analysis">analysis<a class="anchor" aria-label="anchor" href="#arg-analysis"></a></dt>
+<dd><p>A character vector specifying the types of analysis to
+include (e.g., "Pfam", "Phobius", "TMHMM", "Gene3D"). Default is a vector
+of these analyses.</p></dd>
+
+
+<dt id="arg-group-by">group_by<a class="anchor" aria-label="anchor" href="#arg-group-by"></a></dt>
+<dd><p>A string specifying how to group the visualization.
+Default is "Analysis". Options include "Analysis" or "Query".</p></dd>
+
+
+<dt id="arg-name">name<a class="anchor" aria-label="anchor" href="#arg-name"></a></dt>
+<dd><p>A string representing the name to use for y-axis labels.
+Default is "Name".</p></dd>
+
+
+<dt id="arg-text-size">text_size<a class="anchor" aria-label="anchor" href="#arg-text-size"></a></dt>
+<dd><p>An integer specifying the text size for the plot.
+Default is 15.</p></dd>
+
+
+<dt id="arg-legend-name">legend_name<a class="anchor" aria-label="anchor" href="#arg-legend-name"></a></dt>
+<dd><p>A string representing the column to use for legend labels.
+Default is "ShortName".</p></dd>
+
+
+<dt id="arg-cols">cols<a class="anchor" aria-label="anchor" href="#arg-cols"></a></dt>
+<dd><p>An integer specifying the number of columns in the facet wrap.
+Default is 5.</p></dd>
+
+
+<dt id="arg-rows">rows<a class="anchor" aria-label="anchor" href="#arg-rows"></a></dt>
+<dd><p>An integer specifying the number of rows in the legend.
+Default is 10.</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>A ggplot object representing the domain architecture visualization
+for web display.</p>
+    </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu">plotIPR2VizWeb</span><span class="op">(</span>infile_ipr <span class="op">=</span> <span class="st">"path/to/ipr_file.tsv"</span>,</span></span>
+<span class="r-in"><span>                       accessions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ACC123"</span>, <span class="st">"ACC456"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                       analysis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pfam"</span>, <span class="st">"TMHMM"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                       group_by <span class="op">=</span> <span class="st">"Analysis"</span>,</span></span>
+<span class="r-in"><span>                       name <span class="op">=</span> <span class="st">"Gene Name"</span>,</span></span>
+<span class="r-in"><span>                       text_size <span class="op">=</span> <span class="fl">15</span>,</span></span>
+<span class="r-in"><span>                       legend_name <span class="op">=</span> <span class="st">"ShortName"</span>,</span></span>
+<span class="r-in"><span>                       cols <span class="op">=</span> <span class="fl">5</span>,</span></span>
+<span class="r-in"><span>                       rows <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">plot</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

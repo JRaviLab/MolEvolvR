@@ -60,7 +60,8 @@ the ipg database</p></dd>
 
 
 <dt id="arg-plan">plan<a class="anchor" aria-label="anchor" href="#arg-plan"></a></dt>
-<dd></dd>
+<dd><p>Character. Specifies the execution plan for parallel processing.
+Default is "multicore".</p></dd>
 
 
 <dt id="arg-accnums">accnums<a class="anchor" aria-label="anchor" href="#arg-accnums"></a></dt>
@@ -71,6 +72,8 @@ the ipg database</p></dd>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>No return value. The function writes the fetched results to <code>out_path</code>.</p>
+<p>The function does not return a value but writes the efetch results
+directly to the specified <code>out_path</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -81,6 +84,12 @@ the ipg database</p></dd>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="fu">efetchIPG</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="fu">efetchIPG</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  accessions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P12345"</span>, <span class="st">"Q67890"</span>, <span class="st">"A12345"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  out_path <span class="op">=</span> <span class="st">"path/to/efetch_results.xml"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

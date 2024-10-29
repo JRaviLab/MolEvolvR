@@ -61,22 +61,44 @@ Genomic Contexts vs Domain Architectures.</p>
 additional word columns (0/1 format). Default is toast_rack.sub</p></dd>
 
 
+<dt id="arg-colname">colname<a class="anchor" aria-label="anchor" href="#arg-colname"></a></dt>
+<dd><p>Column name from query_data: "DomArch.norep", "GenContext.norep",
+"DomArch.PFAM.norep" or "DomArch.LADB.norep". Default is "DomArch.norep".</p></dd>
+
+
 <dt id="arg-cutoff">cutoff<a class="anchor" aria-label="anchor" href="#arg-cutoff"></a></dt>
 <dd><p>Numeric. Cutoff for word frequency. Default is 90.</p></dd>
 
 
+<dt id="arg-rowscutoff">RowsCutoff<a class="anchor" aria-label="anchor" href="#arg-rowscutoff"></a></dt>
+<dd><p>Boolean. If TRUE, applies a row cutoff to remove data rows
+based on a certain condition. Default is FALSE.</p></dd>
+
+
 <dt id="arg-text-scale">text.scale<a class="anchor" aria-label="anchor" href="#arg-text-scale"></a></dt>
-<dd><p>Allows scaling of axis title, tick lables, and numbers above the intersection size bars.
+<dd><p>Allows scaling of axis title, tick lables, and numbers
+above the intersection size bars.
 text.scale can either take a universal scale in the form of an integer,
 or a vector of specific scales in the format: c(intersection size title,
 intersection size tick labels, set size title, set size tick labels, set names,
 numbers above bars)</p></dd>
 
 
+<dt id="arg-point-size">point.size<a class="anchor" aria-label="anchor" href="#arg-point-size"></a></dt>
+<dd><p>Numeric. Sets the size of points in the UpSet plot.
+Default is 2.2.</p></dd>
+
+
 <dt id="arg-line-size">line.size<a class="anchor" aria-label="anchor" href="#arg-line-size"></a></dt>
-<dd></dd>
+<dd><p>Numeric. Sets the line width in the UpSet plot.
+Default is 0.8.</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>An UpSet plot object. The plot visualizes intersections of sets based
+on the provided colname in query_data.</p>
+    </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>For "da2doms" you would need the file DA.doms.wc as well as the

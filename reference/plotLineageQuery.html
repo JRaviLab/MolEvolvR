@@ -58,17 +58,39 @@ Default is prot (variable w/ protein data).</p></dd>
 
 
 <dt id="arg-queries">queries<a class="anchor" aria-label="anchor" href="#arg-queries"></a></dt>
-<dd><p>Character Vector containing the queries that will be used for the categories</p></dd>
+<dd><p>Character Vector containing the queries that will be used for
+the categories.</p></dd>
+
+
+<dt id="arg-colname">colname<a class="anchor" aria-label="anchor" href="#arg-colname"></a></dt>
+<dd><p>Character. The column used for filtering based on the <code>queries</code>.
+Default is "ClustName".</p></dd>
+
+
+<dt id="arg-cutoff">cutoff<a class="anchor" aria-label="anchor" href="#arg-cutoff"></a></dt>
+<dd><p>Numeric. The cutoff value for filtering rows based on their
+total count. Rows with values below this cutoff are excluded.</p></dd>
 
 
 <dt id="arg-color">color<a class="anchor" aria-label="anchor" href="#arg-color"></a></dt>
-<dd></dd>
+<dd><p>Character. Defines the color palette used for the heatmap.
+Default is a red gradient.</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>A ggplot object representing a heatmap (tile plot) showing the
+relationship between queries and lineages, with the intensity of color
+representing the count of matching records.</p>
+    </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>Please refer to the source code if you have alternate file formats and/or
 column names.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
+    <p>Janani Ravi, Samuel Chen</p>
     </div>
 
     <div class="section level2">

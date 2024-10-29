@@ -78,10 +78,19 @@ Default is 'NULL'</p></dd>
 
 
 <dt id="arg-reduced">reduced<a class="anchor" aria-label="anchor" href="#arg-reduced"></a></dt>
-<dd><p>Boolean. If TRUE, the fasta file will contain only one sequence per lineage.
-Default is 'FALSE'</p></dd>
+<dd><p>Boolean. If TRUE, the fasta file will contain only one
+sequence per lineage. Default is 'FALSE'</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>A character string representing the FASTA formatted sequences.
+If <code>fa_outpath</code> is provided, the FASTA will also be saved to the specified
+file.</p>
+<p>Character string containing the Fasta formatted sequences.
+If <code>fa_outpath</code> is specified, the function also writes the sequences to the
+Fasta file.</p>
+    </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The alignment file would need two columns: 1. accession +

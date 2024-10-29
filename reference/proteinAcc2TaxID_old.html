@@ -49,23 +49,38 @@ and write the resulting file of taxid and lineage to out_path</p>
 
 
 <dl><dt id="arg-accessions">accessions<a class="anchor" aria-label="anchor" href="#arg-accessions"></a></dt>
-<dd><p>Character vector containing the accession numbers to query on
-the ipg database</p></dd>
+<dd><p>A character vector containing the accession numbers to query
+in the protein database.</p></dd>
 
 
 <dt id="arg-out-path">out_path<a class="anchor" aria-label="anchor" href="#arg-out-path"></a></dt>
-<dd><p>Path to write the efetch results to</p></dd>
+<dd><p>A string specifying the path where the results of the query
+will be written. If set to NULL, a temporary directory will be used.</p></dd>
 
 
 <dt id="arg-plan">plan<a class="anchor" aria-label="anchor" href="#arg-plan"></a></dt>
-<dd></dd>
+<dd><p>A character string that specifies the execution plan for parallel
+processing. The default is "multicore".</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>This function does not return a value. It writes the results to the
+specified output path.</p>
+    </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
     <p>Samuel Chen, Janani Ravi</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="va">accessions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ABC123"</span>, <span class="st">"XYZ456"</span>, <span class="st">"LMN789"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">proteinAcc2TaxID_old</span><span class="op">(</span><span class="va">accessions</span>, out_path <span class="op">=</span> <span class="st">"/path/to/output"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
