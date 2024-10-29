@@ -18,7 +18,73 @@
 # suppressPackageStartupMessages(library(d3r))
 # suppressPackageStartupMessages(library(viridis))
 
-#' Shorten Lineage Names
+########################
+## Internal Functions ##
+########################
+#' 
+#' 
+.LevelReduction <- function(lin, level) {
+    gt_loc <- str_locate_all(lin, ">")[[1]]
+    available_levels <- length(gt_loc) / 2  # Since `str_locate_all` returns a matrix
+    
+    # Guard against out-of-bounds level requests
+    if (level > available_levels || level < 1) {
+        return(lin)
+    } else {
+        gt_loc <- gt_loc[level, ][1] %>% as.numeric()
+        lin <- substring(lin, first = 0, last = (gt_loc - 1))
+        return(lin)
+    }
+}
+
+
+
+.GetKingdom <- function(lin) {
+    gt_loc <- str_locate(lin, ">")[, "start"]
+    if (is.na(gt_loc)) {
+        # No '>' in lineage
+        return(lin)
+    } else {
+        kingdom <- substring(lin, first = 0, last = (gt_loc - 1))
+        return(kingdom)
+    }
+}
+
+
+########################
+## Internal Functions ##
+########################
+#' 
+#' 
+.LevelReduction <- function(lin, level) {
+    gt_loc <- str_locate_all(lin, ">")[[1]]
+    available_levels <- length(gt_loc) / 2  # Since `str_locate_all` returns a matrix
+    
+    # Guard against out-of-bounds level requests
+    if (level > available_levels || level < 1) {
+        return(lin)
+    } else {
+        gt_loc <- gt_loc[level, ][1] %>% as.numeric()
+        lin <- substring(lin, first = 0, last = (gt_loc - 1))
+        return(lin)
+    }
+}
+
+
+
+.GetKingdom <- function(lin) {
+    gt_loc <- str_locate(lin, ">")[, "start"]
+    if (is.na(gt_loc)) {
+        # No '>' in lineage
+        return(lin)
+    } else {
+        kingdom <- substring(lin, first = 0, last = (gt_loc - 1))
+        return(kingdom)
+    }
+}
+
+
+#' shortenLineage
 #'
 #' @description
 #' This function abbreviates lineage names by shortening the first part of the
@@ -700,30 +766,6 @@ plotLineageDomainRepeats <- function(query_data, colname) {
 #' }
 #'
 plotLineageHeatmap <- function(prot, domains_of_interest, level = 3, label.size = 8) {
-    .LevelReduction <- function(lin) {
-        if (level == 1) {
-            gt_loc <- str_locate(lin, ">")[[1]]
-            if (is.na(gt_loc)) {
-                # No '>' in lineage
-                return(lin)
-            } else {
-                lin <- substring(lin, first = 0, last = (gt_loc - 1))
-                return(lin)
-            }
-        }
-        #### Add guard here to protect from out of bounds
-        gt_loc <- str_locate_all(lin, ">")[[1]] # [(level-1),][1]
-        l <- length(gt_loc) / 2
-        if (level > l) {
-            # Not enough '>' in lineage
-            return(lin)
-        } else {
-            gt_loc <- gt_loc[level, ][1] %>% as.numeric()
-            lin <- substring(lin, first = 0, last = (gt_loc - 1))
-            return(lin)
-        }
-    }
-
     all_grouped <- data.frame("Query" = character(0), "Lineage" = character(0), "count" = integer())
     for (dom in domains_of_interest)
     {
@@ -738,19 +780,7 @@ plotLineageHeatmap <- function(prot, domains_of_interest, level = 3, label.size 
         all_grouped <- dplyr::union(all_grouped, domSub)
     }
 
-    .GetKingdom <- function(lin) {
-        gt_loc <- str_locate(lin, ">")[, "start"]
-
-        if (is.na(gt_loc)) {
-            # No '>' in lineage
-            return(lin)
-        } else {
-            kingdom <- substring(lin, first = 0, last = (gt_loc - 1))
-            return(kingdom)
-        }
-    }
-
-    all_grouped <- all_grouped %>% mutate(ReducedLin = unlist(purrr::map(Lineage, .LevelReduction)))
+    all_grouped <- all_grouped %>% mutate(ReducedLin = unlist(purrr::map(Lineage, ~.LevelReduction(.x, level))))
 
     all_grouped_reduced <- all_grouped %>%
         group_by(Query, ReducedLin) %>%
@@ -773,6 +803,10 @@ plotLineageHeatmap <- function(prot, domains_of_interest, level = 3, label.size 
     colors <- append(archaea_colors, bacteria_colors) %>%
         append(eukaryota_colors) %>%
         append(virus_colors)
+
+    if (length(colors) < length(unique(all_grouped_reduced$ReducedLin))) {
+    colors <- rep("black", length(unique(all_grouped_reduced$ReducedLin)))  # Fallback to black
+    }
 
     all_grouped_reduced$ReducedLin <- map(
         all_grouped_reduced$ReducedLin,
@@ -801,7 +835,7 @@ plotLineageHeatmap <- function(prot, domains_of_interest, level = 3, label.size 
     )
     ggplot(
         data = all_grouped_reduced,
-        aes_string(x = "ReducedLin", y = "Query")
+        aes(x = "ReducedLin", y = "Query")
     ) +
         geom_tile(
             data = subset(
@@ -809,7 +843,7 @@ plotLineageHeatmap <- function(prot, domains_of_interest, level = 3, label.size 
                 !is.na(count)
             ),
             aes(fill = count),
-            colour = "darkred", size = 0.3
+            colour = "darkred", linewidth = 0.3
         ) + # , width=0.7, height=0.7),
         scale_fill_gradient(low = "white", high = "darkred") +
         # scale_x_discrete(position="top") +
