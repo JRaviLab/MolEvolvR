@@ -28,8 +28,8 @@
 
 straightenOperonSeq <- function(prot) {
     # Check if 'prot' is a data frame
-    if (!is.data.frame(prot)) {
-        abort("Error: 'prot' must be a data frame.")
+    if (!is.vector(prot)) {
+        abort("Error: 'prot' must be a vector.")
     }
     
     w <- prot # $GenContext.orig # was 'x'
