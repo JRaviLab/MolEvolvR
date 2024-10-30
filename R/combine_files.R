@@ -24,21 +24,31 @@
 #'
 #' @author Janani Ravi
 #'
-#' @param inpath String of 'master' path where the files reside (recursive=T)
-#' @param pattern Character vector containing search pattern for files
-#' @param delim
-#' @param skip
-#' @param col_names Takes logical T/F arguments OR column names vector;
-#' usage similar to col_names parameter in `readr::read_delim`
+#' @param inpath Character. The master directory path where the files reside. 
+#' The search is recursive (i.e., it will look in subdirectories as well).
+#' @param pattern Character. A search pattern to identify files to be combined. 
+#' Default is "*full_analysis.tsv".
+#' @param delim Character. The delimiter used in the input files. 
+#' Default is tab ("\t").
+#' @param skip Integer. The number of lines to skip at the beginning of each file. 
+#' Default is 0.
+#' @param col_names Logical or character vector. If TRUE, the first row of each file 
+#' is treated as column names. Alternatively, a character vector can 
+#' be provided to specify custom column names.
 #'
 #' @importFrom purrr pmap_dfr
 #' @importFrom readr cols
 #'
-#' @return
+#' @return A data frame containing the combined contents of all matched files. 
+#' Each row will include a new column "ByFile" indicating the source file of the data.
+#'
 #' @export
 #'
 #' @examples
-combine_files <- function(inpath = c("../molevol_data/project_data/phage_defense/"),
+#' \dontrun{
+#' combined_data <- combineFiles(inpath = "../molevol_data/project_data/phage_defense/")
+#' }
+combineFiles <- function(inpath = c("../molevol_data/project_data/phage_defense/"),
     pattern = "*full_analysis.tsv",
     delim = "\t", skip = 0,
     col_names = T) {
@@ -67,7 +77,7 @@ combine_files <- function(inpath = c("../molevol_data/project_data/phage_defense
 ## Sample Runs ##
 #################
 # ## Combining full_analysis files
-# full_combnd <- combine_files(inpath,
+# full_combnd <- combineFiles(inpath,
 #                             pattern="*full_analysis.txt", skip=0,
 #                             col_names=T)
 #
@@ -75,7 +85,7 @@ combine_files <- function(inpath = c("../molevol_data/project_data/phage_defense
 #           path="../molevol_data/project_data/slps/full_combined.tsv")
 #
 # ## Combining clean files
-# cln_combnd <- combine_files(inpath,
+# cln_combnd <- combineFiles(inpath,
 #                             pattern="^.*cln.txt", skip=0,
 #                             col_names=T)
 #
@@ -86,14 +96,14 @@ combine_files <- function(inpath = c("../molevol_data/project_data/phage_defense
 # ## Less helpful examples!
 # ## Combining BLAST files
 # ## Likely makes no sense since clustering is done per query
-# cl_blast_combnd <- combine_files(inpath,
+# cl_blast_combnd <- combineFiles(inpath,
 #                                  pattern="^.*refseq.1e-5.txt", skip=0,
 #                                  col_names=cl_blast_colnames) %>%
 #   select(-PcPositive, -ClusterID)
 #
 # ## Combining IPR files
 # ## Likely makes no sense since there may be repeated AccNum from indiv. files!
-# ipr_combnd <- combine_files(inpath,
+# ipr_combnd <- combineFiles(inpath,
 #                             pattern="*iprscan.lins*",  skip=0,
 #                             col_names=ipr_colnames)
 #

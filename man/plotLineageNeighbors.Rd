@@ -18,6 +18,11 @@ additional word columns (0/1 format). Default is pspa_data.}
 
 \item{colname}{Column name from query_data. Default is "GenContext.norep".}
 }
+\value{
+A ggplot object representing a heatmap (tile plot) of lineage versus
+the top neighboring domain architectures, with color intensity representing
+the frequency of occurrences.
+}
 \description{
 Lineage plot for top neighbors obtained from DAs of
 Genomic Contexts.

@@ -24,7 +24,7 @@
 #############
 
 ## Sample Runs
-# msa_pdf(fasta_path="data/alns/pspb.gismo.fa" )#, out_path="data/msapdf")
+# createMSA_PDF(fasta_path="data/alns/pspb.gismo.fa" )#, out_path="data/msapdf")
 
 #########################################
 ## Generates MSA PDF from a Fasta file ##
@@ -34,7 +34,7 @@
 #' @description
 #' Generates a multiple sequence alignment from a fasta file
 #'
-#' msa_pdf is a function that reads a fasta file and generates a multiple sequence alignment as
+#' createMSA_PDF is a function that reads a fasta file and generates a multiple sequence alignment as
 #' a pdf
 #'
 #'
@@ -50,14 +50,17 @@
 #' @importFrom msa msa msaPrettyPrint
 #' @importFrom stringr str_replace
 #'
-#' @return
+#' @return A PDF file containing the multiple sequence alignment.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' msa_pdf()
+#' createMSA_PDF(fasta_path = "path/to/your/file.fasta", 
+#'         out_path = "path/to/output/alignment.pdf", 
+#'         lowerbound = 10, 
+#'         upperbound = 200)
 #' }
-msa_pdf <- function(fasta_path, out_path = NULL,
+createMSA_PDF <- function(fasta_path, out_path = NULL,
     lowerbound = NULL, upperbound = NULL) {
     ## SAMPLE ARGUMENTS to test run
     # fasta_path=here("../molevol_data/project_data/phage_defense/full_analysis_20210108/g3d.both_lin.gen.da_sub.fa")
@@ -187,21 +190,27 @@ msa_pdf <- function(fasta_path, out_path = NULL,
 ## https://github.com/mhahsler/rMSA
 #' Function to generate MSA using kalign
 #'
-#' @param fa_file
-#' @param outfile
+#' @param fa_file Character. The path to the input FASTA file containing protein 
+#' sequences.
+#' @param outfile Character. The path to the output file where the alignment 
+#' will be saved.
 #'
 #' @importFrom Biostrings readAAStringSet
 #'
-#' @return
+#' @return A list containing the alignment object and the output file path.
 #' @export
 #'
 #' @examples
-generate_msa <- function(fa_file = "", outfile = "") {
-  prot_aa <- readAAStringSet(
-    fa_file,
-    format = "fasta"
-  )
-  prot_aa
+#' \dontrun{
+#' createMSA_Kalign(fa_file = "path/to/sequences.fasta", 
+#'                  outfile = "path/to/alignment.txt")
+#' }
+createMSA_Kalign <- function(fa_file = "", outfile = "") {
+    prot_aa <- readAAStringSet(
+        path = fa_file,
+        format = "fasta"
+    )
+    prot_aa
 
   ## Install kalign ?rMSA_INSTALL
   ## Messed up! Reimplement from kalign.R

@@ -13,7 +13,6 @@
 #' @importFrom rlang warn abort inform
 #'
 #' @return No return, but run to close all outstanding `sink()`s
-#'         and handles any errors or warnings that occur during the process.
 #'
 #' @export
 #'
@@ -45,18 +44,25 @@ sinkReset <- function() {
 
 #' addLineage
 #'
-#' @param df
-#' @param acc_col
-#' @param assembly_path
-#' @param lineagelookup_path
-#' @param ipgout_path
-#' @param plan
+#' @param df A `data.frame` containing the input data. One column must contain 
+#' the accession numbers.
+#' @param acc_col A string specifying the column name in `df` that holds the 
+#' accession numbers. Defaults to `"AccNum"`.
+#' @param assembly_path A string specifying the path to the `assembly_summary.txt` 
+#' file. This file contains metadata about assemblies.
+#' @param lineagelookup_path A string specifying the path to the lineage lookup 
+#' file, which contains a mapping from tax IDs to their corresponding lineages.
+#' @param ipgout_path (Optional) A string specifying the path where IPG database 
+#' fetch results will be saved. If `NULL`, the results are not written to a file.
+#' @param plan A string specifying the parallelization strategy for the future
+#' package, such as `"sequential"` or `"multisession"`.
 #'
 #' @importFrom dplyr pull
 #' @importFrom magrittr %>%
 #' @importFrom rlang sym warn abort inform
 #'
-#' @return Describe return, in detail
+#' @return A `data.frame` that combines the original `df` with the lineage 
+#' information.
 #' @export
 #'
 #' @examples
@@ -130,8 +136,7 @@ addLineage <- function(df, acc_col = "AccNum", assembly_path,
 #'
 #' @author Samuel Chen, Janani Ravi
 #'
-#' @description This function combines 'efetchIPG()'
-#'              and 'IPG2Lineage()' to map a set
+#' @description This function combines 'efetchIPG()' and 'IPG2Lineage()' to map a set
 #' of protein accessions to their assembly (GCA_ID), tax ID, and lineage.
 #'
 #' @param accessions Character vector of protein accessions
@@ -139,14 +144,15 @@ addLineage <- function(df, acc_col = "AccNum", assembly_path,
 #' This file can be generated using the \link[MolEvolvR]{downloadAssemblySummary} function
 #' @param lineagelookup_path String of the path to the lineage lookup file
 #' (taxid to lineage mapping). This file can be generated using the
-#' @param ipgout_path Path to write the results
-#'                    of the efetch run of the accessions
+#' @param ipgout_path Path to write the results of the efetch run of the accessions
 #' on the ipg database. If NULL, the file will not be written. Defaults to NULL
-#' @param plan
+#' @param plan A string specifying the parallelization strategy for the future
+#' package, such as `"sequential"` or `"multisession"`.
 #'
 #' @importFrom rlang warn abort inform
 #'
-#' @return Describe return, in detail
+#' @return A `data.table` that contains the lineage information, mapping protein 
+#' accessions to their tax IDs and lineages.
 #' @export
 #'
 #' @examples
@@ -208,20 +214,19 @@ acc2Lineage <- function(accessions, assembly_path,
 #'
 #' @author Samuel Chen, Janani Ravi
 #'
-#' @description Perform efetch on the ipg database
-#'              and write the results to out_path
-#'
+#' @description Perform efetch on the ipg database and write the results to out_path
 #' @param accnums Character vector containing the accession numbers to query on
 #' the ipg database
 #' @param out_path Path to write the efetch results to
-#' @param plan
+#' @param plan A string specifying the parallelization strategy for the future
+#' package, such as `"sequential"` or `"multisession"`.
 #'
 #' @importFrom furrr future_map
 #' @importFrom future plan
 #' @importFrom rentrez entrez_fetch
 #' @importFrom rlang warn abort inform
 #'
-#' @return Describe return, in detail
+#' @return No return value. The function writes the fetched results to `out_path`.
 #' @export
 #'
 #' @examples
@@ -260,16 +265,17 @@ efetchIPG <- function(accnums, out_path, plan = "sequential", ...) {
       return(partitioned)
     }
     tryCatch({
-      # Set the future plan strategy
-      plan(strategy = plan, .skip = T)
+
+    # Set the future plan strategy
+    plan(strategy = plan, .skip = T)
 
 
-      min_groups <- length(accnums) / 200
-      groups <- min(max(min_groups, 15), length(accnums))
-      partitioned_acc <- partition(accnums, groups)
+    min_groups <- length(accnums) / 200
+    groups <- min(max(min_groups, 15), length(accnums))
+    partitioned_acc <- partition(accnums, groups)
 
-      # Open the sink to the output path
-      sink(out_path)
+    # Open the sink to the output path
+    sink(out_path)
 
       a <- future_map(1:length(partitioned_acc), function(x) {
         # Avoid hitting the rate API limit
@@ -319,21 +325,20 @@ efetchIPG <- function(accnums, out_path, plan = "sequential", ...) {
 #'              of an efetch run on the ipg database and
 #'
 #' @param accessions Character vector of protein accessions
-#' @param ipg_file Filepath to the file
-#'                 containing results of an efetch run on the
-#' ipg database. The protein accession in
-#'               'accessions' should be contained in this
+#' @param ipg_file Filepath to the file containing results of an efetch run on the
+#' ipg database. The protein accession in 'accessions' should be contained in this
 #' file
 #' @param assembly_path String of the path to the assembly_summary path
 #' This file can be generated using the \link[MolEvolvR]{downloadAssemblySummary} function
 #' @param lineagelookup_path String of the path to the lineage lookup file
 #' (taxid to lineage mapping). This file can be generated using the
-#' "create_lineage_lookup()" function
+#' "createLineageLookup()" function
 #'
 #' @importFrom data.table fread
 #' @importFrom rlang warn abort inform
 #'
-#' @return Describe return, in detail
+#' @return A `data.table` with the lineage information for the provided protein 
+#' accessions.
 #' @export
 #'
 #' @examples

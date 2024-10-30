@@ -3,16 +3,19 @@
 # library(biomartr)
 
 
+#' createLineageLookup
+#' 
+#' @description
 #' Create a look up table that goes from TaxID, to Lineage
 #'
 #' @author Samuel Chen
 #'
-#' @param lineage_file Path to the rankedlineage.dmp file containing taxid's and their
-#' corresponding taxonomic rank. rankedlineage.dmp can be downloaded at
+#' @param lineage_file Path to the rankedlineage.dmp file containing taxid's 
+#' and their corresponding taxonomic rank. rankedlineage.dmp can be downloaded at
 #' https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/new_taxdump/
 #' @param outfile File the resulting lineage lookup table should be written to
-#' @param taxonomic_rank The upperbound of taxonomic rank that the lineage includes. The lineaege will
-#' include superkingdom>...>taxonomic_rank.
+#' @param taxonomic_rank The upperbound of taxonomic rank that the lineage 
+#' includes. The lineaege will include superkingdom>...>taxonomic_rank.
 #' Choices include: "supperkingdom", "phylum",   "class","order", "family",
 #' "genus", and "species"
 #'
@@ -22,13 +25,20 @@
 #' @importFrom stringr str_locate str_replace_all
 #' @importFrom tidyr unite
 #'
-#' @return
+#' @return A tibble containing the tax IDs and their respective lineages up to 
+#' the specified taxonomic rank, saved as a tab-separated file.
+#'
 #' @export
 #'
 #' @examples
-create_lineage_lookup <- function(lineage_file = here("data/rankedlineage.dmp"),
+#' \dontrun{
+#' createLineageLookup(lineage_file = "data/rankedlineage.dmp", 
+#'                      outfile = "data/lineage_lookup.tsv", 
+#'                      taxonomic_rank = "family")
+#' }
+createLineageLookup <- function(lineage_file = here("data/rankedlineage.dmp"),
     outfile, taxonomic_rank = "phylum") {
-    shorten_NA <- function(Lineage) {
+    .shortenNA <- function(Lineage) {
         first_NA <- str_locate(Lineage, "NA")[1]
         if (is.na(first_NA)) {
             # No NAs
@@ -92,7 +102,7 @@ create_lineage_lookup <- function(lineage_file = here("data/rankedlineage.dmp"),
     # Takes a while (2million rows after all)
     rankedLinsCombined <- rankedLins %>%
         unite(col = "Lineage", all_of(combined_taxonomy), sep = ">") %>%
-        mutate(Lineage = unlist(map(Lineage, shorten_NA)))
+        mutate(Lineage = unlist(map(Lineage, .shortenNA)))
 
 
 
@@ -101,7 +111,7 @@ create_lineage_lookup <- function(lineage_file = here("data/rankedlineage.dmp"),
 
 
 
-#' create_lineage_lookup <- function(assembly_path, updateAssembly = FALSE, file_type = "tsv")
+#' createLineageLookup <- function(assembly_path, updateAssembly = FALSE, file_type = "tsv")
 #' {
 #'   #' Create a look up table that goes from GCA_ID, to TaxID, to Lineage
 #'   #' @author Samuel Chen
