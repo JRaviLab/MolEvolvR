@@ -127,33 +127,6 @@ calculateProcessRuntime <- function(dir_job_results) {
     dir.create(dirname(path_log_data),
                 recursive = TRUE, showWarnings = FALSE)
   }
-
-  # attempt to load pre-generated logdata
-  if (!file.exists(path_log_data)) {
-    logs <- aggregate_logs(dir_job_results, latest_date = Sys.Date() - 60)
-    save(logs, file = path_log_data)
-  } else {
-    load(path_log_data) # loads the logs object
-  }
-  df_log <- logs$df_log
-  procs <- c(
-    "dblast", "dblast_cleanup", "iprscan",
-    "ipr2lineage", "ipr2da", "blast_clust",
-    "clust2table"
-  )
-  list_proc_medians <- df_log |>
-    dplyr::select(dplyr::all_of(procs)) |>
-    dplyr::summarise(
-      dplyr::across(
-        dplyr::everything(),
-        \(x) median(x, na.rm = TRUE)
-      )
-    ) |>
-    as.list()
-  return(list_proc_medians)
-}
-
-
     # attempt to load pre-generated logdata
     if (!file.exists(path_log_data)) {
       logs <- aggregate_logs(dir_job_results, latest_date = Sys.Date() - 60)
@@ -600,6 +573,7 @@ assignJobQueue <- function(
 #'                 dev/molevol_scripts/docs/estimate_walltimes.png", plot = p)
 #' @export
 plotEstimatedWallTimes <- function() {
+  tryCatch({
     opts <- mapOption2Process() |> names()
     # get all possible submission permutations (powerset)
     get_powerset <- function(vec) {
