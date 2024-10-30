@@ -25,7 +25,7 @@
 #'
 #' @importFrom dplyr filter
 #' @importFrom stringr str_replace_all
-#' @importFrom rlang sym
+#' @importFrom rlang abort sym
 #'
 #' @return Filtered data frame
 #' @note There is no need to make the domains 'regex safe', that will be handled by this function
@@ -41,6 +41,23 @@ filterByDomains <- function(prot, column = "DomArch", doms_keep = c(), doms_remo
     # Any row containing a domain in doms_remove will be removed
 
     # ^word$|(?<=\+)word$|(?<=\+)word(?=\+)|word(?=\+)
+    
+    # Check if prot is a data frame
+    if (!is.data.frame(prot)) {
+        abort("Error: 'prot' must be a data frame.")
+    }
+    
+    # Check if the specified column exists in the data frame
+    if (!column %in% names(prot)) {
+        abort(paste("Error: The specified column '", column, "' does not exist 
+                   in the data frame.", sep = ""))
+    }
+    
+    # If doms_keep or doms_remove are not provided, inform the user
+    if (length(doms_keep) == 0 && length(doms_remove) == 0) {
+        warning("Warning: No domains specified to keep or remove. Returning the
+                original data frame.")
+    }
 
     # Make regex safe
     doms_keep <- str_replace_all(string = doms_keep, pattern = "\\(", replacement = "\\\\(")
@@ -119,6 +136,23 @@ filterByDomains <- function(prot, column = "DomArch", doms_keep = c(), doms_remo
 #' countByColumn(prot = my_data, column = "DomArch", min.freq = 10)
 #' }
 countByColumn <- function(prot = prot, column = "DomArch", min.freq = 1) {
+    
+    # Check if 'prot' is a data frame
+    if (!is.data.frame(prot)) {
+        abort("Error: 'prot' must be a data frame.")
+    }
+    
+    # Check if the specified column exists in the data frame
+    if (!column %in% names(prot)) {
+        abort(paste("Error: The specified column '", column, "' does not exist in
+                   the data frame.", sep = ""))
+    }
+    
+    # Check if min.freq is a positive integer
+    if (!is.numeric(min.freq) || length(min.freq) != 1 || min.freq < 1 || 
+        floor(min.freq) != min.freq) {
+        abort("Error: 'min.freq' must be a positive integer.")
+    }
     counts <- prot %>%
         select(column) %>%
         table() %>%
@@ -164,6 +198,24 @@ countByColumn <- function(prot = prot, column = "DomArch", min.freq = 1) {
 #' }
 #'
 elements2Words <- function(prot, column = "DomArch", conversion_type = "da2doms") {
+    # Check if 'prot' is a data frame
+    if (!is.data.frame(prot)) {
+        abort("Error: 'prot' must be a data frame.")
+    }
+    
+    # Check if the specified column exists in the data frame
+    if (!column %in% names(prot)) {
+        abort(paste("Error: The specified column '", column, "' does not exist in 
+                   the data frame.", sep = ""))
+    }
+    
+    # Check for valid conversion_type values
+    valid_types <- c("da2doms", "doms2da")
+    if (!conversion_type %in% valid_types) {
+        abort(paste("Error: Invalid 'conversion_type'. Must be one of:", 
+                   paste(valid_types, collapse = ", ")))
+    }
+    
     z1 <- prot %>%
         dplyr::pull(column) %>%
         str_replace_all("\\,", " ") %>%
@@ -223,6 +275,11 @@ elements2Words <- function(prot, column = "DomArch", conversion_type = "da2doms"
 #' }
 #'
 words2WordCounts <- function(string) {
+    # Check if 'string' is a character vector of length 1
+    if (!is.character(string) || length(string) != 1) {
+        abort("Error: 'string' must be a single character vector.")
+    }
+    
     df_word_count <- string %>%
         # reduce spaces with length 2 or greater to a single space
         str_replace_all("\\s{2,}", " ") %>%
@@ -271,6 +328,22 @@ words2WordCounts <- function(string) {
 #' filterByFrequency()
 #' }
 filterByFrequency <- function(x, min.freq) {
+    
+    # Check if 'x' is a data frame
+    if (!is.data.frame(x)) {
+        abort("Error: 'x' must be a data frame.")
+    }
+    
+    # Check if 'min.freq' is a positive integer
+    if (!is.numeric(min.freq) || length(min.freq) != 1 || min.freq < 1 || 
+        floor(min.freq) != min.freq) {
+        abort("Error: 'min.freq' must be a positive integer.")
+    }
+    
+    # Check if the 'freq' column exists in the data frame
+    if (!"freq" %in% names(x)) {
+        abort("Error: The data frame must contain a 'freq' column.")
+    }
     x %>%
         filter(freq >= min.freq)
 }
@@ -313,6 +386,23 @@ NULL
 #'
 summarizeByLineage <- function(prot = "prot", column = "DomArch", by = "Lineage",
     query) {
+    # Check if 'prot' is a data frame
+    if (!is.data.frame(prot)) {
+        abort("Error: 'prot' must be a data frame.")
+    }
+    
+    # Check if the specified column exists in the data frame
+    if (!column %in% names(prot)) {
+        abort(paste("Error: The specified column '", column, "' does not exist in 
+                   the data frame.", sep = ""))
+    }
+    
+    # Check if the 'by' column exists in the data frame
+    if (!by %in% names(prot)) {
+        abort(paste("Error: The specified 'by' column '", by, "' does not exist 
+                   n the data frame.", sep = ""))
+    }
+    
     column <- sym(column)
     by <- sym(by)
     if (query == "all") {
@@ -356,6 +446,19 @@ summarizeByLineage <- function(prot = "prot", column = "DomArch", by = "Lineage"
 #' summarizeDomArch_ByLineage()
 #' }
 summarizeDomArch_ByLineage <- function(x) {
+    # Check if 'x' is a data frame
+    if (!is.data.frame(x)) {
+        abort("Error: 'x' must be a data frame.")
+    }
+    
+    # Check if required columns exist in the data frame
+    required_columns <- c("DomArch", "Lineage")
+    missing_columns <- setdiff(required_columns, names(x))
+    
+    if (length(missing_columns) > 0) {
+        abort(paste("Error: The following required columns are 
+                   missing:", paste(missing_columns, collapse = ", ")))
+    }
     x %>%
         filter(!grepl("^-$", DomArch)) %>%
         group_by(DomArch, Lineage) %>%
@@ -389,6 +492,10 @@ summarizeDomArch_ByLineage <- function(x) {
 #' summarizeDomArch()
 #' }
 summarizeDomArch <- function(x) {
+    # Check if 'x' is a data frame
+    if (!is.data.frame(x)) {
+        abort("Error: 'x' must be a data frame.")
+    }
     x %>%
         group_by(DomArch) %>%
         summarise(totalcount = sum(count), totallin = n()) %>% # totallin=n_distinct(Lineage),
@@ -421,6 +528,10 @@ summarizeDomArch <- function(x) {
 #' summarizeGenContext_ByDomArchLineage
 #' }
 summarizeGenContext_ByDomArchLineage <- function(x) {
+    # Check if 'x' is a data frame
+    if (!is.data.frame(x)) {
+        abort("Error: 'x' must be a data frame.")
+    }
     x %>%
         filter(!grepl("^-$", GenContext)) %>%
         filter(!grepl("^-$", DomArch)) %>%
@@ -446,6 +557,10 @@ summarizeGenContext_ByDomArchLineage <- function(x) {
 #' summarizeGenContext_ByLineage()
 #' }
 summarizeGenContext_ByLineage <- function(x) {
+    # Check if 'x' is a data frame
+    if (!is.data.frame(x)) {
+        abort("Error: 'x' must be a data frame.")
+    }
     x %>%
         filter(!grepl("^-$", GenContext)) %>%
         filter(!grepl("^-$", DomArch)) %>%
@@ -479,6 +594,10 @@ summarizeGenContext_ByLineage <- function(x) {
 #' summarizeGenContext()
 #' }
 summarizeGenContext <- function(x) {
+    # Check if 'x' is a data frame
+    if (!is.data.frame(x)) {
+        abort("Error: 'x' must be a data frame.")
+    }
     x %>%
         group_by(GenContext) %>%
         summarise(
@@ -538,6 +657,31 @@ totalGenContextOrDomArchCounts <- function(prot, column = "DomArch", lineage_col
     cutoff = 90, RowsCutoff = FALSE, digits = 2
     # type = "GC"
 ) {
+    # Check if 'prot' is a data frame
+    if (!is.data.frame(prot)) {
+        abort("Error: 'prot' must be a data frame.")
+    }
+    
+    # Check if the specified columns exist in the data frame
+    required_columns <- c(column, lineage_col)
+    missing_columns <- setdiff(required_columns, names(prot))
+    
+    if (length(missing_columns) > 0) {
+        abort(paste("Error: The following required columns are missing:", 
+                   paste(missing_columns, collapse = ", ")))
+    }
+    
+    # Check that cutoff is a numeric value between 0 and 100
+    if (!is.numeric(cutoff) || length(cutoff) != 1 || cutoff < 0 || cutoff > 100) {
+        abort("Error: 'cutoff' must be a numeric value between 0 and 100.")
+    }
+    
+    # Check that digits is a non-negative integer
+    if (!is.numeric(digits) || length(digits) != 1 || digits < 0 || 
+        floor(digits) != digits) {
+        abort("Error: 'digits' must be a non-negative integer.")
+    }
+    
     column <- sym(column)
 
     prot <- select(prot, {{ column }}, {{ lineage_col }}) %>%
@@ -697,6 +841,11 @@ totalGenContextOrDomArchCounts <- function(prot, column = "DomArch", lineage_col
 #' findParalogs(pspa)
 #' }
 findParalogs <- function(prot) {
+    # Check if 'prot' is a data frame
+    if (!is.data.frame(prot)) {
+        abort("Error: 'prot' must be a data frame.")
+    }
+    
     # Remove eukaryotes
     prot <- prot %>% filter(!grepl("^eukaryota", Lineage))
     paralogTable <- prot %>%
