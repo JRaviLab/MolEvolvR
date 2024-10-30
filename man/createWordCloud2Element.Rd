@@ -15,7 +15,18 @@ createWordCloud2Element(
 \item{query_data}{Data frame of protein homologs with the usual 11 columns +
 additional word columns (0/1 format). Default is "prot".}
 
-\item{UsingRowsCutoff}{}
+\item{colname}{Character. The name of the column in \code{query_data} to generate
+the word cloud from. Default is "DomArch".}
+
+\item{cutoff}{Numeric. The cutoff value for filtering elements based on their
+frequency. Default is 70.}
+
+\item{UsingRowsCutoff}{Logical. Whether to use a row-based cutoff instead of
+a frequency cutoff. Default is FALSE.}
+}
+\value{
+A word cloud plot showing the frequency of elements from the selected
+column.
 }
 \description{
 Wordclouds for the predominant domains (from DAs) and DAs (from GC)

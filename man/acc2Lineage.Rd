@@ -32,11 +32,16 @@ This file can be generated using the "downloadAssemblySummary()" function}
 \item{ipgout_path}{Path to write the results of the efetch run of the accessions
 on the ipg database. If NULL, the file will not be written. Defaults to NULL}
 
-\item{plan}{}
+\item{plan}{Character. Specifies the execution plan for parallel processing.
+Default is "multicore".}
 }
 \value{
 A \code{data.table} that contains the lineage information, mapping protein
 accessions to their tax IDs and lineages.
+
+A dataframe containing lineage information mapped to the given protein
+accessions. The dataframe includes relevant columns such as TaxID, GCA_ID,
+Protein, Protein Name, Species, and Lineage.
 }
 \description{
 This function combines 'efetchIPG()' and 'IPG2Lineage()' to map a set
@@ -50,6 +55,14 @@ of protein accessions to their assembly (GCA_ID), tax ID, and lineage.
 \examples{
 \dontrun{
 acc2Lineage()
+}
+\dontrun{
+lineage_data <- acc2Lineage(
+  accessions = c("P12345", "Q67890"),
+  assembly_path = "path/to/assembly_summary.txt",
+  lineagelookup_path = "path/to/lineage_lookup.tsv",
+  ipgout_path = "path/to/output.txt"
+)
 }
 }
 \author{
