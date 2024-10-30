@@ -36,6 +36,9 @@ mapOption2Process <- function() {
 
 }
 
+#' mapAdvOption2Process
+#' 
+#' @description
 #' Use MolEvolvR advanced options to get associated processes
 #'
 #' @param advanced_opts character vector of MolEvolvR advanced options
@@ -79,6 +82,9 @@ mapAdvOption2Process <- function(advanced_opts) {
 
 }
 
+#' calculateProcessRuntime
+#' 
+#' @description
 #' Scrape MolEvolvR logs and calculate median processes
 #'
 #' @param dir_job_results [chr] path to MolEvolvR job_results
@@ -227,6 +233,9 @@ writeProcessRuntime2TSV <- function(dir_job_results, filepath) {
 
 }
 
+#' writeProcessRuntime2YML
+#' 
+#' @description
 #' Compute median process runtimes, then write a YAML list of the processes and
 #' their median runtimes in seconds to the path specified by 'filepath'.
 #'
@@ -304,6 +313,9 @@ writeProcessRuntime2YML <- function(dir_job_results, filepath = NULL) {
   })
 }
 
+#' getProcessRuntimeWeights
+#' 
+#' @description
 #' Quickly get the runtime weights for MolEvolvR backend processes
 #'
 #' @param dir_job_results [chr] path to MolEvolvR job_results
@@ -494,6 +506,9 @@ calculateEstimatedWallTimeFromOpts	 <- function(advanced_opts,
 }
 
 
+#' assignJobQueue
+#' 
+#' @description
 #' Decision function to assign job queue
 #'
 #' @param t_sec_estimate estimated number of seconds a job will process
@@ -555,6 +570,9 @@ assignJobQueue <- function(
 
 }
 
+#' plotEstimatedWallTimes
+#' 
+#' @description
 #' Plot the estimated runtimes for different advanced options and number
 #' of inputs
 #'

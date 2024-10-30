@@ -44,8 +44,7 @@ accessions. The dataframe includes relevant columns such as TaxID, GCA_ID,
 Protein, Protein Name, Species, and Lineage.
 }
 \description{
-This function combines 'efetchIPG()'
-and 'IPG2Lineage()' to map a set
+This function combines 'efetchIPG()' and 'IPG2Lineage()' to map a set
 of protein accessions to their assembly (GCA_ID), tax ID, and lineage.
 
 Function to map protein accession numbers to lineage

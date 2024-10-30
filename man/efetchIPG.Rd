@@ -27,8 +27,7 @@ The function does not return a value but writes the efetch results
 directly to the specified \code{out_path}.
 }
 \description{
-Perform efetch on the ipg database
-and write the results to out_path
+Perform efetch on the ipg database and write the results to out_path
 
 Perform efetch on the ipg database and write the results to out_path
 }
