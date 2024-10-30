@@ -43,6 +43,8 @@
 #' be saved. Default is the path to "data/alns/pspa_snf7.tre".
 #' @param fasttree_path Path to the FastTree executable, which is used to 
 #' generate the phylogenetic tree. Default is "src/FastTree".
+#' 
+#' @importFrom rlang abort
 #'
 #' @return No return value. The function generates a tree file (.tre) from the 
 #' input FASTA file.
@@ -63,19 +65,19 @@ convertFA2Tree <- function(fa_path = here("data/alns/pspa_snf7.fa"),
     
     # Check if the FASTA file exists
     if (!file.exists(fa_path)) {
-        stop(paste("Error: The FASTA file does not exist at:", fa_path))
+        abort(paste("Error: The FASTA file does not exist at:", fa_path))
     }
     
     # Check if the FastTree executable exists
     if (!file.exists(fasttree_path)) {
-        stop(paste("Error: The FastTree executable does not exist at:", 
+        abort(paste("Error: The FastTree executable does not exist at:", 
                    fasttree_path))
     }
     
     # Check if the output directory exists
     tre_dir <- dirname(tre_path)
     if (!dir.exists(tre_dir)) {
-        stop(paste("Error: The output directory does not exist:", tre_dir))
+        abort(paste("Error: The output directory does not exist:", tre_dir))
     }
     
     # Check if the output file already exists
@@ -84,7 +86,7 @@ convertFA2Tree <- function(fa_path = here("data/alns/pspa_snf7.fa"),
             tre_path, "\n")
     }
     
-    print(fa_path)
+    message(fa_path)
     system2(
         command = fasttree_path,
         args = paste(c(fa_path, ">", tre_path),
@@ -125,13 +127,13 @@ convertAlignment2Trees <- function(aln_path = here("data/alns/")) {
     
     # Check if the alignment directory exists
     if (!dir.exists(aln_path)) {
-        stop(paste("Error: The alignment directory does not exist:", aln_path))
+        abort(paste("Error: The alignment directory does not exist:", aln_path))
     }
     # finding all fasta alignment files
     fa_filenames <- list.files(path = aln_path, pattern = "*.fa")
     # Check if any FASTA files were found
     if (length(fa_filenames) == 0) {
-        stop("Error: No FASTA files found in the specified directory.")
+        abort("Error: No FASTA files found in the specified directory.")
     }
     
     fa_paths <- paste0(aln_path, fa_filenames)
@@ -194,13 +196,13 @@ createFA2Tree <- function(fa_file = "data/alns/pspa_snf7.fa",
     
     # Check if the FASTA file exists
     if (!file.exists(fa_file)) {
-        stop(paste("Error: The FASTA file does not exist at:", fa_file))
+        abort(paste("Error: The FASTA file does not exist at:", fa_file))
     }
     
     # Check if the output directory exists
     out_dir <- dirname(out_file)
     if (!dir.exists(out_dir)) {
-        stop(paste("Error: The output directory does not exist:", out_dir))
+        abort(paste("Error: The output directory does not exist:", out_dir))
     }
     
     # Check if the output file already exists
@@ -233,7 +235,7 @@ createFA2Tree <- function(fa_file = "data/alns/pspa_snf7.fa",
     ## Model Testing & Distance Matrices
     ## Comparison of different nucleotide or amino acid substitution models
     mt <- modelTest(prot10, model = "all")
-    print(mt)
+    message(mt)
 
     # estimate a distance matrix using a Jules-Cantor Model
     dna_dist <- dist.ml(prot10, model = "JC69")
@@ -254,7 +256,7 @@ createFA2Tree <- function(fa_file = "data/alns/pspa_snf7.fa",
     ## Maximum likelihood and Bootstrapping
     # ml estimation w/ distance matrix
     fit <- pml(prot_NJ, prot10)
-    print(fit)
+    message(fit)
     fitJC <- optim.pml(fit, model = "JC", rearrangement = "stochastic")
     logLik(fitJC)
     bs <- bootstrap.pml(fitJC,
@@ -267,7 +269,7 @@ createFA2Tree <- function(fa_file = "data/alns/pspa_snf7.fa",
     prot10_dm <- dist.ml(prot10)
     prot10_NJ <- NJ(prot10_dm)
     fit2 <- pml(prot10_NJ, data = prot10)
-    print(fit2)
+    message(fit2)
     fitJC2 <- optim.pml(fit2, model = "JC", rearrangement = "stochastic")
     logLik(fitJC2)
     bs_subset <- bootstrap.pml(fitJC2,
