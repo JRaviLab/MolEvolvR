@@ -7,8 +7,22 @@
 combineFullAnalysis(inpath, ret = FALSE)
 }
 \arguments{
-\item{ret}{}
+\item{inpath}{Character. The path to the directory containing the
+\code{.full_analysis.tsv} files to be combined.}
+
+\item{ret}{Logical. If TRUE, the function will return the combined data frame.
+Default is FALSE, meaning it will only write the file and not return the data.}
+}
+\value{
+If \code{ret} is TRUE, a data frame containing the combined data from all
+input files. If \code{ret} is FALSE, the function writes the combined data to a
+TSV file named \code{cln_combined.tsv} in the specified directory and returns NULL.
 }
 \description{
 Combining full_analysis files
+}
+\examples{
+\dontrun{
+combined_data <- combineFullAnalysis("path/to/full_analysis/files", ret = TRUE)
+}
 }

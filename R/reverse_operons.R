@@ -3,15 +3,35 @@
 # Modified by Janani Ravi and Samuel Chen
 
 
-#' straightenOperonSeq
+#' straightenOperonSeq: Reverse Equalities in Genomic Context
 #'
-#' @param prot
+#' @description
+#' This function processes the genomic context strings (GenContext) and reverses
+#'  directional signs based on the presence of an equal sign ("=").
 #'
-#' @return
+#' @param prot [vector] A vector of genomic context strings to be processed.
+#' 
+#' @importFrom rlang abort
+#'
+#' @return [vector] A vector of the same length as the input, where each genomic
+#' element is annotated with either a forward ("->") or reverse ("<-") direction,
+#' depending on its position relative to the "=" symbols.
+#'
 #' @export
 #'
 #' @examples
+#' # Example input: Genomic context with directional symbols and an asterisk
+#' genomic_context <- c("A", "B", "*", "C", "D", "=", "E", "F")
+#' straightenOperonSeq(genomic_context)
+#'
+#' # Output: "A->", "B->", "*", "<-C", "<-D", "=", "E->", "F->"
+
 straightenOperonSeq <- function(prot) {
+    # Check if 'prot' is a data frame
+    if (!is.vector(prot)) {
+        abort("Error: 'prot' must be a vector.")
+    }
+    
     w <- prot # $GenContext.orig # was 'x'
 
     y <- rep(NA, length(w))
@@ -57,15 +77,40 @@ straightenOperonSeq <- function(prot) {
 
 ## The function to reverse operons
 
-#' reverseOperonSeq
+#' reverseOperon: Reverse the Direction of Operons in Genomic ContextSeq
 #'
-#' @param prot
+#' @description
+#' This function processes a genomic context data frame to reverse the direction
+#' of operons based on specific patterns in the GenContext column. It handles
+#' elements represented by ">" and "<" and restructures the genomic context by
+#' flipping the direction of operons while preserving the relationships
+#' indicated by "=".
 #'
-#' @return
+#' @param prot [data.frame] A data frame containing at least a column named
+#' 'GenContext', which represents the genomic contexts that need to be reversed.
+#' 
+#' @importFrom rlang abort
+#'
+#' @return [data.frame] The input data frame with the 'GenContext' column updated t
+#' o reflect the reversed operons.
+#'
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' # Example genomic context data frame
+#' ## Rework example data, does not pass R-CMD Check
+#' prot <- data.frame(GenContext = c("A>B", "C<D", "E=F*G", "H>I")) 
+#' reversed_prot <- reverseOperonSeq(prot)
+#' reversed_prot
+#' }
+
 reverseOperonSeq <- function(prot) {
+    # Check if 'prot' is a data frame
+    if (!is.data.frame(prot)) {
+        abort("Error: 'prot' must be a data frame.")
+    }
+  
     gencontext <- prot$GenContext
 
     gencontext <- gsub(pattern = ">", replacement = ">|", x = gencontext)

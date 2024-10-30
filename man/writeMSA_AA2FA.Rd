@@ -13,6 +13,11 @@ writeMSA_AA2FA(alignment, outpath)
 
 \item{outpath}{Where the resulting FASTA file should be written to}
 }
+\value{
+Character string representing the content of the written FASTA file.
+
+Character string of the FASTA content that was written to the file.
+}
 \description{
 MsaAAMultipleAlignment Objects are generated from calls to msaClustalOmega
 and msaMuscle from the 'msa' package
@@ -20,6 +25,16 @@ and msaMuscle from the 'msa' package
 Write MsaAAMultpleAlignment Objects as aligned fasta sequence
 MsaAAMultipleAlignment Objects are generated from calls to msaClustalOmega
 and msaMuscle from the 'msa' package
+}
+\examples{
+\dontrun{
+writeMSA_AA2FA("my_sequences.fasta", outpath = "aligned_output.fasta")
+}
+\dontrun{
+# Example usage
+alignment <- alignFasta("path/to/sequences.fasta")
+writeMSA_AA2FA(alignment, "path/to/aligned_sequences.fasta")
+}
 }
 \author{
 Samuel Chen, Janani Ravi
