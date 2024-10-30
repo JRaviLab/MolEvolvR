@@ -7,7 +7,10 @@
 cleanGeneDescription(prot, column)
 }
 \arguments{
-\item{column}{}
+\item{prot}{A data frame containing the gene descriptions.}
+
+\item{column}{The name of the column from which gene descriptions are pulled
+for cleanup.}
 }
 \value{
 Return trailing period that occurs in GeneDesc column

@@ -6,15 +6,28 @@
 
 #' runIPRScan
 #'
-#' @param filepath_fasta
-#' @param filepath_out
-#' @param appl
+#' Run InterProScan on a given FASTA file and save the results to an
+#' output file.
+#'
+#' @param filepath_fasta A string representing the path to the input FASTA file.
+#' @param filepath_out A string representing the base path for the output file.
+#' @param appl A character vector specifying the InterProScan applications to
+#' use (e.g., "Pfam", "Gene3D"). Default is `c("Pfam", "Gene3D")`.
 #'
 #' @importFrom stringr str_glue
 #'
-#' @return
+#' @return A data frame containing the results from the InterProScan output
+#' TSV file.
 #'
 #' @examples
+#' \dontrun{
+#' results <- runIPRScan(
+#'     filepath_fasta = "path/to/your_fasta_file.fasta",
+#'     filepath_out = "path/to/output_file",
+#'     appl = c("Pfam", "Gene3D")
+#' )
+#' results
+#' }
 runIPRScan <- function(
         filepath_fasta,
         filepath_out, # do not inlucde file extension since ipr handles this
