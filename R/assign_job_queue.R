@@ -661,7 +661,7 @@ plotEstimatedWallTimes <- function() {
                                   .data$n_inputs)
     # sec to hrs
     df_walltimes <- df_walltimes |>
-      dplyr::mutate(est_walltime = est_walltime / 3600)
+      dplyr::mutate(est_walltime = .data$est_walltime / 3600)
     p <- ggplot2::ggplot(df_walltimes, ggplot2::aes(x = .data$n_inputs, 
                                                     y = .data$est_walltime, 
                                                     color = .data$advanced_opts)) +
