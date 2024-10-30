@@ -13,7 +13,7 @@ cleanSpecies(prot, removeEmptyRows = FALSE)
 Default is false.}
 }
 \value{
-Describe return, in detail
+The original data frame with Species cleaned.
 }
 \description{
 Cleanup Species

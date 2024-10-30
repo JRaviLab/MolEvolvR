@@ -17,9 +17,22 @@ plotLineageQuery(
 additional word columns (0/1 format).
 Default is prot (variable w/ protein data).}
 
-\item{queries}{Character Vector containing the queries that will be used for the categories}
+\item{queries}{Character Vector containing the queries that will be used for
+the categories.}
 
-\item{color}{}
+\item{colname}{Character. The column used for filtering based on the \code{queries}.
+Default is "ClustName".}
+
+\item{cutoff}{Numeric. The cutoff value for filtering rows based on their
+total count. Rows with values below this cutoff are excluded.}
+
+\item{color}{Character. Defines the color palette used for the heatmap.
+Default is a red gradient.}
+}
+\value{
+A ggplot object representing a heatmap (tile plot) showing the
+relationship between queries and lineages, with the intensity of color
+representing the count of matching records.
 }
 \description{
 Lineage plot for queries. Heatmap.
@@ -32,6 +45,9 @@ column names.
 \dontrun{
 plotLineageQuery(prot, c("PspA", "PspB", "PspC", "PspM", "PspN"), 95)
 }
+}
+\author{
+Janani Ravi, Samuel Chen
 }
 \keyword{Architectures,}
 \keyword{Domain}
