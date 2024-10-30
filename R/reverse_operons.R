@@ -10,6 +10,8 @@
 #'  directional signs based on the presence of an equal sign ("=").
 #'
 #' @param prot [vector] A vector of genomic context strings to be processed.
+#' 
+#' @importFrom rlang abort
 #'
 #' @return [vector] A vector of the same length as the input, where each genomic
 #' element is annotated with either a forward ("->") or reverse ("<-") direction,
@@ -27,7 +29,7 @@
 straightenOperonSeq <- function(prot) {
     # Check if 'prot' is a data frame
     if (!is.data.frame(prot)) {
-        stop("Error: 'prot' must be a data frame.")
+        abort("Error: 'prot' must be a data frame.")
     }
     
     w <- prot # $GenContext.orig # was 'x'
@@ -86,6 +88,8 @@ straightenOperonSeq <- function(prot) {
 #'
 #' @param prot [data.frame] A data frame containing at least a column named
 #' 'GenContext', which represents the genomic contexts that need to be reversed.
+#' 
+#' @importFrom rlang abort
 #'
 #' @return [data.frame] The input data frame with the 'GenContext' column updated t
 #' o reflect the reversed operons.
@@ -104,7 +108,7 @@ straightenOperonSeq <- function(prot) {
 reverseOperonSeq <- function(prot) {
     # Check if 'prot' is a data frame
     if (!is.data.frame(prot)) {
-        stop("Error: 'prot' must be a data frame.")
+        abort("Error: 'prot' must be a data frame.")
     }
   
     gencontext <- prot$GenContext
