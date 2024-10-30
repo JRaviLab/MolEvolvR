@@ -20,8 +20,16 @@ Default is prot (variable w/ protein data).}
 \item{colname}{Column name from query_data: "DomArch.norep", "GenContext.norep",
 "DomArch.PFAM.norep" or "DomArch.LADB.norep". Default is "DomArch.norep".}
 
+\item{cutoff}{Numeric. Cutoff for word frequency. Default is 90.}
+
+\item{RowsCutoff}{Boolean. If TRUE, applies a row cutoff to remove data rows
+based on a certain condition. Default is FALSE.}
+
 \item{color}{Color for the heatmap. One of six options: "default", "magma", "inferno",
 "plasma", "viridis", or "cividis"}
+}
+\value{
+A LineageDA plot object.
 }
 \description{
 Lineage plot for Domains, Domain Architectures and

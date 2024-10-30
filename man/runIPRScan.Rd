@@ -7,8 +7,28 @@
 runIPRScan(filepath_fasta, filepath_out, appl = c("Pfam", "Gene3D"))
 }
 \arguments{
-\item{appl}{}
+\item{filepath_fasta}{A string representing the path to the input FASTA file.}
+
+\item{filepath_out}{A string representing the base path for the output file.}
+
+\item{appl}{A character vector specifying the InterProScan applications to
+use (e.g., "Pfam", "Gene3D"). Default is \code{c("Pfam", "Gene3D")}.}
+}
+\value{
+A data frame containing the results from the InterProScan output
+TSV file.
 }
 \description{
-runIPRScan
+Run InterProScan on a given FASTA file and save the results to an
+output file.
+}
+\examples{
+\dontrun{
+results <- runIPRScan(
+    filepath_fasta = "path/to/your_fasta_file.fasta",
+    filepath_out = "path/to/output_file",
+    appl = c("Pfam", "Gene3D")
+)
+results
+}
 }

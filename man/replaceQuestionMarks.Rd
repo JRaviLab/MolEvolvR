@@ -12,7 +12,9 @@ replaceQuestionMarks(prot, by_column = "GenContext")
 \item{by_column}{Column to operate on}
 }
 \value{
-Describe return, in detail
+The original data frame with the specified column updated. All
+consecutive '?' characters will be replaced with 'X(s)', and individual '?'
+characters will be replaced with 'X'.
 }
 \description{
 Replace consecutive '?' separated by '->', '<-' or '||' with 'X(s)'

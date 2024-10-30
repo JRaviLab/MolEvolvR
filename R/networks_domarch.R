@@ -24,13 +24,17 @@
 #' A network of domains is returned based on shared domain architectures.
 #'
 #' @param prot A data frame that contains the column 'DomArch'.
-#' @param column Name of column containing Domain architecture from which nodes and edges are generated.
-#' @param domains_of_interest
-#' @param cutoff Integer. Only use domains that occur at or above the cutoff for total counts if cutoff_type is "Total Count".
-#' Only use domains that appear in cutoff or greater lineages if cutoff_type is Lineage.
+#' @param column Name of column containing Domain architecture from which nodes 
+#' and edges are generated.
+#' @param domains_of_interest Character vector specifying domains of interest.
+#' @param cutoff Integer. Only use domains that occur at or above the cutoff for 
+#' total counts if cutoff_type is "Total Count".
+#' Only use domains that appear in cutoff or greater lineages if cutoff_type is 
+#' Lineage.
 #' @param layout Character. Layout type to be used for the network. Options are:
 #' \itemize{\item "grid" \item "circle" \item "random" \item "auto"}
-#' @param query_color
+#' @param query_color Character. Color to represent the queried domain in the 
+#' network.
 #'
 #' @importFrom dplyr across add_row all_of distinct filter mutate pull select
 #' @importFrom igraph delete_vertices graph_from_edgelist vertex
@@ -41,14 +45,14 @@
 #' @importFrom tidyr pivot_wider
 #' @importFrom visNetwork visIgraph visIgraphLayout visNetwork visOptions
 #'
-#' @return
+#' @return A network visualization of domain architectures.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' domain_network(pspa)
+#' createDomainNetwork(pspa)
 #' }
-domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff = 70, layout = "nice", query_color = adjustcolor("green", alpha.f = .5)) {
+createDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, cutoff = 70, layout = "nice", query_color = adjustcolor("green", alpha.f = .5)) {
     # by domain networks or all, as required.
     tryCatch(
         {
@@ -227,15 +231,20 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
 #'
 #'
 #' @param prot A data frame that contains the column 'DomArch'.
-#' @param column Name of column containing Domain architecture from which nodes and edges are generated.
-#' @param domains_of_interest
-#' @param cutoff Integer. Only use domains that occur at or above the cutoff for total counts if cutoff_type is "Total Count".
-#' Only use domains that appear in cutoff or greater lineages if cutoff_type is Lineage.
+#' @param column Name of column containing Domain architecture from which nodes 
+#' and edges are generated.
+#' @param domains_of_interest Character vector specifying the domains of interest.
+#' @param cutoff Integer. Only use domains that occur at or above the cutoff for 
+#' total counts if cutoff_type is "Total Count".
+#' Only use domains that appear in cutoff or greater lineages if cutoff_type is 
+#' Lineage.
 #' @param layout Character. Layout type to be used for the network. Options are:
 #' \itemize{\item "grid" \item "circle" \item "random" \item "auto"}
-#' @param query_color Color that the nodes of the domains in the domains_of_interest vector are colored
-#' @param partner_color Color that the nodes that are not part of the domains_of_interest vector are colored
-#' @param border_color
+#' @param query_color Color that the nodes of the domains in the 
+#' domains_of_interest vector are colored
+#' @param partner_color Color that the nodes that are not part of the 
+#' domains_of_interest vector are colored
+#' @param border_color Color for the borders of the nodes.
 #' @param IsDirected Is the network directed? Set to false to eliminate arrows
 #'
 #' @importFrom dplyr distinct filter group_by mutate pull select summarize
@@ -245,14 +254,14 @@ domain_network <- function(prot, column = "DomArch", domains_of_interest, cutoff
 #' @importFrom stringr str_replace_all str_split
 #' @importFrom visNetwork visEdges visGroups visIgraphLayout visLegend visNetwork visOptions
 #'
-#' @return
+#' @return A network visualization of domain architectures.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' domain_network(pspa)
+#' createBinaryDomainNetwork(pspa)
 #' }
-BinaryDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, cutoff = 70,
+createBinaryDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, cutoff = 70,
     layout = "nice", query_color = adjustcolor("yellow", alpha.f = .5),
     partner_color = adjustcolor("skyblue", alpha.f = .5),
     border_color = adjustcolor("grey", alpha.f = .8),

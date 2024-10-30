@@ -27,9 +27,13 @@ IPG2Lineage(
 ipg database. The protein accession in 'accessions' should be contained in this
 file}
 
+\item{refseq_assembly_path}{String. Path to the RefSeq assembly summary file.}
+
+\item{genbank_assembly_path}{String. Path to the GenBank assembly summary file.}
+
 \item{lineagelookup_path}{String of the path to the lineage lookup file
 (taxid to lineage mapping). This file can be generated using the
-"create_lineage_lookup()" function}
+"createLineageLookup()" function}
 
 \item{assembly_path}{String of the path to the assembly_summary path
 This file can be generated using the \link[MolEvolvR]{downloadAssemblySummary} function}
@@ -37,9 +41,13 @@ This file can be generated using the \link[MolEvolvR]{downloadAssemblySummary} f
 \value{
 A \code{data.table} with the lineage information for the provided protein
 accessions.
+
+A data table containing protein accessions along with their
+corresponding TaxIDs and lineage information.
 }
 \description{
-Takes the resulting file of an efetch run on the ipg database and
+Takes the resulting file
+of an efetch run on the ipg database and
 
 Takes the resulting file of an efetch run on the ipg database and
 append lineage, and taxid columns
@@ -49,6 +57,15 @@ append lineage, and taxid columns
 IPG2Lineage()
 }
 
+\dontrun{
+lins <- IPG2Lineage(
+  accessions = c("P12345", "Q67890"),
+  ipg_file = "path/to/ipg_results.txt",
+  refseq_assembly_path = "path/to/refseq_assembly_summary.txt",
+  genbank_assembly_path = "path/to/genbank_assembly_summary.txt",
+  lineagelookup_path = "path/to/lineage_lookup.tsv"
+)
+}
 }
 \author{
 Samuel Chen, Janani Ravi

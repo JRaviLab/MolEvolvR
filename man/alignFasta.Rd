@@ -2,7 +2,7 @@
 % Please edit documentation in R/CHANGED-pre-msa-tree.R, R/pre-msa-tree.R
 \name{alignFasta}
 \alias{alignFasta}
-\title{Perform a Multiple Sequence Alignment on a FASTA file.}
+\title{alignFasta}
 \usage{
 alignFasta(fasta_file, tool = "Muscle", outpath = NULL)
 
@@ -11,9 +11,11 @@ alignFasta(fasta_file, tool = "Muscle", outpath = NULL)
 \arguments{
 \item{fasta_file}{Path to the FASTA file to be aligned}
 
-\item{tool}{Type of alignment tool to use. One of three options: "Muscle", "ClustalO", or "ClustalW"}
+\item{tool}{Type of alignment tool to use. One of three options: "Muscle",
+"ClustalO", or "ClustalW"}
 
-\item{outpath}{Path to write the resulting alignment to as a FASTA file. If NULL, no file is written}
+\item{outpath}{Path to write the resulting alignment to as a FASTA file. If
+NULL, no file is written}
 }
 \value{
 aligned fasta sequence as a MsaAAMultipleAlignment object
@@ -22,6 +24,20 @@ aligned fasta sequence as a MsaAAMultipleAlignment object
 }
 \description{
 Perform a Multiple Sequence Alignment on a FASTA file.
+
+Perform a Multiple Sequence Alignment on a FASTA file.
+}
+\examples{
+\dontrun{
+aligned_sequences <- alignFasta("my_sequences.fasta",
+tool = "Muscle", outpath = "aligned_output.fasta")
+}
+\dontrun{
+# Example usage
+aligned_sequences <- alignFasta("path/to/sequences.fasta",
+tool = "ClustalO", outpath = "path/to/aligned_sequences.fasta")
+aligned_sequences
+}
 }
 \author{
 Samuel Chen, Janani Ravi

@@ -14,13 +14,17 @@ the ipg database}
 
 \item{out_path}{Path to write the efetch results to}
 
-\item{plan}{}
+\item{plan}{Character. Specifies the execution plan for parallel processing.
+Default is "multicore".}
 
 \item{accnums}{Character vector containing the accession numbers to query on
 the ipg database}
 }
 \value{
 No return value. The function writes the fetched results to \code{out_path}.
+
+The function does not return a value but writes the efetch results
+directly to the specified \code{out_path}.
 }
 \description{
 Perform efetch on the ipg database and write the results to out_path
@@ -30,6 +34,12 @@ Perform efetch on the ipg database and write the results to out_path
 \examples{
 \dontrun{
 efetchIPG()
+}
+\dontrun{
+efetchIPG(
+  accessions = c("P12345", "Q67890", "A12345"),
+  out_path = "path/to/efetch_results.xml"
+)
 }
 }
 \author{
