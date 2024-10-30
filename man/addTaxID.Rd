@@ -7,8 +7,26 @@
 addTaxID(data, acc_col = "AccNum", version = T)
 }
 \arguments{
-\item{version}{}
+\item{data}{A data frame or data table containing protein accession numbers.}
+
+\item{acc_col}{A string specifying the column name in \code{data} that contains
+the accession numbers. Defaults to "AccNum".}
+
+\item{version}{A logical indicating whether to remove the last two characters
+from the accession numbers for TaxID retrieval. Defaults to TRUE.}
+}
+\value{
+A data table that includes the original data along with a new column
+containing the corresponding TaxIDs.
 }
 \description{
 addTaxID
+}
+\examples{
+\dontrun{
+# Create a sample data table with accession numbers
+sample_data <- data.table(AccNum = c("ABC123.1", "XYZ456.1", "LMN789.2"))
+enriched_data <- addTaxID(sample_data, acc_col = "AccNum", version = TRUE)
+enriched_data
+}
 }

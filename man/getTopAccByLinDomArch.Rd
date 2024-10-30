@@ -13,8 +13,32 @@ getTopAccByLinDomArch(
 )
 }
 \arguments{
-\item{query}{}
+\item{infile_full}{A data frame containing the full dataset with lineage and
+domain architecture information.}
+
+\item{DA_col}{A string representing the name of the domain architecture
+column. Default is "DomArch.Pfam".}
+
+\item{lin_col}{A string representing the name of the lineage column.
+Default is "Lineage_short".}
+
+\item{n}{An integer specifying the number of top accession numbers to return.
+Default is 20.}
+
+\item{query}{A string for filtering a specific query name. If it is not
+"All", only the data matching this query will be processed.}
+}
+\value{
+A vector of the top N accession numbers (\code{AccNum}) based on counts
+grouped by lineage and domain architecture.
 }
 \description{
 Group by lineage + DA then take top 20
+}
+\examples{
+\dontrun{
+top_accessions <- getTopAccByLinDomArch(infile_full = my_data,
+DA_col = "DomArch.Pfam", lin_col = "Lineage_short",
+n = 20, query = "specific_query_name")
+}
 }

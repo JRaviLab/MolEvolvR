@@ -2,13 +2,31 @@
 % Please edit documentation in R/reverse_operons.R
 \name{reverseOperonSeq}
 \alias{reverseOperonSeq}
-\title{reverseOperonSeq}
+\title{reverseOperon: Reverse the Direction of Operons in Genomic ContextSeq}
 \usage{
 reverseOperonSeq(prot)
 }
 \arguments{
-\item{prot}{}
+\item{prot}{\link{data.frame} A data frame containing at least a column named
+'GenContext', which represents the genomic contexts that need to be reversed.}
+}
+\value{
+\link{data.frame} The input data frame with the 'GenContext' column updated t
+o reflect the reversed operons.
 }
 \description{
-reverseOperonSeq
+This function processes a genomic context data frame to reverse the direction
+of operons based on specific patterns in the GenContext column. It handles
+elements represented by ">" and "<" and restructures the genomic context by
+flipping the direction of operons while preserving the relationships
+indicated by "=".
+}
+\examples{
+\dontrun{
+# Example genomic context data frame
+## Rework example data, does not pass R-CMD Check
+prot <- data.frame(GenContext = c("A>B", "C<D", "E=F*G", "H>I")) 
+reversed_prot <- reverseOperonSeq(prot)
+reversed_prot
+}
 }

@@ -14,7 +14,7 @@ condenseRepeatedDomains(prot, by_column = "DomArch", excluded_prots = c())
 \item{excluded_prots}{Vector of strings that condenseRepeatedDomains should not reduce to (s). Defaults to c()}
 }
 \value{
-Describe return, in detail
+A data frame with condensed repeated domains in the specified column.
 }
 \description{
 Condense repeated domains

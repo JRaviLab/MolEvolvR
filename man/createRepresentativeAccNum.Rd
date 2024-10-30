@@ -25,10 +25,30 @@ One accession number will be assigned for each of these observations}
 
 \item{accnum_col}{Column from prot_data that contains Accession Numbers}
 }
+\value{
+A character vector containing one Accession number per distinct
+observation from the specified reduced column.
+
+A character vector containing representative accession numbers,
+one for each distinct observation in the specified 'reduced' column.
+}
 \description{
-Function to generate a vector of one Accession number per distinct observation from 'reduced' column
+Function to generate a vector of one Accession number per distinct
+observation from 'reduced' column
 
 Function to generate a vector of one Accession number per distinct observation from 'reduced' column
+}
+\examples{
+\dontrun{
+createRepresentativeAccNum(prot)
+}
+\dontrun{
+# Example usage with a data frame called `protein_data`
+createRepresentativeAccNum <- RepresentativeAccNums(prot_data = protein_data,
+                                                    reduced = "Lineage",
+                                                    accnum_col = "AccNum")
+representative_accessions
+}
 }
 \author{
 Samuel Chen, Janani Ravi

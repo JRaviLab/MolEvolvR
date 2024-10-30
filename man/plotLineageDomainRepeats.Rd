@@ -7,7 +7,16 @@
 plotLineageDomainRepeats(query_data, colname)
 }
 \arguments{
-\item{colname}{}
+\item{query_data}{Data frame containing protein homolog data, including
+relevant domain architectures and lineages.}
+
+\item{colname}{Character. The name of the column in query_data that contains
+domain architectures or other structural information.}
+}
+\value{
+A ggplot object representing a heatmap (tile plot) of domain repeat
+counts across different lineages, with color intensity representing the
+occurrence of domains.
 }
 \description{
 Lineage Domain Repeats Plot

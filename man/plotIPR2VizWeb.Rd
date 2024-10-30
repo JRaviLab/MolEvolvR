@@ -17,8 +17,52 @@ plotIPR2VizWeb(
 )
 }
 \arguments{
-\item{rows}{}
+\item{infile_ipr}{A path to the input IPR file (TSV format) containing
+domain information.}
+
+\item{accessions}{A character vector of accession numbers to filter the
+analysis.}
+
+\item{analysis}{A character vector specifying the types of analysis to
+include (e.g., "Pfam", "Phobius", "TMHMM", "Gene3D"). Default is a vector
+of these analyses.}
+
+\item{group_by}{A string specifying how to group the visualization.
+Default is "Analysis". Options include "Analysis" or "Query".}
+
+\item{name}{A string representing the name to use for y-axis labels.
+Default is "Name".}
+
+\item{text_size}{An integer specifying the text size for the plot.
+Default is 15.}
+
+\item{legend_name}{A string representing the column to use for legend labels.
+Default is "ShortName".}
+
+\item{cols}{An integer specifying the number of columns in the facet wrap.
+Default is 5.}
+
+\item{rows}{An integer specifying the number of rows in the legend.
+Default is 10.}
+}
+\value{
+A ggplot object representing the domain architecture visualization
+for web display.
 }
 \description{
 plotIPR2VizWeb
+}
+\examples{
+\dontrun{
+plot <- plotIPR2VizWeb(infile_ipr = "path/to/ipr_file.tsv",
+                       accessions = c("ACC123", "ACC456"),
+                       analysis = c("Pfam", "TMHMM"),
+                       group_by = "Analysis",
+                       name = "Gene Name",
+                       text_size = 15,
+                       legend_name = "ShortName",
+                       cols = 5,
+                       rows = 10)
+plot
+}
 }

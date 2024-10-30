@@ -13,7 +13,8 @@ removeEmptyRows(prot, by_column = "DomArch")
 Default column is 'DomArch'. Can also take the following as input, 'Species', 'GenContext', 'ClustName'.}
 }
 \value{
-Describe return, in detail
+A tibble with rows removed where the specified column contains
+\code{"-"}, \code{"NA"}, or an empty string.
 }
 \description{
 Remove empty rows by column

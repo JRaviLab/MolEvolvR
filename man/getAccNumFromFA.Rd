@@ -9,10 +9,26 @@ getAccNumFromFA(fasta_file)
 getAccNumFromFA(fasta_file)
 }
 \arguments{
-\item{fasta_file}{}
+\item{fasta_file}{Character. Path to the FASTA file from which
+accession numbers will be extracted.}
+}
+\value{
+A character vector containing the extracted accession numbers.
+
+A character vector containing the extracted accession numbers.
 }
 \description{
 getAccNumFromFA
 
 getAccNumFromFA
+}
+\examples{
+\dontrun{
+getAccNumFromFA("my_sequences.fasta")
+}
+\dontrun{
+# Example usage
+accnums <- getAccNumFromFA("path/to/sequences.fasta")
+accnums
+}
 }

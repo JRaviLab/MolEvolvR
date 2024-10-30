@@ -8,18 +8,26 @@
 
 #' Combining full_analysis files
 #'
-#' @param inpath
-#' @param ret
+#' @param inpath Character. The path to the directory containing the 
+#' `.full_analysis.tsv` files to be combined.
+#' @param ret Logical. If TRUE, the function will return the combined data frame. 
+#' Default is FALSE, meaning it will only write the file and not return the data.
 #'
 #' @importFrom readr write_tsv
 #'
-#' @return
+#' @return If `ret` is TRUE, a data frame containing the combined data from all 
+#' input files. If `ret` is FALSE, the function writes the combined data to a 
+#' TSV file named `cln_combined.tsv` in the specified directory and returns NULL.
+#' 
 #' @export
 #'
 #' @examples
-combine_full <- function(inpath, ret = FALSE) {
+#' \dontrun{
+#' combined_data <- combineFullAnalysis("path/to/full_analysis/files", ret = TRUE)
+#' }
+combineFullAnalysis <- function(inpath, ret = FALSE) {
     ## Combining full_analysis files
-    full_combnd <- combine_files(inpath,
+    full_combnd <- combineFiles(inpath,
         pattern = "*.full_analysis.tsv", skip = 0,
         col_names = T
     )
@@ -35,18 +43,26 @@ combine_full <- function(inpath, ret = FALSE) {
 
 #' Combining clean ipr files
 #'
-#' @param inpath
-#' @param ret
+#' @param inpath Character. The path to the directory containing the 
+#' `.iprscan_cln.tsv` files to be combined.
+#' @param ret Logical. If TRUE, the function will return the combined data frame. 
+#' Default is FALSE, meaning it will only write the file and not return the data.
 #'
 #' @importFrom readr write_tsv
 #'
-#' @return
+#' @return If `ret` is TRUE, a data frame containing the combined data from all 
+#' input files. If `ret` is FALSE, the function writes the combined data to a 
+#' TSV file named `ipr_combined.tsv` in the specified directory and returns NULL.
+#' 
 #' @export
 #'
 #' @examples
-combine_ipr <- function(inpath, ret = FALSE) {
+#' \dontrun{
+#' combineIPR <- combine_ipr("path/to/ipr/files", ret = TRUE)
+#' }
+combineIPR <- function(inpath, ret = FALSE) {
     ## Combining clean ipr files
-    ipr_combnd <- combine_files(inpath,
+    ipr_combnd <- combineFiles(inpath,
         pattern = "*.iprscan_cln.tsv", skip = 0,
         col_names = T
     )
