@@ -17,7 +17,8 @@ plotStackedLineage(
   legend.cols = 2,
   legend.size = 0.7,
   coord_flip = TRUE,
-  legend = TRUE
+  legend = TRUE,
+  cpcols = NULL
 )
 }
 \arguments{
@@ -55,6 +56,8 @@ data (default is "Lineage").}
 (default is TRUE).}
 
 \item{legend}{Logical. Whether to display the legend (default is TRUE).}
+
+\item{cpcols}{}
 }
 \value{
 A ggplot object representing a stacked bar plot showing the
