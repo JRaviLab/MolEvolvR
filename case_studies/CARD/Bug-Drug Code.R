@@ -34,15 +34,6 @@ aro_index <- read_delim("CARD_data/aro_index.tsv", delim = "\t", col_names = TRU
 antibiotics_data <- read_delim("CARD_data/shortname_antibiotics.tsv", delim = "\t", col_names = TRUE)
 pathogens_data <- read_delim("CARD_data/shortname_pathogens.tsv", delim = "\t", col_names = TRUE)
 
-# Extract pathogen, gene, drug, and include Protein.Accession from 'CARD.Short.Name'
-aro_index_clean <- aro_index %>%
-  mutate(
-    pathogen = sapply(strsplit(CARD.Short.Name, "_"), `[`, 1),  # Extract pathogen
-    gene = sapply(strsplit(CARD.Short.Name, "_"), `[`, 2),      # Extract gene
-    drug = ifelse(sapply(strsplit(CARD.Short.Name, "_"), length) == 3,   # Extract drug
-                  sapply(strsplit(CARD.Short.Name, "_"), `[`, 3), NA),
-    Protein.Accession = Protein.Accession  # Include the Protein.Accession column
-  )
 
 # Extract pathogen, gene, drug, and include Protein.Accession from 'CARD Short Name'
 library(dplyr)
@@ -50,18 +41,60 @@ library(purrr)
 library(stringr)
 
 # Extract pathogen, gene, drug, and include Protein.Accession from 'CARD Short Name'
-resistance_profile <- aro_index %>%
-  mutate(
-    split_name = strsplit(`CARD Short Name`, "_"),  # Split the CARD Short Name
-    pathogen = map_chr(split_name, ~ if (length(.) >= 1) .[1] else NA),  # Extract pathogen
-    gene = map_chr(split_name, ~ if (length(.) >= 2) .[2] else NA),      # Extract gene
-    drug = map_chr(split_name, ~ if (length(.) == 3) .[3] else NA),      # Extract drug
-    Protein.Accession = `Protein Accession`  # Include the Protein Accession column
-  ) %>%
-  select(-split_name)
+extract_card_info <- function(card_short_name, drug_class, `Protein Accession`, `DNA Accession`) {
+  # Split the CARD Short Name by underscores
+  split_names <- unlist(strsplit(card_short_name, "_"))
+  
+  # Initialize variables with defaults
+  pathogen <- NA
+  gene <- NA
+  drug <- drug_class  # Default to Drug Class column
+  
+  # Determine the information based on the split names and patterns
+  if (length(split_names) == 1) {
+    # Gene only (single part entry)
+    gene <- split_names[1]
+    pathogen <- "MULTI"  # Assign MULTI as default for pathogen
+  } else if (all(toupper(split_names) == split_names)) {
+    # Gene complex (all uppercase entries)
+    gene <- card_short_name  # Entire entry as gene
+    pathogen <- "MULTI"
+  } else if (length(split_names) == 2) {
+    # Pathogen-Gene scenario
+    pathogen <- split_names[1]
+    gene <- split_names[2]
+  } else if (length(split_names) == 3) {
+    # Pathogen-Gene-Drug scenario
+    pathogen <- split_names[1]
+    gene <- split_names[2]
+    drug <- split_names[3]  # Assign drug from the split entry
+  }
+  
+  # If both pathogen and gene are NA, classify as complex gene
+  if (is.na(pathogen) && is.na(gene)) {
+    gene <- card_short_name  # Assign entire CARD Short Name as gene
+    pathogen <- "MULTI"      # Default to MULTI for pathogen
+  }
+  
+  # Handle Protein Accession
+  if (is.na(`Protein Accession`) || `Protein Accession` == "") {
+    `Protein Accession` <- `DNA Accession`  # Use DNA Accession if Protein Accession is NA
+  }
+  
+  return(list(Pathogen = pathogen, Gene = gene, Drug = drug, Protein_Accession = `Protein Accession`))
+}
 
-# View the cleaned data
-head(resistance_profile)
+# Apply the function to the data frame
+resistance_profile_data <- aro_index %>%
+  mutate(extracted_info = pmap(list(`CARD Short Name`, `Drug Class`, `Protein Accession`, `DNA Accession`),
+                               extract_card_info)) %>%
+  unnest_wider(extracted_info)
+
+# View the resulting data frame
+print(resistance_profile_data)
+
+
+
 
 
 # Merge resistance_profile with the antibiotics_data and pathogens_data
