@@ -57,11 +57,8 @@
 #'                 here("src/FastTree")
 #' }
 convertFA2Tree <- function(fa_path = here("data/alns/pspa_snf7.fa"),
-    .data$tre_path = here("data/alns/pspa_snf7.tre"),
+    tre_path = here("data/alns/pspa_snf7.tre"),
     fasttree_path = here("src/FastTree")) {
-    # fa_path=here("data/alns/pspa_snf7.fa")
-    # .data$tre_path=here("data/alns/pspa_snf7.tre")
-    # fasttree_path=here("src/FastTree")
     
     # Check if the FASTA file exists
     if (!file.exists(fa_path)) {
