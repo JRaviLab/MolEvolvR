@@ -124,6 +124,7 @@ submit_full <- function(
 }
 
 # Define the main pipeline function
+#' @export
 run_molevolvr_pipeline <- function(input_paths, db, nhits, eval,
                                    is_query, type, i) {
 
@@ -182,7 +183,7 @@ run_molevolvr_pipeline <- function(input_paths, db, nhits, eval,
     F_value <- basename(FILE)
     PREFIX <- sub("\\.faa$", "", basename(FILE))
     PREFIX <- gsub(">", "", PREFIX)  # Extract prefix from file name
-    OUTDIR <- file.path(OUTPATH, paste0(PREFIX, "_", type))
+    OUTDIR <- file.path(OUTPATH, paste0(PREFIX))
     dir.create(OUTDIR, showWarnings = FALSE)  # Create output directory
     # setwd(OUTDIR)
 
@@ -234,7 +235,7 @@ run_molevolvr_pipeline <- function(input_paths, db, nhits, eval,
 
 
   # Optionally run IPR2DA if IS_QUERY is true
-  if (is_query == "T") {
+  if (is_query == TRUE) {
     ## perform ipr2da on iprscan results
     da <- ipr2da(file.path(OUTDIR, paste0(PREFIX, ".iprscan_cln.tsv")),
                  PREFIX, "NA")
@@ -244,11 +245,10 @@ run_molevolvr_pipeline <- function(input_paths, db, nhits, eval,
         is.na(PREFIX)) {
       print("No blast results provided, moving on.")
     } else {
-      append_ipr(ipr_da = da, blast = "NA", prefix = PREFIX)
+      browser()
+      file.copy(file.path(OUTDIR, paste0(PREFIX, ".ipr_domarch.tsv")),
+                file.path(OUTDIR, paste0(PREFIX, ".full_analysis.tsv")))
     }
-
-    file.copy(file.path(OUTDIR, paste0(PREFIX, ".ipr_domarch.tsv")),
-              file.path(OUTDIR, PREFIX, paste0(PREFIX, ".full_analysis.tsv")))
   } else {
     # perform ipr2da on iprscan results
     da <- ipr2da(file.path(OUTDIR, paste0(PREFIX, ".iprscan_cln.tsv")),
@@ -660,7 +660,7 @@ cleanup_blast <- function(infile_blast, acc2info, prefix, wblast = F) {
     mutate(FullAccNum = gsub(".*[a-z]", "", FullAccNum))
 
   # If using web-blast output
-  if (wblast == "T") {
+  if (wblast == TRUE) {
     blast_out <- fread(input = infile_blast, sep = "\t", header = FALSE,
                        col.names = web_blastp_hit_colnames, fill = TRUE)
     cleanedup_blast <- blast_out %>%
@@ -702,7 +702,7 @@ cleanup_blast <- function(infile_blast, acc2info, prefix, wblast = F) {
 
   # TaxID to lineage mapping
   cleanedup_blast$TaxID <- as.integer(cleanedup_blast$TaxID)
-  lineage_map <- fread("~/data/lineage_lookup.txt",
+  lineage_map <- fread("~/awasyn/new_trial/lineage_lookup.txt",
                        header = TRUE, fill = TRUE,
                        colClasses = lineage_map_cols)
 
@@ -841,7 +841,7 @@ run_interproscan <- function(query_file, prefix, outdir) {
   # Run InterProScan command
   # Construct the command
   command <- paste(
-    "~/interproscan-5.70-102.0/interproscan.sh -i",
+    "~/iprdir/interproscan-5.70-102.0/interproscan.sh -i",
     shQuote(query_file),
     "-b", shQuote(outfile),
     "-f TSV --cpu", Sys.getenv("INTERPROSCAN_CPUS", "4"),
@@ -875,7 +875,7 @@ ipr2lin <- function(ipr, acc2info, prefix) {
   ipr_tax <- left_join(ipr_in, acc2info_out, by = "AccNum")
 
   # read in lineage map
-  lineage_map <- fread("~/data/lineage_lookup.txt",
+  lineage_map <- fread("~/awasyn/new_trial/lineage_lookup.txt",
                        header = T, fill = T)
 
   # merge ipr+info w/ lineage
@@ -889,7 +889,7 @@ ipr2lin <- function(ipr, acc2info, prefix) {
     select(-Species.x, -Species.y)
 
   # add lookup table to iprscan file
-  lookup_tbl <- fread(input = "~/data/cln_lookup_tbl.tsv",
+  lookup_tbl <- fread(input = "~/awasyn/new_trial/cln_lookup_tbl.tsv",
                       sep = "\t", header = T, fill = T) %>%
     distinct()
   if ("AccNum.x" %in% names(ipr_lin)) {
@@ -1019,7 +1019,7 @@ ipr2da <- function(infile_ipr, prefix,
 
   # save domarch_lins file
   write_tsv(domarch_lins,
-            file = paste0(prefix, ".ipr_domarch.tsv"),
+            file = paste0(prefix, "/", prefix, ".ipr_domarch.tsv"),
             append = F, na = "NA"
   )
 
@@ -1032,13 +1032,13 @@ append_ipr <- function(ipr_da, blast, prefix) {
   # ! an 'AccNum' or 'AccNum.noV' column is required in blast table for joining !
   blast_out <- read_tsv(blast, col_names = T)
   if ("AccNum.noV" %in% colnames(blast_out)) {
-    ipr_da <- read_tsv(paste0(prefix, ".ipr_domarch.tsv"), col_names = T)
+    ipr_da <- read_tsv(paste0(prefix, "/", prefix, ".ipr_domarch.tsv"), col_names = T)
     blast_ipr <- merge(blast_out, ipr_da, by = "AccNum.noV", all.x = T)
   } else {
     blast_ipr <- merge(blast_out, ipr_da, by = "AccNum", all.x = T)
   }
 
-  write_tsv(blast_ipr, file = paste0(prefix, ".full_analysis.tsv"), na = "NA")
+  write_tsv(blast_ipr, file = paste0(prefix, "/", prefix, ".full_analysis.tsv"), na = "NA")
 }
 
 # Web BLAST output

@@ -10,8 +10,8 @@ library(plotly)
 
 # Function to generate the InterProScan Visualization
 generate_ipr_genes_visualization <- function(data, app_data,
-                                             input_rs_iprDatabases,
-                                             input_rs_iprVisType) {
+                                             input_rs_iprDatabases = c("Pfam", "Phobius", "TMHMM", "Gene3D"),
+                                             input_rs_iprVisType = "Analysis") {
 
     # Check if analysis is loaded
     if (nrow(data@df) == 0 || app_data@ipr_path == "") {
@@ -30,7 +30,7 @@ generate_ipr_genes_visualization <- function(data, app_data,
         n <- "Name"  # Hardcoded to "Name" based on original code
 
         # Call the `ipr2viz_web` function
-        ipr_plot <- ipr2viz_web(
+        ipr_plot <- plotIPR2VizWeb(
             infile_ipr = data@ipr_path,
             accessions = data@df$Name,
             analysis = input_rs_iprDatabases,
@@ -41,7 +41,7 @@ generate_ipr_genes_visualization <- function(data, app_data,
     } else {
 
         # Call the `ipr2viz` function with additional arguments
-        ipr_plot <- ipr2viz(
+        ipr_plot <- plotIPR2Viz(
             infile_ipr = data@ipr_path,
             infile_full = data@df,
             accessions = unique(data@df$Name),
@@ -79,10 +79,10 @@ generate_rs_network_layout <- function(data, app_data,
 
     # Clean up domain architecture columns in the data
     df_data <- data@df %>%
-        mutate(across(tidyselect::starts_with("DomArch"), clean_string))
+        mutate(across(tidyselect::starts_with("DomArch"), cleanString))
 
     # Generate the network using the domain_network function
-    res_network <- domain_network(
+    res_network <- createDomainNetwork(
         df_data,
         column = col,
         domains_of_interest = ".*",
@@ -260,7 +260,7 @@ get_fasta_data <- function(fasta_path) {
 }
 
 # Function to get domain sequences (assumes `data` is a predefined object)
-get_domain_data <- function() {
+get_domain_data <- function(data) {
     return(data@domainSeqs)  # Return domain sequences
 }
 
@@ -302,8 +302,7 @@ generate_query_heatmap <- function(query_data_df,
              See the FAQ for possible reasons/solutions.")
     }
 
-    # Assuming `lineage.Query.plot` is a custom function for plotting
-    lineage.Query.plot(prot, queries = queries, colname = "QueryName",
+  plotLineageQuery(prot, queries = queries, colname = "QueryName",
                        cutoff = 100, color = heatmap_color)
 }
 
@@ -404,8 +403,89 @@ generate_main_table <- function(data_df, main_select = NULL) {
     return(datatable_output)
 }
 
+total_counts <- function(prot, column = "DomArch", lineage_col = "Lineage",
+                         cutoff = 90, RowsCutoff = FALSE, digits = 2
+                         # type = "GC"
+) {
+  column <- sym(column)
+
+  prot <- select(prot, {{ column }}, {{ lineage_col }}) %>%
+    filter(!is.na({{ column }}) & !is.na({{ lineage_col }})) %>%
+    filter({{ column }} != "")
+
+  prot <- summarizeByLineage(prot, column, by = lineage_col, query = "all")
+  col_count <- prot %>%
+    group_by({{ column }}) %>%
+    summarise(totalcount = sum(count))
+
+  total <- left_join(prot, col_count, by = as_string(column))
+
+  sum_count <- sum(total$count)
+  total <- total %>%
+    mutate("IndividualCountPercent" = totalcount / sum_count * 100) %>%
+    arrange(-totalcount, -count)
+
+  cumm_percent <- total %>%
+    select({{ column }}, totalcount) %>%
+    distinct() %>%
+    mutate("CumulativePercent" = 0)
+  total_counter <- 0
+  for (x in length(cumm_percent$totalcount):1) {
+    total_counter <- total_counter + cumm_percent$totalcount[x]
+    cumm_percent$CumulativePercent[x] <- total_counter / sum_count * 100
+  }
+
+  cumm_percent <- cumm_percent %>% select(CumulativePercent, {{ column }})
+
+  total <- total %>% left_join(cumm_percent, by = as_string(column))
+
+  # Round the percentage columns
+  total$CumulativePercent <- total$CumulativePercent %>% round(digits = digits)
+  total$IndividualCountPercent <- total$IndividualCountPercent %>% round(digits = digits)
+
+  if (RowsCutoff) {
+    # If total counts is being used for plotting based on number of rows,
+    # don't include other observations that fall below the cummulative percent cutoff
+    # , but that have the same 'totalcount' number as the cutoff observation
+    total <- total %>% filter(CumulativePercent >= 100 - cutoff - .0001)
+    return(total)
+  }
+
+  # Include observations that fall below the cummulative percent cutoff,
+  # but that have the same 'totalcount' as the cutoff observation
+  t <- total %>% filter(CumulativePercent >= 100 - cutoff)
+  if (length(t) == 0) {
+    cutoff_count <- 0
+  } else {
+    cutoff_count <- t$totalcount[nrow(t)]
+  }
+
+  total <- total %>%
+    filter(totalcount >= cutoff_count) %>%
+    ungroup()
+
+  return(total)
+}
+
+DA_TotalCounts <- function(DA_Prot, DACutoff, DA_col, app_data) {
+  # Check if ipr_path is not empty
+  if (app_data@ipr_path == "") {
+    stop("ipr_path is missing.")
+  }
+
+  # Calculate total counts with the specified cutoff and column
+  prot_tc <- total_counts(DA_Prot, cutoff = DACutoff, column = DA_col)
+
+  # Replace all instances of ">" in the Lineage column with "_"
+  prot_tc$Lineage <- map(prot_tc$Lineage, ~ str_replace_all(.x, ">", "_")) %>%
+    unlist()
+
+  # Return the processed data
+  prot_tc
+}
+
 # Function to generate Domain Architecture Linear Table
-generate_DA_lin_table <- function(DA_col, ipr_path, DAlin_count_table_DT) {
+generate_DA_lin_table <- function(DA_col, ipr_path, DA_TotalCounts_value) {
     # Check if ipr_path is valid
     if (ipr_path == "") {
         stop("InterPro path is empty.")
@@ -416,8 +496,39 @@ generate_DA_lin_table <- function(DA_col, ipr_path, DAlin_count_table_DT) {
         stop("DA_col input is required.")
     }
 
+    da_col <- sym(DA_col)
+
+    # Perform the data transformation
+    DA_TotalCounts_value %>%
+        group_by({{ da_col }}, totalcount, CumulativePercent) %>%
+        summarize(LineageCount = n()) %>%
+        select({{ da_col }}, LineageCount, totalcount, CumulativePercent) %>%
+        arrange(-totalcount)
+
     # Generate the DAlin count table
-    DAlin_table <- DAlin_count_table_DT()
+    DAlin_table <- DT::datatable(
+      DA_TotalCounts_value,
+      selection = "single",
+      extensions = c("Buttons"),
+      options = list(
+        pageLength = 25,
+        dom = "frlBtip",
+        buttons = list(
+          list(
+            extend = "csv",
+            text = "Download",
+            filename = "MolEvolvR_domarch",
+            exportOptions = list(
+              modifier = list(page = "all")
+            )
+          )
+        ),
+        scrollX = FALSE,
+        paging = TRUE,
+        fixedHeader = FALSE,
+        fixedColumns = list(leftColumns = 0, rightColumns = 0)
+      )
+    )
 
     return(DAlin_table)
 }
@@ -425,19 +536,19 @@ generate_DA_lin_table <- function(DA_col, ipr_path, DAlin_count_table_DT) {
 # Function to generate the Domain Architecture Lineage Plot
 generate_DA_heatmap_plot <- function(DA_col, DACutoff,
                                      DA_Prot, DA_lin_color,
-                                     analysis_loaded, ipr_path) {
+                                     ipr_path) {
     # Check if ipr_path is valid
     if (ipr_path == "") {
         stop("InterPro path is empty.")
     }
 
     # Filter the protein data for plotting
-    prot <- DA_Prot() %>%
+    prot <- DA_Prot %>%
         filter(Lineage != "") %>%
         drop_na(Lineage)
 
     # Create the plot
-    plot <- lineage.DA.plot(
+    plot <- plotLineageDA(
         prot,
         colname = DA_col,
         cutoff = DACutoff,
@@ -461,7 +572,7 @@ generate_domain_network <- function(DA_col, DACutoff, DA_Prot,
     }
 
     # Prepare the selected protein data
-    dn_data <- DA_Prot()
+    dn_data <- DA_Prot
     col <- sym(DA_col)  # Convert DA_col to a symbol for use with dplyr
     dn_data[[col]] <- str_replace_all(dn_data[[col]], " ", "_")
 
@@ -471,7 +582,7 @@ generate_domain_network <- function(DA_col, DACutoff, DA_Prot,
         filter(!!col != "")
 
     # Generate the domain network
-    res <- domain_network(
+    res <- createDomainNetwork(
         prot = dn_data,
         column = col,
         domains_of_interest = ".*",
@@ -517,21 +628,34 @@ generate_domain_network <- function(DA_col, DACutoff, DA_Prot,
 }
 
 # Function to retrieve and clean Domain Architecture data
-get_DA_Prot <- function(app_data, validate_da, DASelect) {
+get_DA_Prot <- function(app_data, DASelect) {
     # Check if the ipr_path is valid
     if (app_data@ipr_path == "") {
         stop("InterPro path is empty.")
     }
 
     # Validate domain architecture
-    validate_da()
+    # Check if ipr_path is not empty
+    if (app_data@ipr_path == "") {
+        stop("ipr_path is missing.")
+    }
+
+    # Check if the data frame has rows
+    if (nrow(app_data@df) <= 0) {
+        stop("No data available. Please ensure you have uploaded your data correctly. See Help documentation or contact JRaviLab (janani.ravi[AT]cuanschutz[DOT]edu).")
+    }
+
+    # Check if there are domain architecture columns
+    # if (length(domarch_cols) == 0) {
+    #    stop("Please ensure uploaded data has domain architecture columns.")
+    # }
 
     # Retrieve app data and clean domain architecture columns
     df_app_data <- app_data@df
 
     # Domain architecture column cleanup
     df_app_data <- df_app_data %>%
-        mutate(across(starts_with("DomArch"), clean_string))
+        mutate(across(starts_with("DomArch"), cleanString))
 
     # Filter based on user selection
     if (DASelect == "All") {
@@ -612,7 +736,7 @@ generate_da_ipr_genes_plot <- function(app_data, da_iprDatabases,
         name_column <- "Name"
 
         # Generate the plot using the web version
-        plot <- ipr2viz_web(
+        plot <- plotIPR2VizWeb(
             infile_ipr = app_data@ipr_path,
             accessions = df$Name,
             analysis = da_iprDatabases,
@@ -621,7 +745,7 @@ generate_da_ipr_genes_plot <- function(app_data, da_iprDatabases,
         )
     } else {
         # Generate the plot using the local version
-        plot <- ipr2viz(
+        plot <- plotIPR2Viz(
             infile_ipr = app_data@ipr_path,
             infile_full = df,
             accessions = unique(df$Name),
@@ -637,11 +761,6 @@ generate_da_ipr_genes_plot <- function(app_data, da_iprDatabases,
 
 # Function to filter proteins for phylogeny
 filter_phylogeny_proteins <- function(app_data, phylo_select) {
-    # Validate the input app_data
-    if (!analysis_loaded()) {
-        stop("Analysis not loaded.")
-    }
-
     # Get the data frame from app_data
     df <- app_data@df
 
@@ -738,5 +857,40 @@ acc_to_name <- function(app_data) {
     }
 
     return(df)
+}
+
+rep_accnums <- function(phylo, msa_reduce_by, msa_rep_num, PhyloSelect, app_data) {
+  # If `phylo` is true, return all `AccNum` values from `app_data`
+  if (phylo) {
+    return(app_data@df$AccNum)
+  } else {
+    # Switch based on `msa_reduce_by` value
+    tmp <- filter(app_data@df, QueryName == PhyloSelect)
+    rep_acc_species <- RepresentativeAccNums(tmp, reduced = "Species", column = "AccNum")
+
+    # Get representative accession numbers by "Lineage"
+    rep_acc_lineage <- RepresentativeAccNums(tmp, reduced = "Lineage", column = "AccNum")
+    switch(msa_reduce_by,
+           "Species" = rep_acc_species,
+           "Lineage" = rep_acc_lineage,
+           "DomArch" = {
+             # Check if `ipr_path` is not empty
+             if (app_data@ipr_path == "") {
+               stop("ipr_path is missing.")
+             }
+             # Find top sequences by accession number based on criteria
+             seqs <- getTopAccByLinDomArch(infile_full = app_data@df, n = msa_rep_num, query = PhyloSelect)
+             if (is.null(seqs)) {
+               stop("No sequences found.")
+             }
+             return(seqs)
+           },
+           "Full" = {
+             # Filter data for matching `QueryName` and return `AccNum`
+             tmp <- app_data@df %>% filter(QueryName == PhyloSelect)
+             return(tmp$AccNum)
+           }
+    )
+  }
 }
 

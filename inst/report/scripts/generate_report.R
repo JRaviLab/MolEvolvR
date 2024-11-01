@@ -2,6 +2,7 @@
 # Last modified: 2024
 
 # get fasta of pathogen and/or drug
+#' @export
 get_card_data <- function(pathogen = NULL, drug = NULL) {
   destination_dir <- "CARD_data"
   # Check if CARD data exists
@@ -72,6 +73,7 @@ get_card_data <- function(pathogen = NULL, drug = NULL) {
 }
 
 # Run analysis
+#' @export
 run_analysis <- function(
         upload_type = "Fasta",
         evalue = 0.00001,
@@ -94,12 +96,15 @@ run_analysis <- function(
         GCCutoff = 0.5,
         query_select = NULL,
         query_iprDatabases = NULL,
-        query_iprVisType = NULL, tree_msa_tool = "ClustalO",
+        query_iprVisType = "Analysis", tree_msa_tool = "ClustalO",
         levels = 2,
         DA_Col = "DomArch.Pfam",
         msa_rep_num = NULL,
         msa_reduce_by = "Species",
         rval_phylo = FALSE,
+        DA_lin_color = c("default", "viridis", "inferno", "magma", "plasma", "cividis"),
+        networkLayout = c("nice", "grid", "circle", "random"),
+        phylo_select = "All",
         ...
 
 ) {
@@ -570,11 +575,11 @@ run_analysis <- function(
 
     # Assign fetched data to objects if the fetched list has the expected length
     if (length(fetched) == 2) {
-        data <<- fetched[[1]]       # Assign the first element to 'data'
-        app_data <<- fetched[[1]]   # Assign the same to 'app_data'
-        query_data <<- fetched[[2]] # Assign the second element to 'query_data'
+        data <- fetched[[1]]       # Assign the first element to 'data'
+        app_data <- fetched[[1]]   # Assign the same to 'app_data'
+        query_data <- fetched[[2]] # Assign the second element to 'query_data'
 
-        r_nrow_initial(nrow(fetched[[1]]@df))  # Initialize row count
+        r_nrow_initial <- nrow(fetched[[1]]@df)  # Initialize row count
     }
 
     domarch_cols_value <- get_domarch_cols(app_data, DASelect)
@@ -587,27 +592,55 @@ run_analysis <- function(
 
     fastaDataText_value <- get_fasta_data(query_data@fasta_path)
 
-    domainDataText_value <- get_domain_data()
+    domainDataText_value <- get_domain_data(data)
 
     msaDataText_value <- get_msa_data(query_data@msa_path)
 
-    rs_IprGenes_value <- generate_ipr_genes_visualization(data, app_data, input_rs_iprDatabases, input_rs_iprVisType)
+    rs_IprGenes_value <- generate_ipr_genes_visualization(data,
+                                                          app_data,
+                                                          input_rs_iprDatabases,
+                                                          input_rs_iprVisType)
 
-    rval_rs_network_layout_value <- generate_rs_network_layout(data, app_data, cutoff = 100, layout = "nice")
+    rs_network_layout_value <- generate_rs_network_layout(data,
+                                                          app_data,
+                                                          cutoff = 100,
+                                                          layout = "nice")
 
     rs_data_table_value <- generate_data_table(data)
 
-    da_IprGenes_value <- generate_da_ipr_genes_plot(app_data, da_iprDatabases, da_iprVisType, DASelect)
+    da_IprGenes_value <- generate_da_ipr_genes_plot(app_data,
+                                                    da_iprDatabases,
+                                                    da_iprVisType,
+                                                    DASelect)
 
-    query_heatmap_value <- generate_query_heatmap(query_data_df, heatmap_select = "All", heatmap_color = "blue")
+    query_heatmap_value <- generate_query_heatmap(query_data_df,
+                                                  heatmap_select = "All",
+                                                  heatmap_color = "blue")
 
-    DA_Prot_value <- get_DA_Prot(app_data, validate_da, DASelect)
+    DA_Prot_value <- get_DA_Prot(app_data, DASelect)
 
-    DALinPlot_value <- generate_DA_heatmap_plot(DA_col, DACutoff, DA_Prot, DA_lin_color, ipr_path)
+    DALinPlot_value <- generate_DA_heatmap_plot(DA_col = "DomArch.Pfam",
+                                                DACutoff,
+                                                DA_Prot_value,
+                                                DA_lin_color = "viridis",
+                                                app_data@ipr_path)
 
-    DALinTable_value <- generate_DA_lin_table(DA_col, ipr_path, DAlin_count_table_DT)
+    DALin_TotalCounts_value <- DA_TotalCounts(DA_Prot_value,
+                                              DACutoff = 95,
+                                              DA_col = "DomArch.Pfam",
+                                              app_data)
 
-    DANetwork_value <- generate_domain_network(DA_col, DACutoff, DA_Prot, networkLayout, ipr_path)
+    DALinTable_value <- generate_DA_lin_table(DA_col = "DomArch.Pfam",
+                                              app_data@ipr_path,
+                                              DALin_TotalCounts_value)
+
+    DANetwork_value <- generate_domain_network(DA_col = "DomArch.Pfam",
+                                               DACutoff,
+                                               DA_Prot_value,
+                                               networkLayout = "nice",
+                                               app_data@ipr_path)
+
+    rep_accnums_value <-
 
     phylogeny_prot_value <- filter_phylogeny_proteins(app_data, phylo_select)
 
@@ -622,7 +655,7 @@ run_analysis <- function(
         # List of graphics to include in report
         params <- list(
             rs_interproscan_visualization = rs_IprGenes_value,
-            proximity_network = rval_rs_network_layout_value,
+            proximity_network = rs_network_layout_value,
             sunburst = data@df,
             data = rs_data_table_value,
             queryDataTable = queryDataTable_value,
@@ -632,7 +665,7 @@ run_analysis <- function(
             query_domarch_cols = query_domarch_cols_value,
             query_iprDatabases = query_iprDatabases,
             query_iprVisType = query_iprVisType,
-            mainTable = maintable_value,
+            mainTable = mainTable_value,
             DALinTable = DALinTable_value,
             DALinPlot = DALinPlot_value,
             DANetwork = DANetwork_value,
@@ -644,7 +677,7 @@ run_analysis <- function(
             phylo_sunburst_levels = levels,
             phylo_sunburst = phylogeny_prot_value,
             tree_msa_tool = tree_msa_tool,
-            rep_accnums = rep_accnums(),
+            rep_accnums = rep_accnums_value,
             msa_rep_num = 10,
             app_data = app_data,
             PhyloSelect = PhyloSelect,
