@@ -153,86 +153,87 @@ library(stringr)
 filtered_data <- merged_data_pathogens %>%
   filter(Drug == "DAP", Pathogen_Full_Name == "Staphylococcus aureus")
 
-View(filtered_data)
-
-
-
-
-
-
-
-
-
-
-# FASTA sequences
-# Install and Load required packages
-if (!requireNamespace("rentrez", quietly = TRUE)) {
-  install.packages("rentrez")
-}
-if (!requireNamespace("XML", quietly = TRUE)) {
-  install.packages("XML")
-}
-if (!requireNamespace("stringr", quietly = TRUE)) {
-  install.packages("stringr")
-}
-
-library(rentrez)
-library(XML)
-library(stringr)
 
 # Fetch FASTA sequence from Entrez
-fetch_fasta_sequence <- function(Protein_Accession) {
+fetch_fasta_sequence <- function(protein_accession) {
   tryCatch({
     # Fetch the FASTA sequence using Entrez
     fasta_seq <- rentrez::entrez_fetch(db = "protein",
-                                       id = Protein_Accession,
+                                       id = protein_accession,
                                        rettype = "fasta",
                                        retmode = "text")
-
+    
     if (!is.null(fasta_seq)) {
       # Ensure the first line starts with ">"
       if (!grepl("^>", fasta_seq[1])) {
         fasta_seq[1] <- paste0(">", fasta_seq[1])
       }
-
+      
       # Split the sequence into lines
       lines <- str_split(fasta_seq, "\n")[[1]]
-
+      
       # Join the lines back together
       fasta_seq <- paste(lines, collapse = "\n")
-
+      
       return(fasta_seq)
     } else {
-      warning(paste("Failed to retrieve FASTA sequence for protein accession:", Protein_Accession))
+      warning(paste("Failed to retrieve FASTA sequence for protein accession:", protein_accession))
       return(NULL)
     }
   }, error = function(e) {
-    warning(paste("Error fetching FASTA sequence for protein accession:", Protein_Accession, ":", e$message))
+    warning(paste("Error fetching FASTA sequence for protein accession:", protein_accession, ":", e$message))
     return(NULL)
   })
 }
 
 
-# Loop through staph_aureus_dap_combinations to fetch and save FASTA sequences
+# Define the output file for the FASTA sequences
+output_fasta_file <- "Staph_aureus_Daptomycin_sequences-general.fasta"
+
+# Initialize an empty character vector to store the sequences
 combined_sequences <- character()
 
-for (i in 1:nrow(staph_aureus_dap_combinations)) {
-  # Fetch FASTA sequence for each protein accession
-  protein_accession <- staph_aureus_dap_combinations$Protein_Accession[i]
+# Loop through each Protein Accession in the filtered data to fetch sequences
+for (i in 1:nrow(filtered_data)) {
+  # Get the Protein Accession ID
+  protein_accession <- filtered_data$Protein_Accession[i]
+  
+  cat("Fetching sequence for Protein Accession:", protein_accession, "\n")  # Debugging message
+  
+  # Fetch the FASTA sequence
   fasta_sequence <- fetch_fasta_sequence(protein_accession)
-
+  
+  # If the sequence was fetched successfully, add it to the combined_sequences vector
   if (!is.null(fasta_sequence)) {
     combined_sequences <- c(combined_sequences, fasta_sequence)
+    cat("Successfully fetched sequence for:", protein_accession, "\n")
+  } else {
+    cat("Failed to fetch sequence for:", protein_accession, "\n")
   }
 }
 
-# Save the combined FASTA sequences
-filename <- "Staph_aureus_Daptomycin_sequences.fasta"
+# Check if there are any fetched sequences
+if (length(combined_sequences) > 0) {
+  # Save all fetched sequences to a FASTA file
+  writeLines(combined_sequences, output_fasta_file)
+  cat("Sequences saved to", output_fasta_file, "\n")
+} else {
+  cat("No sequences were fetched, so no FASTA file was created.\n")
+}
 
-writeLines(combined_sequences, filename)
+# Read the contents of the file
+fasta_contents <- readLines(output_fasta_file)
+  
+# Print the contents
+cat(fasta_contents, sep = "\n")
 
-# Read the FASTA file
-fasta_content <- readLines(filename)
 
-# Display the contents
-cat(fasta_content, sep = "\n")
+
+
+
+
+
+
+
+
+
