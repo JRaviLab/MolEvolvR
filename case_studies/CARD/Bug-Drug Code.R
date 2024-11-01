@@ -93,46 +93,76 @@ resistance_profile_data <- aro_index %>%
 # View the resulting data frame
 print(resistance_profile_data)
 
+# Define a relative path for saving the data
+output_path <- file.path("CARD_data", "resistance_profile_data.tsv")
+
+# Save resistance_profile_data to the specified path
+write_delim(resistance_profile_data, output_path, delim = "\t")
+
+# Load data
+resistance_profile_data <- read_delim(output_path, delim = "\t", col_names = TRUE)
+antibiotics_data <- read_delim("case_studies/CARD/CARD_data/shortname_antibiotics.tsv", delim = "\t", col_names = TRUE)
+pathogens_data <- read_delim("case_studies/CARD/CARD_data/shortname_pathogens.tsv", delim = "\t", col_names = TRUE)
+
+
+
+# Merge the extracted resistance profile data with antibiotics_data on Drug
+merged_data_antibiotics <- left_join(
+  resistance_profile_data,
+  antibiotics_data,
+  by = c("Drug" = "AAC Abbreviation"), # Adjusting for abbreviations between datasets
+  relationship = "many-to-many"
+)
+
+# Merge the result with pathogens_data on Pathogen, renaming Pathogen.y to Pathogen_Full_Name
+merged_data_pathogens <- left_join(
+  merged_data_antibiotics,
+  pathogens_data,
+  by = c("Pathogen" = "Abbreviation")
+) %>%
+  rename(Pathogen_Full_Name = Pathogen.y)
+
+# Assign "Multi-species" to Pathogen_Full_Name where Pathogen values are "MULTI"
+merged_data_pathogens <- merged_data_pathogens %>%
+  mutate(Pathogen_Full_Name = if_else(Pathogen == "MULTI", "Multi-species", Pathogen_Full_Name))
+
+
+# Assign "Multi-class" to Molecule where Drug values are full names (not abbreviations)
+merged_data_pathogens <- merged_data_pathogens %>%
+  mutate(Molecule = if_else(grepl(" ", Drug) | grepl("-", Drug), "Multi-class", Molecule))
+
+
+#FASTA sequences
+#Install and Load required packages
+if (!requireNamespace("rentrez", quietly = TRUE)) {
+  install.packages("rentrez")
+}
+if (!requireNamespace("XML", quietly = TRUE)) {
+  install.packages("XML")
+}
+if (!requireNamespace("stringr", quietly = TRUE)) {
+  install.packages("stringr")
+}
+
+
+library(rentrez)
+library(XML)
+library(stringr)
+
+# Filter for the target drug (DAP) and pathogen (Staphylococcus aureus)
+filtered_data <- merged_data_pathogens %>%
+  filter(Drug == "DAP", Pathogen_Full_Name == "Staphylococcus aureus")
+
+View(filtered_data)
 
 
 
 
-# Merge resistance_profile with the antibiotics_data and pathogens_data
-# For merging with antibiotics_data
-merged_data_antibiotics <- left_join(resistance_profile, antibiotics_data,
-                                     by = c("drug" = "AAC Abbreviation"),
-                                     relationship = "many-to-many")
-
-# View the merged data
-head(merged_data_antibiotics)
 
 
-# For merging with pathogens_data
-merged_data_pathogens <- left_join(merged_data_antibiotics, pathogens_data,
-                                   by = c("pathogen" = "Abbreviation"))
-
-# View the resulting merged data
-head(merged_data_pathogens)
 
 
-#filter out rows where pathogen is empty
-cleaned_data <- merged_data_pathogens %>%
-  distinct() %>%
-  filter(!is.na(Pathogen))
-View(cleaned_data)
 
-# Group by Pathogen, Gene, Drug, and Protein_Accession, then summarize Antibiotic information
-summarized_data <- cleaned_data %>%
-  group_by(Pathogen = Pathogen, Gene = gene, Drug = drug, Protein_Accession = Protein_Accession) %>%
-  summarize(Antibiotic_Info = paste(unique(Molecule), collapse = ", ")) %>%
-  arrange(Pathogen, Gene, Drug, Protein_Accession)
-
-# Filter for Staphylococcus aureus and DAP (Bug-Drug of Interest)
-staph_aureus_dap_combinations <- summarized_data %>%
-  filter(Pathogen == "Staphylococcus aureus", Drug == "DAP")
-
-# View the filtered data
-head(staph_aureus_dap_combinations)
 
 # FASTA sequences
 # Install and Load required packages
