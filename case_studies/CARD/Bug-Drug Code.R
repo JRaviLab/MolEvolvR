@@ -188,7 +188,7 @@ fetch_fasta_sequence <- function(protein_accession) {
 
 
 # Define the output file for the FASTA sequences
-output_fasta_file <- "Staph_aureus_Daptomycin_sequences-general.fasta"
+output_fasta_file <- "Staph_aureus_Daptomycin_sequences.fasta"
 
 # Initialize an empty character vector to store the sequences
 combined_sequences <- character()
