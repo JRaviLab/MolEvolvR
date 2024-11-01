@@ -395,10 +395,10 @@ IPG2Lineage <- function(accessions, ipg_file,
     {
         # browser()
         acc <- accessions[i]
-        acc_inds <- which(.data$mergedTax$Protein == acc)
+        acc_inds <- which(mergedTax$Protein == acc)
         if (length(acc_inds) != 0) {
             # refseq inds take precedence
-            refseq_inds <- acc_inds[which(.data$mergedTax[acc_inds, ]$Source == "RefSeq")]
+            refseq_inds <- acc_inds[which(mergedTax[acc_inds, ]$Source == "RefSeq")]
             if (length(refseq_inds) != 0) {
                 # Take the first first row of the refseq (smallest index)
                 refseq_rows[i] <- refseq_inds[1]
@@ -424,7 +424,7 @@ IPG2Lineage <- function(accessions, ipg_file,
     }
     if (length(genbank_rows) != 0) {
         genbank_ipg_dt <- ipg_dt[genbank_rows, ]
-        genbank_lins <- GCA2Lineage(.data$gca_ipg_dt,
+        genbank_lins <- GCA2Lineage(gca_ipg_dt,
             assembly_path = genbank_assembly_path,
             lineagelookup_path
         )
