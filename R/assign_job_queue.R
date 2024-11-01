@@ -92,7 +92,8 @@ mapAdvOption2Process <- function(advanced_opts) {
 #'
 #' @importFrom dplyr across everything select summarise
 #' @importFrom rlang warn abort inform
-#'
+#' @importFrom stats median
+#' 
 #' @return [list] names: processes; values: median runtime (seconds)
 #'
 #' see molevol_scripts/R/metrics.R for info on functions called here
@@ -210,7 +211,7 @@ writeProcessRuntime2TSV <- function(dir_job_results, filepath) {
         names_to = "process",
         values_to = "median_seconds"
       ) |>
-      dplyr::arrange(dplyr::desc(median_seconds))
+      dplyr::arrange(dplyr::desc(.data$median_seconds))
 
     # Write the resulting tibble to a TSV file
     readr::write_tsv(df_proc_medians, file = filepath)
