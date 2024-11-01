@@ -97,7 +97,7 @@ column. Use "all" to skip filtering and include all rows.</p></dd>
 
 <dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A dataframe or tibble containing the data. It must have columns
-named <code>GenContext</code>, <code>DomArch</code>, and <code>Lineage</code>.</p></dd>
+named <code>GenContext</code>, <code>DomArch</code>, <code>Lineage</code>, and <code>count</code>.</p></dd>
 
 
 <dt id="arg-lineage-col">lineage_col<a class="anchor" aria-label="anchor" href="#arg-lineage-col"></a></dt>
@@ -142,13 +142,12 @@ The results are arranged in descending order of <code>totallin</code> and <code>
 <li><p><code>count</code>: The total number of occurrences for each combination of
 <code>GenContext</code>, <code>DomArch</code>, and <code>Lineage</code>.</p></li>
 </ul><p>The results are arranged in descending order of <code>count</code>.</p>
-<p>Describe return, in detail</p>
-<p>A tibble summarizing each unique combination of <code>GenContext</code> and
-<code>Lineage</code>, along with the following columns:</p><ul><li><p><code>GenContext</code>: The genomic context for each entry.</p></li>
-<li><p><code>Lineage</code>: The lineage associated with each entry.</p></li>
-<li><p><code>count</code>: The total number of occurrences for each combination of
-<code>GenContext</code> and <code>Lineage</code>.</p></li>
-</ul><p>The results are arranged in descending order of <code>count</code>.</p>
+<p>A tibble summarizing each unique combination of <code>GenContext</code> and <code>Lineage</code>,
+along with the count of occurrences. The results are arranged in descending order of count.</p>
+<p>A tibble summarizing each unique <code>GenContext</code>, along with the following columns:</p><ul><li><p><code>totalcount</code>: The total count for each <code>GenContext</code>.</p></li>
+<li><p><code>totalDA</code>: The number of distinct <code>DomArch</code> for each <code>GenContext</code>.</p></li>
+<li><p><code>totallin</code>: The number of distinct <code>Lineage</code> for each <code>GenContext</code>.</p></li>
+</ul><p>The results are arranged in descending order of <code>totalcount</code>, <code>totalDA</code>, and <code>totallin</code>.</p>
 <p>A data frame with the following columns:</p><ul><li><p><code>{{ column }}</code>: Unique values from the specified column.</p></li>
 <li><p><code>totalcount</code>: The total count of occurrences for each unique value in
 the specified column.</p></li>
@@ -171,19 +170,19 @@ column names.</p>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="fu">summarizeDomArch_ByLineage</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">summarizeDomArch_ByLineage</span><span class="op">(</span><span class="va">data1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="fu">summarizeDomArch</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">summarizeDomArch</span><span class="op">(</span><span class="va">data1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="va">summarizeGenContext_ByDomArchLineage</span></span></span>
+<span class="r-in"><span><span class="fu">summarizeGenContext_ByDomArchLineage</span><span class="op">(</span><span class="va">your_data</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="fu">summarizeGenContext_ByLineage</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">summarizeGenContext_ByLineage</span><span class="op">(</span><span class="va">your_data</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="fu">summarizeGenContext</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">summarizeGenContext</span><span class="op">(</span><span class="va">data1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="fu">totalGenContextOrDomArchCounts</span><span class="op">(</span><span class="va">pspa</span> <span class="op">-</span> <span class="va">gc_lin_counts</span>, <span class="fl">0</span>, <span class="st">"GC"</span><span class="op">)</span></span></span>
