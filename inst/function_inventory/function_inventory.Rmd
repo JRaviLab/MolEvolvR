@@ -1,0 +1,130 @@
+---
+title: "Function Inventory"
+author: "Awa Synthia"
+date: "2024-10-07"
+output: html_document
+---
+
+## Overview
+This document generates an inventory of functions in the MolEvolvR package and 
+identifies dependencies between them, using the interactive network 
+visualizations to illustrate function relationships.
+
+```{r setup, include=FALSE}
+# Load necessary libraries
+library(stringr)
+library(igraph)
+library(visNetwork)
+library(htmlwidgets)
+```
+
+Extract Function Names
+
+We start by extracting the names of all functions defined within in the R 
+directory.
+
+```{r}
+# Function to extract function names from R files
+extract_function_names <- function(file) {
+  content <- readLines(file)
+  function_lines <- grep("^[a-zA-Z0-9_]+\\s*<-\\s*function", content, 
+                         value = TRUE)
+  function_names <- str_extract(function_lines, "^[a-zA-Z0-9_]+")
+  return(na.omit(unique(function_names)))
+}
+
+# List all R files in the package
+function_files <- list.files(path = "/home/simple/awasyn/MolEvolvR/R", pattern = "*.R", 
+                             full.names = TRUE)
+all_function_names <- unlist(lapply(function_files, extract_function_names))
+head(all_function_names)
+
+```
+
+
+Identify Dependencies
+
+Next, we check each function for calls to other functions within its definition, 
+enabling us to map out dependencies between functions.
+
+```{r}
+# Function to find dependencies within function definitions in each file
+find_dependencies <- function(file, all_function_names) {
+  content <- readLines(file)
+  dependencies <- list()
+
+  for (func_name in all_function_names) {
+    func_start <- grep(paste0("^", func_name, "\\s*<-\\s*function"), content)
+    if (length(func_start) > 0) {
+      func_body <- content[func_start[1]:min(length(content), func_start[1] + 20)]
+      called_functions <- unique(unlist(str_extract_all(func_body, 
+          paste0("\\b(", paste(all_function_names, collapse = "|"), ")\\b"))))
+      if (length(called_functions) > 0) {
+        dependencies[[func_name]] <- called_functions
+      }
+    }
+  }
+  return(dependencies)
+}
+
+# Apply to all files and flatten the list
+all_dependencies <- do.call(c, lapply(function_files, find_dependencies, 
+                                      all_function_names))
+head(all_dependencies)
+
+```
+
+
+Interactive Visualization with visNetwork
+
+Here, we build an interactive network of function dependencies using visNetwork, 
+allowing for exploration of complex relationships between functions.
+
+```{r}
+# Prepare data for visNetwork
+create_vis_data <- function(dependencies) {
+  nodes <- data.frame(id = unique(c(names(dependencies), 
+                                    unlist(dependencies))),
+                      label = unique(c(names(dependencies), 
+                                       unlist(dependencies))),
+                      stringsAsFactors = FALSE)
+  edges <- do.call(rbind, lapply(names(dependencies), function(func) {
+    if (length(dependencies[[func]]) > 0) {
+      data.frame(from = func, to = dependencies[[func]], 
+                 stringsAsFactors = FALSE)
+    } else {
+      NULL
+    }
+  }))
+  return(list(nodes = nodes, edges = edges))
+}
+
+# Generate the dependency data
+vis_data <- create_vis_data(all_dependencies)
+
+# Create the visNetwork graph
+network <- visNetwork(vis_data$nodes, vis_data$edges, height = "700px", 
+                      width = "100%") %>%
+  visEdges(arrows = "to") %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
+  visInteraction(navigationButtons = TRUE, zoomView = TRUE) %>%
+  visLayout(randomSeed = 123) # Ensures layout consistency
+
+# Display the network graph in the RMarkdown output
+network
+```
+
+Saving the Interactive Graph
+
+To save the interactive graph as an HTML file, we use saveWidget, which will 
+generate a self-contained HTML document for easy sharing and review.
+
+```{r}
+# Save the network as an HTML file
+# Uncomment the following line to sace gapht to interactive html file
+saveWidget(network, "function_dependency_graph.html", selfcontained = TRUE)
+
+```
+
+
+
