@@ -17,17 +17,6 @@ untar("broadstreet-v3.3.0.tar", exdir = "CARD_data")
 
 
 # Map CARD Short Name
-# Install and Load dplyr and readr
-packages <- c("dplyr", "readr")
-
-for (pkg in packages) {
-  if (!require(pkg, character.only = TRUE)) {
-    install.packages(pkg)
-    library(pkg, character.only = TRUE)
-  } else {
-    library(pkg, character.only = TRUE)
-  }
-}
 
 # Parse the required files using readr::read_delim
 aro_index <- read_delim("CARD_data/aro_index.tsv", delim = "\t", col_names = TRUE)
