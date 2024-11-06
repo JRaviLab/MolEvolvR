@@ -86,9 +86,8 @@ write_delim(resistance_profile_data, output_path, delim = "\t")
 
 # Load data
 resistance_profile_data <- read_delim(output_path, delim = "\t", col_names = TRUE)
-antibiotics_data <- read_delim("case_studies/CARD/CARD_data/shortname_antibiotics.tsv", delim = "\t", col_names = TRUE)
-pathogens_data <- read_delim("case_studies/CARD/CARD_data/shortname_pathogens.tsv", delim = "\t", col_names = TRUE)
-
+antibiotics_data <- read_delim("CARD_data/shortname_antibiotics.tsv", delim = "\t", col_names = TRUE)
+pathogens_data <- read_delim("CARD_data/shortname_pathogens.tsv", delim = "\t", col_names = TRUE)
 
 
 # Merge the extracted resistance profile data with antibiotics_data on Drug
