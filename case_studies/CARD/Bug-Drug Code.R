@@ -13,7 +13,7 @@ if (!require("R.utils")) {
 
 
 # Extract the tar file
-untar("broadstreet-v3.3.0.tar", exdir = "CARD_data")
+untar("broadstreet-v3.3.0.tar.bz2", exdir = "CARD_data")
 
 
 # Map CARD Short Name
