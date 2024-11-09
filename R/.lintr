@@ -1,0 +1,16 @@
+# .lintr configuration file
+
+linters: with_defaults(
+  # Enable specific linters
+  line_length_linter(120),      # Allows lines up to 120 characters
+  object_name_linter(styles = "snake_case"), # Enforces snake_case for object names
+
+  # Disable specific linters
+  assignment_linter = NULL,     # Disables checks for assignment operators
+  single_quotes_linter = NULL   # Allows both single and double quotes
+)
+
+# Ignore files or directories (add any paths you want lintr to skip)
+exclusions: list(
+  "tests/testthat/test-reverse_operons.R"  # Ignore specific test file
+)
