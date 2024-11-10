@@ -1,189 +1,106 @@
-# Function to straighten operons (genomic contexts)
-# Written by L. Aravind
-# Modified by Janani Ravi and Samuel Chen
-
-
-#' straightenOperonSeq: Reverse Equalities in Genomic Context
+#' Reverse Operon Sequences in Genomic Contexts
 #'
-#' @description
-#' This function processes the genomic context strings (GenContext) and reverses
-#'  directional signs based on the presence of an equal sign ("=").
+#' This function takes a data frame with genomic contexts and processes them
+#' to reverse the direction of operons in sequences containing specific
+#' symbols such as `>`, `<`, and `=`.
 #'
-#' @param prot [vector] A vector of genomic context strings to be processed.
-#' 
-#' @importFrom rlang abort
-#'
-#' @return [vector] A vector of the same length as the input, where each genomic
-#' element is annotated with either a forward ("->") or reverse ("<-") direction,
-#' depending on its position relative to the "=" symbols.
-#'
+#' @param prot A data frame with a column named 'GenContext' containing genomic contexts.
+#' @return A modified data frame with the operons' directions reversed.
 #' @export
 #'
 #' @examples
-#' # Example input: Genomic context with directional symbols and an asterisk
-#' genomic_context <- c("A", "B", "*", "C", "D", "=", "E", "F")
-#' straightenOperonSeq(genomic_context)
-#'
-#' # Output: "A->", "B->", "*", "<-C", "<-D", "=", "E->", "F->"
-
-straightenOperonSeq <- function(prot) {
-    # Check if 'prot' is a data frame
-    if (!is.vector(prot)) {
-        abort("Error: 'prot' must be a vector.")
-    }
-    
-    w <- prot # $GenContext.orig # was 'x'
-
-    y <- rep(NA, length(w))
-
-    d <- 1
-
-    b <- grep("\\*", w)
-
-    for (j in b:length(w)) {
-        if (w[j] == "=") {
-            d <- d * (-1)
-        }
-
-        if (d == 1 && w[j] != "=") {
-            y[j] <- paste(w[j], "->", sep = "")
-        } else if (d == -1 && w[j] != "=") {
-            y[j] <- paste("<-", w[j], sep = "")
-        } else {
-            y[j] <- "="
-        }
-    } # (for)
-
-    if (b > 1) {
-        d <- 1
-
-        for (j in (b - 1):1) {
-            if (w[j] == "=") {
-                d <- d * (-1)
-            }
-
-            if (d == 1 && w[j] != "=") {
-                y[j] <- paste(w[j], "->", sep = "")
-            } else if (d == -1 && w[j] != "=") {
-                y[j] <- paste("<-", w[j], sep = "")
-            } else {
-                y[j] <- "="
-            }
-        } # (for)
-    } # (if b>1)
-
-    return(y)
-}
-
-## The function to reverse operons
-
-#' reverseOperon: Reverse the Direction of Operons in Genomic ContextSeq
-#'
-#' @description
-#' This function processes a genomic context data frame to reverse the direction
-#' of operons based on specific patterns in the GenContext column. It handles
-#' elements represented by ">" and "<" and restructures the genomic context by
-#' flipping the direction of operons while preserving the relationships
-#' indicated by "=".
-#'
-#' @param prot [data.frame] A data frame containing at least a column named
-#' 'GenContext', which represents the genomic contexts that need to be reversed.
-#' 
-#' @importFrom rlang abort
-#'
-#' @return [data.frame] The input data frame with the 'GenContext' column updated t
-#' o reflect the reversed operons.
-#'
-#' @export
-#'
-#' @examples
-#' \dontrun{
 #' # Example genomic context data frame
-#' ## Rework example data, does not pass R-CMD Check
-#' prot <- data.frame(GenContext = c("A>B", "C<D", "E=F*G", "H>I")) 
+#' prot <- data.frame(GenContext = c("A>B", "C<D", "E=F*G", "H>I"))
 #' reversed_prot <- reverseOperonSeq(prot)
-#' reversed_prot
-#' }
-
+#' print(reversed_prot)
 reverseOperonSeq <- function(prot) {
-    # Check if 'prot' is a data frame
-    if (!is.data.frame(prot)) {
-        abort("Error: 'prot' must be a data frame.")
-    }
-  
-    gencontext <- prot$GenContext
+  # Ensure input is in correct format (GenContext must be a character vector)
+  if (!"GenContext" %in% colnames(prot) || !is.character(prot$GenContext)) {
+    stop("GenContext must be a character column in the input data frame")
+  }
 
-    gencontext <- gsub(pattern = ">", replacement = ">|", x = gencontext)
+  # Modify GenContext to ensure proper splitting and replacements
+  gencontext <- prot$GenContext
+  gencontext <- gsub(">", ">|", gencontext)
+  gencontext <- gsub("<", "|<", gencontext)
+  gencontext <- gsub("\\|\\|", "|=|", gencontext)
 
-    gencontext <- gsub(pattern = "<", replacement = "|<", x = gencontext)
+  # Split GenContext into a list and remove empty elements
+  gc.list <- strsplit(gencontext, "\\|")
+  gc.list <- lapply(gc.list, function(x) x[x != ""])
 
-    gencontext <- gsub(pattern = "\\|\\|", replacement = "\\|=\\|", x = gencontext)
+  # Replace NAs or missing sequences with "-"
+  gc.list <- lapply(gc.list, function(x) if (any(is.na(x))) "-" else x)
 
-
-
-    gc.list <- strsplit(x = gencontext, split = "\\|")
-
-    if (any(is.na(gc.list))) gc.list[[which(is.na(gc.list))]] <- "-"
-
-    gc.list <- lapply(1:length(gc.list), function(x) {
-        if (any(gc.list[[x]] == "")) gc.list[[x]][which(gc.list[[x]] != "")] else gc.list[[x]]
-    })
-
-
-
-    te <- lapply(1:length(gc.list), function(x) gc.list[[x]][grep("\\*", gc.list[[x]])])
-
+  # Check for "*" in the sequences and process to reverse operons
+  te <- lapply(gc.list, function(x) grep("\\*", x, value = TRUE))
+  if (length(te) > 0 && any(sapply(te, length) > 0)) {
     ye <- unlist(lapply(te, function(x) substr(x[1], 1, 1)))
-
     torev <- which(ye == "<")
+  } else {
+    torev <- NULL
+  }
 
-
-
+  # Process if torev exists
+  if (!is.null(torev) && length(torev) > 0) {
     te <- gc.list[torev]
-
-    te <- lapply(te, function(x) gsub(pattern = "<-|->", replacement = "", x = x))
-
+    te <- lapply(te, function(x) gsub("<-|->", "", x))
     te <- lapply(te, rev)
 
-    witheq <- grep(pattern = "=", x = te)
+    # Split sequences with "=" for further processing
+    witheq <- grep("=", te)
+    withouteq <- setdiff(seq_along(te), witheq)
 
-    withouteq <- which(!((1:length(te)) %in% witheq))
+    # Process sequences with "=" using straightenOperonSeq
+    if (length(witheq) > 0) {
+      ge <- te[witheq]
+      ge <- lapply(ge, straightenOperonSeq)
+      te[witheq] <- ge
+    }
 
-    ge <- te[witheq]
-
-
-
-    ge <- lapply(1:length(ge), function(x) straightenOperonSeq(ge[[x]]))
-
-    ye <- te[withouteq]
-
-    ye <- lapply(1:length(ye), function(x) unname(sapply(ye[[x]], function(y) paste(y, "->", sep = ""))))
-
-
-
-    te[witheq] <- ge
-
-    te[withouteq] <- ye
+    # Handle sequences without "=" by adding "->" suffix
+    if (length(withouteq) > 0) {
+      ye <- lapply(te[withouteq], function(x) paste(x, "->", sep = ""))
+      te[withouteq] <- ye
+    }
 
     gc.list[torev] <- te
+  }
 
+  # Reassemble GenContext from gc.list and update prot data frame
+  rev.gencontext <- sapply(gc.list, function(x) paste(x, collapse = ""))
+  rev.gencontext <- gsub("=", "|", rev.gencontext)
+  prot$GenContext <- rev.gencontext
 
-
-    rev.gencontext <- unlist(lapply(gc.list, function(x) paste(x, collapse = "")))
-
-    rev.gencontext <- gsub(pattern = "=", replacement = "\\|\\|", rev.gencontext)
-
-    prot$GenContext <- rev.gencontext
-
-    return(prot)
+  return(prot)
 }
 
+# Helper function to straighten sequences based on equal signs
+straightenOperonSeq <- function(w) {
+  y <- rep(NA, length(w))
+  d <- 1
+  b <- grep("\\*", w)
 
+  for (j in b:length(w)) {
+    if (w[j] == "=") d <- d * (-1)
+    y[j] <- ifelse(d == 1 && w[j] != "=", paste(w[j], "->", sep = ""),
+      ifelse(d == -1 && w[j] != "=", paste("<-", w[j], sep = ""), "=")
+    )
+  }
 
-##############
-# Absorb into the function above?
-## ???
-# colnames(prot) <- c("AccNum","GenContext.orig","len", "GeneName","TaxID","Species")
+  if (b > 1) {
+    d <- 1
+    for (j in (b - 1):1) {
+      if (w[j] == "=") d <- d * (-1)
+      y[j] <- ifelse(d == 1 && w[j] != "=", paste(w[j], "->", sep = ""),
+        ifelse(d == -1 && w[j] != "=", paste("<-", w[j], sep = ""), "=")
+      )
+    }
+  }
+  return(y)
+}
 
-## ??? straighten operons
-# prot$GenContext.orig <- reverseOperonSeq(prot)
+# Example usage:
+prot <- data.frame(GenContext = c("A>B", "C<D", "E=F*G", "H>I"))
+reversed_prot <- reverseOperonSeq(prot)
+print(reversed_prot)
