@@ -134,8 +134,42 @@ library(XML)
 library(stringr)
 
 # Filter for the target drug (DAP) and pathogen (Staphylococcus aureus)
-filtered_data <- merged_data_pathogens %>%
-  filter(Drug == "DAP", Pathogen_Full_Name == "Staphylococcus aureus")
+filter_resistance_mechanisms <- function(data, drug, bug, exclude_multiclass = FALSE, species_restricted = TRUE) {
+
+  # Filter by drug using partial match to include multiclass entries containing the target drug
+  filtered_data <- data %>%
+    filter(grepl(drug, Drug, ignore.case = TRUE))
+
+  # Filter by pathogen, using partial match
+  filtered_data <- filtered_data %>%
+    filter(grepl(bug, Pathogen_Full_Name, ignore.case = TRUE))
+
+  # Optionally exclude multiclass resistance if exclude_multiclass = TRUE
+  if (exclude_multiclass) {
+    filtered_data <- filtered_data %>%
+      filter(!grepl(";", Drug))  # Only include entries with single drug classes
+  }
+
+  # Optionally restrict to species-specific mechanisms if species_restricted = TRUE
+  if (species_restricted) {
+    filtered_data <- filtered_data %>%
+      filter(Pathogen_Full_Name == bug)  # Include only entries with exact match to the bug of interest
+  }
+
+  return(filtered_data)
+}
+
+# Usage example for Staphylococcus aureus resistant to DAP, including multispecies and multiclass resistance
+filtered_data_saurdap <- filter_resistance_mechanisms(
+  data = merged_data_pathogens,
+  drug = "DAP",
+  bug = "Staphylococcus aureus",
+  exclude_multiclass = FALSE,
+  species_restricted = FALSE
+)
+
+# View the filtered results
+View(filtered_data_saurdap)
 
 
 # Fetch FASTA sequence from Entrez
@@ -178,9 +212,9 @@ output_fasta_file <- "Staph_aureus_Daptomycin_sequences.fasta"
 combined_sequences <- character()
 
 # Loop through each Protein Accession in the filtered data to fetch sequences
-for (i in 1:nrow(filtered_data)) {
+for (i in 1:nrow(filtered_data_saurdap)) {
   # Get the Protein Accession ID
-  protein_accession <- filtered_data$Protein_Accession[i]
+  Protein_accession <- filtered_data_saurdap$Protein_Accession[i]
   
   cat("Fetching sequence for Protein Accession:", protein_accession, "\n")  # Debugging message
   
