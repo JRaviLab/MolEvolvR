@@ -90,16 +90,20 @@ run_analysis <- function(
         output_file = file.path(tempdir(), "report.html"),
         DASelect = "All",
         mainSelect = NULL,
-        PhyloSelect = NULL,
+        PhyloSelect = "All",
         q_heatmap_select = "All",
         DACutoff = 95,
         GCCutoff = 0.5,
         query_select = NULL,
-        query_iprDatabases = NULL,
+        query_iprDatabases = c(
+          "Pfam", "SMART", "Phobius",
+          "Gene3D", "TMHMM", "SignalP_GRAM_POSITIVE",
+          "SUPERFAMILY", "MobiDBLite", "TIGRFAM", "PANTHER", "Coils"
+        ),
         query_iprVisType = "Analysis", tree_msa_tool = "ClustalO",
         levels = 2,
         DA_Col = "DomArch.Pfam",
-        msa_rep_num = NULL,
+        msa_rep_num = 10,
         msa_reduce_by = "Species",
         rval_phylo = FALSE,
         DA_lin_color = c("default", "viridis", "inferno", "magma", "plasma", "cividis"),
@@ -375,7 +379,7 @@ run_analysis <- function(
                                    pattern = paste0("molevolvr_acccnum_validation-", accnum, "-", "XXXXX"),
                                    fileext = ".fa"
                                )
-                               acc2fa(accnum, tmp)
+                               acc2FA(accnum, tmp)
                                readAAStringSet(tmp)
                                TRUE
                            },
@@ -398,7 +402,7 @@ run_analysis <- function(
       Please try submitting FASTA sequences instead.")
                } else {
                    # Write a multifasta
-                   acc2fa(accnum_vect, outpath = path)
+                   acc2FA(accnum_vect, outpath = path)
                }
            },
            "MSA" = {
@@ -584,7 +588,7 @@ run_analysis <- function(
 
     domarch_cols_value <- get_domarch_cols(app_data, DASelect)
 
-    query_domarch_cols_value <- get_domarch_columns(query_data)
+    query_domarch_cols_value <- get_domarch_columns(query_data@df)
 
     mainTable_value <- generate_data_table(data)
 
@@ -613,7 +617,7 @@ run_analysis <- function(
                                                     da_iprVisType,
                                                     DASelect)
 
-    query_heatmap_value <- generate_query_heatmap(query_data_df,
+    query_heatmap_value <- generate_query_heatmap(query_data@df,
                                                   heatmap_select = "All",
                                                   heatmap_color = "blue")
 
@@ -626,7 +630,7 @@ run_analysis <- function(
                                                 app_data@ipr_path)
 
     DALin_TotalCounts_value <- DA_TotalCounts(DA_Prot_value,
-                                              DACutoff = 95,
+                                              DACutoff,
                                               DA_col = "DomArch.Pfam",
                                               app_data)
 
@@ -640,7 +644,7 @@ run_analysis <- function(
                                                networkLayout = "nice",
                                                app_data@ipr_path)
 
-    rep_accnums_value <-
+    rep_accnums_value <- rep_accnums(phylo, msa_reduce_by, msa_rep_num, PhyloSelect, app_data)
 
     phylogeny_prot_value <- filter_phylogeny_proteins(app_data, phylo_select)
 
@@ -678,7 +682,7 @@ run_analysis <- function(
             phylo_sunburst = phylogeny_prot_value,
             tree_msa_tool = tree_msa_tool,
             rep_accnums = rep_accnums_value,
-            msa_rep_num = 10,
+            msa_rep_num = 3,
             app_data = app_data,
             PhyloSelect = PhyloSelect,
             acc_to_name = acc_to_name_value,

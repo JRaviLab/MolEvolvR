@@ -353,7 +353,7 @@ if (is.null(params$DA_col)) {
 
 plot_data <- params$DA_Prot
 plot_data[[da_col]] <- str_replace_all(plot_data[[da_col]], " ", "_")
-wordcloud_element(plot_data, colname = da_col, cutoff = params$DACutoff, UsingRowsCutoff = F)
+createWordCloudElement(plot_data, colname = da_col, cutoff = params$DACutoff, UsingRowsCutoff = F)
 ```
 
 ### Interproscan Visualization
@@ -367,7 +367,7 @@ params$da_interproscan_visualization
 ```{r, echo=FALSE}
 upset_plot_data <- params$DA_Prot
 upset_plot_data[[da_col]] <- str_replace_all(upset_plot_data[[da_col]], " ", "_")
-final_plot <- upset.plot(upset_plot_data, colname = da_col, cutoff = params$DACutoff)
+final_plot <- plotUpSet(upset_plot_data, colname = da_col, cutoff = params$DACutoff)
 domains <- upset_plot_data %>% 
   dplyr::pull(da_col)
 n_unique_domains <- domains %>%
@@ -413,30 +413,33 @@ if(length(params$rep_accnums) >= 3 ) {
   if (!params$rval_phylo) {
     seqs <- readAAStringSet(params$app_data@fasta_path)
     names(seqs) <- sub(" .*", "", names(seqs))
-    query_accession <- params$app_data@df %>% filter(params$app_data@df$QueryName == params$PhyloSelect)
+    query_accession <- params$app_data@df %>% filter(!duplicated(QueryName))
     query_accession <- unique(query_accession$Query)
     query <- seqs[query_accession]
-    names(query) <- params$PhyloSelect
+    names(query) <- unique(params$app_data@df$QueryName)
     query <- AAStringSet(query)
   }
   # Generate Fasta File
   rep_fasta_path <- tempfile()
 
-  acc2fa(rep, outpath = rep_fasta_path, "sequential")
+  acc2FA(rep, outpath = rep_fasta_path, "sequential")
   rename_fasta(rep_fasta_path, rep_fasta_path,
-    replacement_function = map_acc2name,
+    replacement_function = mapAcc2Name,
     acc2name = params$acc_to_name
   )
   if (!params$rval_phylo) {
     writeXStringSet(query, rep_fasta_path, append = TRUE)
   }
-
   rep_msa_path <- tempfile()
   alignFasta(rep_fasta_path, tree_msa_tool, rep_msa_path)
 }
 ```
 
 ```{r, echo=FALSE}
+library(msa)
+library(ape)
+library(tidytree)
+library(ggtree)
 if(length(params$rep_accnums) >= 3 ) {
   seq_tree(fasta_filepath = rep_msa_path) 
  } else {"Not enough representative sequences: try changing the 'Reduce By' field."}
@@ -449,7 +452,7 @@ if(length(params$rep_accnums) >= 3 ) {
   if (!params$rval_phylo) {
     seqs <- readAAStringSet(params$app_data@fasta_path)
     names(seqs) <- sub(" .*", "", names(seqs))
-    query_accession <- params$app_data@df %>% filter(params$app_data@df$QueryName == params$PhyloSelect)
+    query_accession <- params$app_data@df %>% filter(!duplicated(QueryName))
     query_accession <- unique(query_accession$Query)
     query <- seqs[query_accession]
     names(query) <- params$PhyloSelect
@@ -458,9 +461,9 @@ if(length(params$rep_accnums) >= 3 ) {
 
   # Generate Fasta File
   rep_fasta_path <- tempfile()
-  acc2fa(rep, outpath = rep_fasta_path, "sequential")
+  acc2FA(rep, outpath = rep_fasta_path, "sequential")
   rename_fasta(rep_fasta_path, rep_fasta_path,
-    replacement_function = map_acc2name,
+    replacement_function = mapAcc2Name,
     acc2name = params$acc_to_name
   )
   if (!params$rval_phylo) {
@@ -469,16 +472,17 @@ if(length(params$rep_accnums) >= 3 ) {
 
   # Call MSA2PDF
   msa_pdf_path <- tempfile()
-  msa_prefix <- "/data/research/jravilab/molevolvr_app/www/msa_figs/"
+  msa_prefix <- "~/awasyn/MolEvolvRsHzFyk_full/msa_figs/"
   post_fix <- paste("msa", params$query_pin, params$PhyloSelect, params$msa_reduce_by, ".pdf", sep = "_")
 
   msa_pdf_path <- paste0(msa_prefix, post_fix)
 
-  msa_pdf(fasta_path = rep_fasta_path, msa_pdf_path)
+  createMSA_PDF(fasta_path = rep_fasta_path, msa_pdf_path)
   }
 ```
 
 ```{r msa_pdf, echo = FALSE, out.width = "95%", out.height  = "800px"}
+# apt-get install texlive
 if(length(params$rep_accnums) >= 3 ) {
   knitr::include_graphics(msa_pdf_path)
   } else {"Not enough representative sequences: try changing the 'Reduce By' field."}

@@ -91,8 +91,8 @@ generate_rs_network_layout <- function(data, app_data,
     )
 
     # Validate that the result is not an error
-    if (res_network == "error") {
-        stop("Not enough nodes to construct a network.")
+    if (any(res_network == "error")) {
+      stop("Not enough nodes to construct a network.")
     }
 
     return(res_network)
@@ -407,7 +407,7 @@ total_counts <- function(prot, column = "DomArch", lineage_col = "Lineage",
                          cutoff = 90, RowsCutoff = FALSE, digits = 2
                          # type = "GC"
 ) {
-  column <- sym(column)
+  # column <- sym(column)
 
   prot <- select(prot, {{ column }}, {{ lineage_col }}) %>%
     filter(!is.na({{ column }}) & !is.na({{ lineage_col }})) %>%
@@ -415,10 +415,10 @@ total_counts <- function(prot, column = "DomArch", lineage_col = "Lineage",
 
   prot <- summarizeByLineage(prot, column, by = lineage_col, query = "all")
   col_count <- prot %>%
-    group_by({{ column }}) %>%
+    group_by(!!sym(column)) %>%
     summarise(totalcount = sum(count))
 
-  total <- left_join(prot, col_count, by = as_string(column))
+  total <- left_join(prot, col_count, by = column)
 
   sum_count <- sum(total$count)
   total <- total %>%
@@ -584,14 +584,14 @@ generate_domain_network <- function(DA_col, DACutoff, DA_Prot,
     # Generate the domain network
     res <- createDomainNetwork(
         prot = dn_data,
-        column = col,
+        column = DA_col,
         domains_of_interest = ".*",
         cutoff = DACutoff,
         layout = networkLayout
     )
 
     # Validate the result
-    if (res == "error") {
+    if (any(res == "error")) {
         stop("Not enough nodes to construct a network.
              Try increasing 'Total Count Cutoff'.")
     }
@@ -865,11 +865,11 @@ rep_accnums <- function(phylo, msa_reduce_by, msa_rep_num, PhyloSelect, app_data
     return(app_data@df$AccNum)
   } else {
     # Switch based on `msa_reduce_by` value
-    tmp <- filter(app_data@df, QueryName == PhyloSelect)
-    rep_acc_species <- RepresentativeAccNums(tmp, reduced = "Species", column = "AccNum")
+    tmp <- filter(app_data@df)
+    rep_acc_species <- createRepresentativeAccNum(tmp, reduced = "Species", accnum_col = "AccNum")
 
     # Get representative accession numbers by "Lineage"
-    rep_acc_lineage <- RepresentativeAccNums(tmp, reduced = "Lineage", column = "AccNum")
+    rep_acc_lineage <- createRepresentativeAccNum(tmp, reduced = "Lineage", accnum_col = "AccNum")
     switch(msa_reduce_by,
            "Species" = rep_acc_species,
            "Lineage" = rep_acc_lineage,
@@ -894,3 +894,29 @@ rep_accnums <- function(phylo, msa_reduce_by, msa_rep_num, PhyloSelect, app_data
   }
 }
 
+seq_tree <- function(fasta_filepath){
+  my_seqs <- readAAStringSet(fasta_filepath) #, format="fasta", seek.first.rec=T)
+  my_seqs_msa <- msa(my_seqs)
+  my_seqs_msa_aln <- msaConvert(my_seqs_msa, type="seqinr::alignment")
+
+  #below was commented out, does it need to change as one of the parameters? the bottom keeps
+  d <- dist.alignment(my_seqs_msa_aln, "identity")
+  #as.matrix(d)[2:5, "HBA1_Homo_sapiens", drop=FALSE]
+
+  ## Phylogenetic tree
+  ## using package ape
+  ## build neighbor-joining tree
+  seqTree <- nj(d)
+  #plot(seqTree, main="Phylogenetic Tree of MSA")
+  groupInfo <- split(seqTree$tip.label,
+                     gsub("_\\w+", "", seqTree$tip.label))
+  seqTree <- groupOTU(seqTree, groupInfo)
+  # ggtree(seqTree, aes(color=group),
+  #        layout='circular') +
+  #   geom_tiplab(size=1, aes(angle=angle))
+  #https://yulab-smu.top/treedata-book/chapter4.html
+  #offs <- 0
+  tree <- ggtree(seqTree, branch.length = "dN_vs_dS") + theme_tree2(axis.line.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank())
+  msaplot(tree, fasta=fasta_filepath, offset=0.5, bg_line = TRUE) + geom_tiplab(align=TRUE, linesize=0.5, size=3)
+
+}

@@ -245,7 +245,6 @@ run_molevolvr_pipeline <- function(input_paths, db, nhits, eval,
         is.na(PREFIX)) {
       print("No blast results provided, moving on.")
     } else {
-      browser()
       file.copy(file.path(OUTDIR, paste0(PREFIX, ".ipr_domarch.tsv")),
                 file.path(OUTDIR, paste0(PREFIX, ".full_analysis.tsv")))
     }
@@ -728,6 +727,7 @@ run_blastclust <- function(infile, suffix, outdir) {
 
   # Prepare output file path
   outfile <- file.path(outdir, paste0(suffix, ".bclust.L60S80.tsv"))
+  input_file <- file.path(outdir, paste0(suffix, ".bclust.L60S80.tsv.clstr"))
 
 
   # Print process messages
@@ -741,10 +741,17 @@ run_blastclust <- function(infile, suffix, outdir) {
     "cd-hit -i %s -o %s -c 0.8 -aS 0.6 -T 8",
     infile, outfile
   )
+  clean_command <- sprintf(
+    "awk '/^>Cluster/ {if(NR>1)printf \"\\n\"; next} /WP_/ {start=index($0, \"WP_\"); if(start) {end=index(substr($0, start), \"...\"); if (end == 0) end=length($0); printf \"%%s \", substr($0, start, end-1)}}' %s > %s",
+    input_file,
+    outfile
+  )
+
   cat("\nPerforming BLASTCLUST analysis on", infile, "\n")
   # system(blastclust_cmd)
 
   system(cdhit_command)
+  system(clean_command)
 
 }
 
@@ -802,7 +809,7 @@ clust2tbl <- function(clust, blast) {
     }
   }
   # blast_out$AccNum <- gsub("^>", "", blast_out$AccNum)
-  blast_out$AccNum <- paste0(">", blast_out$AccNum)
+  # blast_out$AccNum <- paste0(">", blast_out$AccNum)
   blast_clustnames <- merge(blast_out, new_clust, by = "AccNum")
 
   for (i in 1:nrow(blast_clustnames)) {
