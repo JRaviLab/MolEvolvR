@@ -45,7 +45,7 @@ Default is "Lineage".}
 column. Use "all" to skip filtering and include all rows.}
 
 \item{x}{A dataframe or tibble containing the data. It must have columns
-named \code{GenContext}, \code{DomArch}, and \code{Lineage}.}
+named \code{GenContext}, \code{DomArch}, \code{Lineage}, and \code{count}.}
 
 \item{lineage_col}{Character. The name of the lineage column, default is
 "Lineage".}
@@ -91,18 +91,17 @@ A tibble summarizing each unique combination of \code{GenContext},
 
 The results are arranged in descending order of \code{count}.
 
-Describe return, in detail
+A tibble summarizing each unique combination of \code{GenContext} and \code{Lineage},
+along with the count of occurrences. The results are arranged in descending order of count.
 
-A tibble summarizing each unique combination of \code{GenContext} and
-\code{Lineage}, along with the following columns:
+A tibble summarizing each unique \code{GenContext}, along with the following columns:
 \itemize{
-\item \code{GenContext}: The genomic context for each entry.
-\item \code{Lineage}: The lineage associated with each entry.
-\item \code{count}: The total number of occurrences for each combination of
-\code{GenContext} and \code{Lineage}.
+\item \code{totalcount}: The total count for each \code{GenContext}.
+\item \code{totalDA}: The number of distinct \code{DomArch} for each \code{GenContext}.
+\item \code{totallin}: The number of distinct \code{Lineage} for each \code{GenContext}.
 }
 
-The results are arranged in descending order of \code{count}.
+The results are arranged in descending order of \code{totalcount}, \code{totalDA}, and \code{totallin}.
 
 A data frame with the following columns:
 \itemize{
@@ -137,19 +136,19 @@ tibble(DomArch = c("a+b", "a+b", "b+c", "a+b"), Lineage = c("l1", "l1", "l1", "l
 }
 
 \dontrun{
-summarizeDomArch_ByLineage()
+summarizeDomArch_ByLineage(data1)
 }
 \dontrun{
-summarizeDomArch()
+summarizeDomArch(data1)
 }
 \dontrun{
-summarizeGenContext_ByDomArchLineage
+summarizeGenContext_ByDomArchLineage(your_data)
 }
 \dontrun{
-summarizeGenContext_ByLineage()
+summarizeGenContext_ByLineage(your_data)
 }
 \dontrun{
-summarizeGenContext()
+summarizeGenContext(data1)
 }
 \dontrun{
 totalGenContextOrDomArchCounts(pspa - gc_lin_counts, 0, "GC")

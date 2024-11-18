@@ -581,7 +581,8 @@ assignJobQueue <- function(
 #' @importFrom dplyr mutate select
 #' @importFrom ggplot2 aes geom_line ggplot labs
 #' @importFrom tibble as_tibble
-#' @importFrom rlang warn abort inform
+#' @importFrom utils combn
+#' @importFrom rlang .data warn abort inform
 #'
 #' @return line plot object
 #'
@@ -657,13 +658,13 @@ plotEstimatedWallTimes <- function() {
     df_walltimes <- tidyr::gather(df_walltimes,
                                   key = "advanced_opts",
                                   value = "est_walltime",
-                                  n_inputs)
+                                  .data$n_inputs)
     # sec to hrs
     df_walltimes <- df_walltimes |>
-      dplyr::mutate(est_walltime = est_walltime / 3600)
-    p <- ggplot2::ggplot(df_walltimes, ggplot2::aes(x = n_inputs,
-                                                    y = est_walltime,
-                                                    color = advanced_opts)) +
+      dplyr::mutate(est_walltime = .data$est_walltime / 3600)
+    p <- ggplot2::ggplot(df_walltimes, ggplot2::aes(x = .data$n_inputs, 
+                                                    y = .data$est_walltime, 
+                                                    color = .data$advanced_opts)) +
       ggplot2::geom_line() +
       ggplot2::labs(
         title = "MolEvolvR estimated runtimes",
