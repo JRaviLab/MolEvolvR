@@ -846,8 +846,13 @@ runIPRScan <- function(query_file, prefix, outdir) {
 
   # Run InterProScan command
   # Construct the command
+
+  # get the path to the interproscan.sh script from the environment
+  # variable INTERPROSCAN_CMD, or assume it's on the path if unspecified
+  iprscan_cmd <- Sys.getenv("INTERPROSCAN_CMD", unset="interproscan.sh")
+
   command <- paste(
-    "~/iprdir/interproscan-5.70-102.0/interproscan.sh -i",
+    iprscan_cmd, "-i",
     shQuote(query_file),
     "-b", shQuote(outfile),
     "-f TSV --cpu", Sys.getenv("INTERPROSCAN_CPUS", "4"),

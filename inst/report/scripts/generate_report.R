@@ -1,6 +1,36 @@
 # Author(s): Awa Synthia
 # Last modified: 2024
 
+getCaseStudyReport <- function(pathogen = NULL, drug = NULL, ...) {
+  cat("\n")
+  cat("\033[1;36m")  # Cyan for the "MolEvolvR" header
+  cat("=========================================\n")
+  cat("            M o l E v o l R\n")
+  cat("=========================================\n")
+  cat("\033[0m")
+
+  cat("\033[1;32m")
+  cat("\n>>>>> Case Study Report Generated <<<<<\n")
+  cat("\033[0m")
+
+  # Step 1: Fetch the FASTA sequences of the given pathogen and drug
+  getCardData(pathogen, drug)
+
+  # Check if the FASTA file exists after fetching
+  fasta_file <- "filtered_proteins.fasta"
+  if (!file.exists(fasta_file)) {
+    stop("Failed to retrieve FASTA sequences. The file
+         'filtered_proteins.fasta' does not exist.")
+  }
+  # Step 2: Once the FASTA file is ready, call runAnalysis to run pipeline
+  message("FASTA file downloaded, running analysis...")
+
+  # Pass the file to runAnalysis function
+  runAnalysis(file_paths = list(fasta = fasta_file))
+
+  message("Case study report completed")
+}
+
 # get fasta of pathogen and/or drug
 getCardData <- function(pathogen = NULL, drug = NULL) {
   destination_dir <- "CARD_data"
@@ -84,8 +114,8 @@ runAnalysis <- function(
         acc_homology_analysis = TRUE,
         acc_da_analysis = TRUE,
         acc_phylogeny_analysis = FALSE,
-        report_template_path = "/report/report_template.Rmd",
-        output_file = file.path(tempdir(), "report.html"),
+        report_template_path = system.file("report", "report_template.Rmd", package = "MolEvolvR", mustWork = TRUE),
+        output_file = file.path(getwd(), "report.html"),
         DASelect = "All",
         mainSelect = NULL,
         PhyloSelect = "All",
