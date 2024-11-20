@@ -36,23 +36,23 @@
 #' filterByDomains()
 #' }
 filterByDomains <- function(prot, column = "DomArch", doms_keep = c(), doms_remove = c(),
-                            ignore.case = FALSE) {
+    ignore.case = FALSE) {
     # Only rows with a domain in doms_keep will be kept
     # Any row containing a domain in doms_remove will be removed
 
     # ^word$|(?<=\+)word$|(?<=\+)word(?=\+)|word(?=\+)
-
+    
     # Check if prot is a data frame
     if (!is.data.frame(prot)) {
         abort("Error: 'prot' must be a data frame.")
     }
-
+    
     # Check if the specified column exists in the data frame
     if (!column %in% names(prot)) {
-        abort(paste("Error: The specified column '", column, "' does not exist
+        abort(paste("Error: The specified column '", column, "' does not exist 
                    in the data frame.", sep = ""))
     }
-
+    
     # If doms_keep or doms_remove are not provided, inform the user
     if (length(doms_keep) == 0 && length(doms_remove) == 0) {
         warning("Warning: No domains specified to keep or remove. Returning the
@@ -109,25 +109,25 @@ filterByDomains <- function(prot, column = "DomArch", doms_keep = c(), doms_remo
 #' countByColumn
 #' @description
 #' Function to obtain element counts (DA, GC)
-#'
-#' @param prot A data frame containing the dataset to analyze, typically with
+#' 
+#' @param prot A data frame containing the dataset to analyze, typically with 
 #' multiple columns including the one specified by the `column` parameter.
-#' @param column A character string specifying the name of the column to analyze.
+#' @param column A character string specifying the name of the column to analyze. 
 #' The default is "DomArch".
-#' @param min.freq An integer specifying the minimum frequency an element must
+#' @param min.freq An integer specifying the minimum frequency an element must 
 #' have to be included in the output. Default is 1.
 #'
 #' @importFrom dplyr arrange as_tibble filter select
 #'
 #' @return A tibble with two columns:
 #' \describe{
-#'   \item{`column`}{The unique elements from the specified column
+#'   \item{`column`}{The unique elements from the specified column 
 #'   (e.g., "DomArch").}
-#'   \item{`freq`}{The frequency of each element, i.e., the number of times
+#'   \item{`freq`}{The frequency of each element, i.e., the number of times 
 #'   each element appears in the specified column.}
 #' }
-#' The tibble is filtered to only include elements that have a frequency
-#' greater than or equal to `min.freq` and does not include elements with `NA`
+#' The tibble is filtered to only include elements that have a frequency 
+#' greater than or equal to `min.freq` and does not include elements with `NA` 
 #' values or those starting with a hyphen ("-").
 #' @export
 #'
@@ -136,20 +136,20 @@ filterByDomains <- function(prot, column = "DomArch", doms_keep = c(), doms_remo
 #' countByColumn(prot = my_data, column = "DomArch", min.freq = 10)
 #' }
 countByColumn <- function(prot = prot, column = "DomArch", min.freq = 1) {
-
+    
     # Check if 'prot' is a data frame
     if (!is.data.frame(prot)) {
         abort("Error: 'prot' must be a data frame.")
     }
-
+    
     # Check if the specified column exists in the data frame
     if (!column %in% names(prot)) {
         abort(paste("Error: The specified column '", column, "' does not exist in
                    the data frame.", sep = ""))
     }
-
+    
     # Check if min.freq is a positive integer
-    if (!is.numeric(min.freq) || length(min.freq) != 1 || min.freq < 1 ||
+    if (!is.numeric(min.freq) || length(min.freq) != 1 || min.freq < 1 || 
         floor(min.freq) != min.freq) {
         abort("Error: 'min.freq' must be a positive integer.")
     }
@@ -171,14 +171,14 @@ countByColumn <- function(prot = prot, column = "DomArch", min.freq = 1) {
 #' Break string ELEMENTS into WORDS for domain architecture (DA) and genomic
 #' context (GC)
 #'
-#' @param prot A dataframe containing the dataset to analyze. The specified
+#' @param prot A dataframe containing the dataset to analyze. The specified 
 #' `column` contains the string elements to be processed.
-#' @param column A character string specifying the name of the column to analyze.
+#' @param column A character string specifying the name of the column to analyze. 
 #' Default is "DomArch".
-#' @param conversion_type A character string specifying the type of conversion.
+#' @param conversion_type A character string specifying the type of conversion. 
 #' Two options are available:
 #' \describe{
-#'   \item{`da2doms`}{Convert domain architectures into individual domains by
+#'   \item{`da2doms`}{Convert domain architectures into individual domains by 
 #'   replacing `+` symbols with spaces.}
 #'   \item{`gc2da`}{Convert genomic context into domain architectures by
 #'    replacing directional symbols (`<-`, `->`, and `|`) with spaces.}
@@ -187,13 +187,13 @@ countByColumn <- function(prot = prot, column = "DomArch", min.freq = 1) {
 #' @importFrom dplyr pull
 #' @importFrom stringr str_replace_all
 #'
-#' @return A single string where elements are delimited by spaces. The function
-#' performs necessary substitutions based on the `conversion_type` and cleans up
+#' @return A single string where elements are delimited by spaces. The function 
+#' performs necessary substitutions based on the `conversion_type` and cleans up 
 #' extraneous characters like newlines, tabs, and multiple spaces.
 #'
 #' @examples
 #' \dontrun{
-#' tibble::tibble(DomArch = c("aaa+bbb",
+#' tibble::tibble(DomArch = c("aaa+bbb", 
 #' "a+b", "b+c", "b-c")) |> elements2Words()
 #' }
 #'
@@ -202,35 +202,35 @@ elements2Words <- function(prot, column = "DomArch", conversion_type = "da2doms"
     if (!is.data.frame(prot)) {
         abort("Error: 'prot' must be a data frame.")
     }
-
+    
     # Check if the specified column exists in the data frame
     if (!column %in% names(prot)) {
-        abort(paste("Error: The specified column '", column, "' does not exist in
+        abort(paste("Error: The specified column '", column, "' does not exist in 
                    the data frame.", sep = ""))
     }
-
+    
     # Check for valid conversion_type values
     valid_types <- c("da2doms", "doms2da")
     if (!conversion_type %in% valid_types) {
-        abort(paste("Error: Invalid 'conversion_type'. Must be one of:",
-                    paste(valid_types, collapse = ", ")))
+        abort(paste("Error: Invalid 'conversion_type'. Must be one of:", 
+                   paste(valid_types, collapse = ", ")))
     }
-
+    
     z1 <- prot %>%
         dplyr::pull(column) %>%
         str_replace_all("\\,", " ") %>%
         str_replace_all("\"", " ")
     switch(conversion_type,
-           da2doms = {
-               z2 <- z1 %>%
-                   str_replace_all("\\+", " ")
-           },
-           gc2da = {
-               z2 <- z1 %>%
-                   str_replace_all("\\<-", " ") %>%
-                   str_replace_all("-\\>", " ") %>%
-                   str_replace_all("\\|", " ")
-           }
+        da2doms = {
+            z2 <- z1 %>%
+                str_replace_all("\\+", " ")
+        },
+        gc2da = {
+            z2 <- z1 %>%
+                str_replace_all("\\<-", " ") %>%
+                str_replace_all("-\\>", " ") %>%
+                str_replace_all("\\|", " ")
+        }
     )
     # str_replace_all("^c\\($", " ") %>%		# remove "c("
     # str_replace_all("\\)$", " ") %>%			# remove ")"
@@ -252,20 +252,20 @@ elements2Words <- function(prot, column = "DomArch", conversion_type = "da2doms"
 #' @description
 #' Get word counts (wc) [DOMAINS (DA) or DOMAIN ARCHITECTURES (GC)]
 #'
-#' @param string A character string containing the elements (words) to count.
-#' This would typically be a space-delimited string representing domain
+#' @param string A character string containing the elements (words) to count. 
+#' This would typically be a space-delimited string representing domain 
 #' architectures or genomic contexts.
 #'
 #' @importFrom dplyr as_tibble filter arrange
 #' @importFrom stringr str_replace_all
 #'
-#' @return A tibble (tbl_df) with two columns:
+#' @return A tibble (tbl_df) with two columns: 
 #' \describe{
-#'   \item{`words`}{A column containing the individual words
+#'   \item{`words`}{A column containing the individual words 
 #'   (domains or domain architectures).}
 #'   \item{`freq`}{A column containing the frequency counts for each word.}
 #' }
-#'
+#' 
 #'
 #' @examples
 #' \dontrun{
@@ -279,7 +279,7 @@ words2WordCounts <- function(string) {
     if (!is.character(string) || length(string) != 1) {
         abort("Error: 'string' must be a single character vector.")
     }
-
+    
     df_word_count <- string %>%
         # reduce spaces with length 2 or greater to a single space
         str_replace_all("\\s{2,}", " ") %>%
@@ -311,14 +311,14 @@ words2WordCounts <- function(string) {
 #' filterByFrequency
 #' @description
 #' Function to filter based on frequencies
-#'
-#' @param x A tibble (tbl_df) containing at least two columns: one for
+#' 
+#' @param x A tibble (tbl_df) containing at least two columns: one for 
 #' elements (e.g., `words`) and one for their frequency (e.g., `freq`).
-#' @param min.freq A numeric value specifying the minimum frequency threshold.
-#' Only elements with frequencies greater than or equal to this value will be
+#' @param min.freq A numeric value specifying the minimum frequency threshold. 
+#' Only elements with frequencies greater than or equal to this value will be 
 #' retained.
 #'
-#' @return A tibble with the same structure as `x`, but filtered to include
+#' @return A tibble with the same structure as `x`, but filtered to include 
 #' only rows where the frequency is greater than or equal to `min.freq`.
 #'
 #' @export
@@ -328,18 +328,18 @@ words2WordCounts <- function(string) {
 #' filterByFrequency()
 #' }
 filterByFrequency <- function(x, min.freq) {
-
+    
     # Check if 'x' is a data frame
     if (!is.data.frame(x)) {
         abort("Error: 'x' must be a data frame.")
     }
-
+    
     # Check if 'min.freq' is a positive integer
-    if (!is.numeric(min.freq) || length(min.freq) != 1 || min.freq < 1 ||
+    if (!is.numeric(min.freq) || length(min.freq) != 1 || min.freq < 1 || 
         floor(min.freq) != min.freq) {
         abort("Error: 'min.freq' must be a positive integer.")
     }
-
+    
     # Check if the 'freq' column exists in the data frame
     if (!"freq" %in% names(x)) {
         abort("Error: The data frame must contain a 'freq' column.")
@@ -355,24 +355,24 @@ filterByFrequency <- function(x, min.freq) {
 #' @name MolEvolvR_summary
 #' @description
 #' A collection of summary functions for the MolEvolvR package.
-#'
+#' 
 NULL
 
 #' summarizeByLineage
 #'
 #' @param prot A dataframe or tibble containing the data.
-#' @param column A string representing the column to be summarized
+#' @param column A string representing the column to be summarized 
 #' (e.g., `DomArch`). Default is "DomArch".
-#' @param by A string representing the grouping column (e.g., `Lineage`).
+#' @param by A string representing the grouping column (e.g., `Lineage`). 
 #' Default is "Lineage".
-#' @param query A string specifying the query pattern for filtering the target
+#' @param query A string specifying the query pattern for filtering the target 
 #' column. Use "all" to skip filtering and include all rows.
 #'
 #' @importFrom dplyr arrange filter group_by summarise
 #' @importFrom rlang sym
 #'
-#' @return A tibble summarizing the counts of occurrences of elements in
-#' the `column`, grouped by the `by` column. The result includes the number
+#' @return A tibble summarizing the counts of occurrences of elements in 
+#' the `column`, grouped by the `by` column. The result includes the number 
 #' of occurrences (`count`) and is arranged in descending order of count.
 #' @rdname MolEvolvR_summary
 #' @export
@@ -385,24 +385,24 @@ NULL
 #' }
 #'
 summarizeByLineage <- function(prot = "prot", column = "DomArch", by = "Lineage",
-                               query) {
+    query) {
     # Check if 'prot' is a data frame
     if (!is.data.frame(prot)) {
         abort("Error: 'prot' must be a data frame.")
     }
-
+    
     # Check if the specified column exists in the data frame
     if (!column %in% names(prot)) {
-        abort(paste("Error: The specified column '", column, "' does not exist in
+        abort(paste("Error: The specified column '", column, "' does not exist in 
                    the data frame.", sep = ""))
     }
-
+    
     # Check if the 'by' column exists in the data frame
     if (!by %in% names(prot)) {
-        abort(paste("Error: The specified 'by' column '", by, "' does not exist
+        abort(paste("Error: The specified 'by' column '", by, "' does not exist 
                    n the data frame.", sep = ""))
     }
-
+    
     column <- sym(column)
     by <- sym(by)
     if (query == "all") {
@@ -427,16 +427,16 @@ summarizeByLineage <- function(prot = "prot", column = "DomArch", by = "Lineage"
 #' Function to summarize and retrieve counts by Domains & Domains+Lineage
 #'
 #'
-#' @param x A dataframe or tibble containing the data. It must have columns
+#' @param x A dataframe or tibble containing the data. It must have columns 
 #' named `DomArch` and `Lineage`.
 #'
 #' @importFrom dplyr arrange count desc filter group_by summarise
 #' @importFrom rlang .data
 #'
-#' @return A tibble summarizing the counts of unique domain architectures
-#' (`DomArch`) per lineage (`Lineage`). The resulting table contains three
-#' columns: `DomArch`, `Lineage`, and `count`, which indicates the frequency
-#' of each domain architecture for each lineage. The results are arranged in
+#' @return A tibble summarizing the counts of unique domain architectures 
+#' (`DomArch`) per lineage (`Lineage`). The resulting table contains three 
+#' columns: `DomArch`, `Lineage`, and `count`, which indicates the frequency 
+#' of each domain architecture for each lineage. The results are arranged in 
 #' descending order of `count`.
 #' @rdname MolEvolvR_summary
 #'
@@ -451,13 +451,13 @@ summarizeDomArch_ByLineage <- function(x) {
     if (!is.data.frame(x)) {
         abort("Error: 'x' must be a data frame.")
     }
-
+    
     # Check if required columns exist in the data frame
     required_columns <- c("DomArch", "Lineage")
     missing_columns <- setdiff(required_columns, names(x))
-
+    
     if (length(missing_columns) > 0) {
-        abort(paste("Error: The following required columns are
+        abort(paste("Error: The following required columns are 
                    missing:", paste(missing_columns, collapse = ", ")))
     }
     x %>%
@@ -473,17 +473,17 @@ summarizeDomArch_ByLineage <- function(x) {
 #' @description
 #' Function to retrieve counts of how many lineages a DomArch appears in
 #'
-#' @param x A dataframe or tibble containing the data. It must have a column
-#' named `DomArch` and a count column, such as `count`, which represents the
+#' @param x A dataframe or tibble containing the data. It must have a column 
+#' named `DomArch` and a count column, such as `count`, which represents the 
 #' occurrences of each architecture in various lineages.
 #'
 #' @importFrom dplyr arrange group_by filter summarise desc
 #' @importFrom rlang .data
 #'
-#' @return A tibble summarizing each unique `DomArch`, along with the following
+#' @return A tibble summarizing each unique `DomArch`, along with the following 
 #' columns:
 #' - `totalcount`: The total occurrences of each `DomArch` across all lineages.
-#' - `totallin`: The total number of unique lineages in which each `DomArch`
+#' - `totallin`: The total number of unique lineages in which each `DomArch` 
 #' appears.
 #' The results are arranged in descending order of `totallin` and `totalcount`.
 #' @rdname MolEvolvR_summary
@@ -501,7 +501,7 @@ summarizeDomArch <- function(x) {
     x %>%
         group_by(.data$DomArch) %>%
         summarise(
-            totalcount = sum(.data$count),
+            totalcount = sum(.data$count), 
             totallin = n()
         ) %>%
         arrange(desc(.data$totallin), desc(.data$totalcount)) %>%
@@ -511,18 +511,18 @@ summarizeDomArch <- function(x) {
 
 #' summarizeGenContext_ByDomArchLineage
 #'
-#' @param x A dataframe or tibble containing the data. It must have columns
+#' @param x A dataframe or tibble containing the data. It must have columns 
 #' named `GenContext`, `DomArch`, and `Lineage`.
 #'
 #' @importFrom dplyr arrange desc filter group_by n summarise
 #' @importFrom rlang .data
 #'
-#' @return A tibble summarizing each unique combination of `GenContext`,
+#' @return A tibble summarizing each unique combination of `GenContext`, 
 #' `DomArch`, and `Lineage`, along with the following columns:
 #' - `GenContext`: The genomic context for each entry.
 #' - `DomArch`: The domain architecture for each entry.
 #' - `Lineage`: The lineage associated with each entry.
-#' - `count`: The total number of occurrences for each combination of
+#' - `count`: The total number of occurrences for each combination of 
 #' `GenContext`, `DomArch`, and `Lineage`.
 #'
 #' The results are arranged in descending order of `count`.
@@ -550,13 +550,13 @@ summarizeGenContext_ByDomArchLineage <- function(x) {
 
 #' summarizeGenContext_ByLineage
 #'
-#' @param x A dataframe or tibble containing the data. It must have columns
+#' @param x A dataframe or tibble containing the data. It must have columns 
 #' named `GenContext`, `DomArch`, and `Lineage`.
 #'
 #' @importFrom dplyr arrange desc filter group_by n summarise
 #' @importFrom rlang .data
 #'
-#' @return A tibble summarizing each unique combination of `GenContext` and `Lineage`,
+#' @return A tibble summarizing each unique combination of `GenContext` and `Lineage`, 
 #' along with the count of occurrences. The results are arranged in descending order of count.
 #' @rdname MolEvolvR_summary
 #' @export
@@ -582,7 +582,7 @@ summarizeGenContext_ByLineage <- function(x) {
 
 #' summarizeGenContext
 #'
-#' @param x A dataframe or tibble containing the data. It must have columns
+#' @param x A dataframe or tibble containing the data. It must have columns 
 #' named `GenContext`, `DomArch`, `Lineage`, and `count`.
 #'
 #' @importFrom dplyr arrange desc filter group_by n_distinct summarise
@@ -631,13 +631,13 @@ summarizeGenContext <- function(x) {
 #' @param prot  A data frame that must contain columns:
 #' \itemize{\item Either 'GenContext' or 'DomArch.norep' \item count}
 #' @param column Character. The column to summarize, default is "DomArch".
-#' @param lineage_col Character. The name of the lineage column, default is
+#' @param lineage_col Character. The name of the lineage column, default is 
 #' "Lineage".
-#' @param cutoff Numeric. Cutoff for total count. Counts below this cutoff value
+#' @param cutoff Numeric. Cutoff for total count. Counts below this cutoff value 
 #' will not be shown. Default is 0.
-#' @param RowsCutoff Logical. If TRUE, filters based on cumulative percentage
+#' @param RowsCutoff Logical. If TRUE, filters based on cumulative percentage 
 #' cutoff. Default is FALSE.
-#' @param digits Numeric. Number of decimal places for percentage columns.
+#' @param digits Numeric. Number of decimal places for percentage columns. 
 #' Default is 2.
 #'
 #'
@@ -646,9 +646,9 @@ summarizeGenContext <- function(x) {
 #'
 #' @return A data frame with the following columns:
 #' - `{{ column }}`: Unique values from the specified column.
-#' - `totalcount`: The total count of occurrences for each unique value in
+#' - `totalcount`: The total count of occurrences for each unique value in 
 #' the specified column.
-#' - `IndividualCountPercent`: The percentage of each `totalcount` relative to
+#' - `IndividualCountPercent`: The percentage of each `totalcount` relative to 
 #' the overall count.
 #' - `CumulativePercent`: The cumulative percentage of total counts.
 #' @rdname MolEvolvR_summary
@@ -662,34 +662,34 @@ summarizeGenContext <- function(x) {
 #' totalGenContextOrDomArchCounts(pspa - gc_lin_counts, 0, "GC")
 #' }
 totalGenContextOrDomArchCounts <- function(prot, column = "DomArch", lineage_col = "Lineage",
-                                           cutoff = 90, RowsCutoff = FALSE, digits = 2
-                                           # type = "GC"
+    cutoff = 90, RowsCutoff = FALSE, digits = 2
+    # type = "GC"
 ) {
     # Check if 'prot' is a data frame
     if (!is.data.frame(prot)) {
         abort("Error: 'prot' must be a data frame.")
     }
-
+    
     # Check if the specified columns exist in the data frame
     required_columns <- c(column, lineage_col)
     missing_columns <- setdiff(required_columns, names(prot))
-
+    
     if (length(missing_columns) > 0) {
-        abort(paste("Error: The following required columns are missing:",
-                    paste(missing_columns, collapse = ", ")))
+        abort(paste("Error: The following required columns are missing:", 
+                   paste(missing_columns, collapse = ", ")))
     }
-
+    
     # Check that cutoff is a numeric value between 0 and 100
     if (!is.numeric(cutoff) || length(cutoff) != 1 || cutoff < 0 || cutoff > 100) {
         abort("Error: 'cutoff' must be a numeric value between 0 and 100.")
     }
-
+    
     # Check that digits is a non-negative integer
-    if (!is.numeric(digits) || length(digits) != 1 || digits < 0 ||
+    if (!is.numeric(digits) || length(digits) != 1 || digits < 0 || 
         floor(digits) != digits) {
         abort("Error: 'digits' must be a non-negative integer.")
     }
-
+    
     column <- sym(column)
 
     prot <- select(prot, {{ column }}, {{ lineage_col }}) %>%
@@ -853,7 +853,7 @@ findParalogs <- function(prot) {
     if (!is.data.frame(prot)) {
         abort("Error: 'prot' must be a data frame.")
     }
-
+    
     # Remove eukaryotes
     prot <- prot %>% filter(!grepl("^eukaryota", Lineage))
     paralogTable <- prot %>%
