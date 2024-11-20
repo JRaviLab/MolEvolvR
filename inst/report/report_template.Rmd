@@ -30,11 +30,11 @@ params:
   ## Tree
   tree_msa_tool: default ##input
   ## MSA
-  rep_accnums: default
+  repAccNums: default
   msa_rep_num: default ##input
   app_data: default
   PhyloSelect: default ##input
-  acc_to_name: default
+  acc2Name: default
   rval_phylo: default
   query_pin: default
   msa_reduce_by: default
@@ -408,8 +408,8 @@ if (is.null(params$msa_rep_num)) {
 ```
 
 ```{r, include=FALSE}
-if(length(params$rep_accnums) >= 3 ) {
-  rep <- params$rep_accnums[1:msa_rep_num]
+if(length(params$repAccNums) >= 3 ) {
+  rep <- params$repAccNums[1:msa_rep_num]
   if (!params$rval_phylo) {
     seqs <- readAAStringSet(params$app_data@fasta_path)
     names(seqs) <- sub(" .*", "", names(seqs))
@@ -425,7 +425,7 @@ if(length(params$rep_accnums) >= 3 ) {
   acc2FA(rep, outpath = rep_fasta_path, "sequential")
   rename_fasta(rep_fasta_path, rep_fasta_path,
     replacement_function = mapAcc2Name,
-    acc2name = params$acc_to_name
+    acc2name = params$acc2Name
   )
   if (!params$rval_phylo) {
     writeXStringSet(query, rep_fasta_path, append = TRUE)
@@ -440,15 +440,15 @@ library(msa)
 library(ape)
 library(tidytree)
 library(ggtree)
-if(length(params$rep_accnums) >= 3 ) {
-  seq_tree(fasta_filepath = rep_msa_path) 
+if(length(params$repAccNums) >= 3 ) {
+  seqTree(fasta_filepath = rep_msa_path) 
  } else {"Not enough representative sequences: try changing the 'Reduce By' field."}
 ```
 
 ### MSA
 
 ```{r, include=FALSE}
-if(length(params$rep_accnums) >= 3 ) {
+if(length(params$repAccNums) >= 3 ) {
   if (!params$rval_phylo) {
     seqs <- readAAStringSet(params$app_data@fasta_path)
     names(seqs) <- sub(" .*", "", names(seqs))
@@ -464,7 +464,7 @@ if(length(params$rep_accnums) >= 3 ) {
   acc2FA(rep, outpath = rep_fasta_path, "sequential")
   rename_fasta(rep_fasta_path, rep_fasta_path,
     replacement_function = mapAcc2Name,
-    acc2name = params$acc_to_name
+    acc2name = params$acc2Name
   )
   if (!params$rval_phylo) {
     writeXStringSet(query, rep_fasta_path, append = TRUE)
@@ -483,7 +483,7 @@ if(length(params$rep_accnums) >= 3 ) {
 
 ```{r msa_pdf, echo = FALSE, out.width = "95%", out.height  = "800px"}
 # apt-get install texlive
-if(length(params$rep_accnums) >= 3 ) {
+if(length(params$repAccNums) >= 3 ) {
   knitr::include_graphics(msa_pdf_path)
   } else {"Not enough representative sequences: try changing the 'Reduce By' field."}
 ```

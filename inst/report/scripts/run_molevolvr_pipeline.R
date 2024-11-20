@@ -7,7 +7,7 @@ library(data.table)
 library(readr)
 library(rentrez)
 
-get_sequences <- function(sequences,
+getSeqs <- function(sequences,
                           acc_file_path = "accs.txt",
                           dir_path = "~",
                           separate = TRUE) {
@@ -35,7 +35,7 @@ get_sequences <- function(sequences,
   writeXStringSet(seqs, sequences, format = "fasta")
   return(length(seqs))
 }
-submit_full <- function(
+runFull <- function(
     dir = "/data/scratch",
     DB = Sys.getenv("BLAST_DB", unset = "refseq"),
     NHITS = Sys.getenv("BLAST_HITS", unset = 100),
@@ -70,13 +70,13 @@ submit_full <- function(
 
   # Create a log file
   write("START_DT\tSTOP_DT\tquery\tdblast\tacc2info\tdblast_cleanup\tacc2fa
-        \tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2da\tduration",
+        \tblast_clust\tclust2table\tiprscan\tipr2lineage\tipr2DomArch\tduration",
         "logfile.tsv")
 
   # Process sequences (local handling)
   if (phylo == "FALSE") {
     # Split the sequences if needed, store them locally
-    num_seqs <- get_sequences(sequences, dir_path = dir, separate = TRUE)
+    num_seqs <- getSeqs(sequences, dir_path = dir, separate = TRUE)
 
     fasta <- Biostrings::readAAStringSet(sequences)
     headers_original <- names(fasta)
@@ -89,7 +89,7 @@ submit_full <- function(
       # output_file <- paste0(dir, "/blast_output_", i, ".txt")
 
       # Construct the local BLAST command (make sure 'blastn' is available locally)
-      run_molevolvr_pipeline(input_file, DB, NHITS, EVAL, is_query = F, type, i)
+      runMolevolvrPipeline(input_file, DB, NHITS, EVAL, is_query = F, type, i)
 
       #cmd <- sprintf(
       #  "deltablast -query %s -db %s -out %s -num_alignments %d -evalue %f -remote",
@@ -107,7 +107,7 @@ submit_full <- function(
   }
 
   # Simulate query run locally
-  run_molevolvr_pipeline(sequences, DB, NHITS, EVAL, is_query = TRUE, type)
+  runMolevolvrPipeline(sequences, DB, NHITS, EVAL, is_query = TRUE, type)
   # cmd_query <- sprintf(
   #   "deltablast -query %s -db %s -out %s_query.txt -num_alignments %d -evalue %f -remote",
   #   sequences, DB, paste0(dir, "/query_output"), NHITS, EVAL
@@ -124,8 +124,7 @@ submit_full <- function(
 }
 
 # Define the main pipeline function
-#' @export
-run_molevolvr_pipeline <- function(input_paths, db, nhits, eval,
+runMolevolvrPipeline <- function(input_paths, db, nhits, eval,
                                    is_query, type, i) {
 
   # Start time
@@ -168,9 +167,9 @@ run_molevolvr_pipeline <- function(input_paths, db, nhits, eval,
     # setwd(OUTDIR)
 
     # Run acc2info
-    run_acc2info(parsed_accnums_file, PREFIX, OUTDIR)
+    runAcc2Info(parsed_accnums_file, PREFIX, OUTDIR)
 
-    replace_accession_numbers(file.path(OUTDIR, paste0(PREFIX, ".acc2info.tsv")),
+    replaceAccNums(file.path(OUTDIR, paste0(PREFIX, ".acc2info.tsv")),
                               file.path(OUTPATH, "query-fasta_header-map.tsv"),
                               file.path(OUTDIR, paste0(PREFIX, ".acc2info.tsv")))
 
@@ -188,18 +187,18 @@ run_molevolvr_pipeline <- function(input_paths, db, nhits, eval,
     # setwd(OUTDIR)
 
     # Run DELTABLAST
-    run_deltablast(input_paths, PREFIX, OUTDIR, db, nhits, eval)
+    runDeltablast(input_paths, PREFIX, OUTDIR, db, nhits, eval)
 
     # Run ACC2FA
-    convert_accnum_to_fasta(file.path(OUTDIR, paste0(PREFIX, ".dblast.tsv")),
+    convertAccNum2Fasta(file.path(OUTDIR, paste0(PREFIX, ".dblast.tsv")),
                             PREFIX, OUTDIR)
 
     # Run ACC2INFO
-    run_acc2info(file.path(OUTDIR, paste0(PREFIX, ".all_accnums.txt")),
+    runAcc2Info(file.path(OUTDIR, paste0(PREFIX, ".all_accnums.txt")),
                  PREFIX, OUTDIR)
 
     # Clean up BLAST results
-    cleanup_blast(file.path(OUTDIR, paste0(PREFIX, ".dblast.tsv")),
+    cleanupBlast(file.path(OUTDIR, paste0(PREFIX, ".dblast.tsv")),
                   file.path(OUTDIR, paste0(PREFIX, ".acc2info.tsv")),
                   PREFIX, F)
 
@@ -208,15 +207,15 @@ run_molevolvr_pipeline <- function(input_paths, db, nhits, eval,
   # Sys.sleep(30)
 
   # Run BLASTCLUST
-  run_blastclust(file.path(OUTDIR, paste0(PREFIX, ".all_accnums.fa")),
+  runBlastclust(file.path(OUTDIR, paste0(PREFIX, ".all_accnums.fa")),
                  PREFIX, OUTDIR )
 
   # Convert clusters to table
-  clust2tbl(file.path(OUTDIR, paste0(PREFIX, ".bclust.L60S80.tsv")),
+  clust2Table(file.path(OUTDIR, paste0(PREFIX, ".bclust.L60S80.tsv")),
             file.path(OUTDIR, paste0(PREFIX, ".blast.cln.tsv")))
 
   # Run INTERPROSCAN
-  run_interproscan(file.path(OUTDIR, paste0(PREFIX, ".all_accnums.fa")),
+  runIPRScan(file.path(OUTDIR, paste0(PREFIX, ".all_accnums.fa")),
                    PREFIX, OUTDIR)
   new_header <- c("AccNum", "SeqMD5Digest", "SLength", "Analysis", "DB.ID",
                   "SignDesc", "StartLoc", "StopLoc", "Score",
@@ -230,17 +229,17 @@ run_molevolvr_pipeline <- function(input_paths, db, nhits, eval,
   write.table(temp_data, file.path(OUTDIR, paste0(PREFIX, ".iprscan.tsv")),
               sep = "\t", row.names = FALSE, col.names = TRUE, quote = FALSE)
   # Run IPR2LIN
-  ipr2lin(file.path(OUTDIR, paste0(PREFIX, ".iprscan.tsv")),
+  ipr2Linear(file.path(OUTDIR, paste0(PREFIX, ".iprscan.tsv")),
           file.path(OUTDIR, paste0(PREFIX, ".acc2info.tsv")), PREFIX)
 
 
-  # Optionally run IPR2DA if IS_QUERY is true
+  # Optionally run ipr2DomArch if IS_QUERY is true
   if (is_query == TRUE) {
-    ## perform ipr2da on iprscan results
-    da <- ipr2da(file.path(OUTDIR, paste0(PREFIX, ".iprscan_cln.tsv")),
+    ## perform ipr2DomArch on iprscan results
+    da <- ipr2DomArch(file.path(OUTDIR, paste0(PREFIX, ".iprscan_cln.tsv")),
                  PREFIX, "NA")
 
-    ## if blast results are provided, call append_ipr
+    ## if blast results are provided, call appendIPR
     if (is.null(file.path(OUTDIR, paste0(PREFIX, ".iprscan_cln.tsv"))) |
         is.na(PREFIX)) {
       print("No blast results provided, moving on.")
@@ -249,16 +248,16 @@ run_molevolvr_pipeline <- function(input_paths, db, nhits, eval,
                 file.path(OUTDIR, paste0(PREFIX, ".full_analysis.tsv")))
     }
   } else {
-    # perform ipr2da on iprscan results
-    da <- ipr2da(file.path(OUTDIR, paste0(PREFIX, ".iprscan_cln.tsv")),
+    # perform ipr2DomArch on iprscan results
+    da <- ipr2DomArch(file.path(OUTDIR, paste0(PREFIX, ".iprscan_cln.tsv")),
                  PREFIX)
 
-    ## if blast results are provided, call append_ipr
+    ## if blast results are provided, call appendIPR
     if (is.null(file.path(OUTDIR, paste0(PREFIX, ".iprscan_cln.tsv"))) |
         is.na(PREFIX)) {
       print("No blast results provided, moving on.")
     } else {
-      append_ipr(ipr_da = da,
+      appendIPR(ipr_da = da,
                  blast =  file.path(OUTDIR, paste0(PREFIX, ".cln.clust.tsv")),
                  prefix = PREFIX)
     }
@@ -438,7 +437,7 @@ acc2info <- function(infile, prefix, outdir) {
   cat("Data saved to:", outfile, "\n")
 }
 
-acc2info_phylo <- function(infile, outdir) {
+acc2InfoPhylo <- function(infile, outdir) {
   # Ensure output directory exists
   if (!dir.exists(outdir)) {
     dir.create(outdir, recursive = TRUE)
@@ -498,15 +497,15 @@ acc2info_phylo <- function(infile, outdir) {
 }
 
 # Main function to run based on the prefix
-run_acc2info <- function(infile, prefix, outdir) {
+runAcc2Info <- function(infile, prefix, outdir) {
   if (prefix == "NA") {
-    acc2info_phylo(infile, outdir)
+    acc2InfoPhylo(infile, outdir)
   } else {
     acc2info(infile, prefix, outdir)
   }
 }
 
-substitute_accnum_for_acc2info <- function(df_acc2info, df_header_map) {
+subsAccnum4cc2Info <- function(df_acc2info, df_header_map) {
   df_result <- df_header_map |>
     # set column name in header map to match accnum col in acc2info
     dplyr::rename(AccNum = header_accnum) |>
@@ -522,7 +521,7 @@ substitute_accnum_for_acc2info <- function(df_acc2info, df_header_map) {
 }
 
 
-replace_accession_numbers <- function(path_acc2info,
+replaceAccNums <- function(path_acc2info,
                                       path_query_header_map, path_out) {
 
   # Read the input files
@@ -530,7 +529,7 @@ replace_accession_numbers <- function(path_acc2info,
   df_query_header_map <- read_tsv(path_query_header_map)
 
   # Substitute accession numbers
-  df_acc2info_substituted <- substitute_accnum_for_acc2info(df_acc2info,
+  df_acc2info_substituted <- subsAccnum4cc2Info(df_acc2info,
                                                             df_query_header_map)
 
   # Print the substituted dataframe
@@ -542,7 +541,7 @@ replace_accession_numbers <- function(path_acc2info,
 }
 
 
-run_deltablast <- function(infile, prefix, outdir,
+runDeltablast <- function(infile, prefix, outdir,
                            db = "refseq_protein",
                            nhits = 5000, evalue = 1e-5,
                            threads = 10) {
@@ -580,7 +579,7 @@ run_deltablast <- function(infile, prefix, outdir,
 
 # This script converts AccNum to Fasta using NCBI's EDirect or EBI's API
 
-convert_accnum_to_fasta <- function(infile, prefix, outdir) {
+convertAccNum2Fasta <- function(infile, prefix, outdir) {
 
   # Create the output file path
   outfile <- file.path(outdir, paste0(prefix, ".all_accnums.fa"))
@@ -649,7 +648,7 @@ convert_accnum_to_fasta <- function(infile, prefix, outdir) {
 }
 
 
-cleanup_blast <- function(infile_blast, acc2info, prefix, wblast = F) {
+cleanupBlast <- function(infile_blast, acc2info, prefix, wblast = F) {
 
   outdir <- dirname(infile_blast)
   # Load and clean acc2info file
@@ -723,7 +722,7 @@ cleanup_blast <- function(infile_blast, acc2info, prefix, wblast = F) {
 
 
 # Function to run BLASTCLUST on given input
-run_blastclust <- function(infile, suffix, outdir) {
+runBlastclust <- function(infile, suffix, outdir) {
 
   # Prepare output file path
   outfile <- file.path(outdir, paste0(suffix, ".bclust.L60S80.tsv"))
@@ -756,7 +755,7 @@ run_blastclust <- function(infile, suffix, outdir) {
 }
 
 # Function to format blastclust output
-clust2tbl <- function(clust, blast) {
+clust2Table <- function(clust, blast) {
   clust_out <- read_tsv(file = clust, col_names = F)
   blast_out <- read_tsv(file = blast, col_names = T)
   ## Count the number of accession numbers in a cluster
@@ -831,7 +830,7 @@ clust2tbl <- function(clust, blast) {
 }
 
 # Function to run InterProScan
-run_interproscan <- function(query_file, prefix, outdir) {
+runIPRScan <- function(query_file, prefix, outdir) {
 
   # Start InterProScan run
   cat("\n######################\n")
@@ -864,7 +863,7 @@ run_interproscan <- function(query_file, prefix, outdir) {
   cat("##################\n")
 }
 
-ipr2lin <- function(ipr, acc2info, prefix) {
+ipr2Linear <- function(ipr, acc2info, prefix) {
   # read in iprscan results
   # duplicate rows in iprscan file
   ipr_in <- read_tsv(ipr, col_names = TRUE) %>%
@@ -964,7 +963,7 @@ ipr2lin <- function(ipr, acc2info, prefix) {
   write_tsv(ipr_cln, file.path(paste0(outdir, "/",paste0(prefix,".iprscan_cln.tsv"))))
 }
 
-ipr2da <- function(infile_ipr, prefix,
+ipr2DomArch <- function(infile_ipr, prefix,
                    analysis = c(
                      "Pfam", "SMART", "Phobius",
                      "Gene3D", "TMHMM", "SignalP_GRAM_POSITIVE",
@@ -1034,8 +1033,8 @@ ipr2da <- function(infile_ipr, prefix,
   return(domarch2)
 }
 
-## function to add results from ipr2da to blast results
-append_ipr <- function(ipr_da, blast, prefix) {
+## function to add results from ipr2DomArch to blast results
+appendIPR <- function(ipr_da, blast, prefix) {
   # ! an 'AccNum' or 'AccNum.noV' column is required in blast table for joining !
   blast_out <- read_tsv(blast, col_names = T)
   if ("AccNum.noV" %in% colnames(blast_out)) {

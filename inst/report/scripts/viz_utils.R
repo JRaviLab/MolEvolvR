@@ -9,7 +9,7 @@ library(DT)
 library(plotly)
 
 # Function to generate the InterProScan Visualization
-generate_ipr_genes_visualization <- function(data, app_data,
+getIPRGenesVisualization <- function(data, app_data,
                                              input_rs_iprDatabases = c("Pfam", "Phobius", "TMHMM", "Gene3D"),
                                              input_rs_iprVisType = "Analysis") {
 
@@ -57,7 +57,7 @@ generate_ipr_genes_visualization <- function(data, app_data,
 }
 
 # Function to generate the domain network layout visualization
-generate_rs_network_layout <- function(data, app_data,
+getRSNetworkLayout <- function(data, app_data,
                                        cutoff = 100,
                                        layout = "nice") {
 
@@ -99,7 +99,7 @@ generate_rs_network_layout <- function(data, app_data,
 }
 
 # Function to generate the data table
-generate_data_table <- function(data) {
+getDataTable <- function(data) {
     if (nrow(data@df) == 0) {
         stop("No data available.
              Please ensure you have uploaded your data correctly.")
@@ -165,7 +165,7 @@ generate_data_table <- function(data) {
 }
 
 # Function to generate query data table
-generate_query_data_table <- function(query_data, query_select = NULL) {
+getQueryDataTable <- function(query_data, query_select = NULL) {
 
     # Check if analysis is loaded and data is available
     if (nrow(query_data@df) == 0) {
@@ -239,7 +239,7 @@ generate_query_data_table <- function(query_data, query_select = NULL) {
 }
 
 # Function to read and return the FASTA file contents
-read_fasta_data <- function(fasta_path) {
+readFastaData <- function(fasta_path) {
 
     # Check if analysis is loaded and the file path is not empty
     if (fasta_path == "" || !file.exists(fasta_path)) {
@@ -252,7 +252,7 @@ read_fasta_data <- function(fasta_path) {
     return(fasta_content)
 }
 
-get_fasta_data <- function(fasta_path) {
+getFastaData <- function(fasta_path) {
     if (is.null(fasta_path) || fasta_path == "") {
         stop("Error: FASTA path is not provided.")
     }
@@ -260,12 +260,12 @@ get_fasta_data <- function(fasta_path) {
 }
 
 # Function to get domain sequences (assumes `data` is a predefined object)
-get_domain_data <- function(data) {
+getDomData <- function(data) {
     return(data@domainSeqs)  # Return domain sequences
 }
 
 # Function to get MSA data from a given path
-get_msa_data <- function(msa_path) {
+getMSAData <- function(msa_path) {
     if (is.null(msa_path) || msa_path == "") {
         stop("Error: MSA path is not provided.")
     }
@@ -273,7 +273,7 @@ get_msa_data <- function(msa_path) {
 }
 
 # Function to generate a heatmap
-generate_query_heatmap <- function(query_data_df,
+getQueryHeatmap <- function(query_data_df,
                                    heatmap_select = "All",
                                    heatmap_color = "blue") {
 
@@ -307,7 +307,7 @@ generate_query_heatmap <- function(query_data_df,
 }
 
 # Function to retrieve domain architecture columns
-get_domarch_columns <- function(query_data_df) {
+getDomArchCols <- function(query_data_df) {
     # Check if query data exists
     if (nrow(query_data_df) == 0) {
         stop("No query data available.")
@@ -339,7 +339,7 @@ get_domarch_columns <- function(query_data_df) {
 }
 
 # Function to generate main data table
-generate_main_table <- function(data_df, main_select = NULL) {
+getMainTable <- function(data_df, main_select = NULL) {
     # Validate input data
     if (nrow(data_df) == 0) {
         stop("No data available. Please ensure you have uploaded your data
@@ -403,7 +403,7 @@ generate_main_table <- function(data_df, main_select = NULL) {
     return(datatable_output)
 }
 
-total_counts <- function(prot, column = "DomArch", lineage_col = "Lineage",
+totalCounts <- function(prot, column = "DomArch", lineage_col = "Lineage",
                          cutoff = 90, RowsCutoff = FALSE, digits = 2
                          # type = "GC"
 ) {
@@ -467,14 +467,14 @@ total_counts <- function(prot, column = "DomArch", lineage_col = "Lineage",
   return(total)
 }
 
-DA_TotalCounts <- function(DA_Prot, DACutoff, DA_col, app_data) {
+getDomArchTotalCounts <- function(DA_Prot, DACutoff, DA_col, app_data) {
   # Check if ipr_path is not empty
   if (app_data@ipr_path == "") {
     stop("ipr_path is missing.")
   }
 
   # Calculate total counts with the specified cutoff and column
-  prot_tc <- total_counts(DA_Prot, cutoff = DACutoff, column = DA_col)
+  prot_tc <- totalCounts(DA_Prot, cutoff = DACutoff, column = DA_col)
 
   # Replace all instances of ">" in the Lineage column with "_"
   prot_tc$Lineage <- map(prot_tc$Lineage, ~ str_replace_all(.x, ">", "_")) %>%
@@ -485,7 +485,7 @@ DA_TotalCounts <- function(DA_Prot, DACutoff, DA_col, app_data) {
 }
 
 # Function to generate Domain Architecture Linear Table
-generate_DA_lin_table <- function(DA_col, ipr_path, DA_TotalCounts_value) {
+getDomArchLinearTable <- function(DA_col, ipr_path, DA_TotalCounts_value) {
     # Check if ipr_path is valid
     if (ipr_path == "") {
         stop("InterPro path is empty.")
@@ -534,7 +534,7 @@ generate_DA_lin_table <- function(DA_col, ipr_path, DA_TotalCounts_value) {
 }
 
 # Function to generate the Domain Architecture Lineage Plot
-generate_DA_heatmap_plot <- function(DA_col, DACutoff,
+getDomArchHeatmapPlot <- function(DA_col, DACutoff,
                                      DA_Prot, DA_lin_color,
                                      ipr_path) {
     # Check if ipr_path is valid
@@ -564,7 +564,7 @@ generate_DA_heatmap_plot <- function(DA_col, DACutoff,
 }
 
 # Function to generate the Domain Architecture Network
-generate_domain_network <- function(DA_col, DACutoff, DA_Prot,
+getDomNetwork <- function(DA_col, DACutoff, DA_Prot,
                                     networkLayout, ipr_path) {
     # Check if ipr_path is valid
     if (ipr_path == "") {
@@ -628,7 +628,7 @@ generate_domain_network <- function(DA_col, DACutoff, DA_Prot,
 }
 
 # Function to retrieve and clean Domain Architecture data
-get_DA_Prot <- function(app_data, DASelect) {
+getDomArchProt <- function(app_data, DASelect) {
     # Check if the ipr_path is valid
     if (app_data@ipr_path == "") {
         stop("InterPro path is empty.")
@@ -667,7 +667,7 @@ get_DA_Prot <- function(app_data, DASelect) {
 }
 
 # Function to retrieve domain architecture columns
-get_domarch_cols <- function(app_data, DASelect) {
+getDomArchCols <- function(app_data, DASelect) {
     # Check if app data DataFrame is not empty
     if (nrow(app_data@df) <= 0) {
         stop("No data available in app data.")
@@ -712,7 +712,7 @@ get_domarch_cols <- function(app_data, DASelect) {
 }
 
 # Function to generate the IPR genes plot
-generate_da_ipr_genes_plot <- function(app_data, da_iprDatabases,
+getDomArchIPRGenesPlot <- function(app_data, da_iprDatabases,
                                        da_iprVisType, DASelect) {
 
     if (app_data@ipr_path == "") {
@@ -760,7 +760,7 @@ generate_da_ipr_genes_plot <- function(app_data, da_iprDatabases,
 }
 
 # Function to filter proteins for phylogeny
-filter_phylogeny_proteins <- function(app_data, phylo_select) {
+filterPhylogenyProteins <- function(app_data, phylo_select) {
     # Get the data frame from app_data
     df <- app_data@df
 
@@ -783,7 +783,7 @@ filter_phylogeny_proteins <- function(app_data, phylo_select) {
 }
 
 # Function to retrieve representative accession numbers
-get_representative_accession_numbers <- function(app_data, phylo_select,
+getRepAccNum <- function(app_data, phylo_select,
                                                  msa_reduce_by, msa_rep_num,
                                                  rval_phylo) {
 
@@ -814,7 +814,7 @@ get_representative_accession_numbers <- function(app_data, phylo_select,
     }
 }
 
-generate_domain_architecture_plot <- function(ipr_path, query_names,
+getDomArchPlot <- function(ipr_path, query_names,
                                               analysis_type, group_by) {
     # Check if the input path is provided
     if (is.null(ipr_path) || ipr_path == "") {
@@ -839,7 +839,7 @@ generate_domain_architecture_plot <- function(ipr_path, query_names,
 }
 
 # Function to convert accessions to names
-acc_to_name <- function(app_data) {
+acc2Name <- function(app_data) {
     # Check if "AccNum" is a column in the data
     if (!("AccNum" %in% colnames(app_data@df))) {
         stop("Column 'AccNum' not found in data.")
@@ -859,7 +859,7 @@ acc_to_name <- function(app_data) {
     return(df)
 }
 
-rep_accnums <- function(phylo, msa_reduce_by, msa_rep_num, PhyloSelect, app_data) {
+repAccNums <- function(phylo, msa_reduce_by, msa_rep_num, PhyloSelect, app_data) {
   # If `phylo` is true, return all `AccNum` values from `app_data`
   if (phylo) {
     return(app_data@df$AccNum)
@@ -894,7 +894,7 @@ rep_accnums <- function(phylo, msa_reduce_by, msa_rep_num, PhyloSelect, app_data
   }
 }
 
-seq_tree <- function(fasta_filepath){
+seqTree <- function(fasta_filepath){
   my_seqs <- readAAStringSet(fasta_filepath) #, format="fasta", seek.first.rec=T)
   my_seqs_msa <- msa(my_seqs)
   my_seqs_msa_aln <- msaConvert(my_seqs_msa, type="seqinr::alignment")

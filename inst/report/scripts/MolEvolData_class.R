@@ -72,7 +72,7 @@ top_acc <- function(cln_file, DA_col = "DomArch.Pfam",
 }
 
 
-combine_files_nopmap <- function(inpath, pattern, outpath,
+combineFilesNopmap <- function(inpath, pattern, outpath,
                                  delim = "\t", skip = 0,
                                  col_names) {
     source_files <- dir(path = inpath, pattern = pattern, recursive = T)
@@ -111,7 +111,7 @@ full_analysis_colnames <- c("AccNum", "QueryName", "STitle", "Species.x",
                             "Species.y", "SourceDB", "Completeness")
 
 
-process_wrapper_dir <- function(path, pinName, type = "full") {
+processWrapperDir <- function(path, pinName, type = "full") {
     if (type == "full") {
         if (file.exists(paste0(path, "/cln_combined.tsv")) && file.exists(paste0(path, "/ipr_combined.tsv"))) {
             query_data <- read_tsv(paste0(path, "/query_data/query_data.full_analysis.tsv"))
@@ -164,12 +164,12 @@ process_wrapper_dir <- function(path, pinName, type = "full") {
 
             com_blast_path <- paste0(path, "/blast_combined.tsv")
             ipr_blast_path <- paste0(path, "/ipr_combined.tsv")
-            com_blast_data <- combine_files_nopmap(paste0(path, "/"),
+            com_blast_data <- combineFilesNopmap(paste0(path, "/"),
                                                    pattern = "*.full_analysis.tsv", skip = 0,
                                                    col_names = c(), outpath = com_blast_path, delim = "\t"
             )
 
-            ipr_blast_data <- combine_files_nopmap(paste0(path, "/"),
+            ipr_blast_data <- combineFilesNopmap(paste0(path, "/"),
                                                    pattern = "*.iprscan_cln.tsv", skip = 0,
                                                    col_names = ipr_colnames, outpath = ipr_blast_path, delim = "\t"
             )
@@ -212,7 +212,7 @@ process_wrapper_dir <- function(path, pinName, type = "full") {
         )
         query_data <- query_data %>% select(Query, QueryName)
         com_blast_path <- paste0(path, "/blast_combined.tsv")
-        com_blast_data <- combine_files_nopmap(paste0(path, "/"),
+        com_blast_data <- combineFilesNopmap(paste0(path, "/"),
                                                pattern = "*.blast.cln.tsv",
                                                skip = 0,
                                                col_names = c(),
@@ -282,7 +282,7 @@ process_wrapper_dir <- function(path, pinName, type = "full") {
                                   queries = queries, cln_path = cln_path
         )
         com_blast_path <- paste0(path, "/blast_combined.tsv")
-        com_blast_data <- combine_files_nopmap(paste0(path, "/"),
+        com_blast_data <- combineFilesNopmap(paste0(path, "/"),
                                                pattern = "*.full_analysis.tsv",
                                                skip = 0,
                                                col_names = c(),
@@ -355,8 +355,8 @@ clean_fetched <- function(df) {
 }
 
 # Description
-# validation functions for accession numbers/headers for FASTA (validate_accnum_fasta)
-# & accession number input (validate_accnum) submission types.
+# validation functions for accession numbers/headers for FASTA (validateAccNumFasta)
+# & accession number input (validateAccNum) submission types.
 
 library(Biostrings)
 library(httr)
@@ -364,7 +364,7 @@ library(httr2)
 library(rentrez)
 library(shiny)
 
-.get_accnum_from_fasta <- function(biostrings_aa_string_set, verbose = FALSE) {
+getAccNumFromFasta <- function(biostrings_aa_string_set, verbose = FALSE) {
     # parsing/cleaning accession numbers using the same methods as
     # `upstream_scripts/00_submit_full.R`'s `get_sequences()` function
     accnums <- c()
@@ -392,7 +392,7 @@ library(shiny)
     return(accnums)
 }
 
-validate_accnum_fasta <- function(text) {
+validateAccNumFasta <- function(text) {
     # INPUT: text from input object that houses FASTA data
     # validate the headers/accnums for FASTA submission
     # Return:
@@ -434,7 +434,7 @@ validate_accnum_fasta <- function(text) {
     }
 
     # parse accnums from fasta
-    accnums <- .get_accnum_from_fasta(fasta)
+    accnums <- getAccNumFromFasta(fasta)
     tb_accnum_counts <- tibble("frequencies" = table(accnums))
     # check for duplicates
     if (any(tb_accnum_counts$frequencies > 1)) {
@@ -447,7 +447,7 @@ validate_accnum_fasta <- function(text) {
 
 
 #' Test whether a single accession returns a valid protein from Entrez
-is_accnum_valid_entrez <- function(accnum, verbose = FALSE) {
+isAccNumValidEntrez <- function(accnum, verbose = FALSE) {
     # empty accnum wil not raise an error from efetch, so test for this first
     if (nchar(accnum) <= 0) {if (verbose) {warning("empty accnum")}; return(FALSE)}
 
@@ -467,7 +467,7 @@ is_accnum_valid_entrez <- function(accnum, verbose = FALSE) {
 }
 
 #' Test whether a single accession returns a valid protein from EBI
-is_accnum_valid_ebi <- function(accnum, verbose = FALSE) {
+isAccNumValidEbi <- function(accnum, verbose = FALSE) {
     # validation: ensure there's some text to parse
     if (nchar(accnum) <= 0) {if (verbose) {warning("empty accnum")}; return(FALSE)}
     # construct a httr2 request to POST an accession number, then GET the fasta
@@ -492,7 +492,7 @@ is_accnum_valid_ebi <- function(accnum, verbose = FALSE) {
 }
 
 #' Perform a series of API reqs using NCBI entrez to validate accession numbers
-perform_entrez_reqs <- function(accnums, verbose = FALSE, track_progress = FALSE) {
+performEntrezReqs <- function(accnums, verbose = FALSE, track_progress = FALSE) {
     # API guidelines docs
     # ebi: https://www.ebi.ac.uk/proteins/api/doc/index.html
     # entrez recommends no more than 3 POSTs per second
@@ -501,7 +501,7 @@ perform_entrez_reqs <- function(accnums, verbose = FALSE, track_progress = FALSE
     results <- vapply(
         X = accnums,
         FUN = function(accnum) {
-            result <- is_accnum_valid_entrez(accnum, verbose = TRUE)
+            result <- isAccNumValidEntrez(accnum, verbose = TRUE)
             i <<- i + 1L
             if (i >= 3L) {Sys.sleep(1); print('sleeping for entrez API reqs'); i <<- 0L}
             if (track_progress) {incProgress(1)}
@@ -512,7 +512,7 @@ perform_entrez_reqs <- function(accnums, verbose = FALSE, track_progress = FALSE
     return(results)
 }
 
-perform_ebi_reqs <- function(accnums, verbose = FALSE, track_progress = FALSE) {
+performEbiReqs <- function(accnums, verbose = FALSE, track_progress = FALSE) {
     # API guidelines docs
     # ebi: https://www.ebi.ac.uk/proteins/api/doc/index.html
     # EBI allows 200 POSTs per second
@@ -521,7 +521,7 @@ perform_ebi_reqs <- function(accnums, verbose = FALSE, track_progress = FALSE) {
     results <- vapply(
         X = accnums,
         FUN = function(accnum) {
-            result <- is_accnum_valid_ebi(accnum, verbose = TRUE)
+            result <- isAccNumValidEbi(accnum, verbose = TRUE)
             i <<- i + 1L
             if (i >= 200L) {Sys.sleep(1); i <<- 0L}
             if (track_progress) incProgress(1)
@@ -533,7 +533,7 @@ perform_ebi_reqs <- function(accnums, verbose = FALSE, track_progress = FALSE) {
 }
 
 #' Validate accession numbers from MolEvolvR user input
-validate_accnum <- function(text, verbose = FALSE, track_progress = FALSE, n_steps = integer()) {
+validateAccNum <- function(text, verbose = FALSE, track_progress = FALSE, n_steps = integer()) {
     # API guidelines docs
     # entrez https://www.ncbi.nlm.nih.gov/books/NBK25497/#chapter2.Usage_Guidelines_and_Requiremen
     # ebi: https://www.ebi.ac.uk/proteins/api/doc/index.html
@@ -558,7 +558,7 @@ validate_accnum <- function(text, verbose = FALSE, track_progress = FALSE, n_ste
     if (track_progress) {incProgress(1 / n_steps,
         message = "Please wait (searching NCBI's protein database) . . .")}
     # entrez API
-    entrez_results <- perform_entrez_reqs(accnums, verbose = verbose)
+    entrez_results <- performEntrezReqs(accnums, verbose = verbose)
     if (verbose) {
         stringr::str_glue("rentrez
                 results:\n\t{paste0(entrez_results, collapse=",")}\n") |>
@@ -568,7 +568,7 @@ validate_accnum <- function(text, verbose = FALSE, track_progress = FALSE, n_ste
     # EBI API
     # if all of entrez resulted in success, then skip EBI. Else, try EBI
     if (!all(entrez_results)) {
-        ebi_results <- perform_ebi_reqs(accnums, verbose = verbose)
+        ebi_results <- performEbiReqs(accnums, verbose = verbose)
         if (verbose) {
             stringr::str_glue("ebi results:\n\t{paste0(ebi_results,
                               collapse=",")}\n") |>
@@ -606,7 +606,7 @@ validate_accnum <- function(text, verbose = FALSE, track_progress = FALSE, n_ste
 # Description
 #   validation function for evalue input
 #===============================================================================
-validate_evalue <- function(input_value) {
+validateEvalue <- function(input_value) {
     is_valid_evalue <- is.numeric(input_value) && input_value != 0
     return(is_valid_evalue)
 }
@@ -619,7 +619,7 @@ validate_evalue <- function(input_value) {
 library("Biostrings")
 library("tidyverse")
 #-------------------------------------------------------------------------------
-.guess_seq_type <- function(single_fasta, dna_guess_cutoff = 0.9, other_guess_cutoff = 0.5) {
+guessSeqType <- function(single_fasta, dna_guess_cutoff = 0.9, other_guess_cutoff = 0.5) {
     tb <- as_tibble(alphabetFrequency(single_fasta))
     n_other <- if ("other" %in% colnames(tb)) sum(unlist(tb["other"])) else 0
 
@@ -649,7 +649,7 @@ library("tidyverse")
     return(guess)
 }
 
-.validate_seq_body <- function(text) {
+validateSeqBody <- function(text) {
     # convert string to single letter character vector
     individual_chars <- unlist(strsplit(text, ""))
     # return the characters from input that are NOT in the AA_ALPHABET
@@ -669,7 +669,7 @@ library("tidyverse")
 }
 
 #-------------------------------------------------------------------------------
-validate_fasta <- function(fasta_path, .type = "AA") {
+validateFasta <- function(fasta_path, .type = "AA") {
     # handle case of fasta being unreadable/unrecognized format
     fasta <- tryCatch(
         expr = Biostrings::readAAStringSet(fasta_path),
@@ -695,7 +695,7 @@ validate_fasta <- function(fasta_path, .type = "AA") {
     seq_body_validations <- c()
     for (i in seq_along(1:length(fasta))) {
         seq_body <- as.character(fasta[i])
-        seq_body_validations <- c(.validate_seq_body(seq_body), seq_body_validations)
+        seq_body_validations <- c(validateSeqBody(seq_body), seq_body_validations)
     }
     # require all sequences to have chars only in AA_ALPHABET
     if (!(all(seq_body_validations))) {
@@ -707,7 +707,7 @@ validate_fasta <- function(fasta_path, .type = "AA") {
     # iteratively guess the type (DNA, AA, or other of each seq in the FASTA file)
     seq_types <- c()
     for (idx in seq_along(1:length(fasta))) {
-        seq_types <- c(.guess_seq_type(fasta[idx]), seq_types)
+        seq_types <- c(guessSeqType(fasta[idx]), seq_types)
     }
 
     switch(.type,

@@ -2,8 +2,7 @@
 # Last modified: 2024
 
 # get fasta of pathogen and/or drug
-#' @export
-get_card_data <- function(pathogen = NULL, drug = NULL) {
+getCardData <- function(pathogen = NULL, drug = NULL) {
   destination_dir <- "CARD_data"
   # Check if CARD data exists
   if (!dir.exists(destination_dir)) {
@@ -73,8 +72,7 @@ get_card_data <- function(pathogen = NULL, drug = NULL) {
 }
 
 # Run analysis
-#' @export
-run_analysis <- function(
+runAnalysis <- function(
         upload_type = "Fasta",
         evalue = 0.00001,
         accnum_fasta_input = "",
@@ -224,13 +222,13 @@ run_analysis <- function(
     # Validation of inputs
     fasta_data <- read_file(file_paths$fasta)
     validate_and_process_inputs <- function(evalue, fasta_data) {
-        if (!validate_evalue(evalue)) {
+        if (!validateEvalue(evalue)) {
             return("Error: A numeric E-value is required. Please set a valid
                    value (e.g., 0.0001).")
         }
 
 
-        if (!validate_accnum_fasta(fasta_data)) {
+        if (!validateAccNumFasta(fasta_data)) {
             return("Error: Input for AccNum/Fasta cannot be empty or invalid.")
         }
 
@@ -327,7 +325,7 @@ run_analysis <- function(
                }
 
                # Validate accession numbers for FASTA submission
-               if (!(validate_accnum_fasta(sequence_upload_data@seqs))) {
+               if (!(validateAccNumFasta(sequence_upload_data@seqs))) {
                    stop("Error: Please adjust the FASTA headers. Ensure a header
                         line for each sequence, no duplicate header names, and
                         no duplicate protein accession numbers.")
@@ -338,7 +336,7 @@ run_analysis <- function(
                    expr = {
                        tmp_file <- tempfile()
                        writeLines(sequence_upload_data@seqs, tmp_file)
-                       validate_fasta(tmp_file)
+                       validateFasta(tmp_file)
                    },
                    error = function(e) {
                        warning("Error: Failed to run input FASTA verification")
@@ -454,7 +452,7 @@ run_analysis <- function(
             job_code = pin_id,
         )
     } else {
-        submit_full(
+        runFull(
             dir = dir,
             sequences = path,
             DB = blast_db,
@@ -575,7 +573,7 @@ run_analysis <- function(
     }
 
     # Process results for results
-    fetched <- process_wrapper_dir(dir, pinName = pinName, type = type)
+    fetched <- processWrapperDir(dir, pinName = pinName, type = type)
 
     # Assign fetched data to objects if the fetched list has the expected length
     if (length(fetched) == 2) {
@@ -586,69 +584,69 @@ run_analysis <- function(
         r_nrow_initial <- nrow(fetched[[1]]@df)  # Initialize row count
     }
 
-    domarch_cols_value <- get_domarch_cols(app_data, DASelect)
+    domarch_cols_value <- getDomArchCols(app_data, DASelect)
 
-    query_domarch_cols_value <- get_domarch_columns(query_data@df)
+    query_domarch_cols_value <- getDomArchCols(query_data@df)
 
-    mainTable_value <- generate_data_table(data)
+    mainTable_value <- getDataTable(data)
 
-    queryDataTable_value <- generate_query_data_table(query_data, query_select)
+    queryDataTable_value <- getQueryDataTable(query_data, query_select)
 
-    fastaDataText_value <- get_fasta_data(query_data@fasta_path)
+    fastaDataText_value <- getFastaData(query_data@fasta_path)
 
-    domainDataText_value <- get_domain_data(data)
+    domainDataText_value <- getDomData(data)
 
-    msaDataText_value <- get_msa_data(query_data@msa_path)
+    msaDataText_value <- getMSAData(query_data@msa_path)
 
-    rs_IprGenes_value <- generate_ipr_genes_visualization(data,
+    rs_IprGenes_value <- getIPRGenesVisualization(data,
                                                           app_data,
                                                           input_rs_iprDatabases,
                                                           input_rs_iprVisType)
 
-    rs_network_layout_value <- generate_rs_network_layout(data,
+    rs_network_layout_value <- getRSNetworkLayout(data,
                                                           app_data,
                                                           cutoff = 100,
                                                           layout = "nice")
 
-    rs_data_table_value <- generate_data_table(data)
+    rs_data_table_value <- getDataTable(data)
 
-    da_IprGenes_value <- generate_da_ipr_genes_plot(app_data,
+    da_IprGenes_value <- getDomArchIPRGenesPlot(app_data,
                                                     da_iprDatabases,
                                                     da_iprVisType,
                                                     DASelect)
 
-    query_heatmap_value <- generate_query_heatmap(query_data@df,
+    query_heatmap_value <- getQueryHeatmap(query_data@df,
                                                   heatmap_select = "All",
                                                   heatmap_color = "blue")
 
-    DA_Prot_value <- get_DA_Prot(app_data, DASelect)
+    DA_Prot_value <- getDomArchProt(app_data, DASelect)
 
-    DALinPlot_value <- generate_DA_heatmap_plot(DA_col = "DomArch.Pfam",
+    DALinPlot_value <- getDomArchHeatmapPlot(DA_col = "DomArch.Pfam",
                                                 DACutoff,
                                                 DA_Prot_value,
                                                 DA_lin_color = "viridis",
                                                 app_data@ipr_path)
 
-    DALin_TotalCounts_value <- DA_TotalCounts(DA_Prot_value,
+    DALin_TotalCounts_value <- getDomArchTotalCounts(DA_Prot_value,
                                               DACutoff,
                                               DA_col = "DomArch.Pfam",
                                               app_data)
 
-    DALinTable_value <- generate_DA_lin_table(DA_col = "DomArch.Pfam",
+    DALinTable_value <- getDomArchLinearTable(DA_col = "DomArch.Pfam",
                                               app_data@ipr_path,
                                               DALin_TotalCounts_value)
 
-    DANetwork_value <- generate_domain_network(DA_col = "DomArch.Pfam",
+    DANetwork_value <- getDomNetwork(DA_col = "DomArch.Pfam",
                                                DACutoff,
                                                DA_Prot_value,
                                                networkLayout = "nice",
                                                app_data@ipr_path)
 
-    rep_accnums_value <- rep_accnums(phylo, msa_reduce_by, msa_rep_num, PhyloSelect, app_data)
+    rep_accnums_value <- repAccNums(phylo, msa_reduce_by, msa_rep_num, PhyloSelect, app_data)
 
-    phylogeny_prot_value <- filter_phylogeny_proteins(app_data, phylo_select)
+    phylogeny_prot_value <- filterPhylogenyProteins(app_data, phylo_select)
 
-    acc_to_name_value <- acc_to_name(app_data)
+    acc_to_name_value <- acc2Name(app_data)
 
     ####### Report Generation ########
 
@@ -681,11 +679,11 @@ run_analysis <- function(
             phylo_sunburst_levels = levels,
             phylo_sunburst = phylogeny_prot_value,
             tree_msa_tool = tree_msa_tool,
-            rep_accnums = rep_accnums_value,
+            repAccNums = rep_accnums_value,
             msa_rep_num = 3,
             app_data = app_data,
             PhyloSelect = PhyloSelect,
-            acc_to_name = acc_to_name_value,
+            acc2Name = acc_to_name_value,
             rval_phylo = rval_phylo,
             msa_reduce_by = msa_reduce_by
         )
