@@ -1,6 +1,12 @@
 # Author(s): Awa Synthia
 # Last modified: 2024
 
+# load functions to use
+source("MolEvolData_class.R")
+source("run_molevolvr_pipeline.R")
+source("viz_utils.R")
+
+# example usage: getCaseStudyReport("Acinetobacter baumannii", "Beta-lactams")
 getCaseStudyReport <- function(pathogen = NULL, drug = NULL, ...) {
   cat("\n")
   cat("\033[1;36m")  # Cyan for the "MolEvolvR" header
@@ -616,7 +622,7 @@ runAnalysis <- function(
 
     domarch_cols_value <- getDomArchCols(app_data, DASelect)
 
-    query_domarch_cols_value <- getDomArchCols(query_data@df)
+    query_domarch_cols_value <- getQueryDomArchCols(query_data@df)
 
     mainTable_value <- getDataTable(data)
 
@@ -630,8 +636,8 @@ runAnalysis <- function(
 
     rs_IprGenes_value <- getIPRGenesVisualization(data,
                                                           app_data,
-                                                          input_rs_iprDatabases,
-                                                          input_rs_iprVisType)
+                                                          query_iprDatabases,
+                                                          query_iprVisType)
 
     rs_network_layout_value <- getRSNetworkLayout(data,
                                                           app_data,
@@ -641,9 +647,9 @@ runAnalysis <- function(
     rs_data_table_value <- getDataTable(data)
 
     da_IprGenes_value <- getDomArchIPRGenesPlot(app_data,
-                                                    da_iprDatabases,
-                                                    da_iprVisType,
-                                                    DASelect)
+                                                query_iprDatabases,
+                                                query_iprVisType,
+                                                DASelect)
 
     query_heatmap_value <- getQueryHeatmap(query_data@df,
                                                   heatmap_select = "All",

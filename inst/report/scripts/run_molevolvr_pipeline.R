@@ -740,18 +740,47 @@ runCDHIT <- function(infile, suffix, outdir) {
     "cd-hit -i %s -o %s -c 0.8 -aS 0.6 -T 8",
     infile, outfile
   )
-  clean_cdhit_format <- sprintf(
-    "awk '/^>Cluster/ {if(NR>1)printf \"\\n\"; next} /WP_/ {start=index($0, \"WP_\"); if(start) {end=index(substr($0, start), \"...\"); if (end == 0) end=length($0); printf \"%%s \", substr($0, start, end-1)}}' %s > %s",
-    input_file,
-    outfile
-  )
+  # clean_cdhit_format <- sprintf(
+  #   "awk '/^>Cluster/ {if(NR>1)printf \"\\n\"; next} /WP_/ {start=index($0, \"WP_\"); if(start) {end=index(substr($0, start), \"...\"); if (end == 0) end=length($0); printf \"%%s \", substr($0, start, end-1)}}' %s > %s",
+  #   input_file,
+  #   outfile
+  # )
 
   cat("\nPerforming BLASTCLUST analysis on", infile, "\n")
   # system(blastclust_cmd)
 
   system(cdhit_command)
-  system(clean_cdhit_format)
+  # system(clean_cdhit_format)
+  cleanCDHIT(input_file, outfile)
+  cat("Cleaning CDHIT results completed")
+}
 
+# extract_sequences("input_file.tsv.clstr", "output_file.tsv")
+cleanCDHIT <- function(input_file, output_file) {
+  # Read the input file line by line
+  lines <- readLines(input_file)
+
+  # Initialize an empty vector to store extracted identifiers
+  extracted <- c()
+
+  # Loop through lines and extract content between ">" and "..."
+  for (line in lines) {
+    # Only process lines containing valid sequences (skip cluster headers)
+    if (grepl(">", line) && grepl("\\.\\.\\.", line)) {
+      # Extract the sequence identifier between ">" and "..."
+      match <- regmatches(line, regexpr(">(.*?)\\.\\.\\.", line))
+      if (length(match) > 0) {
+        sequence <- gsub("^>", "", match)  # Remove the leading ">"
+        sequence <- gsub("\\.\\.\\.$", "", sequence)  # Remove trailing dots
+        extracted <- c(extracted, sequence)
+      }
+    }
+  }
+
+  # Write the extracted sequences to the output file
+  writeLines(extracted, output_file)
+
+  cat("Sequences extracted and written to:", output_file, "\n")
 }
 
 # Function to format blastclust output
@@ -902,7 +931,7 @@ ipr2Linear <- function(ipr, acc2info, prefix) {
 
   # add lookup table to iprscan file
   lookup_tbl <- fread(
-    system.file("common_data", "lineage_lookup.txt", package = "MolEvolvR", mustWork = TRUE),
+    system.file("common_data", "cln_lookup_tbl.tsv", package = "MolEvolvR", mustWork = TRUE),
                       sep = "\t", header = TRUE, fill = TRUE) %>%
     distinct()
   if ("AccNum.x" %in% names(ipr_lin)) {

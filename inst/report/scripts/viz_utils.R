@@ -10,8 +10,8 @@ library(plotly)
 
 # Function to generate the InterProScan Visualization
 getIPRGenesVisualization <- function(data, app_data,
-                                             input_rs_iprDatabases = c("Pfam", "Phobius", "TMHMM", "Gene3D"),
-                                             input_rs_iprVisType = "Analysis") {
+                                    query_iprDatabases = c("Pfam", "Phobius", "TMHMM", "Gene3D"),
+                                    query_iprVisType = "Analysis") {
 
     # Check if analysis is loaded
     if (nrow(data@df) == 0 || app_data@ipr_path == "") {
@@ -33,8 +33,8 @@ getIPRGenesVisualization <- function(data, app_data,
         ipr_plot <- plotIPR2VizWeb(
             infile_ipr = data@ipr_path,
             accessions = data@df$Name,
-            analysis = input_rs_iprDatabases,
-            group_by = input_rs_iprVisType,
+            analysis = query_iprDatabases,
+            group_by = query_iprVisType,
             name = n
         )
 
@@ -45,8 +45,8 @@ getIPRGenesVisualization <- function(data, app_data,
             infile_ipr = data@ipr_path,
             infile_full = data@df,
             accessions = unique(data@df$Name),
-            analysis = input_rs_iprDatabases,
-            group_by = input_rs_iprVisType,
+            analysis = query_iprDatabases,
+            group_by = query_iprVisType,
             topn = 20,   # This value is hardcoded in the original code
             query = "All"
         )
@@ -269,7 +269,13 @@ getMSAData <- function(msa_path) {
     if (is.null(msa_path) || msa_path == "") {
         stop("Error: MSA path is not provided.")
     }
-    return(read_file(msa_path))
+    # Attempt to read the file and handle potential errors
+    if (file.exists(msa_path)) {
+        return(read_file(msa_path))
+    } else {
+        warning(sprintf("Warning: Unable to read the file at path '%s'. Ignoring...", msa_path))
+        return(NULL)  # Return NULL if the file cannot be read
+    }
 }
 
 # Function to generate a heatmap
@@ -307,7 +313,7 @@ getQueryHeatmap <- function(query_data_df,
 }
 
 # Function to retrieve domain architecture columns
-getDomArchCols <- function(query_data_df) {
+getQueryDomArchCols <- function(query_data_df) {
     # Check if query data exists
     if (nrow(query_data_df) == 0) {
         stop("No query data available.")
@@ -712,8 +718,8 @@ getDomArchCols <- function(app_data, DASelect) {
 }
 
 # Function to generate the IPR genes plot
-getDomArchIPRGenesPlot <- function(app_data, da_iprDatabases,
-                                       da_iprVisType, DASelect) {
+getDomArchIPRGenesPlot <- function(app_data, query_iprDatabases,
+                                   query_iprVisType, DASelect) {
 
     if (app_data@ipr_path == "") {
         stop("IPR path is not set.")
@@ -739,8 +745,8 @@ getDomArchIPRGenesPlot <- function(app_data, da_iprDatabases,
         plot <- plotIPR2VizWeb(
             infile_ipr = app_data@ipr_path,
             accessions = df$Name,
-            analysis = da_iprDatabases,
-            group_by = da_iprVisType,
+            analysis = query_iprDatabases,
+            group_by = query_iprVisType,
             name = name_column
         )
     } else {
@@ -749,8 +755,8 @@ getDomArchIPRGenesPlot <- function(app_data, da_iprDatabases,
             infile_ipr = app_data@ipr_path,
             infile_full = df,
             accessions = unique(df$Name),
-            analysis = da_iprDatabases,
-            group_by = da_iprVisType,
+            analysis = query_iprDatabases,
+            group_by = query_iprVisType,
             topn = 20,
             query = DASelect
         )
