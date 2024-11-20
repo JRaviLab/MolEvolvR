@@ -303,7 +303,7 @@ runAnalysis <- function(
 
     # After uploading the sequence data, you would check the uploaded data
     if (sequence_upload_data@seqs == "") {
-        stop("Error: Please upload a protein sequence")
+        stop("Error: Please upload a protein sequence.")
     }
     OUT_PATH <- getwd()
     unavailable_pins <- list.files(OUT_PATH)
@@ -339,7 +339,7 @@ runAnalysis <- function(
                        validateFasta(tmp_file)
                    },
                    error = function(e) {
-                       warning("Error: Failed to run input FASTA verification")
+                       warning("Error: Failed to run input FASTA verification.")
                        return(FALSE)  # Return FALSE if an error occurs
                    },
                    finally = {
@@ -526,7 +526,7 @@ runAnalysis <- function(
         }
         if (ipr_upload_data()@seqs == "" && !ipr_ncbi_check) {
             stop("Error: Please provide a file containing sequences or check the
-                 box to use fetch sequences for NCBI accession numbers.")
+                box to fetch sequences using NCBI accession numbers.")
         }
 
         ipr <- read_tsv(ipr_upload_data()@df, col_names = FALSE)

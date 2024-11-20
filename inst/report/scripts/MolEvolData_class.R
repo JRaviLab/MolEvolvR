@@ -41,37 +41,6 @@ setClass("seqUpload",
          )
 )
 
-# Group by lineage + DA then take top 20
-top_acc <- function(cln_file, DA_col = "DomArch.Pfam",
-                    lin_col = "Lineage", n = 20) {
-    lin_sym <- sym(lin_col)
-    DA_sym <- sym(DA_col)
-
-    cln <- fread(cln_file, sep = "\t", fill = T)
-
-    grouped <- cln %>%
-        group_by({{ lin_sym }}, {{ DA_sym }}) %>%
-        summarise(count = n()) %>%
-        arrange(-count) %>%
-        filter(!is.na({{ lin_sym }}) & !is.na({{ DA_sym }}))
-
-    top_acc <- character(n)
-    for (r in 1:min(nrow(grouped), n))
-    {
-        l <- (grouped %>% pull({{ lin_sym }}))[r]
-        DA <- (grouped %>% pull({{ DA_sym }}))[r]
-
-        filt <- cln %>% filter({{ lin_sym }} == l & {{ DA_sym }} == DA)
-
-        top <- filt[which(filt$PcPositive == max(filt$PcPositive))[1], ]
-
-        top_acc[r] <- top$AccNum
-    }
-    top_acc <- top_acc[which(top_acc != "")]
-    return(top_acc)
-}
-
-
 combineFilesNopmap <- function(inpath, pattern, outpath,
                                  delim = "\t", skip = 0,
                                  col_names) {

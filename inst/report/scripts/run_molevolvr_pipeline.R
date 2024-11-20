@@ -187,7 +187,7 @@ runMolevolvrPipeline <- function(input_paths, db, nhits, eval,
     # setwd(OUTDIR)
 
     # Run DELTABLAST
-    runDeltablast(input_paths, PREFIX, OUTDIR, db, nhits, eval)
+    runDELTABLAST(input_paths, PREFIX, OUTDIR, db, nhits, eval)
 
     # Run ACC2FA
     convertAccNum2Fasta(file.path(OUTDIR, paste0(PREFIX, ".dblast.tsv")),
@@ -207,7 +207,7 @@ runMolevolvrPipeline <- function(input_paths, db, nhits, eval,
   # Sys.sleep(30)
 
   # Run BLASTCLUST
-  runBlastclust(file.path(OUTDIR, paste0(PREFIX, ".all_accnums.fa")),
+  runCDHIT(file.path(OUTDIR, paste0(PREFIX, ".all_accnums.fa")),
                  PREFIX, OUTDIR )
 
   # Convert clusters to table
@@ -541,7 +541,7 @@ replaceAccNums <- function(path_acc2info,
 }
 
 
-runDeltablast <- function(infile, prefix, outdir,
+runDELTABLAST <- function(infile, prefix, outdir,
                            db = "refseq_protein",
                            nhits = 5000, evalue = 1e-5,
                            threads = 10) {
@@ -700,9 +700,9 @@ cleanupBlast <- function(infile_blast, acc2info, prefix, wblast = F) {
 
   # TaxID to lineage mapping
   cleanedup_blast$TaxID <- as.integer(cleanedup_blast$TaxID)
-  lineage_map <- fread("~/awasyn/new_trial/lineage_lookup.txt",
-                       header = TRUE, fill = TRUE,
-                       colClasses = lineage_map_cols)
+  lineage_map <- fread(
+    system.file("common_data", "lineage_lookup.txt", package = "MolEvolvR", mustWork = TRUE),
+    header = TRUE, fill = TRUE, colClasses = lineage_map_cols)
 
   # Merge with lineage map and clean up columns
   mergedLins <- merge(cleanedup_blast, lineage_map, by = "TaxID",
@@ -722,7 +722,7 @@ cleanupBlast <- function(infile_blast, acc2info, prefix, wblast = F) {
 
 
 # Function to run BLASTCLUST on given input
-runBlastclust <- function(infile, suffix, outdir) {
+runCDHIT <- function(infile, suffix, outdir) {
 
   # Prepare output file path
   outfile <- file.path(outdir, paste0(suffix, ".bclust.L60S80.tsv"))
@@ -734,13 +734,13 @@ runBlastclust <- function(infile, suffix, outdir) {
   cat("## Now running BLASTCLUST on file(s):", infile, "\n")
   cat("#####################################\n")
 
-  # Run BLASTCLUST
+  # Cluster sequences w/ BLASTCLUST/CD-HIT
   # blastclust_cmd <- paste("blastclust -i", infile, "-o", outfile, "-p T -L .6 -b T -S 80 -a 8")
   cdhit_command <- sprintf(
     "cd-hit -i %s -o %s -c 0.8 -aS 0.6 -T 8",
     infile, outfile
   )
-  clean_command <- sprintf(
+  clean_cdhit_format <- sprintf(
     "awk '/^>Cluster/ {if(NR>1)printf \"\\n\"; next} /WP_/ {start=index($0, \"WP_\"); if(start) {end=index(substr($0, start), \"...\"); if (end == 0) end=length($0); printf \"%%s \", substr($0, start, end-1)}}' %s > %s",
     input_file,
     outfile
@@ -750,7 +750,7 @@ runBlastclust <- function(infile, suffix, outdir) {
   # system(blastclust_cmd)
 
   system(cdhit_command)
-  system(clean_command)
+  system(clean_cdhit_format)
 
 }
 
@@ -881,8 +881,9 @@ ipr2Linear <- function(ipr, acc2info, prefix) {
   ipr_tax <- left_join(ipr_in, acc2info_out, by = "AccNum")
 
   # read in lineage map
-  lineage_map <- fread("~/awasyn/new_trial/lineage_lookup.txt",
-                       header = T, fill = T)
+  lineage_map <- fread(
+    system.file("common_data", "lineage_lookup.txt", package = "MolEvolvR", mustWork = TRUE),
+    header = TRUE, fill = TRUE)
 
   # merge ipr+info w/ lineage
   # both tables have a species column, but only
@@ -895,8 +896,9 @@ ipr2Linear <- function(ipr, acc2info, prefix) {
     select(-Species.x, -Species.y)
 
   # add lookup table to iprscan file
-  lookup_tbl <- fread(input = "~/awasyn/new_trial/cln_lookup_tbl.tsv",
-                      sep = "\t", header = T, fill = T) %>%
+  lookup_tbl <- fread(
+    system.file("common_data", "lineage_lookup.txt", package = "MolEvolvR", mustWork = TRUE),
+                      sep = "\t", header = TRUE, fill = TRUE) %>%
     distinct()
   if ("AccNum.x" %in% names(ipr_lin)) {
     ipr_lin <- ipr_lin %>%

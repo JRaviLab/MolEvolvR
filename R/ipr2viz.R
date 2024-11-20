@@ -212,7 +212,7 @@ plotIPR2Viz <- function(infile_ipr = NULL, infile_full = NULL, accessions = c(),
     analysis_labeler <- analyses %>%
         pivot_wider(names_from = .data$Analysis, values_from = .data$Analysis)
 
-    lookup_tbl_path <- "~/awasyn/new_trial/cln_lookup_tbl.tsv"
+    system.file("common_data", "cln_lookup_tbl.tsv", package = "MolEvolvR", mustWork = TRUE)
     lookup_tbl <- read_tsv(lookup_tbl_path, col_names = T, col_types = MolEvolvR::lookup_table_cols)
 
     lookup_tbl <- lookup_tbl %>% select(-.data$ShortName) # Already has ShortName -- Just needs SignDesc
