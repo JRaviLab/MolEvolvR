@@ -24,16 +24,16 @@
 #' A network of domains is returned based on shared domain architectures.
 #'
 #' @param prot A data frame that contains the column 'DomArch'.
-#' @param column Name of column containing Domain architecture from which nodes
+#' @param column Name of column containing Domain architecture from which nodes 
 #' and edges are generated.
 #' @param domains_of_interest Character vector specifying domains of interest.
-#' @param cutoff Integer. Only use domains that occur at or above the cutoff for
+#' @param cutoff Integer. Only use domains that occur at or above the cutoff for 
 #' total counts if cutoff_type is "Total Count".
-#' Only use domains that appear in cutoff or greater lineages if cutoff_type is
+#' Only use domains that appear in cutoff or greater lineages if cutoff_type is 
 #' Lineage.
 #' @param layout Character. Layout type to be used for the network. Options are:
 #' \itemize{\item "grid" \item "circle" \item "random" \item "auto"}
-#' @param query_color Character. Color to represent the queried domain in the
+#' @param query_color Character. Color to represent the queried domain in the 
 #' network.
 #'
 #' @importFrom dplyr across add_row all_of distinct filter mutate pull select
@@ -231,18 +231,18 @@ createDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, c
 #'
 #'
 #' @param prot A data frame that contains the column 'DomArch'.
-#' @param column Name of column containing Domain architecture from which nodes
+#' @param column Name of column containing Domain architecture from which nodes 
 #' and edges are generated.
 #' @param domains_of_interest Character vector specifying the domains of interest.
-#' @param cutoff Integer. Only use domains that occur at or above the cutoff for
+#' @param cutoff Integer. Only use domains that occur at or above the cutoff for 
 #' total counts if cutoff_type is "Total Count".
-#' Only use domains that appear in cutoff or greater lineages if cutoff_type is
+#' Only use domains that appear in cutoff or greater lineages if cutoff_type is 
 #' Lineage.
 #' @param layout Character. Layout type to be used for the network. Options are:
 #' \itemize{\item "grid" \item "circle" \item "random" \item "auto"}
-#' @param query_color Color that the nodes of the domains in the
+#' @param query_color Color that the nodes of the domains in the 
 #' domains_of_interest vector are colored
-#' @param partner_color Color that the nodes that are not part of the
+#' @param partner_color Color that the nodes that are not part of the 
 #' domains_of_interest vector are colored
 #' @param border_color Color for the borders of the nodes.
 #' @param IsDirected Is the network directed? Set to false to eliminate arrows
