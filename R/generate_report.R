@@ -2,10 +2,8 @@
 # Last modified: 2024
 
 # load functions to use
-source("MolEvolData_class.R")
-source("run_molevolvr_pipeline.R")
-source("viz_utils.R")
 
+#' @export
 # example usage: getCaseStudyReport("Acinetobacter baumannii", "Beta-lactams")
 getCaseStudyReport <- function(pathogen = NULL, drug = NULL, ...) {
   cat("\n")
@@ -687,7 +685,7 @@ runAnalysis <- function(
     ####### Report Generation ########
 
     tryCatch({
-        tempReport <- file.path(tempdir(), "report.Rmd")
+        tempReport <- file.path(dir, "report.Rmd")
         file.copy(report_template_path, tempReport, overwrite = TRUE)
 
         # List of graphics to include in report

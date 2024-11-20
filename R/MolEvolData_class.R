@@ -415,7 +415,7 @@ validateAccNumFasta <- function(text) {
 }
 
 
-#' Test whether a single accession returns a valid protein from Entrez
+# Test whether a single accession returns a valid protein from Entrez
 isAccNumValidEntrez <- function(accnum, verbose = FALSE) {
     # empty accnum wil not raise an error from efetch, so test for this first
     if (nchar(accnum) <= 0) {if (verbose) {warning("empty accnum")}; return(FALSE)}
@@ -435,7 +435,7 @@ isAccNumValidEntrez <- function(accnum, verbose = FALSE) {
     return(result)
 }
 
-#' Test whether a single accession returns a valid protein from EBI
+# Test whether a single accession returns a valid protein from EBI
 isAccNumValidEbi <- function(accnum, verbose = FALSE) {
     # validation: ensure there's some text to parse
     if (nchar(accnum) <= 0) {if (verbose) {warning("empty accnum")}; return(FALSE)}
@@ -460,7 +460,7 @@ isAccNumValidEbi <- function(accnum, verbose = FALSE) {
     return(result)
 }
 
-#' Perform a series of API reqs using NCBI entrez to validate accession numbers
+# Perform a series of API reqs using NCBI entrez to validate accession numbers
 performEntrezReqs <- function(accnums, verbose = FALSE, track_progress = FALSE) {
     # API guidelines docs
     # ebi: https://www.ebi.ac.uk/proteins/api/doc/index.html
@@ -501,7 +501,7 @@ performEbiReqs <- function(accnums, verbose = FALSE, track_progress = FALSE) {
     return(results)
 }
 
-#' Validate accession numbers from MolEvolvR user input
+# Validate accession numbers from MolEvolvR user input
 validateAccNum <- function(text, verbose = FALSE, track_progress = FALSE, n_steps = integer()) {
     # API guidelines docs
     # entrez https://www.ncbi.nlm.nih.gov/books/NBK25497/#chapter2.Usage_Guidelines_and_Requiremen

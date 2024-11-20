@@ -215,7 +215,7 @@ runMolevolvrPipeline <- function(input_paths, db, nhits, eval,
             file.path(OUTDIR, paste0(PREFIX, ".blast.cln.tsv")))
 
   # Run INTERPROSCAN
-  runIPRScan(file.path(OUTDIR, paste0(PREFIX, ".all_accnums.fa")),
+  runIPRScan2(file.path(OUTDIR, paste0(PREFIX, ".all_accnums.fa")),
                    PREFIX, OUTDIR)
   new_header <- c("AccNum", "SeqMD5Digest", "SLength", "Analysis", "DB.ID",
                   "SignDesc", "StartLoc", "StopLoc", "Score",
@@ -859,7 +859,7 @@ clust2Table <- function(clust, blast) {
 }
 
 # Function to run InterProScan
-runIPRScan <- function(query_file, prefix, outdir) {
+runIPRScan2 <- function(query_file, prefix, outdir) {
 
   # Start InterProScan run
   cat("\n######################\n")

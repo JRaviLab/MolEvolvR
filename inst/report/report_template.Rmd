@@ -473,12 +473,12 @@ if(length(params$repAccNums) >= 3 ) {
   # Call MSA2PDF
   msa_pdf_path <- tempfile()
   msa_parent_dir <- dirname(params$app_data@fasta_path)
-  msa_subdir_path <- file.path(parent_dir, "msa_figs")
-  if (!dir.exists(subdir_path)) {
-    dir.create(subdir_path, recursive = TRUE)
-    message("Subdirectory 'msa_figs' created at: ", subdir_path)
+  msa_subdir_path <- file.path(msa_parent_dir, "msa_figs")
+  if (!dir.exists(msa_subdir_path)) {
+    dir.create(msa_subdir_path, recursive = TRUE)
+    message("Subdirectory 'msa_figs' created at: ", msa_subdir_path)
   } else {
-    message("Subdirectory 'msa_figs' already exists at: ", subdir_path)
+    message("Subdirectory 'msa_figs' already exists at: ", msa_subdir_path)
   }
   msa_prefix <- paste0(msa_subdir_path, "/")
   post_fix <- paste("msa", params$query_pin, params$PhyloSelect, params$msa_reduce_by, ".pdf", sep = "_")

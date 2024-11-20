@@ -732,7 +732,7 @@ getDomArchIPRGenesPlot <- function(app_data, query_iprDatabases,
              your data correctly.")
     }
 
-    if (is.null(da_iprDatabases) || length(da_iprDatabases) == 0) {
+    if (is.null(query_iprDatabases) || length(query_iprVisType) == 0) {
         stop("Please select an analysis.")
     }
 
