@@ -36,7 +36,7 @@
 #' filterByDomains()
 #' }
 filterByDomains <- function(prot, column = "DomArch", doms_keep = c(), doms_remove = c(),
-    ignore.case = FALSE) {
+                            ignore.case = FALSE) {
     # Only rows with a domain in doms_keep will be kept
     # Any row containing a domain in doms_remove will be removed
 
@@ -213,7 +213,7 @@ elements2Words <- function(prot, column = "DomArch", conversion_type = "da2doms"
     valid_types <- c("da2doms", "doms2da")
     if (!conversion_type %in% valid_types) {
         abort(paste("Error: Invalid 'conversion_type'. Must be one of:",
-                   paste(valid_types, collapse = ", ")))
+                    paste(valid_types, collapse = ", ")))
     }
 
     z1 <- prot %>%
@@ -221,16 +221,16 @@ elements2Words <- function(prot, column = "DomArch", conversion_type = "da2doms"
         str_replace_all("\\,", " ") %>%
         str_replace_all("\"", " ")
     switch(conversion_type,
-        da2doms = {
-            z2 <- z1 %>%
-                str_replace_all("\\+", " ")
-        },
-        gc2da = {
-            z2 <- z1 %>%
-                str_replace_all("\\<-", " ") %>%
-                str_replace_all("-\\>", " ") %>%
-                str_replace_all("\\|", " ")
-        }
+           da2doms = {
+               z2 <- z1 %>%
+                   str_replace_all("\\+", " ")
+           },
+           gc2da = {
+               z2 <- z1 %>%
+                   str_replace_all("\\<-", " ") %>%
+                   str_replace_all("-\\>", " ") %>%
+                   str_replace_all("\\|", " ")
+           }
     )
     # str_replace_all("^c\\($", " ") %>%		# remove "c("
     # str_replace_all("\\)$", " ") %>%			# remove ")"
@@ -385,7 +385,7 @@ NULL
 #' }
 #'
 summarizeByLineage <- function(prot = "prot", column = "DomArch", by = "Lineage",
-    query) {
+                               query) {
     # Check if 'prot' is a data frame
     if (!is.data.frame(prot)) {
         abort("Error: 'prot' must be a data frame.")
@@ -431,6 +431,7 @@ summarizeByLineage <- function(prot = "prot", column = "DomArch", by = "Lineage"
 #' named `DomArch` and `Lineage`.
 #'
 #' @importFrom dplyr arrange count desc filter group_by summarise
+#' @importFrom rlang .data
 #'
 #' @return A tibble summarizing the counts of unique domain architectures
 #' (`DomArch`) per lineage (`Lineage`). The resulting table contains three
@@ -443,7 +444,7 @@ summarizeByLineage <- function(prot = "prot", column = "DomArch", by = "Lineage"
 #'
 #' @examples
 #' \dontrun{
-#' summarizeDomArch_ByLineage()
+#' summarizeDomArch_ByLineage(data1)
 #' }
 summarizeDomArch_ByLineage <- function(x) {
     # Check if 'x' is a data frame
@@ -460,8 +461,8 @@ summarizeDomArch_ByLineage <- function(x) {
                    missing:", paste(missing_columns, collapse = ", ")))
     }
     x %>%
-        filter(!grepl("^-$", DomArch)) %>%
-        group_by(DomArch, Lineage) %>%
+        filter(!grepl("^-$", .data$DomArch)) %>%
+        group_by(.data$DomArch, .data$Lineage) %>%
         summarise(count = n()) %>% # , bin=as.numeric(as.logical(n()))
         arrange(desc(count))
 }
@@ -476,7 +477,8 @@ summarizeDomArch_ByLineage <- function(x) {
 #' named `DomArch` and a count column, such as `count`, which represents the
 #' occurrences of each architecture in various lineages.
 #'
-#' @importFrom dplyr arrange group_by filter summarise
+#' @importFrom dplyr arrange group_by filter summarise desc
+#' @importFrom rlang .data
 #'
 #' @return A tibble summarizing each unique `DomArch`, along with the following
 #' columns:
@@ -489,7 +491,7 @@ summarizeDomArch_ByLineage <- function(x) {
 #'
 #' @examples
 #' \dontrun{
-#' summarizeDomArch()
+#' summarizeDomArch(data1)
 #' }
 summarizeDomArch <- function(x) {
     # Check if 'x' is a data frame
@@ -497,11 +499,14 @@ summarizeDomArch <- function(x) {
         abort("Error: 'x' must be a data frame.")
     }
     x %>%
-        group_by(DomArch) %>%
-        summarise(totalcount = sum(count), totallin = n()) %>% # totallin=n_distinct(Lineage),
-        arrange(desc(totallin), desc(totalcount)) %>%
-        filter(!grepl(" \\{n\\}", DomArch)) %>%
-        filter(!grepl("^-$", DomArch))
+        group_by(.data$DomArch) %>%
+        summarise(
+            totalcount = sum(.data$count),
+            totallin = n()
+        ) %>%
+        arrange(desc(.data$totallin), desc(.data$totalcount)) %>%
+        filter(!grepl(" \\{n\\}", .data$DomArch)) %>%
+        filter(!grepl("^-$", .data$DomArch))
 }
 
 #' summarizeGenContext_ByDomArchLineage
@@ -510,6 +515,7 @@ summarizeDomArch <- function(x) {
 #' named `GenContext`, `DomArch`, and `Lineage`.
 #'
 #' @importFrom dplyr arrange desc filter group_by n summarise
+#' @importFrom rlang .data
 #'
 #' @return A tibble summarizing each unique combination of `GenContext`,
 #' `DomArch`, and `Lineage`, along with the following columns:
@@ -525,7 +531,7 @@ summarizeDomArch <- function(x) {
 #'
 #' @examples
 #' \dontrun{
-#' summarizeGenContext_ByDomArchLineage
+#' summarizeGenContext_ByDomArchLineage(your_data)
 #' }
 summarizeGenContext_ByDomArchLineage <- function(x) {
     # Check if 'x' is a data frame
@@ -533,28 +539,31 @@ summarizeGenContext_ByDomArchLineage <- function(x) {
         abort("Error: 'x' must be a data frame.")
     }
     x %>%
-        filter(!grepl("^-$", GenContext)) %>%
-        filter(!grepl("^-$", DomArch)) %>%
-        filter(!grepl("^-$", Lineage)) %>%
-        filter(!grepl("^NA$", DomArch)) %>%
-        group_by(GenContext, DomArch, Lineage) %>%
-        summarise(count = n()) %>% # , bin=as.numeric(as.logical(n()))
-        arrange(desc(count))
+        filter(!grepl("^-$", .data$GenContext)) %>%
+        filter(!grepl("^-$", .data$DomArch)) %>%
+        filter(!grepl("^-$", .data$Lineage)) %>%
+        filter(!grepl("^NA$", .data$DomArch)) %>%
+        group_by(.data$GenContext, .data$DomArch, .data$Lineage) %>%
+        summarise(count = n()) %>%
+        arrange(desc(.data$count))
 }
 
 #' summarizeGenContext_ByLineage
 #'
-#' @param x A dataframe or tibble containing the data.
+#' @param x A dataframe or tibble containing the data. It must have columns
+#' named `GenContext`, `DomArch`, and `Lineage`.
 #'
 #' @importFrom dplyr arrange desc filter group_by n summarise
+#' @importFrom rlang .data
 #'
-#' @return Describe return, in detail
+#' @return A tibble summarizing each unique combination of `GenContext` and `Lineage`,
+#' along with the count of occurrences. The results are arranged in descending order of count.
 #' @rdname MolEvolvR_summary
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' summarizeGenContext_ByLineage()
+#' summarizeGenContext_ByLineage(your_data)
 #' }
 summarizeGenContext_ByLineage <- function(x) {
     # Check if 'x' is a data frame
@@ -562,36 +571,35 @@ summarizeGenContext_ByLineage <- function(x) {
         abort("Error: 'x' must be a data frame.")
     }
     x %>%
-        filter(!grepl("^-$", GenContext)) %>%
-        filter(!grepl("^-$", DomArch)) %>%
-        filter(!grepl("^-$", Lineage)) %>%
-        filter(!grepl("^NA$", DomArch)) %>%
-        group_by(GenContext, Lineage) %>% # DomArch.norep,
-        summarise(count = n()) %>% # , bin=as.numeric(as.logical(n()))
-        arrange(desc(count))
+        filter(!grepl("^-$", .data$GenContext)) %>%
+        filter(!grepl("^-$", .data$DomArch)) %>%
+        filter(!grepl("^-$", .data$Lineage)) %>%
+        filter(!grepl("^NA$", .data$DomArch)) %>%
+        group_by(.data$GenContext, .data$Lineage) %>%
+        summarise(count = n()) %>%
+        arrange(desc(.data$count))
 }
 
 #' summarizeGenContext
 #'
 #' @param x A dataframe or tibble containing the data. It must have columns
-#' named `GenContext`, `DomArch`, and `Lineage`.
+#' named `GenContext`, `DomArch`, `Lineage`, and `count`.
 #'
-#' @importFrom dplyr arrange desc filter group_by n n_distinct summarise
+#' @importFrom dplyr arrange desc filter group_by n_distinct summarise
+#' @importFrom rlang .data
 #'
-#' @return A tibble summarizing each unique combination of `GenContext` and
-#' `Lineage`, along with the following columns:
-#' - `GenContext`: The genomic context for each entry.
-#' - `Lineage`: The lineage associated with each entry.
-#' - `count`: The total number of occurrences for each combination of
-#'  `GenContext` and `Lineage`.
+#' @return A tibble summarizing each unique `GenContext`, along with the following columns:
+#' - `totalcount`: The total count for each `GenContext`.
+#' - `totalDA`: The number of distinct `DomArch` for each `GenContext`.
+#' - `totallin`: The number of distinct `Lineage` for each `GenContext`.
 #'
-#' The results are arranged in descending order of `count`.
+#' The results are arranged in descending order of `totalcount`, `totalDA`, and `totallin`.
 #' @rdname MolEvolvR_summary
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' summarizeGenContext()
+#' summarizeGenContext(data1)
 #' }
 summarizeGenContext <- function(x) {
     # Check if 'x' is a data frame
@@ -599,15 +607,15 @@ summarizeGenContext <- function(x) {
         abort("Error: 'x' must be a data frame.")
     }
     x %>%
-        group_by(GenContext) %>%
+        group_by(.data$GenContext) %>%
         summarise(
-            totalcount = sum(count),
-            totalDA = n_distinct(DomArch),
-            totallin = n_distinct(Lineage)
-        ) %>% # totallin=n_distinct(Lineage),
-        arrange(desc(totalcount), desc(totalDA), desc(totallin)) %>%
-        filter(!grepl(" \\{n\\}", GenContext)) %>%
-        filter(!grepl("^-$", GenContext))
+            totalcount = sum(.data$count),
+            totalDA = n_distinct(.data$DomArch),
+            totallin = n_distinct(.data$Lineage)
+        ) %>%
+        arrange(desc(.data$totalcount), desc(.data$totalDA), desc(.data$totallin)) %>%
+        filter(!grepl(" \\{n\\}", .data$GenContext)) %>%
+        filter(!grepl("^-$", .data$GenContext))
 }
 
 
@@ -654,8 +662,8 @@ summarizeGenContext <- function(x) {
 #' totalGenContextOrDomArchCounts(pspa - gc_lin_counts, 0, "GC")
 #' }
 totalGenContextOrDomArchCounts <- function(prot, column = "DomArch", lineage_col = "Lineage",
-    cutoff = 90, RowsCutoff = FALSE, digits = 2
-    # type = "GC"
+                                           cutoff = 90, RowsCutoff = FALSE, digits = 2
+                                           # type = "GC"
 ) {
     # Check if 'prot' is a data frame
     if (!is.data.frame(prot)) {
@@ -668,7 +676,7 @@ totalGenContextOrDomArchCounts <- function(prot, column = "DomArch", lineage_col
 
     if (length(missing_columns) > 0) {
         abort(paste("Error: The following required columns are missing:",
-                   paste(missing_columns, collapse = ", ")))
+                    paste(missing_columns, collapse = ", ")))
     }
 
     # Check that cutoff is a numeric value between 0 and 100
@@ -682,7 +690,7 @@ totalGenContextOrDomArchCounts <- function(prot, column = "DomArch", lineage_col
         abort("Error: 'digits' must be a non-negative integer.")
     }
 
-    # column <- sym(column)
+    column <- sym(column)
 
     prot <- select(prot, {{ column }}, {{ lineage_col }}) %>%
         filter(!is.na({{ column }}) & !is.na({{ lineage_col }})) %>%
@@ -690,10 +698,10 @@ totalGenContextOrDomArchCounts <- function(prot, column = "DomArch", lineage_col
 
     prot <- summarizeByLineage(prot, column, by = lineage_col, query = "all")
     col_count <- prot %>%
-        group_by(!!sym(column)) %>%
+        group_by({{ column }}) %>%
         summarise(totalcount = sum(count))
 
-    total <- left_join(prot, col_count, by = column)
+    total <- left_join(prot, col_count, by = as_string(column))
 
     sum_count <- sum(total$count)
     total <- total %>%
