@@ -10,7 +10,7 @@ getCaseStudyReport <- function(pathogen = NULL, drug = NULL, ...) {
   cat("\033[0m")
 
   cat("\033[1;32m")
-  cat("\n>>>>> Case Study Report Generated <<<<<\n")
+  cat("\n>>>>> Case Study Report Generation started... <<<<<\n")
   cat("\033[0m")
 
   # Step 1: Fetch the FASTA sequences of the given pathogen and drug
@@ -26,7 +26,7 @@ getCaseStudyReport <- function(pathogen = NULL, drug = NULL, ...) {
   message("FASTA file downloaded, running analysis...")
 
   # Pass the file to runAnalysis function
-  runAnalysis(file_paths = list(fasta = fasta_file))
+  runAnalysis(file_paths = list(fasta = fasta_file), ...)
 
   message("Case study report completed")
 }
