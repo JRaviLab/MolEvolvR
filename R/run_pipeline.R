@@ -1,6 +1,9 @@
 # Author(s): Awa Synthia
 # Last modified: 2024
 
+# Temporal fix. should work normally in descr
+library(readr)
+
 getSeqs <- function(sequences,
                           acc_file_path = "accs.txt",
                           dir_path = "~",

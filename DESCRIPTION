@@ -53,6 +53,7 @@ Imports:
     htmltools,
     htmlwidgets,
     httr,
+    httr2,
     igraph,
     latexpdf,
     magrittr,
