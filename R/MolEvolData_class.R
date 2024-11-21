@@ -584,9 +584,6 @@ validateEvalue <- function(input_value) {
 # Author(s): JK
 # Last modified: 2023_06
 #===============================================================================
-
-library("Biostrings")
-library("tidyverse")
 #-------------------------------------------------------------------------------
 guessSeqType <- function(single_fasta, dna_guess_cutoff = 0.9, other_guess_cutoff = 0.5) {
     tb <- as_tibble(alphabetFrequency(single_fasta))

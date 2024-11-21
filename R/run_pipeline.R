@@ -1,12 +1,6 @@
 # Author(s): Awa Synthia
 # Last modified: 2024
 
-# Load necessary libraries
-library(httr)
-library(data.table)
-library(readr)
-library(rentrez)
-
 getSeqs <- function(sequences,
                           acc_file_path = "accs.txt",
                           dir_path = "~",
@@ -320,7 +314,6 @@ acc2info <- function(infile, prefix, outdir) {
     }
   }
 
-
   if (any_atomic) {
     parsed_data <- data.frame(
       AccNum = docsums$oslt$value,
@@ -520,7 +513,6 @@ subsAccnum4cc2Info <- function(df_acc2info, df_header_map) {
   return(df_result)
 }
 
-
 replaceAccNums <- function(path_acc2info,
                                       path_query_header_map, path_out) {
 
@@ -539,7 +531,6 @@ replaceAccNums <- function(path_acc2info,
   # Write the substituted dataframe to the output file
   write_tsv(df_acc2info_substituted, file = path_out, col_names = TRUE)
 }
-
 
 runDELTABLAST <- function(infile, prefix, outdir,
                            db = "refseq_protein",
@@ -576,9 +567,7 @@ runDELTABLAST <- function(infile, prefix, outdir,
   cat("DELTABLAST completed.\n")
 }
 
-
 # This script converts AccNum to Fasta using NCBI's EDirect or EBI's API
-
 convertAccNum2Fasta <- function(infile, prefix, outdir) {
 
   # Create the output file path
@@ -646,7 +635,6 @@ convertAccNum2Fasta <- function(infile, prefix, outdir) {
   cat("END OF EDIRECT SEARCH\n")
   cat("#####################\n")
 }
-
 
 cleanupBlast <- function(infile_blast, acc2info, prefix, wblast = F) {
 
@@ -719,7 +707,6 @@ cleanupBlast <- function(infile_blast, acc2info, prefix, wblast = F) {
   # Write cleaned data to file
   write_tsv(blast_names, file_name, col_names = TRUE)
 }
-
 
 # Function to run BLASTCLUST on given input
 runCDHIT <- function(infile, suffix, outdir) {
@@ -1089,7 +1076,6 @@ web_blast_colnames <- c("Query", "AccNum",
                         "QStart", "QEnd", "SStart", "SEnd",
                         "EValue", "BitScore", "PcPosOrig",
                         "QSFrames") # specific to "blastx"
-
 
 # BLAST Command line
 cl_blast_colnames <- c("Query", "SAccNum", "AccNum",
