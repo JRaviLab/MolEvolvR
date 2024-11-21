@@ -1,7 +1,8 @@
 # Author(s): Awa Synthia
 # Last modified: 2024
 
-# load functions to use
+# import libs
+#' @import readr stringr
 
 #' @export
 # example usage: getCaseStudyReport("Acinetobacter baumannii", "Beta-lactams")

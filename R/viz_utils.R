@@ -1,6 +1,9 @@
 # Author(s): Awa Synthia
 # Last modified: 2024
 
+# import libs
+#' @import dplyr stringr visNetwork DT plotly
+#'
 # Function to generate the InterProScan Visualization
 getIPRGenesVisualization <- function(data, app_data,
                                     query_iprDatabases = c("Pfam", "Phobius", "TMHMM", "Gene3D"),

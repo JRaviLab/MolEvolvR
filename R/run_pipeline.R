@@ -1,8 +1,8 @@
 # Author(s): Awa Synthia
 # Last modified: 2024
 
-# Temporal fix. should work normally in descr
-library(readr)
+# import libs
+#' @import readr data.table httr rentrez
 
 getSeqs <- function(sequences,
                           acc_file_path = "accs.txt",
