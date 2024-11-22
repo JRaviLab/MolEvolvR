@@ -1,6 +1,8 @@
 # Author(s): Samuel Chen
 # Last modified: 2020
 
+#' @import Biostrings tidyverse
+
 setClass("MolEvolData",
          slots = list(
              df = "data.frame",
