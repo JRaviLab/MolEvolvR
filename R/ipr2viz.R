@@ -79,7 +79,7 @@ themeGenes2 <- function() {
 #' n = 20, query = "specific_query_name")
 #' }
 getTopAccByLinDomArch <- function(infile_full,
-    DA_col = "DomArch.Pfam",
+    DA_col = "DomArch.PfamA",
     lin_col = "Lineage_short",
     n = 20,
     query) {
@@ -187,7 +187,7 @@ plotIPR2Viz <- function(infile_ipr = NULL, infile_full = NULL, accessions = c(),
     ## Getting top n accession numbers using getTopAccByLinDomArch()
     top_acc <- getTopAccByLinDomArch(
         infile_full = infile_full,
-        DA_col = "DomArch.Pfam",
+        DA_col = "DomArch.PfamA",
         ## @SAM, you could pick by the Analysis w/ max rows!
         lin_col = "Lineage_short",
         n = topn, query = query
@@ -360,7 +360,7 @@ plotIPR2VizWeb <- function(infile_ipr,
 
     ## @SAM, colnames, merges, everything neeeds to be done now based on the
     ## combined lookup table from "common_data"
-    lookup_tbl_path <- "/data/research/jravilab/common_data/cln_lookup_tbl.tsv"
+    lookup_tbl_path <- system.file("common_data", "cln_lookup_tbl.tsv", package = "MolEvolvR", mustWork = TRUE)
     lookup_tbl <- read_tsv(lookup_tbl_path, col_names = T, col_types = MolEvolvR::lookup_table_cols)
 
     ## Read IPR file and subset by Accessions

@@ -6,7 +6,7 @@
 #'
 # Function to generate the InterProScan Visualization
 getIPRGenesVisualization <- function(data, app_data,
-                                    query_iprDatabases = c("Pfam", "Phobius", "TMHMM", "Gene3D"),
+                                    query_iprDatabases = c("PfamA", "Phobius", "TMHMM", "Gene3d"),
                                     query_iprVisType = "Analysis") {
 
     # Check if analysis is loaded
@@ -829,7 +829,7 @@ getDomArchPlot <- function(ipr_path, query_names,
     }
 
     n <- "Name"
-    plot <- ipr2viz_web(
+    plot <- plotIPR2VizWeb(
         infile_ipr = ipr_path,
         accessions = query_names,
         analysis = analysis_type,

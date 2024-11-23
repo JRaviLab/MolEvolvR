@@ -45,7 +45,8 @@ runFull <- function(
     job_code=NULL,
     submitter_email=NULL,
     advanced_options=NULL,
-    get_slurm_mails=FALSE
+    get_slurm_mails=FALSE,
+    APPLICATION
 ) {
   # Set working directory
   setwd(dir)
@@ -86,7 +87,7 @@ runFull <- function(
       # output_file <- paste0(dir, "/blast_output_", i, ".txt")
 
       # Construct the local BLAST command (make sure 'blastn' is available locally)
-      runMolevolvrPipeline(input_file, DB, NHITS, EVAL, is_query = F, type, i)
+      runMolevolvrPipeline(input_file, DB, NHITS, EVAL, is_query = F, type, i, APPLICATION = APPLICATION)
 
       #cmd <- sprintf(
       #  "deltablast -query %s -db %s -out %s -num_alignments %d -evalue %f -remote",
@@ -104,7 +105,7 @@ runFull <- function(
   }
 
   # Simulate query run locally
-  runMolevolvrPipeline(sequences, DB, NHITS, EVAL, is_query = TRUE, type)
+  runMolevolvrPipeline(sequences, DB, NHITS, EVAL, is_query = TRUE, type, APPLICATION = APPLICATION)
   # cmd_query <- sprintf(
   #   "deltablast -query %s -db %s -out %s_query.txt -num_alignments %d -evalue %f -remote",
   #   sequences, DB, paste0(dir, "/query_output"), NHITS, EVAL
@@ -122,7 +123,7 @@ runFull <- function(
 
 # Define the main pipeline function
 runMolevolvrPipeline <- function(input_paths, db, nhits, eval,
-                                   is_query, type, i) {
+                                   is_query, type, i, APPLICATION) {
 
   # Start time
   start <- Sys.time()
@@ -213,18 +214,8 @@ runMolevolvrPipeline <- function(input_paths, db, nhits, eval,
 
   # Run INTERPROSCAN
   runIPRScan2(file.path(OUTDIR, paste0(PREFIX, ".all_accnums.fa")),
-                   PREFIX, OUTDIR)
-  new_header <- c("AccNum", "SeqMD5Digest", "SLength", "Analysis", "DB.ID",
-                  "SignDesc", "StartLoc", "StopLoc", "Score",
-                  "Status", "RunDate", "IPRAcc", "IPRDesc")
+                  prefix =  PREFIX, outdir = OUTDIR, appl = APPLICATION)
 
-  temp_data <- read_tsv(file.path(OUTDIR, paste0(PREFIX, ".iprscan.tsv")),
-                        col_names = FALSE)
-
-  colnames(temp_data) <- new_header
-
-  write.table(temp_data, file.path(OUTDIR, paste0(PREFIX, ".iprscan.tsv")),
-              sep = "\t", row.names = FALSE, col.names = TRUE, quote = FALSE)
   # Run IPR2LIN
   ipr2Linear(file.path(OUTDIR, paste0(PREFIX, ".iprscan.tsv")),
           file.path(OUTDIR, paste0(PREFIX, ".acc2info.tsv")), PREFIX)
@@ -849,7 +840,7 @@ clust2Table <- function(clust, blast) {
 }
 
 # Function to run InterProScan
-runIPRScan2 <- function(query_file, prefix, outdir) {
+runIPRScan2 <- function(query_file, prefix, outdir, appl) {
 
   # Start InterProScan run
   cat("\n######################\n")
@@ -868,19 +859,42 @@ runIPRScan2 <- function(query_file, prefix, outdir) {
 
   # get the path to the interproscan.sh script from the environment
   # variable INTERPROSCAN_CMD, or assume it's on the path if unspecified
-  iprscan_cmd <- Sys.getenv("INTERPROSCAN_CMD", unset="interproscan.sh")
-
-  command <- paste(
-    iprscan_cmd, "-i",
-    shQuote(query_file),
-    "-b", shQuote(outfile),
-    "-f TSV --cpu", Sys.getenv("INTERPROSCAN_CPUS", "4"),
-    "--appl Pfam,MobiDBlite,Phobius,Coils,SignalP_GRAM_POSITIVE,",
-    "SignalP_GRAM_NEGATIVE,Hamap,Gene3D,SignalP_EUK"
-  )
+  # iprscan_cmd <- Sys.getenv("INTERPROSCAN_CMD", unset="interproscan.sh")
+  #
+  # command <- paste(
+  #   iprscan_cmd, "-i",
+  #   shQuote(query_file),
+  #   "-b", shQuote(outfile),
+  #   "-f TSV --cpu", Sys.getenv("INTERPROSCAN_CPUS", "4"),
+  #   "--appl Pfam,MobiDBlite,Phobius,Coils,SignalP_GRAM_POSITIVE,",
+  #   "SignalP_GRAM_NEGATIVE,Hamap,Gene3D,SignalP_EUK"
+  # )
 
   # Run the command
-  system(command)
+  # system(command)
+  submit_ipr(path2seq = query_file,
+             outfolder = outdir,
+             appl = appl,
+             email = "jravilab.msu@gmail.com")
+
+  new_header <- c("AccNum", "SeqMD5Digest", "SLength", "Analysis", "DB.ID",
+                  "SignDesc", "StartLoc", "StopLoc", "Score",
+                  "Status", "RunDate", "IPRAcc", "IPRDesc")
+
+  temp_data <- read_tsv(file.path(outdir, paste0("ipr_joined.tsv")))
+
+  # Drop the last two columns
+  temp_data <- temp_data[, -((ncol(temp_data) - 1):ncol(temp_data))]
+
+  # remove last 10 xters in AccNum
+  temp_data$file_name <- substr(temp_data$file_name, 1,
+                                nchar(temp_data$file_name) - 12)
+
+  colnames(temp_data) <- new_header
+
+  write.table(temp_data, file.path(outdir, paste0(prefix, ".iprscan.tsv")),
+              sep = "\t", row.names = FALSE, col.names = TRUE, quote = FALSE)
+
 
   cat("##################\n")
   cat("END OF IPRSCAN RUN\n")
@@ -892,6 +906,10 @@ ipr2Linear <- function(ipr, acc2info, prefix) {
   # duplicate rows in iprscan file
   ipr_in <- read_tsv(ipr, col_names = TRUE) %>%
     mutate(DB.ID = gsub("G3DSA:", "", DB.ID))
+
+  if (prefix == "query_data") {
+    ipr_in$AccNum <- sub("(.*)([0-9])([0-9])$", "\\1.\\2_\\3", ipr_in$AccNum)
+  }
 
   acc2info_out <- fread(input = acc2info, sep = "\t", header = T, fill = T) %>%
     mutate(FullAccNum = gsub("\\|", "", FullAccNum)) %>%
@@ -991,9 +1009,9 @@ ipr2Linear <- function(ipr, acc2info, prefix) {
 
 ipr2DomArch <- function(infile_ipr, prefix,
                    analysis = c(
-                     "Pfam", "SMART", "Phobius",
-                     "Gene3D", "TMHMM", "SignalP_GRAM_POSITIVE",
-                     "SUPERFAMILY", "MobiDBLite", "TIGRFAM", "PANTHER", "Coils"
+                     "PfamA", "SMART", "Phobius",
+                     "Gene3d", "TMHMM", "SignalP_GRAM_POSITIVE",
+                     "SuperFamily", "MobiDBLite", "Panther", "Coils"
                    )) {
   # read in cleaned up iprscan results
   ipr_in <- read_tsv(infile_ipr, col_names = T, col_types = ipr_cln_cols)
@@ -1012,7 +1030,12 @@ ipr2DomArch <- function(infile_ipr, prefix,
       group_by(Analysis) %>%
       arrange(StartLoc)
     i <- 1
-    for (a in analysis) {
+    analysis_var <- c(
+      "Pfam", "SMART", "Phobius",
+      "Gene3D", "TMHMM", "SignalP_GRAM_POSITIVE",
+      "SUPERFAMILY", "MobiDBLite", "PANTHER", "Coils"
+    )
+    for (a in analysis_var) {
       a_da <- DA %>% filter(Analysis == a)
       if (a == "SignalP_EUK" || a == "SignalP_GRAM_NEGATIVE" ||
           a == "SignalP_GRAM_POSITIVE") {

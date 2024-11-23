@@ -277,8 +277,8 @@ Visualizations and analyses of all query and homologous protein domains, structu
 ```{r, echo=FALSE}
 if(is.null(params$query_iprDatabases)){
     choices <- params$query_domarch_cols
-    if ("Pfam" %in% choices & "Phobius" %in% choices) {
-      analysis_type <- c("Pfam", "Phobius")
+    if ("PfamA" %in% choices & "Phobius" %in% choices) {
+      analysis_type <- c("PfamA", "Phobius")
       } else {
         default <- choices[1]
         }
@@ -293,7 +293,7 @@ if(is.null(params$query_iprVisType)){
     }
 
 if(length(params$query_domarch_cols) >= 1 ) {
-  DomArchPlot <- ipr2viz_web(
+  DomArchPlot <- plotIPR2VizWeb(
     infile_ipr = params$query_data@ipr_path,
     accessions = params$query_data@df$QueryName,
     analysis = analysis_type, group_by = analysis_group, name = "Name"

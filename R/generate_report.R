@@ -129,13 +129,13 @@ runAnalysis <- function(
         GCCutoff = 0.5,
         query_select = NULL,
         query_iprDatabases = c(
-          "Pfam", "SMART", "Phobius",
-          "Gene3D", "TMHMM", "SignalP_GRAM_POSITIVE",
-          "SUPERFAMILY", "MobiDBLite", "TIGRFAM", "PANTHER", "Coils"
+          "PfamA", "SMART", "Phobius",
+          "Gene3d", "TMHMM", "SignalP_GRAM_POSITIVE",
+          "SuperFamily", "MobiDBLite", "Panther", "Coils"
         ),
         query_iprVisType = "Analysis", tree_msa_tool = "ClustalO",
         levels = 2,
-        DA_Col = "DomArch.Pfam",
+        DA_Col = "DomArch.PfamA",
         msa_rep_num = 10,
         msa_reduce_by = "Species",
         rval_phylo = FALSE,
@@ -496,6 +496,7 @@ runAnalysis <- function(
             phylo = phylo,
             type = type,
             job_code = pin_id,
+            APPLICATION = query_iprDatabases
         )
     }
 
@@ -656,7 +657,7 @@ runAnalysis <- function(
 
     DA_Prot_value <- getDomArchProt(app_data, DASelect)
 
-    DALinPlot_value <- getDomArchHeatmapPlot(DA_col = "DomArch.Pfam",
+    DALinPlot_value <- getDomArchHeatmapPlot(DA_col = "DomArch.PfamA",
                                                 DACutoff,
                                                 DA_Prot_value,
                                                 DA_lin_color = "viridis",
@@ -664,14 +665,14 @@ runAnalysis <- function(
 
     DALin_TotalCounts_value <- getDomArchTotalCounts(DA_Prot_value,
                                               DACutoff,
-                                              DA_col = "DomArch.Pfam",
+                                              DA_col = "DomArch.PfamA",
                                               app_data)
 
-    DALinTable_value <- getDomArchLinearTable(DA_col = "DomArch.Pfam",
+    DALinTable_value <- getDomArchLinearTable(DA_col = "DomArch.PfamA",
                                               app_data@ipr_path,
                                               DALin_TotalCounts_value)
 
-    DANetwork_value <- getDomNetwork(DA_col = "DomArch.Pfam",
+    DANetwork_value <- getDomNetwork(DA_col = "DomArch.PfamA",
                                                DACutoff,
                                                DA_Prot_value,
                                                networkLayout = "nice",
@@ -728,6 +729,7 @@ runAnalysis <- function(
                           output_file = output_file,
                           params = params,
                           envir = new.env(parent = globalenv()))
+        browseURL(output_file)
     }, error = function(e) {
         return(paste("Error in report generation:", e$message))
     })
