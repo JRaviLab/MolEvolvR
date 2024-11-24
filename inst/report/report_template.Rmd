@@ -455,7 +455,7 @@ if(length(params$repAccNums) >= 3 ) {
     query_accession <- params$app_data@df %>% filter(!duplicated(QueryName))
     query_accession <- unique(query_accession$Query)
     query <- seqs[query_accession]
-    names(query) <- params$PhyloSelect
+    # names(query) <- params$PhyloSelect
     query <- AAStringSet(query)
     }
 
