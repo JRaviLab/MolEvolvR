@@ -55,6 +55,7 @@ Imports:
     httr,
     httr2,
     igraph,
+    iprscanr,
     latexpdf,
     magrittr,
     msa,

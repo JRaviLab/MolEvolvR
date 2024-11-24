@@ -2,7 +2,7 @@
 # Last modified: 2024
 
 # import libs
-#' @import readr data.table httr rentrez
+#' @import readr data.table httr rentrez iprscanr
 
 getSeqs <- function(sequences,
                           acc_file_path = "accs.txt",
