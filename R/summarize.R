@@ -690,7 +690,7 @@ totalGenContextOrDomArchCounts <- function(prot, column = "DomArch", lineage_col
         abort("Error: 'digits' must be a non-negative integer.")
     }
     
-    column <- sym(column)
+    # column <- sym(column)
 
     prot <- select(prot, {{ column }}, {{ lineage_col }}) %>%
         filter(!is.na({{ column }}) & !is.na({{ lineage_col }})) %>%
@@ -698,10 +698,10 @@ totalGenContextOrDomArchCounts <- function(prot, column = "DomArch", lineage_col
 
     prot <- summarizeByLineage(prot, column, by = lineage_col, query = "all")
     col_count <- prot %>%
-        group_by({{ column }}) %>%
+        group_by(!!sym(column)) %>%
         summarise(totalcount = sum(count))
 
-    total <- left_join(prot, col_count, by = as_string(column))
+    total <- left_join(prot, col_count, by = column)
 
     sum_count <- sum(total$count)
     total <- total %>%

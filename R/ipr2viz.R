@@ -79,7 +79,7 @@ themeGenes2 <- function() {
 #' n = 20, query = "specific_query_name")
 #' }
 getTopAccByLinDomArch <- function(infile_full,
-    DA_col = "DomArch.Pfam",
+    DA_col = "DomArch.PfamA",
     lin_col = "Lineage_short",
     n = 20,
     query) {
@@ -94,14 +94,14 @@ getTopAccByLinDomArch <- function(infile_full,
     cln_domarch <- cln %>% select(domarch_cols)
     col_counts <- colSums(is.na(cln_domarch))
     DA_sym <- sym(names(which.min(col_counts)))
-    showNotification(paste0("Selecting representatives by unique ", DA_sym, " and lineage combinations"))
+    # showNotification(paste0("Selecting representatives by unique ", DA_sym, " and lineage combinations"))
     ## Group by Lineage, DomArch and reverse sort by group counts
     grouped <- cln %>%
         group_by({{ DA_sym }}, {{ lin_sym }}) %>%
         arrange(desc(PcPositive)) %>%
         summarise(count = n(), AccNum = dplyr::first(AccNum)) %>%
         arrange(-count) %>%
-        filter({{ lin_sym }} != "" && {{ DA_sym }} != "")
+        filter({{ lin_sym }} != "" & {{ DA_sym }} != "")
     top_acc <- grouped$AccNum[1:n]
     top_acc <- na.omit(top_acc)
     return(top_acc)
@@ -180,14 +180,14 @@ plotIPR2Viz <- function(infile_ipr = NULL, infile_full = NULL, accessions = c(),
     ipr_out <- read_tsv(infile_ipr, col_names = T, col_types = MolEvolvR::iprscan_cols)
     ipr_out <- ipr_out %>% filter(.data$Name %in% accessions)
     analysis_cols <- paste0("DomArch.", analysis)
-    infile_full <- infile_full %>% select(.data$analysis_cols, .data$Lineage_short, .data$QueryName, .data$PcPositive, .data$AccNum)
+    infile_full <- infile_full %>% select(analysis_cols, .data$Lineage_short, .data$QueryName, .data$PcPositive, .data$AccNum)
     ## To filter by Analysis
     analysis <- paste(analysis, collapse = "|")
     ## @SAM: This can't be set in stone since the analysis may change!
     ## Getting top n accession numbers using getTopAccByLinDomArch()
     top_acc <- getTopAccByLinDomArch(
         infile_full = infile_full,
-        DA_col = "DomArch.Pfam",
+        DA_col = "DomArch.PfamA",
         ## @SAM, you could pick by the Analysis w/ max rows!
         lin_col = "Lineage_short",
         n = topn, query = query
@@ -212,7 +212,7 @@ plotIPR2Viz <- function(infile_ipr = NULL, infile_full = NULL, accessions = c(),
     analysis_labeler <- analyses %>%
         pivot_wider(names_from = .data$Analysis, values_from = .data$Analysis)
 
-    lookup_tbl_path <- "/data/research/jravilab/common_data/cln_lookup_tbl.tsv"
+    lookup_tbl_path <- system.file("common_data", "cln_lookup_tbl.tsv", package = "MolEvolvR", mustWork = TRUE)
     lookup_tbl <- read_tsv(lookup_tbl_path, col_names = T, col_types = MolEvolvR::lookup_table_cols)
 
     lookup_tbl <- lookup_tbl %>% select(-.data$ShortName) # Already has ShortName -- Just needs SignDesc
@@ -360,7 +360,7 @@ plotIPR2VizWeb <- function(infile_ipr,
 
     ## @SAM, colnames, merges, everything neeeds to be done now based on the
     ## combined lookup table from "common_data"
-    lookup_tbl_path <- "/data/research/jravilab/common_data/cln_lookup_tbl.tsv"
+    lookup_tbl_path <- system.file("common_data", "cln_lookup_tbl.tsv", package = "MolEvolvR", mustWork = TRUE)
     lookup_tbl <- read_tsv(lookup_tbl_path, col_names = T, col_types = MolEvolvR::lookup_table_cols)
 
     ## Read IPR file and subset by Accessions

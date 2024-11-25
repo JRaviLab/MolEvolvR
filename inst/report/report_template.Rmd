@@ -1,0 +1,497 @@
+---
+title: MolEvolvR
+output:
+  html_document: 
+    self_contained: yes
+params:
+  rs_interproscan_visualization: default
+  proximity_network: default
+  sunburst: default
+  data: default
+  queryDataTable: default
+  fastaDataText: default
+  heatmap: default
+  query_data: default
+  query_domarch_cols: default
+  query_iprDatabases: default
+  query_iprVisType: default
+  mainTable: default
+  DALinTable: default
+  DALinPlot: default
+  DANetwork: default
+  DA_Prot: default
+  domarch_cols: default
+  DA_Col: default
+  DACutoff: default
+  da_interproscan_visualization: default
+  phylo_sunburst_levels: default
+  phylo_sunburst: default
+  lineage_table: default
+  ## Tree
+  tree_msa_tool: default ##input
+  ## MSA
+  repAccNums: default
+  msa_rep_num: default ##input
+  app_data: default
+  PhyloSelect: default ##input
+  acc2Name: default
+  rval_phylo: default
+  query_pin: default
+  msa_reduce_by: default
+---
+
+---
+subtitle: "`r glue::glue('Retrieval Code: {params$query_pin}')`"
+---
+
+<style type="text/css">
+.main-container {
+  max-width: 100% !important;
+  margin: auto;
+}
+</style>
+
+<style>
+.full-results-button {
+  vertical-align: middle;
+  // -moz-box-shadow: 0px 10px 14px -7px #000000;
+  // -webkit-box-shadow: 0px 10px 14px -7px #000000;
+  // box-shadow: 0px 10px 14px -7px #000000;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  border: 1px solid #46b8da;
+  display: inline-block;
+  font-size: 15px; 
+  padding: 6px 10px;
+  text-decoration: none; /*no underline!!*/
+  cursor: pointer;
+}
+.full-results-button:active { /*simulate movement*/
+  position: relative;
+  top: 1px;
+}
+</style>
+
+```{r mine,results="asis",engine="js", echo=FALSE}
+// stumble through the tabset(s)
+setTimeout(function(){
+  document.querySelector('a#FullResultButton1').addEventListener('click', doIt);
+  function doIt(){
+    document.querySelector('a[href*="#domain-architecture-2"]').click(); //Second(-2) Domain Architecture Section (reuse at different heading levels)
+  }
+}, 100); // slow your roll
+
+setTimeout(function(){
+  document.querySelector('a#FullResultButton2').addEventListener('click', doIt);
+  function doIt(){
+    document.querySelector('a[href*="#phylogeny-1"]').click(); //Second Phylogeny(-1) Section (reuse at different heading levels)
+  }
+}, 100); 
+
+setTimeout(function(){
+  document.querySelector('a#FullResultButton3').addEventListener('click', doIt);
+  function doIt(){
+    document.querySelector('a[href*="#homolog-data"]').click(); //Homolog Data Section 
+  }
+}, 100); 
+```
+
+```{r setup, include = FALSE}
+## Globally Suppress warnings and messaging
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+## Create Sunburst Report Function
+cpcols <- c(
+    "#AFEEEE", "#DDA0DD", "#EE2C2C", "#CDBE70", "#B0B099",
+    "#8B2323", "#EE7600", "#EEC900", "chartreuse3", "#0000FF",
+    "#FFD900", "#32CD32", "maroon4", "cornflowerblue", "darkslateblue",
+    "#AB82FF", "#CD6889", "#FFA07A", "#FFFF00", "#228B22",
+    "#FFFFE0", "#FFEC8B", "peru", "#668B8B", "honeydew",
+    "#A020F0", "grey", "#8B4513", "#191970", "#00FF7F",
+    "lemonchiffon", "#66CDAA", "#5F9EA0", "#A2CD5A", "#556B2F",
+    "#EEAEEE", "thistle4", "#473C8B", "#FFB6C1", "#8B1C62",
+    "#FFE4B5", "black", "#FF7F50", "#FFB90F", "#FF69B4", "#836FFF",
+    "#757575", "#CD3333", "#EE7600", "#CDAD00", "#556B2F", "#7AC5CD"
+    )
+lineage_sunburst_report <- function(prot, lineage_column = "Lineage",
+    type = "sunburst",
+    levels = 2, colors = NULL, legendOrder = NULL, showLegend = TRUE, maxLevels = 5) {
+    lin_col <- sym(lineage_column)
+
+    # ensure they don't exceed maxLevels, although this should
+    if (!is.null(maxLevels) && levels > maxLevels) {
+        levels <- maxLevels
+    }
+
+    levels_vec <- c()
+    for (i in 1:levels)
+    {
+        levels_vec <- append(levels_vec, paste0("level", i))
+    }
+
+    # Take lineage column and break into the first to levels
+    prot <- prot %>%
+        select({{ lin_col }}) %>%
+        arrange(desc({{ lin_col }})) %>%
+        drop_na({{ lin_col }})
+    protLevels <- prot %>% separate({{ lin_col }}, into = levels_vec, sep = ">")
+    # Count the occurrance of each group of levels
+    protLevels <- protLevels %>%
+        group_by_at(levels_vec) %>%
+        summarise(size = n())
+    protLevels <- protLevels %>% arrange()
+    tree <- d3_nest(protLevels, value_cols = "size")
+
+    # Plot sunburst
+    if (type == "sunburst") {
+        result <- sunburst(tree, legend = list(w = 225, h = 15, r = 5, s = 5), colors = cpcols, legendOrder = legendOrder)
+    } else if (type == "sund2b") {
+        result <- sund2b(tree)
+    }
+
+    if (showLegend) {
+        return(
+            htmlwidgets::onRender(
+                result,
+                "function(el, x) {
+          jQuery('.sunburst-togglelegend', el)
+            .attr('checked', 'true')
+            .attr('data-html2canvas-ignore', 'true');
+          jQuery('.sunburst-legend', el).css('visibility', '');
+
+          // create a button to download the sunburst
+          // (relies on html2canvas being included in the page)
+
+          // FIXME: consider pulling this all out into a js library
+          //  so that we can apply it to other components.
+
+          const downloadBtn = jQuery('<button id=\"download-sunburst\">Download Sunburst</button>')
+            .css({'position': 'absolute', 'right': '5px', 'top': '5px'})
+            .attr('data-html2canvas-ignore', 'true')
+            .appendTo(el);
+
+          saveAs = (blob, fileName) => {
+              const link = document.createElement('a');
+              link.download = fileName
+              link.href = URL.createObjectURL(blob);
+              link.click();
+              URL.revokeObjectURL(link.href);
+          }
+
+          downloadBtn.click(() => {
+            html2canvas(el, { scale: 4, logging: false }).then(canvas => {
+              canvas.toBlob(function(blob) {
+                saveAs(blob, 'sunburst.png');
+              });
+            });
+          });
+        }"
+            )
+        )
+    }
+
+    return(result)
+}
+```
+
+# {.tabset}
+
+## Results Summary
+
+An overview of the protein analysis. To view the full results, explore the additional tabs.
+
+### Domain Architecture 
+
+Visualizations and summaries for protein domains.
+
+<a class="full-results-button" id="FullResultButton1" style="background: #5bc0de; color:#fff; font-face: bold;">View full results</a>
+
+
+#### Interproscan Visualization
+
+```{r, echo=FALSE}
+params$rs_interproscan_visualization
+```
+
+#### Proximity Network
+
+```{r, echo=FALSE}
+params$proximity_network
+```
+
+### Phylogeny
+
+Visualizations for protein evolution.
+
+<a class="full-results-button" id="FullResultButton2" style="background: #5bc0de; color:#fff; font-face: bold;">View full results</a>
+
+#### Sunburst
+
+```{r, echo=FALSE}
+library(dplyr)
+library(tidyr)
+lineage_sunburst_report(params$sunburst, "Lineage", levels = 2)
+```
+
+### Data
+
+Summary table of proteins including domain architectures, phylogeny, and homologs, when applicable.
+
+<a class="full-results-button" id="FullResultButton3" style="background: #5bc0de; color:#fff; font-face: bold;">View full results</a>
+
+```{r, echo=FALSE}
+params$data
+```
+
+
+## Query Data {.tabset}
+
+Input data, additional metadata, and preliminary analyses of query protein(s).
+
+### Data Table
+
+The data table provides a summary of the sequences submitted, or \"queried\", for analysis. The preview shown can be extended by using \"Add/remove column(s)\" to see info about other taxonomic classes as well as domain architecuture codes from databases other than the default (Pfam).
+
+```{r, echo=FALSE}
+params$queryDataTable
+```
+
+### FASTA
+
+Uploaded amino acid FASTA sequence(s).
+
+`r glue::glue(params$fastaDataText)`
+
+### Query Heatmap
+
+A heatmap of submitted sequences and their respective taxonomic lineages.
+
+```{r, echo=FALSE}
+params$heatmap
+```
+
+### Domain Architecture
+
+Visualizations and analyses of all query and homologous protein domains, structural or functional subunits, and their architectures.
+
+```{r, echo=FALSE}
+if(is.null(params$query_iprDatabases)){
+    choices <- params$query_domarch_cols
+    if ("PfamA" %in% choices & "Phobius" %in% choices) {
+      analysis_type <- c("PfamA", "Phobius")
+      } else {
+        default <- choices[1]
+        }
+  } else {
+    analysis_type <- params$query_iprDatabases
+    }
+
+if(is.null(params$query_iprVisType)){
+  analysis_group <- 'Analysis'
+  } else {
+    analysis_group <- params$query_iprVisType
+    }
+
+if(length(params$query_domarch_cols) >= 1 ) {
+  DomArchPlot <- plotIPR2VizWeb(
+    infile_ipr = params$query_data@ipr_path,
+    accessions = params$query_data@df$QueryName,
+    analysis = analysis_type, group_by = analysis_group, name = "Name"
+    )
+    DomArchPlot
+} else {
+  "No domains found in the input sequences."
+  }
+```
+
+## Homolog Data
+
+Full set of homologs of query sequences, including their lineage and domain architecture info.
+
+```{r, echo=FALSE}
+params$mainTable
+```
+
+## Domain Architecture {.tabset}
+
+Summary and visualizations of protein motifs/subunits (domains) and their configurations within the query protein(s) (domain architectures).
+
+### Table
+
+```{r, echo=FALSE}
+params$DALinTable
+```
+
+### Heatmap
+
+```{r, echo=FALSE}
+params$DALinPlot
+```
+
+### Network
+
+```{r, echo=FALSE}
+params$DANetwork
+```
+
+```{r, echo=FALSE}
+if (length(params$domarch_cols) == 0) {
+  choices <- c("None")
+  vals <- "None"
+  selected <- "None"
+  } else {
+    vals <- params$domarch_cols
+    choices <- substring(vals, first = 9)
+    selected <- if (length(choices) >= 2) choices[1:2] else choices[1]
+    }
+
+if (is.null(params$DA_col)) {
+  da_col <- vals[[1]]
+  } else {
+    da_col <- params$DA_Col
+  }
+
+plot_data <- params$DA_Prot
+plot_data[[da_col]] <- str_replace_all(plot_data[[da_col]], " ", "_")
+createWordCloudElement(plot_data, colname = da_col, cutoff = params$DACutoff, UsingRowsCutoff = F)
+```
+
+### Interproscan Visualization
+
+```{r, echo=FALSE}
+params$da_interproscan_visualization
+```
+
+### UpSet Plot
+
+```{r, echo=FALSE}
+upset_plot_data <- params$DA_Prot
+upset_plot_data[[da_col]] <- str_replace_all(upset_plot_data[[da_col]], " ", "_")
+final_plot <- plotUpSet(upset_plot_data, colname = da_col, cutoff = params$DACutoff)
+domains <- upset_plot_data %>% 
+  dplyr::pull(da_col)
+n_unique_domains <- domains %>%
+    unique() %>% 
+    length()
+
+if (n_unique_domains > 1) {
+  final_plot
+  } else {
+    stringr::str_glue("UpSet plot requires more than 1 unique domain (only {n_unique_domains} present). Try selecting more proteins.")
+    }
+```
+
+## Phylogeny {.tabset}
+
+Visualizations of phyletic patterns, sequence similarity, and evolution of related proteins.
+
+### Sunburst
+
+```{r, echo=FALSE}
+lineage_sunburst_report(params$phylo_sunburst, lineage_column = "Lineage_long_na", type = "sunburst", levels = params$phylo_sunburst_levels)
+```
+
+### Tree
+
+```{r, include=FALSE}
+if (is.null(params$tree_msa_tool)) {
+  tree_msa_tool <- 'ClustalO' ## initialize with default value
+  } else {
+    tree_msa_tool <- params$tree_msa_tool
+    }
+
+if (is.null(params$msa_rep_num)) {
+  msa_rep_num <- 3 ## initialize with default value
+  } else {
+    msa_rep_num <- params$msa_rep_num
+    } 
+```
+
+```{r, include=FALSE}
+if(length(params$repAccNums) >= 3 ) {
+  rep <- params$repAccNums[1:msa_rep_num]
+  if (!params$rval_phylo) {
+    seqs <- readAAStringSet(params$app_data@fasta_path)
+    names(seqs) <- sub(" .*", "", names(seqs))
+    query_accession <- params$app_data@df %>% filter(!duplicated(QueryName))
+    query_accession <- unique(query_accession$Query)
+    query <- seqs[query_accession]
+    names(query) <- unique(params$app_data@df$QueryName)
+    query <- AAStringSet(query)
+  }
+  # Generate Fasta File
+  rep_fasta_path <- tempfile()
+
+  acc2FA(rep, outpath = rep_fasta_path, "sequential")
+  rename_fasta(rep_fasta_path, rep_fasta_path,
+    replacement_function = mapAcc2Name,
+    acc2name = params$acc2Name
+  )
+  if (!params$rval_phylo) {
+    writeXStringSet(query, rep_fasta_path, append = TRUE)
+  }
+  rep_msa_path <- tempfile()
+  alignFasta(rep_fasta_path, tree_msa_tool, rep_msa_path)
+}
+```
+
+```{r, echo=FALSE}
+library(msa)
+library(ape)
+library(tidytree)
+library(ggtree)
+if(length(params$repAccNums) >= 3 ) {
+  seqTree(fasta_filepath = rep_msa_path) 
+ } else {"Not enough representative sequences: try changing the 'Reduce By' field."}
+```
+
+### MSA
+
+```{r, include=FALSE}
+if(length(params$repAccNums) >= 3 ) {
+  if (!params$rval_phylo) {
+    seqs <- readAAStringSet(params$app_data@fasta_path)
+    names(seqs) <- sub(" .*", "", names(seqs))
+    query_accession <- params$app_data@df %>% filter(!duplicated(QueryName))
+    query_accession <- unique(query_accession$Query)
+    query <- seqs[query_accession]
+    # names(query) <- params$PhyloSelect
+    query <- AAStringSet(query)
+    }
+
+  # Generate Fasta File
+  rep_fasta_path <- tempfile()
+  acc2FA(rep, outpath = rep_fasta_path, "sequential")
+  rename_fasta(rep_fasta_path, rep_fasta_path,
+    replacement_function = mapAcc2Name,
+    acc2name = params$acc2Name
+  )
+  if (!params$rval_phylo) {
+    writeXStringSet(query, rep_fasta_path, append = TRUE)
+  }
+
+  # Call MSA2PDF
+  msa_pdf_path <- tempfile()
+  msa_parent_dir <- dirname(params$app_data@fasta_path)
+  msa_subdir_path <- file.path(msa_parent_dir, "msa_figs")
+  if (!dir.exists(msa_subdir_path)) {
+    dir.create(msa_subdir_path, recursive = TRUE)
+    message("Subdirectory 'msa_figs' created at: ", msa_subdir_path)
+  } else {
+    message("Subdirectory 'msa_figs' already exists at: ", msa_subdir_path)
+  }
+  msa_prefix <- paste0(msa_subdir_path, "/")
+  post_fix <- paste("msa", params$query_pin, params$PhyloSelect, params$msa_reduce_by, ".pdf", sep = "_")
+
+  msa_pdf_path <- paste0(msa_prefix, post_fix)
+
+  createMSA_PDF(fasta_path = rep_fasta_path, msa_pdf_path)
+  }
+```
+
+```{r msa_pdf, echo = FALSE, out.width = "95%", out.height  = "800px"}
+# apt-get install texlive
+if(length(params$repAccNums) >= 3 ) {
+  knitr::include_graphics(msa_pdf_path)
+  } else {"Not enough representative sequences: try changing the 'Reduce By' field."}
+```

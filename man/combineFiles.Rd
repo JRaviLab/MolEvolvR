@@ -20,7 +20,7 @@ The search is recursive (i.e., it will look in subdirectories as well).}
 Default is "*full_analysis.tsv".}
 
 \item{delim}{Character. The delimiter used in the input files.
-Default is tab ("\t").}
+Default is tab \code{"\t"}.}
 
 \item{skip}{Integer. The number of lines to skip at the beginning of each file.
 Default is 0.}
