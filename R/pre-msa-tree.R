@@ -676,7 +676,7 @@ acc2FA <- function(accessions, outpath, plan = "sequential") {
                 id = accessions_partitioned[[x]],
                 db = "protein",
                 rettype = "fasta",
-                api_key = Sys.getenv("ENTREZ_API_KEY")
+                # api_key = Sys.getenv("ENTREZ_API_KEY")
             )
         )
     })
@@ -809,9 +809,9 @@ alignFasta <- function(fasta_file, tool = "Muscle", outpath = NULL) {
         abort("Error: The FASTA file does not exist: ", fasta_file)
     }
     
-    if (file_ext(fasta_file) != "fasta" && file_ext(fasta_file) != "fa") {
-        abort("Error: The specified file is not a valid FASTA file: ", fasta_file)
-    }
+    # if (file_ext(fasta_file) != "fasta" && file_ext(fasta_file) != "fa") {
+    #    abort("Error: The specified file is not a valid FASTA file: ", fasta_file)
+    # }
     fasta <- readAAStringSet(fasta_file)
 
     aligned <- switch(tool,
@@ -869,11 +869,11 @@ writeMSA_AA2FA <- function(alignment, outpath) {
         abort("Error: The output directory does not exist: ", outdir)
     }
 
-    l <- length(rownames(alignment))
+    l <- length(names(unmasked((alignment))))
     fasta <- ""
     for (i in 1:l)
     {
-        fasta <- paste0(fasta, paste(">", rownames(alignment)[i]), "\n")
+        fasta <- paste0(fasta, paste(">", names(unmasked((alignment)))[i]), "\n")
         seq <- toString(unmasked(alignment)[[i]])
         fasta <- paste0(fasta, seq, "\n")
     }

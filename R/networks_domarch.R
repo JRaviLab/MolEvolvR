@@ -24,20 +24,20 @@
 #' A network of domains is returned based on shared domain architectures.
 #'
 #' @param prot A data frame that contains the column 'DomArch'.
-#' @param column Name of column containing Domain architecture from which nodes 
+#' @param column Name of column containing Domain architecture from which nodes
 #' and edges are generated.
 #' @param domains_of_interest Character vector specifying domains of interest.
-#' @param cutoff Integer. Only use domains that occur at or above the cutoff for 
+#' @param cutoff Integer. Only use domains that occur at or above the cutoff for
 #' total counts if cutoff_type is "Total Count".
-#' Only use domains that appear in cutoff or greater lineages if cutoff_type is 
+#' Only use domains that appear in cutoff or greater lineages if cutoff_type is
 #' Lineage.
 #' @param layout Character. Layout type to be used for the network. Options are:
 #' \itemize{\item "grid" \item "circle" \item "random" \item "auto"}
-#' @param query_color Character. Color to represent the queried domain in the 
+#' @param query_color Character. Color to represent the queried domain in the
 #' network.
 #'
 #' @importFrom dplyr across add_row all_of distinct filter mutate pull select
-#' @importFrom igraph delete_vertices graph_from_edgelist vertex
+#' @importFrom igraph delete_vertices graph_from_edgelist vertex V
 #' @importFrom purrr map
 #' @importFrom rlang sym
 #' @importFrom shiny showNotification
@@ -174,21 +174,21 @@ createDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, c
                 if ("X" %in% V(g)$name) {
                     g <- delete_vertices(g, "X")
                 }
-                V(g)$size <- as.numeric(wc[V(g)$name])
+                igraph::V(g)$size <- as.numeric(wc[igraph::V(g)$name])
 
-                V(g)$size <- (V(g)$size - min(V(g)$size)) / (max(V(g)$size) - min(V(g)$size)) * 20 + 10 # scaled by degree
+                igraph::V(g)$size <- (igraph::V(g)$size - min(igraph::V(g)$size)) / (max(igraph::V(g)$size) - min(igraph::V(g)$size)) * 20 + 10 # scaled by degree
 
                 # setting vertex color by size
-                V(g)$color <- rainbow(5, alpha = .5)[round((V(g)$size - min(V(g)$size)) / (max(V(g)$size) - min(V(g)$size)) * 4 + 1)]
-                V(g)$frame.color <- V(g)$color
+                igraph::V(g)$color <- rainbow(5, alpha = .5)[round((igraph::V(g)$size - min(igraph::V(g)$size)) / (max(igraph::V(g)$size) - min(igraph::V(g)$size)) * 4 + 1)]
+                igraph::V(g)$frame.color <- igraph::V(g)$color
                 # scaling edge width
-                E(g)$width <- e.sz
-                E(g)$width <- ifelse(log(E(g)$width) == 0, .3, log(E(g)$width))
+                igraph::E(g)$width <- e.sz
+                igraph::E(g)$width <- ifelse(log(igraph::E(g)$width) == 0, .3, log(igraph::E(g)$width))
                 # coloring edges by width
                 ew <- c(2.7, 4.5)
-                E(g)$color <- sapply(
-                    E(g)$width,
-                    function(x) if (x >= ew[1] && x <= ew[2]) E(g)$color <- adjustcolor("cadetblue", alpha.f = .7) else if (x > ew[2]) E(g)$color <- adjustcolor("maroon", alpha.f = .5) else E(g)$color <- "gray55"
+                igraph::E(g)$color <- sapply(
+                    igraph::E(g)$width,
+                    function(x) if (x >= ew[1] && x <= ew[2]) igraph::E(g)$color <- adjustcolor("cadetblue", alpha.f = .7) else if (x > ew[2]) igraph::E(g)$color <- adjustcolor("maroon", alpha.f = .5) else igraph::E(g)$color <- "gray55"
                 )
                 vis_g <- visIgraph(g, type = "full")
             }
@@ -211,7 +211,7 @@ createDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, c
                 visOptions(highlightNearest = TRUE)
         },
         error = function(e) {
-            showNotification(toString(e))
+            # showNotification(toString(e))
             vis_g <- "error"
         },
         finally = {
@@ -231,18 +231,18 @@ createDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, c
 #'
 #'
 #' @param prot A data frame that contains the column 'DomArch'.
-#' @param column Name of column containing Domain architecture from which nodes 
+#' @param column Name of column containing Domain architecture from which nodes
 #' and edges are generated.
 #' @param domains_of_interest Character vector specifying the domains of interest.
-#' @param cutoff Integer. Only use domains that occur at or above the cutoff for 
+#' @param cutoff Integer. Only use domains that occur at or above the cutoff for
 #' total counts if cutoff_type is "Total Count".
-#' Only use domains that appear in cutoff or greater lineages if cutoff_type is 
+#' Only use domains that appear in cutoff or greater lineages if cutoff_type is
 #' Lineage.
 #' @param layout Character. Layout type to be used for the network. Options are:
 #' \itemize{\item "grid" \item "circle" \item "random" \item "auto"}
-#' @param query_color Color that the nodes of the domains in the 
+#' @param query_color Color that the nodes of the domains in the
 #' domains_of_interest vector are colored
-#' @param partner_color Color that the nodes that are not part of the 
+#' @param partner_color Color that the nodes that are not part of the
 #' domains_of_interest vector are colored
 #' @param border_color Color for the borders of the nodes.
 #' @param IsDirected Is the network directed? Set to false to eliminate arrows

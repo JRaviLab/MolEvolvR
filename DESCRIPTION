@@ -40,6 +40,7 @@ Imports:
     DBI,
     doParallel,
     dplyr,
+    DT,
     forcats,
     fs,
     furrr,
@@ -51,6 +52,8 @@ Imports:
     here,
     htmltools,
     htmlwidgets,
+    httr,
+    httr2,
     igraph,
     latexpdf,
     magrittr,
@@ -73,6 +76,7 @@ Imports:
     tibble,
     tidyr,
     tinytex,
+    tidyverse,
     tools,
     UpSetR,
     viridis,
@@ -82,4 +86,5 @@ Imports:
     XVector,
     yaml
 Suggests:
-    knitr
+    knitr,
+    iprscanr

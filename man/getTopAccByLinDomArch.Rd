@@ -6,7 +6,7 @@
 \usage{
 getTopAccByLinDomArch(
   infile_full,
-  DA_col = "DomArch.Pfam",
+  DA_col = "DomArch.PfamA",
   lin_col = "Lineage_short",
   n = 20,
   query
