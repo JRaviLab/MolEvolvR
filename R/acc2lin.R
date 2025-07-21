@@ -6,7 +6,7 @@
 # suppressPackageStartupMessages(library(tidyverse))
 # suppressPackageStartupMessages(library(biomartr))
 
-
+utils::globalVariables(c("Protein", "mergedTax", "gca_ipg_dt", "assembly_path", "Lineage"))
 # https://stackoverflow.com/questions/18730491/sink-does-not-release-file
 #' Sink Reset
 #'
@@ -44,15 +44,15 @@ sinkReset <- function() {
 
 #' addLineage
 #'
-#' @param df A `data.frame` containing the input data. One column must contain 
+#' @param df A `data.frame` containing the input data. One column must contain
 #' the accession numbers.
-#' @param acc_col A string specifying the column name in `df` that holds the 
+#' @param acc_col A string specifying the column name in `df` that holds the
 #' accession numbers. Defaults to `"AccNum"`.
-#' @param assembly_path A string specifying the path to the `assembly_summary.txt` 
+#' @param assembly_path A string specifying the path to the `assembly_summary.txt`
 #' file. This file contains metadata about assemblies.
-#' @param lineagelookup_path A string specifying the path to the lineage lookup 
+#' @param lineagelookup_path A string specifying the path to the lineage lookup
 #' file, which contains a mapping from tax IDs to their corresponding lineages.
-#' @param ipgout_path (Optional) A string specifying the path where IPG database 
+#' @param ipgout_path (Optional) A string specifying the path where IPG database
 #' fetch results will be saved. If `NULL`, the results are not written to a file.
 #' @param plan A string specifying the parallelization strategy for the future
 #' package, such as `"sequential"` or `"multisession"`.
@@ -61,7 +61,7 @@ sinkReset <- function() {
 #' @importFrom magrittr %>%
 #' @importFrom rlang sym warn abort inform
 #'
-#' @return A `data.frame` that combines the original `df` with the lineage 
+#' @return A `data.frame` that combines the original `df` with the lineage
 #' information.
 #' @export
 #'
@@ -151,7 +151,7 @@ addLineage <- function(df, acc_col = "AccNum", assembly_path,
 #'
 #' @importFrom rlang warn abort inform
 #'
-#' @return A `data.table` that contains the lineage information, mapping protein 
+#' @return A `data.table` that contains the lineage information, mapping protein
 #' accessions to their tax IDs and lineages.
 #' @export
 #'
@@ -337,7 +337,7 @@ efetchIPG <- function(accnums, out_path, plan = "sequential", ...) {
 #' @importFrom data.table fread
 #' @importFrom rlang warn abort inform
 #'
-#' @return A `data.table` with the lineage information for the provided protein 
+#' @return A `data.table` with the lineage information for the provided protein
 #' accessions.
 #' @export
 #'

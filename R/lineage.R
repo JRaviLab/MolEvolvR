@@ -4,6 +4,8 @@
 # suppressPackageStartupMessages(library(furrr))
 # suppressPackageStartupMessages(library(data.table))
 
+utils::globalVariables(c("AccNum.noV"))
+
 #####################################
 ## Download Assembly Summary Files ##
 #####################################
@@ -450,6 +452,8 @@ IPG2Lineage <- function(accessions, ipg_file,
 #' from the accession numbers for TaxID retrieval. Defaults to TRUE.
 #'
 #' @importFrom data.table as.data.table
+#' @importFrom data.table is.data.table
+#' @importFrom data.table merge.data.table
 #'
 #' @return A data table that includes the original data along with a new column
 #' containing the corresponding TaxIDs.

@@ -104,8 +104,8 @@ ensureUniqAccNum <- function(accnums) {
 #' Parse accesion numbers from fasta and add a
 #' suffix of the ith occurence to handle duplicates
 #'
-#' @param fasta An [XStringSet] object representing the sequences from a 
-#' FASTA file. The sequence names (headers) will be adjusted for uniqueness 
+#' @param fasta An [XStringSet] object representing the sequences from a
+#' FASTA file. The sequence names (headers) will be adjusted for uniqueness
 #' and sanitized.
 #'
 #' @importFrom purrr map_chr
@@ -151,7 +151,7 @@ cleanFAHeaders <- function(fasta) {
 #'
 #' @importFrom dplyr as_tibble filter
 #'
-#' @return A tibble with rows removed where the specified column contains 
+#' @return A tibble with rows removed where the specified column contains
 #' `"-"`, `"NA"`, or an empty string.
 #' @export
 #'
@@ -236,8 +236,8 @@ condenseRepeatedDomains <- function(prot, by_column = "DomArch", excluded_prots 
 #' @param prot DataTable to operate on
 #' @param by_column Column to operate on
 #'
-#' @return The original data frame with the specified column updated. All 
-#' consecutive '?' characters will be replaced with 'X(s)', and individual '?' 
+#' @return The original data frame with the specified column updated. All
+#' consecutive '?' characters will be replaced with 'X(s)', and individual '?'
 #' characters will be replaced with 'X'.
 #' @export
 #'
@@ -274,13 +274,13 @@ replaceQuestionMarks <- function(prot, by_column = "GenContext") {
 #' Used for removing * from GenContext columns
 #'
 #' @param query_data A data frame containing the data to be processed.
-#' @param colname The name of the column from which asterisks should be removed. 
+#' @param colname The name of the column from which asterisks should be removed.
 #' Defaults to "GenContext".
 #'
 #' @importFrom purrr map
 #' @importFrom stringr str_remove_all
 #'
-#' @return The original data frame with asterisks removed from the specified 
+#' @return The original data frame with asterisks removed from the specified
 #' column.
 #' @export
 #'
@@ -311,7 +311,7 @@ removeAsterisks <- function(query_data, colname = "GenContext") {
 #' @param by_column Default column is 'DomArch'. Can also take 'ClustName', 'GenContext' as input.
 #' @param keep_domains Default is False Keeps tail entries that contain the query domains.
 #'
-#' @return The original data frame with singletons removed from the specified 
+#' @return The original data frame with singletons removed from the specified
 #' column.
 #' @export
 #'
@@ -462,7 +462,7 @@ cleanClusters <- function(prot,
     # Contains all domains separated by "|"
     domains_for_grep <- paste(domains_keep$domains, collapse = "|")
     # Remove rows with no domains contained within domains_keep
-    prot <- prot %>% filter(grepl(domains_for_grep, ClustName))
+    prot <- prot %>% filter(grepl(domains_for_grep, .data$ClustName))
 
     ## Optional parameters
     # Condense repeats
@@ -501,33 +501,33 @@ cleanClusters <- function(prot,
 #' The original data frame is returned with the clean DomArchs column and the old domains in the DomArchs.old column.
 #'
 #' @param prot A data frame containing a 'DomArch' column
-#' @param old The name of the original column containing domain architecture. 
+#' @param old The name of the original column containing domain architecture.
 #' Defaults to "DomArch.orig".
-#' @param new The name of the cleaned column to be created. Defaults to 
+#' @param new The name of the cleaned column to be created. Defaults to
 #' "DomArch".
 #' @param domains_keep A data frame containing the domain names to be retained.
-#' @param domains_rename A data frame containing the domain names to be replaced 
+#' @param domains_rename A data frame containing the domain names to be replaced
 #' in a column 'old' and the
 #' corresponding replacement values in a column 'new'.
-#' @param condenseRepeatedDomains Boolean. If TRUE, repeated domains in 
+#' @param condenseRepeatedDomains Boolean. If TRUE, repeated domains in
 #' 'DomArch' are condensed. Default is TRUE.
-#' @param removeTails Boolean. If TRUE, 'ClustName' will be filtered based on 
+#' @param removeTails Boolean. If TRUE, 'ClustName' will be filtered based on
 #' domains to keep/remove. Default is FALSE.
-#' @param removeEmptyRows Boolean. If TRUE, rows with empty/unnecessary values 
+#' @param removeEmptyRows Boolean. If TRUE, rows with empty/unnecessary values
 #' in 'DomArch' are removed. Default is FALSE.
-#' @param domains_ignore A data frame containing the domain names to be removed 
+#' @param domains_ignore A data frame containing the domain names to be removed
 #' in a column called 'domains'
 #'
 #' @importFrom dplyr pull
 #' @importFrom stringr coll str_replace_all
 #'
-#' @return The original data frame is returned with the clean DomArchs column 
+#' @return The original data frame is returned with the clean DomArchs column
 #' and the old domains in the DomArchs.old column.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' cleanDomainArchitecture(prot, TRUE, FALSE, 
+#' cleanDomainArchitecture(prot, TRUE, FALSE,
 #' omains_keep, domains_rename, domains_ignore = NULL)
 #' }
 cleanDomainArchitecture <- function(prot, old = "DomArch.orig", new = "DomArch",
@@ -665,7 +665,7 @@ cleanGenomicContext <- function(prot, domains_rename = data.frame("old" = charac
 #' Cleanup GeneDesc
 #'
 #' @param prot A data frame containing the gene descriptions.
-#' @param column The name of the column from which gene descriptions are pulled 
+#' @param column The name of the column from which gene descriptions are pulled
 #' for cleanup.
 #'
 #' @return Return trailing period that occurs in GeneDesc column
@@ -684,16 +684,16 @@ cleanGeneDescription <- function(prot, column) {
 
 #' Pick Longer Duplicate
 #'
-#' @param prot A data frame containing the data, with at least one column 
+#' @param prot A data frame containing the data, with at least one column
 #' named 'AccNum' for identification of duplicates.
-#' @param column The name of the column from which the longest entry among 
+#' @param column The name of the column from which the longest entry among
 #' duplicates will be selected.
 #'
 #' @importFrom dplyr arrange filter group_by pull n select summarize mutate
 #' @importFrom rlang sym .data
 #'
-#' @return A data frame containing only the longest entries among duplicates 
-#' based on the specified column. 
+#' @return A data frame containing only the longest entries among duplicates
+#' based on the specified column.
 #' @export
 #'
 #' @examples
@@ -702,7 +702,7 @@ cleanGeneDescription <- function(prot, column) {
 #' }
 selectLongestDuplicate <- function(prot, column) {
     col <- rlang::sym(column)
-    prot <- prot %>% 
+    prot <- prot %>%
         mutate(row.orig = seq_len(n()))
     # Get list of duplicates
     dups <- prot %>%
@@ -729,8 +729,8 @@ selectLongestDuplicate <- function(prot, column) {
     }
 
     # grab all the longest rows
-    unique_dups <- prot %>% 
-        filter(!.data$row.orig %in% remove_rows) %>% 
+    unique_dups <- prot %>%
+        filter(!.data$row.orig %in% remove_rows) %>%
         select(-.data$row.orig)
 
     return(unique_dups)
@@ -738,12 +738,12 @@ selectLongestDuplicate <- function(prot, column) {
 
 #' Cleanup Lineage
 #'
-#' @param prot A data frame containing a 'Lineage' column that needs to be 
+#' @param prot A data frame containing a 'Lineage' column that needs to be
 #' cleaned up.
-#' @param lins_rename A data frame with two columns: 'old' containing terms 
+#' @param lins_rename A data frame with two columns: 'old' containing terms
 #' to be replaced and 'new' containing the corresponding replacement terms.
 #'
-#' @return The original data frame with the 'Lineage' column updated based on 
+#' @return The original data frame with the 'Lineage' column updated based on
 #' the provided replacements.
 #' @export
 #'

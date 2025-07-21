@@ -234,8 +234,8 @@ convertIPRScanDomainTable2FA <- function(df_iprscan_domains) {
         dplyr::rowwise() |>
         dplyr::mutate(
             idx_new_record = append_fasta_domains(
-                new_seq = seq_domain,
-                new_seq_id = id_domain
+                new_seq = .data$seq_domain,
+                new_seq_id = .data$id_domain
             )
         )
     return(fasta_domains)

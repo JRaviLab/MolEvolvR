@@ -4,7 +4,7 @@
 \alias{rename_fasta}
 \title{Rename the labels of fasta files}
 \usage{
-rename_fasta(fa_path, outpath, replacement_function = map_acc2name, ...)
+rename_fasta(fa_path, outpath, replacement_function = .data$map_acc2name, ...)
 }
 \arguments{
 \item{fa_path}{Path to fasta file}

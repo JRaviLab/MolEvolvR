@@ -46,8 +46,8 @@ A network of domains is returned based on shared domain architectures.
 }
 \examples{
 \dontrun{
-createUndirectedGenomicContextNetwork(pspa, column = "DomArch", 
-domains_of_interest = c("Domain1", "Domain2"), 
+createUndirectedGenomicContextNetwork(pspa, column = "DomArch",
+domains_of_interest = c("Domain1", "Domain2"),
 cutoff_type = "Total Count", cutoff = 10)
 }
 }
