@@ -4,8 +4,6 @@
 # suppressPackageStartupMessages(library(furrr))
 # suppressPackageStartupMessages(library(data.table))
 
-utils::globalVariables(c("AccNum.noV"))
-
 #####################################
 ## Download Assembly Summary Files ##
 #####################################

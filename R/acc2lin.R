@@ -6,7 +6,6 @@
 # suppressPackageStartupMessages(library(tidyverse))
 # suppressPackageStartupMessages(library(biomartr))
 
-utils::globalVariables(c("Protein", "mergedTax", "gca_ipg_dt", "assembly_path", "Lineage"))
 # https://stackoverflow.com/questions/18730491/sink-does-not-release-file
 #' Sink Reset
 #'
