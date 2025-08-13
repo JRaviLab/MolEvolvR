@@ -115,7 +115,7 @@ addLeaves2Alignment <- function(aln_file = "",
     if (length(aln) == 1) {
         colnames(aln) <- "x1"
         aln <- separate(aln,
-            col = x1,
+            col = .data$x1,
             into = c("x1", "x2"),
             sep = "\\s+"
         )
@@ -125,8 +125,8 @@ addLeaves2Alignment <- function(aln_file = "",
 
     aln_lin <- left_join(aln, lin, by = "AccNum") %>%
         select(
-            AccNum, Alignment,
-            Species, Lineage
+            .data$AccNum, .data$Alignment,
+            .data$Species, .data$Lineage
         )
 
     # Removes rows with NA
@@ -138,17 +138,17 @@ addLeaves2Alignment <- function(aln_file = "",
     ## !! FIX ASAP.
     if (reduced) {
         # Removes duplicate lineages
-        aln_lin <- aln_lin %>% distinct(Lineage, .keep_all = TRUE)
+        aln_lin <- aln_lin %>% distinct(.data$Lineage, .keep_all = TRUE)
     }
 
     temp <- aln_lin %>%
-        separate(Lineage,
+        separate(.data$Lineage,
             into = c("Kingdom", "Phylum"),
             sep = ">", remove = F, ## !! How to deal w/ lineages without a phylum?
             extra = "merge", fill = "right"
         ) %>%
         replace_na(replace = list(Kingdom = "", Phylum = "")) %>%
-        separate(Species,
+        separate(.data$Species,
             into = c("Genus", "Spp"),
             sep = " ", remove = F,
             extra = "merge", fill = "left"
@@ -157,28 +157,28 @@ addLeaves2Alignment <- function(aln_file = "",
         # kingdomPhylum_GenusSpecies
         mutate(Leaf = paste(
             paste0(
-                str_sub(Kingdom,
+                str_sub(.data$Kingdom,
                     start = 1, end = 1
                 ),
-                str_sub(Phylum, 1, 6)
+                str_sub(.data$Phylum, 1, 6)
             ),
             paste0(
-                str_sub(Genus, start = 1, end = 1),
-                str_sub(Spp, start = 1, end = 3)
+                str_sub(.data$Genus, start = 1, end = 1),
+                str_sub(.data$Spp, start = 1, end = 3)
             ),
             # AccNum,
             sep = "_"
         ))
     temp$Leaf <- map(temp$Leaf, convert2TitleCase)
     temp <- temp %>%
-        mutate(Leaf_Acc = (paste(Leaf, AccNum, sep = "_")))
+        mutate(Leaf_Acc = (paste(.data$Leaf, .data$AccNum, sep = "_")))
 
     # Combine and run through add leaves
     # 3 columns AccNum Sequence Leaf result
     # Create Leaf_AccNum pasted together
     # 2 columns Leaf_AccNum and Sequence Far left
     leaf_aln <- temp %>%
-        select(Leaf_Acc, Alignment)
+        select(.data$Leaf_Acc, .data$Alignment)
     return(leaf_aln)
 }
 
@@ -226,15 +226,15 @@ addName <- function(data,
             sep = lin_sep
         ) %>%
         mutate(
-            Kingdom = strtrim(Kingdom, 1),
-            Phylum = strtrim(Phylum, 6)
+            Kingdom = strtrim(.data$Kingdom, 1),
+            Phylum = strtrim(.data$Phylum, 6)
         )
     if (!is.null(spec_col)) {
         split_data <- split_data %>%
             separate(spec_col, into = c("Genus", "Spp"), sep = " ") %>%
             mutate(
-                Genus = strtrim(Genus, 1),
-                Spp = word(string = Spp, start = 1)
+                Genus = strtrim(.data$Genus, 1),
+                Spp = word(string = .data$Spp, start = 1)
             )
     } else {
         split_data$Genus <- ""
@@ -249,8 +249,8 @@ addName <- function(data,
 
     Leaf <- split_data %>%
         mutate(Leaf = paste0(
-            Kingdom, Phylum, "_",
-            Genus, Spp, "_",
+          .data$Kingdom, .data$Phylum, "_",
+          .data$Genus, .data$Spp, "_",
             {{ accnum_sym }}
         )) %>%
         pull(Leaf) %>%
@@ -284,6 +284,7 @@ addName <- function(data,
 #' Default is 'FALSE'
 #'
 #' @importFrom readr write_file
+#' @importFrom data.table data.table
 #'
 #' @details The alignment file would need two columns: 1. accession +
 #' number and 2. alignment. The protein homolog accession to lineage mapping +

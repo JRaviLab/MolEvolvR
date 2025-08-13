@@ -31,8 +31,8 @@ Create a look up table that goes from TaxID, to Lineage
 }
 \examples{
 \dontrun{
-createLineageLookup(lineage_file = "data/rankedlineage.dmp", 
-                     outfile = "data/lineage_lookup.tsv", 
+createLineageLookup(lineage_file = "data/rankedlineage.dmp",
+                     outfile = "data/lineage_lookup.tsv",
                      taxonomic_rank = "family")
 }
 }

@@ -98,8 +98,8 @@ getTopAccByLinDomArch <- function(infile_full,
     ## Group by Lineage, DomArch and reverse sort by group counts
     grouped <- cln %>%
         group_by({{ DA_sym }}, {{ lin_sym }}) %>%
-        arrange(desc(PcPositive)) %>%
-        summarise(count = n(), AccNum = dplyr::first(AccNum)) %>%
+        arrange(desc(.data$PcPositive)) %>%
+        summarise(count = n(), AccNum = dplyr::first(.data$AccNum)) %>%
         arrange(-count) %>%
         filter({{ lin_sym }} != "" && {{ DA_sym }} != "")
     top_acc <- grouped$AccNum[1:n]
@@ -365,25 +365,25 @@ plotIPR2VizWeb <- function(infile_ipr,
 
     ## Read IPR file and subset by Accessions
     ipr_out <- read_tsv(infile_ipr, col_names = T)
-    ipr_out <- ipr_out %>% filter(Name %in% accessions)
+    ipr_out <- ipr_out %>% filter(.data$Name %in% accessions)
     ## Need to fix eventually based on 'real' gene orientation!
     ipr_out$Strand <- rep("forward", nrow(ipr_out))
 
     ipr_out <- ipr_out %>% arrange(.data$AccNum, .data$StartLoc, .data$StopLoc)
     ipr_out_sub <- filter(
         ipr_out,
-        grepl(pattern = analysis, x = Analysis)
+        grepl(pattern = analysis, x = .data$Analysis)
     )
     # dynamic analysis labeller
     analyses <- ipr_out_sub %>%
-        select(Analysis) %>%
+        select(.data$Analysis) %>%
         distinct()
     analysis_labeler <- analyses %>%
-        pivot_wider(names_from = Analysis, values_from = Analysis)
+        pivot_wider(names_from = .data$Analysis, values_from = .data$Analysis)
     # analysis_labeler[1,] = colnames(analysis_labeler)
 
     # ipr_out_sub$label <- paste0(" ", ipr_out_sub$Name)
-    lookup_tbl <- lookup_tbl %>% select(-ShortName)
+    lookup_tbl <- lookup_tbl %>% select(-.data$ShortName)
     ## @SAM, make sure the following two work with the Lookup Tables!!
     # ipr_out_sub <- merge(ipr_out_sub, lookup_tbl, by = "DB.ID")
     ## PLOTTING
@@ -424,9 +424,9 @@ plotIPR2VizWeb <- function(infile_ipr,
         plot <- ggplot(
             ipr_out_sub,
             aes(
-                xmin = 1, xmax = SLength,
-                y = Analysis, # y = AccNum
-                label = ShortName
+                xmin = 1, xmax = .data$SLength,
+                y = .data$Analysis, # y = AccNum
+                label = .data$ShortName
             )
         ) +
             geom_subgene_arrow(data = ipr_out_sub, aes_string(

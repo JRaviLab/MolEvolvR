@@ -21,12 +21,12 @@
 ########################
 ## Internal Functions ##
 ########################
-#' 
-#' 
+#'
+#'
 .LevelReduction <- function(lin, level) {
     gt_loc <- str_locate_all(lin, ">")[[1]]
     available_levels <- length(gt_loc) / 2  # Since `str_locate_all` returns a matrix
-    
+
     # Guard against out-of-bounds level requests
     if (level > available_levels || level < 1) {
         return(lin)
@@ -54,12 +54,12 @@
 ########################
 ## Internal Functions ##
 ########################
-#' 
-#' 
+#'
+#'
 .LevelReduction <- function(lin, level) {
     gt_loc <- str_locate_all(lin, ">")[[1]]
     available_levels <- length(gt_loc) / 2  # Since `str_locate_all` returns a matrix
-    
+
     # Guard against out-of-bounds level requests
     if (level > available_levels || level < 1) {
         return(lin)
@@ -218,8 +218,8 @@ plotUpSet <- function(query_data = "toast_rack.sub",
             # names(words.tc)[1] <- "words"
             words.tc <- words.tc %>% str_split(pattern = " ")
             words.tc <- as.data.frame(words.tc, col.names = "Words", stringsAsFactors = F) %>%
-                filter(!grepl("^X$|^X\\(s\\)$", Words)) %>%
-                pull(Words) # remove "X" and "X(s)"
+                filter(!grepl("^X$|^X\\(s\\)$", .data$Words)) %>%
+                pull(.data$Words) # remove "X" and "X(s)"
             words.tc <- words.tc[2:(length(words.tc) - 1)]
 
             # Only use the DAs/GCs that are within the total count cutoff
@@ -258,7 +258,7 @@ plotUpSet <- function(query_data = "toast_rack.sub",
             ## Creating UpSet data
             upset <- query_data %>%
                 select(
-                    AccNum, Lineage, {{ column }}, # GenContext, DomArch,
+                    .data$AccNum, Lineage, {{ column }}, # GenContext, DomArch,
                     words.tc
                 ) %>%
                 # mutate_all(list(~ if (is.numeric(.)) as.integer(.) else .)) %>%
@@ -372,7 +372,7 @@ plotLineageDA <- function(query_data = "prot",
     query.summ.byLin.ggplot <- drop_na(query.summ.byLin) %>%
         filter(Lineage != "NANA") %>%
         filter(count >= 1) %>% # count or total count?
-        arrange(totalcount)
+        arrange(.data$totalcount)
 
     query.summ.byLin.ggplot$Lineage <- factor(query.summ.byLin.ggplot$Lineage,
         levels = sort(names(sort(table(query.summ.byLin.ggplot$Lineage), decreasing = TRUE)))
@@ -653,6 +653,8 @@ plotLineageNeighbors <- function(query_data = "prot", query = "pspa",
 #' relevant domain architectures and lineages.
 #' @param colname Character. The name of the column in query_data that contains
 #' domain architectures or other structural information.
+#' @param query_DAdoms List or data frame containing 'domains' element,
+#' character vector of domain names. (NEW ARGUMENT)
 #'
 #' @importFrom dplyr across mutate select where
 #' @importFrom ggplot2 aes element_text geom_tile ggplot scale_fill_gradient scale_x_discrete theme theme_minimal
@@ -668,12 +670,14 @@ plotLineageNeighbors <- function(query_data = "prot", query = "pspa",
 #' \dontrun{
 #' plotLineageDomainRepeats()
 #' }
-plotLineageDomainRepeats <- function(query_data, colname) {
+plotLineageDomainRepeats <- function(query_data, colname, query_DAdoms) {
     # query_data <- pspa_data
     # colname <- "SIG.TM.LADB"
+    # Defensive: check query_DAdoms
+    if (is.null(query_DAdoms$domains)) stop("query_DAdoms$domains must be provided")
 
     ## Create columns for domains/DAs and fill them with 1/0
-    for (i in query.DAdoms$domains)
+    for (i in query_DAdoms$domains)
     {
         j <- str_replace_all(string = i, pattern = "\\(", replacement = "\\\\(")
         j <- str_replace_all(string = j, pattern = "\\)", replacement = "\\\\)")
@@ -691,9 +695,9 @@ plotLineageDomainRepeats <- function(query_data, colname) {
     ggplot.data <- query_data %>%
         # filter(grepl(queryname, Query)) %>%
         select(
-            DomArch.norep, Lineage, GenContext.norep,
-            SIG.TM.LADB, GenContext, AccNum,
-            query.DAdoms$domains
+            .data$DomArch.norep, .data$Lineage, .data$GenContext.norep,
+            .data$SIG.TM.LADB, .data$GenContext, .data$AccNum,
+            all_of(query_DAdoms$domains)
         ) %>% # words.gecutoff$words
         # mutate_all(list(~ if (is.numeric(.)) as.integer(.) else .)) %>%
         mutate(across(where(is.numeric), as.integer)) %>%
@@ -705,7 +709,7 @@ plotLineageDomainRepeats <- function(query_data, colname) {
 
     ## Gathering element/word columns
     ggplot.data.gather <- ggplot.data %>%
-        gather(key = domains, value = count, 7:ncol(ggplot.data)) # %>%
+        gather(key = "domains", value = "count", 7:ncol(ggplot.data)) # %>%
     # select(DomArch.norep, Lineage, domains, count)
 
     # ## written on Sep 4
@@ -714,11 +718,11 @@ plotLineageDomainRepeats <- function(query_data, colname) {
     # 						delim="\t", col_names=TRUE)
 
     ## Stacked column plot
-    ggplot(data = ggplot.data.gather, aes(x = Lineage, y = domains)) + # aes_string # plot <- (
+    ggplot(data = ggplot.data.gather, aes(x = Lineage, y = .data$domains)) + # aes_string # plot <- (
         # geom_col(position="fill") +
         geom_tile(
             data = subset(ggplot.data.gather, !is.na(count)),
-            aes(fill = as.numeric(as.logical(count))),
+            aes(fill = as.numeric(as.logical(.data$count))),
             colour = "coral3", size = 0.3
         ) + # , width=0.7, height=0.7),
         scale_fill_gradient(low = "white", high = "darkred") +
@@ -769,7 +773,7 @@ plotLineageHeatmap <- function(prot, domains_of_interest, level = 3, label.size 
     all_grouped <- data.frame("Query" = character(0), "Lineage" = character(0), "count" = integer())
     for (dom in domains_of_interest)
     {
-        domSub <- prot %>% filter(grepl(dom, GenContext, ignore.case = T))
+        domSub <- prot %>% filter(grepl(dom, .data$GenContext, ignore.case = T))
 
         domSub <- domSub %>%
             group_by(Lineage) %>%
@@ -783,12 +787,12 @@ plotLineageHeatmap <- function(prot, domains_of_interest, level = 3, label.size 
     all_grouped <- all_grouped %>% mutate(ReducedLin = unlist(purrr::map(Lineage, ~.LevelReduction(.x, level))))
 
     all_grouped_reduced <- all_grouped %>%
-        group_by(Query, ReducedLin) %>%
+        group_by(.data$Query, .data$ReducedLin) %>%
         summarize("count" = sum(count)) %>%
-        mutate(Kingdom = unlist(purrr::map(ReducedLin, .GetKingdom)))
+        mutate(Kingdom = unlist(purrr::map(.data$ReducedLin, .GetKingdom)))
 
     lin_counts <- all_grouped_reduced %>%
-        group_by(Kingdom, ReducedLin) %>%
+        group_by(.data$Kingdom, .data$ReducedLin) %>%
         summarize("count" = n())
 
     # grep("bacteria", lin_counts$Kingdom) %>% length()
@@ -823,7 +827,7 @@ plotLineageHeatmap <- function(prot, domains_of_interest, level = 3, label.size 
         }
     ) %>% unlist()
 
-    ordered_lin <- all_grouped_reduced %>% arrange(Kingdom)
+    ordered_lin <- all_grouped_reduced %>% arrange(.data$Kingdom)
 
     all_grouped_reduced$Query <- factor(
         x = all_grouped_reduced$Query,
@@ -907,7 +911,7 @@ plotStackedLineage <- function(prot, column = "DomArch", cutoff, Lineage_col = "
     coord_flip = TRUE, legend = TRUE,
     cpcols = NULL) {
     col <- sym(column)
-    
+
     if (is.null(cpcols)) {
         cpcols <- c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "#FF7F00", "#FFFF33", "#A65628", "#F781BF")
     }
@@ -1214,7 +1218,7 @@ createWordCloudElement <- function(query_data = "prot",
 #' a frequency cutoff. Default is FALSE.
 #'
 #' @importFrom dplyr filter pull
-#' @importFrom rlang sym
+#' @importFrom rlang .data sym
 #'
 #' @return A word cloud plot showing the frequency of elements from the selected
 #' column.
@@ -1266,9 +1270,9 @@ createWordCloud2Element <- function(query_data = "prot",
     # normalized sizes
     words.tc$label <- words.tc$freq
 
-    words.tc <- words.tc %>% mutate(freq = log10(freq))
+    words.tc <- words.tc %>% mutate(freq = log10(.data$freq))
 
-    words.tc <- words.tc %>% select(words, freq, label)
+    words.tc <- words.tc %>% select(.data$words, .data$freq, .data$label)
 
     wordcloud3(words.tc, minSize = 0)
 }

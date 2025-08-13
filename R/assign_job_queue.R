@@ -8,7 +8,7 @@
 common_root <- Sys.getenv("COMMON_SRC_ROOT")
 
 #' mapOption2Process
-#' 
+#'
 #' @description
 #' Construct list where names (MolEvolvR advanced options) point to processes
 #'
@@ -37,7 +37,7 @@ mapOption2Process <- function() {
 }
 
 #' mapAdvOption2Process
-#' 
+#'
 #' @description
 #' Use MolEvolvR advanced options to get associated processes
 #'
@@ -83,7 +83,7 @@ mapAdvOption2Process <- function(advanced_opts) {
 }
 
 #' calculateProcessRuntime
-#' 
+#'
 #' @description
 #' Scrape MolEvolvR logs and calculate median processes
 #'
@@ -92,6 +92,7 @@ mapAdvOption2Process <- function(advanced_opts) {
 #'
 #' @importFrom dplyr across everything select summarise
 #' @importFrom rlang warn abort inform
+#' @importFrom stats median
 #'
 #' @return [list] names: processes; values: median runtime (seconds)
 #'
@@ -166,7 +167,7 @@ calculateProcessRuntime <- function(dir_job_results) {
 }
 
 #' writeProcessRuntime2TSV
-#' 
+#'
 #' @description
 #' Write a table of 2 columns: 1) process and 2) median seconds
 #'
@@ -210,7 +211,7 @@ writeProcessRuntime2TSV <- function(dir_job_results, filepath) {
         names_to = "process",
         values_to = "median_seconds"
       ) |>
-      dplyr::arrange(dplyr::desc(median_seconds))
+      dplyr::arrange(dplyr::desc(.data$median_seconds))
 
     # Write the resulting tibble to a TSV file
     readr::write_tsv(df_proc_medians, file = filepath)
@@ -234,7 +235,7 @@ writeProcessRuntime2TSV <- function(dir_job_results, filepath) {
 }
 
 #' writeProcessRuntime2YML
-#' 
+#'
 #' @description
 #' Compute median process runtimes, then write a YAML list of the processes and
 #' their median runtimes in seconds to the path specified by 'filepath'.
@@ -314,7 +315,7 @@ writeProcessRuntime2YML <- function(dir_job_results, filepath = NULL) {
 }
 
 #' getProcessRuntimeWeights
-#' 
+#'
 #' @description
 #' Quickly get the runtime weights for MolEvolvR backend processes
 #'
@@ -380,7 +381,7 @@ getProcessRuntimeWeights <- function(medians_yml_path = NULL) {
 }
 
 #' calculateEstimatedWallTimeFromOpts
-#' 
+#'
 #' @description
 #' Given MolEvolvR advanced options and number of inputs,
 #' calculate the total estimated walltime for the job
@@ -466,9 +467,9 @@ calculateEstimatedWallTimeFromOpts	 <- function(advanced_opts,
     opts2procs <- mapOption2Process()
     # exclude the homology search processes for the homologous hits
     procs2exclude_for_homologs <- opts2procs[["homology_search"]]
-    procs_homologs <- procs_from_opts[!(procs_from_opts 
+    procs_homologs <- procs_from_opts[!(procs_from_opts
                                         %in% procs2exclude_for_homologs)]
-    binary_proc_vec_homolog <- dplyr::if_else(all_procs 
+    binary_proc_vec_homolog <- dplyr::if_else(all_procs
                                               %in% procs_homologs, 1L, 0L)
     # add the estimated walltime for processes run on the homologous hits
     est_walltime <- est_walltime +
@@ -507,7 +508,7 @@ calculateEstimatedWallTimeFromOpts	 <- function(advanced_opts,
 
 
 #' assignJobQueue
-#' 
+#'
 #' @description
 #' Decision function to assign job queue
 #'
@@ -571,7 +572,7 @@ assignJobQueue <- function(
 }
 
 #' plotEstimatedWallTimes
-#' 
+#'
 #' @description
 #' Plot the estimated runtimes for different advanced options and number
 #' of inputs
@@ -662,8 +663,8 @@ plotEstimatedWallTimes <- function() {
     # sec to hrs
     df_walltimes <- df_walltimes |>
       dplyr::mutate(est_walltime = .data$est_walltime / 3600)
-    p <- ggplot2::ggplot(df_walltimes, ggplot2::aes(x = .data$n_inputs, 
-                                                    y = .data$est_walltime, 
+    p <- ggplot2::ggplot(df_walltimes, ggplot2::aes(x = .data$n_inputs,
+                                                    y = .data$est_walltime,
                                                     color = .data$advanced_opts)) +
       ggplot2::geom_line() +
       ggplot2::labs(
