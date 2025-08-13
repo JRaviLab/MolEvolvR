@@ -37,23 +37,23 @@
 ## !! FastTree will only work if there are unique sequence names!!
 #' convertFA2Tree
 #'
-#' @param fa_path Path to the input FASTA alignment file (.fa). Default is the 
+#' @param fa_path Path to the input FASTA alignment file (.fa). Default is the
 #' path to "data/alns/pspa_snf7.fa".
-#' @param tre_path Path to the output file where the generated tree (.tre) will 
+#' @param tre_path Path to the output file where the generated tree (.tre) will
 #' be saved. Default is the path to "data/alns/pspa_snf7.tre".
-#' @param fasttree_path Path to the FastTree executable, which is used to 
+#' @param fasttree_path Path to the FastTree executable, which is used to
 #' generate the phylogenetic tree. Default is "src/FastTree".
-#' 
+#'
 #' @importFrom rlang abort
 #'
-#' @return No return value. The function generates a tree file (.tre) from the 
+#' @return No return value. The function generates a tree file (.tre) from the
 #' input FASTA file.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' convert_fa2tre(here("data/alns/pspa_snf7.fa"), 
-#'                 here("data/alns/pspa_snf7.tre"), 
+#' convert_fa2tre(here("data/alns/pspa_snf7.fa"),
+#'                 here("data/alns/pspa_snf7.tre"),
 #'                 here("src/FastTree")
 #' }
 convertFA2Tree <- function(fa_path = here("data/alns/pspa_snf7.fa"),
@@ -62,30 +62,30 @@ convertFA2Tree <- function(fa_path = here("data/alns/pspa_snf7.fa"),
     # fa_path=here("data/alns/pspa_snf7.fa")
     # tre_path=here("data/alns/pspa_snf7.tre")
     # fasttree_path=here("src/FastTree")
-    
+
     # Check if the FASTA file exists
     if (!file.exists(fa_path)) {
         abort(paste("Error: The FASTA file does not exist at:", fa_path))
     }
-    
+
     # Check if the FastTree executable exists
     if (!file.exists(fasttree_path)) {
-        abort(paste("Error: The FastTree executable does not exist at:", 
+        abort(paste("Error: The FastTree executable does not exist at:",
                    fasttree_path))
     }
-    
+
     # Check if the output directory exists
-    tre_dir <- dirname(tre_path)
+    tre_dir <- dirname(.data$tre_path)
     if (!dir.exists(tre_dir)) {
         abort(paste("Error: The output directory does not exist:", tre_dir))
     }
-    
+
     # Check if the output file already exists
     if (file.exists(tre_path)) {
-        cat("Warning: The output file already exists and will be overwritten:", 
+        cat("Warning: The output file already exists and will be overwritten:",
             tre_path, "\n")
     }
-    
+
     message(fa_path)
     system2(
         command = fasttree_path,
@@ -107,15 +107,15 @@ convertFA2Tree <- function(fa_path = here("data/alns/pspa_snf7.fa"),
 #' @description
 #' Generate Trees for ALL fasta files in "data/alns"
 #'
-#' @param aln_path Path to the directory containing all the alignment FASTA 
+#' @param aln_path Path to the directory containing all the alignment FASTA
 #' files (.fa) for which trees will be generated. Default is "data/alns/".
-#' 
+#'
 #'
 #' @importFrom here here
 #' @importFrom purrr pmap
 #' @importFrom stringr str_replace_all
 #'
-#' @return No return value. The function generates tree files (.tre) for each 
+#' @return No return value. The function generates tree files (.tre) for each
 #' alignment file in the specified directory.
 #' @export
 #'
@@ -124,7 +124,7 @@ convertFA2Tree <- function(fa_path = here("data/alns/pspa_snf7.fa"),
 #' generate_trees(here("data/alns/"))
 #' }
 convertAlignment2Trees <- function(aln_path = here("data/alns/")) {
-    
+
     # Check if the alignment directory exists
     if (!dir.exists(aln_path)) {
         abort(paste("Error: The alignment directory does not exist:", aln_path))
@@ -135,7 +135,7 @@ convertAlignment2Trees <- function(aln_path = here("data/alns/")) {
     if (length(fa_filenames) == 0) {
         abort("Error: No FASTA files found in the specified directory.")
     }
-    
+
     fa_paths <- paste0(aln_path, fa_filenames)
     variable <- str_replace_all(basename(fa_filenames),
         pattern = ".fa", replacement = ""
@@ -164,16 +164,17 @@ convertAlignment2Trees <- function(aln_path = here("data/alns/")) {
 #'
 #' @param fa_file Character. Path to the alignment FASTA file (.fa) from which
 #'  the phylogenetic tree will be generated. Default is 'pspa_snf7.fa'.
-#' @param out_file Path to the output file where the generated tree (.tre) will 
+#' @param out_file Path to the output file where the generated tree (.tre) will
 #' be saved. Default is "data/alns/pspa_snf7.tre".
 #'
 #' @importFrom ape write.tree
 #' @importFrom phangorn bootstrap.pml dist.ml NJ modelTest phyDat plotBS pml pml.control pratchet optim.parsimony optim.pml read.phyDat upgma
 #' @importFrom seqinr dist.alignment read.alignment
 #' @importFrom stats logLik
+#' @importFrom phangorn midpoint
 #'
-#' @return No return value. The function generates a phylogenetic tree file 
-#' (.tre) based on different approaches like Neighbor Joining, UPGMA, and 
+#' @return No return value. The function generates a phylogenetic tree file
+#' (.tre) based on different approaches like Neighbor Joining, UPGMA, and
 #' Maximum Likelihood.
 #' @export
 #'
@@ -193,21 +194,21 @@ createFA2Tree <- function(fa_file = "data/alns/pspa_snf7.fa",
     ## SAMPLE ARGS
     # fa_file="data/alns/pspa_snf7.fa"
     # out_file="data/alns/pspa_snf7.tre"
-    
+
     # Check if the FASTA file exists
     if (!file.exists(fa_file)) {
         abort(paste("Error: The FASTA file does not exist at:", fa_file))
     }
-    
+
     # Check if the output directory exists
     out_dir <- dirname(out_file)
     if (!dir.exists(out_dir)) {
         abort(paste("Error: The output directory does not exist:", out_dir))
     }
-    
+
     # Check if the output file already exists
     if (file.exists(out_file)) {
-        cat("Warning: The output file already exists and will be overwritten:", 
+        cat("Warning: The output file already exists and will be overwritten:",
             out_file, "\n")
     }
 
@@ -220,7 +221,7 @@ createFA2Tree <- function(fa_file = "data/alns/pspa_snf7.fa",
     prot_dist <- dist.alignment(prot_aln, matrix = "similarity")
     prot_nj <- NJ(prot_dist)
     prot_nj_tree <- plot(prot_nj, main = "Neighbor Joining")
-    write.tree(phy = prot_nj_tree, file = tre_path)
+    write.tree(phy = prot_nj_tree, file = out_file)
 
     ###########################
     ## Approach 2
@@ -248,7 +249,7 @@ createFA2Tree <- function(fa_file = "data/alns/pspa_snf7.fa",
     plot(prot_NJ, main = "Neighbor Joining")
 
     # parsimony searches
-    prot_optim <- optim.parsimony(prot_NJ, prot)
+    prot_optim <- optim.parsimony(prot_NJ, .data$prot)
     prot_pratchet <- pratchet(prot10) # returning error
     plot(prot_optim)
     plot(prot_pratchet)

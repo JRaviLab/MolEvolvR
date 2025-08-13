@@ -166,7 +166,7 @@ prepareSingleColumnParams <- function(df,
                 "column: {col_name}\nvalue: {labels}\nn: {values}"
             )
         ) %>%
-        dplyr::select(ids, parents, labels, values, hovertext)
+        dplyr::select(.data$ids, .data$parents, .data$labels, .data$values, .data$hovertext)
 }
 #' validateCountDF
 #'
@@ -174,6 +174,7 @@ prepareSingleColumnParams <- function(df,
 #'
 #' @importFrom assertthat assert_that has_name
 #' @importFrom dplyr across mutate
+#' @importFrom tidyselect matches
 #'
 #' @return A data frame with non-'n' columns converted to character type.
 #' @export

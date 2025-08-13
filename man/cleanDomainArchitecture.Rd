@@ -58,7 +58,7 @@ The original data frame is returned with the clean DomArchs column and the old d
 }
 \examples{
 \dontrun{
-cleanDomainArchitecture(prot, TRUE, FALSE, 
+cleanDomainArchitecture(prot, TRUE, FALSE,
 omains_keep, domains_rename, domains_ignore = NULL)
 }
 }
