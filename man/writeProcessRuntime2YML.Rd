@@ -7,9 +7,9 @@
 writeProcessRuntime2YML(dir_job_results, filepath = NULL)
 }
 \arguments{
-\item{dir_job_results}{\link{chr} path to MolEvolvR job_results directory}
+\item{dir_job_results}{\link[rlang:vector-construction]{rlang::chr} path to MolEvolvR job_results directory}
 
-\item{filepath}{\link{chr} path to save YAML file; if NULL,
+\item{filepath}{\link[rlang:vector-construction]{rlang::chr} path to save YAML file; if NULL,
 uses ./molevol_scripts/log_data/job_proc_weights.yml}
 }
 \description{
