@@ -83,4 +83,6 @@ Imports:
     XVector,
     yaml
 Suggests:
-    knitr
+    knitr,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
