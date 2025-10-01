@@ -8,7 +8,7 @@ column names and types}
 readIPRScanTSV(filepath)
 }
 \arguments{
-\item{filepath}{\link{chr} path to interproscan output TSV}
+\item{filepath}{\link[rlang:vector-construction]{rlang::chr} path to interproscan output TSV}
 }
 \value{
 \link{tbl_df} interproscan output table

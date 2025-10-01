@@ -13,15 +13,15 @@ createIPRScanDomainTable(
 )
 }
 \arguments{
-\item{accnum}{\link{chr} a \emph{single} accession number from the original fasta (fasta param)
+\item{accnum}{\link[rlang:vector-construction]{rlang::chr} a \emph{single} accession number from the original fasta (fasta param)
 which will be used to search for its sequence's domains (df_iprscan param)}
 
-\item{fasta}{\link{AAStringSet} original fasta file which was fed into interproscan}
+\item{fasta}{\link[Biostrings:XStringSet-class]{Biostrings::AAStringSet} original fasta file which was fed into interproscan}
 
 \item{df_iprscan}{\link{tbl_df} the output TSV of interproscan, read as a tibble with
 readIPRScanTSV()}
 
-\item{analysis}{\link{chr} the domain databases to extract sequences from}
+\item{analysis}{\link[rlang:vector-construction]{rlang::chr} the domain databases to extract sequences from}
 }
 \value{
 \link{tbl_df} table with each domain sequence and a new identifier column
