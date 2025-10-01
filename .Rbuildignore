@@ -1,4 +1,5 @@
 ^\.Rproj\.user$
+^\.devcontainer
 ^MolEvolvR\.Rproj$
 ^README\.Rmd$
 ^data-raw$
