@@ -1,11 +1,13 @@
 {
   "name": "R (rocker r-ver, Positron)",
-  "image": "ghcr.io/rocker-org/devcontainer/r-ver:4",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
   "features": {
     "ghcr.io/rocker-org/devcontainer-features/r-packages:1": {
       "packages": "languageserver,httpgd,pak"
     },
     "ghcr.io/rocker-org/devcontainer-features/quarto-cli:1": {}
-  },
-  "postCreateCommand": "R -q -e 'pak::local_install_deps(\".\", dependencies = TRUE)'"
+  }
 }
