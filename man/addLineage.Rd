@@ -23,26 +23,30 @@ addLineage(
 )
 }
 \arguments{
-\item{df}{A \code{data.frame} containing the input data. One column must contain
-the accession numbers.}
+\item{df}{Dataframe containing accession numbers. The dataframe should
+have a column specified by \code{acc_col} that contains these accession numbers.}
 
-\item{acc_col}{A string specifying the column name in \code{df} that holds the
-accession numbers. Defaults to \code{"AccNum"}.}
+\item{acc_col}{Character. The name of the column in \code{df} containing
+accession numbers. Default is "AccNum".}
 
-\item{assembly_path}{A string specifying the path to the \code{assembly_summary.txt}
-file. This file contains metadata about assemblies.}
+\item{assembly_path}{String. The path to the assembly summary file generated
+using the \code{downloadAssemblySummary()} function.}
 
-\item{lineagelookup_path}{A string specifying the path to the lineage lookup
-file, which contains a mapping from tax IDs to their corresponding lineages.}
+\item{lineagelookup_path}{String. The path to the lineage lookup file (taxid
+to lineage mapping) generated using the \code{create_lineage_lookup()} function.}
 
-\item{ipgout_path}{(Optional) A string specifying the path where IPG database
-fetch results will be saved. If \code{NULL}, the results are not written to a file.}
+\item{ipgout_path}{String. Optional path to save intermediate output files.
+Default is NULL.}
 
-\item{plan}{}
+\item{plan}{Character. Specifies the execution plan for parallel processing.
+Default is "multicore".}
 }
 \value{
 A \code{data.frame} that combines the original \code{df} with the lineage
 information.
+
+A dataframe that combines the original dataframe \code{df} with lineage
+information retrieved based on the provided accession numbers.
 }
 \description{
 addLineage
@@ -52,5 +56,11 @@ addLineage
 \examples{
 \dontrun{
 addLineage()
+}
+\dontrun{
+enriched_df <- addLineage(df = my_data,
+                           acc_col = "AccNum",
+                           assembly_path = "path/to/assembly_summary.txt",
+                           lineagelookup_path = "path/to/lineage_lookup.tsv")
 }
 }

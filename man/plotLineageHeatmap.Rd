@@ -15,6 +15,11 @@ plotLineageHeatmap(prot, domains_of_interest, level = 3, label.size = 8)
 
 \item{label.size}{Size of the text labels}
 }
+\value{
+A ggplot object representing a heatmap (tile plot) of domain repeat
+counts across different lineages, with color intensity representing the
+occurrence of domains.
+}
 \description{
 Generate a lineage plot
 }

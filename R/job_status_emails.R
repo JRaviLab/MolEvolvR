@@ -106,7 +106,7 @@ formatJobArgumentsHTML <- function(job_args) {
                 )
             },
             error = function(e) {
-                return(value)
+                return(key)
             }
         )
 

@@ -7,8 +7,23 @@
 prepareColumnParams(count_data, fill_by_n, sort_by_n)
 }
 \arguments{
-\item{sort_by_n}{}
+\item{count_data}{A data frame containing the data.}
+
+\item{fill_by_n}{Logical indicating if fill color is based on counts.}
+
+\item{sort_by_n}{Logical indicating if data should be sorted by counts.}
+}
+\value{
+A data frame of parameters for treemap visualization.
 }
 \description{
 prepareColumnParams
+}
+\examples{
+\dontrun{
+count_data <- data.frame(Category = c("A", "B", "C"),
+                          n = c(10, 20, 15))
+params <- prepareColumnParams(count_data, fill_by_n = TRUE, sort_by_n = FALSE)
+params
+}
 }
