@@ -1,225 +1,330 @@
-context("fa2domain")
-test_that("fa2domain", {
-    library(mockery)
-    library(readr)
-    library(glue)
-    # runIPRScan
-    # Define file paths using system.file to locate files in the package
-    filepath_fasta <- system.file("tests", "example_fasta.fa", package = "MolEvolvR")
-    filepath_out <- tempfile()  # Temporary file for output
-    
-    # Set application options
-    mock_appl_single <- "Pfam"
-    mock_appl_multiple <- c("Pfam", "Gene3D")
-    
-    # Create a sample TSV file in extdata and read it
-    sample_tsv_path <- system.file("tests", "example_iprscan_valid.tsv", package = "MolEvolvR")
-    
-    # Read the TSV file into a dataframe
-    sample_tsv <- read.csv(sample_tsv_path, sep = "\t", header = TRUE) 
-    
-    # Mock the system function to avoid running the real command
-    mock_system <- mock(0L)  # Simulate successful system call
-    
-    # Patch the system and readIPRScanTSV functions
-    stub(runIPRScan, "system", mock_system)
-    stub(runIPRScan, "readIPRScanTSV", function(x) read.csv(sample_tsv_path, sep = "\t"))
-    
-    ## TEST 1: Command construction for single application
-    result_single <- runIPRScan(filepath_fasta, filepath_out, appl = mock_appl_single)
-    expected_cmd_single <- glue("iprscan -i {filepath_fasta} -b {filepath_out} --cpu 4 -f TSV ",
-                                "--appl {mock_appl_single}")
-    
-    # Capture the actual command from the mock
-    actual_cmd_single <- mock_args(mock_system)[[1]]
-    
-    # Verify that the expected command matches the actual command
-    expect_equal(as.character(unlist(actual_cmd_single)), as.character(expected_cmd_single))
-    
-    # Clear the mock calls for the next test
-    mock_system <- mock(0L)
-    stub(runIPRScan, "system", mock_system)
-    
-    ## TEST 3: Real result from reading TSV file
-    expect_equal(result_single, sample_tsv)
-    
-    ## TEST 4: Error handling when system command fails
-    mock_system_fail <- mock(1L)  # Simulate non-zero exit code
-    stub(runIPRScan, "system", mock_system_fail)
-    
-    # Expect a warning and return NULL on failure
-    expect_warning(result_fail <- runIPRScan(filepath_fasta, filepath_out, appl = mock_appl_single),
-                   regexp = "interproscan exited with non-zero code")
-    expect_null(result_fail)
-    
-    ## TEST 5: Error handling for missing or invalid inputs
-    # Invalid `filepath_fasta`
-    expect_error(runIPRScan(NULL, filepath_out, appl = mock_appl_single), 
-                 "filepath_fasta cannot be NULL or empty")
-    
-    # Invalid `filepath_out`
-    expect_error(runIPRScan(filepath_fasta, NULL, appl = mock_appl_single), 
-                 "filepath_out cannot be NULL or empty")
-    
-    # Invalid `appl`
-    expect_error(runIPRScan(filepath_fasta, filepath_out, appl = "InvalidApp"), 
-                 "Invalid application specified")
-    
-    # readIPRScanTSV
-    # Read the TSV file using the function
-    df_ipr <- readIPRScanTSV(sample_tsv_path)
-    
-    # Check that the returned object is a data frame
-    expect_s3_class(df_ipr, "data.frame")
-    
-    # getIPRScanColNames
-    # Call the function to get the column names
-    col_names <- getIPRScanColNames()
-    
-    # Check that the result is a character vector
-    expect_type(col_names, "character")
-    
-    # Define the expected column names
-    expected_col_names <- c(
+# example data to test these functions is located at
+# molevol_scripts/tests
+# notes:
+# - a protein with no domains (unlikely) found from
+# interproscan CLI will return a completely empty file (0Bytes)
+
+#' runIPRScan
+#'
+#' Run InterProScan on a given FASTA file and save the results to an
+#' output file.
+#'
+#' @param filepath_fasta A string representing the path to the input FASTA file.
+#' @param filepath_out A string representing the base path for the output file.
+#' @param appl A character vector specifying the InterProScan applications to
+#' use (e.g., "Pfam", "Gene3D"). Default is `c("Pfam", "Gene3D")`.
+#'
+#' @importFrom stringr str_glue
+#'
+#' @return A data frame containing the results from the InterProScan output
+#' TSV file.
+#'
+#' @examples
+#' \dontrun{
+#' results <- runIPRScan(
+#'     filepath_fasta = "path/to/your_fasta_file.fasta",
+#'     filepath_out = "path/to/output_file",
+#'     appl = c("Pfam", "Gene3D")
+#' )
+#' results
+#' }
+runIPRScan <- function(
+        filepath_fasta,
+        filepath_out, # do not inlucde file extension since ipr handles this
+        appl = c("Pfam", "Gene3D")
+        # destPartition = "LocalQ",
+        # destQoS = "shortjobs"
+    ) {
+    # Validate inputs
+    if (is.null(filepath_fasta) || filepath_fasta == "") {
+        stop("filepath_fasta cannot be NULL or empty")
+    }
+    if (is.null(filepath_out) || filepath_out == "") {
+        stop("filepath_out cannot be NULL or empty")
+    }
+    if (!all(appl %in% c("Pfam", "Gene3D"))) {
+        stop("Invalid application specified")
+    }
+    # construct interproscan command
+    cmd_iprscan <- stringr::str_glue(
+        "iprscan -i {filepath_fasta} -b {filepath_out} --cpu 4 -f TSV ",
+        "--appl {appl}"
+    )
+    # execute
+    exit_code <- system(cmd_iprscan)
+    if (exit_code != 0L) {
+        warning("interproscan exited with non-zero code")
+        return(NULL)
+    }
+    # read and return results
+    df_iprscan <- readIPRScanTSV(paste0(filepath_out, ".tsv"))
+    return(df_iprscan)
+}
+
+#' Constructor function for interproscan column names
+#' (based upon the global variable written in
+#' molevol_scripts/R/colnames_molevol.R)
+#'
+#' @return [chr] interproscan column names used throughout molevolvr
+getIPRScanColNames <- function() {
+    column_names <- c(
         "AccNum", "SeqMD5Digest", "SLength", "Analysis",
         "DB.ID", "SignDesc", "StartLoc", "StopLoc", "Score",
         "Status", "RunDate", "IPRAcc", "IPRDesc"
     )
-    
-    # Check that the column names match exactly
-    expect_equal(col_names, expected_col_names)
-    expect_type(col_names, "character")
-    
-    # Ensure there are exactly 13 columns
-    expect_length(col_names, 13)
-    
-    # getIPRScanColTypes
-    col_types <- getIPRScanColTypes()
-    
-    # Check that col_types is of the expected class
-    # readr::cols() returns col_spec object
-    expect_s3_class(col_types, "col_spec")  
-    
-    # Verify that each column has the correct type
-    expect_equal(col_types$cols$AccNum, col_character())
-    expect_equal(col_types$cols$SeqMD5Digest, col_character())
-    expect_equal(col_types$cols$SLength, col_integer())
-    expect_equal(col_types$cols$Analysis, col_character())
-    expect_equal(col_types$cols$DB.ID, col_character())
-    expect_equal(col_types$cols$SignDesc, col_character())
-    expect_equal(col_types$cols$StartLoc, col_integer())
-    expect_equal(col_types$cols$StopLoc, col_integer())
-    expect_equal(col_types$cols$Score, col_double())
-    expect_equal(col_types$cols$Status, col_character())
-    expect_equal(col_types$cols$RunDate, col_character())
-    expect_equal(col_types$cols$IPRAcc, col_character())
-    expect_equal(col_types$cols$IPRDesc, col_character())
-    
-    # Optionally, check that there are no additional columns defined
-    expect_length(col_types$cols, 13)
-    
-    # createIPRScanDomainTable
-    
-    # Load the sample FASTA file
-    fasta <- Biostrings::readAAStringSet(filepath_fasta)
-    
-    # Read the sample InterProScan TSV file
-    df_iprscan <- readIPRScanTSV(sample_tsv_path)
-    
-    # Example accession number for testing
-    accnum <- df_iprscan$AccNum[1]
-    
-    # Test case 1: Valid inputs
-    df_iprscan_domains <- createIPRScanDomainTable(accnum, fasta, df_iprscan)
-    
-    # Check that the output is a data frame
-    expect_s3_class(df_iprscan_domains, "data.frame")
-    
-    # Validate the structure of the output
-    expect_true(all(c("AccNum", "DB.ID", "StartLoc", "StopLoc", "seq_domain", 
-                      "id_domain") %in% names(df_iprscan_domains)))
-    
-    # Validate the content of the seq_domain column
-    # Ensure no empty sequences
-    expect_true(all(nchar(df_iprscan_domains$seq_domain) > 0))  
-    
-    # Validate the id_domain structure
-    expect_true(all(grepl("^(~*\\w+(-\\w+-\\d+_\\d+)?)+$", df_iprscan_domains$id_domain)))
-    
-    # Test case 2: No matching accession number
-    empty_df <- createIPRScanDomainTable("non_existent_accnum", fasta, df_iprscan)
-    expect_s3_class(empty_df, "data.frame")
-    expect_equal(nrow(empty_df), 0)
-    
-    # Test case 3: No domains in input data frame
-    empty_iprscan <- df_iprscan[0, ]  # Create an empty df_iprscan
-    empty_domains_df <- createIPRScanDomainTable(accnum, fasta, empty_iprscan)
-    expect_s3_class(empty_domains_df, "data.frame")
-    expect_equal(nrow(empty_domains_df), 0)
-    
-    # convertIPRScanDomainTable2FA
+    return(column_names)
+}
 
-    # Test case 1: Valid domain data
-    fasta_domains <- convertIPRScanDomainTable2FA(df_iprscan_domains)
-    
-    # Check that the output is an AAStringSet
-    expect_s4_class(fasta_domains, "AAStringSet")
-    
-    # Check that the correct number of sequences are returned
-    expect_equal(length(fasta_domains), nrow(df_iprscan_domains))
-
-    # Check that the names of the sequences match the id_domain column
-    expect_equal(names(fasta_domains), as.character(df_iprscan_domains$id_domain))
-    
-    # Test case 2: Empty input data frame
-    empty_domains <- convertIPRScanDomainTable2FA(data.frame())
-    expect_s4_class(empty_domains, "AAStringSet")
-    expect_equal(length(empty_domains), 0)
-    
-    # Test case 3: Data frame with no domains
-    empty_df_iprscan <- df_iprscan[0, ]  # Create an empty df_iprscan
-    empty_domains_df <- convertIPRScanDomainTable2FA(empty_df_iprscan)
-    expect_s4_class(empty_domains_df, "AAStringSet")
-    expect_equal(length(empty_domains_df), 0)
-    
-    # getDomainsFromFA
-    # Test case 1: Valid input
-    fasta_domains <- getDomainsFromFA(fasta, df_iprscan)
-    
-    # Check that the output is an AAStringSet
-    expect_s4_class(fasta_domains, "AAStringSet")
-    
-    # Check that the output contains the expected sequences
-    expect_true(length(fasta_domains) > 0)  # Ensure there are some domains extracted
-    
-    # Test case 2: Empty input FASTA
-    empty_fasta <- Biostrings::AAStringSet()
-    empty_fasta_domains <- getDomainsFromFA(empty_fasta, df_iprscan)
-
-    expect_s4_class(empty_fasta_domains, "AAStringSet")
-    expect_equal(length(empty_fasta_domains), 0)
-    
-    # Test case 3: Empty input df_iprscan
-    empty_iprscan <- data.frame()  # Create an empty df_iprscan
-    empty_domains_iprscan <- getDomainsFromFA(fasta, empty_iprscan)
-    
-    expect_s4_class(empty_domains_iprscan, "AAStringSet")
-    expect_equal(length(empty_domains_iprscan), 0)
-    
-    # Test case 4: Verbose output
-    analysis <- c("Pfam", "Gene3D")
-    expect_warning(
-        getDomainsFromFA(fasta, empty_iprscan, verbose = TRUE),
-        regexp = stringr::str_glue(
-            "accession number: aaeB_6~~~aaeB_4 had no domains for the selected analyses: ",
-            "{paste(unique(analysis), collapse = ',')}\n"
-        )
+#' construct column types for reading interproscan output TSVs
+#' (based upon the global variable written in
+#' molevol_scripts/R/colnames_molevol.R)
+#' @return [collector] a named vector of type expecatations
+#' for interproscan columns
+#'
+getIPRScanColTypes <- function() {
+    column_types <- readr::cols(
+        "AccNum" = readr::col_character(),
+        "SeqMD5Digest" = readr::col_character(),
+        "SLength" = readr::col_integer(),
+        "Analysis" = readr::col_character(),
+        "DB.ID" = readr::col_character(),
+        "SignDesc" = readr::col_character(),
+        "StartLoc" = readr::col_integer(),
+        "StopLoc" = readr::col_integer(),
+        "Score" = readr::col_double(),
+        "Status" = readr::col_character(),
+        "RunDate" = readr::col_character(),
+        "IPRAcc" = readr::col_character(),
+        "IPRDesc" = readr::col_character(),
     )
-    
-    # Test case 5: Verbose output for some valid accession numbers
-    fasta_domains_verbose <- getDomainsFromFA(fasta, df_iprscan, verbose = TRUE)
-    
-    # Check that the output is still an AAStringSet
-    expect_s4_class(fasta_domains_verbose, "AAStringSet")
-    
-})
+    return(column_types)
+}
+
+#' Read an interproscan output TSV with standardized
+#' column names and types
+#'
+#' @param filepath [chr] path to interproscan output TSV
+#'
+#' @importFrom readr read_tsv
+#'
+#' @return [tbl_df] interproscan output table
+readIPRScanTSV <- function(filepath) {
+    df_ipr <- readr::read_tsv(filepath,
+        col_types = getIPRScanColTypes(),
+        col_names = getIPRScanColNames()
+    )
+    return(df_ipr)
+}
+
+#' For a given accession number, get the domain sequences using a interproscan
+#' output table & the original FASTA file
+#'
+#' @param accnum [chr] a *single* accession number from the original fasta (fasta param)
+#' which will be used to search for its sequence's domains (df_iprscan param)
+#' @param fasta [AAStringSet] original fasta file which was fed into interproscan
+#' @param df_iprscan [tbl_df] the output TSV of interproscan, read as a tibble with
+#' readIPRScanTSV()
+#' @param analysis [chr] the domain databases to extract sequences from
+#'
+#' @importFrom dplyr arrange filter mutate rowwise relocate select ungroup
+#' @importFrom stringr str_glue
+#' @importFrom XVector subseq
+#'
+#' @return [tbl_df] table with each domain sequence and a new identifier column
+#'
+#' @examples
+#' \dontrun{
+#' path_molevol_scripts <- file.path(Sys.getenv("DEV", unset = "/data/molevolvr_transfer/molevolvr_dev"), "molevol_scripts")
+#' setwd(path_molevol_scripts)
+#' source("R/fa2domain.R")
+#' fasta <- Biostrings::readAAStringSet("./tests/example_protein.fa")
+#' df_iprscan <- readIPRScanTSV("./tests/example_iprscan_valid.tsv")
+#' accnum <- df_iprscan$AccNum[1]
+#' df_iprscan_domains <- createIPRScanDomainTable(accnum, fasta, df_iprscan)
+#' }
+#'
+createIPRScanDomainTable <- function(
+        accnum,
+        fasta,
+        df_iprscan,
+        analysis = c("Pfam", "Gene3D")) {
+    cat("accnum:", accnum, "\n")
+    # handle rare case of an interproscan result with no domains at all;
+    # return the tibble with 0 rows quickly
+    if (nrow(df_iprscan) < 1) {
+        return(df_iprscan)
+    }
+    # filter for "Analysis" argument (i.e., the interproscan member database)
+    # by default we're only selecting domains from a subset of the
+    # interproscan member databases, but this param can be overwritten
+    # and
+    # filter for the accnum of interest (note: it's possible the accession
+    # number is not in the table [i.e., it had no domains])
+    df_iprscan_accnum <- df_iprscan |>
+        dplyr::filter(.data$Analysis %in% analysis) |>
+        dplyr::filter(.data$AccNum == accnum) |>
+        dplyr::select(dplyr::all_of(c("AccNum", "DB.ID", "StartLoc", "StopLoc"))) |>
+        dplyr::arrange(.data$StartLoc)
+    # handle the case of no records after filtering by "Analysis"; return the tibble
+    # with 0 rows quickly
+    if (nrow(df_iprscan_accnum) < 1) {
+        return(df_iprscan_accnum)
+    }
+
+    # create a new column to store the domain sequences
+    df_iprscan_domains <- df_iprscan_accnum |>
+        dplyr::rowwise() |>
+        dplyr::mutate(
+            seq_domain = XVector::subseq(
+                fasta[[grep(pattern = .data$AccNum, x = names(fasta), fixed = TRUE)]],
+                start = .data$StartLoc,
+                end = .data$StopLoc
+            ) |>
+                as.character()
+        )
+
+    # create identifiers for each domain sequence
+    df_iprscan_domains <- df_iprscan_domains |>
+        dplyr::mutate(
+            id_domain = stringr::str_glue("{AccNum}-{DB.ID}-{StartLoc}_{StopLoc}")
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::relocate(.data$id_domain, .before = 1)
+    return(df_iprscan_domains)
+}
+
+#' Using the table returned from createIPRScanDomainTable, construct a
+#' domain fasta for a single accession number in the original fasta
+#' (i.e., the original fasta argument to createIPRScanDomainTable())
+#'
+#' @param df_iprscan_domains [tbl_df] return value from createIPRScanDomainTable
+#'
+#' @importFrom Biostrings AAStringSet
+#' @importFrom dplyr mutate rowwise
+#'
+#' @return [AAStringSet] A domain fasta containing all the domains for a
+#' single protein in the original fasta passed as an argument to createIPRScanDomainTable()
+#'
+#' @examples
+#' \dontrun{
+#' path_molevol_scripts <- file.path(Sys.getenv("DEV", unset = "/data/molevolvr_transfer/molevolvr_dev"), "molevol_scripts")
+#' setwd(path_molevol_scripts)
+#' source("R/fa2domain.R")
+#' fasta <- Biostrings::readAAStringSet("./tests/example_protein.fa")
+#' df_iprscan <- readIPRScanTSV("./tests/example_iprscan_valid.tsv")
+#' accnum <- df_iprscan$AccNum[1]
+#' df_iprscan_domains <- createIPRScanDomainTable(accnum, fasta, df_iprscan)
+#' fasta_domains <- df_iprscan_domains |> convertIPRScanDomainTable2FA()
+#' }
+#'
+convertIPRScanDomainTable2FA <- function(df_iprscan_domains) {
+    # if there are no records (e.g., after filtering for Pfam analysis only)
+    # the quickly return an empty AAStringSet object
+    if (nrow(df_iprscan_domains) < 1) {
+        return(Biostrings::AAStringSet())
+    }
+
+    # function with side effect to append a fasta when applied to tibble rows
+    # 1. constructs a new fasta for a single domain and
+    # 2. appends it to a `fasta_domains` object in the parent env
+    # 3. returns the index of the new record; although,
+    # note: return value is not particularly important here since we're
+    # writing the main object within this function block
+    fasta_domains <- Biostrings::AAStringSet()
+    append_fasta_domains <- function(new_seq, new_seq_id) {
+        idx_new_record <- length(fasta_domains) + 1
+        fasta_domain <- Biostrings::AAStringSet(new_seq)
+        names(fasta_domain) <- new_seq_id
+        fasta_domains <<- c(fasta_domains, fasta_domain)
+        return(idx_new_record)
+    }
+
+    # apply append_fasta_domains() rowwise
+    df_iprscan_domains <- df_iprscan_domains |>
+        dplyr::rowwise() |>
+        dplyr::mutate(
+            idx_new_record = append_fasta_domains(
+                new_seq = .data$seq_domain,
+                new_seq_id = .data$id_domain
+            )
+        )
+    return(fasta_domains)
+}
+
+#' getDomainsFromFA
+#'
+#' @param fasta [AAStringSet] a protein (AA) fasta
+#' @param df_iprscan [tbl_df] the interproscan results from the original fasta
+#' @param analysis [chr] the domain databases to extract sequences from
+#'
+#' @importFrom Biostrings AAStringSet
+#' @importFrom stringr str_glue
+#'
+#' @return fasta_domains [AAStringSet] fasta of domains
+#'
+#' @examples
+#' \dontrun{
+#' path_molevol_scripts <- file.path(Sys.getenv("DEV", unset = "/data/molevolvr_transfer/molevolvr_dev"), "molevol_scripts")
+#' setwd(path_molevol_scripts)
+#' source("R/fa2domain.R")
+#' fasta <- Biostrings::readAAStringSet("./tests/example_protein.fa")
+#' df_iprscan <- readIPRScanTSV("./tests/example_iprscan_valid.tsv")
+#' getDomainsFromFA(fasta, df_iprscan)
+#' }
+#'
+getDomainsFromFA <- function(
+        fasta,
+        df_iprscan,
+        analysis = c("Pfam", "Gene3D"),
+        verbose = FALSE) {
+    # initialize an AAStringSet which will store
+    # all the domain sequences
+    # named "parent" since this will be appended
+    # from a child environment
+    parent_fasta_domains <- Biostrings::AAStringSet()
+
+    # for each seq in the fasta use the interproscan
+    # table construct a new fasta of the domains
+    #
+    # a boolean result keeps track of which sequences do or
+    # do not have domain data that was added to the final
+    # domain fasta
+    results <- vapply(
+        X = names(fasta),
+        FUN = function(header) {
+            # parse the accession number from header
+            df_iprscan_domains <- createIPRScanDomainTable(
+                header,
+                fasta,
+                df_iprscan,
+                analysis = c("Pfam", "Gene3D")
+            )
+            # if the interpro results are empty OR
+            # there's no domains for the analyses (databases)
+            # then return early and do not append
+            if (nrow(df_iprscan_domains) < 1) {
+                if (verbose) {
+                    msg <- stringr::str_glue(
+                        "accession number: {header} had no domains for the ",
+                        "selected analyses: {paste(analysis, collapse = ',')}\n"
+                    )
+                    warning(msg)
+                }
+                return(FALSE)
+            }
+            fasta_domains <- convertIPRScanDomainTable2FA(df_iprscan_domains)
+            parent_fasta_domains <<- c(parent_fasta_domains, fasta_domains)
+            return(TRUE)
+        },
+        FUN.VALUE = logical(1)
+    )
+    if (verbose) {
+        msg <- stringr::str_glue(
+            "{sum(results)} / {length(fasta)} accession numbers had ",
+            "at least 1 domain available from the selected analyses: ",
+            "{paste(analysis, collapse = ',')}\n"
+        )
+        print(msg)
+    }
+    return(parent_fasta_domains)
+}
