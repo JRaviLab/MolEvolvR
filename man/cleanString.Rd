@@ -10,7 +10,7 @@ cleanString(string)
 \item{string}{}
 }
 \value{
-\link{string} string with only alphanumerics, "_", "+", and "."
+\link[rlang:string]{rlang::string} string with only alphanumerics, "_", "+", and "."
 }
 \description{
 Keep only alphanumerics, "\emph{", "+", and "." in strings

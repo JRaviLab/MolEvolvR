@@ -17,13 +17,19 @@
 #'
 #'
 #' @param prot A data frame that contains the column 'DomArch'.
-#' @param column Name of column containing Domain architecture from which nodes and edges are generated.
-#' @param domains_of_interest
-#' @param cutoff_type Character. Used to determine how data should be filtered. Either
-#' \itemize{\item "Lineage" to filter domains based off how many lineages the Domain architecture appears in
-#' \item "Total Count" to filter off the total amount of times a domain architecture occurs }
-#' @param cutoff Integer. Only use domains that occur at or above the cutoff for total counts if cutoff_type is "Total Count".
-#' Only use domains that appear in cutoff or greater lineages if cutoff_type is Lineage.
+#' @param column Name of column containing Domain architecture from which nodes
+#' and edges are generated.
+#' @param domains_of_interest Character vector specifying the domains of interest.
+#' @param cutoff_type Character. Used to determine how data should be filtered.
+#' Either
+#' \itemize{\item "Lineage" to filter domains based off how many lineages the
+#' Domain architecture appears in
+#' \item "Total Count" to filter off the total amount of times a
+#' domain architecture occurs }
+#' @param cutoff Integer. Only use domains that occur at or above the cutoff
+#' for total counts if cutoff_type is "Total Count".
+#' Only use domains that appear in cutoff or greater lineages if cutoff_type is
+#' Lineage.
 #' @param layout Character. Layout type to be used for the network. Options are:
 #' \itemize{\item "grid" \item "circle" \item "random" \item "auto"}
 #'
@@ -32,12 +38,14 @@
 #' @importFrom igraph E graph_from_edgelist layout.auto layout.circle layout_on_grid layout_randomly  plot.igraph V
 #' @importFrom stringr str_replace_all str_split
 #'
-#' @return
+#' @return A plot of the domain architecture network.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' createUndirectedGenomicContextNetwork(pspa)
+#' createUndirectedGenomicContextNetwork(pspa, column = "DomArch",
+#' domains_of_interest = c("Domain1", "Domain2"),
+#' cutoff_type = "Total Count", cutoff = 10)
 #' }
 createUndirectedGenomicContextNetwork <- function(prot, column = "GenContext", domains_of_interest, cutoff_type = "Lineage", cutoff = 1, layout = "grid") {
     # by domain networks or all, as required.
@@ -48,7 +56,7 @@ createUndirectedGenomicContextNetwork <- function(prot, column = "GenContext", d
         lin_summary <- prot %>%
             summarizeDomArch_ByLineage() %>%
             summarizeDomArch()
-        doms_above_cutoff <- (lin_summary %>% filter(totallin >= cutoff))[[column]]
+        doms_above_cutoff <- (lin_summary %>% filter(.data$totallin >= cutoff))[[column]]
     } else if (cutoff_type == "Total Count") { # Change this type?
         GC_above_cutoff <- (prot %>% totalGenContextOrDomArchCounts(column = column, cutoff = cutoff))[[column]]
     }
@@ -117,6 +125,7 @@ createUndirectedGenomicContextNetwork <- function(prot, column = "GenContext", d
 #########################
 ## GC Directed Network ##
 #########################
+utils::globalVariables(c("width", "size", "font.size", "color", "frame.color"))
 #' Genomic Context Directed Network
 #'
 #' @description
@@ -127,8 +136,10 @@ createUndirectedGenomicContextNetwork <- function(prot, column = "GenContext", d
 #'
 #' @param prot A data frame that contains the column 'GenContext'.
 #' @param domains_of_interest Character vector of domains of interest.
-#' @param column Name of column containing Genomic Context from which nodes and edges are generated.
-#' @param cutoff Integer. Only use GenContexts that occur at or above the cutoff percentage for total count
+#' @param column Name of column containing Genomic Context from which nodes and
+#' edges are generated.
+#' @param cutoff Integer. Only use GenContexts that occur at or above the cutoff
+#' percentage for total count
 #' @param layout Character. Layout type to be used for the network. Options are:
 #' \itemize{\item "grid" \item "circle" \item "random" \item "auto" \item "nice"}
 #' @param directed Is the network directed?
@@ -139,12 +150,12 @@ createUndirectedGenomicContextNetwork <- function(prot, column = "GenContext", d
 #' @importFrom stringr str_replace_all
 #' @importFrom visNetwork visIgraphLayout visLegend visNetwork visOptions
 #'
-#' @return
+#' @return A plot of the genomic context network.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' gc_directed_network(pspa, column = "GenContex", cutoff = 55)
+#' gc_directed_network(pspa, column = "GenContext", cutoff = 55)
 #' }
 createGenomicContextNetwork <- function(prot, domains_of_interest, column = "GenContext",
     cutoff = 40,
@@ -223,9 +234,9 @@ createGenomicContextNetwork <- function(prot, domains_of_interest, column = "Gen
 
     max_size <- max(nodes$size)
     min_size <- min(nodes$size)
-    nodes <- nodes %>% mutate(size = (size - min_size) / ((max_size - min_size)) * 20 + 10)
+    nodes <- nodes %>% mutate(size = (.data$size - min_size) / ((max_size - min_size)) * 20 + 10)
     max_font_size <- 43
-    nodes <- nodes %>% mutate(font.size = purrr::map(size, function(x) min(x * 2, max_font_size)))
+    nodes <- nodes %>% mutate(font.size = purrr::map(.data$size, function(x) min(x * 2, max_font_size)))
 
     max_size <- max(nodes$size)
     min_size <- min(nodes$size)
@@ -272,7 +283,7 @@ createGenomicContextNetwork <- function(prot, domains_of_interest, column = "Gen
     edges <- data.frame(from = pwise[, 1], to = pwise[, 2]) %>%
         group_by(from, to) %>%
         summarize(width = n())
-    edges <- edges %>% mutate(width = ifelse(width == 1, .3, log(width)))
+    edges <- edges %>% mutate(width = ifelse(.data$width == 1, .3, log(width)))
     ew <- c(2.7, 4.5)
 
     ColorEdges <- function(x) {
@@ -285,7 +296,7 @@ createGenomicContextNetwork <- function(prot, domains_of_interest, column = "Gen
         }
     }
 
-    edges <- edges %>% mutate(color = unlist(purrr::map(width, ColorEdges)))
+    edges <- edges %>% mutate(color = unlist(purrr::map(.data$width, ColorEdges)))
 
     if (directed) {
         vg <- visNetwork(nodes, edges, width = "100%", height = "600px") %>%

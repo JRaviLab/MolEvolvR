@@ -5,6 +5,7 @@
 ## convert_aln2tsv??, convert_accnum2fa??
 ## Created from add_leaves.R, convert_aln2fa.R, all_aln2fa.R
 ## Modified: Dec 24, 2019 | Jan 2021
+
 ## Janani Ravi (@jananiravi) & Samuel Chen (@samuelzornchen)
 
 api_key <- Sys.getenv("ENTREZ_API_KEY", unset = "YOUR_KEY_HERE")
@@ -45,11 +46,20 @@ api_key <- Sys.getenv("ENTREZ_API_KEY", unset = "YOUR_KEY_HERE")
 #' @param x Character vector.
 #' @param y Delimitter. Default is space (" ").
 #'
-#' @return
+#' @importFrom rlang abort
+#'
+#' @return A character vector in title case.
 #' @export
 #'
 #' @examples
+#' convert2TitleCase("hello world")
+#' convert2TitleCase("this is a test", "_")
+
 convert2TitleCase <- function(x, y = " ") {
+    # Check if the input is NULL or not a character
+    if (is.null(x) || !is.character(x)) {
+        abort("Error: Input must be a non-null character string.")
+    }
     s <- strsplit(x, y)[[1]]
     paste(toupper(substring(s, 1, 1)), substring(s, 2),
         sep = "", collapse = y
@@ -86,8 +96,10 @@ convert2TitleCase <- function(x, y = " ") {
 #' @importFrom stats complete.cases
 #' @importFrom stringr str_sub
 #' @importFrom tidyr replace_na separate
+#' @importFrom rlang abort
 #'
-#' @return
+#' @return A data frame containing the combined alignment and lineage
+#' information.
 #' @export
 #'
 #' @note Please refer to the source code if you have alternate +
@@ -101,6 +113,25 @@ addLeaves2Alignment <- function(aln_file = "",
     lin_file = "data/rawdata_tsv/all_semiclean.txt", # !! finally change to all_clean.txt!!
     # lin_file="data/rawdata_tsv/PspA.txt",
     reduced = FALSE) {
+
+    #Check if the alignment file is provided and exists
+    if (nchar(aln_file) == 0) {
+        abort("Error: Alignment file path must be provided.")
+    }
+
+    if (!file.exists(aln_file)) {
+        abort(paste("Error: The alignment file '", aln_file, "' does not exist."))
+    }
+
+    # Check if the lineage file exists
+    if (!file.exists(lin_file)) {
+        abort(paste("Error: The lineage file '", lin_file, "' does not exist."))
+    }
+
+    # Check that the 'reduced' parameter is logical
+    if (!is.logical(reduced) || length(reduced) != 1) {
+        abort("Error: 'reduced' must be a single logical value (TRUE or FALSE).")
+    }
     ## SAMPLE ARGS
     # aln_file <- "data/rawdata_aln/pspc.gismo.aln"
     # lin_file <- "data/rawdata_tsv/all_semiclean.txt"
@@ -116,7 +147,7 @@ addLeaves2Alignment <- function(aln_file = "",
     if (length(aln) == 1) {
         colnames(aln) <- "x1"
         aln <- separate(aln,
-            col = x1,
+            col = .data$x1,
             into = c("x1", "x2"),
             sep = "\\s+"
         )
@@ -126,8 +157,8 @@ addLeaves2Alignment <- function(aln_file = "",
 
     aln_lin <- left_join(aln, lin, by = "AccNum") %>%
         select(
-            AccNum, Alignment,
-            Species, Lineage
+            .data$AccNum, .data$Alignment,
+            .data$Species, .data$Lineage
         )
 
     # Removes rows with NA
@@ -143,13 +174,13 @@ addLeaves2Alignment <- function(aln_file = "",
     }
 
     temp <- aln_lin %>%
-        separate(Lineage,
+        separate(.data$Lineage,
             into = c("Kingdom", "Phylum"),
             sep = ">", remove = F, ## !! How to deal w/ lineages without a phylum?
             extra = "merge", fill = "right"
         ) %>%
         replace_na(replace = list(Kingdom = "", Phylum = "")) %>%
-        separate(Species,
+        separate(.data$Species,
             into = c("Genus", "Spp"),
             sep = " ", remove = F,
             extra = "merge", fill = "left"
@@ -158,28 +189,28 @@ addLeaves2Alignment <- function(aln_file = "",
         # kingdomPhylum_GenusSpecies
         mutate(Leaf = paste(
             paste0(
-                str_sub(Kingdom,
+                str_sub(.data$Kingdom,
                     start = 1, end = 1
                 ),
-                str_sub(Phylum, 1, 6)
+                str_sub(.data$Phylum, 1, 6)
             ),
             paste0(
-                str_sub(Genus, start = 1, end = 1),
-                str_sub(Spp, start = 1, end = 3)
+                str_sub(.data$Genus, start = 1, end = 1),
+                str_sub(.data$Spp, start = 1, end = 3)
             ),
             # AccNum,
             sep = "_"
         ))
-    temp$Leaf <- map(temp$Leaf, to_titlecase)
+    temp$Leaf <- map(temp$Leaf, .data$to_titlecase)
     temp <- temp %>%
-        mutate(Leaf_Acc = (paste(Leaf, AccNum, sep = "_")))
+        mutate(Leaf_Acc = (paste(.data$Leaf, .data$AccNum, sep = "_")))
 
     # Combine and run through add leaves
     # 3 columns AccNum Sequence Leaf result
     # Create Leaf_AccNum pasted together
     # 2 columns Leaf_AccNum and Sequence Far left
     leaf_aln <- temp %>%
-        select(Leaf_Acc, Alignment)
+        select(.data$Leaf_Acc, .data$Alignment)
     return(leaf_aln)
 }
 
@@ -188,8 +219,8 @@ addLeaves2Alignment <- function(aln_file = "",
 #'
 #' @author Samuel Chen, Janani Ravi
 #'
-#' @description This function adds a new 'Name' column that is comprised of components from
-#' Kingdom, Phylum, Genus, and species, as well as the accession
+#' @description This function adds a new 'Name' column that is comprised of
+#' components from Kingdom, Phylum, Genus, and species, as well as the accession
 #'
 #' @param data Data to add name column to
 #' @param accnum_col Column containing accession numbers
@@ -203,15 +234,31 @@ addLeaves2Alignment <- function(aln_file = "",
 #' @importFrom dplyr mutate pull select
 #' @importFrom stringi stri_replace_all_regex
 #' @importFrom tidyr separate
-#' @importFrom rlang sym
+#' @importFrom rlang abort sym
 #'
 #' @return Original data with a 'Name' column
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' addName(data_frame)
+#' }
 addName <- function(data,
     accnum_col = "AccNum", spec_col = "Species", lin_col = "Lineage",
     lin_sep = ">", out_col = "Name") {
+    # Check if the data is a data fram
+    if (!is.data.frame(data)) {
+        abort("Error: The input 'data' must be a data frame")
+    }
+
+    # Check that the specified columns exist in the data
+    required_cols <- c(accnum_col, spec_col, lin_col)
+    missing_cols <- setdiff(required_cols, names(data))
+    if (length(missing_cols) > 0) {
+        abort(paste("Error: The following columns are missing from the data:",
+                   paste(missing_cols, collapse = ", ")))
+    }
+
     cols <- c(accnum_col, "Kingdom", "Phylum", "Genus", "Spp")
     split_data <- data %>%
         separate(
@@ -219,15 +266,15 @@ addName <- function(data,
             sep = lin_sep
         ) %>%
         mutate(
-            Kingdom = strtrim(Kingdom, 1),
-            Phylum = strtrim(Phylum, 6)
+            Kingdom = strtrim(.data$Kingdom, 1),
+            Phylum = strtrim(.data$Phylum, 6)
         )
     if (!is.null(spec_col)) {
         split_data <- split_data %>%
             separate(spec_col, into = c("Genus", "Spp"), sep = " ") %>%
             mutate(
-                Genus = strtrim(Genus, 1),
-                Spp = word(string = Spp, start = 1)
+                Genus = strtrim(.data$Genus, 1),
+                Spp = word(string = .data$Spp, start = 1)
             )
     } else {
         split_data$Genus <- ""
@@ -242,8 +289,8 @@ addName <- function(data,
 
     Leaf <- split_data %>%
         mutate(Leaf = paste0(
-            Kingdom, Phylum, "_",
-            Genus, Spp, "_",
+          .data$Kingdom, .data$Phylum, "_",
+          .data$Genus, .data$Spp, "_",
             {{ accnum_sym }}
         )) %>%
         pull(Leaf) %>%
@@ -272,8 +319,8 @@ addName <- function(data,
 #' Default is 'pspa.txt'
 #' @param fa_outpath Character. Path to the written fasta file.
 #' Default is 'NULL'
-#' @param reduced Boolean. If TRUE, the fasta file will contain only one sequence per lineage.
-#' Default is 'FALSE'
+#' @param reduced Boolean. If TRUE, the fasta file will contain only one
+#' sequence per lineage. Default is 'FALSE'
 #'
 #' @details The alignment file would need two columns: 1. accession +
 #' number and 2. alignment. The protein homolog accession to lineage mapping +
@@ -282,8 +329,12 @@ addName <- function(data,
 #' file formats and/or column names.
 #'
 #' @importFrom readr write_file
+#' @importFrom rlang abort
+#' @importFrom data.table data.table
 #'
-#' @return
+#' @return Character string containing the Fasta formatted sequences.
+#' If `fa_outpath` is specified, the function also writes the sequences to the
+#' Fasta file.
 #' @export
 #'
 #' @examples
@@ -294,6 +345,24 @@ convertAlignment2FA <- function(aln_file = "",
     lin_file = "data/rawdata_tsv/all_semiclean.txt", # !! finally change to all_clean.txt!!
     fa_outpath = "",
     reduced = FALSE) {
+    #Check if the alignment file is provided and exists
+    if (nchar(aln_file) == 0) {
+        abort("Error: Alignment file path must be provided.")
+    }
+
+    if (!file.exists(aln_file)) {
+        abort(paste("Error: The alignment file '", aln_file, "' does not exist."))
+    }
+
+    # Check if the lineage file exists
+    if (!file.exists(lin_file)) {
+        abort(paste("Error: The lineage file '", lin_file, "' does not exist."))
+    }
+
+    # Check that the 'reduced' parameter is logical
+    if (!is.logical(reduced) || length(reduced) != 1) {
+        abort("Error: 'reduced' must be a single logical value (TRUE or FALSE).")
+    }
     ## SAMPLE ARGS
     # aln_file <- "data/rawdata_aln/pspc.gismo.aln"
     # lin_file <- "data/rawdata_tsv/all_semiclean.txt"
@@ -325,11 +394,11 @@ convertAlignment2FA <- function(aln_file = "",
 }
 
 #' mapAcc2Name
-#' 
+#'
 #' @description
 #' Default rename_fasta() replacement function. Maps an accession number to its name
 #'
-#' @param line he line of a fasta file starting with '>'
+#' @param line The line of a fasta file starting with '>'
 #' @param acc2name Data Table containing a column of accession numbers and a name column
 #' @param acc_col Name of the column containing Accession numbers
 #' @param name_col Name of the column containing the names that the accession numbers
@@ -337,13 +406,37 @@ convertAlignment2FA <- function(aln_file = "",
 #'
 #' @importFrom dplyr filter pull
 #' @importFrom stringr str_locate
-#' @importFrom rlang sym
+#' @importFrom rlang abort sym
 #'
-#' @return
+#' @return Character string. The modified line from the Fasta file header with
+#' the name instead of the accession number.
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' acc2name_table <- data.table(AccNum = c("ACC001", "ACC002"),
+#' Name = c("Species A", "Species B"))
+#' line <- ">ACC001 some additional info"
+#' mapped_line <- mapAcc2Name(line, acc2name_table)
+#' mapped_line  # Expected output: ">Species A"
+#' }
+
 mapAcc2Name <- function(line, acc2name, acc_col = "AccNum", name_col = "Name") {
+    # Check if acc2name is a data frame
+    if (!is.data.frame(acc2name)) {
+        abort("Error: acc2name must be a data frame.")
+    }
+
+    # Check if the specified columns exist in the data frame
+    if (!(acc_col %in% colnames(acc2name))) {
+        abort("Error: The specified acc_col '", acc_col, "' does not exist in
+             acc2name.")
+    }
+    if (!(name_col %in% colnames(acc2name))) {
+        abort("Error: The specified name_col '", name_col, "' does not exist in
+             acc2name.")
+    }
+
     # change to be the name equivalent to an add_names column
     # Find the first ' '
     end_acc <- str_locate(line, " ")[[1]]
@@ -367,13 +460,29 @@ mapAcc2Name <- function(line, acc2name, acc_col = "AccNum", name_col = "Name") {
 #'
 #' @importFrom purrr map
 #' @importFrom readr read_lines write_lines
+#' @importFrom rlang abort
 #'
-#' @return
+#' @return Character vector containing the modified lines of the Fasta file.
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' rename_fasta("input.fasta", "output.fasta",
+#' replacement_function = map_acc2name, acc2name = acc2name_table)
+#' }
 rename_fasta <- function(fa_path, outpath,
-    replacement_function = map_acc2name, ...) {
+    replacement_function = .data$map_acc2name, ...) {
+    # Check if the input FASTA file exists
+    if (!file.exists(fa_path)) {
+        abort("Error: The input FASTA file does not exist at the specified
+             path: ", fa_path)
+    }
+
+    # Check if the output path is writable
+    outdir <- dirname(outpath)
+    if (!dir.exists(outdir)) {
+        abort("Error: The output directory does not exist: ", outdir)
+    }
     lines <- read_lines(fa_path)
     res <- map(lines, function(x) {
         if (strtrim(x, 1) == ">") {
@@ -391,30 +500,37 @@ rename_fasta <- function(fa_path, outpath,
 ################################
 ## generateAllAlignments2FA
 #' generateAllAlignments2FA
-#' 
+#'
 #' @description
 #' Adding Leaves to an alignment file w/ accessions
 #'
-#' @author Janani Ravi
 #' @keywords alignment, accnum, leaves, lineage, species
 #' @description Adding Leaves to all alignment files w/ accessions & DAs?
 #'
 #' @param aln_path Character. Path to alignment files.
 #' Default is 'here("data/rawdata_aln/")'
-#' @param fa_outpath Character. Path to the written fasta file.
-#' Default is 'here("data/alns/")'.
-#' @param lin_file Character. Path to file. Master protein file with AccNum & lineages.
+#' @param fa_outpath Character. Path to file. Master protein file with AccNum &
+#' lineages.
 #' Default is 'here("data/rawdata_tsv/all_semiclean.txt")'
-#' @param reduced Boolean. If TRUE, the fasta file will contain only one sequence per lineage.
+#' @param lin_file Character. Path to the written fasta file.
+#' Default is 'here("data/alns/")'.
+#' @param reduced Boolean. If TRUE, the fasta file will contain only one
+#' sequence per lineage.
 #' Default is 'FALSE'.
-#'
-#' @details The alignment files would need two columns separated by spaces: 1. AccNum and 2. alignment. The protein homolog file should have AccNum, Species, Lineages.
-#' @note Please refer to the source code if you have alternate + file formats and/or column names.
 #'
 #' @importFrom purrr pmap
 #' @importFrom stringr str_replace_all
+#' @importFrom rlang abort
 #'
-#' @return
+#' @return NULL. The function saves the output FASTA files to the specified
+#' directory.
+#'
+#' @details The alignment files would need two columns separated by spaces:
+#' 1. AccNum and 2. alignment. The protein homolog file should have AccNum,
+#' Species, Lineages.
+#' @note Please refer to the source code if you have alternate + file formats
+#' and/or column names.
+#'
 #' @export
 #'
 #' @examples
@@ -425,6 +541,24 @@ generateAllAlignments2FA <- function(aln_path = here("data/rawdata_aln/"),
     fa_outpath = here("data/alns/"),
     lin_file = here("data/rawdata_tsv/all_semiclean.txt"),
     reduced = F) {
+    # Check if the alignment path exists
+    if (!dir.exists(aln_path)) {
+        abort("Error: The alignment directory does not exist at the specified
+             path: ", aln_path)
+    }
+
+    # Check if the output path exists; if not, attempt to create it
+    if (!dir.exists(fa_outpath)) {
+        dir.create(fa_outpath, recursive = TRUE)
+        message("Note: The output directory did not exist and has been created: ",
+                fa_outpath)
+    }
+
+    # Check if the linear file exists
+    if (!file.exists(lin_file)) {
+        abort("Error: The linear file does not exist at the specified path: ",
+             lin_file)
+    }
     # library(here)
     # library(tidyverse)
     # aln_path <- here("data/rawdata_aln/")
@@ -443,7 +577,7 @@ generateAllAlignments2FA <- function(aln_path = here("data/rawdata_aln/"),
         fa_outpath = paste0(fa_outpath, "/", variable, ".fa")
     )
     pmap(
-        .l = aln2fa_args, .f = convert_aln2fa,
+        .l = aln2fa_args, .f = .data$convert_aln2fa,
         lin_file = lin_file,
         reduced = reduced
     )
@@ -452,40 +586,53 @@ generateAllAlignments2FA <- function(aln_path = here("data/rawdata_aln/"),
 
 # accessions <- c("P12345","Q9UHC1","O15530","Q14624","P0DTD1")
 # accessions <- rep("ANY95992.1", 201)
-#' acc2fa
+#' acc2FA
 #'
 #' @description
-#' converts protein accession numbers to a fasta format. Resulting 
+#' converts protein accession numbers to a fasta format. Resulting
 #' fasta file is written to the outpath.
-#' 
+#'
 #' @author Samuel Chen, Janani Ravi
 #' @keywords accnum, fasta
 #'
 #' @description
-#' acc2fa converts protein accession numbers to a fasta format.
+#' acc2FA converts protein accession numbers to a fasta format.
 #' Resulting fasta file is written to the outpath.
 #'
 #'
-#' @param accessions Character vector containing protein accession numbers to generate fasta sequences for.
-#' Function may not work for vectors of length > 10,000
+#' @param accessions Character vector containing protein accession numbers to
+#' generate fasta sequences for. Function may not work for vectors of
+#' length > 10,000
 #' @param outpath [str]. Location where fasta file should be written to.
-#' @param plan
+#' @param plan Character. The plan to use for processing. Default is "sequential".
 #'
 #' @importFrom Biostrings readAAStringSet
 #' @importFrom future future plan
 #' @importFrom purrr map
 #' @importFrom rentrez entrez_fetch
+#' @importFrom rlang abort
 #'
-#' @return
+#' @return A Fasta file is written to the specified `outpath`.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' acc2fa(accessions = c("ACU53894.1", "APJ14606.1", "ABK37082.1"), outpath = "my_proteins.fasta")
-#' Entrez:accessions <- rep("ANY95992.1", 201) |> acc2fa(outpath = "entrez.fa")
-#' EBI:accessions <- c("P12345", "Q9UHC1", "O15530", "Q14624", "P0DTD1") |> acc2fa(outpath = "ebi.fa")
+#' acc2FA(accessions = c("ACU53894.1", "APJ14606.1", "ABK37082.1"),
+#' outpath = "my_proteins.fasta")
+#' Entrez:accessions <- rep("ANY95992.1", 201) |> acc2FA(outpath = "entrez.fa")
+#' EBI:accessions <- c("P12345", "Q9UHC1", "O15530", "Q14624", "P0DTD1") |>
+#' acc2FA(outpath = "ebi.fa")
 #' }
-acc2fa <- function(accessions, outpath, plan = "sequential") {
+
+acc2FA <- function(accessions, outpath, plan = "sequential") {
+    if (!is.character(accessions) || length(accessions) == 0) {
+        abort("Error: 'accessions' must be a non-empty character vector.")
+    }
+
+    if (!dir.exists(dirname(outpath))) {
+        abort("Error: The output directory does not exist: ", dirname(outpath))
+    }
+
     # validation
     stopifnot(length(accessions) > 0)
 
@@ -570,16 +717,42 @@ acc2fa <- function(accessions, outpath, plan = "sequential") {
 #' @param accnum_col Column from prot_data that contains Accession Numbers
 #'
 #' @importFrom dplyr filter pull
-#' @importFrom rlang sym
+#' @importFrom rlang abort sym
 #'
-#' @return
+#' @return A character vector containing representative accession numbers,
+#' one for each distinct observation in the specified 'reduced' column.
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' # Example usage with a data frame called `protein_data`
+#' createRepresentativeAccNum <- RepresentativeAccNums(prot_data = protein_data,
+#'                                                     reduced = "Lineage",
+#'                                                     accnum_col = "AccNum")
+#' representative_accessions
+#' }
 createRepresentativeAccNum <- function(prot_data,
     reduced = "Lineage",
     accnum_col = "AccNum") {
+
+    # Validate input
+    if (!is.data.frame(prot_data)) {
+        abort("Error: 'prot_data' must be a data frame.")
+    }
+
+    # Check if the reduced column exists in prot_data
+    if (!(reduced %in% colnames(prot_data))) {
+        abort("Error: The specified reduced column '", reduced, "' does not
+             exist in the data frame.")
+    }
+
+    # Check if the accnum_col exists in prot_data
+    if (!(accnum_col %in% colnames(prot_data))) {
+        abort("Error: The specified accession number column '", accnum_col, "'
+             does not exist in the data frame.")
+    }
     # Get Unique reduced column and then bind the AccNums back to get one AccNum per reduced column
+
     reduced_sym <- sym(reduced)
     accnum_sym <- sym(accnum_col)
 
@@ -613,17 +786,35 @@ createRepresentativeAccNum <- function(prot_data,
 #' @author Samuel Chen, Janani Ravi
 #'
 #' @param fasta_file Path to the FASTA file to be aligned
-#' @param tool Type of alignment tool to use. One of three options: "Muscle", "ClustalO", or "ClustalW"
-#' @param outpath Path to write the resulting alignment to as a FASTA file. If NULL, no file is written
+#' @param tool Type of alignment tool to use. One of three options: "Muscle",
+#' "ClustalO", or "ClustalW"
+#' @param outpath Path to write the resulting alignment to as a FASTA file. If
+#' NULL, no file is written
 #'
 #' @importFrom Biostrings readAAStringSet
 #' @importFrom msa msaMuscle msaClustalOmega msaClustalW
+#' @importFrom rlang abort
+#' @importFrom tools file_ext
 #'
 #' @return aligned fasta sequence as a MsaAAMultipleAlignment object
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' # Example usage
+#' aligned_sequences <- alignFasta("path/to/sequences.fasta",
+#' tool = "ClustalO", outpath = "path/to/aligned_sequences.fasta")
+#' aligned_sequences
+#' }
 alignFasta <- function(fasta_file, tool = "Muscle", outpath = NULL) {
+    # Validate the input FASTA file
+    if (!file.exists(fasta_file)) {
+        abort("Error: The FASTA file does not exist: ", fasta_file)
+    }
+
+    if (file_ext(fasta_file) != "fasta" && file_ext(fasta_file) != "fa") {
+        abort("Error: The specified file is not a valid FASTA file: ", fasta_file)
+    }
     fasta <- readAAStringSet(fasta_file)
 
     aligned <- switch(tool,
@@ -652,12 +843,35 @@ alignFasta <- function(fasta_file, tool = "Muscle", outpath = NULL) {
 #'
 #' @importFrom Biostrings unmasked
 #' @importFrom readr write_file
+#' @importFrom rlang abort
 #'
-#' @return
+#' @return Character string of the FASTA content that was written to the file.
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' # Example usage
+#' alignment <- alignFasta("path/to/sequences.fasta")
+#' writeMSA_AA2FA(alignment, "path/to/aligned_sequences.fasta")
+#' }
+
 writeMSA_AA2FA <- function(alignment, outpath) {
+    # Validate input alignment
+    if (!inherits(alignment, "AAMultipleAlignment")) {
+        abort("Error: The alignment must be of type 'AAMultipleAlignment'.")
+    }
+
+    # Check the output path is a character string
+    if (!is.character(outpath) || nchar(outpath) == 0) {
+        abort("Error: Invalid output path specified.")
+    }
+
+    # Check if the output directory exists
+    outdir <- dirname(outpath)
+    if (!dir.exists(outdir)) {
+        abort("Error: The output directory does not exist: ", outdir)
+    }
+
     l <- length(rownames(alignment))
     fasta <- ""
     for (i in 1:l)
@@ -672,15 +886,21 @@ writeMSA_AA2FA <- function(alignment, outpath) {
 
 #' getAccNumFromFA
 #'
-#' @param fasta_file
+#' @param fasta_file Character. Path to the FASTA file from which
+#' accession numbers will be extracted.
 #'
 #' @importFrom readr read_file
 #' @importFrom stringi stri_extract_all_regex
 #'
-#' @return
+#' @return A character vector containing the extracted accession numbers.
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' # Example usage
+#' accnums <- getAccNumFromFA("path/to/sequences.fasta")
+#' accnums
+#' }
 getAccNumFromFA <- function(fasta_file) {
     txt <- read_file(fasta_file)
     accnums <- stringi::stri_extract_all_regex(fasta_file, "(?<=>)[\\w,.]+")[[1]]

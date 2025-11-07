@@ -44,10 +44,9 @@ plotSunburst <- function(count_data, fill_by_n = FALSE, sort_by_n = FALSE, maxde
 }
 
 
-#' @param count_data
-#'
-#' @param fill_by_n
-#' @param sort_by_n
+#' @param count_data A data frame containing the data.
+#' @param fill_by_n Logical indicating if fill color is based on counts.
+#' @param sort_by_n Logical indicating if data should be sorted by counts.
 #'
 #' @importFrom plotly plot_ly
 #' @importFrom purrr exec
@@ -68,18 +67,24 @@ plotTreemap <- function(count_data, fill_by_n = FALSE, sort_by_n = FALSE) {
 
 #' prepareColumnParams
 #'
-#' @param count_data
-#' @param fill_by_n
-#' @param sort_by_n
+#' @param count_data A data frame containing the data.
+#' @param fill_by_n Logical indicating if fill color is based on counts.
+#' @param sort_by_n Logical indicating if data should be sorted by counts.
 #'
 #' @importFrom assertthat assert_that
 #' @importFrom dplyr bind_rows mutate
 #' @importFrom purrr map
 #'
-#' @return
+#' @return A data frame of parameters for treemap visualization.
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' count_data <- data.frame(Category = c("A", "B", "C"),
+#'                           n = c(10, 20, 15))
+#' params <- prepareColumnParams(count_data, fill_by_n = TRUE, sort_by_n = FALSE)
+#' params
+#' }
 prepareColumnParams <- function(count_data, fill_by_n, sort_by_n) {
     validateCountDF(count_data)
     assertthat::assert_that(is.logical(fill_by_n),
@@ -116,17 +121,24 @@ prepareColumnParams <- function(count_data, fill_by_n, sort_by_n) {
 
 #' prepareSingleColumnParams
 #'
-#' @param df
-#' @param col_num
-#' @param root
+#' @param df A data frame containing the data to be processed.
+#' @param col_num An integer representing the column number to process.
+#' @param root A string representing the root node for the treemap.
 #'
 #' @importFrom dplyr c_across group_by mutate rowwise select summarise ungroup
 #' @importFrom stringr str_glue
 #'
-#' @return
+#' @return A data frame containing parameters for the specified column for
+#' treemap visualization.
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' df <- data.frame(Category = c("A", "A", "B", "B", "C"),
+#'                  n = c(10, 20, 30, 40, 50))
+#' params <- prepareSingleColumnParams(df, col_num = 1, root = "Root")
+#' params
+#' }
 prepareSingleColumnParams <- function(df,
     col_num,
     root) {
@@ -154,19 +166,23 @@ prepareSingleColumnParams <- function(df,
                 "column: {col_name}\nvalue: {labels}\nn: {values}"
             )
         ) %>%
-        dplyr::select(ids, parents, labels, values, hovertext)
+        dplyr::select(.data$ids, .data$parents, .data$labels, .data$values, .data$hovertext)
 }
 #' validateCountDF
 #'
-#' @param var
+#' @param var A data frame whose columns are to be converted.
 #'
 #' @importFrom assertthat assert_that has_name
 #' @importFrom dplyr across mutate
+#' @importFrom tidyselect matches
 #'
-#' @return
+#' @return A data frame with non-'n' columns converted to character type.
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' new_df <- .all_non_n_cols_to_char(my_data)
+#' }
 validateCountDF <- function(var) {
     msg <- paste(substitute(var), "must be a count dataframe (output of dplyr::count)")
     assertthat::assert_that(is.data.frame(var),

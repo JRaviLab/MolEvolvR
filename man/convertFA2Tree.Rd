@@ -29,8 +29,8 @@ convertFA2Tree
 }
 \examples{
 \dontrun{
-convert_fa2tre(here("data/alns/pspa_snf7.fa"), 
-                here("data/alns/pspa_snf7.tre"), 
+convert_fa2tre(here("data/alns/pspa_snf7.fa"),
+                here("data/alns/pspa_snf7.tre"),
                 here("src/FastTree")
 }
 }

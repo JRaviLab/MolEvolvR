@@ -11,19 +11,30 @@ createLineageLookup(
 )
 }
 \arguments{
-\item{lineage_file}{Path to the rankedlineage.dmp file containing taxid's and their
-corresponding taxonomic rank. rankedlineage.dmp can be downloaded at
+\item{lineage_file}{Path to the rankedlineage.dmp file containing taxid's
+and their corresponding taxonomic rank. rankedlineage.dmp can be downloaded at
 https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/new_taxdump/}
 
 \item{outfile}{File the resulting lineage lookup table should be written to}
 
-\item{taxonomic_rank}{The upperbound of taxonomic rank that the lineage includes. The lineaege will
-include superkingdom>...>taxonomic_rank.
+\item{taxonomic_rank}{The upperbound of taxonomic rank that the lineage
+includes. The lineaege will include superkingdom>...>taxonomic_rank.
 Choices include: "supperkingdom", "phylum",   "class","order", "family",
 "genus", and "species"}
 }
+\value{
+A tibble containing the tax IDs and their respective lineages up to
+the specified taxonomic rank, saved as a tab-separated file.
+}
 \description{
 Create a look up table that goes from TaxID, to Lineage
+}
+\examples{
+\dontrun{
+createLineageLookup(lineage_file = "data/rankedlineage.dmp",
+                     outfile = "data/lineage_lookup.tsv",
+                     taxonomic_rank = "family")
+}
 }
 \author{
 Samuel Chen

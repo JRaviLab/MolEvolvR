@@ -2,20 +2,19 @@
 # suppressPackageStartupMessages(library(here))
 # library(biomartr)
 
-
 #' createLineageLookup
-#' 
+#'
 #' @description
 #' Create a look up table that goes from TaxID, to Lineage
 #'
 #' @author Samuel Chen
 #'
-#' @param lineage_file Path to the rankedlineage.dmp file containing taxid's and their
-#' corresponding taxonomic rank. rankedlineage.dmp can be downloaded at
+#' @param lineage_file Path to the rankedlineage.dmp file containing taxid's
+#' and their corresponding taxonomic rank. rankedlineage.dmp can be downloaded at
 #' https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/new_taxdump/
 #' @param outfile File the resulting lineage lookup table should be written to
-#' @param taxonomic_rank The upperbound of taxonomic rank that the lineage includes. The lineaege will
-#' include superkingdom>...>taxonomic_rank.
+#' @param taxonomic_rank The upperbound of taxonomic rank that the lineage
+#' includes. The lineaege will include superkingdom>...>taxonomic_rank.
 #' Choices include: "supperkingdom", "phylum",   "class","order", "family",
 #' "genus", and "species"
 #'
@@ -25,10 +24,17 @@
 #' @importFrom stringr str_locate str_replace_all
 #' @importFrom tidyr unite
 #'
-#' @return
+#' @return A tibble containing the tax IDs and their respective lineages up to
+#' the specified taxonomic rank, saved as a tab-separated file.
+#'
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' createLineageLookup(lineage_file = "data/rankedlineage.dmp",
+#'                      outfile = "data/lineage_lookup.tsv",
+#'                      taxonomic_rank = "family")
+#' }
 createLineageLookup <- function(lineage_file = here("data/rankedlineage.dmp"),
     outfile, taxonomic_rank = "phylum") {
     .shortenNA <- function(Lineage) {
@@ -85,10 +91,10 @@ createLineageLookup <- function(lineage_file = here("data/rankedlineage.dmp"),
 
     if (tax_rank_index < length(taxonomy_ranks)) {
         rankedLins <- rankedLins %>%
-            select(-all_of(taxonomy_ranks[(tax_rank_index + 1):length(taxonomy_ranks)]), -kingdom)
+            select(-all_of(taxonomy_ranks[(tax_rank_index + 1):length(taxonomy_ranks)]), -.data$kingdom)
     } else {
         rankedLins <- rankedLins %>%
-            select(-kingdom)
+            select(-.data$kingdom)
     }
 
 

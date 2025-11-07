@@ -33,7 +33,7 @@ context (GC)
 }
 \examples{
 \dontrun{
-tibble::tibble(DomArch = c("aaa+bbb", 
+tibble::tibble(DomArch = c("aaa+bbb",
 "a+b", "b+c", "b-c")) |> elements2Words()
 }
 

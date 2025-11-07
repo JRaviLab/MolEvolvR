@@ -10,11 +10,11 @@ plotSunburst(count_data, fill_by_n = FALSE, sort_by_n = FALSE, maxdepth = 2)
 plotTreemap(count_data, fill_by_n = FALSE, sort_by_n = FALSE)
 }
 \arguments{
-\item{count_data}{}
+\item{count_data}{A data frame containing the data.}
 
-\item{fill_by_n}{If TRUE, uses a continuous scale to fill plot by group size}
+\item{fill_by_n}{Logical indicating if fill color is based on counts.}
 
-\item{sort_by_n}{}
+\item{sort_by_n}{Logical indicating if data should be sorted by counts.}
 }
 \description{
 These functions help you quickly create interactive hierarchical plots

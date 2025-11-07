@@ -19,21 +19,33 @@ cleanDomainArchitecture(
 \arguments{
 \item{prot}{A data frame containing a 'DomArch' column}
 
+\item{old}{The name of the original column containing domain architecture.
+Defaults to "DomArch.orig".}
+
+\item{new}{The name of the cleaned column to be created. Defaults to
+"DomArch".}
+
 \item{domains_keep}{A data frame containing the domain names to be retained.}
 
-\item{domains_rename}{A data frame containing the domain names to be replaced in a column 'old' and the
+\item{domains_rename}{A data frame containing the domain names to be replaced
+in a column 'old' and the
 corresponding replacement values in a column 'new'.}
 
-\item{condenseRepeatedDomains}{Boolean. If TRUE, repeated domains in 'DomArch' are condensed. Default is TRUE.}
+\item{condenseRepeatedDomains}{Boolean. If TRUE, repeated domains in
+'DomArch' are condensed. Default is TRUE.}
 
-\item{removeTails}{Boolean. If TRUE, 'ClustName' will be filtered based on domains to keep/remove. Default is FALSE.}
+\item{removeTails}{Boolean. If TRUE, 'ClustName' will be filtered based on
+domains to keep/remove. Default is FALSE.}
 
-\item{removeEmptyRows}{Boolean. If TRUE, rows with empty/unnecessary values in 'DomArch' are removed. Default is FALSE.}
+\item{removeEmptyRows}{Boolean. If TRUE, rows with empty/unnecessary values
+in 'DomArch' are removed. Default is FALSE.}
 
-\item{domains_ignore}{A data frame containing the domain names to be removed in a column called 'domains'}
+\item{domains_ignore}{A data frame containing the domain names to be removed
+in a column called 'domains'}
 }
 \value{
-The original data frame is returned with the clean DomArchs column and the old domains in the DomArchs.old column.
+The original data frame is returned with the clean DomArchs column
+and the old domains in the DomArchs.old column.
 }
 \description{
 Cleanup Domain Architectures
@@ -46,6 +58,7 @@ The original data frame is returned with the clean DomArchs column and the old d
 }
 \examples{
 \dontrun{
-cleanDomainArchitecture(prot, TRUE, FALSE, domains_keep, domains_rename, domains_ignore = NULL)
+cleanDomainArchitecture(prot, TRUE, FALSE,
+omains_keep, domains_rename, domains_ignore = NULL)
 }
 }
