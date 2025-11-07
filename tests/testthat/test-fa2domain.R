@@ -5,7 +5,7 @@ test_that("fa2domain", {
     library(glue)
     # runIPRScan
     # Define file paths using system.file to locate files in the package
-    filepath_fasta <- system.file("tests", "example_fasta.fa", package = "MolEvolvR")
+    filepath_fasta <- testthat::test_path("testdata", "example_fasta.fa")
     filepath_out <- tempfile()  # Temporary file for output
     
     # Set application options
@@ -13,7 +13,7 @@ test_that("fa2domain", {
     mock_appl_multiple <- c("Pfam", "Gene3D")
     
     # Create a sample TSV file in extdata and read it
-    sample_tsv_path <- system.file("tests", "example_iprscan_valid.tsv", package = "MolEvolvR")
+    sample_tsv_path <- testthat::test_path("testdata", "example_iprscan_valid.tsv")
     
     # Read the TSV file into a dataframe
     sample_tsv <- read.csv(sample_tsv_path, sep = "\t", header = TRUE) 
