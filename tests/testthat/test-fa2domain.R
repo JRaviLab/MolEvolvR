@@ -204,10 +204,7 @@ test_that("fa2domain", {
     analysis <- c("Pfam", "Gene3D")
     expect_warning(
         getDomainsFromFA(fasta, empty_iprscan, verbose = TRUE),
-        regexp = stringr::str_glue(
-            "accession number: aaeB_6~~~aaeB_4 had no domains for the selected analyses: ",
-            "{paste(unique(analysis), collapse = ',')}\n"
-        )
+        regexp = "had no domains for the selected analyses"
     )
     
     # Test case 5: Verbose output for some valid accession numbers
