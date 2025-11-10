@@ -540,18 +540,32 @@ test_that("cleanup", {
     expect_equal(result, expected_output)
     
     # Sample input data
+    # mock data for selectLongestDuplicate()
     prot <- tibble::tibble(
-        AccNum = c("A1", "A1", "B1", "B1", "C1"),
-        Description = c("Short", 
-                        "Longer Description", 
-                        "Medium", "Shortest", "Unique")
-    )
+        AccNum = c("P001", "P001", "P002", "P003", "P003", "P003", "P004"),
+        Description = c(
+            "Short peptide",
+            "Much longer peptide description text",
+            "Single entry",
+            "Tiny desc",
+            "Medium length description",
+            "This one is definitely the longest description for P003",
+            "Unique protein"
+        ),
+        Length = c(120, 150, 80, 50, 70, 95, 200)
+        )
     
     # Expected output after selecting longest duplicates
     expected_output <- tibble::tibble(
-        AccNum = c("A1", "B1", "C1"),
-        Description = c("Longer Description", "Shortest", "Unique")
-    )
+        AccNum = c("P001", "P002", "P003", "P004"),
+        Description = c(
+            "Much longer peptide description text",
+            "Single entry",
+            "This one is definitely the longest description for P003",
+            "Unique protein"
+        ),
+        Length = c(150, 80, 95, 200)
+        )
     
     # Run the function
     result <- selectLongestDuplicate(prot, "Description")
