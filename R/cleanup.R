@@ -732,7 +732,7 @@ selectLongestDuplicate <- function(prot, column) {
     # grab all the longest rows
     unique_dups <- prot %>%
         filter(!.data$row.orig %in% remove_rows) %>%
-        select(-.data$row.orig)
+        select(-"row.orig")
 
     return(unique_dups)
 }
