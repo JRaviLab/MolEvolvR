@@ -33,7 +33,7 @@ test_that("fa2domain", {
     # Capture the actual command from the mock
     actual_cmd_single <- mock_args(mock_system)[[1]]
     
-    # Verify that the expected command matches the actual command
+    # TEST 2: Verify that the expected command matches the actual command
     expect_equal(as.character(unlist(actual_cmd_single)), as.character(expected_cmd_single))
     
     # Clear the mock calls for the next test
