@@ -63,7 +63,7 @@ test_that("fa2domain", {
     
     # Invalid `appl`
     expect_error(runIPRScan(filepath_fasta, filepath_out, appl = "InvalidApp"), 
-                 "Invalid application specified")
+                 "Invalid IPRscan analyses specified")
     
     # readIPRScanTSV
     # Read the TSV file using the function
