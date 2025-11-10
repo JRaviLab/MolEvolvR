@@ -65,14 +65,10 @@ runIPRScan <- function(
 #' (based upon the global variable written in
 #' molevol_scripts/R/colnames_molevol.R)
 #'
-#' @return [chr] interproscan column names used throughout molevolvr
+#' @return [chr] interproscan column names used throughout MolEvolvR
 getIPRScanColNames <- function() {
-    column_names <- c(
-        "AccNum", "SeqMD5Digest", "SLength", "Analysis",
-        "DB.ID", "SignDesc", "StartLoc", "StopLoc", "Score",
-        "Status", "RunDate", "IPRAcc", "IPRDesc"
-    )
-    return(column_names)
+    data("ipr_colnames", package = "MolEvolvR", envir = environment())
+    ipr_colnames
 }
 
 #' construct column types for reading interproscan output TSVs

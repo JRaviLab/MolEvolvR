@@ -9,7 +9,7 @@ molevol_scripts/R/colnames_molevol.R)}
 getIPRScanColNames()
 }
 \value{
-\link[rlang:vector-construction]{rlang::chr} interproscan column names used throughout molevolvr
+\link[rlang:vector-construction]{rlang::chr} interproscan column names used throughout MolEvolvR
 }
 \description{
 Constructor function for interproscan column names

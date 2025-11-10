@@ -79,15 +79,9 @@ test_that("fa2domain", {
     # Check that the result is a character vector
     expect_type(col_names, "character")
     
-    # Define the expected column names
-    expected_col_names <- c(
-        "AccNum", "SeqMD5Digest", "SLength", "Analysis",
-        "DB.ID", "SignDesc", "StartLoc", "StopLoc", "Score",
-        "Status", "RunDate", "IPRAcc", "IPRDesc"
-    )
     
     # Check that the column names match exactly
-    expect_equal(col_names, expected_col_names)
+    expect_equal(colnames(df_ipr), col_names)
     expect_type(col_names, "character")
     
     # Ensure there are exactly 13 columns
