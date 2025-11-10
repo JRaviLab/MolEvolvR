@@ -43,7 +43,7 @@ runIPRScan <- function(
         stop("filepath_out cannot be NULL or empty")
     }
     if (!all(appl %in% c("Pfam", "Gene3D"))) {
-        stop("Invalid application specified")
+        stop("Invalid IPRscan analyses specified")
     }
     # construct interproscan command
     cmd_iprscan <- stringr::str_glue(
