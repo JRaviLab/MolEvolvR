@@ -7,7 +7,7 @@
 writeProcessRuntime2TSV(dir_job_results, filepath)
 }
 \arguments{
-\item{dir_job_results}{\link{chr} path to MolEvolvR job_results}
+\item{dir_job_results}{\link[rlang:vector-construction]{rlang::chr} path to MolEvolvR job_results}
 
 \item{filepath}{path to save tsv file}
 }

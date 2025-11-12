@@ -12,7 +12,7 @@ convertIPRScanDomainTable2FA(df_iprscan_domains)
 \item{df_iprscan_domains}{\link{tbl_df} return value from createIPRScanDomainTable}
 }
 \value{
-\link{AAStringSet} A domain fasta containing all the domains for a
+\link[Biostrings:XStringSet-class]{Biostrings::AAStringSet} A domain fasta containing all the domains for a
 single protein in the original fasta passed as an argument to createIPRScanDomainTable()
 }
 \description{

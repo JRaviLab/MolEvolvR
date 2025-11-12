@@ -6,15 +6,28 @@
 
 #' runIPRScan
 #'
-#' @param filepath_fasta
-#' @param filepath_out
-#' @param appl
+#' Run InterProScan on a given FASTA file and save the results to an
+#' output file.
+#'
+#' @param filepath_fasta A string representing the path to the input FASTA file.
+#' @param filepath_out A string representing the base path for the output file.
+#' @param appl A character vector specifying the InterProScan applications to
+#' use (e.g., "Pfam", "Gene3D"). Default is `c("Pfam", "Gene3D")`.
 #'
 #' @importFrom stringr str_glue
 #'
-#' @return
+#' @return A data frame containing the results from the InterProScan output
+#' TSV file.
 #'
 #' @examples
+#' \dontrun{
+#' results <- runIPRScan(
+#'     filepath_fasta = "path/to/your_fasta_file.fasta",
+#'     filepath_out = "path/to/output_file",
+#'     appl = c("Pfam", "Gene3D")
+#' )
+#' results
+#' }
 runIPRScan <- function(
         filepath_fasta,
         filepath_out, # do not inlucde file extension since ipr handles this
@@ -30,7 +43,7 @@ runIPRScan <- function(
         stop("filepath_out cannot be NULL or empty")
     }
     if (!all(appl %in% c("Pfam", "Gene3D"))) {
-        stop("Invalid application specified")
+        stop("Invalid IPRscan analyses specified")
     }
     # construct interproscan command
     cmd_iprscan <- stringr::str_glue(
@@ -52,14 +65,10 @@ runIPRScan <- function(
 #' (based upon the global variable written in
 #' molevol_scripts/R/colnames_molevol.R)
 #'
-#' @return [chr] interproscan column names used throughout molevolvr
+#' @return [chr] interproscan column names used throughout MolEvolvR
 getIPRScanColNames <- function() {
-    column_names <- c(
-        "AccNum", "SeqMD5Digest", "SLength", "Analysis",
-        "DB.ID", "SignDesc", "StartLoc", "StopLoc", "Score",
-        "Status", "RunDate", "IPRAcc", "IPRDesc"
-    )
-    return(column_names)
+    data("ipr_colnames", package = "MolEvolvR", envir = environment())
+    ipr_colnames
 }
 
 #' construct column types for reading interproscan output TSVs
@@ -231,8 +240,8 @@ convertIPRScanDomainTable2FA <- function(df_iprscan_domains) {
         dplyr::rowwise() |>
         dplyr::mutate(
             idx_new_record = append_fasta_domains(
-                new_seq = seq_domain,
-                new_seq_id = id_domain
+                new_seq = .data$seq_domain,
+                new_seq_id = .data$id_domain
             )
         )
     return(fasta_domains)

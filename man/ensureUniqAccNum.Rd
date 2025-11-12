@@ -7,10 +7,10 @@
 ensureUniqAccNum(accnums)
 }
 \arguments{
-\item{accnums}{\link{chr} a vector of accession numbers}
+\item{accnums}{\link[rlang:vector-construction]{rlang::chr} a vector of accession numbers}
 }
 \value{
-\link{chr} a vector of adjusted, unique accession numbers
+\link[rlang:vector-construction]{rlang::chr} a vector of adjusted, unique accession numbers
 }
 \description{
 Append an index of occurence suffix to each accession number (or any

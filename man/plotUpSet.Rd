@@ -18,15 +18,30 @@ plotUpSet(
 \item{query_data}{Data frame of protein homologs with the usual 11 columns +
 additional word columns (0/1 format). Default is toast_rack.sub}
 
+\item{colname}{Column name from query_data: "DomArch.norep", "GenContext.norep",
+"DomArch.PFAM.norep" or "DomArch.LADB.norep". Default is "DomArch.norep".}
+
 \item{cutoff}{Numeric. Cutoff for word frequency. Default is 90.}
 
-\item{text.scale}{Allows scaling of axis title, tick lables, and numbers above the intersection size bars.
+\item{RowsCutoff}{Boolean. If TRUE, applies a row cutoff to remove data rows
+based on a certain condition. Default is FALSE.}
+
+\item{text.scale}{Allows scaling of axis title, tick lables, and numbers
+above the intersection size bars.
 text.scale can either take a universal scale in the form of an integer,
 or a vector of specific scales in the format: c(intersection size title,
 intersection size tick labels, set size title, set size tick labels, set names,
 numbers above bars)}
 
-\item{line.size}{}
+\item{point.size}{Numeric. Sets the size of points in the UpSet plot.
+Default is 2.2.}
+
+\item{line.size}{Numeric. Sets the line width in the UpSet plot.
+Default is 0.8.}
+}
+\value{
+An UpSet plot object. The plot visualizes intersections of sets based
+on the provided colname in query_data.
 }
 \description{
 UpSet plot for Domain Architectures vs Domains and

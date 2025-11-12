@@ -24,13 +24,17 @@
 #' A network of domains is returned based on shared domain architectures.
 #'
 #' @param prot A data frame that contains the column 'DomArch'.
-#' @param column Name of column containing Domain architecture from which nodes and edges are generated.
-#' @param domains_of_interest
-#' @param cutoff Integer. Only use domains that occur at or above the cutoff for total counts if cutoff_type is "Total Count".
-#' Only use domains that appear in cutoff or greater lineages if cutoff_type is Lineage.
+#' @param column Name of column containing Domain architecture from which nodes
+#' and edges are generated.
+#' @param domains_of_interest Character vector specifying domains of interest.
+#' @param cutoff Integer. Only use domains that occur at or above the cutoff for
+#' total counts if cutoff_type is "Total Count".
+#' Only use domains that appear in cutoff or greater lineages if cutoff_type is
+#' Lineage.
 #' @param layout Character. Layout type to be used for the network. Options are:
 #' \itemize{\item "grid" \item "circle" \item "random" \item "auto"}
-#' @param query_color
+#' @param query_color Character. Color to represent the queried domain in the
+#' network.
 #'
 #' @importFrom dplyr across add_row all_of distinct filter mutate pull select
 #' @importFrom igraph delete_vertices graph_from_edgelist vertex
@@ -40,8 +44,10 @@
 #' @importFrom stringr str_replace_all str_split
 #' @importFrom tidyr pivot_wider
 #' @importFrom visNetwork visIgraph visIgraphLayout visNetwork visOptions
+#' @importFrom igraph V E "V<-" "E<-"
+#' @importFrom igraph graph_from_edgelist
 #'
-#' @return
+#' @return A network visualization of domain architectures.
 #' @export
 #'
 #' @examples
@@ -74,7 +80,7 @@ createDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, c
 
             # string clean up all of the Domain Architecture columns
             prot <- prot |>
-                mutate(DomArch.ntwrk = cleanString(DomArch.ntwrk)) |>
+                mutate(DomArch.ntwrk = cleanString(.data$DomArch.ntwrk)) |>
                 mutate(
                     across(
                         all_of(column),
@@ -85,7 +91,7 @@ createDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, c
             domain.list <- prot %>%
                 dplyr::filter(grepl(
                     pattern = domains_of_interest_regex,
-                    x = DomArch.ntwrk,
+                    x = .data$DomArch.ntwrk,
                     ignore.case = T, perl = T
                 ))
             ## Separating column and converting to atomic vector prevents coercion
@@ -96,7 +102,7 @@ createDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, c
             domain.list <- domain.list$DomArch.ntwrk %>% str_split(pattern = "\\+")
             # Get a table of domain counts
             wc <- elements2Words(prot = prot, column = column, conversion_type = "da2doms") %>% words2WordCounts()
-            wc <- pivot_wider(wc, names_from = words, values_from = freq)
+            wc <- pivot_wider(wc, names_from = .data$words, values_from = .data$freq)
 
             # Remove all isolated domarchs, such that an adjacency list can easily be constructed
             singletons <- domain.list[which(lengths(domain.list) == 1)] %>% unique()
@@ -227,15 +233,20 @@ createDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, c
 #'
 #'
 #' @param prot A data frame that contains the column 'DomArch'.
-#' @param column Name of column containing Domain architecture from which nodes and edges are generated.
-#' @param domains_of_interest
-#' @param cutoff Integer. Only use domains that occur at or above the cutoff for total counts if cutoff_type is "Total Count".
-#' Only use domains that appear in cutoff or greater lineages if cutoff_type is Lineage.
+#' @param column Name of column containing Domain architecture from which nodes
+#' and edges are generated.
+#' @param domains_of_interest Character vector specifying the domains of interest.
+#' @param cutoff Integer. Only use domains that occur at or above the cutoff for
+#' total counts if cutoff_type is "Total Count".
+#' Only use domains that appear in cutoff or greater lineages if cutoff_type is
+#' Lineage.
 #' @param layout Character. Layout type to be used for the network. Options are:
 #' \itemize{\item "grid" \item "circle" \item "random" \item "auto"}
-#' @param query_color Color that the nodes of the domains in the domains_of_interest vector are colored
-#' @param partner_color Color that the nodes that are not part of the domains_of_interest vector are colored
-#' @param border_color
+#' @param query_color Color that the nodes of the domains in the
+#' domains_of_interest vector are colored
+#' @param partner_color Color that the nodes that are not part of the
+#' domains_of_interest vector are colored
+#' @param border_color Color for the borders of the nodes.
 #' @param IsDirected Is the network directed? Set to false to eliminate arrows
 #'
 #' @importFrom dplyr distinct filter group_by mutate pull select summarize
@@ -244,13 +255,14 @@ createDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, c
 #' @importFrom rlang sym
 #' @importFrom stringr str_replace_all str_split
 #' @importFrom visNetwork visEdges visGroups visIgraphLayout visLegend visNetwork visOptions
+#' @importFrom rlang .data
 #'
-#' @return
+#' @return A network visualization of domain architectures.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' createDomainNetwork(pspa)
+#' createBinaryDomainNetwork(pspa)
 #' }
 createBinaryDomainNetwork <- function(prot, column = "DomArch", domains_of_interest, cutoff = 70,
     layout = "nice", query_color = adjustcolor("yellow", alpha.f = .5),
@@ -290,7 +302,7 @@ createBinaryDomainNetwork <- function(prot, column = "DomArch", domains_of_inter
 
     nodes <- data.frame(id = wc$words, label = wc$words, size = wc$freq) %>%
         mutate(group = purrr::map(
-            id,
+            .data$id,
             function(x) {
                 ifelse(x %in% domains_of_interest, "Query", "Partner")
             }
@@ -298,9 +310,9 @@ createBinaryDomainNetwork <- function(prot, column = "DomArch", domains_of_inter
 
     max_size <- max(nodes$size)
     min_size <- min(nodes$size)
-    nodes <- nodes %>% mutate(size = (size - min_size) / ((max_size - min_size)) * 20 + 10)
+    nodes <- nodes %>% mutate(size = (.data$size - min_size) / ((max_size - min_size)) * 20 + 10)
     max_font_size <- 43
-    nodes <- nodes %>% mutate(font.size = purrr::map(size, function(x) min(x * 2, max_font_size)))
+    nodes <- nodes %>% mutate(font.size = purrr::map(.data$size, function(x) min(x * 2, max_font_size)))
 
     domain.list <- domain.list[-which(lengths(domain.list) == 1)]
 
@@ -318,7 +330,7 @@ createBinaryDomainNetwork <- function(prot, column = "DomArch", domains_of_inter
         edges <- data.frame(from = pwise[, 1], to = pwise[, 2]) %>%
             group_by(from, to) %>%
             summarize(width = n())
-        edges <- edges %>% mutate(width = ifelse(width == 1, .3, log(width)))
+        edges <- edges %>% mutate(width = ifelse(.data$width == 1, .3, log(.data$width)))
         ew <- c(2.7, 4.5)
 
         ColorEdges <- function(x) {
@@ -331,7 +343,7 @@ createBinaryDomainNetwork <- function(prot, column = "DomArch", domains_of_inter
             }
         }
 
-        edges <- edges %>% mutate(color = unlist(purrr::map(width, ColorEdges)))
+        edges <- edges %>% mutate(color = unlist(purrr::map(.data$width, ColorEdges)))
     }
 
     if (IsDirected) {
