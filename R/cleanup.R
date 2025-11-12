@@ -192,7 +192,7 @@ removeEmptyRows <- function(prot, by_column = "DomArch") {
 #' @export
 #'
 #' @importFrom dplyr pull mutate
-#' @importFrom stringr str_replace_all
+#' @importFrom stringr str_replace_all regex
 #' @importFrom rlang .data :=
 #'
 #' @examples
@@ -202,29 +202,19 @@ removeEmptyRows <- function(prot, by_column = "DomArch") {
 condenseRepeatedDomains <- function(prot, by_column = "DomArch", excluded_prots = c()) {
     # If there are strings that condenseRepeatedDomains should not affect, the pattern to search
     # for must be changed to exclude a search for those desired strings
-
-    collapsed_prots <- paste0(excluded_prots, collapse = "\\s|")
-    regex_exclude <- paste0("(?!", collapsed_prots, "\\s)")
-    regex_identify_repeats <- paste0("(?i)", regex_exclude, "\\b([a-z0-9_-]+)\\b(?:\\s+\\1\\b)+")
-
-    # !! FUNS is soft-deprecated. FIX!!!
-    prot <- prot %>%
-        dplyr::mutate(!!by_column := stringr::str_replace_all(
-            .data[[by_column]],
-            c(
-                "\\." = "_d_",
-                " " = "_",
-                "\\+" = " ",
-                "-" = "__",
-                regex_identify_repeats = "\\1(s)",
-                "__" = "-",
-                " " = "+",
-                "_d_" = "."
-            )
-        ))
+    collapsed_prots <- paste0(excluded_prots, collapse = "|")
+    regex_exclude <- if (length(excluded_prots)) paste0("(?!", collapsed_prots, "\\b)") else ""
+    
+    # Allow + or space (or combinations) as delimiters
+    regex_identify_repeats <- paste0("(?i)", regex_exclude, "\\b([A-Za-z0-9_-]+)\\b(?:[+\\s]+\\1\\b)+")
+    
+    prot <-
+        prot %>%
+        mutate(
+            !!by_column := str_replace_all(.data[[by_column]], regex(regex_identify_repeats), "\\1(s)")
+        )
 
     return(prot)
-
 }
 
 
