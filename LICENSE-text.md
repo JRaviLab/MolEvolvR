@@ -1,0 +1,5 @@
+# License
+
+    YEAR: 2024
+    COPYRIGHT HOLDER: MolEvolvR authors
+    ORGANIZATION: JRaviLab

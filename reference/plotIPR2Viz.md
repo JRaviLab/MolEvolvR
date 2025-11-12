@@ -1,0 +1,87 @@
+# plotIPR2Viz
+
+plotIPR2Viz
+
+## Usage
+
+``` r
+plotIPR2Viz(
+  infile_ipr = NULL,
+  infile_full = NULL,
+  accessions = c(),
+  analysis = c("Pfam", "Phobius", "TMHMM", "Gene3D"),
+  group_by = "Analysis",
+  topn = 20,
+  name = "Name",
+  text_size = 15,
+  query = "All"
+)
+```
+
+## Arguments
+
+- infile_ipr:
+
+  A path to the input IPR file (TSV format) containing domain
+  information.
+
+- infile_full:
+
+  A path to the full input file (TSV format) containing lineage and
+  accession information.
+
+- accessions:
+
+  A character vector of accession numbers to filter the analysis.
+  Default is an empty vector.
+
+- analysis:
+
+  A character vector specifying the types of analysis to include (e.g.,
+  "Pfam", "Phobius", "TMHMM", "Gene3D"). Default is a vector of these
+  analyses.
+
+- group_by:
+
+  A string specifying how to group the visualization. Default is
+  "Analysis". Options include "Analysis" or "Query".
+
+- topn:
+
+  An integer specifying the number of top accessions to visualize.
+  Default is 20.
+
+- name:
+
+  A string representing the name to use for y-axis labels. Default is
+  "Name".
+
+- text_size:
+
+  An integer specifying the text size for the plot. Default is 15.
+
+- query:
+
+  A string for filtering a specific query name. If it is not "All", only
+  the data matching this query will be processed.
+
+## Value
+
+A ggplot object representing the domain architecture visualization.
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+plot <- plotIPR2Viz(infile_ipr = "path/to/ipr_file.tsv",
+                    infile_full = "path/to/full_file.tsv",
+                    accessions = c("ACC123", "ACC456"),
+                    analysis = c("Pfam", "TMHMM"),
+                    group_by = "Analysis",
+                    topn = 20,
+                    name = "Gene Name",
+                    text_size = 15,
+                    query = "All")
+plot
+} # }
+```

@@ -1,0 +1,236 @@
+# Package index
+
+## All functions
+
+- [`GCA2Lineage()`](https://jravilab.github.io/MolEvolvR/reference/GCA2Lineage.md)
+  : Function to map GCA_ID to TaxID, and TaxID to Lineage
+- [`IPG2Lineage()`](https://jravilab.github.io/MolEvolvR/reference/IPG2Lineage.md)
+  : IPG2Lineage
+- [`summarizeByLineage()`](https://jravilab.github.io/MolEvolvR/reference/MolEvolvR_summary.md)
+  [`summarizeDomArch_ByLineage()`](https://jravilab.github.io/MolEvolvR/reference/MolEvolvR_summary.md)
+  [`summarizeDomArch()`](https://jravilab.github.io/MolEvolvR/reference/MolEvolvR_summary.md)
+  [`summarizeGenContext_ByDomArchLineage()`](https://jravilab.github.io/MolEvolvR/reference/MolEvolvR_summary.md)
+  [`summarizeGenContext_ByLineage()`](https://jravilab.github.io/MolEvolvR/reference/MolEvolvR_summary.md)
+  [`summarizeGenContext()`](https://jravilab.github.io/MolEvolvR/reference/MolEvolvR_summary.md)
+  [`totalGenContextOrDomArchCounts()`](https://jravilab.github.io/MolEvolvR/reference/MolEvolvR_summary.md)
+  : MolEvolvR Summary
+- [`acc2FA()`](https://jravilab.github.io/MolEvolvR/reference/acc2FA.md)
+  : acc2FA
+- [`acc2Lineage()`](https://jravilab.github.io/MolEvolvR/reference/acc2Lineage.md)
+  : acc2Lineage
+- [`addLeaves2Alignment()`](https://jravilab.github.io/MolEvolvR/reference/addLeaves2Alignment.md)
+  : addLeaves2Alignment
+- [`addLineage()`](https://jravilab.github.io/MolEvolvR/reference/addLineage.md)
+  : addLineage
+- [`addName()`](https://jravilab.github.io/MolEvolvR/reference/addName.md)
+  : addName
+- [`addTaxID()`](https://jravilab.github.io/MolEvolvR/reference/addTaxID.md)
+  : addTaxID
+- [`alignFasta()`](https://jravilab.github.io/MolEvolvR/reference/alignFasta.md)
+  : alignFasta
+- [`assignJobQueue()`](https://jravilab.github.io/MolEvolvR/reference/assignJobQueue.md)
+  : assignJobQueue
+- [`calculateEstimatedWallTimeFromOpts()`](https://jravilab.github.io/MolEvolvR/reference/calculateEstimatedWallTimeFromOpts.md)
+  : calculateEstimatedWallTimeFromOpts
+- [`calculateProcessRuntime()`](https://jravilab.github.io/MolEvolvR/reference/calculateProcessRuntime.md)
+  : calculateProcessRuntime
+- [`cleanClusterFile()`](https://jravilab.github.io/MolEvolvR/reference/cleanClusterFile.md)
+  : Clean Cluster File
+- [`cleanClusters()`](https://jravilab.github.io/MolEvolvR/reference/cleanClusters.md)
+  : Cleanup Clust
+- [`cleanDomainArchitecture()`](https://jravilab.github.io/MolEvolvR/reference/cleanDomainArchitecture.md)
+  : Cleanup DomArch
+- [`cleanFAHeaders()`](https://jravilab.github.io/MolEvolvR/reference/cleanFAHeaders.md)
+  : Cleanup FASTA Header
+- [`cleanGeneDescription()`](https://jravilab.github.io/MolEvolvR/reference/cleanGeneDescription.md)
+  : Cleanup GeneDesc
+- [`cleanGenomicContext()`](https://jravilab.github.io/MolEvolvR/reference/cleanGenomicContext.md)
+  : Cleanup Genomic Contexts
+- [`cleanLineage()`](https://jravilab.github.io/MolEvolvR/reference/cleanLineage.md)
+  : Cleanup Lineage
+- [`cleanSpecies()`](https://jravilab.github.io/MolEvolvR/reference/cleanSpecies.md)
+  : Cleanup Species
+- [`cleanString()`](https://jravilab.github.io/MolEvolvR/reference/cleanString.md)
+  : Clean String
+- [`combineFiles()`](https://jravilab.github.io/MolEvolvR/reference/combineFiles.md)
+  : Download the combined assembly summaries of genbank and refseq
+- [`combineFullAnalysis()`](https://jravilab.github.io/MolEvolvR/reference/combineFullAnalysis.md)
+  : Combining full_analysis files
+- [`combineIPR()`](https://jravilab.github.io/MolEvolvR/reference/combineIPR.md)
+  : Combining clean ipr files
+- [`condenseRepeatedDomains()`](https://jravilab.github.io/MolEvolvR/reference/condenseRepeatedDomains.md)
+  : condenseRepeatedDomains
+- [`convert2TitleCase()`](https://jravilab.github.io/MolEvolvR/reference/convert2TitleCase.md)
+  [`to_titlecase()`](https://jravilab.github.io/MolEvolvR/reference/convert2TitleCase.md)
+  : Changing case to 'Title Case'
+- [`convertAlignment2FA()`](https://jravilab.github.io/MolEvolvR/reference/convertAlignment2FA.md)
+  : convertAlignment2FA
+- [`convertAlignment2Trees()`](https://jravilab.github.io/MolEvolvR/reference/convertAlignment2Trees.md)
+  : convertAlignment2Trees
+- [`convertFA2Tree()`](https://jravilab.github.io/MolEvolvR/reference/convertFA2Tree.md)
+  : convertFA2Tree
+- [`convertIPRScanDomainTable2FA()`](https://jravilab.github.io/MolEvolvR/reference/convertIPRScanDomainTable2FA.md)
+  : Using the table returned from createIPRScanDomainTable, construct a
+  domain fasta for a single accession number in the original fasta
+  (i.e., the original fasta argument to createIPRScanDomainTable())
+- [`countByColumn()`](https://jravilab.github.io/MolEvolvR/reference/countByColumn.md)
+  : countByColumn
+- [`createBinaryDomainNetwork()`](https://jravilab.github.io/MolEvolvR/reference/createBinaryDomainNetwork.md)
+  : Domain Network
+- [`createDomainNetwork()`](https://jravilab.github.io/MolEvolvR/reference/createDomainNetwork.md)
+  : Domain Network
+- [`createFA2Tree()`](https://jravilab.github.io/MolEvolvR/reference/createFA2Tree.md)
+  : createFA2Tree
+- [`createGenomicContextNetwork()`](https://jravilab.github.io/MolEvolvR/reference/createGenomicContextNetwork.md)
+  : Genomic Context Directed Network
+- [`createIPRScanDomainTable()`](https://jravilab.github.io/MolEvolvR/reference/createIPRScanDomainTable.md)
+  : For a given accession number, get the domain sequences using a
+  interproscan output table & the original FASTA file
+- [`createJobResultsURL()`](https://jravilab.github.io/MolEvolvR/reference/createJobResultsURL.md)
+  : Given a pin_id, returns the URL where the user can check the status
+  of their job
+- [`createJobStatusEmailMessage()`](https://jravilab.github.io/MolEvolvR/reference/createJobStatusEmailMessage.md)
+  : Produces a mail message that can be sent to a user when their job is
+  accepted. Used by the sendJobStatusEmail() method.
+- [`createLineageLookup()`](https://jravilab.github.io/MolEvolvR/reference/createLineageLookup.md)
+  : createLineageLookup
+- [`createMSA_Kalign()`](https://jravilab.github.io/MolEvolvR/reference/createMSA_Kalign.md)
+  : Function to generate MSA using kalign
+- [`createMSA_PDF()`](https://jravilab.github.io/MolEvolvR/reference/createMSA_PDF.md)
+  : Multiple Sequence Alignment
+- [`createRepresentativeAccNum()`](https://jravilab.github.io/MolEvolvR/reference/createRepresentativeAccNum.md)
+  : createRepresentativeAccNum
+- [`createUndirectedGenomicContextNetwork()`](https://jravilab.github.io/MolEvolvR/reference/createUndirectedGenomicContextNetwork.md)
+  : createUndirectedGenomicContextNetwork
+- [`createWordCloud2Element()`](https://jravilab.github.io/MolEvolvR/reference/createWordCloud2Element.md)
+  : Wordclouds for the predominant domains, domain architectures.
+- [`createWordCloudElement()`](https://jravilab.github.io/MolEvolvR/reference/createWordCloudElement.md)
+  : Wordclouds for the predominant domains, domain architectures
+- [`downloadAssemblySummary()`](https://jravilab.github.io/MolEvolvR/reference/downloadAssemblySummary.md)
+  : Download the combined assembly summaries of genbank and refseq
+- [`efetchIPG()`](https://jravilab.github.io/MolEvolvR/reference/efetchIPG.md)
+  : efetchIPG
+- [`elements2Words()`](https://jravilab.github.io/MolEvolvR/reference/elements2Words.md)
+  : elements2Words
+- [`ensureUniqAccNum()`](https://jravilab.github.io/MolEvolvR/reference/ensureUniqAccNum.md)
+  : make accnums unique
+- [`extractAccNum()`](https://jravilab.github.io/MolEvolvR/reference/extractAccNum.md)
+  : extractAccNum
+- [`filterByDomains()`](https://jravilab.github.io/MolEvolvR/reference/filterByDomains.md)
+  : filterByDomains
+- [`filterByFrequency()`](https://jravilab.github.io/MolEvolvR/reference/filterByFrequency.md)
+  : filterByFrequency
+- [`findParalogs()`](https://jravilab.github.io/MolEvolvR/reference/findParalogs.md)
+  : findParalogs
+- [`formatJobArgumentsHTML()`](https://jravilab.github.io/MolEvolvR/reference/formatJobArgumentsHTML.md)
+  : Format job arguments into html-formatted key/value pairs, for
+  including in an email
+- [`generateAllAlignments2FA()`](https://jravilab.github.io/MolEvolvR/reference/generateAllAlignments2FA.md)
+  : generateAllAlignments2FA
+- [`getAccNumFromFA()`](https://jravilab.github.io/MolEvolvR/reference/getAccNumFromFA.md)
+  : getAccNumFromFA
+- [`getDomainsFromFA()`](https://jravilab.github.io/MolEvolvR/reference/getDomainsFromFA.md)
+  : getDomainsFromFA
+- [`getIPRScanColNames()`](https://jravilab.github.io/MolEvolvR/reference/getIPRScanColNames.md)
+  : Constructor function for interproscan column names (based upon the
+  global variable written in molevol_scripts/R/colnames_molevol.R)
+- [`getIPRScanColTypes()`](https://jravilab.github.io/MolEvolvR/reference/getIPRScanColTypes.md)
+  : construct column types for reading interproscan output TSVs (based
+  upon the global variable written in
+  molevol_scripts/R/colnames_molevol.R)
+- [`getProcessRuntimeWeights()`](https://jravilab.github.io/MolEvolvR/reference/getProcessRuntimeWeights.md)
+  : getProcessRuntimeWeights
+- [`getTopAccByLinDomArch()`](https://jravilab.github.io/MolEvolvR/reference/getTopAccByLinDomArch.md)
+  : getTopAccByLinDomArch
+- [`ipr_colnames`](https://jravilab.github.io/MolEvolvR/reference/ipr_colnames.md)
+  : InterProScan Column Names
+- [`mapAcc2Name()`](https://jravilab.github.io/MolEvolvR/reference/mapAcc2Name.md)
+  : mapAcc2Name
+- [`mapAdvOption2Process()`](https://jravilab.github.io/MolEvolvR/reference/mapAdvOption2Process.md)
+  : mapAdvOption2Process
+- [`mapOption2Process()`](https://jravilab.github.io/MolEvolvR/reference/mapOption2Process.md)
+  : mapOption2Process
+- [`plotEstimatedWallTimes()`](https://jravilab.github.io/MolEvolvR/reference/plotEstimatedWallTimes.md)
+  : plotEstimatedWallTimes
+- [`plotIPR2Viz()`](https://jravilab.github.io/MolEvolvR/reference/plotIPR2Viz.md)
+  : plotIPR2Viz
+- [`plotIPR2VizWeb()`](https://jravilab.github.io/MolEvolvR/reference/plotIPR2VizWeb.md)
+  : plotIPR2VizWeb
+- [`plotLineageDA()`](https://jravilab.github.io/MolEvolvR/reference/plotLineageDA.md)
+  : Lineage Plot: Heatmap of Domains/DAs/GCs vs Lineages
+- [`plotLineageDomainRepeats()`](https://jravilab.github.io/MolEvolvR/reference/plotLineageDomainRepeats.md)
+  : Lineage Domain Repeats Plot
+- [`plotLineageHeatmap()`](https://jravilab.github.io/MolEvolvR/reference/plotLineageHeatmap.md)
+  : plotLineageHeatmap
+- [`plotLineageNeighbors()`](https://jravilab.github.io/MolEvolvR/reference/plotLineageNeighbors.md)
+  : Lineage Plot for top neighbors
+- [`plotLineageQuery()`](https://jravilab.github.io/MolEvolvR/reference/plotLineageQuery.md)
+  : Lineage Plot: Heatmap of Queries vs Lineages
+- [`plotLineageSunburst()`](https://jravilab.github.io/MolEvolvR/reference/plotLineageSunburst.md)
+  : Lineage Sunburst
+- [`plotStackedLineage()`](https://jravilab.github.io/MolEvolvR/reference/plotStackedLineage.md)
+  : Stacked Lineage Plot
+- [`plotSunburst()`](https://jravilab.github.io/MolEvolvR/reference/plotSunburst.md)
+  [`plotTreemap()`](https://jravilab.github.io/MolEvolvR/reference/plotSunburst.md)
+  : Create an interactive plotly from count data
+- [`plotUpSet()`](https://jravilab.github.io/MolEvolvR/reference/plotUpSet.md)
+  : UpSet Plot
+- [`prepareColumnParams()`](https://jravilab.github.io/MolEvolvR/reference/prepareColumnParams.md)
+  : prepareColumnParams
+- [`prepareSingleColumnParams()`](https://jravilab.github.io/MolEvolvR/reference/prepareSingleColumnParams.md)
+  : prepareSingleColumnParams
+- [`proteinAcc2TaxID()`](https://jravilab.github.io/MolEvolvR/reference/proteinAcc2TaxID.md)
+  : proteinAcc2TaxID
+- [`proteinAcc2TaxID_old()`](https://jravilab.github.io/MolEvolvR/reference/proteinAcc2TaxID_old.md)
+  : proteinAcc2TaxID_old
+- [`readIPRScanTSV()`](https://jravilab.github.io/MolEvolvR/reference/readIPRScanTSV.md)
+  : Read an interproscan output TSV with standardized column names and
+  types
+- [`removeAsterisks()`](https://jravilab.github.io/MolEvolvR/reference/removeAsterisks.md)
+  : Remove Asterisk
+- [`removeEmptyRows()`](https://jravilab.github.io/MolEvolvR/reference/removeEmptyRows.md)
+  : Remove Empty
+- [`removeTails()`](https://jravilab.github.io/MolEvolvR/reference/removeTails.md)
+  : Remove Tails
+- [`renameFA()`](https://jravilab.github.io/MolEvolvR/reference/renameFA.md)
+  : Rename the labels of fasta files
+- [`rename_fasta()`](https://jravilab.github.io/MolEvolvR/reference/rename_fasta.md)
+  : Rename the labels of fasta files
+- [`replaceQuestionMarks()`](https://jravilab.github.io/MolEvolvR/reference/replaceQuestionMarks.md)
+  : Replace QMs
+- [`reverseOperonSeq()`](https://jravilab.github.io/MolEvolvR/reference/reverseOperonSeq.md)
+  : reverseOperon: Reverse the Direction of Operons in Genomic
+  ContextSeq
+- [`runDeltaBlast()`](https://jravilab.github.io/MolEvolvR/reference/runDeltaBlast.md)
+  : Run DELTABLAST to find homologs for proteins of interest
+- [`runIPRScan()`](https://jravilab.github.io/MolEvolvR/reference/runIPRScan.md)
+  : runIPRScan
+- [`runRPSBlast()`](https://jravilab.github.io/MolEvolvR/reference/runRPSBlast.md)
+  : Run RPSBLAST to generate domain architectures for proteins of
+  interest
+- [`selectLongestDuplicate()`](https://jravilab.github.io/MolEvolvR/reference/selectLongestDuplicate.md)
+  : Pick Longer Duplicate
+- [`sendJobStatusEmail()`](https://jravilab.github.io/MolEvolvR/reference/sendJobStatusEmail.md)
+  : Sends a "job accepted" email to a user when their job is accepted,
+  including details about the job submission and how to check its
+  status.
+- [`shortenLineage()`](https://jravilab.github.io/MolEvolvR/reference/shortenLineage.md)
+  : shortenLineage
+- [`sinkReset()`](https://jravilab.github.io/MolEvolvR/reference/sinkReset.md)
+  : Sink Reset
+- [`straightenOperonSeq()`](https://jravilab.github.io/MolEvolvR/reference/straightenOperonSeq.md)
+  : straightenOperonSeq: Reverse Equalities in Genomic Context
+- [`themeGenes2()`](https://jravilab.github.io/MolEvolvR/reference/themeGenes2.md)
+  : themeGenes2
+- [`validateCountDF()`](https://jravilab.github.io/MolEvolvR/reference/validateCountDF.md)
+  : validateCountDF
+- [`wordcloud3()`](https://jravilab.github.io/MolEvolvR/reference/wordcloud3.md)
+  : plotWordCloud3
+- [`words2WordCounts()`](https://jravilab.github.io/MolEvolvR/reference/words2WordCounts.md)
+  : words2WordCounts
+- [`writeMSA_AA2FA()`](https://jravilab.github.io/MolEvolvR/reference/writeMSA_AA2FA.md)
+  : writeMSA_AA2FA
+- [`writeProcessRuntime2TSV()`](https://jravilab.github.io/MolEvolvR/reference/writeProcessRuntime2TSV.md)
+  : writeProcessRuntime2TSV
+- [`writeProcessRuntime2YML()`](https://jravilab.github.io/MolEvolvR/reference/writeProcessRuntime2YML.md)
+  : writeProcessRuntime2YML
