@@ -29,8 +29,8 @@ test_that("CHANGED-test-pre-msa-tree", {
     )
     
     # Write the mock alignment data to a .aln file
-    aln_file <- "mock_alignment.aln"
-    writeLines(mock_alignment_data, "mock_alignment.aln")
+    aln_file <- file.path(tempdir(), "mock_alignment.aln")
+    writeLines(mock_alignment_data, aln_file)
     
     # Create mock lineage data
     mock_lineage_data <- data.frame(
@@ -41,11 +41,11 @@ test_that("CHANGED-test-pre-msa-tree", {
     )
     
     # Write lineage data to a TSV file
-    lin_file <- "mock_lineage.tsv"
-    write_tsv(mock_lineage_data, "mock_lineage.tsv")
+    lin_file <- file.path(tempdir(), "mock_lineage.tsv")
+    write_tsv(mock_lineage_data, lin_file)
     
     # Now you can test the function
-    result <- addLeaves2Alignment("mock_alignment.aln", "mock_lineage.tsv")
+    result <- addLeaves2Alignment(aln_file, lin_file)
     
     # Check the structure of the result
     expect_is(result, "data.frame")
