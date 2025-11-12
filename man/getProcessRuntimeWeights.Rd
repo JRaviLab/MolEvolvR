@@ -7,7 +7,7 @@
 getProcessRuntimeWeights(medians_yml_path = NULL)
 }
 \arguments{
-\item{dir_job_results}{\link{chr} path to MolEvolvR job_results
+\item{dir_job_results}{\link[rlang:vector-construction]{rlang::chr} path to MolEvolvR job_results
 directory}
 }
 \value{

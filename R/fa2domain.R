@@ -43,7 +43,7 @@ runIPRScan <- function(
         stop("filepath_out cannot be NULL or empty")
     }
     if (!all(appl %in% c("Pfam", "Gene3D"))) {
-        stop("Invalid application specified")
+        stop("Invalid IPRscan analyses specified")
     }
     # construct interproscan command
     cmd_iprscan <- stringr::str_glue(
@@ -65,14 +65,10 @@ runIPRScan <- function(
 #' (based upon the global variable written in
 #' molevol_scripts/R/colnames_molevol.R)
 #'
-#' @return [chr] interproscan column names used throughout molevolvr
+#' @return [chr] interproscan column names used throughout MolEvolvR
 getIPRScanColNames <- function() {
-    column_names <- c(
-        "AccNum", "SeqMD5Digest", "SLength", "Analysis",
-        "DB.ID", "SignDesc", "StartLoc", "StopLoc", "Score",
-        "Status", "RunDate", "IPRAcc", "IPRDesc"
-    )
-    return(column_names)
+    data("ipr_colnames", package = "MolEvolvR", envir = environment())
+    ipr_colnames
 }
 
 #' construct column types for reading interproscan output TSVs

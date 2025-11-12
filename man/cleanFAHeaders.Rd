@@ -7,12 +7,12 @@
 cleanFAHeaders(fasta)
 }
 \arguments{
-\item{fasta}{An \link{XStringSet} object representing the sequences from a
+\item{fasta}{An \link[Biostrings:XStringSet-class]{Biostrings::XStringSet} object representing the sequences from a
 FASTA file. The sequence names (headers) will be adjusted for uniqueness
 and sanitized.}
 }
 \value{
-\link{XStringSet} fasta with adjusted names (headers)
+\link[Biostrings:XStringSet-class]{Biostrings::XStringSet} fasta with adjusted names (headers)
 }
 \description{
 Parse accesion numbers from fasta and add a
