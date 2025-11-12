@@ -12,14 +12,14 @@ getDomainsFromFA(
 )
 }
 \arguments{
-\item{fasta}{\link{AAStringSet} a protein (AA) fasta}
+\item{fasta}{\link[Biostrings:XStringSet-class]{Biostrings::AAStringSet} a protein (AA) fasta}
 
 \item{df_iprscan}{\link{tbl_df} the interproscan results from the original fasta}
 
-\item{analysis}{\link{chr} the domain databases to extract sequences from}
+\item{analysis}{\link[rlang:vector-construction]{rlang::chr} the domain databases to extract sequences from}
 }
 \value{
-fasta_domains \link{AAStringSet} fasta of domains
+fasta_domains \link[Biostrings:XStringSet-class]{Biostrings::AAStringSet} fasta of domains
 }
 \description{
 getDomainsFromFA

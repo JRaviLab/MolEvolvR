@@ -35,6 +35,16 @@ runIPRScan <- function(
         # destPartition = "LocalQ",
         # destQoS = "shortjobs"
     ) {
+    # Validate inputs
+    if (is.null(filepath_fasta) || filepath_fasta == "") {
+        stop("filepath_fasta cannot be NULL or empty")
+    }
+    if (is.null(filepath_out) || filepath_out == "") {
+        stop("filepath_out cannot be NULL or empty")
+    }
+    if (!all(appl %in% c("Pfam", "Gene3D"))) {
+        stop("Invalid IPRscan analyses specified")
+    }
     # construct interproscan command
     cmd_iprscan <- stringr::str_glue(
         "iprscan -i {filepath_fasta} -b {filepath_out} --cpu 4 -f TSV ",
@@ -55,14 +65,10 @@ runIPRScan <- function(
 #' (based upon the global variable written in
 #' molevol_scripts/R/colnames_molevol.R)
 #'
-#' @return [chr] interproscan column names used throughout molevolvr
+#' @return [chr] interproscan column names used throughout MolEvolvR
 getIPRScanColNames <- function() {
-    column_names <- c(
-        "AccNum", "SeqMD5Digest", "SLength", "Analysis",
-        "DB.ID", "SignDesc", "StartLoc", "StopLoc", "Score",
-        "Status", "RunDate", "IPRAcc", "IPRDesc"
-    )
-    return(column_names)
+    data("ipr_colnames", package = "MolEvolvR", envir = environment())
+    ipr_colnames
 }
 
 #' construct column types for reading interproscan output TSVs
@@ -296,7 +302,7 @@ getDomainsFromFA <- function(
                 if (verbose) {
                     msg <- stringr::str_glue(
                         "accession number: {header} had no domains for the ",
-                        "selected analyes: {paste(analysis, collapse = ',')}\n"
+                        "selected analyses: {paste(analysis, collapse = ',')}\n"
                     )
                     warning(msg)
                 }
