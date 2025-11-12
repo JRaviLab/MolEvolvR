@@ -185,7 +185,7 @@ createIPRScanDomainTable <- function(
             id_domain = stringr::str_glue("{AccNum}-{DB.ID}-{StartLoc}_{StopLoc}")
         ) |>
         dplyr::ungroup() |>
-        dplyr::relocate(.data$id_domain, .before = 1)
+        dplyr::relocate('id_domain', .before = 1)
     return(df_iprscan_domains)
 }
 
