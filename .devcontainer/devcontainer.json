@@ -1,0 +1,13 @@
+{
+  "name": "R (rocker r-ver, Positron)",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "features": {
+    "ghcr.io/rocker-org/devcontainer-features/r-packages:1": {
+      "packages": "languageserver,httpgd,pak"
+    },
+    "ghcr.io/rocker-org/devcontainer-features/quarto-cli:1": {}
+  }
+}
