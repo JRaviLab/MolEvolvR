@@ -45,7 +45,7 @@ test_that("CHANGED-test-pre-msa-tree", {
     write_tsv(mock_lineage_data, lin_file)
     
     # Now you can test the function
-    result <- addLeaves2Alignment(aln_file, lin_file)
+    result <- addLeaves2Alignment(aln_file, lin_file, seq_type = 'AA')
     
     # Check the structure of the result
     expect_is(result, "data.frame")
@@ -373,11 +373,22 @@ test_that("CHANGED-test-pre-msa-tree", {
     fa_dir <- tempdir()
     lin_dir <- tempdir()
     
-    # Create mock alignment files with correct FASTA format
-    writeLines(c(">Acc1", "ATGCNNNN", ">Acc2", "ATGCNNNN"), 
-               file.path(aln_dir, "test1.aln"))
-    writeLines(c(">Acc3", "ATGCNNNN", ">Acc4", "ATGCNNNN"), 
-               file.path(aln_dir, "test2.aln"))
+    # Create tabular alignment files (two columns: AccNum <TAB> Alignment)
+    aln1 <- 
+      tibble::tibble(
+        AccNum = c("Acc1", "Acc2"),
+        Alignment = c("ATGCNNNN", "ATGCNNNN")
+        )
+
+    aln2 <- 
+      tibble::tibble(
+        AccNum = c("Acc3", "Acc4"),
+        Alignment = c("ATGCNNNN", "ATGCNNNN")
+        )
+
+    # Write without column names so read_tsv(..., col_names = c("AccNum","Alignment")) works
+    readr::write_tsv(aln1, file.path(aln_dir, "test1.aln"), col_names = FALSE)
+    readr::write_tsv(aln2, file.path(aln_dir, "test2.aln"), col_names = FALSE)
     
     # Create mock lineage data (AccNum, Species, Lineage)
     mock_lineage_data <- tibble::tibble(
@@ -407,9 +418,20 @@ test_that("CHANGED-test-pre-msa-tree", {
     aln_dir <- tempdir()
     fa_dir <- tempdir()
     
-    # Create mock alignment files
-    writeLines(c(">Acc1\nATGCNNNN\n>Acc2\nATGCNNNN\n"), 
-               file.path(aln_dir, "test1.aln"))
+  # Create mock alignment data as a tibble
+    mock_aln <- tibble(
+        AccNum    = c("Acc1", "Acc2"),
+        Alignment = c("ATGCNNNN", "ATGCNNNN")
+    )
+
+    # Write as a tab-delimited file without header row
+    # (so read_tsv(..., col_names = c("AccNum","Alignment")) will work correctly)
+    write_tsv(mock_aln,
+            file = file.path(aln_dir, "test1.aln"),
+            col_names = FALSE)
+    # # Create mock alignment files
+    # writeLines(c(">Acc1\nATGCNNNN\n>Acc2\nATGCNNNN\n"), 
+    #            file.path(aln_dir, "test1.aln"))
     
     # Create mock lineage data
     mock_lineage_data <- tibble::tibble(
@@ -441,13 +463,11 @@ test_that("CHANGED-test-pre-msa-tree", {
         Lineage = c("L1", "L1", "L2", "L2", NA)
     )
     
-    result <- RepresentativeAccNums(prot_data, 
-                                    reduced = "Lineage", accnum_col = "AccNum")
+    result <- createRepresentativeAccNum(prot_data, reduced = "Lineage", accnum_col = "AccNum")
     
     expect_equal(result, c("A001", "A003"))  # A001 for L1 and A003 for L2
     
-    result <- RepresentativeAccNums(prot_data, 
-                                    reduced = "Lineage", accnum_col = "AccNum")
+    result <- createRepresentativeAccNum(prot_data, reduced = "Lineage", accnum_col = "AccNum")
     
     expect_false(any(is.na(result)))  # No NA values in result
     expect_equal(length(result), 2)    # Still only 2 unique Lineages
@@ -457,7 +477,7 @@ test_that("CHANGED-test-pre-msa-tree", {
         Lineage = c("L1", "L1", "L2", "L2", "L3", "L3")
     )
     
-    result <- RepresentativeAccNums(prot_data_with_duplicates, 
+    result <- createRepresentativeAccNum(prot_data_with_duplicates, 
                                     reduced = "Lineage", accnum_col = "AccNum")
     
     # A001 for L1, A002 for L2, and one for L3
@@ -465,7 +485,7 @@ test_that("CHANGED-test-pre-msa-tree", {
     
     empty_data <- tibble::tibble(AccNum = character(), Lineage = character())
     
-    result <- RepresentativeAccNums(empty_data, 
+    result <- createRepresentativeAccNum(empty_data, 
                                     reduced = "Lineage", 
                                     accnum_col = "AccNum")
     
@@ -498,7 +518,7 @@ test_that("CHANGED-test-pre-msa-tree", {
     
     # Expect error for non-existing file
     expect_error(alignFasta("non_existing_file.fasta", tool = "Muscle"), 
-                 "cannot open file 'non_existing_file.fasta'") 
+                 "Error: The FASTA file does not exist: ") 
     
     # Clean up mock fasta file after tests
     file.remove(mock_fasta_path)
