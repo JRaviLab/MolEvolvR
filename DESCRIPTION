@@ -31,6 +31,7 @@ RoxygenNote: 7.3.3
 VignetteBuilder: knitr
 Imports: 
     ape,
+    aplot,
     assertthat,
     base64enc,
     Biostrings,
@@ -48,6 +49,7 @@ Imports:
     ggplot2,
     glue,
     gridExtra,
+    gt,
     here,
     htmltools,
     htmlwidgets,
