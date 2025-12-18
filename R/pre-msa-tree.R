@@ -554,9 +554,9 @@ generateAllAlignments2FA_legacy <- function(aln_path = here("data/rawdata_aln/")
                 fa_outpath)
     }
 
-    # Check if the linear file exists
+    # Check if the lineage file exists
     if (!file.exists(lin_file)) {
-        abort("Error: The linear file does not exist at the specified path: ",
+        abort("Error: The lineage file does not exist at the specified path: ",
              lin_file)
     }
     # library(here)
