@@ -7,11 +7,11 @@ Adding Leaves to all alignment files w/ accessions & DAs?
 ## Usage
 
 ``` r
-generateAllAlignments2FA(
+generateAllAlignments2FA_legacy(
   aln_path = here("data/rawdata_aln/"),
   fa_outpath = here("data/alns/"),
   lin_file = here("data/rawdata_tsv/all_semiclean.txt"),
-  reduced = FALSE
+  reduced = F
 )
 ```
 

@@ -13,8 +13,10 @@
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/acc2FA.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/acc2Lineage.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/addLeaves2Alignment.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/addLeaves2Alignment_legacy.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/addLineage.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/addName.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/addName_lecacy.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/addTaxID.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/alignFasta.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/assignJobQueue.html</loc></url>
@@ -35,6 +37,7 @@
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/condenseRepeatedDomains.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/convert2TitleCase.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/convertAlignment2FA.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/convertAlignment2FA_legacy.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/convertAlignment2Trees.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/convertFA2Tree.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/convertIPRScanDomainTable2FA.html</loc></url>
@@ -63,6 +66,7 @@
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/findParalogs.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/formatJobArgumentsHTML.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/generateAllAlignments2FA.html</loc></url>
+<url><loc>https://jravilab.github.io/MolEvolvR/reference/generateAllAlignments2FA_legacy.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/getAccNumFromFA.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/getDomainsFromFA.html</loc></url>
 <url><loc>https://jravilab.github.io/MolEvolvR/reference/getIPRScanColNames.html</loc></url>

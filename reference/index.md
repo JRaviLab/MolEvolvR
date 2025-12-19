@@ -20,9 +20,13 @@
   : acc2Lineage
 - [`addLeaves2Alignment()`](https://jravilab.github.io/MolEvolvR/reference/addLeaves2Alignment.md)
   : addLeaves2Alignment
+- [`addLeaves2Alignment_legacy()`](https://jravilab.github.io/MolEvolvR/reference/addLeaves2Alignment_legacy.md)
+  : addLeaves2Alignment_legacy
 - [`addLineage()`](https://jravilab.github.io/MolEvolvR/reference/addLineage.md)
   : addLineage
 - [`addName()`](https://jravilab.github.io/MolEvolvR/reference/addName.md)
+  : addName
+- [`addName_lecacy()`](https://jravilab.github.io/MolEvolvR/reference/addName_lecacy.md)
   : addName
 - [`addTaxID()`](https://jravilab.github.io/MolEvolvR/reference/addTaxID.md)
   : addTaxID
@@ -64,6 +68,8 @@
   [`to_titlecase()`](https://jravilab.github.io/MolEvolvR/reference/convert2TitleCase.md)
   : Changing case to 'Title Case'
 - [`convertAlignment2FA()`](https://jravilab.github.io/MolEvolvR/reference/convertAlignment2FA.md)
+  : convertAlignment2FA
+- [`convertAlignment2FA_legacy()`](https://jravilab.github.io/MolEvolvR/reference/convertAlignment2FA_legacy.md)
   : convertAlignment2FA
 - [`convertAlignment2Trees()`](https://jravilab.github.io/MolEvolvR/reference/convertAlignment2Trees.md)
   : convertAlignment2Trees
@@ -126,6 +132,8 @@
   : Format job arguments into html-formatted key/value pairs, for
   including in an email
 - [`generateAllAlignments2FA()`](https://jravilab.github.io/MolEvolvR/reference/generateAllAlignments2FA.md)
+  : generateAllAlignments2FA
+- [`generateAllAlignments2FA_legacy()`](https://jravilab.github.io/MolEvolvR/reference/generateAllAlignments2FA_legacy.md)
   : generateAllAlignments2FA
 - [`getAccNumFromFA()`](https://jravilab.github.io/MolEvolvR/reference/getAccNumFromFA.md)
   : getAccNumFromFA

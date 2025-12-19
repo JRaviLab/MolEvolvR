@@ -6,7 +6,7 @@ from Kingdom, Phylum, Genus, and species, as well as the accession
 ## Usage
 
 ``` r
-addName(
+addName_lecacy(
   data,
   accnum_col = "AccNum",
   spec_col = "Species",
@@ -54,15 +54,7 @@ Samuel Chen, Janani Ravi
 ## Examples
 
 ``` r
-# Example usage of the addName function
-data <- data.frame(
-  AccNum = c("ACC123", "ACC456"),
-  Species = c("Homo sapiens", "Mus musculus"),
-  Lineage = c("Eukaryota>Chordata", "Eukaryota>Chordata")
-)
-enriched_data <- addName(data)
-enriched_data
-#>   AccNum      Species            Lineage                     Name
-#> 1 ACC123 Homo sapiens Eukaryota>Chordata  EChorda_Hsapiens_ACC123
-#> 2 ACC456 Mus musculus Eukaryota>Chordata EChorda_Mmusculus_ACC456
+if (FALSE) { # \dontrun{
+addName(data_frame)
+} # }
 ```

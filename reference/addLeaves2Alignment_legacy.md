@@ -1,4 +1,4 @@
-# addLeaves2Alignment
+# addLeaves2Alignment_legacy
 
 Adding Leaves to an alignment file w/ accessions Genomic Contexts vs
 Domain Architectures.
@@ -6,11 +6,10 @@ Domain Architectures.
 ## Usage
 
 ``` r
-addLeaves2Alignment(
+addLeaves2Alignment_legacy(
   aln_file = "",
   lin_file = "data/rawdata_tsv/all_semiclean.txt",
-  reduced = FALSE,
-  seq_type = c("AA", "DNA")
+  reduced = FALSE
 )
 ```
 
@@ -18,7 +17,7 @@ addLeaves2Alignment(
 
 - aln_file:
 
-  haracter. Path to file. Input tab-delimited file + alignment file
+  Character. Path to file. Input tab-delimited file + alignment file
   accnum & alignment. Default is 'pspa_snf7.aln'
 
 - lin_file:
@@ -31,14 +30,9 @@ addLeaves2Alignment(
   Boolean. If TRUE, a reduced data frame will be generated with only one
   sequence per lineage. Default is FALSE.
 
-- seq_type:
-
-  Character. Type of sequence, either "AA" or "DNA". Default is "AA".
-
 ## Value
 
-A data frame containing the enriched alignment data with lineage
-information.
+A data frame containing the combined alignment and lineage information.
 
 ## Details
 

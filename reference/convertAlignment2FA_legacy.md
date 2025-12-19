@@ -1,16 +1,15 @@
-# addLeaves2Alignment
+# convertAlignment2FA
 
-Adding Leaves to an alignment file w/ accessions Genomic Contexts vs
-Domain Architectures.
+convertAlignment2FA
 
 ## Usage
 
 ``` r
-addLeaves2Alignment(
+convertAlignment2FA_legacy(
   aln_file = "",
   lin_file = "data/rawdata_tsv/all_semiclean.txt",
-  reduced = FALSE,
-  seq_type = c("AA", "DNA")
+  fa_outpath = "",
+  reduced = FALSE
 )
 ```
 
@@ -18,7 +17,7 @@ addLeaves2Alignment(
 
 - aln_file:
 
-  haracter. Path to file. Input tab-delimited file + alignment file
+  Character. Path to file. Input tab-delimited file + alignment file
   accnum & alignment. Default is 'pspa_snf7.aln'
 
 - lin_file:
@@ -26,19 +25,20 @@ addLeaves2Alignment(
   Character. Path to file. Protein file with accession + number to
   lineage mapping. Default is 'pspa.txt'
 
+- fa_outpath:
+
+  Character. Path to the written fasta file. Default is 'NULL'
+
 - reduced:
 
-  Boolean. If TRUE, a reduced data frame will be generated with only one
-  sequence per lineage. Default is FALSE.
-
-- seq_type:
-
-  Character. Type of sequence, either "AA" or "DNA". Default is "AA".
+  Boolean. If TRUE, the fasta file will contain only one sequence per
+  lineage. Default is 'FALSE'
 
 ## Value
 
-A data frame containing the enriched alignment data with lineage
-information.
+Character string containing the Fasta formatted sequences. If
+`fa_outpath` is specified, the function also writes the sequences to the
+Fasta file.
 
 ## Details
 
@@ -59,6 +59,6 @@ Janani Ravi
 
 ``` r
 if (FALSE) { # \dontrun{
-addLeaves2Alignment("pspa_snf7.aln", "pspa.txt")
+convertAlignment2FA("pspa_snf7.aln", "pspa.txt")
 } # }
 ```
