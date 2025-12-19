@@ -69,7 +69,7 @@ convert2TitleCase <- function(x, y = " ") {
 ################################
 ## Function to add leaves to an alignment file
 ## !! Add DA to leaves?
-#' addLeaves2Alignment
+#' addLeaves2Alignment_legacy
 #'
 #' @author Janani Ravi
 #'
@@ -109,7 +109,7 @@ convert2TitleCase <- function(x, y = " ") {
 #' \dontrun{
 #' addLeaves2Alignment("pspa_snf7.aln", "pspa.txt")
 #' }
-addLeaves2Alignment <- function(aln_file = "",
+addLeaves2Alignment_legacy <- function(aln_file = "",
     lin_file = "data/rawdata_tsv/all_semiclean.txt", # !! finally change to all_clean.txt!!
     # lin_file="data/rawdata_tsv/PspA.txt",
     reduced = FALSE) {
@@ -243,7 +243,7 @@ addLeaves2Alignment <- function(aln_file = "",
 #' \dontrun{
 #' addName(data_frame)
 #' }
-addName <- function(data,
+addName_lecacy <- function(data,
     accnum_col = "AccNum", spec_col = "Species", lin_col = "Lineage",
     lin_sep = ">", out_col = "Name") {
     # Check if the data is a data fram
@@ -341,7 +341,7 @@ addName <- function(data,
 #' \dontrun{
 #' convertAlignment2FA("pspa_snf7.aln", "pspa.txt")
 #' }
-convertAlignment2FA <- function(aln_file = "",
+convertAlignment2FA_legacy <- function(aln_file = "",
     lin_file = "data/rawdata_tsv/all_semiclean.txt", # !! finally change to all_clean.txt!!
     fa_outpath = "",
     reduced = FALSE) {
@@ -537,7 +537,7 @@ rename_fasta <- function(fa_path, outpath,
 #' \dontrun{
 #' generateAllAlignments2FA()
 #' }
-generateAllAlignments2FA <- function(aln_path = here("data/rawdata_aln/"),
+generateAllAlignments2FA_legacy <- function(aln_path = here("data/rawdata_aln/"),
     fa_outpath = here("data/alns/"),
     lin_file = here("data/rawdata_tsv/all_semiclean.txt"),
     reduced = F) {
@@ -554,9 +554,9 @@ generateAllAlignments2FA <- function(aln_path = here("data/rawdata_aln/"),
                 fa_outpath)
     }
 
-    # Check if the linear file exists
+    # Check if the lineage file exists
     if (!file.exists(lin_file)) {
-        abort("Error: The linear file does not exist at the specified path: ",
+        abort("Error: The lineage file does not exist at the specified path: ",
              lin_file)
     }
     # library(here)

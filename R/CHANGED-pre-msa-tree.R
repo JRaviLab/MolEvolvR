@@ -73,7 +73,9 @@ convert2TitleCase <- function(x, y = " ") {
 #' Default is 'pspa.txt'
 #' @param reduced Boolean. If TRUE, a reduced data frame will be generated with
 #' only one sequence per lineage. Default is FALSE.
+#' @param seq_type Character. Type of sequence, either "AA" or "DNA". Default is "AA".
 #'
+#' @importFrom Biostrings readAAMultipleAlignment readDNAMultipleAlignment
 #' @importFrom dplyr distinct left_join mutate select
 #' @importFrom purrr map
 #' @importFrom readr read_file read_tsv
@@ -99,7 +101,8 @@ convert2TitleCase <- function(x, y = " ") {
 addLeaves2Alignment <- function(aln_file = "",
     lin_file = "data/rawdata_tsv/all_semiclean.txt", # !! finally change to all_clean.txt!!
     # lin_file="data/rawdata_tsv/PspA.txt",
-    reduced = FALSE) {
+    reduced = FALSE, 
+    seq_type = c("AA", "DNA")) {
     ## SAMPLE ARGS
     # aln_file <- "data/rawdata_aln/pspc.gismo.aln"
     # lin_file <- "data/rawdata_tsv/all_semiclean.txt"
@@ -108,25 +111,36 @@ addLeaves2Alignment <- function(aln_file = "",
     # 1. Read aln & lineage master files files w/ read_file/read_tsv
     # 2. paste and collapse files so they can be read w/ tsv
     # 3. If the file has 1 column, separate it
-    aln <- read_file(aln_file)
-    lin <- read_tsv(lin_file)
-    aln <- paste(aln, sep = "\\s+", collapse = "\\t")
-    aln <- read_tsv(aln, col_names = F)
-    if (length(aln) == 1) {
-        colnames(aln) <- "x1"
-        aln <- separate(aln,
-            col = .data$x1,
-            into = c("x1", "x2"),
-            sep = "\\s+"
+    seq_type <- match.arg(seq_type, c('AA', 'DNA'))
+
+    # Read lineage data
+    lin <- read_tsv(lin_file, show_col_types = FALSE)
+
+    # Detect file format
+    first_line <- readLines(aln_file, n = 1)
+    is_clustal <- grepl("^CLUSTAL", first_line, ignore.case = TRUE)
+
+    if (is_clustal) {
+        rlang::inform(rlang::format_error_bullets(c("i" = "Detected Clustal alignment: using Biostrings parser")))
+        aln_obj <- switch(
+        seq_type,
+        AA = readAAMultipleAlignment(aln_file, format = "clustal"),
+        DNA = readDNAMultipleAlignment(aln_file, format = "clustal")
         )
+
+        aln <- tibble(
+        AccNum = names(aln_obj),
+        Alignment = as.character(unmasked(aln_obj))
+        )
+    } else {
+        rlang::inform(rlang::format_error_bullets(c("i" = "Detected tabular alignment: reading with readr")))
+        aln <- read_tsv(aln_file, col_names = c("AccNum", "Alignment"), show_col_types = FALSE)
     }
-
-    colnames(aln) <- c("AccNum", "Alignment")
-
+    
     aln_lin <- left_join(aln, lin, by = "AccNum") %>%
         select(
-            .data$AccNum, .data$Alignment,
-            .data$Species, .data$Lineage
+            'AccNum', 'Alignment',
+            'Species', 'Lineage'
         )
 
     # Removes rows with NA
@@ -178,7 +192,7 @@ addLeaves2Alignment <- function(aln_file = "",
     # Create Leaf_AccNum pasted together
     # 2 columns Leaf_AccNum and Sequence Far left
     leaf_aln <- temp %>%
-        select(.data$Leaf_Acc, .data$Alignment)
+        select('Leaf_Acc', 'Alignment')
     return(leaf_aln)
 }
 
@@ -223,7 +237,9 @@ addName <- function(data,
     split_data <- data %>%
         separate(
             col = lin_col, into = c("Kingdom", "Phylum"),
-            sep = lin_sep
+            sep = lin_sep,
+            extra = 'drop',
+            fill = 'right'
         ) %>%
         mutate(
             Kingdom = strtrim(.data$Kingdom, 1),
@@ -302,10 +318,30 @@ addName <- function(data,
 #' addLeaves2Alignment("pspa_snf7.aln", "pspa.txt")
 #' }
 #'
+#' @importFrom data.table data.table
 convertAlignment2FA <- function(aln_file = "",
     lin_file = "data/rawdata_tsv/all_semiclean.txt", # !! finally change to all_clean.txt!!
     fa_outpath = "",
     reduced = FALSE) {
+    # Check if the alignment file is provided and exists
+    if (nchar(aln_file) == 0) {
+        abort("Error: Alignment file path must be provided.")
+    }
+
+    if (!file.exists(aln_file)) {
+        abort(paste("Error: The alignment file '", aln_file, "' does not exist."))
+    }
+
+    # Check if the lineage file exists
+    if (!file.exists(lin_file)) {
+        abort(paste("Error: The lineage file '", lin_file, "' does not exist."))
+    }
+
+    # Check that the 'reduced' parameter is logical
+    if (!is.logical(reduced) || length(reduced) != 1) {
+        abort("Error: 'reduced' must be a single logical value (TRUE or FALSE).")
+    }
+
     ## SAMPLE ARGS
     # aln_file <- "data/rawdata_aln/pspc.gismo.aln"
     # lin_file <- "data/rawdata_tsv/all_semiclean.txt"
@@ -314,8 +350,8 @@ convertAlignment2FA <- function(aln_file = "",
 
     ## Add leaves
     aln <- addLeaves2Alignment(
-        aln = aln_file,
-        lin = lin_file,
+        aln_file = aln_file,
+        lin_file = lin_file,
         reduced = reduced
     )
     names <- aln$Leaf_Acc
@@ -451,12 +487,25 @@ renameFA <- function(fa_path, outpath,
 generateAllAlignments2FA <- function(aln_path = here("data/rawdata_aln/"),
     fa_outpath = here("data/alns/"),
     lin_file = here("data/rawdata_tsv/all_semiclean.txt"),
-    reduced = F) {
-    # library(here)
-    # library(tidyverse)
-    # aln_path <- here("data/rawdata_aln/")
-    # outpath <- here("data/alns/")
-    # lin_file <- here("data/rawdata_tsv/all_semiclean.txt")
+    reduced = FALSE) {
+    
+    if (!dir.exists(aln_path)) {
+        abort("Error: The alignment directory does not exist at the specified
+             path: ", aln_path)
+    }
+
+    # Check if the output path exists; if not, attempt to create it
+    if (!dir.exists(fa_outpath)) {
+        dir.create(fa_outpath, recursive = TRUE)
+        message("Note: The output directory did not exist and has been created: ",
+                fa_outpath)
+    }
+
+    # Check if the lineage file exists
+    if (!file.exists(lin_file)) {
+        abort("Error: The lineage file does not exist at the specified path: ",
+             lin_file)
+    }
 
     aln_filenames <- list.files(path = aln_path, pattern = "*.aln")
     aln_filepaths <- paste0(aln_path, "/", aln_filenames)
@@ -726,7 +775,7 @@ writeMSA_AA2FA <- function(writeMSA_AA2FA, outpath) {
 #' }
 getAccNumFromFA <- function(fasta_file) {
     txt <- read_file(fasta_file)
-    accnums <- stringi::stri_extract_all_regex(fasta_file, "(?<=>)[\\w,.]+")[[1]]
+    accnums <- stringi::stri_extract_all_regex(txt, "(?<=>)[\\w,.]+")[[1]]
     return(accnums)
 }
 
